@@ -1,0 +1,94 @@
+ENTRY 8092C0 LIMIT 80939E
+008092C0 push     ebp
+008092C1 mov      ebp, esp
+008092C3 sub      esp, 0xc
+008092C6 mov      edx, dword ptr [ebp + 8]
+008092C9 mov      eax, dword ptr [edx + 4]
+008092CC sub      eax, dword ptr [edx]
+008092CE push     ebx
+008092CF sar      eax, 2
+008092D2 xor      ecx, ecx
+008092D4 push     esi
+008092D5 push     edi
+008092D6 mov      dword ptr [ebp - 0xc], eax
+008092D9 mov      dword ptr [ebp - 8], ecx
+008092DC test     eax, eax
+008092DE jne      0x8092f3
+008092E0 pop      edi
+008092E1 pop      esi
+008092E2 pop      ebx
+008092E3 mov      esp, ebp
+008092E5 pop      ebp
+008092E6 ret      8
+008092E9 lea      esp, [esp]
+008092F0 mov      edx, dword ptr [ebp + 8]
+008092F3 mov      eax, dword ptr [edx]
+008092F5 mov      esi, dword ptr [eax + ecx*4]
+008092F8 mov      edi, dword ptr [esi + 4]
+008092FB sub      edi, dword ptr [esi]
+008092FD xor      ebx, ebx
+008092FF sar      edi, 2
+00809302 mov      dword ptr [ebp - 4], ebx
+00809305 cmp      edi, ebx
+00809307 je       0x809387
+00809309 test     edi, edi
+0080930B je       0x80936c
+0080930D lea      ecx, [ecx]
+00809310 mov      ecx, dword ptr [esi]
+00809312 mov      ecx, dword ptr [ecx + ebx*4]
+00809315 mov      edx, dword ptr [ecx]
+00809317 mov      eax, dword ptr [ebp + 0xc]
+0080931A mov      edx, dword ptr [edx + 4]
+0080931D push     eax
+0080931E call     edx
+00809320 test     eax, eax
+00809322 jne      0x80932b
+00809324 cmp      dword ptr [esi + 0x20], eax
+00809327 jne      0x80936c
+00809329 jmp      0x809332
+0080932B mov      dword ptr [ebp - 4], 1
+00809332 inc      ebx
+00809333 cmp      ebx, edi
+00809335 jb       0x809310
+00809337 cmp      dword ptr [ebp - 4], 0
+0080933B je       0x80936c
+0080933D mov      ebx, dword ptr [esi + 0x14]
+00809340 sub      ebx, dword ptr [esi + 0x10]
+00809343 xor      edi, edi
+00809345 sar      ebx, 2
+00809348 test     ebx, ebx
+0080934A je       0x809366
+0080934C lea      esp, [esp]
+00809350 mov      eax, dword ptr [esi + 0x10]
+00809353 mov      ecx, dword ptr [eax + edi*4]
+00809356 mov      edx, dword ptr [ecx]
+00809358 mov      eax, dword ptr [ebp + 0xc]
+0080935B mov      edx, dword ptr [edx + 0xc]
+0080935E push     eax
+0080935F call     edx
+00809361 inc      edi
+00809362 cmp      edi, ebx
+00809364 jb       0x809350
+00809366 cmp      dword ptr [ebp - 4], 0
+0080936A jne      0x809390
+0080936C mov      ecx, dword ptr [ebp - 8]
+0080936F inc      ecx
+00809370 mov      dword ptr [ebp - 8], ecx
+00809373 cmp      ecx, dword ptr [ebp - 0xc]
+00809376 jb       0x8092f0
+0080937C pop      edi
+0080937D pop      esi
+0080937E xor      eax, eax
+00809380 pop      ebx
+00809381 mov      esp, ebp
+00809383 pop      ebp
+00809384 ret      8
+00809387 mov      dword ptr [ebp - 4], 1
+0080938E jmp      0x80933d
+00809390 pop      edi
+00809391 pop      esi
+00809392 mov      eax, 1
+00809397 pop      ebx
+00809398 mov      esp, ebp
+0080939A pop      ebp
+0080939B ret      8

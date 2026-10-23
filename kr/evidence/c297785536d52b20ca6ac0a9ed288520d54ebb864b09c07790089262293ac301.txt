@@ -1,0 +1,100 @@
+"""Offline KR quest notification/state boundary audit; never attaches to a process."""
+import hashlib, json, struct
+from pathlib import Path
+from build_native_index import PE
+from capstone import Cs, CS_ARCH_X86, CS_MODE_32
+
+ROOT = Path(__file__).resolve().parent.parent
+OUT = ROOT / 'anal/native-index'
+p = PE(ROOT / 'Tartaros.bin')
+m = Cs(CS_ARCH_X86, CS_MODE_32)
+idx = json.loads((OUT / 'Tartaros.bin.json').read_text(encoding='utf-8'))
+assert hashlib.sha256(p.data).hexdigest() == idx['sha256']
+specs = [
+ ('quest-manager-getter', 0x40f930, 0x40f992),
+ ('quest-manager-constructor', 0x4ffe60, 0x4fff70),
+ ('quest-record-lookup', 0x500f90, 0x500fc4),
+ ('quest-context-filter', 0x500950, 0x5009fd),
+ ('quest-dialogue-record-selection', 0x5007d0, 0x5008b0),
+ ('quest-packet-registration', 0x5020b0, 0x50216c),
+ ('quest-shared-packet-dispatch', 0x4fda30, 0x4fdab3),
+ ('quest-notification0045', 0x5027d0, 0x502b40),
+ ('quest-result0046', 0x502b40, 0x50303c),
+ ('quest-result0064', 0x5030c0, 0x5033a7),
+ ('quest-clear-one-slot', 0x5000d0, 0x50010c),
+ ('quest-rebuild-context-list', 0x500240, 0x5007cb),
+]
+funcs = {}
+for name, start, end in specs:
+    ins = list(m.disasm(p.read(start, end-start), start))
+    assert sum(i.size for i in ins) == end-start, name
+    expected = 'call' if start == 0x4ffe60 else 'int3' if start == 0x500240 else 'ret'
+    assert ins[-1].mnemonic == expected, name
+    bounds = {i.address for i in ins}
+    for i in ins:
+        if i.mnemonic.startswith('j') and i.op_str.startswith('0x'):
+            target = int(i.op_str, 16)
+            if start <= target < end:
+                assert target in bounds, (name, hex(target))
+    funcs[start] = {i.address:i for i in ins}
+    (OUT / (name+'.txt')).write_text('\n'.join(
+        f'{i.address:08X} {i.mnemonic:8} {i.op_str}' for i in ins)+'\n', encoding='utf-8')
+
+checks = [
+ (0x40f930,0x40f97e,'eax, 0xfab2a0'),
+ (0x4ffe60,0x4ffe95,'dword ptr [0xfab2a0], 0xc0db08'),
+ (0x4ffe60,0x4fff2c,'0x5020b0'),
+ (0x500f90,0x500f97,'esi, dword ptr [ecx + 0x5eac]'),
+ (0x500950,0x5009d3,'dword ptr [eax + 0x28], edx'),
+ (0x500950,0x5009d8,'dword ptr [eax + 4], 1'),
+ (0x5007d0,0x500848,'dword ptr [edx], ebx'),
+ (0x5007d0,0x500888,'esi, word ptr [ecx]'),
+ (0x4fda30,0x4fda3e,'eax, dword ptr [esi + edi*8 + 4]'),
+ (0x5027d0,0x502804,'edi, word ptr [eax + 2]'),
+ (0x5027d0,0x502862,'dword ptr [eax + 0x10], 0xf4306'),
+ (0x5027d0,0x50294e,'0x5016f0'),
+ (0x502b40,0x502bb5,'ecx, word ptr [ebx + 4]'),
+ (0x502b40,0x502bc2,'dword ptr [eax + 0x10], 0xf4282'),
+ (0x502b40,0x502c18,'0x502e6e'),
+ (0x502b40,0x502db1,'0x5000d0'),
+ (0x502b40,0x502dd3,'0x44b4e0'),
+ (0x502b40,0x502de8,'0x500240'),
+ (0x502b40,0x502e41,'dword ptr [eax + 0x10], 0xf438c'),
+ (0x5030c0,0x503199,'dword ptr [edi + 4], 0'),
+ (0x5030c0,0x5031a9,'0x5000d0'),
+ (0x5030c0,0x5031bb,'0x500240'),
+ (0x5000d0,0x5000eb,'eax, 0x14'),
+ (0x5000d0,0x5000f4,'word ptr [edx + eax*2 + 0x5ed0], cx'),
+ (0x500240,0x500295,'dword ptr [ebx + 0x5ec4], esi'),
+ (0x500240,0x500488,'edx, dword ptr [ebp + 0xc]'),
+ (0x500240,0x500491,'eax, dword ptr [ebx + 0xc]'),
+ (0x500240,0x500652,'edx, dword ptr [eax + 0x24]'),
+ (0x500240,0x500664,'ecx, dword ptr [esi + 0x5eb4]'),
+]
+for start, addr, operand in checks:
+    assert funcs[start][addr].op_str == operand, (hex(addr),operand)
+vt = next(v for v in idx['vtables'] if v['address']==0xc0db08)
+assert vt['className']=='.?AVCQuestMgr@@' and vt['entries'][1]==0x4fda30
+handlers = {0x40:0x502270,0x45:0x5027d0,0x46:0x502b40,0x47:0x503040,
+            0x64:0x5030c0,0x65:0x5035d0,0x6f:0x502170,0x72:0x5033b0,0x74:0x503400}
+writes = {i.op_str for i in funcs[0x5020b0].values() if i.mnemonic=='mov'}
+for cmd, handler in handlers.items():
+    assert f'dword ptr [{hex(0xfab2a0+cmd*8+4)}], {hex(handler)}' in writes
+assert not any(hex(0xfab2a0+0x36*8+4) in x for x in writes)
+assert p.cstring(0xc0dab8)=='QUEST_READY' and p.cstring(0xc0da98)=='QUESTSTATE'
+report = dict(checks='passed',sha256=idx['sha256'],boundedFunctions=len(specs),
+ functions=[dict(name=n,start=hex(s),endExclusive=hex(e)) for n,s,e in specs],
+ manager=dict(className=vt['className'],root='FAB2A0',recordMapOffset='5EAC',
+              filteredIdsOffset='5EC0',otherIdsOffset='5EB0',twentyWordSlotsOffset='5ED0'),
+ handlers={hex(c):hex(h) for c,h in handlers.items()},
+ notification0045=dict(id='signedWORD+2',effect='record-driven UI notification; QUEST_READY resource'),
+ result0046=dict(id='signedWORD+2',result='WORD+4',zeroBranch='clear matching20slot ID; optionally append5EB0; rebuild5EC0; F438C'),
+ result0064=dict(id='signedWORD+2',result='DWORD+4',zeroBranch='clear matching20slot ID; rebuild5EC0; UI notification'),
+ limitations=['No dedicated0036 handler in this manager registration, not global absence proof.',
+  'Official command names/result enums and0036 reply ordering not established.',
+  'Top-level delivery/forwarding into CQuestMgr not expanded here.',
+  '5EB0 list semantic inferred from exclusion/prerequisite tests, not officially named.',
+  'Called helpers and UI consumers not exhaustively expanded.',
+  'No native monster AI/wave executor/P2P authority established.'])
+(OUT/'quest-state-notifications-audit.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+print(json.dumps(dict(checks='passed',boundedFunctions=len(specs),dedicatedHandlers=len(handlers))))

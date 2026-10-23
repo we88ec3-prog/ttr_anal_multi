@@ -1,0 +1,57 @@
+"""Read-only smoke queries and provenance checks; writes only its own result."""
+import datetime, hashlib, json, sqlite3, subprocess, sys
+from pathlib import Path
+HERE = Path(__file__).resolve().parent
+ROOT = HERE.parents[1]
+EXPECTED = '9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91'
+def sha(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+assert sha(ROOT / 'Tartaros.bin') == EXPECTED
+queries = [([], 'semantics', 10), (['--method', '0x7d28e0'], 'semantics', 1),
+           (['--method', '0x4b0640'], 'semantics', 0),
+           (['--parameter', '0xfbab80'], 'frame_parameters', 1),
+           (['--section', 'ATTACKED'], 'frame_parameters', 6),
+           (['--api', 'GetPrivateProfileIntA', '--limit', '100'], 'profile_calls', 32),
+           (['--api', 'WritePrivateProfileStringA'], 'profile_calls', 3),
+           (['--unresolved', '--limit', '100'], 'unresolved', 30),
+           (['--class-name', 'CLoginModuleGSP'], 'class_metadata', 1)]
+checks = []
+for args, key, expected_count in queries:
+    run = subprocess.run([sys.executable, str(HERE / 'query_records.py'), *args],
+                         capture_output=True, text=True, encoding='utf-8', check=True)
+    result = json.loads(run.stdout)
+    assert result['metadata']['source_sha256'] == EXPECTED
+    assert len(result[key]) == expected_count, (args, key, len(result[key]))
+    checks.append({'arguments': args, 'result_key': key, 'rows': len(result[key])})
+inputs = json.loads((HERE / 'input-provenance.json').read_text(encoding='utf-8'))
+for item in inputs:
+    assert sha(HERE / item['retained_snapshot']) == item['sha256']
+prior = []
+for name in ['kr-phase1-20261022', 'kr-boundaries-20261022', 'kr-motion-sources-20261022']:
+    folder = HERE.parent / name
+    manifest = json.loads((folder / 'artifact-manifest.json').read_text(encoding='utf-8'))
+    for item in manifest['files']:
+        path = folder / item['path']
+        assert sha(path) == item['sha256'], str(path)
+        assert path.stat().st_size == item['bytes'], str(path)
+    prior.append({'phase': name, 'verified_files': len(manifest['files'])})
+db = sqlite3.connect((HERE / 'methods.sqlite').as_uri() + '?mode=ro', uri=True)
+assert db.execute('pragma integrity_check').fetchone()[0] == 'ok'
+assert db.execute("select count(*) from methods where analysis_status='engine-body-and-call-context-only'").fetchone()[0] == 2
+evidence_count = 0
+for eid, locations in db.execute('select evidence_id,locations from evidence'):
+    for loc in json.loads(locations):
+        assert sha(HERE / loc['path']) == loc['file_sha256'], (eid, loc['path'])
+    evidence_count += 1
+for (record,) in db.execute('select record from data_structures'):
+    value = json.loads(record)
+    for eid in value.get('evidence_ids', []):
+        assert db.execute('select count(*) from evidence where evidence_id=?', (eid,)).fetchone()[0] == 1
+db.close()
+output = {'checked_at_utc': datetime.datetime.now(datetime.timezone.utc).isoformat(),
+          'source_sha256': EXPECTED, 'checks': 'passed', 'queries': checks,
+          'retained_input_snapshots': len(inputs), 'prior_phase_manifests': prior,
+          'evidence_records_with_verified_files': evidence_count,
+          'scope': 'Delivery integrity and read-only query behavior, not global semantic completeness.'}
+(HERE / 'delivery-validation.json').write_text(json.dumps(output, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+print(json.dumps(output, ensure_ascii=False))

@@ -1,0 +1,94 @@
+"""Source-bound analyst path records using saved REA CFG/Listing; no CFG reconstruction."""
+import hashlib, json, sqlite3, struct, sys
+from pathlib import Path
+HERE=Path(__file__).resolve().parent;ROOT=HERE.parents[1]
+sys.path.insert(0,str(ROOT/'anal'));from build_native_index import PE
+SHA='9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91'
+pe=PE(ROOT/'Tartaros.bin');assert hashlib.sha256(pe.data).hexdigest()==SHA
+inputs=json.loads((HERE/'input-provenance.json').read_text(encoding='utf-8'))
+for item in inputs:assert hashlib.sha256((HERE/item['snapshot']).read_bytes()).hexdigest()==item['sha256']
+response=json.loads((HERE/'input-snapshots/13-function-4b0640.json').read_text(encoding='utf-8'))
+e=response['structuredContent'];assert e['subject']['digest']['sha256']==SHA
+n=e['normalized_result'];eid=e['evidence_id']
+listing={int(s.split(':')[0],16):s for s in n['assembly']}
+blocks={int(b['start'],16):b for b in n['basic_blocks']}
+targets=struct.unpack('<9I',pe.read(0x4b1914,36))
+engine_targets={int(m['target_address'],16) for m in n['native_api']['jump_tables'][0]['mappings']}
+assert set(targets)==engine_targets
+assert targets==(0x4b0b69,0x4b118b,0x4b0eec,0x4b0e5a,0x4b0d14,0x4b15b7,0x4b1313,0x4b18d9,0x4b1673)
+def window(start,end):return [v for a,v in listing.items() if start<=a<end]
+def edge(start,end):
+    b=blocks[start];assert hex(end) in b['successors'];return {'source_block':hex(start),'destination_block':hex(end),'native_block':b}
+# Explicit analyst-selected edges, all already supplied by Ghidra's CFG.
+edges=[edge(a,b) for a,b in [(0x4b0d02,0x4b189a),(0x4b0e50,0x4b18c9),
+                           (0x4b1181,0x4b18c9),(0x4b188d,0x4b189a),
+                           (0x4b18c7,0x4b18c9),(0x4b18c9,0x4b18d9)]]
+frames=json.loads((HERE/'input-snapshots/framecontrol-table.json').read_text(encoding='utf-8'))
+frame_by_dest={int(r['destination'],16):r for r in frames['rows']}
+routes=[]
+def route(case,site,actor,group,result,windows,notes):
+    r={'id':f'case{case}-{actor}-{site:x}','packet_result_case':case,'switch_target':hex(targets[case]),
+       'call_site':hex(site),'callee':'0x7d28e0','receiver_actor_role':actor,
+       'receiver':'actor model pointer (+15C) +B4','group_ECX':group,'result_EDX':result,
+       'value_key':['NORMAL-VALUE','BLOCKED-VALUE','CRITICAL-VALUE'][result],
+       'ratio_key':['NORMAL-RATIO','BLOCKED-RATIO','CRITICAL-RATIO'][result],
+       'guard':'Chosen actor model is non-null, chosen actor+370 is nonzero, model+AC motion is non-null.',
+       'native_windows':[{'start':hex(a),'end_exclusive':hex(z),'listing':window(a,z)}for a,z in windows],
+       'notes':notes,'evidence_ids':[eid],'source_sha256':SHA}
+    if isinstance(group,int):
+        va=0xfbab80+4*(6*group+result)
+        r['value_parameter']=frame_by_dest[va]
+        r['ratio_parameter']=frame_by_dest[va+12]
+    else:r['group_limit']='Returned AL from the chosen model motion virtual+30; full enum/producers/bounds remain unknown.'
+    routes.append(r)
+for case in [0,8]:
+    route(case,0x4b18a6,'source','source model motion.v30() low byte',0,
+          [(0x4b0cd6,0x4b0d14)] if case==0 else [(0x4b1871,0x4b189a)],
+          'case0 reaches shared 4B189A from 4B0D0F; case8 falls through from 4B1898. Source guard failure can still continue to target path.')
+    route(case,0x4b18d4,'target',4,0,[(0x4b18ab,0x4b18d9)],
+          'This path executes XOR EDX,EDX at 4B18C7 before shared call tail.')
+for case,result,site,source_start,source_jump,target_start,target_end in [
+ (4,1,0x4b0e1d,0x4b0e22,0x4b0e55,0x4b0de5,0x4b0e22),
+ (2,2,0x4b114e,0x4b1153,0x4b1186,0x4b1116,0x4b1153)]:
+    route(case,site,'target','target model motion.v30() low byte',result,[(target_start,target_end)],
+          'Target model receives its motion category and BLOCKED/CRITICAL index.')
+    route(case,0x4b18d4,'source',4,result,[(source_start,source_jump+5),(0x4b18c9,0x4b18d9)],
+          'MOV EDX,result then JMP 4B18C9 bypasses XOR at 4B18C7; EAX was loaded from source actor+15C, not target.')
+# Include common receiver suffix in source normal windows for direct instruction review.
+for r in routes:
+    if r['call_site']=='0x4b18a6':r['native_windows'].append({'start':'0x4b189a','end_exclusive':'0x4b18ab','listing':window(0x4b189a,0x4b18ab)})
+corrections=[{'id':'C-4B18D4-PATHS','supersedes':[
+ 'kr-persistence-20261023/battle-frame-contexts.json: call_contexts[call_site=0x4b18d4].result_EDX=0',
+ 'kr-persistence-20261023/REPORT.md: four-callsite summary group4/result0'],
+ 'old_claim':'4B18D4 is uniformly result0 with actor+15C model receiver.',
+ 'corrected_claim':'4B18D4 has path-specific inputs: case0/8 target/group4/result0; case4 source/group4/result1; case2 source/group4/result2.',
+ 'reason':'4B0E55 and 4B1186 jump into 4B18C9, bypassing EDX zeroing at 4B18C7; EAX carries the source model on these branches.',
+ 'effect':'Use ATTACKED BLOCKED/CRITICAL fields for source reaction on cases4/2. Callsite-only constant argument summaries are incomplete.',
+ 'status':'instruction-and-native-CFG-confirmed','evidence_ids':[eid],
+ 'preservation':'Older phase manifest is retained unchanged; this correction overlay takes precedence.'}]
+regions=[{'start':0x4b1914,'end_exclusive':0x4b1938,'classification':'jump-target-table-u32x9',
+          'file_offset':pe.offset(0x4b1914),'raw_hex':pe.read(0x4b1914,36).hex(),
+          'sha256':hashlib.sha256(pe.read(0x4b1914,36)).hexdigest(),
+          'evidence_id':eid,'basis':'Ghidra native jump-table source plus exact indexed JMP and independent file bytes; not executable method body.'},
+         {'start':0x4b18c7,'end_exclusive':0x4b18d9,'classification':'shared-code-tail-with-multiple-entry-states',
+          'file_offset':pe.offset(0x4b18c7),'raw_hex':pe.read(0x4b18c7,18).hex(),
+          'sha256':hashlib.sha256(pe.read(0x4b18c7,18)).hexdigest(),'evidence_id':eid,
+          'basis':'Native CFG has separate blocks 4B18C7 and 4B18C9 with bypass edges; not independent function.'}]
+data={'source_sha256':SHA,'profile_digest':e['analysis_profile']['digest'],'provider':e['provider'],
+      'function':'0x4b0640','function_status':'partial-bounded-result-to-framecontrol-semantics',
+      'pcode_truncated':n['native_value_flow']['truncated'],'routes':routes,
+      'switch_cases':[{'case':i,'target':hex(v),'mapping_basis':'exact little-endian table order + MOVSX/CMP8/unsigned JA/indexed JMP'}for i,v in enumerate(targets)],
+      'selected_native_cfg_edges':edges,'regions':regions,'corrections':corrections,
+      'unknowns':['No full 4B0640 semantic completion.', 'Case0/8 visual paths differ; shared frame index does not make full behavior identical.',
+       'Actual INI values and formal time/category enums unobserved.', 'Motion virtual+30 targets remain unresolved.',
+       'No ordinary monster decision/skill producer or authority conclusion.']}
+(HERE/'binding-records.json').write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+db=sqlite3.connect(HERE/'bindings.sqlite')
+db.executescript('drop table if exists metadata;drop table if exists routes;drop table if exists switch_cases;drop table if exists corrections;drop table if exists regions;create table metadata(key text primary key,value text);create table routes(id text primary key,packet_case integer,call_site integer,actor_role text,group_index integer,result_index integer,record text);create table switch_cases(packet_case integer primary key,target integer,record text);create table corrections(id text primary key,record text);create table regions(start integer primary key,end_exclusive integer,classification text,record text);')
+db.executemany('insert into metadata values(?,?)',[('source_sha256',SHA),('evidence_id',eid),('profile_digest',e['analysis_profile']['digest']),('scope','Bounded path overlay; no global method completion count')])
+for r in routes:db.execute('insert into routes values(?,?,?,?,?,?,?)',(r['id'],r['packet_result_case'],int(r['call_site'],16),r['receiver_actor_role'],r['group_ECX'] if isinstance(r['group_ECX'],int)else None,r['result_EDX'],json.dumps(r,ensure_ascii=False)))
+for r in data['switch_cases']:db.execute('insert into switch_cases values(?,?,?)',(r['case'],int(r['target'],16),json.dumps(r)))
+for r in corrections:db.execute('insert into corrections values(?,?)',(r['id'],json.dumps(r,ensure_ascii=False)))
+for r in regions:db.execute('insert into regions values(?,?,?,?)',(r['start'],r['end_exclusive'],r['classification'],json.dumps(r,ensure_ascii=False)))
+db.commit();assert db.execute('pragma integrity_check').fetchone()[0]=='ok';db.close()
+print(json.dumps({'path_records':len(routes),'corrected_shared_callsite':'0x4b18d4','switch_targets':9,'new_valid_function_count':0}))

@@ -1,0 +1,78 @@
+"""Offline battle result/heading route audit; no runtime access or packets."""
+from pathlib import Path
+import hashlib
+import json
+import struct
+from build_native_index import PE
+from capstone import Cs, CS_ARCH_X86, CS_MODE_32
+
+ROOT = Path(__file__).resolve().parent.parent
+OUT = ROOT / 'anal/native-index'
+p = PE(ROOT / 'Tartaros.bin')
+md = Cs(CS_ARCH_X86, CS_MODE_32)
+idx = json.loads((OUT / 'Tartaros.bin.json').read_text(encoding='utf-8'))
+assert hashlib.sha256(p.data).hexdigest() == idx['sha256']
+
+def dump(start, end, name):
+    ins = list(md.disasm(p.read(start, end-start), start))
+    assert ins[-1].mnemonic == 'ret' and ins[-1].address + ins[-1].size == end
+    boundaries = {i.address for i in ins}
+    for i in ins:
+        if i.mnemonic.startswith('j') and i.op_str.startswith('0x'):
+            target = int(i.op_str, 16)
+            if start <= target < end:
+                assert target in boundaries, (hex(i.address), hex(target))
+    (OUT / (name + '.txt')).write_text('\n'.join(
+        f'{i.address:08X} {i.mnemonic:8} {i.op_str}' for i in ins)+'\n', encoding='utf-8')
+    return {i.address: i for i in ins}
+
+result = dump(0x4b0640, 0x4b1914, 'battle-result-common')
+scenario = dump(0x4c4920, 0x4c4aba, 'battle-result-scenario-feedback')
+feedback = dump(0x54a8f0, 0x54aa58, 'hero-ai-hit-feedback')
+movement = dump(0x4afe60, 0x4b0122, 'actor-movement-receive')
+heading = dump(0x4c8c30, 0x4c8c40, 'actor-heading-only')
+ready = dump(0x4b2570, 0x4b2615, 'battle-ready-common')
+mission_ready = dump(0x4230f0, 0x42317a, 'battle-ready-mission')
+assert result[0x4b0770].op_str == 'eax, eax, 0xd'
+assert result[0x4b077f].op_str == 'ebx, [eax + ecx + 2]'
+assert result[0x4b07af].op_str == 'edx, word ptr [ebx]'
+assert result[0x4b0819].op_str == 'edx, word ptr [ebx + 2]'
+assert result[0x4b0b55].op_str == 'eax, byte ptr [ebx + 4]'
+assert result[0x4b0b62].op_str == 'dword ptr [eax*4 + 0x4b1914]'
+targets = list(struct.unpack('<9I', p.read(0x4b1914, 36)))
+assert all(t in result for t in targets)
+assert targets[7] == 0x4b18d9  # advance record, no result-case body
+assert result[0x4b0afb].op_str == 'dword ptr [ebx + 6], eax'
+assert scenario[0x4c4951].op_str == '0x4b0640'
+assert scenario[0x4c4a51].op_str == '0x54a8f0'
+assert scenario[0x4c4a56].op_str == 'edi, 0xd'
+assert feedback[0x54a90c].op_str == 'ecx, 0x10'
+assert feedback[0x54a90f].op_str == 'eax, 3'
+assert feedback[0x54a921].op_str == 'edx, dword ptr [ebp + 0xc]'
+assert feedback[0x54aa4d].op_str == 'dword ptr [esi + eax*8], ecx'
+assert movement[0x4b00fa].op_str == 'ebx, 8'
+assert movement[0x4b00e2].op_str == 'edx, dword ptr [edx + 0x58]'
+assert heading[0x4c8c36].op_str == 'byte ptr [ecx + 0xb0], al'
+assert ready[0x4b259d].op_str == 'dword ptr [eax + 4], ebx'
+assert mission_ready[0x42311f].op_str == '0x4b2570'
+routes = {}
+for name in ('CMissionField', 'CScenarioField', 'CInfiniteDungeonField'):
+    v = next(v for v in idx['vtables'] if v['className'] == f'.?AV{name}@Scene@@'
+             and v['thisOffset'] == 0)
+    routes[name] = v['entries'][0x28//4]
+assert routes == {'CMissionField':0x4b0640, 'CScenarioField':0x4c4920,
+                  'CInfiniteDungeonField':0x4c4920}
+for name in ('CMonster', 'CCharacter'):
+    v = next(v for v in idx['vtables'] if v['className'] == f'.?AV{name}@@'
+             and v['thisOffset'] == 0)
+    assert v['entries'][0x58//4] == 0x4c8c30
+handlers = {r['command']:r['handler'] for r in idx['mainPacketHandlers']}
+assert handlers[0xe] == 0x436c40 and handlers[0xb] == 0x4afe60
+assert p.read(0x436c40, 5) == bytes.fromhex('8b01ff6028')
+report = dict(sha256=idx['sha256'], resultCommand=14, resultHeader=2, resultStride=13,
+              sceneVirtualOffset=40, sceneRoutes=routes, resultCases=targets,
+              movementCommand=11, movementHeader=2, movementStride=8,
+              headingOnlyFunction=0x4c8c30,
+              limitations='Result field semantics partial; callee graph not exhaustively expanded. No decision-source or P2P conclusion.')
+(OUT / 'battle-result-route-audit.json').write_text(json.dumps(report, indent=2)+'\n', encoding='utf-8')
+print(json.dumps(dict(checks='passed', boundedFunctions=7, resultCases=len(targets), sceneRoutes=routes)))

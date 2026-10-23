@@ -1,0 +1,19 @@
+# 廣場地圖與出生位置實驗
+
+使用者看到索瑪頭像與登入光圈、可旋轉鏡頭，但位於地下且不能移動。
+唯讀附加 PID26448：controller c0fac4、active=1、controlled entity 正確；
+模型非空、ready=1；entity position=(0,0,100)；fab1d0 移動地圖物件為 NULL。
+高度管理物件仍載入 select18.fld。不是尚未綁定角色。
+
+完整遍歷 fb74b0 的字串 map（4665 entries，nil 位於 node+2D）確認：
+60020=select18，511=square001D，4514=Square02D。
+本輪選 511 作為廣場測試地圖，尚未確認是否應使用較新版廣場4514。
+在 08/07/0A 之前送 12/6、map ID511，因12會先重設控制器。
+先前撤回的 context1 對應 mushroom01D，確實是森林，不能使用。
+
+4cab80 在新座標與原座標相同時跳過高度查詢；原fixture(0,0)正好等於
+建構初始值，保留高度100。因此改成暫定 planar(1000,1000)，觸發
+4cab30 經 fba838 的地形高度查詢。此位置是合成測試值，尚未證實可行走。
+
+四種封包 encode/decode 與 Python 編譯檢查通過。
+下一輪需確認真正廣場載入、模型顯示、地形高度、移動 bounds，以及背包開關。

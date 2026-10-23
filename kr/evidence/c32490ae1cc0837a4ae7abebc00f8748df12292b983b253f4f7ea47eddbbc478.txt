@@ -1,0 +1,97 @@
+{
+  "checks": "passed",
+  "sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+  "boundedFunctions": 6,
+  "functions": [
+    {
+      "name": "animation-worker-loop",
+      "start": "0x7b65b0",
+      "endExclusive": "0x7b6770"
+    },
+    {
+      "name": "animation-worker-start",
+      "start": "0x7b6770",
+      "endExclusive": "0x7b67d1"
+    },
+    {
+      "name": "animation-worker-task",
+      "start": "0x7b6010",
+      "endExclusive": "0x7b6191"
+    },
+    {
+      "name": "animation-completion-queue-consumer",
+      "start": "0x7b6330",
+      "endExclusive": "0x7b65ae"
+    },
+    {
+      "name": "animation-task-resource-load",
+      "start": "0x7b5980",
+      "endExclusive": "0x7b5c82"
+    },
+    {
+      "name": "drawing-batch-state-consumer",
+      "start": "0x7b40a0",
+      "endExclusive": "0x7b4ec7"
+    }
+  ],
+  "stateField": {
+    "root": "0xfd9420",
+    "offset": "0x90",
+    "absolute": "0xfd94b0",
+    "value2Behavior": "Sleep(1) branch in animation worker"
+  },
+  "animationFailureString": "Animation Load failed: %s",
+  "imports": {
+    "0xbd2304": "Sleep",
+    "0xbd22d4": "GetTickCount",
+    "0xbd20cc": "CreateEventW",
+    "0xbd20d0": "SetEvent",
+    "0xbd224c": "EnterCriticalSection",
+    "0xbd2248": "LeaveCriticalSection"
+  },
+  "localInstructionChecks": [
+    {
+      "address": "0x7b5641",
+      "operand": "eax, 0xfd9420"
+    },
+    {
+      "address": "0x7ab339",
+      "operand": "0xfd9420"
+    },
+    {
+      "address": "0x7ab33e",
+      "operand": "0x7b6770"
+    },
+    {
+      "address": "0x491d3b",
+      "operand": "0xfd9420"
+    },
+    {
+      "address": "0x491d40",
+      "operand": "0x7b6330"
+    },
+    {
+      "address": "0x4b1f24",
+      "operand": "dword ptr [0xfd94b0], 2"
+    },
+    {
+      "address": "0x492e47",
+      "operand": "0x7b40a0"
+    }
+  ],
+  "directKnownMonsterOrB0Calls": {
+    "animation-worker-loop": [],
+    "animation-worker-start": [],
+    "animation-worker-task": [],
+    "animation-completion-queue-consumer": [],
+    "animation-task-resource-load": [],
+    "drawing-batch-state-consumer": []
+  },
+  "limitations": [
+    "Original root/large client callers are local instruction checks, not full new audits.",
+    "Task callbacks, loader helpers and graphics virtual target not fully expanded.",
+    "State=2 has a verified wait-time effect, not a complete enum definition.",
+    "FBA830 controls this drawing-batch branch; other alias/indirect uses remain possible.",
+    "No original spawn scheduler, native AI activation or P2P authority established."
+  ]
+}

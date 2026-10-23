@@ -1,0 +1,47 @@
+"""Freeze this stage's delivery; does not claim full-program completion."""
+import datetime, hashlib, json
+from pathlib import Path
+HERE = Path(__file__).resolve().parent
+EXPECTED = '9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91'
+def sha(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+assert sha(HERE.parents[1] / 'Tartaros.bin') == EXPECTED
+assert json.loads((HERE / 'validation.json').read_text(encoding='utf-8'))['checks'] == 'passed'
+assert json.loads((HERE / 'delivery-validation.json').read_text(encoding='utf-8'))['checks'] == 'passed'
+close_files = ['mcp-evidence/25-close.json', 'followup/mcp-evidence/07-close.json',
+               'frame-consumers/mcp-evidence/14-close.json', 'workbench/mcp-evidence/16-close.json']
+closures = []
+for relative in close_files:
+    path = HERE / relative
+    response = json.loads(path.read_text(encoding='utf-8'))
+    assert not response.get('isError')
+    result = response['structuredContent']['result']
+    snapshot = Path(result['path'])
+    assert snapshot.resolve().is_relative_to(HERE.resolve())
+    assert snapshot.stat().st_size == result['bytes']
+    closures.append({'close_response': relative, 'response_sha256': sha(path),
+                     'snapshot': snapshot.relative_to(HERE).as_posix(),
+                     'snapshot_sha256': sha(snapshot), 'snapshot_bytes': snapshot.stat().st_size,
+                     'basis': 'Successful close_binary response from the retained public-MCP driver.'})
+status = json.loads((HERE / 'workbench/status.json').read_text(encoding='utf-8'))
+assert status['state'] == 'closed'
+now = datetime.datetime.now(datetime.timezone.utc)
+start = datetime.datetime(2026, 10, 23, 1, 8, 40, tzinfo=datetime.timezone.utc)
+closeout = {'source_sha256': EXPECTED, 'stage_started_utc': start.isoformat(),
+            'delivery_closed_utc': now.isoformat(), 'elapsed_calendar_minutes': (now-start).total_seconds()/60,
+            'native_analysis_end_utc': status['updated_utc'],
+            'time_limit_assessment': 'Native investigation ended about 33 minutes after stage start; derived artifact work and resumed delivery crossed the planned 90-minute stage limit. Continuous active-work duration cannot be established. No claim of on-time stage completion.',
+            'native_closures': closures, 'workbench_terminal_state': status['state'],
+            'current_goal_status': 'active', 'full_program_complete': False,
+            'results': json.loads((HERE / 'progress.json').read_text(encoding='utf-8')),
+            'remaining': 'See unknowns.json and HANDOFF.md; global region partition/function denominator/semantics/13-domain dataflow remain incomplete.'}
+(HERE / 'closeout.json').write_text(json.dumps(closeout, ensure_ascii=False, indent=2)+'\n', encoding='utf-8')
+files=[]
+for path in sorted(HERE.rglob('*')):
+    if path.is_file() and path.name != 'artifact-manifest.json' and '__pycache__' not in path.parts:
+        files.append({'path': path.relative_to(HERE).as_posix(), 'bytes': path.stat().st_size, 'sha256': sha(path)})
+manifest={'source_sha256':EXPECTED,'created_utc':now.isoformat(),'files':files}
+(HERE/'artifact-manifest.json').write_text(json.dumps(manifest,indent=2)+'\n',encoding='utf-8')
+for row in files:
+    assert sha(HERE/row['path']) == row['sha256']
+print(json.dumps({'stage_delivery':'closed','manifest_files':len(files),'full_program_complete':False}))

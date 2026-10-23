@@ -1,0 +1,86 @@
+# 四個動作／狀態來源候選的原生分類
+
+接續2026-10-22晚間工作，跨日交付時間以closeout.json為準。唯一原檔 `E:/Tartaros/workspace/Tartaros.bin`，SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。僅離線唯讀；未執行/附加遊戲、未呼叫目標API、未改原檔/資源/帳號/存檔，未展開繁中保護殼。
+
+## 本階段結果與限制
+
+本階段沒有定位新的普通怪物尋敵／選招producer。完成四個指定候選的物件／ABI／用途裁決，補出一條 **已有模型鍵→CDoll參照替換→既有motion重播** 的具體鏈；另三個候選分屬圖形或動畫資源，不再僅因slot68或offsetF0列入怪物決策來源。
+
+| 入口及右開範圍 | 已確認來源與行為 | 對普通怪物決策的裁決 |
+|---|---|---|
+| 4C8060..4C823D，477 bytes | Actor/Monster共用v34；+370 guard、+8C或+88模型鍵、CDoll參照替換、重套座標/朝向/大小；v68讀既有+38C、倍率1.0 | 本body是模型恢復及已保存動作的consumer，尚缺+38C的決策producer |
+| 5CB110..5CB1C0，176 bytes | manager由stack傳入、EDI為額外圖形介面；兩子物件保存裝置並各輸出+78資源；775540另外建立+7C資源 | 兩個v68使用七個顯式stack參數，與actor motion ABI不同 |
+| 74E4D0..74E89B，971 bytes | 同一device傳入D3DXCreateSprite，建立正交矩陣/表面/buffers及繪圖狀態；三個v68輸出到+1594/+1598/+165A0 | 圖形裝置初始化，不是動作/技能選擇 |
+| 7D59A0..7D5CC6，806 bytes | 輸入字串、ItemAniSet/Ani/Index節點及strtol；7D5AF1直接CALL402A70，ECX=destination+F0 | 字串與動畫資料載入，不是actor狀態機v8 |
+
+[semantic-records.json](semantic-records.json)保存4筆用途、參數/返回確認度、分支、副作用、欄位、caller/callee、未解間接呼叫及限制。[methods.sqlite](methods.sqlite)另保存9份engine dossier的完整可查詢證據與body ranges；其餘5支支援方法沒有全部升級成新增完整語意紀錄。
+
+## 模型恢復的資料流
+
+原檔CActor vtable C07554與CMonster C0C9DC的+34指標均是4C8060，+68均是4C8DA0；原始pointer bytes及RTTI台帳來源已核對。ECX→ESI在4C808C保存receiver。
+
+1. +370非零才重建。清+370與+15C/+160、釋放舊引用；用+8C，為零才fallback +88，低16bits交7A4C50。
+2. 4CA460寫vptr C0760C。原始RTTI名稱為 `.?AV?$_Ref_count@VCDoll@IS3D@@@tr1@std@@`，搭配+4/+8初值1、+C raw pointer與atomic更新，可識別為 `std::tr1::_Ref_count<IS3D::CDoll>` 的具體控制塊家族。
+3. 4E0F60使用EAX來源pair、EDI目的pair；本caller的EDI=&actor+15C。非alias路徑將來源兩DWORD清零，再寫目的並釋放舊control block；正常EAX返回EDI。這是move-like轉移，不是單純copy加引用。
+4. 重設+370=1，透過v44/v58/v5C重套+A0座標、+B0朝向、+B4大小等既有資料。4C8217讀+38C，4C8223經v68傳入該motion與1.0。
+
+```mermaid
+flowchart LR
+  A[actor +8C / +88 模型鍵] --> B[7A4C50: 模型建立]
+  B --> C[4CA460: CDoll共享控制塊]
+  C --> D[4E0F60: 移入 actor +15C/+160]
+  D --> E[重套既有座標/朝向/大小]
+  F[actor +38C 已保存motion] --> G[4C8223: actor v68 motion, 1.0]
+  E --> G
+  H[決定目標/技能/新motion的producer尚未定位] -.-> F
+```
+
+4C8060正常EAX固定1不等於每個配置/下層呼叫都成功；模型/虛擬方法的下層副作用與錯誤處理仍有缺口。沒有把重建模型或能播放動作升級成自主AI證據。
+
+## 圖形與動畫候選的具體排除依據
+
+**5CB110**：589D30在589D55把輸入ECX保存EDI，589DD5呼叫5CB110；caller同時建立帶RTTI的Graphics::CImageSprite並引用UI/Data/IMECandidate.eif。5CB110取manager+3C/+40，寫child+74=EDI，v68參數為 `device,0x70,0,0x144,1,&child+78,0`。不能採用Ghidra預設偽碼「v68()無參數」。775540使用child+74裝置，釋放舊child+7C後另外呼叫device v5C建立9×1資源；依child+80選0..3填入helper。**child+78與+7C是不同輸出，沒有把前者誤寫成775540的輸入。** manager/tree/child正式C++類名與全部填入helper未恢復。
+
+**74E4D0**：native callees明列D3DX9_32.DLL::D3DXCreateSprite及D3DXMatrixOrthoLH。裝置由[EBP+C]傳入；物件由[EBP+8]傳入；EAX/ECX另保存為整數尺寸並FILD轉float。Ghidra預設兩參數宣告漏掉後兩個register inputs。三個v68的長度分別50/70/15000(hex)，不是motion ID與FLOAT倍率。可確定圖形介面用途，但未綁定COM具體runtime實作地址，所有原生unknown仍保留。
+
+**7D59A0**：7D5AEB LEA ECX,[EDX+F0]；7D5AF1是直接CALL402A70。新dossier顯示該helper具有capacity+14(hex)、length+10(hex)、15-byte inline容量、alias/grow/copy及NUL結尾等narrow-string assignment特徵。ItemAniSet/Ani/Index及十進位strtol支持動畫資料用途；沒有把offsetF0與Actor內嵌FSM混同。前段先掃描字串，後段出現null判斷不能證明整個API接受null。parser/7EF670的完整格式與資源副作用仍未知。
+
+標準程式分類另存 [library-patterns.json](library-patterns.json)：4CA460有RTTI型別互證；4E0F60及402A70只確認操作idiom，沒有猜原始模板宣告、編譯器版本或原始C++函式名稱。
+
+## 區域分類、呼叫與證據品質
+
+775540的欄位+80選擇器對應switch資料表 **7755BC..7755CC（16 bytes）**，四個DWORD依序為7755B1/775595/77559D/7755A7，與Ghidra typed case0..3互證。77558B的unsigned JA直接去7755B7，這個邊界分支由原始指令獨立確認，不靠未解析的default標籤猜測。
+
+7755B9..7755BC為`8D4900`，位於RET後且不在observed body中，僅標padding候選，不宣稱全域不可達。以上在 [region-evidence.json](region-evidence.json)與DB分類表；其餘body只保存引擎範圍，不據此宣稱全域code/data分類完成。
+
+本階段29筆唯一native Evidence、9份dossier、4筆有限語意；13個instruction Evidence中12個地址可解碼。額外探查的589DC9不是指令邊界，原結果保留，沒有強行解碼或作為caller證明。重複查詢由相同Evidence ID去重，不重複計成果。
+
+本cohort有58條typed static call references、55個engine-unresolved callsites。它們包含COM、虛擬清理及其他helpers；用途分類不能取代實體callee位址解析，也不能與前兩階段總數直接相加。9份dossier的pcode皆未截斷，但這不等於語意或間接呼叫已完全閉合。
+
+## 重現、版本與驗證
+
+本輪session-start重新確認REA MCP6.5.0、skill42、Ghidra12.1.4、JDK21.0.12.1與原生decompiler可用。profile為 `965552102e88fd60a1ccde827b92cc552a22c4f08ddda16a7fc2bea3c04307c0`，仍只停用X86 Function Callee Purge。兩個公共MCP工作階段均成功匯出並close；無缺少引擎或新逾時，未安裝或修改全域設定。driver/輸入舊報告hash在input-provenance.json，查詢plan與完整結果均保存。
+
+7份輸入另存input-snapshots並逐一核對原記錄hash；其中動作分類舊報告因後加最新導覽段落，保留版本僅移除該已知段落並確認與開始時SHA完全一致。原生session於2026-10-22 15:57:37 UTC前完成close，主要查詢核驗檔於16:06:20 UTC產生；本次補交收束時間另存closeout.json。兩者間空窗不是持續原生分析或等待中的引擎工作，亦不拿整段牆鐘時間冒充分析工時。
+
+Python只整理JSON/SQLite、核對來源SHA、range hashes、pointer bytes、指定指令與CALL位移；沒有重建atlas或自製反編譯/模擬器。驗證通過19個關鍵指令、6個直接CALL、12個可解碼native Listing地址、RTTI控制塊型別、4個switch目標、DB integrity及semantic→Evidence關係。這些檢查只支持列出的範圍。
+
+```powershell
+python anal/kr-motion-sources-20261022/build_records.py
+python anal/kr-motion-sources-20261022/verify_records.py --derive-only
+# 首次核對並產生region/library派生資料後，再build一次納入DB；不重建歷史atlas。
+python anal/kr-motion-sources-20261022/build_records.py
+python anal/kr-motion-sources-20261022/verify_records.py
+python anal/kr-motion-sources-20261022/query_records.py --method 0x4C8060
+python anal/kr-motion-sources-20261022/query_records.py --method 0x4CA460
+python anal/kr-motion-sources-20261022/query_records.py --region-at 0x7755BC
+python anal/kr-motion-sources-20261022/query_records.py --unresolved
+```
+
+使用已保存Evidence即可重建派生DB；沒有新問題不重新啟動引擎。來源與未解項在 [unknowns.json](unknowns.json)，分開進度在 [progress.json](progress.json)。歷史54.57% executable/35.85%整檔byte union未重算，不能因本輪分類扣bytes或換算成語意完成率。
+
+## 新對話接續
+
+先讀本報告、semantic-records.json及unknowns.json，再查直接相關功能來源。四個候選的指定分支已分類，不再重跑。要找普通怪物producer，應改查有新receiver來源或命令生產/別名證據的封閉鏈；不要重新把顯式Rebind、EventActor、結果展示、小地圖或這批圖形資源當brain。MEF interpreter/OBJECT/COUNT及P2P權威仍未確認；沒有新consumer/別名或同版資料前不無限擴展舊路線。
+
+整體區域分類、有效函式總數、全程式語意及13個功能的所有資料流尚未完成。本階段完成的是四個候選的來源裁決與可驗證增量，不是縮小整體目標或宣稱完成全程式。

@@ -1,0 +1,70 @@
+"""Original KR Lua CreateObject ownership and cleanup boundaries, offline."""
+import hashlib,json,struct
+from pathlib import Path
+from build_native_index import PE
+from capstone import Cs,CS_ARCH_X86,CS_MODE_32
+ROOT=Path(__file__).resolve().parent.parent;OUT=ROOT/'anal/native-index'
+p=PE(ROOT/'Tartaros.bin');md=Cs(CS_ARCH_X86,CS_MODE_32)
+idx=json.loads((OUT/'Tartaros.bin.json').read_text(encoding='utf-8'))
+assert hashlib.sha256(p.data).hexdigest()==idx['sha256']
+specs=[('script-CreateObject-event-actor',0x562ec0,0x5632c5,'ret'),
+ ('register-CreateObject',0x566560,0x5665f9,'ret'),
+ ('event-actor-constructor',0x4d0b80,0x4d0c96,'ret'),
+ ('script-object-tree-node-allocation',0x57ef20,0x57ef85,'int3'),
+ ('script-object-tree-unique-insertion',0x82f200,0x82f2c6,'ret'),
+ ('script-DeleteAllObject',0x563a70,0x563c37,'ret'),
+ ('register-DeleteAllObject',0x567460,0x5674f9,'ret'),
+ ('register-DeleteObject',0x5666a0,0x566739,'ret'),
+ ('script-DeleteObject-no-op',0x476430,0x476433,'ret'),
+ ('script-Q-base-binding',0x565e40,0x565f15,'ret'),
+ ('script-Q-registration-and-base-load',0x560600,0x5607c3,'ret')]
+f={}
+for name,s,e,last in specs:
+ ins=list(md.disasm(p.read(s,e-s),s));assert sum(i.size for i in ins)==e-s
+ assert ins[-1].mnemonic==last
+ starts={i.address for i in ins}
+ for i in ins:
+  if i.mnemonic.startswith('j') and i.op_str.startswith('0x'):
+   t=int(i.op_str,16)
+   if s<=t<e:assert t in starts,(name,hex(i.address))
+ f[s]={i.address:i for i in ins}
+ (OUT/(name+'.txt')).write_text('\n'.join(f'{i.address:08X} {i.mnemonic:8} {i.op_str}' for i in ins)+'\n',encoding='utf-8')
+checks=[(0x562ec0,0x562f48,'0x438'),(0x562ec0,0x562f68,'0x4d0b80'),
+ (0x562ec0,0x562f82,'word ptr [ebx + 4], dx'),(0x562ec0,0x562f93,'dword ptr [ebx + 0x90], 0x10'),
+ (0x562ec0,0x563287,'esi, dword ptr [esp + 0x18]'),(0x562ec0,0x56328b,'esi, 0x18'),
+ (0x562ec0,0x56329c,'dword ptr [esp + 0x28], ebx'),(0x562ec0,0x5632a0,'0x57ef20'),
+ (0x562ec0,0x5632ab,'0x82f200'),(0x4d0b80,0x4d0bb8,'dword ptr [edi], 0xc0c824'),
+ (0x4d0b80,0x4d0c3a,'dword ptr [edi + 0xcc], xmm0'),
+ (0x57ef20,0x57ef26,'0x18'),(0x57ef20,0x57ef54,'dword ptr [ecx], edx'),
+ (0x57ef20,0x57ef59,'dword ptr [ecx + 4], edx'),
+ (0x82f200,0x82f2ae,'0x89120c'),(0x82f200,0x82f2b9,'byte ptr [esi + 4], 0'),
+ (0x563a70,0x563ab0,'edi, dword ptr [esi + 0x10]'),
+ (0x563a70,0x563ac6,'1'),(0x563a70,0x563b1a,'edi, [ecx + 0x18]'),
+ (0x563a70,0x563b1d,'0x823850'),
+ (0x566560,0x566578,'dword ptr [0xfe27a4], 0x562ec0'),
+ (0x567460,0x567478,'dword ptr [0xfe2804], 0x563a70'),
+ (0x5666a0,0x5666b8,'dword ptr [0xfe27ac], 0x476430'),
+ (0x565e40,0x565e4b,'dword ptr [0xfe2778], eax'),
+ (0x560600,0x56060d,'0x565e40'),(0x560600,0x5607b3,'0xc10658')]
+for s,a,op in checks:assert f[s][a].op_str==op,(hex(a),f[s][a].op_str,op)
+for a,text in [(0xd6a2e4,'CreateObject'),(0xc10604,'Q'),(0xc10658,'Event/qbase.lua')]:
+ assert p.read(a,60).split(b'\0')[0].decode('ascii')==text
+for s,name in [(0x5666a0,'DeleteObject'),(0x567460,'DeleteAllObject')]:
+ a=int(f[s][s+0x58].op_str,16)
+ assert p.read(a,60).split(b'\0')[0].decode('ascii')==name
+assert struct.unpack('<f',p.read(0xc456c0,4))[0]==1.0
+assert next(v for v in idx['vtables'] if v['address']==0xc0c824)['className']=='.?AVCEventActor@@'
+assert not any(i.mnemonic=='call' and i.op_str=='0x4d1710' for i in f[0x562ec0].values())
+speed=struct.unpack('<f',p.read(0xc55b6c,4))[0]
+r=dict(sha256=idx['sha256'],checks='passed',boundedFunctions=len(specs),
+ functions=[dict(name=n,start=hex(s),endExclusive=hex(e)) for n,s,e,_ in specs],
+ createdClass='CEventActor',allocationBytes=0x438,constructorBaseSpeed=speed,
+ mapInsertion='this+18; DWORD script ID key / CEventActor pointer value; unique insertion',
+ resourceTypeRanges='signed modelID <10:type0; <10000:type1; <11000:type6; <21000:type7; else log/type0',
+ limitations=['Only this CreateObject path is proven EventActor; no global claim all map insertion paths covered.',
+ 'Other registration APIs and multiargument Lua adapter not fully traced.',
+ 'Duplicate tree key discards new node; no proof caller safely frees newly allocated actor.',
+ 'Cleanup helper and resource/effect subcalls not fully expanded; no ordinary AI/wave/P2P authority proof.',
+ 'No deployment or runtime changes.'])
+(OUT/'script-object-lifecycle-audit.json').write_text(json.dumps(r,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+print(json.dumps(dict(checks='passed',boundedFunctions=len(specs),createdClass=r['createdClass'],baseSpeed=speed)))

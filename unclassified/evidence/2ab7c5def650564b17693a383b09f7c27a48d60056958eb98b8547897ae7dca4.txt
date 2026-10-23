@@ -1,0 +1,92 @@
+"""Attach to an existing client; record endpoints/errors, never credentials."""
+from pathlib import Path
+import argparse, datetime, json, sys, time
+r = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(r/'anal/python_deps'))
+import frida
+
+p = argparse.ArgumentParser()
+p.add_argument('--pid', type=int, required=True)
+p.add_argument('--seconds', type=int, default=300)
+a = p.parse_args()
+js = r'''
+function record(o) { o.time = new Date().toISOString(); send(o); }
+function str(p) { try { return p.readCString(); } catch (_) { return '<unreadable>'; } }
+function endpoint(p) {
+  try {
+    const family = p.readU16();
+    const port = (p.add(2).readU8() << 8) | p.add(3).readU8();
+    if (family === 2) {
+      const ip = [4,5,6,7].map(i => p.add(i).readU8()).join('.');
+      return {family, ip, port};
+    }
+    if (family === 23) {
+      const ip = Array.from({length:8}, (_,i) =>
+        ((p.add(8+i*2).readU8()<<8)|p.add(9+i*2).readU8()).toString(16)).join(':');
+      return {family, ip, port};
+    }
+    return {family};
+  } catch (_) { return {error:'unreadable sockaddr'}; }
+}
+const w = Process.getModuleByName('ws2_32.dll');
+for (const name of ['connect','WSAConnect']) {
+  const address = w.findExportByName(name);
+  if (!address) continue;
+  Interceptor.attach(address, {
+    onEnter(args) {
+      this.target = endpoint(args[1]);
+      record({event:'connect-enter', api:name, ...this.target,
+        caller:DebugSymbol.fromAddress(this.returnAddress).toString()});
+    },
+    onLeave(ret) {
+      const result = ret.toInt32();
+      record({event:'connect-result', api:name, ...this.target,
+        result, wsaError: result === -1 ? this.lastError : 0});
+    }
+  });
+}
+const dns = w.findExportByName('gethostbyname');
+if (dns) Interceptor.attach(dns, {
+  onEnter(args) { this.host = str(args[0]); record({event:'resolve-enter',host:this.host}); },
+  onLeave(ret) { record({event:'resolve-result',host:this.host,
+    success:!ret.isNull(),wsaError:ret.isNull()?this.lastError:0}); }
+});
+const main = Process.mainModule;
+if (Process.arch === 'ia32') {
+  const pe = main.base.add(main.base.add(0x3c).readU32());
+  if (pe.add(8).readU32() === TIMESTAMP) {
+    Interceptor.attach(main.base.add(0x406ad0), {
+      onEnter() {
+        const sp = this.context.esp;
+        record({event:'client-connect-enter',host:str(sp.add(4).readPointer()),
+          port:sp.add(8).readU32()});
+      }
+    });
+  } else record({event:'internal-hook-skipped',reason:'PE timestamp differs'});
+}
+record({event:'hooks-installed',pid:Process.id,arch:Process.arch,path:main.path});
+'''
+import struct
+b = (r/'Tartaros.bin').read_bytes()
+pe = struct.unpack_from('<I', b, 0x3c)[0]
+js = js.replace('TIMESTAMP', str(struct.unpack_from('<I', b, pe+8)[0]))
+out = r/'anal'/('login-runtime-'+datetime.datetime.now().strftime('%Y%m%d-%H%M%S')+'.jsonl')
+with out.open('w', encoding='utf-8') as f:
+ def message(m, data):
+  o = m.get('payload', m)
+  line = json.dumps(o, ensure_ascii=False)
+  f.write(line+'\n'); f.flush()
+  print(line, flush=True)
+ session = frida.get_local_device().attach(a.pid)
+ try:
+  script = session.create_script(js)
+  script.on('message', message)
+  script.load()
+  print('Trace file: '+str(out), flush=True)
+  print('Press login in the game now. Ctrl+C detaches; the game remains running.', flush=True)
+  time.sleep(a.seconds)
+ except KeyboardInterrupt:
+  pass
+ finally:
+  try: session.detach()
+  except frida.InvalidOperationError: pass

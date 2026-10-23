@@ -1,0 +1,68 @@
+"""Offline target-position packet and correction audit. Does not send packets."""
+from pathlib import Path
+import hashlib
+import json
+import struct
+from build_native_index import PE
+from capstone import Cs, CS_ARCH_X86, CS_MODE_32
+
+ROOT = Path(__file__).resolve().parent.parent
+OUT = ROOT / 'anal/native-index'
+p = PE(ROOT / 'Tartaros.bin')
+md = Cs(CS_ARCH_X86, CS_MODE_32)
+idx = json.loads((OUT / 'Tartaros.bin.json').read_text(encoding='utf-8'))
+assert hashlib.sha256(p.data).hexdigest() == idx['sha256']
+
+def dump(start, end, name):
+    ins = list(md.disasm(p.read(start,end-start),start))
+    assert ins[-1].mnemonic == 'ret' and ins[-1].address + ins[-1].size == end
+    bounds = {i.address for i in ins}
+    for i in ins:
+        if i.mnemonic.startswith('j') and i.op_str.startswith('0x'):
+            target = int(i.op_str,16)
+            if start <= target < end:
+                assert target in bounds
+    (OUT / (name+'.txt')).write_text('\n'.join(
+        f'{i.address:08X} {i.mnemonic:8} {i.op_str}' for i in ins)+'\n',encoding='utf-8')
+    return {i.address:i for i in ins}
+
+target = dump(0x4b2730,0x4b28c3,'actor-target-position-receive')
+correct = dump(0x4cad60,0x4cae94,'actor-residual-position-correction')
+stop = dump(0x4b2620,0x4b272e,'actor-battle-stop-receive')
+assert target[0x4b2768].op_str == 'ecx, [eax - 2]'
+assert target[0x4b2772].op_str == 'edx, 3'  # 0xAAAAAAAB multiply + shift = /12
+assert target[0x4b27b9].op_str == 'edx, word ptr [esi - 2]'
+assert target[0x4b2825].op_str == 'dword ptr [eax + 0xc0], edx'
+assert target[0x4b282e].op_str == 'dword ptr [eax + 0xc4], edx'
+assert target[0x4b2821].op_str == 'ecx, word ptr [esi + 8]'
+assert target[0x4b2834].op_str == 'dword ptr [eax + 0xc8], ecx'
+assert target[0x4b283a].op_str == 'dword ptr [eax + 0xd4], 1'
+assert target[0x4b2809].op_str == 'dword ptr [eax + 0xd8], ecx'
+assert target[0x4b2846].op_str == 'dword ptr [eax + 0xe8], ecx'
+assert target[0x4b284f].op_str == 'dword ptr [eax + 0xec], edx'
+assert target[0x4b289f].op_str == 'esi, 0xc'
+assert correct[0x4cade8].op_str == 'dword ptr [ecx + 0xd8]'
+assert correct[0x4cadf7].op_str == 'dword ptr [ecx + 0xdc]'
+assert correct[0x4cae56].op_str == '0x4cae83'
+assert correct[0x4cae63].op_str == 'eax, dword ptr [eax + 0x44]'
+assert correct[0x4cae85].op_str == 'edx, dword ptr [edx + 0x54]'
+assert stop[0x4b262c].op_str == 'dword ptr [eax + 4], 0'
+assert stop[0x4b26aa].op_str == 'eax, 0x7fff'
+assert next(r for r in idx['mainPacketHandlers'] if r['command']==0x18)['handler']==0x4b2730
+assert next(r for r in idx['mainPacketHandlers'] if r['command']==0x15)['handler']==0x4b2620
+# This nearby target producer is a different object class, not a monster ctor.
+ctor = {i.address:i for i in md.disasm(p.read(0x4cfd10,0x80),0x4cfd10)}
+assert ctor[0x4cfd4b].op_str == 'dword ptr [esi], 0xc07c0c'
+assert next(v for v in idx['vtables'] if v['address']==0xc07c0c)['className']=='.?AVCDropItem@@'
+constants = {hex(a):struct.unpack('<f',p.read(a,4))[0] for a in [0xc558c0,0xc55a60]}
+report = dict(sha256=idx['sha256'],command=24,headerBytes=2,rowBytes=12,
+              rowFields=[dict(offset=0,type='WORD',meaning='actorID'),
+                         dict(offset=2,type='FLOAT',meaning='targetX'),
+                         dict(offset=6,type='FLOAT',meaning='targetY'),
+                         dict(offset=10,type='WORD',meaning='step count')],
+              fieldsWritten=['C0','C4','C8','D4','D8','DC','E8','EC'],
+              correctionConstants=constants,
+              excludedNearbyConstructor=dict(address=0x4cfd10,className='CDropItem'),
+              limitation='Target command receiver, not enemy decision producer. Step count is not proven milliseconds; no runtime packet emitted.')
+(OUT / 'actor-target-producer-audit.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8')
+print(json.dumps(dict(checks='passed',boundedFunctions=3,targetRowBytes=12,constants=constants)))

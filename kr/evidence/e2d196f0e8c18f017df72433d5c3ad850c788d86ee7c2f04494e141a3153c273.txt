@@ -1,0 +1,83 @@
+0082F200 push     ebp
+0082F201 mov      ebp, esp
+0082F203 sub      esp, 8
+0082F206 mov      eax, dword ptr [ebp + 8]
+0082F209 mov      edx, dword ptr [ebp + 0xc]
+0082F20C push     ebx
+0082F20D push     edi
+0082F20E mov      edi, dword ptr [eax + 4]
+0082F211 mov      eax, dword ptr [edi + 4]
+0082F214 cmp      byte ptr [eax + 0x15], 0
+0082F218 mov      cl, 1
+0082F21A mov      byte ptr [ebp - 8], cl
+0082F21D jne      0x82f23e
+0082F21F mov      ebx, dword ptr [edx + 0xc]
+0082F222 cmp      ebx, dword ptr [eax + 0xc]
+0082F225 mov      edi, eax
+0082F227 setb     cl
+0082F22A mov      byte ptr [ebp - 8], cl
+0082F22D test     cl, cl
+0082F22F je       0x82f235
+0082F231 mov      eax, dword ptr [eax]
+0082F233 jmp      0x82f238
+0082F235 mov      eax, dword ptr [eax + 8]
+0082F238 cmp      byte ptr [eax + 0x15], 0
+0082F23C je       0x82f222
+0082F23E mov      ebx, edi
+0082F240 mov      dword ptr [ebp - 4], ebx
+0082F243 test     cl, cl
+0082F245 je       0x82f281
+0082F247 mov      ecx, dword ptr [ebp + 8]
+0082F24A mov      eax, dword ptr [ecx + 4]
+0082F24D cmp      edi, dword ptr [eax]
+0082F24F jne      0x82f273
+0082F251 push     edx
+0082F252 push     1
+0082F254 lea      edx, [ebp + 0xc]
+0082F257 mov      eax, edi
+0082F259 push     edx
+0082F25A mov      edi, ecx
+0082F25C call     0x44bd00
+0082F261 mov      eax, dword ptr [eax]
+0082F263 pop      edi
+0082F264 mov      dword ptr [esi], eax
+0082F266 mov      byte ptr [esi + 4], 1
+0082F26A mov      eax, esi
+0082F26C pop      ebx
+0082F26D mov      esp, ebp
+0082F26F pop      ebp
+0082F270 ret      8
+0082F273 lea      eax, [ebp - 4]
+0082F276 call     0x53f8a0
+0082F27B mov      ebx, dword ptr [ebp - 4]
+0082F27E mov      edx, dword ptr [ebp + 0xc]
+0082F281 mov      ecx, dword ptr [ebx + 0xc]
+0082F284 push     edx
+0082F285 cmp      ecx, dword ptr [edx + 0xc]
+0082F288 jae      0x82f2ae
+0082F28A mov      edx, dword ptr [ebp - 8]
+0082F28D push     edx
+0082F28E lea      eax, [ebp + 0xc]
+0082F291 push     eax
+0082F292 mov      eax, edi
+0082F294 mov      edi, dword ptr [ebp + 8]
+0082F297 call     0x44bd00
+0082F29C mov      ecx, dword ptr [eax]
+0082F29E pop      edi
+0082F29F mov      dword ptr [esi], ecx
+0082F2A1 mov      byte ptr [esi + 4], 1
+0082F2A5 mov      eax, esi
+0082F2A7 pop      ebx
+0082F2A8 mov      esp, ebp
+0082F2AA pop      ebp
+0082F2AB ret      8
+0082F2AE call     0x89120c
+0082F2B3 add      esp, 4
+0082F2B6 pop      edi
+0082F2B7 mov      dword ptr [esi], ebx
+0082F2B9 mov      byte ptr [esi + 4], 0
+0082F2BD mov      eax, esi
+0082F2BF pop      ebx
+0082F2C0 mov      esp, ebp
+0082F2C2 pop      ebp
+0082F2C3 ret      8

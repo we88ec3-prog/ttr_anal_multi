@@ -1,0 +1,79 @@
+"""Offline quest notification delivery and followup dialogue audit."""
+import hashlib, json, re, struct
+from pathlib import Path
+from build_native_index import PE
+from capstone import Cs, CS_ARCH_X86, CS_MODE_32
+
+ROOT=Path(__file__).resolve().parent.parent
+OUT=ROOT/'anal/native-index'
+p=PE(ROOT/'Tartaros.bin'); m=Cs(CS_ARCH_X86,CS_MODE_32)
+idx=json.loads((OUT/'Tartaros.bin.json').read_text(encoding='utf-8'))
+assert hashlib.sha256(p.data).hexdigest()==idx['sha256']
+specs=[('quest-client-registration',0x493170,0x494355),
+ ('quest-client-dispatch',0x48aad0,0x48ab68),
+ ('quest-client-wrapper',0x494440,0x4944c2),
+ ('quest-f438b-open-mode2',0x5b6d20,0x5b6e55),
+ ('quest-f438c-open-mode3',0x5b6e60,0x5b6f95)]
+funcs={}
+for name,start,end in specs:
+ ins=list(m.disasm(p.read(start,end-start),start))
+ assert sum(i.size for i in ins)==end-start and ins[-1].mnemonic=='ret',name
+ bounds={i.address for i in ins}
+ for i in ins:
+  if i.mnemonic.startswith('j') and i.op_str.startswith('0x'):
+   t=int(i.op_str,16)
+   if start<=t<end: assert t in bounds,(name,hex(t))
+ funcs[start]={i.address:i for i in ins}
+ (OUT/(name+'.txt')).write_text('\n'.join(f'{i.address:08X} {i.mnemonic:8} {i.op_str}' for i in ins)+'\n',encoding='utf-8')
+
+checks=[(0x48aad0,0x48aae6,'ecx, dword ptr [edi + eax*8 + 0xc]'),
+ (0x48aad0,0x48ab34,'ecx, [eax + edi - 0x200]'),
+ (0x494440,0x4944a0,'eax, dword ptr [0xfab2a0]'),
+ (0x494440,0x4944a7,'edx, dword ptr [eax + 4]'),
+ (0x494440,0x4944aa,'ecx, 0xfab2a0'),
+ (0x5b6d20,0x5b6d5b,'eax, 0x105b9'),
+ (0x5b6d20,0x5b6e17,'ecx, dword ptr [esi + 0x28]'),
+ (0x5b6d20,0x5b6e21,'2'),(0x5b6d20,0x5b6e24,'0x636520'),
+ (0x5b6e60,0x5b6e9b,'eax, 0x105b9'),
+ (0x5b6e60,0x5b6f57,'ecx, dword ptr [esi + 0x2c]'),
+ (0x5b6e60,0x5b6f61,'3'),(0x5b6e60,0x5b6f64,'0x636520')]
+for s,a,op in checks:assert funcs[s][a].op_str==op,(hex(a),op)
+for a,op in [(0x6366ce,'eax, dword ptr [ebp + 0x10]'),(0x6366d1,'0x500f90')]:
+ assert next(m.disasm(p.read(a,8),a)).op_str==op
+
+# Re-derive the upstream table from the original full registration, rather than
+# relying on the incomplete CDefaultScene mainPacketHandlers index.
+constants={};rows=[]
+for i in funcs[0x493170].values():
+ if i.mnemonic!='mov':continue
+ r=re.fullmatch(r'(edx|edi), (0x[0-9a-f]+|[0-9]+)',i.op_str)
+ if r:constants[r[1]]=int(r[2],0);continue
+ r=re.fullmatch(r'dword ptr \[eax \+ (0x[0-9a-f]+|[0-9]+)\], (edx|0x[0-9a-f]+)',i.op_str)
+ if not r:continue
+ offset=int(r[1],0);target=constants.get(r[2]) if r[2]=='edx' else int(r[2],0)
+ if offset>=0x208 and (offset-0x208)%16==0 and target and 0x400000<=target<0xb00000:
+  rows.append(dict(command=(offset-0x208)//16,handler=target,registration=i.address))
+assert len(rows)==197
+quest=[r for r in rows if r['handler']==0x494440]
+assert [r['command'] for r in quest]==[0x40,0x45,0x46,0x47,0x64,0x65,0x6f,0x72,0x74]
+assert next(v for v in idx['vtables'] if v['address']==0xc0db08)['entries'][1]==0x4fda30
+
+events={}
+for event,target,calladdr,callee in [(0xf438b,0x5b7fff,0x5b8003,0x5b6d20),
+                                   (0xf438c,0x5b8011,0x5b8015,0x5b6e60)]:
+ slot=p.read(0x5b8460+event-0xf4364,1)[0]
+ assert struct.unpack('<I',p.read(0x5b8394+slot*4,4))[0]==target
+ ins=next(m.disasm(p.read(calladdr,5),calladdr))
+ assert ins.mnemonic=='call' and ins.op_str==hex(callee)
+ events[hex(event)]=dict(target=hex(target),callee=hex(callee))
+report=dict(checks='passed',sha256=idx['sha256'],boundedFunctions=len(specs),
+ functions=[dict(name=n,start=hex(s),endExclusive=hex(e)) for n,s,e in specs],
+ upstreamQuestCommands=quest,lobbyEvents=events,
+ followup=dict(event='F438C',id='event+14',dataId='questRecord+2C',contextId='FAB1BC',mode=3,
+  nextSelection='prior636B70 ->5007D0 filter record28==dataId and record10/14 contains completedID ->F438A'),
+ limitations=['F438C chain applies to original Lobby/Square page, not all pages.',
+  'Reused prior queue drain/TalkBox/quest map proofs; no live packet sequence.',
+  'No directCMonster constructor call in fivefunctions; indirect/helpers not exhaustive.',
+  'NativeAI/wave/P2P decision producer not established.'])
+(OUT/'quest-followup-delivery-audit.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+print(json.dumps(dict(checks='passed',boundedFunctions=len(specs),questCommands=len(quest))))

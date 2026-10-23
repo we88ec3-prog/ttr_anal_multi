@@ -1,0 +1,17 @@
+"""Retain exact native call windows and bounded field aliases, not reconstructed source."""
+import hashlib,json
+from pathlib import Path
+HERE=Path(__file__).resolve().parent
+def get(name):
+ f=HERE/'workbench/mcp-evidence'/name;e=json.loads(f.read_text(encoding='utf-8'))['structuredContent'];return e,f
+battle,bf=get('13-function-4b0640.json');tick,tf=get('14-function-7a5c50.json');setter,sf=get('12-function-7d28e0.json');consumer,cf=get('11-function-7a87d0.json')
+rows=[]
+for address,result,category in [(0x4b0e1d,1,'motion interface v30 AL'),(0x4b114e,2,'motion interface v30 AL'),(0x4b18a6,0,'motion interface v30 AL'),(0x4b18d4,0,'constant4')]:
+ assembly=battle['normalized_result']['assembly'];index=next(i for i,v in enumerate(assembly) if v.startswith(hex(address)+':'))
+ rows.append({'call_site':hex(address),'target':'0x7d28e0','stack_receiver':'actor+15C model pointer +0xB4','group_source':category,'result_EDX':result,'evidence_id':battle['evidence_id'],'native_window':assembly[max(0,index-17):index+3],'scope':'Only this argument-transfer context is certified; parent pcode is truncated.'})
+assembly=tick['normalized_result']['assembly'];index=next(i for i,v in enumerate(assembly) if v.startswith('0x7a5dd9:'))
+rows.append({'call_site':'0x7a5dd9','target':'0x7a87d0','stack_receiver':'same model pointer from [EBP+8] via EBX','evidence_id':tick['evidence_id'],'native_window':assembly[index-12:index+3],'scope':'Forwarding context, not complete semantic restoration of all 7A5C50 branches.'})
+aliases=[{'subobject_offset':hex(s),'model_offset':hex(0xb4+s),'role':role} for s,role in [(0x18,'active'),(0x1c,'group'),(0x20,'result'),(0x24,'VALUE threshold'),(0x28,'elapsed accumulator'),(0x2c,'withheld/backlog amount'),(0x30,'progress multiplier'),(0x34,'updated flag')]]
+report={'source_sha256':battle['subject']['digest']['sha256'],'call_contexts':rows,'bounded_structure_view':{'name':'model-frame-control-view','label_origin':'analyst descriptive label, not recovered original C++ type','relative_model_base':'0xb4','observed_end_exclusive':'0xec','minimum_observed_span_bytes':56,'exact_class_size_known':False,'aliases':aliases,'evidence_ids':[setter['evidence_id'],consumer['evidence_id'],battle['evidence_id']]},'historical_actor_tick_link':{'call_site':'0x4c87fa','target':'0x7a5c50','receiver_source':'actor+15C, shown in retained actor-model-and-state-tick-full.txt; independent bytes checked by verify_records.py','native_incoming_reference_evidence':tick['evidence_id']},'parent_limitations':{'4b0640_pcode_truncated':battle['normalized_result']['native_value_flow']['truncated'],'7a5c50_only_forwarding_context':True}}
+(HERE/'battle-frame-contexts.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+print(json.dumps({'call_contexts':len(rows),'field_aliases':len(aliases)}))

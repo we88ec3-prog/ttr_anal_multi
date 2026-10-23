@@ -1,0 +1,67 @@
+"""Independent PE/Capstone checks at declared semantics anchors; no execution."""
+import hashlib,json,sqlite3,struct,sys
+from pathlib import Path
+HERE=Path(__file__).resolve().parent;ROOT=HERE.parents[1]
+sys.path.insert(0,str(ROOT/'anal'));from build_native_index import PE
+import capstone
+from capstone.x86 import X86_OP_IMM,X86_OP_MEM
+pe=PE(ROOT/'Tartaros.bin');SHA='9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91'
+assert hashlib.sha256(pe.data).hexdigest()==SHA
+cs=capstone.Cs(capstone.CS_ARCH_X86,capstone.CS_MODE_32);cs.detail=True;checks=[]
+def ins(a,mnemonic,expected_op=None):
+    i=next(cs.disasm(pe.read(a,15),a,count=1));assert i.mnemonic==mnemonic,(hex(a),i.mnemonic)
+    if expected_op is not None:assert i.op_str==expected_op,(hex(a),i.op_str)
+    checks.append({'address':hex(a),'mnemonic':i.mnemonic,'operand':i.op_str,'raw_hex':i.bytes.hex()});return i
+def imm(i,value):assert any(o.type==X86_OP_IMM and o.imm==value for o in i.operands),(i.op_str,value)
+for a,b in [(0x7ac052,0xc4fd0c),(0x7abe02,0xc4fd0c)]:imm(ins(a,'mov'),b)
+for a in [0x7ac03c]:imm(ins(a,'push'),0x30)
+ins(0x7ac03e,'mov','esi, eax');ins(0x7ac037,'mov','ebx, dword ptr [ebp + 8]')
+for a,op in [(0x7ac07c,'eax, dword ptr [ebp + 0xc]'),(0x7ac082,'ecx, dword ptr [ebp + 0x10]'),(0x7ac088,'eax, dword ptr [ebp + 0x14]')]:ins(a,'mov',op)
+imm(ins(0x7ac0b1,'cmp'),3);imm(ins(0x7ac0b4,'ja'),0x7ac20a)
+i=ins(0x7ac0ba,'jmp');assert i.operands[0].mem.disp==0x7ac218
+targets=struct.unpack('<4I',pe.read(0x7ac218,16));assert targets==(0x7ac0d2,0x7ac0c1,0x7ac0d2,0x7ac0c1)
+for a,v in [(0xc55ab4,60.),(0xc55968,50.),(0xc55798,20.),(0xc556c0,10.)]:assert struct.unpack('<f',pe.read(a,4))[0]==v
+ins(0x7abd00,'mov','esi, edx');ins(0x7abd0f,'neg','ecx');imm(ins(0x7abd1c,'je'),0x7ac00c)
+imm(ins(0x7abec9,'cmp'),5);imm(ins(0x7abf03,'mov'),0xc101b4)
+assert pe.read(0xc101b4,13)==b'Critical.dds\0'
+ins(0x551f2e,'mov','edi, ecx');ins(0x551f29,'mov','esi, dword ptr [edx]')
+imm(ins(0x551f34,'cmp'),2);imm(ins(0x551f39,'cmp'),3)
+for a,t in [(0x551f45,0x551cd0),(0x551f59,0x551b80),(0x551f78,0x551dd0)]:imm(ins(a,'call'),t)
+ins(0x5521f6,'mov','eax, dword ptr [ebp + 0x18]');ins(0x552200,'cmp','dword ptr [ebp + 0xc], esi')
+for a,t in [(0x552208,0xc0fea4),(0x552212,0xc0feb4)]:imm(ins(a,'mov'),t)
+assert pe.read(0xc0fea4,len(b'MONSTER_STRUCK\0'))==b'MONSTER_STRUCK\0'
+assert pe.read(0xc0feb4,7)==b'STRUCK\0'
+imm(ins(0x552226,'push'),0x7c);ins(0x552289,'mov','dl, byte ptr [ebp + 0x1c]')
+imm(ins(0x55228c,'mov'),0xfb7470);imm(ins(0x552291,'call'),0x4f6f70)
+ins(0x5522da,'mov','ecx, dword ptr [ebp + 0x14]');ins(0x5522dd,'mov','edi, dword ptr [ebp + 0x10]')
+imm(ins(0x5522f7,'call'),0x550580)
+for a,t in [(0x7ac207,16),(0x7ac212,16),(0x7ac027,16),(0x551f82,16),(0x552346,24),(0x55235c,24)]:imm(ins(a,'ret'),t)
+# Parent passes row+C and row+5 before the singleton getter; getter's observed native body ends in plain RET.
+ins(0x4b0b71,'movsx','edx, byte ptr [ebx + 0xc]');ins(0x4b0b7a,'movsx','edx, byte ptr [ebx + 5]')
+ins(0x4b0b85,'sete','al');imm(ins(0x4b0b82,'cmp'),1)
+assert pe.read(0x49b1a1,1)==b'\xc3'
+imm(ins(0x4b0b97,'call'),0x5521d0)
+ins(0x4b0bf7,'mov','ecx, dword ptr [ebx + 6]');ins(0x4b0bfa,'mov','edx, eax');imm(ins(0x4b0bfc,'call'),0x7abcd0)
+relation=json.loads((HERE/'class-relations.json').read_text(encoding='utf-8'))
+assert relation['class_metadata']['address']==0xc4fd0c
+for key in ['range','col_range','hierarchy_range','base_array_range']:
+    r=json.loads(relation['class_metadata'][key]);assert hashlib.sha256(pe.read(r['va'],r['size'])).hexdigest()==r['sha256']
+assert struct.unpack('<I',pe.read(0xc4fd08,4))[0]==relation['class_metadata']['complete_object_locator']
+records=json.loads((HERE/'effect-semantic-records.json').read_text(encoding='utf-8'));assert len(records)==4
+db=sqlite3.connect((HERE/'methods.sqlite').as_uri()+'?mode=ro',uri=True);assert db.execute('pragma integrity_check').fetchone()[0]=='ok'
+assert db.execute('select count(*) from semantics').fetchone()[0]==4
+assert db.execute('select count(*) from calls where status=?',('engine-unresolved',)).fetchone()[0]==0
+for method,start,end,offset,sha in db.execute('select * from ranges'):
+    assert pe.offset(start)==offset and hashlib.sha256(pe.read(start,end-start)).hexdigest()==sha
+for eid,location in db.execute('select evidence_id,location from evidence'):
+    loc=json.loads(location);p=HERE/loc['path'];assert hashlib.sha256(p.read_bytes()).hexdigest()==loc['sha256']
+    e=json.loads(p.read_text(encoding='utf-8'))['structuredContent'];assert e['subject']['digest']['sha256']==SHA
+    assert e['normalized_result']['native_value_flow']['truncated'] is False
+    assert e['evidence_id']==eid
+db.close()
+output={'source_sha256':SHA,'checks':'passed','critical_instructions':checks,'panel_rtti_ranges_verified':4,
+        'effect_semantic_records':4,'mode_switch_targets':list(map(hex,targets)),
+        'abi_correction':'5521D0 sixth stack parameter [EBP+1C] and RET18 independently confirmed; default five-argument pseudocode is incomplete.',
+        'limits':'No target execution; all helper semantics and whole-program completeness remain unproven.'}
+(HERE/'effect-validation.json').write_text(json.dumps(output,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+print(json.dumps({'checks':'passed','critical_instructions':len(checks),'semantics':4,'rtti_ranges':4}))

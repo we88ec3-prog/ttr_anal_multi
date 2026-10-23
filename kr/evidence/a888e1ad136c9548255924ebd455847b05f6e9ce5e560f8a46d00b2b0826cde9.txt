@@ -1,0 +1,51 @@
+# 命令列實際接收者：CLoginModuleGSP
+
+2026-10-05。離線分析原始韓版 bin，未修改遊戲、服務、存檔或 v41 自製 AI。
+
+前一輪把入口的 virtual +1C 暫稱為 client 方法；本輪確認實際是 **CLoginModuleGSP 登入模組**。它解析命令列、選登入模式與伺服器位址來源，再選擇登入封包。這條已解出的路徑沒有戰鬥房主、P2P 或怪物原生決策的證據。
+
+## 物件與驗證
+
+44D680–44D6EA 返回 FBACD4 的地址；首次取得時呼叫 6D6300 並儲存物件。完整 constructor 6D6300–6D634B（含第二個 return）配置 64 hex bytes，寫 vtable BFB01C，預設 this+8=52 hex、this+28=1。RTTI 為 CLoginModuleGSP，不是 CClient。
+
+Virtual +1C=440280 解析命令列；+20=4405C0 初始化 endpoint；+30=440790 選登入發送函式。範圍右界皆 exclusive preferred VA。
+
+`audit_login_module_command_line.py` 檢查 8 個完整函式的 SHA、覆蓋、內部分支、RTTI/vtable、欄位與送包指令，結果 passed。輸出 native-index/login-module-command-audit.json 和逐指令記錄。
+
+重跑：
+
+```powershell
+& 'C:\Programs\Python\Python310\python.exe' 'E:\Tartaros\workspace\anal\audit_login_module_command_line.py'
+```
+
+## 命令列模式
+
+完整 440280–4405BB 使用空格、& 作為 split helper 參數，對產生字串比對。Split／transform helper 尚未完整展開，不把精確 quoting 或最後 token 語意當已驗證結論。
+
+| 已確認分支 | this+8 | 後續 |
+|---|---|---|
+| 字串等於 Rlyeh 且 serverIp.ini 查詢成功 | 40 hex | endpoint 初始化用 serverip.ini 相關 helper |
+| 空字串 | 52 hex | 固定 IPv4 字串；auth 00E8 |
+| 第三個固定 marker 匹配 | 54 hex | 另一 IPv4 字串；auth 000F |
+| 未匹配 | 保留預設／既有值 | 本函式不產生怪物或戰鬥 ownership 設定 |
+
+命中分支共同寫 this+28=1，沒有把這個欄位解釋成 authority。初始化 4405C0–44078F 將位址字串存 this+C；完整 formatter 440850–440925 使用 %d.%d.%d.%d。檔案／轉換 helper 的完整語意尚未解出。
+
+## 登入封包
+
+完整 dispatch 440790–44082B 含三個 return 分支，不能在第一個 ret 截斷。
+
+| 模式 | 完整函式範圍 | command | 長度 | network slot |
+|---|---|---|---|---|
+| 52 hex | 4A3360–4A35B5 | 00E8 | 70 hex = 112 bytes | 1 |
+| 54 hex／其他 | 4A31B0–4A3357 | 000F | D6 hex = 214 bytes | 1 |
+
+兩者均用既有 FBA854 network virtual +10 Send，沒有在這兩個 body 建立新 peer connection。Slot 1 與既有登入連線初始化相符。輸入字串轉換、固定欄位與編碼 helper 尚未全部解出，這不是完整 auth 格式文件，也沒有輸出帳密。
+
+不能由這條登入路徑推論整個程式沒有 P2P，或其他地方完全不使用 mode 欄位；目前只是沒有把它連到怪物 decision／控制權。
+
+## 接續方向
+
+啟動器 → 命令列 → 登入模式候選已分類，暫不擴展字串／登入 helper 作為 AI 主線。回到怪物實際速度、陣營、owner 與控制狀態，對照 action 接收、原生移動和網路送出入口，區分 Python 自製命令、外部命令與客戶端命令。
+
+實際載入模組／socket 可驗證 Network.dll 是否參與；未驗證前不把 listener 當房主證據。已知角色三槽仍是 hero／follow AI，不能硬塞 monster 當原生 AI 啟用。

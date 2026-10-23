@@ -1,0 +1,139 @@
+"""Read-only script inventory. Parse Lua 5.1 chunks, never execute them."""
+import hashlib
+import json
+import struct
+from pathlib import Path
+
+from stp_resources import Archive
+
+ROOT = Path(__file__).resolve().parent.parent
+TARGETS = {'lb', 'CreateObject', 'CreateObjectEx', 'Rebind'}
+OPS = ('MOVE LOADK LOADBOOL LOADNIL GETUPVAL GETGLOBAL GETTABLE SETGLOBAL '
+       'SETUPVAL SETTABLE NEWTABLE SELF ADD SUB MUL DIV MOD POW UNM NOT LEN '
+       'CONCAT JMP EQ LT LE TEST TESTSET CALL TAILCALL RETURN FORLOOP FORPREP '
+       'TFORLOOP SETLIST CLOSE CLOSURE VARARG').split()
+
+
+class Chunk:
+    def __init__(self, data):
+        self.data, self.pos, self.prototypes = data, 12, []
+        assert data[:12] == bytes.fromhex('1b4c75615100010404040800'), 'Unsupported Lua header'
+
+    def take(self, size):
+        assert 0 <= size <= len(self.data) - self.pos
+        result = self.data[self.pos:self.pos + size]
+        self.pos += size
+        return result
+
+    def uint(self):
+        return struct.unpack('<I', self.take(4))[0]
+
+    def string(self):
+        size = self.uint()
+        return self.take(size)[:-1].decode('utf-8', errors='replace') if size else None
+
+    def parse(self, path='0', depth=0):
+        assert depth < 100
+        source = self.string()
+        first, last = self.uint(), self.uint()
+        upvalues, params, vararg, stack = self.take(4)
+        code = [self.uint() for _ in range(self.uint())]
+        constants = []
+        for _ in range(self.uint()):
+            tag = self.take(1)[0]
+            if tag == 0:
+                value = None
+            elif tag == 1:
+                value = bool(self.take(1)[0])
+            elif tag == 3:
+                value = struct.unpack('<d', self.take(8))[0]
+            elif tag == 4:
+                value = self.string()
+            else:
+                raise ValueError(f'Unknown constant tag {tag}')
+            constants.append(value)
+        row = {'path': path, 'source': source, 'firstLine': first, 'lastLine': last,
+               'params': params, 'constants': constants, 'code': code}
+        self.prototypes.append(row)
+        for index in range(self.uint()):
+            self.parse(f'{path}.{index}', depth + 1)
+        self.take(self.uint() * 4)  # Debug line table.
+        for _ in range(self.uint()):
+            self.string()
+            self.take(8)
+        for _ in range(self.uint()):
+            self.string()
+        return row
+
+
+def inspect(label, data):
+    row = {'file': label, 'bytes': len(data), 'sha256': hashlib.sha256(data).hexdigest()}
+    if data.startswith(b'\x1bLua'):
+        chunk = Chunk(data)
+        chunk.parse()
+        assert chunk.pos == len(data), (label, chunk.pos, len(data))
+        row['format'] = 'Lua 5.1 bytecode'
+        row['prototypeCount'] = len(chunk.prototypes)
+        hits = []
+        for proto in chunk.prototypes:
+            matched = [v for v in proto['constants'] if isinstance(v, str) and v in TARGETS]
+            if not matched:
+                continue
+            instructions = []
+            for pc, word in enumerate(proto['code']):
+                op = word & 63
+                # SETLIST C=0 has a raw following word. Inventory only, not a CFG.
+                entry = {'pc': pc, 'op': OPS[op] if op < len(OPS) else 'RAW',
+                         'a': (word >> 6) & 255, 'b': (word >> 23) & 511,
+                         'c': (word >> 14) & 511}
+                bx = word >> 14
+                if op in (1, 5, 7) and bx < len(proto['constants']):
+                    entry['constant'] = proto['constants'][bx]
+                if op in (6, 11) and entry['c'] & 256:
+                    index = entry['c'] & 255
+                    if index < len(proto['constants']):
+                        entry['member'] = proto['constants'][index]
+                instructions.append(entry)
+            hits.append({k: proto[k] for k in ('path', 'source', 'firstLine', 'lastLine', 'params')}
+                        | {'matchingConstants': matched, 'instructions': instructions})
+        row['hits'] = hits
+    else:
+        row['format'] = 'non-bytecode (raw text search only)'
+        row['hits'] = [{'token': token} for token in sorted(TARGETS) if token.encode() in data]
+    return row
+
+
+def main():
+    rows, archives, failures = [], [], []
+    for path in sorted(ROOT.glob('*.lua')):
+        try:
+            rows.append(inspect(path.name, path.read_bytes()))
+        except Exception as exc:
+            failures.append({'file': path.name, 'error': repr(exc)})
+    paths = sorted(ROOT.glob('*.stp')) + [ROOT / 'UI/LUA.stp'] + sorted((ROOT / 'anal/backups').glob('*.original-kr.stp'))
+    for path in paths:
+        archive = Archive(path)
+        scripts = sorted(name for name in archive.files if Path(name).suffix.lower() in ('.lua', '.lau'))
+        label = path.relative_to(ROOT).as_posix()
+        archives.append({'file': label, 'sha256': hashlib.sha256(path.read_bytes()).hexdigest(),
+                         'entryCount': len(archive.files), 'scriptEntries': len(scripts)})
+        for name in scripts:
+            try:
+                rows.append(inspect(f'{label}:{name}', archive.read(name)))
+            except Exception as exc:
+                failures.append({'file': f'{label}:{name}', 'error': repr(exc)})
+    result = {'scope': 'root Lua files + root STP scripts + UI/LUA.stp + available original-kr STP backups',
+              'limitations': ['Current archives may be localized or patched; hashes identify scanned inputs.',
+                              'Constant references do not establish executed calls or argument values.',
+                              'No recursive asset-directory scan, remote scripts, runtime or DLL behavior inspected.'],
+              'archives': archives, 'scripts': rows, 'failures': failures}
+    output = ROOT / 'anal/native-index/lb-script-references.json'
+    output.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding='utf-8')
+    print(json.dumps({'scripts': len(rows), 'archives': len(archives), 'failures': len(failures),
+                      'matches': [{'file': r['file'], 'hits': len(r['hits'])} for r in rows if r['hits']]},
+                     ensure_ascii=False))
+    assert not failures, failures
+
+
+if __name__ == '__main__':
+    main()

@@ -1,0 +1,79 @@
+# 韓版全檔區域帳務與來源註記
+
+唯一來源：`E:/Tartaros/workspace/Tartaros.bin`，SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`，12,472,320 bytes。本輪建立16,588個不重疊base interval，精確核算每個file byte一次，另保留11,537個去除同範圍重複後的來源claim。未知、候選與重疊來源都在帳內，沒有轉成整體還原完成率。
+
+入口：[query_kr_regions.py](../query_kr_regions.py)、[regions.sqlite](regions.sqlite)、[summary.json](summary.json)、[驗證](validation.json)、[交接](HANDOFF.md)。原檔／資源唯讀，只寫anal；沒有執行／附加遊戲、呼叫目標API或改launcher／繁中殼。新增有效函式確認0、方法語意0、功能call chain確認0。
+
+## 區域帳務
+
+| 有效區域標籤 | File bytes | 證據界限 |
+|---|---:|---|
+| code-observation | 36,781 | 選定native body／邊界／短驗證窗口；不是有效函式或完整語意證明 |
+| shared-code-observation | 93 | 明確共享實作或共享尾段，保留原本來源 |
+| constant-data | 139 | 已核對switch／索引表及數值常數 |
+| structured-or-string-data | 567,767 | RTTI結構、精確字串、PE header／IAT、resource目錄與opaque payload |
+| listed-pointer-data-candidate | 256,516 | 列出的vtable pointer extent，終止邊界未全部證明 |
+| padding-candidate | 916 | 對齊範圍、NOP／LEA或明確filler bytes；不宣稱全域不可達 |
+| unknown | 11,610,108 | 沒有足夠精細claim，包含大量尚未分類.text／非執行區域 |
+| 合計 | **12,472,320** | 包括未知與候選的完整帳務 |
+
+目前匯入claim之間沒有strong code/data矛盾；這不證明其他未知區域沒有矛盾。分類器保留conflict-code-data／conflict-code-candidate-data，六個合成案例驗證其行為；沒有把合成案例算成原檔真實衝突。116 bytes同時具有精確data證據及較弱listed-vtable候選範圍，兩層claim保留；data標籤沒有被candidate table覆蓋。
+
+此區域帳務與歷史4,471,035-byte解碼聯集是不同口徑。歷史解碼35.85%整檔／54.57% executable尚未重新合併；本輪只匯入來源充分的局部native／data觀察，不將atlas的min/max或raw opcode候選當連續body。unknown不代表完全未被解碼，code-observation也不代表方法語意已完成。
+
+## 來源與分類規則
+
+REA MCP6.5.0及Ghidra12.1.4已確認可用。新資料來自REA `inspect_pe_resources`（provider rea-pe-resources version1），完整bounded tree包含15個目錄、24個entries、10個payload；type/name/language、file offset、RVA與payload SHA均保留。這不包含image解碼、Windows載入或播放觀察。既有Ghidra overview六個segments與PE raw/virtual欄位互證；沒有為帳務再導入native target。
+
+native body／padding／shared／constant／字串／RTTI使用既有九個readonly分析DB；只讀取原有PE index的422個IAT位置，不重建索引。每個claim保存file offset、VA（可映射時）、range SHA、family、confidence、owner entry（適用時）及source/table/key/Evidence引用。相同range/kind/owner重複只追加provenance；file bytes永不相加重複。
+
+- 強code與data／constant重疊時保留conflict，不用日期或匯入順序裁決。
+- 多個code owner重疊只標記待裁決，不自動叫shared code；明確的shared claim才進shared類別。
+- 精確字串／結構資料可和較弱vtable extent同時存在。29個被拒slot的來源bytes保留data證據，並明列「只否定slot關係，不全域否定target方法」。
+- NOP、LEA、零值與filler只有結合已保存邊界／對齊證據才列padding候選；沒有掃描所有零值就宣稱padding。
+- 既有generic unknown範圍不重複加入claim；PE容器本身提供base unknown。特定4F9B00..4F9B15 excluded gap仍有自己的unknown註記。
+
+`.rsrc` raw overhang的168 bytes精確重複`PADDINGXXPADDING`（末尾截斷到對齊大小）。位置同時位於VirtualSize以外／RawSize以內，列padding candidate；不是僅因marker名稱就證明程式永不讀取。其他資料／程式範圍的同名文字不套用此判斷。
+
+RTTI資料來自原台帳的type descriptor、COL、hierarchy、base-array與base-descriptor精確範圍；每段SHA再核對。列出的vtable終止邊界仍保留candidate狀態。422個IAT cells是原檔的pre-loader資料，不是實際runtime DLL函式位址。
+
+## File與虛擬位址分開
+
+另表virtual_regions目前有三項非加總觀察：
+
+- PE `.data` virtual-only tail：`[F8C800,FE83D8)`，375,768 bytes沒有原始file storage；不是runtime dump。
+- Ghidra provider的`tdb`：`[FFDFF000,FFE00000)`，沒有PE header/section file mapping；不當作主檔bytes或已觀察到的目標程序記憶體。
+- FrameControl全域layout：`[FBAB80,FBABF8)`，120 bytes的static read/write-address觀察，位於上述virtual tail內；不與tail相加，也沒有取得runtime float內容。
+
+因此查FBAB80會同時看到兩個virtual觀察，file_backed=false；不從來源bin補造其目前值。header／section alignment與未mapped檔案位置也不硬套VA。
+
+## 查詢與重建
+
+在workspace執行：
+
+```powershell
+python anal/query_kr_regions.py
+python anal/query_kr_regions.py --va 0x4b1914
+python anal/query_kr_regions.py --va 0x4b18c9
+python anal/query_kr_regions.py --va 0x4f9b00
+python anal/query_kr_regions.py --va 0xc2a27c
+python anal/query_kr_regions.py --offset 0xbe4f58
+python anal/query_kr_regions.py --va 0xfbab80
+python anal/query_kr_regions.py --category unknown --limit 10
+python anal/query_kr_regions.py --claim C000001 --full
+```
+
+query會核對主程式、ledger/summary identity及所有claim source／保留快照的SHA，readonly開啟資料庫。預設最多30個claim／reference，輸出matching/truncated欄位；--full保留全部reference，--limit最大500。file offset超界會拒絕。原始module身分與range hash不同欄位保留，不把range hash當主程式SHA。
+
+方法、class及callsite仍用 `python anal/query_kr_evidence.py ...` 的九來源query；它的--address保留歷史個別來源。當前merged file partition使用本輪query_kr_regions.py，不擅改舊封存catalog。
+
+```powershell
+python anal/kr-region-ledger-20261023/build_ledger.py
+python anal/kr-region-ledger-20261023/verify_ledger.py
+```
+
+builder只整理既有PE reader／native／RTTI／resource證據與區間，不反組譯全程式或模擬CPU。sources表、input-provenance.json保存工具／資料來源SHA；REA原始Evidence與Ghidra overview快照保留，來源版本不符時失敗。classification rules另存region_rules.py。
+
+十項驗收檢查全部base interval連續、每段／claim SHA、兩個方向的membership完整性、所有來源不可變性、29個拒絕slot、10個resource payload／目錄資料、特殊unknown/shared/padding位置、virtual與file分離、合成衝突及實際CLI。已核對11,537個claim、16,588個partition；metadata/read-only資料庫均通過integrity_check。這些驗證只證明帳務與來源一致，不證明所有歷史方法邊界或全程式語意正確。
+
+下一步與未解影響見HANDOFF.md／unknowns.json。完整主程式解析目標保持active。

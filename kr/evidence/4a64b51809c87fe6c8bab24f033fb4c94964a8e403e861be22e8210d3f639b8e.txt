@@ -1,0 +1,76 @@
+# 內建收包與場景分派
+
+本輪把收包來源接到已知場景處理表，尚未找到／啟用韓版怪物自主決策。
+全程離線分析，遊戲、服務、資料庫及客戶端資源未變更。
+
+## 已串起的路徑
+
+1. CIocpNetwork virtual+4 = **806CF0** 等待 GetQueuedCompletionStatus。
+   連線完成資料的 +A050 分支把收到的 bytes 交给 **807B40**；+A030 是另一個完成分支。
+2. **807B40–807E44** 從連線緩衝區解析 frame。WORD 長度限制為 1..1000(hex)；
+   辨識 2633、0BBB、1A68、22D7 等標記，選用 8／6／4 bytes header。
+   2633 分支有解碼及 727190 轉換呼叫；其演算法尚未在本輪重新核對。
+   0BBB 分支以 B6 解首 byte，後續相依 XOR 並檢查 checksum。
+3. 解出的 packet 物件保存 connection+0、payload size+4、payload+8。
+   正常非空 payload 讀 **connection+A080**，經 **489920 → FC10D0** 取得 pipeline，
+   呼叫 **8040A0** 放入該類別佇列；空 payload 回到 packet pool。
+4. **804740–804A34** 消費 FC10D0 的 **0..5 六個佇列**，
+   透過 **804100** 取 packet，呼叫介面 virtual+0，參數為 connection、payload、size、queue index。
+   完成後清空 packet 並歸還 pool。
+5. CClient 的 CTCPInterface 子物件位於 +148，vtable **C05AEC** 的 virtual+0 = **4930E0**。
+   **4930E0–493160** 讀 payload 起始 WORD 命令，僅 queue index **2** 進入下述分派。
+   此數字是 pipeline 類別，不能直接視為房主或 P2P 身分。
+6. 介面+B8 對應完整 CClient+200 的 CPacketProcessor 子物件（vtable C05B04）。
+   virtual+4 = **48AAD0**，使用每命令 16 bytes 的表；查 handler+8、this adjustment+0C、label+10。
+   實際呼叫 this = processor + adjustment - 200。
+7. 預設 handler **494360** 將處理轉到 **FD2CF8 CSceneManager** 的 virtual+4 = **4FDA30**。
+   manager 的預設槽再由 **4B7EC0** 處理；後續已核對它讀取 manager+5EAC 的目前場景，
+   改用該物件作 this，尾跳 scene virtual+4。詳見 CONNECTION-ROLES-AND-HANDOFF.md。
+   已知目前場景會使用 **4C4670**／**4342A0** 的覆寫表，沒有覆寫時才回落 **4FDA30** 主表。
+
+**806AD0** 建立 TCP 連線時，806B25／806B33 將第四個明確參數（[ebp+14]）
+寫到 connection+A080。因此 queue 選擇來自連線建立參數，
+接下來應查呼叫端如何配置這個参数，而不是把六個佇列當成六名玩家。
+
+## 補上的客戶端註冊層
+
+**493170–494354** 初始化 3029 個預設槽（stride 10 hex），
+預設轉接 494360，並有 **197 筆明確覆寫**。
+這不是前輪 CDefaultScene 的 101 筆註冊：它是更前面的 CClient 分派層。
+例如 012A 此層仍指向 494360，最終才到已找到的技能計時接收函式。
+其他命令會轉向全域狀態等處理物件，不能只用主場景表判讀。
+
+`native-index/client-packet-overrides.json` 已保存每筆命令、handler、註冊地址。
+此解析器限於已核對的註冊函式與 EDX 立即數寫入，不是通用符號執行器。
+
+## 教學與一般場景的覆寫差異
+
+4C4670 查 `[scene+5EAC+cmd*8]`，非零時優先呼叫；零時回落主表。
+另一類選擇畫面 4342A0 使用 +6100 的表。
+
+| 場景 | 命令（hex） | 優先 handler |
+|---|---:|---|
+| 一般任務 CMissionField | 14 | 4C5930 → scene virtual+2C |
+| 一般任務 | 39 | 4BC930 |
+| 一般任務 | 3A | 4C58A0 |
+| 一般任務 | 31 | 4BCA90 |
+| 一般任務 | 3B | 4C5590 |
+| 劇情 CScenarioField | 14 | 4C5930 → scene virtual+2C |
+| 劇情 | 0E | 436C40 |
+| 教學 CTutorial | 4C | 4C4F20 |
+
+已確認的三個註冊函式會先清空 5EA8 bytes 覆寫區。
+一般任務 39／3A／31／3B 的已核對函式主要操作 UI 通知、場景欄位與顯示狀態，
+沒有在這些函式中找到敵人搜尋／自主出招。14 的轉接在一般任務進入 4230F0，
+再呼叫 4B2570；劇情進入 4C4910，同樣转到 4B2570。
+不能把 4C5930 的間接跳轉誤記為空處理。
+這只涵蓋三個場景的明確覆寫，不代表其他一般關卡都一樣。
+
+## 檢查與後續
+
+`audit_receive_dispatch.py` 重跑 bounded disassembly、197 筆唯一註冊、三個場景覆寫，
+輸出 `native-index/receive-dispatch-audit.json`。粗略 `receive-window-*`、
+`overlay-handler-window-*` 仍可能包含相鄰函式，不當成完整函式證據。
+
+下一步：核對 4B7EC0 的目前場景轉接、連線 A080 參數來源，以及 CClient 其他路由目的物件。
+目前證據支持一條內建 TCP 收包分派鏈，仍不能排除其他連線／中繼／P2P 權威。

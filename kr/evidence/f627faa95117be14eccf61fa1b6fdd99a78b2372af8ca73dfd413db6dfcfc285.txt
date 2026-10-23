@@ -1,0 +1,66 @@
+"""Bounded PosUpdate receiver and scene reset writers; offline original KR."""
+import hashlib,json,struct
+from pathlib import Path
+from build_native_index import PE
+from capstone import Cs,CS_ARCH_X86,CS_MODE_32
+ROOT=Path(__file__).resolve().parent.parent;OUT=ROOT/'anal/native-index'
+p=PE(ROOT/'Tartaros.bin');md=Cs(CS_ARCH_X86,CS_MODE_32)
+idx=json.loads((OUT/'Tartaros.bin.json').read_text(encoding='utf-8'))
+assert hashlib.sha256(p.data).hexdigest()==idx['sha256']
+specs=[('actor-position-update-0001-0016',0x4afb80,0x4afe5a,'jmp'),
+ ('duel-decision-stop-reset',0x4bd820,0x4bdb99,'int3'),
+ ('gvg-duel-decision-stop-reset',0x4c06f0,0x4c0b14,'int3'),
+ ('tutorial-controller-field-initialization',0x548b90,0x548c73,'ret'),
+ ('ui-list-content-offset-collision',0x471830,0x4718a6,'ret')]
+funcs={}
+for name,s,e,last in specs:
+ ins=list(md.disasm(p.read(s,e-s),s));assert sum(i.size for i in ins)==e-s
+ assert ins[-1].mnemonic==last
+ starts={i.address for i in ins}
+ for i in ins:
+  if i.mnemonic.startswith('j') and i.op_str.startswith('0x'):
+   t=int(i.op_str,16)
+   if s<=t<e:assert t in starts,(name,hex(i.address))
+ funcs[s]={i.address:i for i in ins}
+ (OUT/(name+'.txt')).write_text('\n'.join(f'{i.address:08X} {i.mnemonic:8} {i.op_str}' for i in ins)+'\n',encoding='utf-8')
+checks=[(0x4afb80,0x4afbbb,'eax, 0xcccccccd'),(0x4afb80,0x4afbc2,'edx, 3'),
+ (0x4afb80,0x4afc10,'edx, word ptr [edi - 2]'),(0x4afb80,0x4afc6a,'word ptr [ebp + 0x10], 0x16'),
+ (0x4afb80,0x4afc6f,'dword ptr [esi + 0xd4], ebx'),
+ (0x4afb80,0x4afc77,'dword ptr [esi + 0xe8], edx'),(0x4afb80,0x4afc80,'dword ptr [esi + 0xec], eax'),
+ (0x4afb80,0x4afcc3,'edx, dword ptr [eax + 0x20]'),
+ (0x4afb80,0x4afcde,'byte ptr [esi + 0xe4], bl'),
+ (0x4afb80,0x4afcfb,'edx, dword ptr [eax + 0x44]'),
+ (0x4afb80,0x4afd69,'edi, 0xa'),(0x4afb80,0x4afd9e,'word ptr [esi + 0xe2], ax'),
+ (0x4afb80,0x4afdb8,'dword ptr [esi + 0xd8], ecx'),(0x4afb80,0x4afdc6,'dword ptr [esi + 0xdc], edx'),
+ (0x4afb80,0x4afe55,'0x4afd69'),
+ (0x4bd820,0x4bd91d,'word ptr [esi + 0xe2], ax'),
+ (0x4bd820,0x4bd942,'byte ptr [esi + 0xe4], dl'),
+ (0x4c06f0,0x4c08b7,'word ptr [esi + 0xe2], cx'),
+ (0x4c06f0,0x4c08e2,'byte ptr [esi + 0xe4], dl'),
+ (0x548b90,0x548b9f,'dword ptr [esi], 0xc0fb1c'),
+ (0x471830,0x47183f,'dword ptr [esi], 0xc01e54')]
+for s,a,op in checks:assert funcs[s][a].op_str==op,(hex(a),op)
+assert all(any(r['command']==c and r['handler']==0x4afb80 for r in idx['mainPacketHandlers']) for c in [1,0x16])
+assert p.read(0xc06ab0,80).split(b'\0')[0]==b'[PosUpdate]: Cannot Found In CharList'
+classes={}
+for cls,entry in [('CDuelDecision@Scene',0x4bd820),('CGvGDuelDecision@Scene',0x4c06f0)]:
+ vs=[v for v in idx['vtables'] if v['className']=='.?AV'+cls+'@@' and entry in v['entries']]
+ assert vs
+ classes[cls]=[dict(vtable=hex(v['address']),slot=hex(v['entries'].index(entry)*4),thisOffset=v['thisOffset']) for v in vs]
+assert next(v for v in idx['vtables'] if v['address']==0xc01e54)['className'].startswith('.?AV?$FXUIListContainerContent@')
+report=dict(sha256=idx['sha256'],checks='passed',boundedFunctions=len(specs),
+ functions=[dict(name=n,start=hex(s),endExclusive=hex(e)) for n,s,e,_ in specs],
+ positionUpdate=dict(direction='S2C',commands=['0001','0016'],headerBytes=2,rowBytes=10,
+  fields=['row WORD0 actorID','row FLOAT2 X','row FLOAT6 Y'],
+  common='common actor lookup; clearD4; writeE8/EC; matching current actor clearscontroller74',
+  command0016='clear residualD8/DC, preserve cachedE0/E4, v58 heading, v44 absolute XY',
+  command0001='store target-current inD8/DC, keepcurrentXY; later known4CAD60consumes residual',
+  firstReturn='4AFD8E',postReturnBranch='4AFD91..4AFE59'),
+ sceneResetClasses=classes,
+ limitations=['PosUpdate diagnosis does not prove observed backstep cause or wire timing.',
+  '0001 and0016 are externally supplied coordinate updates, not autonomous enemy selection.',
+  'Reset methods clear8000 and retain heading; full UI/helper semantics not all expanded.',
+  'Generic field candidates do not establish actor identity; UI and controller examples demonstrate collisions.',
+  'Original monster AI/wavescheduler/P2P remains unresolved; no deployment changes.'])
+(OUT/'position-update-reset-audit.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+print(json.dumps(dict(checks='passed',boundedFunctions=len(specs),positionRowBytes=10)))

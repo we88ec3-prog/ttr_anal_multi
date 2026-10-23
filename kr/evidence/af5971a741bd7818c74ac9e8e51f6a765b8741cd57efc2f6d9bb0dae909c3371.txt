@@ -1,0 +1,72 @@
+{
+  "checks": "passed",
+  "sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+  "boundedFunctions": 6,
+  "functions": [
+    {
+      "name": "single-controller-sidepath-tick",
+      "start": "0x548a90",
+      "endExclusive": "0x548b8e"
+    },
+    {
+      "name": "single-controller-input-special-case",
+      "start": "0x548a20",
+      "endExclusive": "0x548a88"
+    },
+    {
+      "name": "tutorial-controller-input-tick",
+      "start": "0x548cb0",
+      "endExclusive": "0x548d0d"
+    },
+    {
+      "name": "actor-status-flag-query",
+      "start": "0x4c9ed0",
+      "endExclusive": "0x4c9f31"
+    },
+    {
+      "name": "battle-local-target-and-motion-sidepath",
+      "start": "0x49c5c0",
+      "endExclusive": "0x49cc86"
+    },
+    {
+      "name": "battle-local-target-effect-refresh",
+      "start": "0x49cc90",
+      "endExclusive": "0x49ce04"
+    }
+  ],
+  "singleTick": {
+    "vtable": "C0FAC4",
+    "slot": "2C",
+    "guard": "controller4 nonzero",
+    "normalInput": "5452C0",
+    "sidepath": "controllerC current actor ->state checks ->49C5C0(controller88, actor)"
+  },
+  "tutorialTick": {
+    "vtable": "C0FB1C",
+    "slot": "2C",
+    "guards": [
+      "controller4 nonzero",
+      "controllerDC nonzero"
+    ],
+    "input": "5452C0"
+  },
+  "localMotion": {
+    "inputStateByte": "FB901B",
+    "motion": "0x10",
+    "actorVirtualSlot": "68",
+    "speed": 1,
+    "targetHelpersPending": [
+      "49D470",
+      "49CE10",
+      "49D640",
+      "49D010"
+    ]
+  },
+  "limitations": [
+    "No monster-specific decision producer established.",
+    "49C5C0 and49CC90 include post-normal-ret throwing paths.",
+    "No direct network entry call in these six functions; helpers/indirect calls not exhausted.",
+    "Input-state fields and actor status enums not officially named.",
+    "No packet request/reply pairing orP2P authority established."
+  ]
+}

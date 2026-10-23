@@ -1,0 +1,43 @@
+"""Position estimate from client direction/start/stop input; no client attachment.
+
+This does not implement terrain collision and is not a client position report.
+"""
+import math
+import time
+
+
+class Position:
+    def __init__(self):
+        self.x=self.y=900.0
+        self.direction=0
+        self.moving=False
+        self.speed=50
+        self.percent=100
+        self.parameter1=300
+        self.tick=None
+        self.received=None
+
+    def advance(self,seconds):
+        if self.moving:
+            distance=seconds*self.speed*self.percent/100
+            angle=self.direction*math.tau/256
+            self.x+=distance*math.sin(angle)
+            self.y-=distance*math.cos(angle)
+
+    def input(self,tick,moving,direction,now=None):
+        now=time.monotonic() if now is None else now
+        if self.tick is not None:
+            elapsed=((tick-self.tick)&0xffffffff)/1000
+            if elapsed<=120:self.advance(elapsed)
+        self.tick=tick
+        self.received=now
+        self.moving=bool(moving)
+        self.direction=direction
+
+    def stop_for_switch(self,now=None):
+        now=time.monotonic() if now is None else now
+        if self.received is not None:self.advance(max(0,min(120,now-self.received)))
+        self.tick=self.received=None
+        self.moving=False
+        return {'x':self.x,'y':self.y,'direction':self.direction,
+                'speed':self.speed,'percent':self.percent,'parameter1':self.parameter1}

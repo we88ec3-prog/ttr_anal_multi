@@ -1,0 +1,69 @@
+# 地圖切換狀態的真正消費者：動畫資源與繪製
+
+2026-10-07。離線原版韓版 `Tartaros.bin`，SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。未啟動服務／遊戲、修改資源、存檔、runtime 或可用的 v41 AI。
+
+本輪將 `0038` 寫入的兩個欄位追到具體使用處：`FD94B0` 是動畫資源工作器的等待策略欄位之一；`FBA830` 在繪製批次函式控制分支。這些路徑不應命名為已確認的生怪區域／波次條件。
+
+## FD94B0：不是獨立全域變數，而是 root +90
+
+前輪的精確地址掃描主要找到寫入，原因之一是讀取端使用 root pointer 的相對偏移。
+
+- 原版 `7B5430` 正常返回指令 `7B5641` 回傳 `FD9420`。
+- `7AB339` 的本地指令將 `FD9420` 傳給 `7B6770` 工作器啟動函式。
+- 完整 `7B6770..7B67D0` 建立 event、將 `7B65B0` 作為工作器入口，並將 caller 的 root argument 傳入 thread helper。
+- 完整 `7B65B0..7B676F` 保存這個參數；`7B66FA` 讀取 `[root+90]`，即 `FD9420+90=FD94B0`。
+
+大型 root 建構與上層啟動 caller 僅核對上述本地指令，不宣稱本輪已完整展開。
+
+## 已確認的狀態 2 效果
+
+工作器每輪以 `GetTickCount` 計算 `7B6010` 工作耗時。`Sleep` IAT `BD2304` 被放在 EBX，末端 `7B6736 call ebx` 使用分支選出的等待值。
+
+| 條件 | Sleep 參數（毫秒） |
+|---|---:|
+| root +90 == 2 | 1 |
+| 其他狀態，工作耗時 <10 | 1 |
+| 10 ≤ 耗時 <20 | 5 |
+| 20 ≤ 耗時 <30 | 10 |
+| 30 ≤ 耗時 <40 | 20 |
+| 40 ≤ 耗時 <50 | 25 |
+| 耗時 ≥50 | 30 |
+
+這是已核對的資源工作器節流效果，不是完整狀態枚舉定義。不能將它直接解釋成技能冷卻、普攻間隔、怪物 tick 或房間主機權限，也未證明它造成現有戰鬥問題。
+
+## 工作內容：載入動畫資源與交付 callback
+
+完整 `7B6010..7B6190` 從 root 的工作容器取出 request，找到對應 callback record，呼叫 `7B5980`。成功結果放入 root +60 completion queue，失敗路徑使用字串 `Animation Load failed: %s`（`C4FB48`）。Queue 與部分共享容器使用 `EnterCriticalSection`／`LeaveCriticalSection`。
+
+完整 loader `7B5980..7B5C81` 讀取 request 字串／資源快取，經多個模型／motion helpers 建立載入結果；helpers 未全部展開，因此不指定所有動畫格式與完整類型。
+
+完整 completion consumer `7B6330..7B65AD`：
+
+1. 從 root +60 收集 8-byte request/result pairs。
+2. 在 root +10／+20 容器查找對應 callback record。
+3. 有效時於 `7B6516` 透過 record 的 virtual +0 傳入 request/result。
+4. 清除 request record 與相關映射；缺少 callback record 時走資源釋放 helper。
+
+本地 caller `491D3B/491D40` 傳入 root `FD9420` 呼叫這個 completion consumer，顯示資源背景工作與 caller 端結果交付分離。Callback target 的實際類型、完成後是否間接影響 actor 初始化，仍未確認；不把 animation load callback 宣稱為怪物決策器。
+
+## FBA830：繪製資料批次的分支
+
+完整 `7B40A0..7B4EC6` 在入口 `7B40CE` 比較 `FBA830`。為 0 時走清理目前批次 vector 的路徑；非 0 時展開資料迭代、浮點座標／頂點組裝與 graphics virtual calls。
+
+具體證據包括末段將本地資料指標、數量 2、類型值 4 傳入 graphics object 的 virtual +14C（`7B4DC8`）；方法的正式介面名稱未新做核對，不只靠 vtable offset 命名。尾端清理 `FBAB54..FBAB58` 資料範圍。
+
+上層本地候選 `492E47` 直接呼叫 `7B40A0`。這條有界函式是繪製批次相關用途，不是已找到的 map group spawn executor；其所有 graphics helpers 與其他 indirect 使用尚未窮盡。
+
+## 對原版生怪／AI 分析的影響
+
+本輪 6 個完整函式沒有直接呼叫已知 `CMonster` 建構 `4D1710`、`CAIControl` 建構 `548FF0`，或前輪 B0 producers `4E40A0`／`419070`。不排除其他 callbacks、helpers、模組或 server 排程。
+
+`0038` 的 preload、fade、music、動畫工作器節流、繪製旗標目前已有明確分類。單憑這些欄位還不能建立原版「進區→某個群組生怪→啟動原生 AI」鏈，也沒有新的 P2P 證據。
+
+下一個優先方向應回到实际 scene/controller 初始化與 S2C `0012`／`005F`／`0014` 的狀態交接，及原版收到 actor 描述後的 owner／控制權欄位。避免把目前已分類的音樂、動畫預載或繪製功能繼續當成生怪排程主線。若追查 B0，仍需找原版實際 producer 與呼叫條件，不能使用本機 Python 的 pending guard 作為原版證據。
+
+## 驗證產物
+
+`audit_map_state_consumers.py` 已通過原版 SHA、6 個函式完整 byte coverage／末端 ret／內部分支邊界、工作器入口與參數、root+90 alias、Sleep／GetTickCount／event／lock IAT、動畫失敗字串、completion queue、graphics call 與本地 root/caller 指令。
+
+`native-index/map-state-consumers-audit.json` 保存結果與限制；同目錄的 `animation-*.txt`、`drawing-batch-state-consumer.txt` 保存完整反組譯。前序參照為 `MAP-ENTRY-FADE-AND-MUSIC.md`。

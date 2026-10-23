@@ -1,0 +1,77 @@
+"""Offline KR battle-input buffer to socket transmission audit."""
+from pathlib import Path
+import hashlib,json,struct
+from build_native_index import PE
+from capstone import Cs,CS_ARCH_X86,CS_MODE_32
+ROOT=Path(__file__).resolve().parent.parent
+OUT=ROOT/'anal/native-index'
+p=PE(ROOT/'Tartaros.bin')
+idx=json.loads((OUT/'Tartaros.bin.json').read_text(encoding='utf-8'))
+assert hashlib.sha256(p.data).hexdigest()==idx['sha256']
+md=Cs(CS_ARCH_X86,CS_MODE_32)
+def dump(start,end,name):
+    ins=list(md.disasm(p.read(start,end-start),start))
+    assert sum(i.size for i in ins)==end-start and ins[-1].mnemonic=='ret'
+    boundaries={i.address for i in ins}
+    for i in ins:
+        if i.mnemonic.startswith('j') and i.op_str.startswith('0x'):
+            target=int(i.op_str,16)
+            if start<=target<end:assert target in boundaries
+    (OUT/(name+'.txt')).write_text('\n'.join(f'{i.address:08X} {i.mnemonic:8} {i.op_str}' for i in ins)+'\n',encoding='utf-8')
+    return {i.address:i for i in ins}
+controller=dump(0x5452c0,0x545b9f,'battle-input-batch-producer')
+append=dump(0x5471b0,0x5471d8,'battle-input-row-append')
+send=dump(0x8069a0,0x8069f6,'battle-input-network-slot-send')
+copy=dump(0x8060d0,0x806191,'battle-input-packet-copy')
+queue=dump(0x806060,0x8060ce,'battle-input-connection-queue')
+frame=dump(0x8061a0,0x8063de,'battle-input-connection-framing')
+worker=dump(0x804a40,0x804c70,'battle-input-socket-worker')
+socket=dump(0x8068b0,0x80699d,'network-overlapped-wsasend')
+close=dump(0x806fc0,0x807090,'network-close-connection')
+vt=next(v for v in idx['vtables'] if v['address']==0xc51748)
+assert vt['entries'][3]==0x8068b0 and vt['entries'][4]==0x8069a0 and vt['entries'][9]==0x806fc0
+assert controller[0x545829].op_str=='edx, 0xa'
+assert controller[0x545887].op_str=='ecx, dword ptr [0xf93944]'
+assert controller[0x54588d].op_str=='dword ptr [0xfe38d2], ecx'
+assert controller[0x545994].op_str=='0x545895'
+assert controller[0x545991].op_str=='edi, 3'
+assert controller[0x545935].op_str=='dword ptr [0xfe48d0], 5'
+assert controller[0x545b66].op_str=='edx, dword ptr [edx + 0x10]'
+assert controller[0x545b6a].op_str=='0xfe38d0' and controller[0x545b6f].op_str=='0'
+assert append[0x5471b8].op_str=='edx, 0x1000'
+assert [a for a,b in idx['candidateDirectCalls'] if b==0x5471b0]==[0x54598b]
+assert send[0x8069eb].op_str=='0x8060d0'
+assert copy[0x80616c].op_str=='0x89dbd0'
+assert copy[0x806178].op_str=='0x806060'
+assert queue[0x8060a2].op_str=='dword ptr [esi + 0xa078], ecx'
+assert frame[0x806223].op_str=='0x807830' and frame[0x80623a].op_str=='0x807a70'
+assert worker[0x804ad6].op_str=='0x8061a0'
+assert worker[0x804b4a].op_str=='edx, dword ptr [edx + 0xc]'
+assert socket[0x806912].op_str=='dword ptr [0xbd25b8]'
+assert socket[0x80692d].op_str=='edi, 0x3e5'
+assert close[0x807030].op_str=='dword ptr [0xbd25c8]'
+assert close[0x807037].op_str=='dword ptr [0xbd25d4]'
+iat={i['iat']:i['symbol'] for i in idx['imports']}
+assert iat[0xbd25b8]=='WSASend' and iat[0xbd25c8]=='#22' and iat[0xbd25d4]=='#3'
+refs={}
+for target in [0xfe48d0,0xfe38d0]:
+    rows=[];needle=struct.pack('<I',target)
+    for s in p.sections:
+        if not s['flags']&0x20000000:continue
+        data=p.data[s['raw']:s['raw']+s['size']];pos=0
+        while True:
+            q=data.find(needle,pos)
+            if q<0:break
+            rows.append(s['va']+q);pos=q+4
+    assert all(0x5452c0<=a<0x545b9f or 0x5471b0<=a<0x5471d8 for a in rows)
+    refs[hex(target)]=[hex(a) for a in rows]
+report=dict(sha256=idx['sha256'],boundedFunctions=9,
+    inputPacket=dict(command='0x000a',headerBytes=6,rowBytes=5,
+        fields=['WORD command','DWORD F93944, meaning pending','row actor WORD, input WORD, heading BYTE'],
+        networkSlot=0,buffer='0xfe38d0',length='0xfe48d0'),
+    pipeline=['5452C0','8069A0 slot lookup','8060D0 packet copy','806060 connection queue',
+        '8061A0 framing','804A40 send worker','8068B0 WSASend'],
+    rawBufferReferenceCandidates=refs,
+    limitations='No alternate transport excluded: absolute exact-address scan omits aliases/interior pointers/DLL code. Input generator primary hero and extra-follow consumers previously scoped. Framing helpers not exhaustively decoded. No original monster decision/P2P authority established, no runtime changes.')
+(OUT/'battle-input-transport-audit.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8')
+print(json.dumps(dict(checks='passed',boundedFunctions=9,command='0x000a',networkSlot=0,socketAPI='WSASend')))

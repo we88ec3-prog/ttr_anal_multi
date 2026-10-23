@@ -1,0 +1,52 @@
+"""Bounded Monster state registration, shared dispatch and visual callback audit, offline."""
+import hashlib,json,struct
+from pathlib import Path
+from build_native_index import PE
+from capstone import Cs,CS_ARCH_X86,CS_MODE_32
+ROOT=Path(__file__).resolve().parent.parent;OUT=ROOT/'anal/native-index'
+p=PE(ROOT/'Tartaros.bin');sha=hashlib.sha256(p.data).hexdigest()
+assert sha=='9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91'
+md=Cs(CS_ARCH_X86,CS_MODE_32)
+specs=[('actor-state-transition-dispatch',0x4ca060,0x4ca0ab),
+ ('monster-state-registration-constructor',0x4d1710,0x4d18d0),
+ ('actor-heading-smoothing',0x4c89a0,0x4c8a87),
+ ('actor-MoveState-exit',0x4cb580,0x4cb58e),
+ ('actor-state3-enter',0x4cb590,0x4cb70d),
+ ('actor-state3-tick',0x4cb710,0x4cb7c9),
+ ('actor-state5-enter',0x4cb870,0x4cb894)]
+f={}
+for name,s,e in specs:
+ ins=list(md.disasm(p.read(s,e-s),s));assert sum(i.size for i in ins)==e-s
+ assert ins[-1].mnemonic=='ret'
+ starts={i.address for i in ins}
+ for i in ins:
+  if i.mnemonic.startswith('j') and i.op_str.startswith('0x'):
+   target=int(i.op_str,16)
+   if s<=target<e:assert target in starts
+ f[s]={i.address:i for i in ins}
+ (OUT/(name+'.txt')).write_text('\n'.join(f'{i.address:08X} {i.mnemonic:8} {i.op_str}' for i in ins)+'\n',encoding='utf-8')
+checks=[(0x4ca060,0x4ca06a,'edi, 0x1a'),
+ (0x4ca060,0x4ca091,'dword ptr [esi + 0x68], ecx'),
+ (0x4d1710,0x4d174f,'dword ptr [edi + 0xf0], 0xc0ca64'),
+ (0x4d1710,0x4d17fe,'dword ptr [esi], 0xc077b4'),
+ (0x4d1710,0x4d17e6,'ecx, 2'),
+ (0x4d1710,0x4d182f,'dword ptr [edi + ebx*4 + 0xf4], esi'),
+ (0x4c89a0,0x4c8a53,'byte ptr [ecx + 0x3a4], al'),
+ (0x4cb580,0x4cb583,'dword ptr [eax + 0x418], 0xb4'),
+ (0x4cb590,0x4cb614,'7'),
+ (0x4cb710,0x4cb74d,'dword ptr [edi + 0x38]'),
+ (0x4cb870,0x4cb877,'dword ptr [ecx + 0x418], 0x12c')]
+for start,site,operand in checks:assert f[start][site].op_str==operand,(hex(site),f[start][site].op_str)
+for table,offset,target in [(0xc075dc,8,0x4ca060),(0xc0ca64,8,0x4ca060),
+ (0xc077b4,12,0x4cb580),(0xc077cc,4,0x4cb590),(0xc077cc,8,0x4cb710),
+ (0xc077fc,4,0x4cb870)]:
+ assert struct.unpack('<I',p.read(table+offset,4))[0]==target
+
+result={'module':'Tartaros.bin','sha256':sha,'checks':'passed',
+ 'functions':[{'name':n,'start':s,'endExclusive':e} for n,s,e in specs],
+ 'limitations':['State registration/switching is not autonomous target/skill selection evidence.',
+ 'State3 effects helpers and base actor constructor not exhaustively audited here.',
+ 'Candidate scan may overlap; complete AI/global producer coverage is not claimed.',
+ 'No runtime, service, resource, save or deployed AI changes.']}
+(OUT/'actor-state-transitions-audit.json').write_text(json.dumps(result,indent=2),encoding='utf-8')
+print(json.dumps({'checks':'passed','boundedFunctions':len(specs)}))

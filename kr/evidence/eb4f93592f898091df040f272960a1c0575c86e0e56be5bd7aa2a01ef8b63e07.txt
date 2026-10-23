@@ -1,0 +1,84 @@
+"""Source-bound evidence/database overlay. No decoding, emulation or reindexing."""
+import hashlib,json,sqlite3,sys
+from pathlib import Path
+HERE=Path(__file__).resolve().parent;ROOT=HERE.parents[1]
+sys.path.insert(0,str(ROOT/'anal'));from build_native_index import PE
+EXPECTED='9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91'
+PROFILE='965552102e88fd60a1ccde827b92cc552a22c4f08ddda16a7fc2bea3c04307c0'
+pe=PE(ROOT/'Tartaros.bin');assert hashlib.sha256(pe.data).hexdigest()==EXPECTED
+evidence={};locations={}
+for path in sorted(HERE.glob('**/mcp-evidence/*.json')):
+ r=json.loads(path.read_text(encoding='utf-8'))
+ if r.get('isError'):continue
+ e=r.get('structuredContent') or json.loads(next(c['text'] for c in r['content'] if c['type']=='text'))
+ if 'evidence_id' not in e:continue
+ assert e['subject']['digest']['sha256']==EXPECTED
+ assert e['analysis_profile']['digest']==PROFILE
+ eid=e['evidence_id'];evidence[eid]=e
+ locations.setdefault(eid,[]).append({'path':path.relative_to(HERE).as_posix(),'file_sha256':hashlib.sha256(path.read_bytes()).hexdigest()})
+functions={int(e['normalized_result']['procedure']['address'],16):e for e in evidence.values() if e['operation']=='analyze_function'}
+notes=json.loads((HERE/'analyst-records.json').read_text(encoding='utf-8'))
+records=[]
+for note in notes:
+ a=int(note['address'],16);e=functions[a];n=e['normalized_result'];r=dict(note)
+ ids=[e['evidence_id']]+[functions[int(v,16)]['evidence_id'] for v in r.pop('supporting_methods',[])]
+ ranges=[]
+ for b in n['procedure']['body']['ranges']:
+  start=int(b['start'],16);end=int(b['end'],16)+1
+  ranges.append({'start':start,'end_exclusive':end,'file_offset':pe.offset(start),'sha256':hashlib.sha256(pe.read(start,end-start)).hexdigest()})
+ r.update(source_sha256=EXPECTED,analysis_profile_digest=PROFILE,status='bounded-semantics-with-explicit-unknowns',evidence_ids=sorted(set(ids)),ranges=ranges,
+  incoming_references=n['incoming_references'],outgoing_references=n['outgoing_references'],callers=n['callers'],callees=n['callees'],unresolved_calls=n['unresolved_calls'],
+  native_api=n['native_api'],pcode_truncated=n['native_value_flow']['truncated'],engine_limitations=n['limitations'])
+ records.append(r)
+(HERE/'semantic-records.json').write_text(json.dumps(records,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+db=sqlite3.connect(HERE/'methods.sqlite')
+db.executescript('drop table if exists metadata;drop table if exists evidence;drop table if exists methods;drop table if exists ranges;drop table if exists semantics;drop table if exists calls;drop table if exists dataflow_edges;create table metadata(key text primary key,value text);create table evidence(evidence_id text primary key,operation text,locations text,record text);create table methods(address integer primary key,name text,evidence_id text,analysis_status text,record text);create table ranges(method integer,start integer,end_exclusive integer,file_offset integer,sha256 text,evidence_id text,primary key(method,start,evidence_id));create table semantics(address integer primary key,purpose text,classification text,record text);create table calls(method integer,site text,target text,status text,record text);create table dataflow_edges(source text,destination text,meaning text,record text);')
+db.executemany('insert into metadata values(?,?)',[('source_sha256',EXPECTED),('profile_digest',PROFILE),('scope','Three INI import seed analysis; global function denominator unknown')])
+for eid,e in evidence.items():db.execute('insert into evidence values(?,?,?,?)',(eid,e['operation'],json.dumps(locations[eid]),json.dumps(e,ensure_ascii=False)))
+for a,e in functions.items():
+ n=e['normalized_result'];proc=n['procedure'];db.execute('insert into methods values(?,?,?,?,?)',(a,proc['name'],e['evidence_id'],'bounded-semantics-with-unknowns' if any(int(r['address'],16)==a for r in records) else 'engine-body-and-call-context-only',json.dumps(proc,ensure_ascii=False)))
+ for b in proc['body']['ranges']:
+  start=int(b['start'],16);end=int(b['end'],16)+1
+  db.execute('insert into ranges values(?,?,?,?,?,?)',(a,start,end,pe.offset(start),hashlib.sha256(pe.read(start,end-start)).hexdigest(),e['evidence_id']))
+ for ref in n['outgoing_references']:
+  if ref.get('kind',{}).get('call'):db.execute('insert into calls values(?,?,?,?,?)',(a,ref['source_address'],ref['target_address'],'typed-static-reference',json.dumps(ref,ensure_ascii=False)))
+ for ref in n['unresolved_calls']:
+  db.execute('insert into calls values(?,?,?,?,?)',(a,ref.get('address') or ref.get('source_address') or ref.get('site'),None,'engine-unresolved',json.dumps(ref,ensure_ascii=False)))
+for r in records:
+ db.execute('insert into semantics values(?,?,?,?)',(int(r['address'],16),r['purpose'],r['classification'],json.dumps(r,ensure_ascii=False)))
+ for edge in r.get('dataflow',[]):db.execute('insert into dataflow_edges values(?,?,?,?)',(edge['source'],edge['destination'],edge['meaning'],json.dumps(edge,ensure_ascii=False)))
+db.commit();assert db.execute('pragma integrity_check').fetchone()[0]=='ok'
+db.executescript('drop table if exists region_classifications;drop table if exists library_patterns;create table region_classifications(start integer primary key,end_exclusive integer,classification text,record text);create table library_patterns(address integer primary key,classification text,record text);')
+if (HERE/'region-evidence.json').exists():
+ region_data=json.loads((HERE/'region-evidence.json').read_text(encoding='utf-8'));assert region_data['source_sha256']==EXPECTED
+ for r in region_data['regions']:db.execute('insert into region_classifications values(?,?,?,?)',(r['start'],r['end_exclusive'],r['classification'],json.dumps(r,ensure_ascii=False)))
+if (HERE/'library-patterns.json').exists():
+ library_data=json.loads((HERE/'library-patterns.json').read_text(encoding='utf-8'));assert library_data['source_sha256']==EXPECTED
+ r=library_data['typed_control_block'];db.execute('insert into library_patterns values(?,?,?)',(int(r['method'],16),'RTTI-confirmed-typed-reference-control-block',json.dumps(r,ensure_ascii=False)))
+ for r in library_data['related_idioms']:db.execute('insert into library_patterns values(?,?,?)',(int(r['method'],16),r['classification'],json.dumps(r,ensure_ascii=False)))
+db.commit()
+db.executescript('drop table if exists profile_calls;drop table if exists frame_parameters;create table profile_calls(method integer,site integer,api text,target text,reference_type text,record text,primary key(method,site,api));create table frame_parameters(destination integer primary key,group_index integer,field_index integer,section text,key text,default_uint32 integer,call_site integer,store_site integer,record text);')
+profile_symbols={'GetPrivateProfileStringA','GetPrivateProfileIntA','WritePrivateProfileStringA'}
+for a,e in functions.items():
+ for ref in e['normalized_result']['outgoing_references']:
+  proc=ref.get('target_procedure');name=proc.get('name','') if proc else ''
+  symbol=name.split('::')[-1]
+  if ref['kind']['call'] and symbol in profile_symbols:
+   db.execute('insert into profile_calls values(?,?,?,?,?,?)',(a,int(ref['source_address'],16),symbol,ref['target_address'],ref['kind']['type'],json.dumps(ref,ensure_ascii=False)))
+frame=json.loads((HERE/'framecontrol-table.json').read_text(encoding='utf-8'));assert frame['source_sha256']==EXPECTED
+for r in frame['rows']:
+ address=int(r['destination'],16);group,field=divmod((address-0xfbab80)//4,6)
+ assert ['NORMAL-VALUE','BLOCKED-VALUE','CRITICAL-VALUE','NORMAL-RATIO','BLOCKED-RATIO','CRITICAL-RATIO'][field]==r['key']
+ assert ['LIGHT_MELEE','MEDIUM_MELEE','HEAVY_MELEE','RANGED','ATTACKED'][group]==r['section']
+ db.execute('insert into frame_parameters values(?,?,?,?,?,?,?,?,?)',(address,group,field,r['section'],r['key'],r['default_uint32'],int(r['call_site'],16),int(r['store_site'],16),json.dumps(r,ensure_ascii=False)))
+db.commit()
+db.executescript('drop table if exists call_contexts;drop table if exists data_structures;create table call_contexts(site integer primary key,target text,evidence_id text,record text);create table data_structures(name text primary key,record text);')
+contexts=json.loads((HERE/'battle-frame-contexts.json').read_text(encoding='utf-8'));assert contexts['source_sha256']==EXPECTED
+for r in contexts['call_contexts']:db.execute('insert into call_contexts values(?,?,?,?)',(int(r['call_site'],16),r['target'],r['evidence_id'],json.dumps(r,ensure_ascii=False)))
+db.execute('insert into data_structures values(?,?)',('model-frame-control-view',json.dumps(contexts['bounded_structure_view'],ensure_ascii=False)))
+region_data=json.loads((HERE/'region-evidence.json').read_text(encoding='utf-8'))
+db.execute('insert into data_structures values(?,?)',('global-frame-parameter-table',json.dumps(region_data['runtime_structure'],ensure_ascii=False)))
+db.commit()
+progress={'source_sha256':EXPECTED,'profile_digest':PROFILE,'engine_evidence_records':len(evidence),'engine_function_dossiers':len(functions),'bounded_semantic_records':len(records),'native_instruction_evidence':sum(e['operation']=='inspect_native_instruction' for e in evidence.values()),'calls_by_status':dict(db.execute('select status,count(*) from calls group by status')),'profile_call_sites_by_api':dict(db.execute('select api,count(*) from profile_calls group by api')),'frame_parameter_fields':30,'bounded_call_contexts':len(contexts['call_contexts']),'source_region_classifications':db.execute('select count(*) from region_classifications').fetchone()[0],'valid_global_function_denominator':None,'byte_union_recomputed':False,'source_classification_scope':'Only three selected INI imports, direct/native pointer-read owners and the bounded FrameControl dataflow; no whole-game persistence or full save-format claim.'}
+db.close();(HERE/'progress.json').write_text(json.dumps(progress,indent=2)+'\n',encoding='utf-8')
+print(json.dumps(progress))

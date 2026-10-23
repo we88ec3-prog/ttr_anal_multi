@@ -1,0 +1,85 @@
+0054F270 push     ebp
+0054F271 mov      ebp, esp
+0054F273 push     ebx
+0054F274 push     esi
+0054F275 mov      esi, ecx
+0054F277 test     al, 0xc0
+0054F279 jne      0x54f325
+0054F27F mov      ecx, eax
+0054F281 and      ecx, 1
+0054F284 je       0x54f28e
+0054F286 test     al, 2
+0054F288 je       0x54f28e
+0054F28A mov      bl, 4
+0054F28C jmp      0x54f2d2
+0054F28E test     cx, cx
+0054F291 je       0x54f29b
+0054F293 test     al, 4
+0054F295 je       0x54f29b
+0054F297 mov      bl, 5
+0054F299 jmp      0x54f2d2
+0054F29B mov      edx, eax
+0054F29D and      edx, 2
+0054F2A0 je       0x54f2aa
+0054F2A2 test     al, 4
+0054F2A4 je       0x54f2aa
+0054F2A6 mov      bl, 6
+0054F2A8 jmp      0x54f2d2
+0054F2AA test     cx, cx
+0054F2AD je       0x54f2b3
+0054F2AF mov      bl, 1
+0054F2B1 jmp      0x54f2d2
+0054F2B3 test     dx, dx
+0054F2B6 je       0x54f2bc
+0054F2B8 mov      bl, 2
+0054F2BA jmp      0x54f2d2
+0054F2BC test     al, 4
+0054F2BE je       0x54f2c4
+0054F2C0 mov      bl, 3
+0054F2C2 jmp      0x54f2d2
+0054F2C4 test     al, 8
+0054F2C6 je       0x54f2cc
+0054F2C8 mov      bl, 7
+0054F2CA jmp      0x54f2d2
+0054F2CC test     al, 0x10
+0054F2CE je       0x54f325
+0054F2D0 mov      bl, 0xa
+0054F2D2 mov      eax, dword ptr [ebp + 8]
+0054F2D5 movzx    ecx, word ptr [esi + 2]
+0054F2D9 push     eax
+0054F2DA push     ecx
+0054F2DB call     0x40f7f0
+0054F2E0 call     0x819220
+0054F2E5 test     eax, eax
+0054F2E7 jne      0x54f2f1
+0054F2E9 xor      eax, eax
+0054F2EB pop      esi
+0054F2EC pop      ebx
+0054F2ED pop      ebp
+0054F2EE ret      8
+0054F2F1 push     eax
+0054F2F2 mov      al, byte ptr [ebp + 0xc]
+0054F2F5 mov      cl, bl
+0054F2F7 call     0x81a8e0
+0054F2FC movzx    eax, ax
+0054F2FF test     ax, ax
+0054F302 je       0x54f2e9
+0054F304 mov      edx, eax
+0054F306 add      esi, 4
+0054F309 push     esi
+0054F30A lea      eax, [ebp + 8]
+0054F30D mov      dword ptr [ebp + 8], edx
+0054F310 call     0x54f4e0
+0054F315 xor      ecx, ecx
+0054F317 cmp      dword ptr [eax + 4], ecx
+0054F31A sete     cl
+0054F31D mov      eax, ecx
+0054F31F pop      esi
+0054F320 pop      ebx
+0054F321 pop      ebp
+0054F322 ret      8
+0054F325 pop      esi
+0054F326 mov      eax, 1
+0054F32B pop      ebx
+0054F32C pop      ebp
+0054F32D ret      8

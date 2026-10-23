@@ -1,0 +1,38 @@
+# 繁中版 MEF 線索與韓版比對
+
+2026-10-08，只讀取E:/Tartaros/tc_workspace，產物寫入韓版workspace/anal。未啟動遊戲／服務，未修改繁中或韓版資源。
+
+## 找到的資料
+
+繁中Table.stp的Table/_MapList.xml有3,922筆含.mef欄位的資料列。這是地圖表宣告，不是3,922個實際檔案或已確認的執行事件。
+
+| 地圖ID | 繁中TRIGGER | 與目前韓版表比對 |
+|---|---|---|
+| 1 | N_mushroom01_01N.mef | 相同 |
+| 188 | town000.mef | 相同 |
+| 190 | scenario_town000.mef | 相同 |
+
+這三筆的MAP／BOUND亦相同；未宣稱兩版整張表或程式邏輯相同。
+
+## 尚未找到的內容
+
+- 繁中根目錄、Map、UI下共56個STP索引，沒有含.mef的檔名項目；讀取全部成功。
+- 繁中整個目錄（包含子目錄）沒有副檔名.mef的散檔。
+- Integrity.xml、pack.gms、Quest.xml沒有ASCII／UTF16LE的.mef literal。
+- 四個二進位Tartaros.bin、Tartaros.exe、Network.dll、G-Blender_1642N5mt_dx32.DLL沒有原始.mef／LoadMEF literal。短字串MEF命中是二進位片段，以及launcher的GetTimeFormatA子字串，不能當成MEF接口。
+
+這次沒有逐一解析所有封裝payload，也未檢查全部其他資產封裝，不能排除內嵌、改名、其他版本或原服務端保存的資料。
+
+## 主程式的分析限制
+
+繁中Tartaros.bin SHA256：f181071094286fe4e72cb12863edbe7e83f8fa825cfb65604143cb53ae2cd873。
+
+其PE有非標準section名稱，主要section virtualSize遠大於raw size，並有額外可執行sections；磁碟檔呈壓縮／保護外觀。原始字串搜尋連MapList／trigger都未命中，因此不能拿「磁碟檔找不到MEF字串」判定執行期沒有MEF程式。此次未完成解包，也未將韓版位址套到繁中。
+
+繁中Tartaros.exe SHA256：d06cd8d6998eda2cf72ec6836a40deb8c9f7d6984ce908c687c9bce36c19a521。其可搜尋字串沒有提供新的MEF接口；尚未完整反編譯launcher全部方法。
+
+## 結論
+
+繁中版能補強「兩版都有MEF名稱宣告」的證據，目前沒有補出實際MEF檔或可驗證執行器。若要繼續繁中程式這條線，下一步需要取得解包後／載入後的程式內容，再找TRIGGER表的真正消費端；目前不能用繁中資源直接補回韓版缺少的MEF。
+
+可重跑工具inspect_tc_mef_evidence.py，SHA、56個archive索引、表列與literal位置保存在native-index/tc-mef-evidence.json。這是來源盤點，不是AI或波次生成實作。

@@ -1,0 +1,223 @@
+"""Isolated first-expedition probe, not an account authentication service.
+
+Client 672505 sends 3E + 21 UTF-16 units in a 48-byte request.
+EXPD 4C4670 indexes from 5EAC; 60FC selects server4A, handler4C21D0.
+That handler forwards signed int16 status to the existing naming dialog.
+Server 6E + signed byte 1 invokes 4B9260 -> TUTO constructor/init.
+"""
+import json
+import struct
+import threading
+from pathlib import Path
+
+ISILIA=4
+INITIAL_CHARACTERS=(1,3)  # 01_Soma / 03_Sblm; old video begins with these two.
+EAST=64  # 4449D0 direction table: sin(theta),-cos(theta), +X is east.
+STARTING_SKILLS={1:(1,2,3),3:(33,35,36),4:(49,50,52)}
+STARTING_WEAPONS={1:1,2:10,3:19,4:28,5:37,6:46,7:254,8:2013,9:2031}
+BATTLE_MAP=190  # scenario_town000.mef/collision, separate from walking context188.
+BATTLE_SPAWN={'x':368.,'y':272.,'direction':0,'speed':30,'percent':100}
+
+class NewExpedition:
+    def __init__(self,path,data=None,persist=None,inventory=None):
+        self.path=Path(path) if path else None
+        self.persist=persist
+        self.inventory=inventory
+        self.lock=threading.RLock()
+        self.data=data if data is not None else json.loads(self.path.read_text(encoding='utf-8')) if self.path and self.path.exists() else {
+            'version':1,'expedition_name':'','characters':list(INITIAL_CHARACTERS),'stage':'naming'}
+        if self.data.get('characters') not in ([1,3],[1,3,ISILIA],[1,3,ISILIA,2]):
+            raise ValueError('Initial expedition must contain Soma and Shubalman')
+        self._validate_name(self.data['expedition_name'],allow_empty=True)
+
+    def _persist(self,data):
+        if self.persist:
+            self.persist(data)
+        else:
+            self.path.parent.mkdir(parents=True,exist_ok=True)
+            temporary=self.path.with_suffix('.tmp')
+            temporary.write_text(json.dumps(data,ensure_ascii=False,indent=2),encoding='utf-8')
+            temporary.replace(self.path)
+
+    @staticmethod
+    def _validate_name(name,allow_empty=False):
+        if not isinstance(name,str) or '\0' in name or len(name.encode('utf-16le'))>40:
+            raise ValueError('Invalid expedition name length')
+        if not allow_empty and (not name.strip() or name!=name.strip()):
+            raise ValueError('Expedition name must not be empty or padded')
+        if any(ord(c)<32 for c in name):raise ValueError('Invalid control character')
+
+    def create(self,payload):
+        if len(payload)!=48 or struct.unpack_from('<H',payload)[0]!=0x3e:
+            raise ValueError('Invalid expedition creation request')
+        units=struct.unpack_from('<21H',payload,6)
+        if 0 not in units:raise ValueError('Unterminated expedition name')
+        name=payload[6:6+2*units.index(0)].decode('utf-16le')
+        self._validate_name(name)
+        with self.lock:
+            if self.data['expedition_name'] and self.data['expedition_name']!=name:
+                return struct.pack('<Hh',0x4a,-1)
+            updated=dict(self.data,expedition_name=name,stage='named-awaiting-tutorial')
+            self._persist(updated)
+            self.data=updated
+        return struct.pack('<Hh',0x4a,1)
+
+    def tutorial_entry(self):
+        if not self.data['expedition_name']:
+            raise ValueError('Name expedition before tutorial')
+        return struct.pack('<Hb',0x6e,1)
+
+    def player_initialization(self,character=1):
+        if character not in self.data['characters']:
+            raise ValueError('Character is not in the initial roster')
+        from character_switch import responses
+        from login_protocol import plaza_movement_timing_responses
+        # Quest1000 scene1 loads town000D and places Soma at231/144.
+        # Context188 has town000.mef + town000 collision for tutorial walking;
+        # context50018 only has geometry and leaves bounds NULL.
+        packets=self._levels(responses(character,{'x':275.,'y':144.,'direction':EAST,'speed':30,'percent':100}))
+        return (struct.pack('<HI',0x12,188),)+self._with_skills(packets,character)+plaza_movement_timing_responses()
+
+    @staticmethod
+    def skill_initialization(character):
+        # Account126/4E46D0: characterB + learned(H skill,B level,B reserved).
+        # Account127/4E48A0: characterB,presetB,enabledB + same records.
+        # Each ID/level1 exists in the read-only native skill catalog snapshot.
+        # Recruitment must not crash switching to a character whose native
+        # skill catalog has not yet been captured.
+        if character not in STARTING_SKILLS:return ()
+        skills=STARTING_SKILLS[character]
+        records=b''.join(struct.pack('<HBB',skill,1,0) for skill in skills)
+        return (struct.pack('<HB',0x126,character)+records,
+                struct.pack('<HBBB',0x127,character,0,1)+records,
+                # Account12C/4E5620: characterI, selectedB,reservedB,presetsB[].
+                struct.pack('<HIBBB',0x12c,character,0,0,0))
+
+    def _with_skills(self,packets,character):
+        # Initialize before local controller binding refreshes character UI.
+        return packets[:5]+self.skill_initialization(character)+(self.inventory.snapshots(character)[1:] if self.inventory else self.equipment_initialization(character))+packets[5:]
+
+    @staticmethod
+    def equipment_initialization(character):
+        from inventory_equipment import equipment_response
+        item=STARTING_WEAPONS[character]
+        gear={1:{'serial':0x30000+character,'base_id':item,'item_id':item}}
+        # Isolated fixture only: no changes to the saved equipment playground.
+        return (equipment_response(character,gear),
+                struct.pack('<HIIHH',0xf9,1,0,character,1),
+                struct.pack('<HIHHHBB',0xfa,1,character,0,item,0,0))
+
+    @staticmethod
+    def _levels(packets):
+        return tuple(p[:3]+bytes([2 if p[2]==ISILIA else 1])+p[4:] if p[:2]==b'\x5c\x00' else p for p in packets)
+
+    def unlock_isilia(self,payload):
+        if payload!=struct.pack('<HH',0x40,14):return ()
+        from login_protocol import channel_response,combined_character_data_response
+        with self.lock:
+            if ISILIA not in self.data['characters']:
+                updated=dict(self.data,characters=[1,3,ISILIA],stage='isilia-unlocked')
+                self._persist(updated)
+                self.data=updated
+        record=bytearray(channel_response(True,character_ids=(ISILIA,))[65:])
+        struct.pack_into('<I',record,0x2a,2)
+        stats=bytearray(combined_character_data_response());stats[2:4]=bytes([ISILIA,2])
+        # Account callback15C ->4E2730 ->4D4150 adds owned character records.
+        return (struct.pack('<H',0x2b)+record,bytes(stats))
+
+    def relock_isilia(self):
+        with self.lock:
+            if self.tutorial_completed:return
+            updated=dict(self.data,characters=[1,3],stage='named-awaiting-tutorial')
+            self._persist(updated)
+            self.data=updated
+
+    @property
+    def tutorial_completed(self):
+        return self.data.get('stage')=='plaza'
+
+    def complete_tutorial(self):
+        with self.lock:
+            updated=dict(self.data,stage='plaza')
+            self._persist(updated)
+            self.data=updated
+
+    def formation(self):
+        if ISILIA not in self.data['characters']:raise ValueError('Isilia dialogue must finish before battle')
+        # 50: allowed bitmask, forced bitmask, party capacity, ordered IDs.
+        # 5082B0 reads allowed;5083A0 builds ordered selections; first is leader.
+        return struct.pack('<HHHBH',0x50,13,0,1,ISILIA)
+
+    def bootstrap(self,payload):
+        data=bytearray(payload)
+        for offset in range(65,len(data),53):
+            if data[offset+46]==ISILIA:struct.pack_into('<I',data,offset+42,2)
+        return bytes(data)
+
+    def battle_entry(self,payload):
+        if len(payload)!=13 or struct.unpack_from('<HH',payload)!=(0x28,14):
+            raise ValueError('Unsupported tutorial battle confirmation')
+        if payload[4]!=ISILIA or any(payload[5:12]) or payload[12]!=0:
+            raise ValueError('First tutorial battle requires Isilia as sole leader')
+        if ISILIA not in self.data['characters']:
+            raise ValueError('Isilia has not been unlocked')
+        # Combat controller/UI initialization is required before38 produces B0.
+        # tutorial-v2 client retains TUTO when handling5F/2, while invoking
+        # native SCEF init4C4750 for controller3/UI7 without deleting Lua.
+        return (struct.pack('<HB',0x5f,2),struct.pack('<HBHHH',0x38,2,BATTLE_MAP,0,14))
+
+    def battle_completion(self,position):
+        # Restore the walking map before Lua can start its next cutscene.
+        # TUTO4C4F20 marks scenario14 ended, releasing IsScenarioEnded.
+        if position is None:raise ValueError('Missing pre-battle tutorial position')
+        return ((struct.pack('<HB',0x5f,6),struct.pack('<HI',0x12,188))+self.switch_character(ISILIA,position)
+                +(struct.pack('<H',0x14),struct.pack('<HH',0x4c,14)))
+
+    def unlock_pinko_after_scene(self,payload):
+        # Lua Part2 scene1000/13 follows the recruitment explanation, then
+        # waits for IsCharacterAvailable(2). Complete the native ownership
+        # update here, not at login or first-battle formation.
+        if payload!=struct.pack('<4H',0x3f,1000,13,1) or ISILIA not in self.data['characters']:return ()
+        from login_protocol import channel_response,combined_character_data_response
+        with self.lock:
+            if 2 in self.data['characters']:return ()
+            updated=dict(self.data,characters=[1,3,ISILIA,2],stage='pinko-unlocked')
+            self._persist(updated);self.data=updated
+        record=bytearray(channel_response(True,character_ids=(2,))[65:])
+        stats=bytearray(combined_character_data_response());stats[2:4]=bytes([2,1])
+        return (struct.pack('<H',0x2b)+record,bytes(stats))
+
+    def battle_player(self,position):
+        # 38 changes the loading page;12/4B24F0 actually loads map resources.
+        # Use a known clear scenario collision cell, pending formal spawn data.
+        return (struct.pack('<HI',0x12,BATTLE_MAP),)+self.switch_character(ISILIA,BATTLE_SPAWN)+(struct.pack('<H',0x14),)
+
+    def switch_character(self,character,position):
+        if character not in self.data['characters']:
+            raise ValueError('Character is not in the initial roster')
+        from character_switch import responses
+        from login_protocol import plaza_movement_timing_responses
+        return self._with_skills(self._levels(responses(character,position)),character)+plaza_movement_timing_responses()
+
+    @staticmethod
+    def after_tutorial_scene(payload):
+        if len(payload)!=8 or struct.unpack('<4H',payload)!=(0x3f,1000,1,1):
+            return ()
+        from login_protocol import plaza_player_control_response,plaza_movement_timing_responses
+        # RestoreMap at the end of scene1000/1 can invalidate control/state.
+        # Position after dialogue is separate from the staged cutscene actors.
+        # Keep the existing entity and map; move outside the blocked gate route.
+        speed=struct.pack('<H',0)+struct.pack('<HHh',0x100,5,100)+struct.pack('<HHh',0x100,6,30)
+        position=struct.pack('<HHff',0x16,0x100,275.,144.)
+        facing=struct.pack('<HHBBHH',0x0b,0x100,EAST,0,275,144)
+        # Explicitly restore the walking collision/height context as well as
+        # position. RestoreMap can leave the cutscene's saved map state active.
+        return (struct.pack('<HI',0x12,188),position,facing,plaza_player_control_response(),speed)+plaza_movement_timing_responses()
+
+    @staticmethod
+    def scenario_selection(payload):
+        # Client40 from4AA4D0; server4E basic slot274 ->4B3570.
+        # F43DA is handled by tutorial page5C3370 ->5C3610 formation UI.
+        if payload!=struct.pack('<HH',0x40,14):
+            raise ValueError('Unsupported tutorial scenario request')
+        return struct.pack('<HH',0x4e,14)

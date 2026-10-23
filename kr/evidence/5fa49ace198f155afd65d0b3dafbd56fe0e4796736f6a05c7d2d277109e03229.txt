@@ -1,0 +1,97 @@
+{
+  "checks": "passed",
+  "sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+  "boundedFunctions": 10,
+  "functions": [
+    {
+      "name": "action-notification-controller-forward",
+      "start": "0x4b19d0",
+      "endExclusive": "0x4b19f2"
+    },
+    {
+      "name": "action-cannot-use-skill-notification",
+      "start": "0x545c50",
+      "endExclusive": "0x545e19"
+    },
+    {
+      "name": "delete-actor-list-receiver",
+      "start": "0x4b28d0",
+      "endExclusive": "0x4b2aed"
+    },
+    {
+      "name": "delete-common-actor-by-id",
+      "start": "0x4dfbc0",
+      "endExclusive": "0x4dfc2c"
+    },
+    {
+      "name": "checkpoint-list-receiver",
+      "start": "0x4b2af0",
+      "endExclusive": "0x4b2cc4"
+    },
+    {
+      "name": "checkpoint-constructor-full",
+      "start": "0x543700",
+      "endExclusive": "0x543b2a"
+    },
+    {
+      "name": "checkpoint-interaction-full",
+      "start": "0x544070",
+      "endExclusive": "0x544726"
+    },
+    {
+      "name": "checkpoint-request-send",
+      "start": "0x544020",
+      "endExclusive": "0x544067"
+    },
+    {
+      "name": "checkpoint-movement-update",
+      "start": "0x4cb000",
+      "endExclusive": "0x4cb01f"
+    },
+    {
+      "name": "checkpoint-effect-update",
+      "start": "0x4cb020",
+      "endExclusive": "0x4cb04a"
+    }
+  ],
+  "receiveRoutes": {
+    "000F": "controller+3C ->545C50 CANNOT_USE_SKILL/notifications",
+    "001A": "header4, actor WORD rows ->4DFBC0 delete",
+    "0027": "header2, rows18 ->CCheckPoint in FB79F0 manager"
+  },
+  "checkpointRequest": {
+    "command": "C2S001C",
+    "bytes": 6,
+    "networkSlot": 0,
+    "fields": [
+      "WORD command",
+      "WORD checkpoint+F4",
+      "WORD checkpoint+F6"
+    ]
+  },
+  "controllerTables": [
+    ".?AVCController@@",
+    ".?AVCFormationController@@",
+    ".?AVCSingleController@@",
+    ".?AVCTutorialController@@"
+  ],
+  "directKnownMonsterOrBrainCalls": {
+    "action-notification-controller-forward": [],
+    "action-cannot-use-skill-notification": [],
+    "delete-actor-list-receiver": [],
+    "delete-common-actor-by-id": [],
+    "checkpoint-list-receiver": [],
+    "checkpoint-constructor-full": [],
+    "checkpoint-interaction-full": [],
+    "checkpoint-request-send": [],
+    "checkpoint-movement-update": [],
+    "checkpoint-effect-update": []
+  },
+  "limitations": [
+    "Checkpoint virtual+64 is an interaction handler, not its per-frame virtual+24.",
+    "GUI callbacks/helper graphs, trigger radius and all request callers not fully expanded.",
+    "Checkpoint fields are not assigned official enum names; byte+3 signed widening preserved.",
+    "001A extra header WORD purpose and000F bytes2..6 not established.",
+    "No server reply pairing, monster wave trigger or P2P authority established."
+  ]
+}

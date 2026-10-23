@@ -1,0 +1,68 @@
+"""Bounded original KR script object movement: not autonomous monster AI."""
+import hashlib,json
+from pathlib import Path
+from build_native_index import PE
+from capstone import Cs,CS_ARCH_X86,CS_MODE_32
+ROOT=Path(__file__).resolve().parent.parent;OUT=ROOT/'anal/native-index'
+p=PE(ROOT/'Tartaros.bin');md=Cs(CS_ARCH_X86,CS_MODE_32)
+idx=json.loads((OUT/'Tartaros.bin.json').read_text(encoding='utf-8'))
+assert hashlib.sha256(p.data).hexdigest()==idx['sha256']
+specs=[('script-WalkObject',0x563330,0x5633b0),
+ ('script-WarpObject',0x5633b0,0x5634d7),('script-AniObject',0x5634e0,0x563524),
+ ('script-StopObject',0x5637e0,0x56382f),
+ ('register-WalkObject',0x566e20,0x566eb9),('register-WarpObject',0x566ec0,0x566f59),
+ ('register-AniObject',0x566f60,0x566ff9),('register-StopObject',0x567280,0x567319),
+ ('lua-StopObject-wrapper',0x5695e0,0x56963c),
+ ('lua-one-number-member-adapter',0x56a430,0x56a4a3),
+ ('event-actor-target-direction',0x4d0ce0,0x4d0dcc),
+ ('event-actor-target-arrival',0x4d0dd0,0x4d0f05),
+ ('event-actor-tick-target-consumer',0x4d0f80,0x4d0f95),
+ ('shared-actor-motion-setter',0x4c8da0,0x4c8dd2)]
+funcs={}
+for name,s,e in specs:
+ ins=list(md.disasm(p.read(s,e-s),s));assert sum(i.size for i in ins)==e-s
+ assert ins[-1].mnemonic=='ret',(name,ins[-1].mnemonic)
+ starts={i.address for i in ins}
+ for i in ins:
+  if i.mnemonic.startswith('j') and i.op_str.startswith('0x'):
+   t=int(i.op_str,16)
+   if s<=t<e:assert t in starts,(name,hex(i.address))
+ funcs[s]={i.address:i for i in ins}
+ (OUT/(name+'.txt')).write_text('\n'.join(f'{i.address:08X} {i.mnemonic:8} {i.op_str}' for i in ins)+'\n',encoding='utf-8')
+bindings=[('WalkObject',0x566e20,0x566e38,0xfe27dc,0x563330,0x566e78,0xd6a3bc,0x569340),
+ ('WarpObject',0x566ec0,0x566ed8,0xfe27e0,0x5633b0,0x566f18,0xd6a3c8,0x5693a0),
+ ('AniObject',0x566f60,0x566f78,0xfe27e4,0x5634e0,0x566fb8,0xd6a3d4,0x569400),
+ ('StopObject',0x567280,0x567298,0xfe27f8,0x5637e0,0x5672d8,0xd6a410,0x5695e0)]
+for name,s,site,g,target,ns,na,wrapper in bindings:
+ assert funcs[s][site].op_str==f'dword ptr [{hex(g)}], {hex(target)}'
+ assert funcs[s][ns].op_str==hex(na)
+ assert p.read(na,60).split(b'\0')[0].decode('ascii')==name
+ assert any(i.mnemonic=='push' and i.op_str==hex(wrapper) for i in funcs[s].values())
+checks=[(0x563330,0x563348,'ecx, [esi + 0x18]'),(0x563330,0x56335d,'esi, dword ptr [eax + 0x10]'),
+ (0x563330,0x56337e,'0x4d0ce0'),(0x563330,0x5633a1,'dword ptr [esi + 0x434], xmm0'),
+ (0x5633b0,0x563429,'dword ptr [esi + 0xe0], ecx'),(0x5633b0,0x563432,'byte ptr [esi + 0xe4], bl'),
+ (0x5633b0,0x563441,'edx, dword ptr [eax + 0x44]'),
+ (0x5634e0,0x563514,'edx, dword ptr [edx + 0x68]'),
+ (0x5637e0,0x563816,'1'),(0x5637e0,0x563821,'word ptr [esi + 0xe2], cx'),
+ (0x5695e0,0x569616,'ecx, dword ptr [0xfe27f8]'),(0x5695e0,0x569620,'0x56a430'),
+ (0x56a430,0x56a439,'ebx, dword ptr [0xfe2778]'),(0x56a430,0x56a48a,'dword ptr [ebp + 8]'),
+ (0x4d0ce0,0x4d0ceb,'dword ptr [esi + 0x424], ecx'),
+ (0x4d0ce0,0x4d0cf4,'dword ptr [esi + 0x428], edx'),
+ (0x4d0ce0,0x4d0db6,'dword ptr [esi + 0xe0], ecx'),
+ (0x4d0dd0,0x4d0ef9,'word ptr [esi + 0xe2], ax'),
+ (0x4d0f80,0x4d0f8b,'0x4d0dd0'),(0x4c8da0,0x4c8dad,'dword ptr [ecx + 0x38c], eax')]
+for s,a,op in checks:assert funcs[s][a].op_str==op,(hex(a),funcs[s][a].op_str,op)
+v=next(v for v in idx['vtables'] if v['address']==0xc0c824)
+assert v['className']=='.?AVCEventActor@@' and v['entries'][8]==0x4d0f80
+report=dict(sha256=idx['sha256'],checks='passed',boundedFunctions=len(specs),
+ functions=[dict(name=n,start=hex(s),endExclusive=hex(e)) for n,s,e in specs],
+ bindings=[dict(name=n,registration=hex(s),pointerGlobal=hex(g),member=hex(t),wrapper=hex(w)) for n,s,a,g,t,ns,na,w in bindings],
+ objectLookup='this+18 map, sentinel+1C, node+10 object; distinct lookup path from common FAB138',
+ targetTickClass='CEventActor primary C0C824 v20=4D0F80',
+ limitations=['Four operations take explicit script arguments, not autonomous enemy selection.',
+ 'Map ownership and insertion/class guarantees not yet fully traced; do not assume every lookup is CMonster or only CEventActor.',
+ 'StopObject adapter fully traced; other multi-argument adapters and global rebind lifecycle not fully audited.',
+ 'Heuristic envelope55F960 previously included these separate functions; not a verified single function extent.',
+ 'No service, game, runtime, packet, resource, client, save or AI changes.'])
+(OUT/'script-object-motion-audit.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+print(json.dumps(dict(checks='passed',boundedFunctions=len(specs),scriptBindings=len(bindings))))

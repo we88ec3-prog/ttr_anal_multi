@@ -1,0 +1,104 @@
+"""Offline KR checkpoint wire source / action notification classification."""
+import hashlib
+import json
+from pathlib import Path
+from build_native_index import PE
+from capstone import Cs, CS_ARCH_X86, CS_MODE_32
+
+ROOT=Path(__file__).resolve().parent.parent
+OUT=ROOT/'anal/native-index'
+p=PE(ROOT/'Tartaros.bin')
+idx=json.loads((OUT/'Tartaros.bin.json').read_text(encoding='utf-8'))
+assert hashlib.sha256(p.data).hexdigest()==idx['sha256']
+md=Cs(CS_ARCH_X86,CS_MODE_32)
+specs=[
+ ('action-notification-controller-forward',0x4b19d0,0x4b19f2),
+ ('action-cannot-use-skill-notification',0x545c50,0x545e19),
+ ('delete-actor-list-receiver',0x4b28d0,0x4b2aed),
+ ('delete-common-actor-by-id',0x4dfbc0,0x4dfc2c),
+ ('checkpoint-list-receiver',0x4b2af0,0x4b2cc4),
+ ('checkpoint-constructor-full',0x543700,0x543b2a),
+ ('checkpoint-interaction-full',0x544070,0x544726),
+ ('checkpoint-request-send',0x544020,0x544067),
+ ('checkpoint-movement-update',0x4cb000,0x4cb01f),
+ ('checkpoint-effect-update',0x4cb020,0x4cb04a),
+]
+functions={}
+for name,start,end in specs:
+ ins=list(md.disasm(p.read(start,end-start),start))
+ assert sum(i.size for i in ins)==end-start,name
+ assert ins[-1].mnemonic=='ret',name
+ bounds={i.address for i in ins}
+ for i in ins:
+  if i.mnemonic.startswith('j') and i.op_str.startswith('0x'):
+   t=int(i.op_str,16)
+   if start<=t<end: assert t in bounds,(name,hex(t))
+ functions[name]={i.address:i for i in ins}
+ (OUT/(name+'.txt')).write_text('\n'.join(f'{i.address:08X} {i.mnemonic:8} {i.op_str}' for i in ins)+'\n',encoding='utf-8')
+checks=[
+ ('action-notification-controller-forward',0x4b19de,'eax, dword ptr [eax + 0x3c]'),
+ ('action-cannot-use-skill-notification',0x545c7b,'eax, 0xf'),
+ ('action-cannot-use-skill-notification',0x545c8f,'byte ptr [esi + 7], bl'),
+ ('action-cannot-use-skill-notification',0x545c97,'0xc0f928'),
+ ('action-cannot-use-skill-notification',0x545d16,'byte ptr [esi + 8], 1'),
+ ('action-cannot-use-skill-notification',0x545d6a,'byte ptr [ecx + 8], bl'),
+ ('action-cannot-use-skill-notification',0x545db9,'byte ptr [ecx + 8], 2'),
+ ('delete-actor-list-receiver',0x4b2908,'eax, -4'),
+ ('delete-actor-list-receiver',0x4b290b,'eax, 1'),
+ ('delete-actor-list-receiver',0x4b2ac2,'0x4dfbc0'),
+ ('delete-common-actor-by-id',0x4dfbfd,'eax, dword ptr [edx + 0x14]'),
+ ('delete-common-actor-by-id',0x4dfc11,'dword ptr [edi + 0x10], 0'),
+ ('delete-common-actor-by-id',0x4dfc1e,'0x7b6890'),
+ ('checkpoint-list-receiver',0x4b2b65,'0x5449a0'),
+ ('checkpoint-list-receiver',0x4b2b79,'eax, 0x38e38e39'),
+ ('checkpoint-list-receiver',0x4b2b95,'0x108'),
+ ('checkpoint-list-receiver',0x4b2bd5,'0x543700'),
+ ('checkpoint-list-receiver',0x4b2c9b,'edi, 0x12'),
+ ('checkpoint-constructor-full',0x543738,'0x4ca730'),
+ ('checkpoint-constructor-full',0x543772,'dword ptr [ebx], 0xc0f7fc'),
+ ('checkpoint-constructor-full',0x543778,'word ptr [ebx + 0xf4], cx'),
+ ('checkpoint-constructor-full',0x543755,'word ptr [ebx + 0xf6], ax'),
+ ('checkpoint-interaction-full',0x54409e,'eax, word ptr [esi + 0xf4]'),
+ ('checkpoint-interaction-full',0x5443ca,'dword ptr [0xfba7ac], ebx'),
+ ('checkpoint-interaction-full',0x5443e3,'dword ptr [ecx + eax*4 + 0xb4], 1'),
+ ('checkpoint-interaction-full',0x54470e,'0x544020'),
+ ('checkpoint-request-send',0x54402d,'dx, word ptr [eax + 0xf4]'),
+ ('checkpoint-request-send',0x544034,'ax, word ptr [eax + 0xf6]'),
+ ('checkpoint-request-send',0x54403b,'ecx, 0x1c'),
+ ('checkpoint-request-send',0x544056,'edx, dword ptr [edx + 0x10]'),
+ ('checkpoint-request-send',0x544059,'6'),
+ ('checkpoint-request-send',0x54405f,'0'),
+ ('checkpoint-movement-update',0x4cb004,'0x4ca890'),
+ ('checkpoint-effect-update',0x4cb03e,'0x7bd8d0'),
+]
+for name,a,op in checks:assert functions[name][a].op_str==op,(name,hex(a))
+assert p.cstring(0xc0f928)=='CANNOT_USE_SKILL'
+assert p.cstring(0xc06ce0)=='DeleteObjPack: Cannot Found In CharList'
+handlers={r['command']:r['handler'] for r in idx['mainPacketHandlers']}
+assert handlers[0xf]==0x4b19d0 and handlers[0x1a]==0x4b28d0 and handlers[0x27]==0x4b2af0
+vt=next(r for r in idx['vtables'] if r['address']==0xc0f7fc)
+assert vt['className']=='.?AVCCheckPoint@@'
+assert vt['entries'][8:10]==[0x4cb000,0x4cb020]
+assert vt['entries'][25]==0x544070
+controllerTables=[]
+for r in idx['vtables']:
+ if r['className'] in ['.?AVCController@@','.?AVCFormationController@@','.?AVCSingleController@@','.?AVCTutorialController@@'] and r['thisOffset']==0:
+  assert r['entries'][15]==0x545c50
+  controllerTables.append(r['className'])
+report=dict(checks='passed',sha256=idx['sha256'],boundedFunctions=len(specs),
+ functions=[dict(name=n,start=hex(s),endExclusive=hex(e)) for n,s,e in specs],
+ receiveRoutes={'000F':'controller+3C ->545C50 CANNOT_USE_SKILL/notifications',
+                '001A':'header4, actor WORD rows ->4DFBC0 delete',
+                '0027':'header2, rows18 ->CCheckPoint in FB79F0 manager'},
+ checkpointRequest=dict(command='C2S001C',bytes=6,networkSlot=0,
+    fields=['WORD command','WORD checkpoint+F4','WORD checkpoint+F6']),
+ controllerTables=controllerTables,
+ directKnownMonsterOrBrainCalls={n:[hex(i.address) for i in ins.values() if i.mnemonic=='call'
+   and i.op_str in ('0x4d1710','0x548ff0','0x549490')] for n,ins in functions.items()},
+ limitations=['Checkpoint virtual+64 is an interaction handler, not its per-frame virtual+24.',
+  'GUI callbacks/helper graphs, trigger radius and all request callers not fully expanded.',
+  'Checkpoint fields are not assigned official enum names; byte+3 signed widening preserved.',
+  '001A extra header WORD purpose and000F bytes2..6 not established.',
+  'No server reply pairing, monster wave trigger or P2P authority established.'])
+(OUT/'checkpoint-action-notifications-audit.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+print(json.dumps(dict(checks='passed',boundedFunctions=len(specs),checkpoint='CCheckPoint',request='C2S001C/6bytes/slot0')))

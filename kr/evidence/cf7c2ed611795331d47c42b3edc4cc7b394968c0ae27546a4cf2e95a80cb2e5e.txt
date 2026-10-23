@@ -1,0 +1,110 @@
+# 韓版 INI 設定來源與戰鬥動畫控制資料流
+
+唯一來源為 `E:/Tartaros/workspace/Tartaros.bin`，SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。本輪確認三類本機設定讀取，並把 FrameControl 的來源、表布局、戰鬥結果觸發與模型更新消費端接起來。沒有執行遊戲、附加程序、呼叫目標 API 或讀寫實際 INI／帳號／存檔。
+
+產物：[唯讀查詢](query_records.py)、[SQLite 台帳](methods.sqlite)、[10 筆語意紀錄](semantic-records.json)、[30 個參數與來源](framecontrol-table.json)、[呼叫窗口與欄位別名](battle-frame-contexts.json)、[區域分類](region-evidence.json)、[未解項](unknowns.json)、[接續導覽](HANDOFF.md)。
+
+## 證據與界限
+
+使用 REA MCP 6.5.0／公開 MCP SDK 2.3.1、Ghidra 12.1.4、Java 21.0.12.1；技能版本 42。原生反編譯、Reference Manager 交叉引用、包含函式解析、呼叫與 pcode 由引擎提供；Python 只整理表格／資料庫及核對原始 bytes。沿用僅停用 `X86 Function Callee Purge` 的 profile，digest `965552102e88fd60a1ccde827b92cc552a22c4f08ddda16a7fc2bea3c04307c0`；不能依預設 ABI 自動命名宣告，已確認的暫存器／stack 傳遞另列證據。
+
+46 個唯一 Evidence 與 12 份函式 dossier 已保存於各層 `mcp-evidence`；每筆 Evidence 保存來源 SHA、引擎與 profile。資料庫 `evidence.locations` 保存檔案位置與 hash；`ranges` 保存每段右開範圍、檔案 offset 與 SHA256。10 份為帶未知的有限語意紀錄；4B0640 與 7A5C50 僅屬有界呼叫上下文，不算兩支新增完成方法。4B0640 pcode 截斷；原生 Listing 的四個 callsite 可以核對，不代表整個函式語意完成。所有 native session 已 export/close，當前 MCP 可連線且 Ghidra 可用，見 [恢復時狀態](resumption-session.json)。
+
+本輪原生分析約 01:12–01:41 UTC，起始計畫時間 2026-10-23 01:08:40 UTC；之後整理／驗證與恢復收尾跨越原訂 90 分鐘上限。沒有可證明全程連續工作的計時，不把中間時差計為引擎運行或有效分析工時。本輪原生路線在約 33 分鐘內已取得表與消費端新關係；本報告的行政收尾仍屬超時，不能聲稱本階段按時完成。第一階段原有 90 分鐘驗收與本次後續階段分開。
+
+## 已確認的方法與設定鏈
+
+地址皆為靜態 VA，以下 end 為 exclusive；不連續範圍以資料庫為準。
+
+| 方法 | 原生範圍 | 有限語意 |
+|---|---|---|
+| 4405C0 | 4405C0..44078F | receiver+8 selector；40 讀 serverip.ini，52／54 以固定四段參數格式化；選出字串寫 receiver+0C，正常識別分支 EAX=1，其他為 0 |
+| 440850 | 440850..440925 | 兩個 stack byte 與 DL／CL 組 `%d.%d.%d.%d`，輸出 ESI 字串 |
+| 6EDD50 | 6EDD50..6EDDBD、6EDDC0..6EDDED、6EDDF0..6EDE1D | 工作目錄 + 分隔符 + basename 的 path holder；+1C 初始化為 0 |
+| 6EDE70 | 6EDE70..6EDEFA | filename holder、ECX default、ESI out；讀 Login/IP，EAX 回傳輸出物件，RET4 |
+| 6DACD0 | 6DACD0..6DADDF | 讀 packetlog.ini 的 LOG/Packet（fallback 0），非零建立 logger wrapper |
+| 6F0100 | 6F0100..6F021F | 讀 ./LogSetting.ini TYPE/LOG（fallback 1）；值 2 與其他值走不同配置／constructor，backend sink 未解 |
+| 6EDE20 | 6EDE20..6EDE62 | path holder 清理，帶 guard 的全 NULL 資料參數 profile 呼叫與字串釋放 |
+| 7D2170 | 7D2170..7D28DF | 讀 ./FrameControl.ini 30 欄，轉為 float32 寫入全域表 |
+| 7D28E0 | 7D28E0..7D293D | 啟動／調整模型子物件，以 VALUE 表初始化 threshold |
+| 7A87D0 | 7A87D0..7A8E06 | 模型動畫進度更新，消費 RATIO 表並累積／回補延後量；其餘 motion 回呼等仍未知 |
+
+6EDE20 的分離入口／原生 body 不能拿舊 6EDD50 包絡代替；這是生命週期 helper，不拿來推算新增 C++ 業務方法分母。4405C0 與舊 CLoginModuleGSP vtable 關係可查上游 class ledger；類別名稱本身不證明完整登入協定。
+
+```mermaid
+flowchart LR
+  S["4405C0 selector 40"] --> P["6EDD50: cwd + serverip.ini"]
+  P --> R["6EDE70: Login/IP"]
+  D["440850: 0.0.0.0 default"] --> R
+  R --> O["字串轉移到 receiver+0C"]
+  L["packetlog.ini LOG/Packet"] --> C["6DACD0: 非零才建立 logger"]
+  C --> F["6F0100: LogSetting.ini TYPE/LOG"]
+  F --> B["2 與其他值選不同 backend；sink 未解"]
+```
+
+路徑前綴是執行時工作目錄，不能改稱 executable 目錄。未讀實際 INI 內容，因此 fallback 不等於目前有效值。三個 WritePrivateProfileStringA site 為 4406B8、6DADA8、6EDE39，**前三個參數均為 NULL**、第四參數為 filename，且由 holder+1C guard 控制。這些是清理／同步模式的靜態呼叫證據，不能當具名 key/value、帳號或遊戲進度儲存證據；本次未測試其 OS 側實際效果。
+
+## FrameControl 表、觸發與消費
+
+最初沿 GetPrivateProfileIntA IAT BD22C0 的原生引用，發現 7D22F5 載入 ESI 的指令。7D2170 後續 30 次 CALL ESI 已由 Ghidra 解析為邏輯匯入 `GetPrivateProfileIntA`（EXTERNAL:0x82）；Python 只是整理已有的引擎 binding，沒有自行模擬或重新解呼叫。
+
+全域 `[FBAB80, FBABF8)` 共 120 bytes，為 5 組 × 6 個 float32。group 依序 LIGHT_MELEE、MEDIUM_MELEE、HEAVY_MELEE、RANGED、ATTACKED。每組記憶體順序為 NORMAL-VALUE、BLOCKED-VALUE、CRITICAL-VALUE、NORMAL-RATIO、BLOCKED-RATIO、CRITICAL-RATIO；呼叫讀取順序另保留，不能和記憶體欄位順序混用。完整 key、default uint32、call/store VA 與字串來源在 JSON／CSV／SQLite。
+
+整數轉換含負號位修正 +2^32。乘數在 C559C8，原始 bytes `000000e04d62503f`，為精確 double `0.0010000000474974513`（float32 的 0.001 再提升），最後才 FSTP float32；不能寫成精確 double 0.001 或全程 float32 乘法。獨立核對曾捕捉此差異，驗證腳本固定檢查原始 bytes。
+
+```mermaid
+flowchart TD
+  I["FrameControl.ini keys / compiled fallback"] --> L["7D2170: 30 次設定讀取與轉換"]
+  L --> T["FBAB80..FBABF8: 5×6 float32"]
+  B["4B0640 四個有界戰鬥結果 callsite"] --> A["actor+15C 模型；模型+ B4 子物件"]
+  A --> S["7D28E0: group/result 啟動"]
+  T -->|VALUE| S
+  S --> M["模型 CC..E8 控制欄位"]
+  U["4C87D0 actor 更新"] --> W["7A5C50 轉送相同模型 pointer"]
+  W --> C["7A87D0 模型動畫進度"]
+  M --> C
+  T -->|RATIO| C
+```
+
+四個觸發 callsite 是 4B0E1D（result=1）、4B114E（2）、4B18A6（0）、4B18D4（group=4/result=0）。前三個 group 由模型 motion 介面 v30 的 AL 取得；原始 enum 及所有 producer 未恢復。模型非 NULL、actor+370、model+AC 等 guard 與 argument windows 已保存。這些窗口不能代替 4B0640 全部 4,820 bytes 的分支語意。
+
+7D28E0 首次啟動存 group/result，取 `FBAB80[6*group+result]` 到子物件+24（model+D8）；設 active 並清累積欄位。已 active 且 updated 時，以半差方式調整 threshold。此 body 未檢查索引上界。7A87D0 以同 group/result 從 `FBAB8C[6*group+result]` 取 RATIO；active 分支累積經過量與延後量、降低當次進度，threshold 滿足時關閉 active，inactive 分支每次回補尚餘延後量的十分之一。單位、正式旗標名稱與完整 motion 介面仍未知。
+
+子物件 base 為 model+B4，觀察至 model+EC，因此最小觀察 span 為 56 bytes，**不是完整 C++ 類別大小**。8 個 alias 見 battle-frame-contexts.json；不可與 actor 自身相同 offset 混用。7A87D0 在歷史 ACTOR-UPDATE-PIPELINE 已被分類為動畫進度，本輪新增的是 INI 來源、精確表布局與戰鬥結果觸發證據，不宣稱首次發現該方法。此機制尚不提供普通怪物選敵／技能決策來源，也不能直接稱為傷害係數。
+
+## 分開報告的進度
+
+| 指標 | 本輪實證 | 未涵蓋部分 |
+|---|---|---|
+| 區域分類 | 7 個檔案區域：3 常數、1 IAT、1 字串、2 padding 候選；另有 120-byte runtime 表結構 | 不是全檔 partition；BCC7D0 引用片段沒有 Ghidra Function，保留未判定 |
+| 有效函式辨識 | 12 個引擎 dossier 的 body/range 與來源可查；分 10 有限語意／2 上下文 | 不當作新的全域有效函式數；未校出完整分母 |
+| 方法語意 | 10 筆，均保留參數確認度、回傳、分支、欄位、副作用與未知 | 不表示每個 callee／例外路徑皆已完成 |
+| 功能呼叫鏈 | 本機端點、logger 設定、FrameControl 來源→表→觸發→模型進度 | 遊戲進度儲存、完整戰鬥結果 schema、MEF interpreter、普通怪物 producer 仍未確認 |
+| 間接呼叫／未知資料 | 280 條 typed static call references；30 個其他 unresolved site | 不是執行觀測或全域總數；30 個已解析 FrameControl CALL ESI 不在此未解數內 |
+
+其餘 unresolved 分布為 4B0640:4、6F0100:2、7A5C50:7、7A87D0:17。資料庫可按方法／API／callsite 查詢，原始 operand 與 Evidence 保留。字串 helper 依既有已核對家族分類，不因本輪再呼叫就重算完成項。
+
+歷史解碼聯集仍為 4,471,035 bytes，占整檔 12,472,320 bytes 的 35.85%，或 executable 區域 8,192,496 bytes 的 54.57%。本輪未重建 atlas 或重新合併聯集；此比例不等於語意還原完成率，不能把本輪 body bytes 直接相加。
+
+## 建立、驗證與接續
+
+在 workspace 以現有 Python 執行以下步驟，只會整理 anal 內產物，原檔唯讀：
+
+```powershell
+python anal/kr-persistence-20261023/extract_frame_table.py
+python anal/kr-persistence-20261023/build_contexts.py
+python anal/kr-persistence-20261023/create_semantics.py
+python anal/kr-persistence-20261023/build_regions.py
+python anal/kr-persistence-20261023/build_records.py
+python anal/kr-persistence-20261023/verify_records.py
+python anal/kr-persistence-20261023/verify_delivery.py
+python anal/kr-persistence-20261023/query_records.py --method 0x7d28e0
+python anal/kr-persistence-20261023/query_records.py --section ATTACKED
+python anal/kr-persistence-20261023/query_records.py --api GetPrivateProfileIntA --limit 100
+```
+
+原生取得工具為 rea_persistence.cjs、上游 [rea_boundary.cjs](../kr-boundaries-20261022/rea_boundary.cjs) 搭配本輪 followup-plan.json／frame-consumer-plan.json，以及 rea_workbench.cjs 搭配 workbench-queue.json；執行版初始 selector 另存 executed-driver.initial.cjs，後續 READ xref selector 修正與 followup 理由分開保存。通用 driver 的 REA_BOUNDARY_OUT、REA_BOUNDARY_PLAN、REA_BOUNDARY_SNAPSHOT 必須各自指向新的 anal 輸出目錄、所選 plan 與已保存 snapshot；不覆蓋本次 Evidence。tool-schemas.json 保存當時公開工具 schema；所有 stage 使用同一來源 SHA／profile。重播原生分析須使用當時版本、相同環境與 ephemeral readonly target 設定；Evidence ID／分析耗時不承諾逐次相同。已保存原生證據足以先重建本輪資料庫，不需再次導入全程式。
+
+獨立驗證見 validation.json：11 個 native instruction bytes、24 個關鍵指令、8 個 direct call、6 個直接 API call、3 個 NULL 資料參數序列、30 個 CALL ESI／120 個 argument push／30 個 FSTP、常數／字串／區域 SHA 與 DB integrity。delivery-validation.json 另核對查詢、來源、保留的輸入快照及舊階段 manifest；通過這些檢查只支持本輪有界結論。artifact-manifest.json 保存本輪交付時每檔 hash；重建會變更衍生檔，因此先核對 manifest，再重建並另存驗證結果。
+
+下一階段先讀 HANDOFF.md；整體主程式解析尚未完成，目標維持全範圍。

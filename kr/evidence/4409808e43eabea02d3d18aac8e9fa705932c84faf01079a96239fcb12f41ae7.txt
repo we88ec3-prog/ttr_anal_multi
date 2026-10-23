@@ -1,0 +1,45 @@
+# Actor target-position source and residual correction
+
+Original KR offline analysis, 2026-10-04. No game, service, client resource, or save changes. Original monster AI is not activated; deployed v41 custom AI remains unchanged.
+
+## S→C0018 sets the interpolation target
+
+Main registration **0018 → 4B2730..4B28C2**. It computes floor((payloadLength−2)/12), looks up each actorID in FAB138, and skips missing actors. There is no model<=9 filter in this bounded receiver, so existing monsters in the common actor tree can receive the same target command.
+
+| Offset within each 12-byte row | Type | Use |
+|---:|---|---|
+| 0 | WORD | actor ID |
+| 2 | FLOAT | target X → actor+C0 and +E8 |
+| 6 | FLOAT | target Y → actor+C4 and +EC |
+| 10 | WORD | remaining interpolation steps → actor+C8 |
+
+The header is a two-byte command WORD. The receiver clears residual displacement+D8/+DC and sets actor+D4=1. Heading remains based on the existing actor+B0; it updates displayed+3A4/model rotation when +3A8 permits. It does not select a target enemy or a skill.
+
+This links directly to the prior **4CA890** consumer: D4=1 follows target+C0/+C4 for the supplied step count. C8=0 takes the target-application branch, clears movement bit8000 in +E2, and sets D4=0. Positive counts normalize/scale displacement, call virtual+54 for a step, and decrement C8. The final zero-count branch calls virtual+44 directly; it does not repeat the virtual+54 candidate-position check in that branch. Therefore it is important to distinguish a validated intermediate step from final target application. Do not label the count as milliseconds or blindly substitute timestamps.
+
+The existing 000B heading/flags/optional-coordinate command and this 0018 float-target/step-count command are distinct wire formats. This newly located receiver is a concrete native interpolation interface; it is not evidence of a local monster brain or the official frequency with which it was sent. No synthetic0018 packet was sent during analysis.
+
+## Residual correction4CAD60
+
+Verified full **4CAD60..4CAE93**, including both returns; stopping at the first return would omit the collision-aware branch at4CAE83.
+
+It reads residual+D8/+DC and compares squared magnitude with float0.01 atC558C0. It computes a partial correction using its first two arguments, subtracts that amount from residual fields, and compares the remaining squared magnitude with float0.04 atC55A60. Under the final threshold it adds the remaining residual into the correction and clears D8/DC. The exact interpretation/unit of those arguments is not assigned here.
+
+The third argument selects application:
+
+- Nonzero: add correction to current+A0/+A4 and call actor virtual+44 directly.
+- Zero: pass relative correction to actor virtual+54; CMonster resolves that to4CABE0, which checks candidate XY using FAB1D0/82CDF0.
+
+Thus the routine reduces already stored positional discrepancy. It neither chooses an enemy nor allocates an AI slot. Constants are squared-distance thresholds, not skill cooldowns. Full caller/producer behavior outside the audited paths remains open.
+
+## Other writers classified
+
+**S→C0015 → 4B2620..4B272D** sets controller+4=0, walks common actors with actorID low-byte0/1, selects state1, and clears movement bit8000 in their cached flags while keeping heading. This complements common0014's controller+4=1; these are controller/actor state changes, not confirmed host-authority assignment.
+
+Nearby target+C0/C4/C8 writes at4B2E4F and4B2F0E belong to the **0021 receiver4B2CD0**. Its creation branch calls4CFD10, whose decoded vtable write at4CFD4B isC07C0C, RTTI **CDropItem**. Both nearby paths use a fixed20-step target motion. Their full enclosing receiver is not bounded in this audit, so only the constructor identity/instruction linkage is asserted. Do not treat those writes as CMonster AI merely because offsets match.
+
+## Checks and next investigation
+
+`audit_actor_target_producers.py` verifies three complete functions, internal branch boundaries, main packet registrations, target field writes/row stride, correction branches/constants, and the nearby DropItem constructor's vtable identity. All checks passed. Outputs are under native-index.
+
+The established path is now: external0018 target → native interpolation → native position validation/application. Missing link remains the command's decision producer. Next expand input/skill generation beyond cached movement fields and distinguish original battle transport from the present Python-generated test commands. P2P remains neither confirmed nor excluded.

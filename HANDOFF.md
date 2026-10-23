@@ -1,0 +1,11 @@
+# 接續導覽
+
+2026-10-24：整理版已完成，沒有執行中的盤點或遊戲程序需要接管。先讀REPORT及shared/task-readiness.json，不要恢復已完成的全量掃描或重建原生atlas。
+
+下一步由使用者選定任務（例如KR T08），依AGENTS.md認領範圍。任務可獨立閱讀現有資料，但新分析仍需原檔和REA/Ghidra。台版只具背景／缺口資料。
+
+仍有未分類來源與歷史外部引用；它們已明列為缺口，不能用檔名前綴、最新日期或相同功能名稱推定來源。需要某項缺口時才補取證據，不要為閉合全部導覽擴大範圍。
+
+重要更正：AI固定出生點／怪物能力／傷害／追逐不能當原生規則；原版005F type6不是本機修補的Tutorial；000F不可直接按fixture名稱認成命中；4B18D4依路徑而非固定result0；4BC150不是有效函式入口。Frame-dispatch仍待原階段語意驗收。
+
+可追溯性：原CHECKPOINT與初版catalog已封存在history/checkpoint-v1.json.gz；初版試包保留，新版使用exports/*-release.zip。原anal唯讀且未變更。重現與增量更新看REPRODUCE.md，避免只重跑初版builder覆蓋後續整理。

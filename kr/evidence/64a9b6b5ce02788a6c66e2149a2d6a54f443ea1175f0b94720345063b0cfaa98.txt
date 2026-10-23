@@ -1,0 +1,50 @@
+"""Reformat native Listing/pseudocode evidence; validate known argument bytes independently.
+This does not discover/decode functions or emulate instructions.
+"""
+import csv,hashlib,json,re,struct,sys
+from pathlib import Path
+HERE=Path(__file__).resolve().parent;ROOT=HERE.parents[1]
+sys.path.insert(0,str(ROOT/'anal'));from build_native_index import PE
+EXPECTED='9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91'
+pe=PE(ROOT/'Tartaros.bin');assert hashlib.sha256(pe.data).hexdigest()==EXPECTED
+f=HERE/'followup/mcp-evidence/05-function-7d2170.json'
+e=json.loads(f.read_text(encoding='utf-8'))['structuredContent'];assert e['subject']['digest']['sha256']==EXPECTED
+n=e['normalized_result'];assert not n['native_value_flow']['truncated']
+pattern=r'GetPrivateProfileIntA\("([^"\n]+)","([^"\n]+)",(0x[0-9a-f]+|[0-9]+),"(\./FrameControl\.ini)"\)'
+pseudo=re.findall(pattern,n['pseudocode']);assert len(pseudo)==30
+assembly=n['assembly'];calls=[(i,s) for i,s in enumerate(assembly) if s.endswith(': CALL ESI')];assert len(calls)==30
+load=next(i for i,s in enumerate(assembly) if s=='0x7d22f5: MOV ESI, dword ptr [0x00bd22c0]')
+assert all(not re.search(r': (MOV|POP|LEA|XOR) ESI\b',s) for s in assembly[load+1:calls[-1][0]+1])
+scale=struct.unpack('<d',pe.read(0xc559c8,8))[0];correction=struct.unpack('<f',pe.read(0xc55680,4))[0]
+assert pe.read(0xc559c8,8).hex()=='000000e04d62503f'
+assert scale==struct.unpack('<f',struct.pack('<f',0.001))[0] and correction==4294967296.0
+rows=[];previous=load
+for idx,((section,key,default,filename),(position,line)) in enumerate(zip(pseudo,calls)):
+ a=int(line.split(':')[0],16);pushes=[]
+ ops=[op for op in n['native_value_flow']['operations'] if op['address']==hex(a) and op['opcode']=='CALL'];assert len(ops)==1
+ for ins in assembly[previous+1:position]:
+  m=re.fullmatch(r'(0x[0-9a-f]+): PUSH (0x[0-9a-f]+|EBX)',ins)
+  if m:
+   if m[2]=='EBX':
+    assert len(pushes)==1 and ops[0]['inputs'][3]['kind']=='constant' and int(ops[0]['inputs'][3]['constant_hex'],16)==0
+    pushes.append((int(m[1],16),0))
+   else:pushes.append((int(m[1],16),int(m[2],16)))
+ assert len(pushes)==4,(hex(a),pushes)
+ assert pe.cstring(pushes[0][1])==filename and pushes[1][1]==int(default,0)
+ assert pe.cstring(pushes[2][1])==key and pe.cstring(pushes[3][1])==section
+ end=calls[idx+1][0] if idx+1<len(calls) else len(assembly)
+ stores=[re.fullmatch(r'(0x[0-9a-f]+): FSTP float ptr \[(0x[0-9a-f]+)\]',s) for s in assembly[position+1:end]]
+ stores=[m for m in stores if m and 0xfbab80<=int(m[2],16)<0xfbabf8];assert len(stores)==1
+ store=int(stores[0][1],16);destination=int(stores[0][2],16)
+ assert ops[0]['inputs'][0]['location']=='0xbd22c0'
+ refs=[v for v in n['outgoing_references'] if v['source_address']==hex(a) and v['kind']['call']]
+ assert len(refs)==1 and refs[0]['target_procedure']['name']=='KERNEL32.DLL::GetPrivateProfileIntA'
+ rows.append({'section':section,'key':key,'default_uint32':int(default,0),'filename':filename,'destination':hex(destination),'store_site':hex(store),'call_site':hex(a),'default_scaled_approx':int(default,0)*scale,'argument_pushes':[{'site':hex(s),'value':hex(v)} for s,v in pushes],'native_pcode_call':{'id':ops[0]['id'],'target_location':ops[0]['inputs'][0]['location'],'is_dead_flag':ops[0]['is_dead']},'engine_reference_manager_unresolved':any(v['address']==hex(a) for v in n['unresolved_calls']),'native_import_binding':{'target':refs[0]['target_address'],'name':refs[0]['target_procedure']['name'],'reference_type':refs[0]['kind']['type'],'provenance':refs[0]['kind']['provenance']}})
+ previous=position
+assert sorted(int(r['destination'],16) for r in rows)==list(range(0xfbab80,0xfbabf8,4))
+assert len({r['section'] for r in rows})==5 and len({r['key'] for r in rows})==6
+report={'source_sha256':EXPECTED,'evidence_id':e['evidence_id'],'evidence_file':f.relative_to(HERE).as_posix(),'evidence_file_sha256':hashlib.sha256(f.read_bytes()).hexdigest(),'analysis_profile_digest':e['analysis_profile']['digest'],'runtime_table_range':{'start':'0xfbab80','end_exclusive':'0xfbabf8','bytes':120,'elements':30,'element_type':'float32 after uint32 conversion and x87 double multiplication'},'scale':{'address':'0xc559c8','type':'float64','value':scale,'raw_hex':pe.read(0xc559c8,8).hex()},'unsigned_conversion_correction':{'address':'0xc55680','type':'float32','value':correction},'rows':rows,'limitations':['Only compiled fallback arguments are recorded; actual INI contents were not read or used.','Units and gameplay meaning require consumers; section/key strings alone do not prove AI/damage/timing roles.','Native pcode is_dead flags are retained. Binding is cross-checked against Listing and typed native references, not claimed as executed dataflow.','The arithmetic uses the precise double constant at C559C8, not a float-only multiply or exact decimal0.001; final store is float32. Runtime FPU mode was not observed.','The 30 logical import bindings are supplied by Ghidra ReferenceManager/HighFunction, not a Python-created callee resolution. Concrete runtime Windows addresses are outside this offline scope.']}
+(HERE/'framecontrol-table.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+with (HERE/'framecontrol-table.csv').open('w',newline='',encoding='utf-8-sig') as out:
+ names=['section','key','default_uint32','default_scaled_approx','destination','call_site','store_site'];w=csv.DictWriter(out,fieldnames=names,extrasaction='ignore');w.writeheader();w.writerows(rows)
+print(json.dumps({'configuration_fields':len(rows),'bytes':120,'scale_type':'float64','logical_import_bindings':len(rows)}))

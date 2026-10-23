@@ -1,0 +1,156 @@
+# 主程式整體方法索引與功能地圖（初版）
+
+2026-10-23 最新：[CRT→遊戲入口→frame callback](kr-crt-startup-20261023/REPORT.md)、[本階段方法／callsite查詢](kr-crt-startup-20261023/query_records.py)、[交接](kr-crt-startup-20261023/HANDOFF.md)。確認8978E6→CRT→4A30C0，以及CClient+8 framework的+378 callback／+3AC user-data註冊消費，條件式接至492040→既有4E0200。新增9筆有限語意、1筆WinMain補充、6筆CRT分類；engine unknown與五筆analyst path binding分存。CRT46-byte gap、偽碼原型／JMP metadata差異保留；全域分母／完成百分比未重算。
+
+2026-10-23 最新區域資料：[全檔區域記錄表](kr-region-ledger-20261023/README.md)、[file offset／VA查詢](query_kr_regions.py)、[交接](kr-region-ledger-20261023/HANDOFF.md)。16,588段精確核算12,472,320 file bytes一次，保留11,610,108未知bytes、候選pointer／padding及全部來源claim；10個PE resource payload已核對。BSS、provider tdb與靜態全域layout另表，不混file分母。本輪新增有效函式／語意／功能鏈0，完整帳務不代表100%解析。
+
+2026-10-23 最新工具：[跨階段唯讀證據查詢](query_kr_evidence.py)、[使用／驗證說明](kr-unified-ledger-20261023/README.md)、[交接](kr-unified-ledger-20261023/HANDOFF.md)。串接九個原資料庫，查方法／callsite／class／region／Evidence／十三domain導覽，保留4BC150入口否定、4B18D4路徑更正及engine/analyst authority差異。39筆既有有限語意可查，本輪新增語意0；完整engine inventory仍非有效函式分母，沒有重建atlas或生成還原率。
+
+2026-10-23 最新：[命中音效 key 與 CSound 消費鏈](kr-hit-resource-20261023/REPORT.md)、[交接](kr-hit-resource-20261023/HANDOFF.md)、[方法／key／callsite 查詢](kr-hit-resource-20261023/query_records.py)。row+C 經4F6F70查FB7510音效名稱表，550580建立CSound並存效果記錄+28；來源為DamageSound ATTACK/DEFENSE組合byte。7筆有限語意（含1既有方法補充）、2筆函式庫識別、45筆有SHA的資源列分開統計。PATH/path合約經attribute helper與CRT bytes確認；精確資源build配對、80E4C0方法語意與全域分母仍未完成。
+
+2026-10-23 最新：[戰鬥結果到 FrameControl 與效果建立](kr-battle-frame-binding-20261023/REPORT.md)、[交接](kr-battle-frame-binding-20261023/HANDOFF.md)、[依方法／路徑查詢](kr-battle-frame-binding-20261023/query_binding.py)。4B18D4 是共享尾段，case0/8 傳 target/group4/result0，case4 傳 source/group4/result1，case2 傳 source/group4/result2。上一階段把該 site 固定為 result0 的摘要不完整；查詢須套用新 correction overlay。另新增 4 筆顯示／效果方法有限語意與 CFieldPanel 關係，核對 5521D0 第六 stack 參數。8 條路徑不能算 8 個新函式；全域分母仍未知。
+
+2026-10-23 最新：[INI 設定與戰鬥動畫控制資料流](kr-persistence-20261023/REPORT.md)、[接續導覽](kr-persistence-20261023/HANDOFF.md)、[方法／參數／API 查詢](kr-persistence-20261023/query_records.py)。新增 10 筆帶未知的有限語意、30 個 FrameControl 參數與來源→表→戰鬥結果觸發→模型進度鏈；4B0640／7A5C50 僅保留呼叫窗口。三個 WritePrivateProfileStringA 皆為 NULL/NULL/NULL/filename，不代表遊戲存檔。未重算全域 byte 聯集或函式分母。
+
+2026-10-23最新：[四個動作／狀態來源裁決](kr-motion-sources-20261022/REPORT.md)、[語意與callsite查詢](kr-motion-sources-20261022/query_records.py)。模型參照替換與既有動作重播、圖形裝置slot68、動畫資料offsetF0已區分；保存4筆有限語意與RTTI/標準操作家族識別依據。全域函式分母與整體語意覆蓋率仍未知。
+
+2026-10-22接續：[函式邊界與字串污染裁決](kr-boundaries-20261022/REPORT.md)、[查詢工具](kr-boundaries-20261022/query_boundaries.py)。舊prior-bounded-audit的4BC150入口已否定，真正CMissionDecision建構入口為4BC170；三個清單缺席callback仍有精確Listing/註冊證據。新增拒絕22條vtable關係，並非刪除22個函式。歷史atlas保留，後續須並讀overlay。
+
+2026-10-22 韓版最新：[第一階段分母核驗與語意成果](kr-phase1-20261022/FIRST-PHASE-REPORT.md)、[直接接續導覽](kr-phase1-20261022/HANDOFF.md)。本輪只分析原始韓版 Tartaros.bin；下列 20,549 是混合候選，54.57% 是歷史解碼位址覆蓋，均非有效函式或語意完成率。新台帳保留原索引，另標記 7 個由字串誤認的 vtable slots，保存 9 筆有範圍與 REA/Ghidra 證據的語意紀錄。
+
+基準：原始韓版 `Tartaros.bin`、原始 `Tartaros.exe`、`Network.dll`。離線建立，不啟動遊戲／服務、不修改執行檔、資源、帳號或 v41 AI。不同版本的位址不可混用。
+
+## 入口與成果
+
+- [可搜尋的本機方法瀏覽器](native-index/method-atlas/index.html)：模組、功能分類、解析狀態、類別／方法名稱、位址搜尋；可看呼叫指令與直接呼叫者。用瀏覽器開啟此 HTML 即可，不需要服務。
+- [SQLite 方法資料庫](native-index/method-atlas/methods.sqlite)：可重用的查詢資料，與遊戲帳號 DB 無關。
+- [統計與 SHA](native-index/method-atlas/summary.json)、[驗證結果](native-index/method-atlas/audit.json)。
+- [建立工具](build_method_atlas.py)、[查詢工具](query_method_atlas.py)、[瀏覽器產生工具](render_method_atlas.py)、[驗證工具](audit_method_atlas.py)。
+- [既有詳細行為分析入口](NATIVE-BEHAVIOR-MAP.md)：保留每個系統已有的實證報告。
+
+| 模組 | 方法入口／候選 | 既有完整範圍核對 | 解碼 byte 覆蓋率 |
+|---|---:|---:|---:|
+| Tartaros.bin | 20,549 | 382 | 54.57% |
+| Tartaros.exe | 5,026 | 0（本索引匯入範圍） | 67.68% |
+| Network.dll | 774 | 0（本索引匯入範圍） | 60.12% |
+
+覆蓋率只計算自動／既有反組譯覆蓋的 executable 區域位址聯集，不能當作遊戲行為解析比例；區域也可能含 padding、常數、switch table。方法數包含候選、共享尾段、thunk、執行期函式與可能的錯誤邊界，不是官方函式總數。既有人工分析不全都採用相同 JSON schema，表中數量只代表可匯入的範圍紀錄，不是全部歷史已核對函式。
+
+後續已補上 [怪物方法表盤點與分析順序](MONSTER-VIRTUAL-SURFACE-AND-ANALYSIS-PLAN.md)，以及 `collect_legacy_method_evidence.py` 對旧 audit 固定宣告的 byte 比對匯入。這類紀錄保存舊來源與範圍；本輪沒有重新執行所有舊語意 assertion，不升級成全新語意證明。
+
+## 證據等級
+
+最新追查：[位置更新與移動欄位寫入來源](POSITION-UPDATE-AND-MOVEMENT-WRITERS.md)。0001／0016的位置校正與371個寫入候選已分開記錄；候選相同offset不能直接判定為怪物AI。
+
+後續已核對[Lua物件控制接口與CEventActor邊界](SCRIPT-OBJECT-MOTION-BOUNDARY.md)，補入14個完整範圍，並修正大型包絡中的獨立入口分類。
+
+其生產端已接上[Q.CreateObject與脚本容器所有權](SCRIPT-OBJECT-CREATION-AND-OWNERSHIP.md)：這條建立鏈配置CEventActor；ID低byte或外觀不能取代類別證據。
+
+另已核對[lb.CreateObjectEx參數與控制器邊界](LB-CREATE-OBJECT-ABI-AND-CONTROL.md)：這是另一套普通actor建立接口，六參數已對齊；第六參數不能直接當作怪物AI開關。腳本引用盤點在同一報告末段。
+
+載入來源已接續至[共用Lua載入與教學腳本邊界](SHARED-LUA-LOADING-AND-TUTORIAL-BOUNDARY.md)：新增9個完整範圍與UI/LUA.stp盤點，區分共用FDF3C8狀態、DoFile／buffer入口及教學實例的具名entry point。
+
+動作生產／消費端已新增[動作接口呼叫點與來源分類](ACTOR-MOTION-CALLS-AND-SOURCE-CLASSIFICATION.md)：53個不同slot68候選，完整核對Wait／Move動畫選擇、文字觸發動作與兩個欄位位移誤判來源。
+
+| 狀態 | 本索引代表的意義 | 限制 |
+|---|---|---|
+| `prior-bounded-audit` | 同 SHA 的既有 audit 提供起點與 endExclusive，完整解碼範圍核對 | 語意沿用來源報告，本輪沒有重新證明每項命名 |
+| `cfg-recovered-heuristic` | RTTI、PE entry/export、封包入口、常見 prologue 或解碼 call target 起點，走訪控制流到停止點 | 仍是函式邊界推測，不能當完整語意 |
+| `cfg-partial` | 遇到間接跳躍、共享／尾跳入口、非法解碼窗口或預算限制 | 未解析原因保存於 `issues` |
+| `raw-candidate-only` | 原始 opcode 指向的候選起點，未進行方法走訪 | 不能當有效方法／呼叫關係 |
+
+直接呼叫 edge 與原始 E8 候選放在不同表。虛擬／計算指標呼叫保留 callsite 與 operand，不假裝已解析到目標。方法 `min_va/max_va_exclusive` 是解碼位址包絡，**不是已確認函式範圍**；不連續分支與共用片段可能重疊。函式指標表、switch table、跨 DLL IAT 實際連結、動態 Lua 名稱、執行時主控條件都還需深入核對。
+
+## 系統功能地圖
+
+實線是既有報告確認的流程；虛線是仍待追查的連結。網路來源不預設為官方伺服器或 P2P 房主。
+
+```mermaid
+flowchart TD
+  Input[本機輸入／控制器] --> Producer[5452C0 輸入資料生產]
+  Producer --> Send[FBA854／CIocpNetwork 傳輸]
+  Transport[外部網路資料] --> Client[CClient 分派]
+  Client --> Scene[CDefaultScene 分派]
+  Client --> Managers[Quest／Party／Trade 等管理器]
+  Scene --> Create[0007 實體建立]
+  Create --> Actors[共同 actor 容器]
+  Actors --> Tick[狀態／模型／顯示更新]
+  Scene --> Actions[000B／0018／000D 外部動作套用]
+  Actions --> Actors
+  Lua[Lua CreateObject／Ex] --> LocalCreate[4A0F70 本機建立]
+  LocalCreate --> Actors
+  Case[CaseList／MapFlow／Cluster] --> Preload[資源與地圖節點預載]
+  Case -.尚未定位排程.-> Spawn[群組／波次生成者]
+  Spawn -.待確認.-> Create
+  Brain[普通怪物原生決策來源] -.尚未定位.-> Actions
+  Brain -.權限分工待確認.-> Send
+  Managers --> Events[UI 事件佇列／對话流程]
+  Events --> Requests[任務／互動確認請求]
+  Requests --> Send
+```
+
+| 功能群組 | 原版主要入口／類別 | 目前已確認 | 尚未確認／閱讀來源 |
+|---|---|---|---|
+| 程式啟動與模組 | 三模組 PE entrypoint；Tartaros.exe 匯入與 RTTI | 各模組分開收錄方法、匯入、虛擬表 | 本輪僅初步分類，不因 .exe 名稱推定它就是完整遊戲逻輯；查模組索引 |
+| 網路與封包 | CClient／CIocpNetwork；8069A0；48AAD0；493170 | CClient 197 明確覆寫、場景 101 明確註冊；部分管理器另有自己的命令表 | 接收端與發送端同號不能配對；[分派](RECEIVE-AND-SCENE-DISPATCH.md)、[動態傳輸](DYNAMIC-NETWORK-PATHS.md) |
+| 控制器／戰鬥輸入 | Single／MissionRoom／Formation／Tutorial；5452C0／546100 | 控制器種類、角色輸入、跟隨資料、局部動作路徑 | 普通怪物自主控制來源與 host 權限；[控制器](SCENE-CONTROLLER-SELECTION.md)、[輸入來源](CONTROL-AND-SKILL-SOURCE.md) |
+| actor／怪物顯示 | CMonster 4D1710；共同 actor 容器；4D1AF0／4C87D0 | 物件建立、狀態更新、模型與陣營顯示判斷 | 更新／owner 欄位不等於 AI 權限；[更新管線](ACTOR-UPDATE-PIPELINE.md)、[關係與顯示](MONSTER-TICK-RELATION-AND-PRESENTATION.md) |
+| AI 規則框架 | CSubAIManager／CAIControl／ObsessionsAI；548FF0／8092C0 | 已確認隊友鏈使用條件／動作執行框架 | 不代表框架只支援隊友，也未找到普通怪物接入；[本機建立與框架](LOCAL-ACTOR-AND-AI-FRAMEWORK.md)、[隊友動作](SUBAI-ACTION-TRACE.md) |
+| 地圖／生成 | 53E3F0／53E120／53E230／53E800；Lua 4A0F70 | Case／Chart／預載清單；本機及封包實體建立入口 | CLUSTER OBJECT/COUNT 排程器與訊息來源；[地圖流程](MAPFLOW-CLUSTER-LOADING.md)、[觸發消費端](MAP-TRIGGER-CONSUMERS.md) |
+| 技能／動作 | 000D 接收；4C8A90；角色技能矩陣 | 外部指定動作的套用、部分技能旗標來源 | 自主選招、命中裁決、連段窗口；[技能來源](CONTROL-AND-SKILL-SOURCE.md) |
+| 任務／對話 | CQuestMgr／CTalkBoxDialog；0036／0045／0046／0064 | 任務資料查找、通知更新、F438C→對話／後續確認 | 部分條件與官方服務端流程；[任務通知](QUEST-STATE-NOTIFICATIONS.md)、[對話接續](QUEST-FOLLOWUP-DELIVERY.md) |
+| UI／事件 | 74F000 事件佇列；595D20 頁面路由 | 頁面分派、部分確認包裝／提交 | 並非所有頁面採用相同事件；[事件分派](CHECKPOINT-EVENT-DISPATCH.md)、[TalkBox](CHECKPOINT-TALKBOX-FLOW.md) |
+| 道具／拾取／商城 | CDropItem；49CE10／49D470／49D010；item/shop 類 RTTI | S2C0021 地面物件建立、C2S0012 ID 清單 | 商城與背包大量方法仍僅類別名稱推測；[拾取側路徑](BATTLE-SIDEPATH-TARGETS.md) |
+| 隊伍／公會／社交 | CPartyMgr／CUnionPartyMgr／CGuildMgr／CMessengerMgr | 個別管理器命令表及部分名單資料 | 隊伍名單不等於房主權限；[管理器分派](CLIENT-MANAGER-AND-PARTY-ROUTES.md) |
+| 資源／腳本／渲染／音效 | Lua loader 6F4A50；CTartarosConfig；Model／Texture／Sound 等 RTTI | 可用名稱、虛擬入口、字串／匯入引用索引 | 初步自動標籤不能取代參數與呼叫條件核對 |
+
+功能標籤是由 RTTI／既有方法名稱的關鍵字推測，允許重疊。`monster-ai` 目前標記 68 個韓版入口，不代表已找到 68 支怪物 AI；例如 CMonster 顯示方法也會進入候選。未具備名稱的入口維持未分類，避免把全部底層函式強行貼到某個系統。
+
+## 查詢與維護
+
+在 workspace 的 PowerShell 執行：
+
+```powershell
+& 'C:\Programs\Python\Python310\python.exe' anal/query_method_atlas.py --search CMonster
+& 'C:\Programs\Python\Python310\python.exe' anal/query_method_atlas.py --domain monster-ai
+& 'C:\Programs\Python\Python310\python.exe' anal/query_method_atlas.py --method 0x4D1AF0
+& 'C:\Programs\Python\Python310\python.exe' anal/query_method_atlas.py --callers 0x4D1710
+& 'C:\Programs\Python\Python310\python.exe' anal/query_method_atlas.py --string CLUSTER
+& 'C:\Programs\Python\Python310\python.exe' anal/query_method_atlas.py --module Tartaros.exe --search Character
+```
+
+SQLite 表：`modules`（版本）、`methods`（入口／狀態／範圍包絡）、`labels`（名稱／來源）、`domains`（推測分類）、`virtual_slots`（類別／slot／目標）、`edges`（解碼 edge）、`raw_calls`（原始候選）、`string_refs`（候選字串引用）。字串引用只做可讀文字啟發式辨識，不保證每筆皆是真正字串物件。
+
+人工維護以各系統 Markdown 與 `audit_*.py` 為證據來源；方法新增名稱時記錄 VA、原檔 SHA、完整範圍、命名依據與待確認事項。新的 audit 若產出同 SHA 的 `functions:[{name,start,endExclusive}]`，重建時會匯入。不要直接修改生成的 SQLite／HTML，避免下次重建遺失。僅有 RTTI 或名稱推測時不升級成已確認行為。
+
+重建先執行 `collect_legacy_method_evidence.py` 更新舊格式範圍，再執行 `build_method_atlas.py`、`audit_method_atlas.py`、`render_method_atlas.py` 與 `node anal/audit_method_atlas_ui.js`。原始 PE 索引須與本機原檔 SHA 相符；工具讀取來源檔，不操作遊戲程序。SQLite／HTML 是衍生分析檔。
+
+## 接下來如何利用整體索引
+
+先查 monster-ai／battle-skill 類別入口、完整 caller／callsite 候選與未解析間接跳躍，再交叉比對普通怪物建立入口、控制器掛接及資料寫入。地圖方向則沿 Case／Cluster 的真正消費端找排程，不再把模型預載當生成。同時保留 Tartaros.exe 的候選，若它的類別／字串出現相关控制邏輯，再做特定函式核對。
+
+本階段完成的是**可重建的整體初步索引與功能地圖**，不是所有函式的人工反編譯，也不宣稱已確認原生怪物 AI／P2P 架構。
+
+
+- 2026-10-08：[普通怪物狀態建立與切換來源](MONSTER-STATE-TRANSITIONS-AND-SOURCES.md)。7個完整範圍，確認 CMonster Move 狀態建立與共用切換入口；另保存狀態寫入／派送候選，AI決策權限仍待確認。
+
+- 2026-10-08：[狀態上游候選分類](SCENE-STATE-SOURCE-EXCLUSIONS.md)：確認CExpedition展示建立與固定角色結果動作；5個完整範圍，補v8派送候選掃描，未找到新的怪物AI決策來源。
+
+- 2026-10-08：[發送端命令與怪物更新邊界](OUTGOING-COMMANDS-AND-MONSTER-UPDATE-BOUNDARY.md)：原生CCharChangeDialog送6-byte C2S000C角色選擇，與S2C000C狀態列分開；新增發送常數候選清單及5個完整範圍核對。
+
+- 2026-10-08：[場景發送父函式與連線分流](SCENE-OUTGOING-PARENTS-AND-CHANNEL-SPLIT.md)：6 個完整範圍，補上 15 個先前未定位發送點；辨識頻道初始化、槽 2 文字回應與 Decision 命令 0037，AI／P2P 尚未證實。
+
+- 2026-10-08：[場景與 keyed 資料回應](SCENE-KEYED-RESPONSES-AND-FLAG-MESSAGES.md)：11 個完整範圍，再補 9 個發送點，核對 0009/0025/EA/101/BBE/EC/ED/EE 的格式與收到訊息註冊來源；未證實怪物 AI／P2P。
+
+- 2026-10-08：[Messenger 發送與識別值回應](MESSENGER-SEND-PATHS-AND-IDENTIFIER-RESPONSES.md)：10 個完整範圍、10 個發送點；RTTI 證實 CMessengerWnd 選項送槽 2 的短命令，區分社交 UI 與尚未證實的戰鬥 P2P。
+
+- 2026-10-08：[發送缺口完成：公會與 UI](FINAL-SENDER-GAPS-GUILD-AND-UI.md)：14 個完整範圍、最後11個send，Guild RTTI與UI事件來源核對；45個歷史缺口聯集已驗證，仍非所有傳輸／AI語義完成。
+
+- 2026-10-08：[快捷槽緩衝區與掃描限制](QUICKSLOT-BUFFER-SOURCES-AND-SCAN-LIMITS.md)：8 個完整範圍、4 個發送點；0022／002A 快捷槽來源與 0007 旗標已核對，沒有 WORD 常數不代表動態 AI 命令。
+
+- 2026-10-08：[可變長度封包：拍賣搜尋與背包來源](VARIABLE-BUFFERS-AUCTION-AND-INVENTORY.md)：10 個完整函式、4 個送出點；Auction RTTI、0BD2 批次清單與 0021 可選記錄已核對，怪物決策來源仍待確認。
+
+- 2026-10-08：[Actor 鄰近的文字請求邊界](ACTOR-ADJACENT-TEXT-REQUEST-BOUNDARY.md)：6 個完整函式；0011 文字格式、表情／任務介面來源與本機指令分支已核對，不能以位址鄰近當成怪物 AI。
+- 2026-10-08：[發包來源與 actor 路徑交叉核對](SENDER-ACTOR-CROSSCHECK-AND-LOBBY-GAPS.md)：339 個發送位置／301 個 parent 交叉索引，補回大廳壓縮 switch 的兩個漏解 call；有限直接呼叫圖未找到新的 Monster 決策来源，虛擬派送與主控身分仍待查。
+- 2026-10-08：[Monster base 方法與虛擬更新身分](ACTOR-BASE-LIFECYCLE-AND-VIRTUAL-DISPATCH.md)：6 個完整範圍；v10／v14的附屬資料配對操作、128指標迴圈、actor v20／v24回呼已核對，不能將槽位數量當作AI證據。
+- 2026-10-08：[actor 附屬指標的特效來源](ACTOR-ATTACHMENT-EFFECT-PROVENANCE.md)：8 個完整範圍；+164指標建立端連到FindEffect／NewEffect與特效資源池，可從決策AI候選中排除這條鏈。

@@ -1,0 +1,138 @@
+0056F5C0 push     ebp
+0056F5C1 mov      ebp, esp
+0056F5C3 push     ebx
+0056F5C4 push     esi
+0056F5C5 mov      esi, dword ptr [ebp + 0xc]
+0056F5C8 mov      edx, dword ptr [esi]
+0056F5CA push     edi
+0056F5CB cmp      edx, 8
+0056F5CE je       0x56f639
+0056F5D0 cmp      edx, 0xb
+0056F5D3 je       0x56f639
+0056F5D5 mov      eax, dword ptr [ebp + 8]
+0056F5D8 mov      edi, dword ptr [eax + 0x54]
+0056F5DB mov      eax, dword ptr [edi]
+0056F5DD cmp      eax, edi
+0056F5DF je       0x56f5f6
+0056F5E1 mov      ecx, dword ptr [eax + 8]
+0056F5E4 cmp      dword ptr [ecx], edx
+0056F5E6 jne      0x56f5f0
+0056F5E8 mov      ebx, dword ptr [ecx + 4]
+0056F5EB cmp      ebx, dword ptr [esi + 4]
+0056F5EE je       0x56f627
+0056F5F0 mov      eax, dword ptr [eax]
+0056F5F2 cmp      eax, edi
+0056F5F4 jne      0x56f5e1
+0056F5F6 mov      edi, dword ptr [ebp + 8]
+0056F5F9 mov      esi, dword ptr [edi + 0x54]
+0056F5FC mov      ecx, dword ptr [esi + 4]
+0056F5FF lea      eax, [ebp + 0xc]
+0056F602 push     eax
+0056F603 push     ecx
+0056F604 push     esi
+0056F605 call     0x74d700
+0056F60A mov      ecx, dword ptr [edi + 0x58]
+0056F60D mov      edx, 0x3ffffffe
+0056F612 sub      edx, ecx
+0056F614 cmp      edx, 1
+0056F617 jae      0x56f716
+0056F61D push     0xbf2034
+0056F622 call     0x87db30
+0056F627 mov      edx, dword ptr [esi + 8]
+0056F62A mov      dword ptr [ecx + 8], edx
+0056F62D call     0x56f0f0
+0056F632 pop      edi
+0056F633 pop      esi
+0056F634 pop      ebx
+0056F635 pop      ebp
+0056F636 ret      8
+0056F639 cmp      dword ptr [esi + 8], 4
+0056F63D mov      eax, dword ptr [ebp + 8]
+0056F640 mov      edi, dword ptr [eax + 0x54]
+0056F643 jne      0x56f6e2
+0056F649 mov      edx, dword ptr [edi]
+0056F64B xor      bl, bl
+0056F64D cmp      edx, edi
+0056F64F je       0x56f5f6
+0056F651 mov      ecx, dword ptr [edx + 8]
+0056F654 mov      eax, dword ptr [ecx]
+0056F656 cmp      eax, 8
+0056F659 je       0x56f660
+0056F65B cmp      eax, 0xb
+0056F65E jne      0x56f69e
+0056F660 cmp      dword ptr [esi], eax
+0056F662 jne      0x56f67a
+0056F664 mov      eax, dword ptr [esi + 4]
+0056F667 cmp      eax, dword ptr [ecx + 4]
+0056F66A jne      0x56f67a
+0056F66C mov      eax, dword ptr [esi + 8]
+0056F66F mov      dword ptr [ecx + 8], eax
+0056F672 mov      byte ptr [ecx + 0xc], 1
+0056F676 mov      bl, 1
+0056F678 jmp      0x56f69e
+0056F67A fld      dword ptr [ecx + 0x10]
+0056F67D fld      dword ptr [esi + 0x10]
+0056F680 fucompi  st(1)
+0056F682 fstp     st(0)
+0056F684 lahf     
+0056F685 test     ah, 0x44
+0056F688 jp       0x56f69e
+0056F68A fld      dword ptr [ecx + 0x14]
+0056F68D fld      dword ptr [esi + 0x14]
+0056F690 fucompi  st(1)
+0056F692 fstp     st(0)
+0056F694 lahf     
+0056F695 test     ah, 0x44
+0056F698 jp       0x56f69e
+0056F69A mov      byte ptr [ecx + 0xc], 0
+0056F69E mov      edx, dword ptr [edx]
+0056F6A0 cmp      edx, edi
+0056F6A2 jne      0x56f651
+0056F6A4 test     bl, bl
+0056F6A6 je       0x56f5f6
+0056F6AC cmp      dword ptr [esi + 0x38], 8
+0056F6B0 jb       0x56f6be
+0056F6B2 mov      ecx, dword ptr [esi + 0x24]
+0056F6B5 push     ecx
+0056F6B6 call     0x89120c
+0056F6BB add      esp, 4
+0056F6BE mov      dword ptr [esi + 0x38], 7
+0056F6C5 xor      edx, edx
+0056F6C7 mov      dword ptr [esi + 0x34], 0
+0056F6CE push     esi
+0056F6CF mov      word ptr [esi + 0x24], dx
+0056F6D3 call     0x89120c
+0056F6D8 add      esp, 4
+0056F6DB pop      edi
+0056F6DC pop      esi
+0056F6DD pop      ebx
+0056F6DE pop      ebp
+0056F6DF ret      8
+0056F6E2 mov      ecx, dword ptr [edi]
+0056F6E4 cmp      ecx, edi
+0056F6E6 je       0x56f5f6
+0056F6EC lea      esp, [esp]
+0056F6F0 mov      eax, dword ptr [ecx + 8]
+0056F6F3 cmp      dword ptr [eax], edx
+0056F6F5 jne      0x56f6ff
+0056F6F7 mov      ebx, dword ptr [eax + 4]
+0056F6FA cmp      ebx, dword ptr [esi + 4]
+0056F6FD je       0x56f70a
+0056F6FF mov      ecx, dword ptr [ecx]
+0056F701 cmp      ecx, edi
+0056F703 jne      0x56f6f0
+0056F705 jmp      0x56f5f6
+0056F70A mov      ecx, dword ptr [esi + 8]
+0056F70D mov      dword ptr [eax + 8], ecx
+0056F710 mov      byte ptr [eax + 0xc], 1
+0056F714 jmp      0x56f6ac
+0056F716 inc      ecx
+0056F717 mov      dword ptr [edi + 0x58], ecx
+0056F71A mov      dword ptr [esi + 4], eax
+0056F71D mov      ecx, dword ptr [eax + 4]
+0056F720 pop      edi
+0056F721 pop      esi
+0056F722 mov      dword ptr [ecx], eax
+0056F724 pop      ebx
+0056F725 pop      ebp
+0056F726 ret      8

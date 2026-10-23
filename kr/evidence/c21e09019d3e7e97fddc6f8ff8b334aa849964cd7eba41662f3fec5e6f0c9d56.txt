@@ -1,0 +1,74 @@
+{
+  "sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+  "checks": "passed",
+  "boundedFunctions": 11,
+  "functions": [
+    {
+      "name": "script-CreateObject-event-actor",
+      "start": "0x562ec0",
+      "endExclusive": "0x5632c5"
+    },
+    {
+      "name": "register-CreateObject",
+      "start": "0x566560",
+      "endExclusive": "0x5665f9"
+    },
+    {
+      "name": "event-actor-constructor",
+      "start": "0x4d0b80",
+      "endExclusive": "0x4d0c96"
+    },
+    {
+      "name": "script-object-tree-node-allocation",
+      "start": "0x57ef20",
+      "endExclusive": "0x57ef85"
+    },
+    {
+      "name": "script-object-tree-unique-insertion",
+      "start": "0x82f200",
+      "endExclusive": "0x82f2c6"
+    },
+    {
+      "name": "script-DeleteAllObject",
+      "start": "0x563a70",
+      "endExclusive": "0x563c37"
+    },
+    {
+      "name": "register-DeleteAllObject",
+      "start": "0x567460",
+      "endExclusive": "0x5674f9"
+    },
+    {
+      "name": "register-DeleteObject",
+      "start": "0x5666a0",
+      "endExclusive": "0x566739"
+    },
+    {
+      "name": "script-DeleteObject-no-op",
+      "start": "0x476430",
+      "endExclusive": "0x476433"
+    },
+    {
+      "name": "script-Q-base-binding",
+      "start": "0x565e40",
+      "endExclusive": "0x565f15"
+    },
+    {
+      "name": "script-Q-registration-and-base-load",
+      "start": "0x560600",
+      "endExclusive": "0x5607c3"
+    }
+  ],
+  "createdClass": "CEventActor",
+  "allocationBytes": 1080,
+  "constructorBaseSpeed": 24.0,
+  "mapInsertion": "this+18; DWORD script ID key / CEventActor pointer value; unique insertion",
+  "resourceTypeRanges": "signed modelID <10:type0; <10000:type1; <11000:type6; <21000:type7; else log/type0",
+  "limitations": [
+    "Only this CreateObject path is proven EventActor; no global claim all map insertion paths covered.",
+    "Other registration APIs and multiargument Lua adapter not fully traced.",
+    "Duplicate tree key discards new node; no proof caller safely frees newly allocated actor.",
+    "Cleanup helper and resource/effect subcalls not fully expanded; no ordinary AI/wave/P2P authority proof.",
+    "No deployment or runtime changes."
+  ]
+}

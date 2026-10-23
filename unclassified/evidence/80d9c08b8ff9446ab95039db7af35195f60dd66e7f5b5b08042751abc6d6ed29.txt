@@ -1,0 +1,72 @@
+# 韓版 SubAI 目標與攻擊輸出
+
+本次僅解析原始 Tartaros.bin；沒有修改服務、遊戲或存檔。
+
+## 攻擊設定與執行
+
+CAttackAction@SubAI 的 vtable C0FCC0：54B2A0 建立物件，
+54B2D0 解析設定，54B3C0 執行。設定名稱直接由原檔確認：
+
+| 設定鍵 | action offset | 缺省 |
+|---|---|---|
+| source | +4 | 0 |
+| target | +8 | 0 |
+| tier | +C | -1 |
+| key | +10 | 0 |
+
+54B3C0 把四項參數交給 549C60。549C60 的實際流程：
+
+1. 54AA60 根據 source/target 選出已保存的 actor ID，再從 GameInfo+8 查 actor。
+2. 548D20 將 key 1..10 轉成旗標 1/2/4/3/5/6/8/128/64/16。
+3. 549CF5..549CFE 檢查施放者 model key 的低 WORD <=9。
+4. 使用 F94304 的 0x210 大小角色資料與 +1F4 欄位；tier=-1 時取 actor+3E8。
+5. 54F270 查技能資料與其 +4 狀態是否為零；成功後寫 CAIControl+72 的技能旗標，
+   三槽中當前槽 +AC 寫 4，並依目標方向寫 +74。
+
+這證實這個攻擊執行器使用隊伍角色技能資料。怪物模型 1036 無法通過第 3 步；
+不能把此路徑當作怪物 AI 掛接點。也不能因為它不接受怪物，就推論整個客戶端沒有怪物 AI。
+
+54F270 本身沒有送封包；它把按鍵位元轉技能類別，經 40F7F0 / 819220 /
+81A8E0 查資料，再由 54F4E0 查狀態。+4 非零的具體時間／狀態意義仍須追寫入者，
+目前不把它直接命名為冷卻秒數。
+
+## 目標保存與搜尋
+
+CAIControl 的三個槽從 +A8 開始，每槽 0x10 bytes。
+54AA60 根據設定選擇槽，再以 target=0/1/2 分別讀槽 +0/+8/+C 的 actor ID。
+target=0 是槽角色；+8/+C 是另外保存的目標 ID，而非 actor+9C owner。
+source 的數字意義有模式分支，暫不自行命名全部數值。
+
+54A450 驗證槽 +8 的目標存在、actor+158 存在及其 +34 為零，並檢查距離。
+失效時清除槽 +8；需要新目標時呼叫 549320，將回傳 ID 寫入槽 +8。
+部分模式把目標分享給其他兩個槽（+B0/+C0/+D0）。
+
+549320 從 FAB13C 的 common actor tree 遍歷：
+
+- actor ID 低 byte 僅接受 0 或 1。
+- 使用 4C96B0 做候選篩選；該函式取得控制器 virtual+20 回傳 actor，
+  比較雙方 +90 對應資料並呼叫 4C6F60。這是關係篩選線索，確切陣營表語義待確認。
+- 排除 actor+158 不存在或 +34 非零。
+- 用 549290 的位置及 actor+B4 修正距離計算比較，保存最小值候選 actor ID。
+
+因此已找到原生隊友 AI 的尋敵與選招路徑，不只是跟隨或動畫更新。
+搜尋可以考慮 common tree 中的怪物作為目標，但不等於怪物也是這套 AI 的施放者。
+
+## 控制器輸出與尚待確認
+
+548FF0 在 549145..549150 將 CAIControl+70 DWORD（含 +72 flags）和 +74 heading
+複製到呼叫端輸出，接著清掉 +72 及暫存 actor 指標。
+Formation 5480E0 在 5481B3 呼叫它。這形成原生 AI -> 控制器旗標的已確認鏈。
+共同輸入 5452C0 的 C→S 0A 批次與毫秒節流已另行解析；仍須核對此次輸出
+到封包記錄的完整資料流，才能宣稱攻擊受到哪個傳送門檻影響。
+
+這輪仍沒有找到怪物決策入口或房主權限判定，P2P／relay 拓撲未定。
+下一步優先從候選篩選的關係表、技能狀態寫入者及其他控制器交叉追蹤，
+避免繼續把英雄 SubAI 當成怪物控制器。
+
+## 可核查原始證據
+
+native-index/subai-action-methods.txt、subai-action-execution.txt、
+subai-target-and-skill-validation.txt、subai-target-selection.txt、
+subai-enemy-search.txt、subai-nearest-candidate.txt、subai-candidate-predicate.txt。
+這些檔案以列出的入口／上界解碼；switch table 明確標成 DATA，不作指令證據。

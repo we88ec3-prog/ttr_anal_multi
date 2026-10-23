@@ -1,0 +1,72 @@
+"""Offline command-line consumer and login transport audit of original KR bin."""
+from pathlib import Path
+import hashlib, json, struct
+from build_native_index import PE
+from capstone import Cs, CS_ARCH_X86, CS_MODE_32
+
+ROOT = Path(__file__).resolve().parent.parent
+OUT = ROOT/'anal/native-index'
+p = PE(ROOT/'Tartaros.bin')
+idx = json.loads((OUT/'Tartaros.bin.json').read_text(encoding='utf-8'))
+assert hashlib.sha256(p.data).hexdigest() == idx['sha256']
+md = Cs(CS_ARCH_X86,CS_MODE_32)
+
+def dump(start,end,name):
+    ins = list(md.disasm(p.read(start,end-start),start))
+    assert sum(i.size for i in ins) == end-start and ins[-1].mnemonic == 'ret'
+    bounds = {i.address for i in ins}
+    for i in ins:
+        if i.mnemonic.startswith('j') and i.op_str.startswith('0x'):
+            target = int(i.op_str,16)
+            if start <= target < end: assert target in bounds
+    (OUT/(name+'.txt')).write_text('\n'.join(
+        f'{i.address:08X} {i.mnemonic:8} {i.op_str}' for i in ins)+'\n',encoding='utf-8')
+    return {i.address:i for i in ins}
+
+getter = dump(0x44d680,0x44d6ea,'login-module-singleton-getter')
+ctor = dump(0x6d6300,0x6d634b,'login-module-gsp-constructor')
+parse = dump(0x440280,0x4405bb,'login-module-command-parser')
+endpoint = dump(0x4405c0,0x44078f,'login-module-endpoint-initializer')
+format_ip = dump(0x440850,0x440925,'login-module-ip-formatter')
+dispatch = dump(0x440790,0x44082b,'login-module-auth-dispatch')
+auth0f = dump(0x4a31b0,0x4a3357,'login-module-auth-command-000f')
+authe8 = dump(0x4a3360,0x4a35b5,'login-module-auth-command-00e8')
+
+vt = next(v for v in idx['vtables'] if v['address']==0xbfb01c)
+assert vt['className']=='.?AVCLoginModuleGSP@@'
+assert vt['entries'][7]==0x440280 and vt['entries'][8]==0x4405c0
+assert vt['entries'][12]==0x440790
+assert getter[0x44d6bf].op_str=='0x6d6300'
+assert getter[0x44d6c9].op_str=='dword ptr [0xfbacd4], eax'
+assert ctor[0x6d6321].op_str=='dword ptr [eax], 0xbfb01c'
+assert ctor[0x6d6340].op_str=='dword ptr [eax + 8], 0x52'
+for a,s in [(0xbfafb8,' '),(0xbfafbc,'&'),(0xbfafc0,'serverIp.ini'),
+            (0xbfafd0,'Rlyeh'),(0xbf2375,''),(0xbfaffc,'serverip.ini'),
+            (0xbfb050,'%d.%d.%d.%d')]:assert p.cstring(a)==s
+assert parse[0x440494].op_str=='dword ptr [eax + 8], 0x40'
+assert parse[0x4404df].op_str=='dword ptr [eax + 8], 0x52'
+assert parse[0x44052d].op_str=='dword ptr [eax + 8], 0x54'
+assert parse[0x440534].op_str=='dword ptr [eax + 0x28], 1'
+assert endpoint[0x4406df].op_str=='eax, 0x52'
+assert endpoint[0x440727].op_str=='eax, 0x54'
+assert format_ip[0x44088e].op_str=='0xbfb050'
+assert dispatch[0x4407c2].op_str=='0x4a3360'
+assert dispatch[0x4407f7].op_str=='0x4a31b0'
+assert dispatch[0x440822].op_str=='0x4a31b0'
+assert auth0f[0x4a31e3].op_str=='ecx, 0xf'
+assert auth0f[0x4a31ec].op_str=='word ptr [ebp - 0x13c], cx'
+assert auth0f[0x4a32b6].op_str=='0xd6' and auth0f[0x4a32c2].op_str=='1'
+assert authe8[0x4a33ab].op_str=='ecx, 0xe8'
+assert authe8[0x4a33b0].op_str=='word ptr [esp + 0x74], cx'
+assert authe8[0x4a34fc].op_str=='0x70' and authe8[0x4a3503].op_str=='1'
+assert auth0f[0x4a32b0].op_str==authe8[0x4a34f6].op_str=='edx, dword ptr [edx + 0x10]'
+report = dict(sha256=idx['sha256'],boundedFunctions=8,
+    actualClass='CLoginModuleGSP', singleton='FBACD4', vtable='BFB01C',
+    commandParser='440280, virtual +1C', defaultMode='0x52',
+    selectedModes=['0x40 marker plus serverIp.ini exists','0x52 empty marker','0x54 third marker'],
+    auth=dict(networkSlot=1,mode52=dict(command='0x00e8',bytes=0x70),
+              otherModes=dict(command='0x000f',bytes=0xd6)),
+    correction='Previous client virtual +1C terminology was provisional; object is login module, not CClient.',
+    limitations='Split/transform helpers and all field consumers not exhaustive. No mode establishes room host/monster authority. Endpoint initializer not a peer connector. Offline only, no runtime/game/server/save changes.')
+(OUT/'login-module-command-audit.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8')
+print(json.dumps(dict(checks='passed',boundedFunctions=8,actualClass='CLoginModuleGSP',networkSlot=1)))

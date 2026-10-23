@@ -1,0 +1,78 @@
+# 一般關卡與教學怪物交叉比對
+
+2026-10-04，離線讀取原始韓版主程式與資源；沒有改動正在運作的服務或遊戲。
+
+## 資源覆蓋與可重現方法
+
+執行 `anal/audit_general_monsters.py`，輸出
+`anal/native-index/general-monster-comparison.json`。
+使用 `anal/backups/Table.original-kr.stp`，避免把中文／商城修改表當成原版。
+
+Field.stp 有 663 份 Cluster XML，成功解析 662 份，共 16,639 筆 OBJECT 記錄。
+`CLUST_T_Rotrua_01.xml` 第 67 行不是合法 XML，已記錄錯誤，未假裝完整解析。
+OBJECT 記錄含 2,207 種 ID；這是群組配置 ID 數，不直接等同全部怪物種類。
+COUNT 是每次呼叫群組的數量，不能推成整張地圖的總數或出生座標。
+
+## 比對樣本
+
+| 模型 ID | 原版模型 | 出現的群組檔數 | 動畫 4 引用 |
+|---|---|---:|---|
+| 1001 | 00_HokyPoky | 53 | HokyPoky_MOVE01 |
+| 1002 | 01_Vamp | 71 | Vamp_WAIT01 |
+| 1004 | 01_Nepenths | 39 | Nepenths_WAIT01 |
+| 1005 | 02_Tiki | 30 | Tiki_MOVE01 |
+| 1036 | 03_Assassin | 2 | Assassin_MOVE01 |
+
+`CLUST_barley_01.xml` 包含 1001、1002、1004、1005；可作為教學以外的比較樣本。
+1036 除教學 `CLUST_scenario_town000_01.xml`，也在
+`CLUST_R_Mark01_01.xml` 中出現。因此模型 1036 本身不能視為教學專用。
+是否有不同關卡控制流程，仍需另外確認。
+
+1002／1004 的動畫 4 與 6 都引用 WAIT01，這是原始模型資料中的差異。
+它提示不應對所有怪物套用同一種追逐動作，但僅憑動畫引用不能斷言
+它們在所有情境都不會位移，也不能推出原版偵敵／攻击規則。
+這五個 ABF 的 XML 節點為模型、動畫、音效、特效等資料，沒有在這些
+樣本中找到直接指定 AI 腳本的節點。
+
+## 技能矩陣與原版載入路徑
+
+`Table/Skill/SkillMatrix.xml` 明確引用 CharacterMatrices.xml 和 MonsterMatrices.xml。
+後者共有 877 個 SkillMatrix，以上五個樣本都有技能配置。例如：
+
+- 1001：tier 0 的 key 1／2／3 → 76／307／371。
+- 1005：tier 0 的 key 1／7 → 82／83，另有 tier 1／2 配置。
+- 1036：tier 0 的 key 1／2／3 → 288／289／290。
+
+這些 ID 在 `SkillActiveTable.xml` 的 `SKILL no` 中沒有匹配；這僅表示
+該表不包含這些直接定義，不能推論整個客戶端沒有技能資料。
+另存 `general-monster-skill-id-hits.json` 的全 Table XML ID 搜尋有四份
+解析例外，而且不同表的相同 ID 不屬於同一命名空間，不可混用。
+
+主程式的實際路徑：
+
+- `40F7F0` 回傳技能矩陣單例 `FAB27C`。
+- 初始化區段 `48D0A6` 傳入 `C52F74 = Table/Skill/SkillMatrix.xml`，
+  `48D0B8` 呼叫 `8180C0`。
+- `8180C0` 從已核對入口解析 MatrixInfo，函式主尾端 `81842C ret 1C`。
+- `818430` 從已核對入口解析 MatrixList／SkillMatrix／CharID／Matrix；
+  保存 CharID 的索引用 WORD 轉換（例如 81895D、8189DC），不是限於角色 1..9。
+- `819220` 依兩個索引尋找矩陣物件，完整查找函式到 `819275 ret 8`。
+- `81A8E0` 用 tier < 4、key < 11 讀取 WORD 技能 ID，完整到 `81A906 ret 4`。
+
+已保存 matrix-list-loader.txt、matrix-file-loader.txt、matrix-index-lookup.txt、
+matrix-0040f7f0.txt、matrix-0081a8e0.txt。matrix-file-loader 包含尾部分支，
+不可把遇到第一個 ret 視為所有分支均結束。
+`matrix-candidate-*` 是未全部核對邊界的候選鄰域，不作完整函式證據。
+
+技能矩陣載入／查找本身沒有決定怪物目標或出招時機。
+先前找到的 SubAI 攻擊執行器 `549C60` 另有限制 caster model <= 9，
+不能因為共同使用矩陣，就把怪物直接塞入角色隊友 SubAI。
+AI_List 的 AILINK char 集合也確實只有 1..9；這個資源不是五種怪物的規則表。
+
+## 下一個分析邊界
+
+普通怪與教學怪都有模型／技能播放資料；仍未找到原版怪物決策入口。
+後續應以普通關卡的控制器建立、受控 actor 分配與怪物技能命令來源交叉追查，
+區分客戶端決策、房主／隊友傳輸及服務端決策。現有證據不確認 P2P 權威。
+
+目前運行的 v41 仍是先前自製 AI；本次沒有宣稱或部署原版 AI。

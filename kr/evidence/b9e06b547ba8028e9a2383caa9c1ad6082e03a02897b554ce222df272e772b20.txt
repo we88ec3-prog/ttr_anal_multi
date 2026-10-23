@@ -1,0 +1,53 @@
+# 腳本物件建立、容器所有權與清除
+
+2026-10-07，原始韓版離線核對。未啟動服務／遊戲，未修改客戶端、資源、存檔、封包或v41 AI。
+
+## CreateObject確實建立CEventActor
+
+前一輪的WalkObject／WarpObject等查找`this+18`。本輪已連上其中一條實際生產端：
+
+`Lua Q.CreateObject → 註冊566560／FE27A4 → 562EC0 → 配置438 bytes → 4D0B80 → CEventActor → this+18唯一鍵插入`
+
+註冊函式566560..5665F6把562EC0寫入FE27A4，名稱字串D6A2E4是CreateObject，Lua wrapper為568E00。多參數adapter尚未完整展开；本輪函式參數意義由原生成員內部使用推導。
+
+完整562EC0..5632C2無條件走CEventActor建構分支，不呼叫CMonster建構函式4D1710，也沒有在此路徑取共同FAB138 actor當作新物件。4D0B80..4D0C93的主vtable為C0C824，RTTI確認CEventActor。
+
+這是**這條CreateObject路徑**的結論，尚未證明所有其他API／別名／容器插入都只會放CEventActor。
+
+## ID與外觀資源不可混為物件類別
+
+| 項目 | 建立函式使用 |
+|---|---|
+| 腳本物件key | 第一個DWORD參數，最後作為this+18樹的key |
+| actor WORD ID | 低byte由外觀資源分類產生，高byte取腳本ID的低byte |
+| 外觀資源key | 資源分類byte左移24位，OR模型ID低16位，交v3C |
+| 陣營 | 固定90=16 |
+| 初始化 | 指定XY／朝向，讀資源參數5C→v5C，建立顯示並選狀態20／指定動作；含服裝與效果分支 |
+
+模型ID使用有號比較：小於10→分類0；小於10000→1；小於11000→6；小於21000→7；其餘記錄提示並使用0。分類1的外觀仍由CEventActor承載，不能只看actor ID低byte=1就宣稱這條路徑產生了普通CMonster。
+
+CEventActor建構時CC基礎速度為24、D0=100、434倍率為1、42C=1，另初始化420／430。這解釋其腳本移動可以有完整速度來源；不能直接套成CMonster初始化或AI啟用條件。
+
+## 容器插入與生命週期
+
+562EC0結尾把原this取回後加18，組成`(DWORD腳本ID, CEventActor*)`。完整57EF20..57EF84配置18-byte樹節點，key在node+C、物件指標在node+10，包含正常ret後配置失敗throw分支。
+
+完整82F200..82F2C3按key比較並作唯一鍵插入，重複key時釋放新樹節點並回傳false。CreateObject沒有檢查該回傳值；這裡只能確認節點處理，**不能推定重複ID時新配置的actor也被安全釋放**。目前沒有部署修改。
+
+同一插入helper在限定560000..565E40的raw-call候選另出現564A28／564A32；觀察其容器base是全域FB7358，屬FlyingObject附近流程，並非已證明的this+18第二條插入。helper共用不能代表容器共用；該函式尚未完整核對。
+
+DeleteAllObject註冊567460→FE2804=563A70。完整563A70..563C36遍歷this+1C sentinel樹，取node+10物件，呼叫v14及v0(1)，再對this+18呼叫823850清樹，並清理其他效果／資源狀態。那些helper尚未全面展開。
+
+另一註冊DeleteObject5666A0→FE27AC=476430在此原版是**單一ret4的空操作**；不能以API名字推定已完成單物件刪除。這不是我們停用或改寫的結果。
+
+## Lua基礎接口來源
+
+完整560600..5607C2串接包括CreateObject與四個移動API的註冊，末端載入Coroutine.lua、Boot.lua、Logic.lua、Event/qbase.lua。完整565E40..565F14使用名稱Q，保存FE2774 Lua狀態與FE2778實例值；既有Rebind可替換後者。容器實例的完整建構／所有插入來源仍待查，不在此命名為怪物管理器。
+
+因此既有Event／qbase出現CreateObject、WalkObject等，只能先對應這組腳本物件操作。它們與CreateObjectEx的普通怪物建立路徑4A0F70→4D1710應分開追查，不用同名或相似名稱合併。
+
+## 驗證與下一步
+
+audit_script_object_lifecycle.py核對11個完整範圍、SHA、byte覆盖、內部分支與結尾、RTTI、註冊指標、節點資料與關鍵寫入；結果script-object-lifecycle-audit.json。
+
+下一步回到普通CMonster建立／引用來源，追CreateObjectEx及一般關卡的上層呼叫與控制欄位；腳本this+18其他插入與一般Case／Cluster波次仍保留待查。原生怪物決策與P2P權限尚未定位，未將劇情替身當成戰鬥AI。

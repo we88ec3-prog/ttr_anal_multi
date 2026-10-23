@@ -1,0 +1,85 @@
+"""Offline spawn/control boundaries and the auxiliary minimap record path."""
+from pathlib import Path
+import hashlib, json, struct
+from build_native_index import PE
+from capstone import Cs, CS_ARCH_X86, CS_MODE_32
+
+ROOT=Path(__file__).resolve().parent.parent
+OUT=ROOT/'anal/native-index'
+p=PE(ROOT/'Tartaros.bin')
+idx=json.loads((OUT/'Tartaros.bin.json').read_text(encoding='utf-8'))
+assert hashlib.sha256(p.data).hexdigest()==idx['sha256']
+md=Cs(CS_ARCH_X86,CS_MODE_32)
+def dump(start,end,name,terminal='ret'):
+    ins=list(md.disasm(p.read(start,end-start),start))
+    assert sum(i.size for i in ins)==end-start
+    assert ins[-1].mnemonic==terminal
+    bounds={i.address for i in ins}
+    for i in ins:
+        if i.mnemonic.startswith('j') and i.op_str.startswith('0x'):
+            dest=int(i.op_str,16)
+            if start<=dest<end: assert dest in bounds
+    (OUT/(name+'.txt')).write_text('\n'.join(
+        f'{i.address:08X} {i.mnemonic:8} {i.op_str}' for i in ins)+'\n',encoding='utf-8')
+    return {i.address:i for i in ins}
+
+# Spawn has a fatal error branch AFTER its normal ret. Jump-table bytes are data.
+spawn=dump(0x4ae4d0,0x4aed8d,'monster-spawn-common-receiver','call')
+register=dump(0x4dff30,0x4dffaa,'common-actor-map-registration')
+owner=dump(0x4c6e50,0x4c6e9d,'player-active-actor-helper')
+control=dump(0x4af920,0x4afae8,'actor-control-assignment-bounded')
+queue=dump(0x56f5c0,0x56f729,'spawn-auxiliary-marker-insertion')
+free=dump(0x56f0f0,0x56f122,'spawn-auxiliary-marker-free')
+render=dump(0x56f130,0x56f5b6,'spawn-auxiliary-marker-render')
+# Includes the allocation-failure exception branch after the successful ret.
+ctor=dump(0x56de30,0x56e0ac,'spawn-auxiliary-marker-manager-constructor','int3')
+assert next(r for r in idx['mainPacketHandlers'] if r['command']==7)['handler']==0x4ae4d0
+assert next(r for r in idx['mainPacketHandlers'] if r['command']==10)['handler']==0x4af920
+targets=struct.unpack('<8I',p.read(0x4aed90,32))
+assert targets==(0x4ae5e4,0x4ae671,0x4aed83,0x4aed83,0x4aed83,0x4aed83,0x4ae80a,0x4ae8d6)
+assert all(t in spawn for t in targets)
+assert spawn[0x4aed80].mnemonic=='ret' and spawn[0x4aed88].op_str=='0x6edc70'
+assert spawn[0x4aed47].op_str=='ebx, 0x1a'
+assert spawn[0x4ae692].op_str=='0x4d1710'
+assert spawn[0x4ae69d].op_str=='0x48'
+assert spawn[0x4ae6d1].op_str=='dword ptr [edi], 7'
+assert spawn[0x4ae77a].op_str=='0x56f5c0'
+assert spawn[0x4aeb1c].op_str=='dword ptr [esi + 0x9c], eax'
+assert spawn[0x4aeb26].op_str=='dword ptr [esi + 0x90], eax'
+assert spawn[0x4aec03].op_str=='0x4dff30'
+assert spawn[0x4aec83].op_str=='0x4c6e50'
+assert spawn[0x4ae8f7].op_str=='0x4d1060'
+npc_ctor={i.address:i for i in md.disasm(p.read(0x4d1060,0xc2),0x4d1060)}
+assert npc_ctor[0x4d1096].op_str=='dword ptr [edi], 0xc0c8c4'
+assert next(v for v in idx['vtables'] if v['address']==0xc0c8c4)['className']=='.?AVCEventObject@@'
+assert register[0x4dff82].op_str=='0x82f200'
+assert owner[0x4c6e57].op_str=='dword ptr [edi + 4], eax'
+assert control[0x4af92b].op_str=='ebx, dword ptr [esi + 2]'
+assert control[0x4af986].op_str=='edx, dword ptr [eax + 0x5f50]'
+assert control[0x4afa09].op_str=='cx, word ptr [eax + ebx*4 + 9]'
+assert control[0x4afa2b].op_str=='edx, dword ptr [edx + 8]'
+assert control[0x4afab1].op_str=='eax, dword ptr [edx + 4]'
+assert control[0x4afaa1].op_str=='dword ptr [edi + 0x9c], eax'
+assert queue[0x56f5d8].op_str=='edi, dword ptr [eax + 0x54]'
+assert queue[0x56f62d].op_str=='0x56f0f0'
+assert free[0x56f117].op_str=='0x89120c'
+assert ctor[0x56df12].op_str=='0xc10824'
+assert p.read(0xc10824,28).decode('utf-16le').rstrip('\0')=='MinimapCached'
+assert render[0x56f490].op_str=='0x739230'
+assert render[0x56f502].op_str=='0x735ba0'
+calls=[hex(a) for a,b in idx['candidateDirectCalls'] if b==0x4dff30]
+assert calls==['0x4a11b6','0x4aa222','0x4aec03','0x4af4f7','0x4b2f83']
+report=dict(sha256=idx['sha256'],boundedFunctions=8,
+    spawn=dict(command=7,headerBytes=2,rowBytes=26,typeSelector='actor ID low byte',
+        type1Constructor='0x4d1710',ownerOffset=18,factionOffset=24,
+        auxiliaryBytes=72,auxiliaryKind=7),
+    control=dict(command=10,headerBytes=7,rowBytes=4,
+        fields=['owner DWORD at 2','signed row count BYTE at 6','actor WORD','related actor WORD'],
+        localUnequalRow='controller virtual +8 extra-follow',
+        localNormalRow='controller virtual +4 primary registration'),
+    commonRegistrationCandidateCalls=calls,
+    auxiliary=dict(globalAddress='0xfdf3c4',cacheName='MinimapCached',
+        evidence='72-byte spawn record enters manager +54 list; render consumes coordinates, draws sprites/text.'),
+    limitation='No original monster decision producer or P2P authority confirmed. Called helpers are not exhaustively expanded. No runtime mutation or packet sent.')
+(OUT/'monster-spawn-control-audit.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8')
+print(json.dumps(dict(checks='passed',boundedFunctions=8,spawnRowBytes=26,auxiliaryCache='MinimapCached')))

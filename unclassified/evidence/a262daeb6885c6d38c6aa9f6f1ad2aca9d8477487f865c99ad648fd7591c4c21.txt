@@ -1,0 +1,88 @@
+# 本機生成角色與 AI 規則框架追查
+
+## 第二個 CMonster 建立入口
+
+2026-10-08補充：[lb.CreateObjectEx參數與控制器边界](LB-CREATE-OBJECT-ABI-AND-CONTROL.md)。已確認此處接口屬於`lb`，與qbase的`Q.CreateObject`不同；舊文下方以9參數／4參數作ABI比較的疑點已解除，應以新報告為準。
+
+原始主程式中已找到的直接 CMonster constructor 呼叫：
+
+| 呼叫點 | 路徑 |
+|---|---|
+| 4AE692 | S→C07 的怪物生成 |
+| 4A0FFE | 本機 4A0F70 生成角色／怪物／NPC |
+
+4A0F70 已從入口解碼至 4A122A ret18：model ID <10 走玩家，
+10..10000 建立 CMonster，其他分支建立 NPC。
+此入口配置 ID、模型、位置、朝向、比例、動作狀態，然後由 4DFF30 加入 common actor tree。
+
+Lua 註冊已確認：
+
+- 4A1790 將 4A0B40 放入 FE1788，以 D6ADBC 的 `CreateObject` 名稱註冊。
+- 4A1830 將 4A0F70 放入 FE178C，以 D6ADCC 的 `CreateObjectEx` 名稱註冊。
+- 4A0B40 是四參數包裝器，對 4A0F70 補入兩個固定參數。
+- 4A11C1 檢查第六參數；非零時呼叫目前控制器 virtual+4 加入 actor，
+  呼叫 virtual+10，並修改 FB8830。這是可選的控制器掛接，不是已證實怪物 AI 開關。
+
+即使本機生成也沿用同一個 CMonster 與 actor tree。
+此函式沒有找到獨立怪物 brain 建構或尋敵／選招呼叫，
+不能因為怪物可本機生成就宣稱官方戰鬥由 P2P 房主運算。
+也不能把第六參數直接設非零作為原生怪物 AI 修正；仍有隊伍控制器的角色資料限制。
+
+## 腳本資源交叉核對
+
+掃描 Event.stp / Panel.stp / Table.stp 中 .lua/.lau/.xml 的相關字串：
+`CreateObject` 在 Event/qbase.lua 出現；Table/_ActorList.xml 有 03_Assassin。
+Event/qbase.lua 是 Lua5.1 bytecode，已用結構解析器完整讀取，沒有执行。
+共 75 個 child prototypes；child61，原來源行429..441，9參數，
+透過 `Q.CreateObject` 呼叫，並處理 isVisible 與默认值。
+
+更新：qbase的9參數指向Q.CreateObject→562EC0／CEventActor，這裡的4參數指向lb.CreateObject→4A0B40；兩套接口不能合併比較。lb.CreateObjectEx的6參數adapter現已完整核對，詳見新報告，未修改腳本。
+相關資源引用掃描使用當前 archives；下面技能矩陣另外使用 original-kr 備份。
+
+## ObsessionsAI 執行器
+
+8092C0 從正式入口解碼至 80939B：
+
+1. 遍歷一组規則。
+2. 各 condition 呼叫 virtual+4，帶入同一 context。
+3. 通過規則後，遍歷 actions，呼叫 virtual+C，同樣帶 context。
+4. 成功／失敗條件受規則欄位 +20 影響。
+
+因此是規則 condition/action 執行框架，沒有在此函式自行搜尋怪物或判定網路主控。
+807FB0 會呼叫它並清掉這次處理的佇列；CAIControl 548FF0 使用該佇列。
+8082F0 建立 CManager@ObsessionsAI（C517D0），已找到的直接呼叫來自
+48A2E0 的 CSubAIManager singleton 初始化；該 singleton 會覆寫 derived vtable C0FC48。
+這是目前已確認的隊友 SubAI 使用鏈，不足以宣稱框架只能服務隊友。
+
+## 教學怪物原始技能矩陣
+
+已核對 `anal/backups/Table.original-kr.stp` 的
+Table/Skill/Matrix/MonsterMatrices.xml，CharID1036：
+
+| Matrix | Tier | Key | Skill ID |
+|---|---|---|---|
+| 0 | 0 | 1 | 288 |
+| 0 | 0 | 2 | 289 |
+| 0 | 0 | 3 | 290 |
+
+這證明原始客戶端有這隻怪物的技能按鍵映射；不代表包含施放時機與尋路決策。
+在此輪查閱的 SkillActiveTable.xml / CharSkill.xml 沒找到這三個 ID 的直接
+no/id/skill 欄位定義，不能猜測其傷害、冷卻或 animation ID，也不能據此斷言所有資源都缺失。
+矩陣已單獨保存，後續應追技能 lookup 的怪物分支與資料載入來源。
+
+## 原始證據與下一步
+
+native-index/local-actor-create.txt（入口4A0F70，上界4A1230）、
+local-actor-create-wrapper.txt、local-actor-api-bindings.txt、
+obsessions-rule-execution.txt、qbase-lua-prototypes.json、
+local-actor-resource-references.json、monster-1036-skill-matrix.xml。
+
+monster-alternative-and-ai-manager.txt 和 local-actor-binding-and-ai-framework.txt
+含未對齊鄰域，只用作找入口；正式入口的分拆檔才作函式證據。
+
+下一個較有價值的入口是 common skill lookup 如何讀取1036的288/289/290，
+以及何處觸發它。繼續區分動畫播放、技能資料與 monster decision，
+不再僅從泛用框架名稱推測 AI。
+
+本輪只讀取原檔與程序清單。遊戲 PID24460仍存在；未啟閉遊戲或修改服務／存檔。
+韓版怪物自主 AI 仍未啟用，P2P 權限仍未證實。

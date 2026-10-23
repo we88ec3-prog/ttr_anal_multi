@@ -1,0 +1,43 @@
+"""Local tutorial AI; not a reconstruction of the official/P2P authority."""
+import math,struct
+
+class MonsterAI:
+    def __init__(self,entity,spawn):
+        self.entity=entity;self.home=tuple(spawn);self.position=tuple(spawn)
+        self.last=None;self.state=None;self.direction=0
+        self.attack_end=0.;self.hit_at=None;self.next_attack=0.
+        self.player_hp=100
+
+    def update(self,now,player,alive=True):
+        if not alive:self.hit_at=None;return ()
+        if self.last is None:self.last=now
+        elapsed=max(0,min(.15,now-self.last));self.last=now
+        packets=[];x,y=self.position;px,py=player
+        distance=math.hypot(px-x,py-y)
+        if self.hit_at is not None and now>=self.hit_at:
+            self.hit_at=None
+            if distance<=4:
+                damage=min(5,self.player_hp-1);self.player_hp-=damage
+                if damage:
+                    packets.extend((struct.pack('<HHHBBIHb',15,self.entity,256,0,0,damage,0,0),
+                                    struct.pack('<HHHh',0,256,1,self.player_hp)))
+        if now<self.attack_end:return tuple(packets)
+        returning=math.hypot(px-self.home[0],py-self.home[1])>20
+        tx,ty=self.home if returning else player
+        gap=math.hypot(tx-x,ty-y)
+        state='idle';motion=1
+        if not returning and distance<=3:
+            if now>=self.next_attack:
+                state='attack';motion=101
+                # Shipped Assassin_SKILL01:35frames/40fps, then small recovery.
+                self.attack_end=now+.875;self.hit_at=now+.4;self.next_attack=now+1.3
+        elif gap>1:
+            state='return' if returning else 'chase';motion=4
+            step=min(gap,elapsed*8)
+            self.position=(x+(tx-x)*step/gap,y+(ty-y)*step/gap)
+            packets.append(struct.pack('<HHff',0x16,self.entity,*self.position))
+        if gap>.001:self.direction=round(math.atan2(tx-x,-(ty-y))*256/math.tau)%256
+        if state!=self.state or state=='attack':
+            self.state=state
+            packets.append(struct.pack('<HHBHf',13,self.entity,self.direction,motion,1.))
+        return tuple(packets)

@@ -1,0 +1,71 @@
+# 地圖檢查點訊息與動作通知分類
+
+2026-10-07 原版 KR 離線分析。沒有啟動服務或遊戲、修改資源／存檔／封包或替換 v41 AI。新增 `audit_checkpoint_and_action_notifications.py`；10 個完整函式的 SHA、指令覆蓋、內部分支、註冊、RTTI 與關鍵指令全部通過。
+
+## 0027：外部提供地圖檢查點，不是怪物批次
+
+主表 `S2C0027 → 4B2AF0..4B2CC3`，每筆 18 bytes，header 2 bytes。它先以 `5449A0` 清除 FB79F0 manager 的原有清單，再逐筆配置 0x108 bytes、呼叫完整 `543700..543B29`，將指標加入該 manager 陣列。
+
+constructor 的 vtable `C0F7FC`，RTTI **CCheckPoint**。它使用 common base `4CA730`，不是 CMonster constructor `4D1710`。不能把此清單當成另一個敵人 AI 名冊。
+
+以下 offset 相對於一筆 18-byte row；以程式實際讀寫為準，正式遊戲 enum 名稱尚未賦予：
+
+| Row offset | 格式 | constructor／物件用途 |
+|---:|---|---|
+| 0 | WORD | → checkpoint+F6 |
+| 2 | signed BYTE | 符號擴展後 → WORD checkpoint+F4；互動路徑依此分流 |
+| 3 | BYTE | → checkpoint+105 |
+| 4、8 | FLOAT | 位置 XY；與物件原位置比較、不同時更新 |
+| 12 | FLOAT | → checkpoint+FC，另有不同種類的比例處理 |
+| 16 | BYTE | 擴展後 → checkpoint+100 |
+| 17 | BYTE | → checkpoint+F8 |
+
+座標是接收清單給定的資料；本函式沒有自主從 CLUSTER 決定位置、数量或波次。分支還會建立視覺／小地圖相關資料，但相關 helpers 尚未全部展開。
+
+## 互動會產生 C2S001C
+
+Checkpoint virtual+64=`544070..544725` 是互動處理，不是每幀 tick。完整函式包含多個 return，這輪沒有在第一個 return 截斷。
+
+其入口依 checkpoint+F4 分流：
+
+- 值 3：取得目前控制 actor、調整朝向，查後續資料及 UI 路徑；某些分支建立確認視窗或排入 callback queue。
+- 值 4：只有 FBA7AC=4（已確認 Tutorial controller kind）才將 `controller+B4+4×signed(checkpoint+F6)` 寫成 1；此分支返回，不直接發送 001C。
+- 值 5：依 UI／玩家資料進入另外兩個 helpers。
+- 值 2：查資料並建立回呼工作，加入 UI queue。
+- 其餘／剩餘條件：可能先出現確認視窗，或呼叫 `544020`。
+
+完整 `544020..544066` 是直接訊息來源：
+
+| Payload offset | 格式 | 值 |
+|---:|---|---|
+| 0 | WORD | C2S001C |
+| 2 | WORD | checkpoint+F4 |
+| 4 | WORD | checkpoint+F6 |
+
+FBA798=0 時，以 FBA854 virtual+10、connection slot 0 傳送 6 bytes。不能把同編號的 S2C 訊息語義套到此請求。
+
+這提供了「外部建立檢查點 → 玩家互動 → 客戶端回報」的具體入口。**001C 是否引發換圖、劇情或怪物生成，仍需追正式回覆來源／資料關聯；這輪没有封包配對或官方流量證據。** 教學種類 4 則有本地旗標路徑，不能假設所有檢查點都發送 001C。
+
+### 每幀更新的區別
+
+CCheckPoint virtual+20=`4CB000..4CB01E` 呼叫既有 `4CA890` 移動 consumer，並更新相關元件；virtual+24=`4CB020..4CB049` 更新附屬效果的時間。它們與 virtual+64 互動入口分開，沒有直接建立 CMonster 或调用已知 CAIControl 決策端。
+
+## 000F：不能使用技能的音效／提示
+
+完整 `4B19D0..4B19F1` 將接收資料轉交 controller virtual+3C。CController、Single、Formation、Tutorial 四張已核對 vtable 此槽皆為完整 `545C50..545E18`。
+
+後者確認傳入命令為 000F，讀 payload BYTE+7。非零時使用原版字串 **CANNOT_USE_SKILL**，走音效服務；值為 1 時再依 BYTE+8 的 bit1／bit4／bit2 呼叫提示文字／顯示 helpers。
+
+這段沒有建立敵人目標、選擇怪物技能或派送角色動作。BYTE+7／+8 的正式錯誤碼與各提示文字 ID 仍需展開下游資料來源，payload+2..6 的欄位用途也未確認。不能把 000F 視為怪物 AI 啟用訊息。
+
+## 001A：指定物件刪除清單
+
+完整 `4B28D0..4B2AEC` 使用 header 4 bytes，後續每筆 actor WORD。先查共用 actor map，依類型處理顯示資料與控制器，再呼叫完整 `4DFBC0..4DFC2B`。
+
+刪除 helper 對物件呼叫 virtual+14、virtual+0（參數 1），清掉 node+10 指標並移除 map node。原版診斷字串為 **DeleteObjPack: Cannot Found In CharList**。額外 header WORD 的意義沒有在此命名。
+
+這是可影響怪物存在／消失的接收路徑，並非 owner 更新或選招入口。它與先前 0012 的全體清理路徑不同。
+
+## 下一步
+
+新增的可用來源是 **Checkpoint 001C 互動回報**；需追它的資料索引與後續派送，確認是否連到原版關卡事件。普通怪物動作決策與官方波次排程仍未定位，P2P 權責也未證實。GUI callbacks、helpers 與所有間接路徑尚未窮盡，不把這次分類當成全客戶端不存在怪物 AI 的證明。

@@ -1,0 +1,102 @@
+"""Offline map trigger-name consumers and trigger-message classification."""
+import hashlib
+import json
+import re
+import struct
+import xml.etree.ElementTree as ET
+from pathlib import Path
+from build_native_index import PE
+from capstone import Cs, CS_ARCH_X86, CS_MODE_32
+from stp_resources import Archive
+
+ROOT = Path(__file__).resolve().parent.parent
+OUT = ROOT/'anal/native-index'
+pe = PE(ROOT/'Tartaros.bin')
+index = json.loads((OUT/'Tartaros.bin.json').read_text(encoding='utf-8'))
+assert hashlib.sha256(pe.data).hexdigest()==index['sha256']
+md = Cs(CS_ARCH_X86, CS_MODE_32)
+specs = [
+    ('map-trigger-table-loader',0x4f5640,0x4f5d4e),
+    # Includes same-map branch after first return.
+    ('map-change-trigger-name-lookup',0x4df510,0x4dfa9d),
+    ('map-id-string-map-subscript',0x4f7df0,0x4f7f1b),
+    ('trigger-message-table-loader',0x536280,0x5366b9),
+    ('trigger-message-object-constructor',0x540250,0x540453),
+    ('trigger-message-receiver-005e',0x4b3c10,0x4b3d9f),
+]
+functions = {}
+for name,start,end in specs:
+    ins = list(md.disasm(pe.read(start,end-start),start))
+    assert sum(i.size for i in ins)==end-start,name
+    assert ins[-1].mnemonic=='ret',name
+    addresses = {i.address for i in ins}
+    for i in ins:
+        if i.mnemonic.startswith('j') and i.op_str.startswith('0x'):
+            target=int(i.op_str,16)
+            if start<=target<end:
+                assert target in addresses,(name,hex(target))
+    functions[name]={i.address:i for i in ins}
+    (OUT/(name+'.txt')).write_text('\n'.join(f'{i.address:08X} {i.mnemonic:8} {i.op_str}' for i in ins)+'\n',encoding='utf-8')
+
+checks = [
+    ('map-trigger-table-loader',0x4f5675,'ecx, 0xc0d4b4'),
+    ('map-trigger-table-loader',0x4f5723,'0xc0d4d4'),
+    ('map-trigger-table-loader',0x4f5813,'ecx, 0xfb74c0'),
+    ('map-change-trigger-name-lookup',0x4df585,'ecx, 0xfb74c0'),
+    ('map-change-trigger-name-lookup',0x4df58d,'0x4f7df0'),
+    ('map-change-trigger-name-lookup',0x4df5b9,'eax, [ebp - 0x10]'),
+    ('map-change-trigger-name-lookup',0x4df622,'ecx, 0xfb74b0'),
+    ('map-change-trigger-name-lookup',0x4df9ac,'ecx, 0xfb74d0'),
+    ('trigger-message-table-loader',0x5362b5,'ecx, 0xc0f230'),
+    ('trigger-message-table-loader',0x5363f9,'0xc0f260'),
+    ('trigger-message-table-loader',0x536472,'0xc0f268'),
+    ('trigger-message-object-constructor',0x5402c4,'dword ptr [esi], 0xc0f51c'),
+    ('trigger-message-receiver-005e',0x4b3c62,'ecx, word ptr [esi + 2]'),
+    ('trigger-message-receiver-005e',0x4b3c69,'0x540250'),
+]
+for name,address,operand in checks:
+    assert functions[name][address].op_str==operand,(name,hex(address))
+strings={hex(a):pe.cstring(a) for a in (0xc0d4b4,0xc0d4d4,0xc0d4dc,0xc0d4e0,0xc0f230,0xc0f260,0xc0f268)}
+assert strings['0xc0d4d4']=='trigger'
+assert strings['0xc0d4dc']=='map'
+assert strings['0xc0d4e0']=='bound'
+assert strings['0xc0f260']=='TEXT' and strings['0xc0f268']=='COLOR'
+vtable=next(v for v in index['vtables'] if v['address']==0xc0f51c)
+assert vtable['className']=='.?AVCTriggerMsgObject@@'
+registration=next(r for r in index['mainPacketHandlers'] if r['command']==0x5e)
+assert registration['handler']==0x4b3c10
+
+refs={}
+for va in (0xfb74c0,0xfb74c4,0xfb74c8):
+    rows=[]
+    for section in pe.sections:
+        if section['flags']&0x20000000:
+            data=pe.data[section['raw']:section['raw']+section['size']]
+            rows.extend(hex(section['va']+m.start()) for m in re.finditer(re.escape(struct.pack('<I',va)),data))
+    refs[hex(va)]=rows
+
+table=Archive(ROOT/'Table.stp')
+map_data=table.read('Table/_MapList.xml')
+maps=ET.fromstring(map_data)
+selected=[dict(row.attrib) for row in maps if row.get('ID') in ('1','188','190')]
+mef_names={row.get('TRIGGER','').lower() for row in maps if row.get('TRIGGER','').lower().endswith('.mef')}
+messages=ET.fromstring(table.read('Table/TriggerMsgList.xml'))
+inventory=[]
+paths=[ROOT/'Table.stp',ROOT/'Field.stp',ROOT/'Event.stp']+sorted((ROOT/'Map').rglob('*.stp'))
+for path in paths:
+    ar=Archive(path)
+    entries=[name for name in ar.files if name.lower().endswith('.mef') or name.rsplit('/',1)[-1].lower() in mef_names]
+    inventory.append(dict(archive=str(path.relative_to(ROOT)),sha256=hashlib.sha256(path.read_bytes()).hexdigest(),files=len(ar.files),mefEntries=entries))
+
+report=dict(checks='passed',sha256=index['sha256'],boundedFunctions=len(specs),
+    functions=[dict(name=n,start=hex(s),endExclusive=hex(e)) for n,s,e in specs],
+    strings=strings,messageClass=vtable['className'],messageRegistration=registration,
+    exactAbsolutePointerCandidates=refs,mapListSha256=hashlib.sha256(map_data).hexdigest(),selectedMaps=selected,
+    triggerMessageRows=len(messages),archiveInventory=inventory,
+    directKnownMonsterOrControllerCalls={n:[hex(i.address) for i in ins.values() if i.mnemonic=='call' and i.op_str in ('0x4d1710','0x548ff0')] for n,ins in functions.items()},
+    limitations=['Exact pointer candidates exclude aliases, interior pointers, indirect references and other modules.',
+        'MEF inventory covers listed current archives, not all machine files, versions or embedded payloads.',
+        'A trigger filename lookup with unused result is not native MEF execution or absence proof for another path.',
+        'Container and other called helpers not exhaustively expanded; no original monster decision/P2P proof.'])
+(OUT/'map-trigger-consumers-audit.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+print(json.dumps(dict(checks='passed',boundedFunctions=len(specs),archives=len(inventory),mefEntries=sum(len(r['mefEntries']) for r in inventory),selectedMaps=selected,messageCommand='005E'),ensure_ascii=False))

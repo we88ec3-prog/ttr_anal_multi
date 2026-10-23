@@ -1,0 +1,52 @@
+# Native actor movement consumption
+
+2026-10-04 original KR offline analysis. No game/service/client/save modifications. Native monster AI decision source is still unresolved; deployed v41 custom AI remains unchanged.
+
+## Additional actor update stage
+
+The previously verified actor virtual+24 worker stage handles animation/state updates. A separate, now bounded stage calls **actor virtual+20**:
+
+```text
+491CB6 candidate callsite → 4E0060..4E01FA
+  GameInfo+0C tree sentinel
+  → 4E13F0..4E1461: each node+10 actor, virtual+20
+    → CMonster C0C9DC+20 = 4D1AE0
+      exact tail jump → 4C8580..4C87C4
+        → 4CA890..4CAAF7 movement consumer
+        → 4C89A0..4C8A86 heading smoothing
+```
+
+491CB6 is an instruction-level caller candidate; its complete enclosing function and wall-clock call rate are not newly audited. 4E0060 and the tree iterator are complete verified functions. The traversal invokes every actor in this tree, not only three hero AI slots. This corrects any overly narrow reading of the prior virtual+24 update-chain documentation: it was not the only actor processing stage.
+
+## Cached flags drive movement
+
+The common consumer **4CA890** checks actor+D4 first. When D4=1, it uses target+C0/+C4 and step count+C8: zero remaining steps applies the target and clears the movement bit; otherwise it normalizes the target displacement, scales a step, calls actor virtual+54, and decrements C8. The producer of all these interpolation fields is not fully traced here.
+
+Otherwise it tests **WORD actor+E2 bit8000**. When set:
+
+1. Actor virtual+60 obtains movement speed. CMonster resolves this to **4CAD40..4CAD5F**, computing approximately `D0 × 0.01 × CC`.
+2. Speed is scaled by the reciprocal of FBA7CC object's DWORD+1360. This is a configured divisor; actual update frequency/unit is not inferred.
+3. BYTE actor+E4 selects an eight-byte XY direction pair from FB8020, initialized through4449D0.
+4. Direction×scaled speed is passed to actor virtual+54.
+
+CMonster virtual+54 resolves to **4CABE0..4CACBB**. It adds the proposed displacement to current+A0/+A4, checks the candidate with **82CDF0** using FAB1D0, and applies a position update through virtual+44 only if the check succeeds. Exact grid representation and 82CDF0 implementation are outside this audit; this is a candidate-position validation boundary, not an AI target search.
+
+The function then invokes4CAD60 for another movement-related correction step. Its full behavior remains to be audited. No change to the divisor, speed coefficient, collision logic, or flags is proposed.
+
+## Relationship to network commands
+
+Previously verified S→C000B writes cached actor+E0/+E4 and optional XY targets+E8/+EC. This new trace confirms that the embedded E2 movement bit and E4 heading are consumed by the native actor movement stage; packets are not limited to setting a visible facing direction.
+
+**4C89A0** separately compares desired heading+B0 with displayed heading+3A4, chooses the shorter circular difference, limits the turn increment, and updates the model's rotation when available. This smooths facing; it does not choose an enemy.
+
+Movement execution therefore exists for monsters independently of hero-only input546100. Missing monster decision logic cannot be inferred from546100's model<=9 guard. Conversely, demonstrating movement consumption does not establish that the client autonomously generates monster movement or that networking is P2P.
+
+## Candidate searches and exclusions
+
+Raw displacement searches found many +E0/+E4 references in other classes. They are not all actor fields: matching an offset without resolving the owning object is insufficient. One nearby writer at4D0DB6 belongs to a CEventActor-related region, not CMonster; do not transplant it as monster AI. Monster virtual+28 at4D1B90 includes position/distance/color/text presentation and is not the newly located movement stage.
+
+## Reproducible checks and next step
+
+`audit_native_movement_consumer.py` verifies seven full function ranges, internal direct branch boundaries, relevant instructions, Monster RTTI virtual offsets, exact thunk target, and original executable SHA. Results and disassemblies are under native-index. Seven checks passed; speed coefficient read as0.009999999776482582.
+
+Next follow producers of actor+D4/+C0/+C8 and consumers of4CAD60, and identify the battle input/skill producer that feeds these cached commands. Any live trace must separate the current Python-generated movement from original client-generated commands. Original monster AI remains unactivated.

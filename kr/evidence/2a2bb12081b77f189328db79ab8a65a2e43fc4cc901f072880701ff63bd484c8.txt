@@ -1,0 +1,63 @@
+# 巢狀資料接收與TCP介面繼承
+
+本輪接續 PARTY-NOTIFICATION-FOLLOWUP.md，只分析原始韓版主程式。
+
+## +6920物件實際處理物品槽位
+
+CGlobalStatus基址F8D9E0的+6920就是F94300。
+由4E1590入口解碼的建構序列，4E1991呼叫5094D0，4E19A3保存結果至F94300；
+因此它與先前未命名的物件不是另一個網路接收器。
+
+| 命令 | 完整資料處理函式 | 已確認格式 |
+| --- | --- | --- |
+| S→C00C2 | 50A890..50A9A8 | header4，WORD+2寫物件+50B8，後續每筆17 bytes |
+| S→C00C3 | 50A9B0..50AAC2 | header2，後續每筆17 bytes |
+| S→C00C4 | 50AAD0..50AC66 | BYTE+2結果；結果1時WORD+3寫物件+50B8，發UI事件及提示 |
+
+C2／C3共同將物件+23A0作為槽位陣列基址。
+非零紀錄經509260..509349查51D700道具產品資料，更新每槽24-byte內部紀錄；
+零紀錄則清空指定槽位。槽號允許1..480。
+產品錯誤與槽號錯誤分別有原始英文診斷字串
+`Invalid Item Product %d`及`Invalid slot idx %d`。
+這支持物品槽位資料分類；尚未僅憑這些函式斷定是背包、倉庫或商城的哪種介面。
+
+每筆17-byte紀錄目前可定位：WORD槽號+0，DWORD+2／+6，
+BYTE+12，以及DWORD+13經EDI交給509260；+10..11未在這兩個handler中使用。
+BYTE+12為零走清空分支；具體數值欄位名稱仍需對照道具結構。
+兩種接收最後都發UI事件F4364，未發現這兩個完整函式中的自主怪物技能選擇。
+
+**不能將C2／C3直接配對為上一輪C→S00C8／00C9的回覆。**
+目前只確認各自的靜態路由，數字接近不是請求／回覆配對證據。
+
+## 00C1仍是另一組資料
+
+4E3800轉給FE1C50的4FF6A0..4FF91E。
+它從payload+2 DWORD、+6 WORD及+8起多個欄位寫入單例，
+有固定區及+8C後每筆15-byte的附加資料，最後發UI事件F431E。
+欄位中包含WORD、BYTE與float；本輪未完整命名其用途，不稱為peer地址或怪物控制資料。
+原始長度不足分支僅記錄錯誤後繼續處理，離線分析不代表已適合讓本機伺服器發送新格式。
+
+## RTTI繼承範圍查找
+
+搜尋名稱不足以找到「名字沒有TCP但繼承TCP介面」的類別，
+因此本輪解析每個索引vtable的CompleteObjectLocator、ClassHierarchyDescriptor、BaseClassArray與BaseClassDescriptor。
+
+- 1558個已索引vtable的階層皆可解码，沒有解析失敗。
+- 含CTCPInterface基類的結果共5個vtable：CClient四個（thisOffset0／8／148／200），以及CTCPInterface本身。
+- CClient的CTCPInterface基類描述符C69478明確記錄mdisp148；
+  因此實際接收表仍是C05AEC／4930E0，與先前接收路徑吻合。
+- 其餘CClient vtable也會列出同一基類，這是同一物件的繼承資訊，不能算成四個獨立接收器。
+
+結論限於**原始韓版主程式中已索引的RTTI**：未找到第二種CTCPInterface衍生接收類別。
+這不排除無RTTI物件、其他DLL、其他介面或同一CClient搭配伺服器中繼，也不能据此否定P2P。
+
+## 可重現檢核與下一步
+
+audit_nested_data_and_tcp_types.py核對七個完整函式、物品查表／錯誤字串／stride、
+F94300來源及1558個RTTI階層；檢核通過。
+結果保存於native-index/nested-data-tcp-type-audit.json，完整反組譯存於同目錄。
+party-data-candidate-*仍是搜尋視窗，不當成完整函式證據。
+
+下一步擴大查找網路物件的別名使用與Send／Connect呼叫端，以及一般任務戰鬥建立的資料來源；
+不再將C2／C3物品槽位路徑當成怪物決策候選。
+沒有遊戲、服務、資源或存檔變更。v41自製AI仍在部署，原版怪物AI與P2P權威尚未確認。

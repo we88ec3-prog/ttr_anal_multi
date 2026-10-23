@@ -1,0 +1,49 @@
+# Battle result, movement, and hero AI feedback
+
+Original KR offline analysis, 2026-10-04. Seven complete function ranges and nine switch destinations checked by `audit_battle_result_routes.py`. No runtime, client, service, or save modification. Native monster decision source remains unresolved.
+
+## Result path: S→C 000E
+
+Main registration points to **436C40**, exactly `mov eax,[ecx]; jmp [eax+28]`. RTTI scene virtual+28 resolves as follows:
+
+| Scene | Receiver |
+|---|---|
+| CMissionField | 4B0640 |
+| CScenarioField | 4C4920 → 4B0640, then hero AI feedback |
+| CInfiniteDungeonField | Same 4C4920 override |
+
+**4B0640..4B1913** first finds local player F93930 in FAB148. If missing, it logs `Player doesn't exist!` and returns 80004005. It processes floor((size−2)/13) rows after a two-byte command header, looking up both row WORD0 and WORD2 in FAB138 common actors. Diagnostics explicitly identify them as SourceObject and TargetObject; missing objects skip the row. There is no model<=9 restriction on these initial lookups, so this result receiver also addresses monsters already in the common actor tree.
+
+| Row offset | Observed use |
+|---:|---|
+| 0 | WORD source actor ID |
+| 2 | WORD target actor ID |
+| 4 | Signed BYTE result case, valid 0..8 |
+| 5 | Signed BYTE forwarded to effect helpers; exact enumeration pending |
+| 6 | DWORD result value used by multiple branches; case1 may negate it in place |
+| 10..11 | Not assigned a meaning in this audit |
+| 12 | Signed BYTE forwarded in case0/case8 effect handling; meaning pending |
+
+Result cases map to 4B0B69 / 4B118B / 4B0EEC / 4B0E5A / 4B0D14 / 4B15B7 / 4B1313 / 4B18D9 / 4B1673. Case7 goes straight to row advancement. Other branches operate visual effects, actor fields, controller slot checks, and value feedback. This is not a complete semantic mapping of damage/healing/status types. **The common receiver mutates the received row value in one branch**, so a trace taken after processing may differ from wire bytes. No new result packet is sent by this audit.
+
+## Why this is hero AI feedback, not a monster brain
+
+**4C4920..4C4AB9** calls the common result receiver first and proceeds only on success. It temporarily sets CAIControl FB7A28+54/+50/+58 (FB7A7C/78/80) from controller virtual+1C indices0/1/2. It walks the same 13-byte result rows, selects case0/2/3, and calls **54A8F0(sourceID,targetID)**. It clears those temporary fields at the end.
+
+**54A8F0..54AA57** searches both supplied actor IDs against exactly three CAIControl slots starting +A8 with stride10(hex). If source matches a slot, it updates target fields +B0/+C0/+D0 with targetID, with additional leader-selection conditions. If only target matches a slot, it looks up the source actor and checks ID low-byte0/1, relation4C96B0, state+158, and state+34 before updating slot feedback fields (+B4/+C4/+D4 for the applicable index, and +B0/+C0/+D0 when empty).
+
+Thus the feedback supplies a monster ID as a **target or attacking source to the three hero slots**; it does not allocate a monster AI slot. It may affect hero target choice after hits. The common result/effect callees are not exhaustively expanded, and this audit makes no global claim that every indirect callee is free of networking.
+
+## Movement path: S→C 000B
+
+**4AFE60..4B0121** uses a two-byte header and eight-byte rows. Row actorID WORD0 is looked up in FAB138; row heading BYTE2 and flags BYTE3 feed cached input fields. Row WORD4/WORD6 are converted to float XY and written to actor+E8/+EC when both are nonzero; a distance comparison may also update +D8/+DC. This rejects a blind interpretation of every zero coordinate as a valid position update.
+
+After controller/local-actor reconciliation, it calls actor virtual+58. Both **CMonster C0C9DC** and **CCharacter C07B44** resolve this slot to **4C8C30..4C8C3F**, which only writes the supplied byte to actor+B0 and returns4. This last call is heading assignment, not skill execution or AI activation. Other movement/input consumption downstream remains a separate investigation.
+
+## Ready path: S→C 0014
+
+Common **4B2570..4B2614** sets controller+4=1 and handles singleton/UI-related flags. Mission wrapper **4230F0..423179** calls it, then emits UI event F4262. Scenario virtual+2C is a tail jump at4C4910 to the common function. No monster spawn/decision is directly implemented in these bounded functions; their singleton callees are not exhaustively audited.
+
+## Next step
+
+The actor receives movement000B, state000C, motion000D, and result000E through established dispatch. These are outputs/feedback, not evidence of where enemies choose actions. Next trace the cached input consumption and ordinary battle skill/action request producers; compare their network send path with hero input5452C0. Separately created transports and relayed P2P remain open possibilities. Do not activate hero-only CAIControl as a substitute for original monster AI.

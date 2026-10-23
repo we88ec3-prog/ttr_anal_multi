@@ -1,0 +1,69 @@
+"""Offline nested data receivers and RTTI TCP interface inheritance audit."""
+from pathlib import Path
+import hashlib,json,struct
+from build_native_index import PE
+from capstone import Cs,CS_ARCH_X86,CS_MODE_32
+ROOT=Path(__file__).resolve().parent.parent
+OUT=ROOT/'anal/native-index'
+p=PE(ROOT/'Tartaros.bin')
+idx=json.loads((OUT/'Tartaros.bin.json').read_text(encoding='utf-8'))
+assert hashlib.sha256(p.data).hexdigest()==idx['sha256']
+md=Cs(CS_ARCH_X86,CS_MODE_32)
+def dump(a,b,name):
+    ins=list(md.disasm(p.read(a,b-a),a))
+    assert ins[-1].mnemonic=='ret' and ins[-1].address+ins[-1].size==b
+    boundaries={i.address for i in ins}
+    for i in ins:
+        if i.mnemonic.startswith('j') and i.op_str.startswith('0x'):
+            target=int(i.op_str,16)
+            if a<=target<b:assert target in boundaries
+    (OUT/(name+'.txt')).write_text('\n'.join(f'{i.address:08X} {i.mnemonic:8} {i.op_str}' for i in ins)+'\n',encoding='utf-8')
+    return {i.address:i for i in ins}
+c2=dump(0x50a890,0x50a9a9,'nested-item-slots-00c2')
+c3=dump(0x50a9b0,0x50aac3,'nested-item-slots-00c3')
+dump(0x50aad0,0x50ac67,'nested-item-result-00c4')
+dump(0x4ff6a0,0x4ff91f,'nested-data-00c1')
+item=dump(0x509260,0x50934a,'nested-item-slot-assignment')
+dump(0x509220,0x50925f,'nested-item-slot-clear')
+dump(0x51d700,0x51d7cd,'item-product-lookup')
+assert c2[0x50a94e].op_str=='esi, 0x11' and c3[0x50aa68].op_str=='esi, 0x11'
+assert item[0x5092d8].op_str=='esi, [edx + ecx*8]'
+assert item[0x5092b3].op_str=='0xbccc90'
+assert item[0x5092cd].op_str=='0x51d700'
+assert p.cstring(0xc0de0c)=='Invalid Item Product %d'
+assert p.cstring(0xc0de24)=='Invalid slot idx %d'
+# Check the allocation/assignment within a previously verified entry sequence.
+global_ctor=list(md.disasm(p.read(0x4e1590,0x590),0x4e1590))
+by_address={i.address:i for i in global_ctor}
+assert by_address[0x4e1991].op_str=='0x5094d0'
+assert by_address[0x4e19a3].op_str=='dword ptr [0xf94300], eax'
+assert 0xf8d9e0+0x6920==0xf94300
+
+tcp_type=next(c['typeDescriptor'] for c in idx['classes'] if c['name']=='.?AVCTCPInterface@@')
+matches=[];failures=[]
+for v in idx['vtables']:
+    try:
+        col=struct.unpack('<I',p.read(v['address']-4,4))[0]
+        hierarchy=struct.unpack('<5I',p.read(col,20))[4]
+        _,_,count,array=struct.unpack('<4I',p.read(hierarchy,16))
+        assert 0<count<1000
+        descriptors=struct.unpack('<'+'I'*count,p.read(array,count*4))
+        inherited=[d for d in descriptors if struct.unpack('<I',p.read(d,4))[0]==tcp_type]
+        if inherited:
+            matches.append(dict(className=v['className'],vtable=v['address'],thisOffset=v['thisOffset'],baseDescriptors=inherited))
+    except (ValueError,struct.error,AssertionError) as exc:
+        failures.append(dict(vtable=v['address'],error=type(exc).__name__))
+assert not failures, failures
+assert {v['className'] for v in matches}=={'.?AVCClient@@','.?AVCTCPInterface@@'}
+assert len(matches)==5
+tcp_base=struct.unpack('<6I',p.read(0xc69478,24))
+assert tcp_base[0]==tcp_type and tcp_base[2]==0x148
+report=dict(sha256=idx['sha256'],dataReceivers=dict(c2=dict(header=4,stride=17),c3=dict(header=2,stride=17),
+            storagePointer=0xf94300,slotArrayOffset=0x23a0,slotInternalStride=24),
+            tcpInterfaceType=tcp_type,indexedVtableCount=len(idx['vtables']),tcpInheritanceMatches=matches,
+            hierarchyDecodeFailures=failures,limitations=[
+                'Only indexed RTTI in the original Korean main executable; not DLLs or RTTI-free objects.',
+                'C8/C9 requests are not paired to C1-C4 by numerical proximity.',
+                'C1 field meanings remain partial; no native monster decision activation.'])
+(OUT/'nested-data-tcp-type-audit.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8')
+print(json.dumps(dict(boundedFunctions=7,indexedVtables=len(idx['vtables']),tcpMatches=len(matches),hierarchyFailures=len(failures))))

@@ -1,0 +1,17 @@
+# v20 第一戰測試
+
+保留 v19 的可用基準，新增施放期間沒有输入时的普攻续段窗口，以及一隻原生測試怪物。這是測試 encounter，並不是資源中的正式怪物配置。
+
+怪物 entity257/model1001，368/252，HP60。面向且在技能範圍內才扣血；全部擊倒送11清怪與30/0x11勝利通知。沒有AI/反擊/死亡動畫/掉落或任務獎勵。碰撞與朝向使用既有 tracker估計，尚非精確客戶端位置。
+
+25項離線測試、編譯與8416 socket流程通過；原生視覺、HP與勝利訊息待使用者測試。服務 PID4288。
+
+冷卻图示及第一戰後的原生教學銜接仍未完成：Lua等待IsScenarioEnded，TUTO child4C寫完成旗標，但目前戰鬥的SCEF不接此命令。6E1會重跑初始化，不應直接回送。
+
+## 2026-10-03 v22 tutorial scenario completion candidate
+- User confirmed combo now works, story remains Korean; requested pause story translation and continue inability to complete quest. Preserved combo/server/state baseline at anal/baselines/20261003-tutorial-combo-working.
+- Root issue: previous kill only emitted30/0x11 generic victory popup, while main5F/2 destroyed TUTO's4C receiver. v22 battle_entry sends38/type2 only, retaining TUTO/coroutine; battle map190/load/player/casts unchanged. Actual controller combat compatibility still requires visual test.
+- Final monster kill marks encounter objective complete, sends11 cleanup, then .75sec later exactly-once completion: map12/188, rebuild/bind Isilia4 at saved PRE-battle tutorial position,14,4C/scenario14. Removed30 generic popup. No6E reinitialization; no fabricated full quest rewards/persistent account completion. Lua Part2 should resume IsScenarioEnded14 ->SetUIPage/scene1000/10/12 if original TUTO remains. Later second scenario/quests not implemented.
+- Fixed prior code overwriting saved return position with battle spawn; returned tracker reset to saved position/direction/speed. Skill/held combo reset on return.
+- 26 unit tests and py_compile pass; live8416 socket tutorialB0 ->40/14 ->28/14 ->battleB0 ->0A ZC ->kill ->12/188 ->one4C14 passes, no30/5F, stderr empty. First synthetic test omitted initialB0 so noinput processed; corrected full handshake passed. Wire delivery is not proof of client Lua/UI completion.
+- Only verified8416 PID5384 restarted ->29252, v22 stdout/stderr, capture20261003-200248-942193. Other services/game untouched. Ask user manually reopen current Tartaros.local.tc-ui-v1.exe (or working csv-v3) and play first battle; confirm skills remain operational and after kill returns to tutorial/next dialogue. Translation unchanged.

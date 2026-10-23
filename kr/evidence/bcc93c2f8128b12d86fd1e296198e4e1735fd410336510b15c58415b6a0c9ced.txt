@@ -1,0 +1,63 @@
+# 連線槽、收包分類與目前場景
+
+## 本輪已確認
+
+SceneManager 的預設轉接 **4B7EC0–4B7EF1** 讀取 `[this+5EAC]`。
+在 FD2CF8 singleton 中即 **FD8BA4**，為目前場景物件。
+若非零，改用該物件作 this，尾跳 virtual+4；若為零，記錄訊息並回傳 0。
+因此先前收包鏈已接到實際場景的覆寫／共用封包表，沒有在這個轉接函式中啟動 AI。
+
+## 三個數字必須分開
+
+| 名稱 | 寫入／使用位置 | 已知用途 |
+|---|---|---|
+| 連線槽 | Connect 第三個參數 [ebp+10]；806C91–806CD2 寫 network+18 map | 發送时用槽編號找 connection |
+| pipeline 類別 | Connect 第四個參數 [ebp+14]；806B33 寫 connection+A080 | 收包後選 FC10D0 的佇列 |
+| actor／owner ID | 角色控制及 spawn 封包 | 與前兩欄不是同一數值命名空間 |
+
+**8069A0–8069F5** 的發送函式，從第一個參數取連線槽，查 network+18 map，
+取得 connection 後把 payload／size 交給 8060D0。
+不能把 send 的槽 0，或 receive 的 pipeline 2，解讀成玩家或房主編號。
+
+## 已核對的 Connect 呼叫
+
+呼叫的明確參數順序為 address、port、slot、pipeline。
+以下是原始韓版執行檔常數，不是新取得的官方封包或即時端點快照。
+
+| 呼叫位置 | port | slot | pipeline | 所在函式 |
+|---|---:|---:|---:|---|
+| 49575B | 8415 | 1 | 2 | 495610–4957B9 |
+| 4957EA | 8416 | 0 | 2 | 4957C0–4959E5 |
+| 495803 | 8414 | 2 | 2 | 同上 |
+
+後兩者取相同 address 參數，[esi+BF64]／[esi+BF68] 保存成功 connection。
+8415 的 connection 保存在 client+BF60。
+原生角色輸入 5452C0 的 send 使用槽 0；結合這組初始化路徑，對應 8416 連線。
+三個不同連線都進入 pipeline 2，所以六個 pipeline 並不表示六名玩家或六個 peer。
+address 的來源與執行時是否被改寫，仍需依呼叫端／runtime 驗證。
+
+## Socket 範圍與限制
+
+806AD0 建立 AF_INET／SOCK_STREAM socket，806B8C 呼叫 connect。
+在目前主程式的靜態 Winsock IAT 中，WSASocketA／connect 的候選引用各一個，
+並已核對到同一個 Connect 函式；WSASend／WSARecv 亦各有已知引用。
+本輪用本機 Windows ws2_32 匯出地址比對解析 ordinal：
+htons、setsockopt、WSAStartup、WSACleanup、gethostbyname、connect、shutdown、
+WSAGetLastError、closesocket。只解析匯出，未呼叫 Winsock 初始化或建立 socket。
+
+以「直接從 FBA854 載入 ECX → vtable+18 → 第一個 call」的窄模式搜尋，
+目前只命中上述三個 Connect 呼叫。這個模式不包含別名指標、計算地址或其他 DLL，
+不能宣稱所有網路建立路徑已找齊，也不能據 TCP 傳輸排除 P2P／中繼。
+
+遊戲 PID 24460 與服務 PID 維持原狀。netstat 篩選未取得可用資料，
+Get-NetTCPConnection 明確回報拒絕存取；沒有把這當成「沒有連線」的證據。
+
+## 可重跑檢查
+
+`audit_connection_routes.py` 核對函式邊界、參數寫入、三個 Connect 呼叫、
+窄模式引用與本機匯出名稱，輸出 `native-index/connection-route-audit.json`。
+檢查已通過，原始主程式 SHA 未變。
+
+下一個有效調查點是 address 呼叫端、CClient 其他封包路由目的物件，
+以及一般任務進場時的控制權分配。尚未找到原生怪物決策入口；
+目前 v41 自製 AI 沒有替換或調整。

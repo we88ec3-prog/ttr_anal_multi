@@ -1,0 +1,79 @@
+004C89A0 push     ebp
+004C89A1 mov      ebp, esp
+004C89A3 push     ecx
+004C89A4 cmp      dword ptr [ecx + 0x3a8], 0
+004C89AB jne      0x4c8a83
+004C89B1 push     ebx
+004C89B2 mov      bl, byte ptr [ecx + 0x3a4]
+004C89B8 push     esi
+004C89B9 movzx    esi, byte ptr [ecx + 0xb0]
+004C89C0 movzx    edx, bl
+004C89C3 mov      eax, esi
+004C89C5 sub      eax, edx
+004C89C7 push     edi
+004C89C8 mov      edi, eax
+004C89CA je       0x4c8a80
+004C89D0 sub      edx, esi
+004C89D2 test     edi, edi
+004C89D4 jns      0x4c89dc
+004C89D6 lea      edi, [eax + 0x100]
+004C89DC test     edx, edx
+004C89DE jns      0x4c89e6
+004C89E0 add      edx, 0x100
+004C89E6 cmp      edi, edx
+004C89E8 cdq      
+004C89E9 jle      0x4c8a0c
+004C89EB xor      eax, edx
+004C89ED sub      eax, edx
+004C89EF mov      dword ptr [ecx + 0x3ac], 0xffffffff
+004C89F9 cmp      eax, 0x10
+004C89FC jle      0x4c8a03
+004C89FE mov      eax, 0x10
+004C8A03 cdq      
+004C8A04 xor      eax, edx
+004C8A06 sub      eax, edx
+004C8A08 neg      eax
+004C8A0A jmp      0x4c8a47
+004C8A0C jge      0x4c8a2d
+004C8A0E xor      eax, edx
+004C8A10 sub      eax, edx
+004C8A12 mov      dword ptr [ecx + 0x3ac], 1
+004C8A1C cmp      eax, 0x10
+004C8A1F jle      0x4c8a26
+004C8A21 mov      eax, 0x10
+004C8A26 cdq      
+004C8A27 xor      eax, edx
+004C8A29 sub      eax, edx
+004C8A2B jmp      0x4c8a47
+004C8A2D xor      eax, edx
+004C8A2F sub      eax, edx
+004C8A31 cmp      eax, 0x30
+004C8A34 jle      0x4c8a3b
+004C8A36 mov      eax, 0x30
+004C8A3B cdq      
+004C8A3C xor      eax, edx
+004C8A3E sub      eax, edx
+004C8A40 imul     eax, dword ptr [ecx + 0x3ac]
+004C8A47 add      al, bl
+004C8A49 cmp      dword ptr [ecx + 0x370], 0
+004C8A50 mov      byte ptr [ebp - 4], al
+004C8A53 mov      byte ptr [ecx + 0x3a4], al
+004C8A59 je       0x4c8a80
+004C8A5B mov      ecx, dword ptr [ecx + 0x15c]
+004C8A61 test     ecx, ecx
+004C8A63 je       0x4c8a80
+004C8A65 mov      eax, dword ptr [ebp - 4]
+004C8A68 mov      esi, dword ptr [ecx + 4]
+004C8A6B lea      edi, [ecx + 4]
+004C8A6E push     eax
+004C8A6F call     0x444a90
+004C8A74 mov      edx, dword ptr [esi + 0xc]
+004C8A77 mov      ecx, edi
+004C8A79 movss    dword ptr [esp], xmm0
+004C8A7E call     edx
+004C8A80 pop      edi
+004C8A81 pop      esi
+004C8A82 pop      ebx
+004C8A83 mov      esp, ebp
+004C8A85 pop      ebp
+004C8A86 ret      

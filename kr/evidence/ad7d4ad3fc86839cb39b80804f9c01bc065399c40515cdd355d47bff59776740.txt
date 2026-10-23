@@ -1,0 +1,45 @@
+"""Freeze verified bounded stage, including correction precedence and native closure."""
+import datetime,hashlib,json,sqlite3,subprocess,sys
+from pathlib import Path
+HERE=Path(__file__).resolve().parent;ROOT=HERE.parents[1]
+SHA='9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91'
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+assert sha(ROOT/'Tartaros.bin')==SHA
+for file in ['binding-validation.json','effect-validation.json']:
+    assert json.loads((HERE/file).read_text(encoding='utf-8'))['checks']=='passed'
+queries=[]
+for args,key,count in [(['--method','0x5521d0'],'semantics',1),(['--method','0x7abcd0'],'semantics',1),
+                       (['--method','0x4b0640'],'routes',8),(['--callsite','0x4b18d4'],'routes',4),(['--corrections'],'corrections',1)]:
+    result=json.loads(subprocess.check_output([sys.executable,str(HERE/'query_binding.py'),*args],encoding='utf-8'))
+    assert len(result[key])==count;assert result['source']['source_sha256']==SHA
+    queries.append({'arguments':args,'key':key,'rows':count})
+for r in json.loads((HERE/'input-provenance.json').read_text(encoding='utf-8')):
+    assert sha(HERE/r['snapshot'])==r['sha256']
+# The superseded phase stays immutable; this stage is an overlay, not a rewrite.
+upstream=HERE.parent/'kr-persistence-20261023'
+manifest=json.loads((upstream/'artifact-manifest.json').read_text(encoding='utf-8'))
+for row in manifest['files']:
+    assert sha(upstream/row['path'])==row['sha256'],row['path']
+response=json.loads((HERE/'mcp-evidence/08-close.json').read_text(encoding='utf-8'))
+assert not response.get('isError');closed=response['structuredContent']['result'];snapshot=Path(closed['path'])
+assert snapshot.resolve().is_relative_to(HERE.resolve()) and snapshot.stat().st_size==closed['bytes']
+session=json.loads((HERE/'mcp-evidence/01-session-start.json').read_text(encoding='utf-8'))['structuredContent']['result']
+now=datetime.datetime.now(datetime.timezone.utc);start=datetime.datetime(2026,10,23,9,6,34,tzinfo=datetime.timezone.utc)
+assert (now-start).total_seconds()<90*60,'Stage exceeded stated 90-minute bound; record explicitly instead of claiming timely completion.'
+output={'source_sha256':SHA,'started_utc':start.isoformat(),'closed_utc':now.isoformat(),
+        'elapsed_minutes':(now-start).total_seconds()/60,'within_90_minute_stage_limit':True,
+        'native_exec_handle':93915,'native_exec_terminal_exit_code':0,
+        'native_close_response':'mcp-evidence/08-close.json','native_snapshot_sha256':sha(snapshot),
+        'server_identity':session['server_identity'],'native_profile_digest':'965552102e88fd60a1ccde827b92cc552a22c4f08ddda16a7fc2bea3c04307c0',
+        'progress':json.loads((HERE/'progress.json').read_text(encoding='utf-8')),
+        'queries_verified':queries,'upstream_phase_files_unchanged':len(manifest['files']),
+        'goal_status':'active','full_program_complete':False,
+        'remaining':'See unknowns.json and HANDOFF.md; original full-program scope retained.'}
+(HERE/'closeout.json').write_text(json.dumps(output,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+files=[]
+for p in sorted(HERE.rglob('*')):
+    if p.is_file() and p.name!='artifact-manifest.json' and '__pycache__' not in p.parts:
+        files.append({'path':p.relative_to(HERE).as_posix(),'bytes':p.stat().st_size,'sha256':sha(p)})
+(HERE/'artifact-manifest.json').write_text(json.dumps({'source_sha256':SHA,'created_utc':now.isoformat(),'files':files},indent=2)+'\n',encoding='utf-8')
+for r in files:assert sha(HERE/r['path'])==r['sha256']
+print(json.dumps({'stage_delivery':'closed','elapsed_minutes':output['elapsed_minutes'],'manifest_files':len(files),'upstream_unchanged':len(manifest['files']),'full_program_complete':False}))

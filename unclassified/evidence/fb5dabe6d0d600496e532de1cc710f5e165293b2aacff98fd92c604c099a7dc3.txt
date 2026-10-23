@@ -1,0 +1,100 @@
+"""Offline comparison of shipped normal encounters and tutorial monsters.
+
+Reads original archives; never attaches to a process or sends packets.
+Cluster counts are per invocation, not a claim about total map populations.
+"""
+import hashlib
+import json
+from collections import Counter
+from pathlib import Path
+import xml.etree.ElementTree as ET
+
+from stp_resources import Archive
+
+ROOT = Path(__file__).resolve().parent.parent
+SELECTED = (1001, 1002, 1004, 1005, 1036)
+
+
+def xml(raw):
+    try:
+        return ET.fromstring(raw)
+    except ValueError:
+        # ElementTree does not directly support the shipped multi-byte KR label.
+        return ET.fromstring(raw.decode('euc-kr'))
+
+
+def audit():
+    table_path = ROOT / 'anal/backups/Table.original-kr.stp'
+    table = Archive(table_path)
+    field = Archive(ROOT / 'Field.stp')
+    base = Archive(ROOT / 'Character/Mon/Base.stp')
+    actor_tree = xml(table.read('Table/_ActorList.xml'))
+    matrix_tree = xml(table.read('Table/Skill/Matrix/MonsterMatrices.xml'))
+    ai_tree = xml(table.read('Table/AI/AI_List.xml'))
+    active_tree = xml(table.read('Table/SkillActiveTable.xml'))
+    encounters = []
+    errors = []
+    cluster_paths = [p for p in field.files
+                     if p.lower().startswith('field/cluster/')
+                     and p.lower().endswith('.xml')]
+    for path in cluster_paths:
+        try:
+            tree = xml(field.read(path))
+            for group in tree.findall('CLUSTERSET'):
+                for cluster in group.findall('CLUSTER'):
+                    for obj in cluster.findall('OBJECT'):
+                        encounters.append(dict(path=path, set=group.attrib,
+                                               cluster=cluster.attrib,
+                                               object=obj.attrib))
+        except (ET.ParseError, ValueError, UnicodeError) as exc:
+            errors.append(dict(path=path, error=str(exc)))
+    models = []
+    for model in SELECTED:
+        actors = [e.attrib for e in actor_tree.iter('ACTOR')
+                  if e.get('ID') == str(model)]
+        primary = next(e for e in actors if e['PRE'] == '1')
+        abf_path = 'Mon/' + primary['FILE'] + '.abf'
+        abf = xml(base.read(abf_path))
+        matrix = matrix_tree.find("SkillMatrix[@CharID='%s']" % model)
+        tiers = [dict(matrix=m.attrib, tier=t.attrib,
+                      keys=[k.attrib for k in t.findall('Key')])
+                 for m in matrix.findall('Matrix') for t in m.findall('Tier')]
+        skill_ids = sorted({k['skill'] for t in tiers for k in t['keys']}, key=int)
+        models.append(dict(
+            model=model, actors=actors, matrix=tiers, abfPath=abf_path,
+            abfTags=dict(Counter(e.tag for e in abf.iter())),
+            animations=[e.attrib for e in abf.iter('Animation')],
+            encounterReferences=[e for e in encounters
+                                 if e['object'].get('ID') == str(model)],
+            activeTableMatches=[e.attrib for e in active_tree.iter('SKILL')
+                                if e.get('no') in skill_ids]))
+    return dict(
+        originalTableSHA256=hashlib.sha256(table_path.read_bytes()).hexdigest(),
+        selectedModels=list(SELECTED), clusterFiles=len(cluster_paths),
+        parsedClusterFiles=len(cluster_paths)-len(errors), errors=errors,
+        objectRecords=len(encounters),
+        uniqueClusterModels=len({e['object'].get('ID') for e in encounters}),
+        aiListLinkedCharacters=sorted({int(e.get('char'))
+                                      for e in ai_tree.iter('AI')}),
+        matrixCharacterCount=len(matrix_tree.findall('SkillMatrix')),
+        models=models,
+        limits=[
+            'Cluster COUNT is per invocation; coordinates and total waves are not inferred.',
+            'Animation metadata and skill matrices do not identify a decision-making AI.',
+            'No active-table match is limited to SkillActiveTable.xml, not all skill sources.',
+            'No runtime change or native AI activation is performed.'])
+
+
+if __name__ == '__main__':
+    result = audit()
+    target = ROOT / 'anal/native-index/general-monster-comparison.json'
+    target.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding='utf-8')
+    print(json.dumps({k: result[k] for k in (
+        'clusterFiles', 'parsedClusterFiles', 'objectRecords', 'uniqueClusterModels',
+        'matrixCharacterCount', 'aiListLinkedCharacters', 'errors')}, ensure_ascii=True))
+    for model in result['models']:
+        paths = {e['path'] for e in model['encounterReferences']}
+        move = [e['File'] for e in model['animations'] if e['ID'] == '4']
+        print(model['model'], 'clusterFiles=', len(paths), 'move=', move,
+              'activeMatches=', len(model['activeTableMatches']))
+    print(target)

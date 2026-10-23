@@ -1,0 +1,33 @@
+# 登入傳輸格式與測試回應
+
+## 遊戲實測結果
+
+2026-10-01 23:30:45（Asia/Taipei）：服務收到 118 bytes，解碼命令 232（0xe8）、112-byte payload，checksum 正確；傳送命令 19（0x13）、status=1 的 154-byte wire 回應，客戶端隨後關閉連線。使用者截圖顯示「로그인 실패 / 잘못된 ID입니다.」（登入失敗／錯誤的 ID）。因此已實測確認客戶端接受此傳輸封裝及登入結果命令，status=1 在此版 UI 對應錯誤 ID。服務未檢查帳密，該訊息源自刻意回傳的狀態碼，不能據此判定輸入的帳號是否存在。成功分支、伺服器清單及角色流程仍未完成。
+
+2026-10-01。已實際解碼首次 118-byte 擷取：一個 112-byte payload，命令 0x00e8，checksum 正確，沒有剩餘 bytes。重新編碼後與原始擷取逐 byte 完全一致。
+
+## 0x0bbb 封裝
+
+前 6 bytes 為三個 little-endian uint16：payload 長度、magic 0x0bbb、所有解碼 payload bytes 的總和 mod 65536。
+
+編碼第一個 byte = payload[0] XOR 0xb6；之後 encoded[i] = payload[i] XOR payload[i-1]。解碼第一個 byte XOR 0xb6；之後 decoded[i] = encoded[i] XOR decoded[i-1]。
+
+證據：0x807830 傳送封裝（長度 +6、magic 0x0bbb、XOR 與 checksum）；0x807bfc 識別接收 magic；0x807d33 起解碼並在 0x807d66 比較 checksum。另有 4-byte 與 8-byte 標頭模式，codec 目前只支援已擷取的 0x0bbb 模式。
+
+login_protocol.py 已通過實際擷取重新編碼、跨 recv 分段、同一次 recv 合併兩包，以及錯誤 checksum 拒絕測試。
+
+## 登入結果命令 0x0013
+
+0x4c3220 初始化登入模組的處理表，其基底為物件 +0x5eac；+0x5f44 保存 0x4c37a0。0x4c4670 使用命令 *8 作索引，故 (0x5f44-0x5eac)/8 = 19 = 0x13。
+
+0x4c37a0 在 payload+0x16 讀取狀態 byte：5 為特殊非成功分支；0 才考慮成功，但還要求 payload+2 的 UTF-16 字串非空，並讀取多個後續欄位；其他值走 login failed 訊息與斷線清理。狀態值 1 的具體人類可讀意義尚未確認。
+
+## 實驗回覆
+
+login_test_server.py 新增 --reply login-reject：收到 checksum 正確的命令 0xe8 後，回傳命令 0x13、status=1、其餘為零的 0x94-byte payload，以同一已確認封裝編碼。這是非成功診斷回覆，不是帳號驗證或可玩服務端。0x94 長度是保守測試緩衝長度，並非已證實的正式回應 struct 大小。
+
+已在獨立 18415 port 用合成 0xe8 請求驗證服務可回傳 checksum 正確的 0x13/status=1。尚待遊戲實測 UI 與回應處理。服務已於 127.0.0.1:8415 以此模式重新啟動，紀錄目錄 login-captures/20261001-232910-791324。
+
+服務仍不打印帳密內容；解碼檔可能含帳密，請使用虛構測試帳密並保留本機。
+
+更正 08 文件的傳送虛擬表位置：+0x10 對應 0x8069a0，而非 0x806850；0x8069a0 依 connection ID 找物件後呼叫 0x8060d0 送入佇列。

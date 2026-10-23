@@ -1,0 +1,40 @@
+# 場景初始化與控制器選擇
+
+## 本輪結果
+
+從韓版原始 Tartaros.bin 的 RTTI 場景 vtable+10 入口完整反組譯，確認以下對應。
+這是靜態場景初始化流程，不是本輪擷取的遊戲狀態。
+
+| 場景類別 | 初始化入口／結束 | 控制器 | FBA7AC 值 |
+| --- | --- | --- | --- |
+| CMissionField | 4BC750／4BC925 | CSingleController | 2 |
+| CMissionRoom | 4BCBA0／4BCEAE | CMissionRoomController | 1 |
+| CScenarioField | 4C4750／4C488C | CFormationController | 3 |
+| CTutorial | 4C4B10／4C4D58 | CTutorialController | 4 |
+
+FBA7AC 在這些路徑是**控制器種類判別值**。不能把 1／2／3／4 解讀為房主、玩家編號或 P2P 身分。
+同種類已有控制器時，場景呼叫 544F50 重設；種類不同時，先呼叫舊控制器 virtual+28／解構，再建立新控制器並呼叫 virtual+24。
+
+CMissionField 的 4BC865 呼叫 548540，建構函式於 5485D6 寫入種類2。
+CMissionRoom 沒有單獨的完整衍生建構呼叫：4BCE1B 呼叫基底544C40，4BCE20直接寫入 C0FA6C vtable，4BCE26 寫入種類1。
+CScenarioField 4C47FF 呼叫547390；5473CD写入 C0FA14，54741B写入種類3，並在5473E6初始化既有CAIControl單例。
+CTutorial 4C4CF2呼叫548B90，使用C0FB1C。
+
+## 對怪物與教學的影響
+
+四個控制器 virtual+44 都指向已驗證的546EF0額外實體跟隨流程。
+virtual+48 分別為548A20、546100、5480A0、548D10；先前分析已確認這些主要輸入／轉接路徑的英雄模型限制。
+因此換用一般任務場景，或僅將怪物加進額外控制清單，仍不足以證明原版怪物AI已啟動。
+
+「新手教學」是遊玩流程名稱，不能據此斷言整段都使用CTutorial：劇情戰鬥可走CScenarioField，這與先前戰鬥快照中的Formation控制器相容。
+本輪沒有新的快照，沒有假定目前玩家正在上述哪個場景，也沒有修改任何場景或分配封包。
+
+## 可重現證據與後續
+
+執行 `C:\Programs\Python\Python310\python.exe anal\audit_scene_controllers.py`：
+核對原檔SHA、四個場景RTTI入口、控制器RTTI、內部分支落點、完整函式邊界與共用跟隨函式。
+完整反組譯及JSON結果位於 `anal/native-index/scene-controller-*`。
+`battle-init-candidate-*` 與 `battle-init-window-*` 僅為搜尋視窗，不得將其中相鄰函式當成同一入口的行為。
+
+下一步追查一般任務的戰鬥建立／技能命令來源及控制權資料，與目前已定位的英雄／跟隨控制器分開核對。
+原版怪物決策入口及P2P戰鬥權限仍未確認。v41自製AI仍在部署，本輪沒有啟用原版AI或改動客戶端、服務、帳號與存檔。

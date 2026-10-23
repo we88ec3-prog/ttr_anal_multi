@@ -1,0 +1,80 @@
+# 本機主線／教學流程與封包對照
+
+核對日期：2026-10-04。依目前程式整理，涵蓋新冒險團 → 教學第一戰 → 蘋果家 → 廣場任務15。這不是完整官方主線協定，也不代表後續任務已實作。本文不修改服務、存檔或客戶端。
+
+## 架構與維護狀況
+
+目前流程由客戶端 Event 劇情／教學脚本與伺服器特例共同推進。客戶端播放對話、等待角色解鎖與場景結束；伺服器接收特定請求，回覆解鎖、地圖、戰鬥或完成標記。
+
+| 程式 | 負責內容 | 維護入口 |
+|---|---|---|
+| login_test_server.py | 8416連線、封包分流、場景完成事件、B0載入階段、延遲回廣場、存檔回呼 | 約105–190、307–377、422–465、623–645行 |
+| new_expedition.py | 命名、初始角色1/3、角色4/2解鎖、第一戰隊伍與進出戰鬥、教學完成stage | NewExpedition各方法 |
+| tutorial_battle.py | 一隻教學怪物、暫定命中判斷、扣血、清怪與戰鬥完成計時 | spawn/cast/update/take_completion |
+| tutorial_monster_config.py | 從Field資源讀第一個怪物群組，model1036/PRE1/COUNT1 | first_cluster |
+| tutorial_skill_cast.py | 技能施放、冷卻、按住Z續段、動作完成與輸入恢復 | SkillCast |
+| plaza_npcs.py | Town5 NPC、互動區、任務15接受／完成、完成位元圖 | PlazaNPCs.request/enter |
+| account_store.py | SQLite帳號與各帳號存檔區段讀寫 | load/save；不判斷任務達成 |
+| login_protocol.py | 通訊編解碼、通用初始化封包 | encode/decode；不決定任務流程 |
+
+人類可以閱讀程式與日誌，但目前不適合直接由企劃維護任務。ID、條件與回覆分散在Python分支；stage只有粗略進度，中間尚有連線記憶體旗標；没有獨立任務編輯器或統一的任務狀態表。
+
+## 閱讀封包的方式
+
+- C→S：客戶端送給目前本機TCP伺服器。S→C：本機伺服器回覆。以下全部是解碼後payload。
+- 整數小端序；H=uint16、I=uint32、B=uint8、b=int8、h=int16、f=float32。指令占最前面的H。
+- 傳輸外框為 `H payload長度 + H 0x0BBB + H checksum + 編碼payload`，外框6 bytes。checksum是payload逐byte總和取低16位。編碼第一byte XOR B6，後續byte XOR前一個原始byte。
+- 同一指令數字可能在不同方向／模組有不同意義，例如 C→S40是選教學關卡，S→C40是廣場接受任務回覆。
+- 本表記錄目前本機行為；尚未證實哪些官方戰鬥同步應由P2P提供。
+
+## 主線觸發與反饋表
+
+| 節點 | C→S觸發／欄位 | 條件與伺服器處理 | S→C反饋 | 保存／缺口 |
+|---|---|---|---|---|
+| 新帳號初始化 | A0，2 bytes | 已通過帳密／通道驗證；送角色與冒險團資料 | 通用初始化；有名稱且未完成教學時6E/b1；已完成則38廣場上下文 | 從SQLite expedition讀名稱、角色、stage |
+| 命名冒險團 | 3E，48 bytes；+6起21個UTF-16單元、必須NUL結尾 | 名稱最多20 UTF-16單元；禁止空白名稱／控制字元；已有另一名稱拒絕 | 4A/h1成功或h-1失敗；成功另送6E/b1進教學 | name；stage=named-awaiting-tutorial |
+| 教學地圖載入 | B0，2 bytes | 首次初始化角色控制；須依pending狀態分流 | 12/I188＋角色重建、技能126/127/12C、裝備70/F9/FA、移動初始化 | 玩家位置275,144；東向64。中間旗標僅在連線記憶體 |
+| 開場對話結束 | 3F/H1000/H1/H1，8 bytes | 首次符合後恢復地圖／控制；重複忽略 | 12/I188、16/H256/f275/f144、0B朝東、控制／速度資料 | tutorial_scene_complete記憶體旗標；水下問題尚未根治 |
+| 教學中切角色 | 0C/I角色ID，6 bytes | 必須已擁有；保存當前估計位置，重建角色 | character_switch回覆組＋技能／裝備／移動初始化 | 此處是C→S0C，與S→C0C動作狀態不同 |
+| 戰鬥選角前解鎖伊希莉亞 | 40/H14，4 bytes | 解鎖角色4，等級2；組成限定第一戰隊伍 | 2B新角色＋5C能力資料；50/H13/H0/B1/H4；4E/H14 | stage=isilia-unlocked；characters=[1,3,4] |
+| 確認第一戰隊伍 | 28/H14＋9 bytes隊伍資料，共13 bytes；+4角色4；+5..11與+12全0 | 只接受角色4作單人隊長；先保存進戰鬥前位置 | 5F/B2，38/B2/H190/H0/H14 | battle_pending與return position僅連線記憶體 |
+| 戰鬥載入就緒 | B0，2 bytes；battle_pending=true | 切到map190、初始化角色4，生成第一個群組 | 12/I190＋角色初始化＋14＋07怪物＋00 HP% | 暫定出生368,272；怪376,272；不是完整官方配置 |
+| 玩家施放技能／命中 | 0A：H指令/I tick，接每筆5 bytes entityH/flagsH/directionB | SkillCast解析輸入；接受施放後依玩家估計位置／方向／半徑計算命中，延遲0.2秒傷害 | 0D技能動作；命中0F，00更新怪物HP% | 傷害Z20、X35、其他60為測試值；無怪物AI／正式P2P判定 |
+| 教學戰鬥目標完成 | 非獨立C→S完成請求；怪物hp降至0 | server TutorialBattle判斷死亡，清空pending傷害 | 0F、00 HP0、11清怪 | completed記憶體旗標；不是通用任務獎勵結算 |
+| 第一戰結束回教學 | 死亡後0.75秒server計時 | 還原進戰鬥前地圖與位置；通知scenario14結束 | 5F/B6、12/I188、角色4重建、14、4C/H14（4 bytes） | 客戶端IsScenarioEnded等待由此解除；與廣場4C長度不同 |
+| 蘋果家劇情／角色取得 | 3F/H1000/H13/H1，8 bytes | 必須已擁有4且未擁有2；加入蘋果 | 2B新角色＋5C能力資料 | stage=pinko-unlocked；characters=[1,3,4,2]；家前互動主要是客戶端教學脚本 |
+| 最終教學劇情完成 | 3F/H1000/H14/H1，8 bytes | 尚未開始回廣場時安排0.5秒延遲 | 38/B0/H5/H0/H0＋廣場進入回覆組 | 延遲/pending旗標記憶體 |
+| 廣場載入完成 | B0，2 bytes；plaza_pending=true | map511、玩家控制、NPC及互動區初始化；標記教學完成 | 12/I511＋角色／14＋6F完成圖＋07 NPC＋27互動區 | stage=plaza保存；之後登入從廣場；位置／角色另存position |
+| 廣場任務15接受 | 3C/H15/I choice，8 bytes；choice=0或FFFFFFFF | NPC ready，未接受／未完成 | 40/H15/I0；45/H15/H1 | quests.accepted=true；播放Square_Tutorial01 |
+| 廣場任務15對話完成 | 3F/H15/H1/H1，8 bytes | NPC ready且未完成。也接受客戶端跳過3C直接送3F的情況 | 4C/H15/I0（8 bytes）；6F完成位元圖 | quests.accepted/completed=true；下一段教學說明仍未實作／確認觸發 |
+
+### 核對用payload範例
+
+```text
+40 00 0E 00                         C→S 選scenario14
+50 00 0D 00 00 00 01 04 00         S→C 強制單人隊長角色4
+28 00 0E 00 04 00 00 00 00 00 00 00 00  C→S 確認隊伍
+3F 00 E8 03 0D 00 01 00            C→S scene1000/13結束
+3F 00 E8 03 0E 00 01 00            C→S scene1000/14結束
+4C 00 0E 00                         S→C 教學scenario14完成
+3C 00 0F 00 00 00 00 00            C→S 接受廣場任務15
+3F 00 0F 00 01 00 01 00            C→S 廣場任務15 scene1完成
+4C 00 0F 00 00 00 00 00            S→C 廣場任務15完成
+6F 00 00 C0 01 00                  S→C 完成14/15/16位元图
+```
+
+6F是32-bit位元圖陣列，並非任務ID清單。未完成15時目前預先標記14/16，完成15後再加入15；這是本機測試初始化策略，不能當作三個完整任務皆經官方流程達成。
+
+## 存檔與目前限制
+
+SQLite `accounts.sqlite3` 的saves表以account_id＋section區分：expedition（名稱、角色、粗略stage）、quests（目前只有15的accepted/completed）、inventory（背包／裝備）、position（廣場位置／目前角色）。account_store只提供持久保存，不自行判定條件。
+
+目前沒有通用的任務接取／目標計數／獎勵／交付／下一任務系統。教學清怪與整段關卡結束是兩個事件，但不是一般化的「小任務／通關」引擎。流程未保存每一段對話或戰鬥中間快照，因此不能保證任意位置斷線後精確續接。NPC位置與教學怪物位置仍是測試配置；P2P/怪物AI與連段節奏尚待解析。
+
+## 資源與下一步維護方式
+
+Table中的QuestInfo.xml、ScenarioTalkTable.xml、QuestTalk.xml、SceneList.xml、_TownList.xml、npctable.xml、_ActorList.xml，以及Event裡的教學／場景腳本共同提供任務與劇情資料。存在資料不代表目前伺服器已實作該任務。`mainline-resource-index.json`列出原始任務／場景資料，僅作查詢，尚不驅動server。
+
+建議以一個明確的流程表管理step ID、前置step、觸發方向／指令／欄位、條件、回覆、存檔變更、next step及測試案例；Python只保留封包codec、通用執行器和少數特殊動作。先讓現有流程使用這張表，再逐段補完任務；不要直接把所有未知QuestInfo條目自動開放。
+
+驗證應一次跑整條路徑，覆蓋重複通知、順序錯誤、重登續接、角色切換、目標完成與通關分離。每個未知節點明確記錄缺少的是client本地觸發、C→S請求、S→C回覆，或持久狀態，避免只看到畫面卡住後猜一個封包。

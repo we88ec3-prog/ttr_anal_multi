@@ -1,0 +1,79 @@
+# Skill matrix consumers and the monster decision boundary
+
+Offline original KR `Tartaros.bin` inspection, 2026-10-04. Reproduce with
+`C:\Programs\Python\Python310\python.exe anal/audit_skill_matrix_consumers.py`.
+Eight complete bounded functions, internal branch destinations, indexed RTTI
+identities and original EXE SHA are checked. No game process, services, packets,
+resources or account saves were changed. Deployed v41 remains custom AI.
+
+## Shared data does not establish a monster brain
+
+The existing loader includes both CharacterMatrices and MonsterMatrices; monster
+1036 has tier-0 keys 1/2/3 mapped to skills 288/289/290. Shared lookup 819220
+and key accessor 81A8E0 do not themselves restrict IDs to heroes. The latter
+requires tier < 4, key < 11 and returns the WORD at matrix +4 +2*(tier*11+key).
+
+There are six raw indexed direct-call candidates to 819220. Their relevant paths:
+
+| Call site | Consumer | Evidence / scope |
+|---|---|---|
+| 470715 | 4704C0, practice/talent list population | Complete list helper through 470A36 was inspected in a candidate window; indexed caller 410250 is `CBuyPracticeTalentWnd` virtual D0. Other callers / full caller graph not audited. |
+| 549A7F | 549980, SubAI skill condition | Complete function; actor at input +50, model WORD +88 must be <=9, then hero record stride 210. |
+| 54F2E0 | 54F270, skill-flag availability | Complete generic function; reads model WORD from its own input object +2. No <=9 gate inside this function. |
+| 5CD806 | 5CD520, bottom menu refresh | Caller 5CEAB0 is indexed `CBottomMenuFrame` virtual 198; input obtained from controller virtual 1C index 0. Large helper remains a candidate window. |
+| 60F330 | 60F120, tooltip population | Caller 60D820 is indexed `CSkillSlotToolTip` virtual 184. Inspected helper window includes model <10 / hero stride210 gating; complete helper not bounded. |
+| 61C898 | 61C7C0, skill-list population | Complete function rejects model >9 at 61C82C/82F. Caller 61C660 has incoming calls in `CBuyPracticeActiveWnd` indexed message method 61BFD0. Caller chain is window evidence. |
+
+This classifies these candidates; it is not proof that every runtime matrix
+consumer has been found. Calculated calls, inlining, aliases and external modules
+remain possible. RTTI naming is evidence for the indexed object identity, not a
+complete proof of every caller's purpose.
+
+## The checked SubAI condition is hero-only
+
+`CSkillCheckCondition@SubAI` virtual +4 is 54AE70. It forwards its stored
+tier/key/options and AI context to 549980, then normalizes the return to Boolean.
+549980 validates the hero record, matrix key, resource-related conditions and
+controller-associated cooldown availability via 54F270. It does not choose an
+enemy or emit a monster skill command. The model <=9 gate occurs before matrix
+lookup, so replacing its matrix row with monster 1036 cannot by itself activate
+monster AI.
+
+## Generic availability versus UI snapshot
+
+54F270 maps input flags to keys: 1/2/4 -> keys 1/2/3, combined flags 3/5/6 ->
+keys 4/5/6, bit0x08 -> key7, bit0x10 -> key10. Flags involving 0xC0 return available
+through a separate early branch; an unrecognized skill flag also takes that
+branch. It queries model WORD at object +2 and the passed matrix variant/tier,
+then finds the skill cooldown entry in object +4 and tests remaining DWORD +4
+against zero. This is a predicate, not target selection, action playback or a
+cooldown-start command.
+
+Its four indexed callers are 5462DD, 54827F, 549C0E and 549D54, within the
+previously investigated primary/formation hero-input and SubAI paths. This
+turn does not establish a monster instance of that cooldown object.
+
+54F330 is a separate complete snapshot function. It performs the matrix lookup
+inline using tree helpers 8195E0/8196D0 rather than calling 819220, validates
+tier/key, then copies four DWORDs (16 bytes) from the cooldown entry to the caller
+buffer. Its three indexed direct-call candidates 5CDD2F/5CDEB0/5CE0A7 are inside
+the bottom-menu helper 5CD520, consistent with UI consumption. It does not start
+cooldown or produce an attack.
+
+The same tree helper 8195E0 is also called at 52CCD1, but complete function
+52CCC0 passes `this +30`, not the skill-matrix singleton FAB27C, and follows a
+different secondary lookup 52D110. A shared STL tree helper reference alone must
+not be classified as a skill-matrix reference. Other inline singleton lookup
+candidates remain to be classified (41135A, 610AAC, 615D25, 617079, 617C60,
+61E51D).
+
+61C7C0 has a branch block at 61CAAC after its normal return 61CAA9. The bounded
+audit retains it through the final jump at 61CAB1; stopping at the first return
+would omit valid logic.
+
+## Next useful boundary
+
+Follow inline FAB27C consumers and the model-word/cooldown-object initialization
+and ownership, then compare command creation with the already known common
+movement/result receivers. Native monster decision generation and P2P authority
+remain unconfirmed; do not wire hero SubAI into monsters on the evidence above.

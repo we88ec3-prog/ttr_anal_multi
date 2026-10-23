@@ -1,0 +1,51 @@
+# 原版場景建立、地圖重置與控制器就緒
+
+本輪只讀取原版 `Tartaros.bin`；沒有啟動服務、遊戲或修改客戶端、封包、存檔及 v41 AI。`audit_scene_entry_lifecycle.py` 驗證 SHA、9 個完整函式／尾端轉跳、指令覆蓋、內部分支、兩張 switch table、封包註冊及 RTTI，結果全部通過。
+
+## 已確認的交接
+
+| 接收訊息 | 原版入口 | 實際作用 |
+|---|---|---|
+| S2C `005F` | `4B99C0..4B9B51` | 讀取 BYTE+2 選場景，建立後交給 `4B7D50` 安裝 |
+| S2C `0012` | `4B24F0..4B2565` | 清除 actor manager、重置目前控制器，再以 DWORD+2 呼叫地圖變更 |
+| S2C `0014` | `4C5930..4C5934` | 轉交目前場景 virtual+2C；Scenario 路徑最後寫目前控制器+4=1 |
+
+這是三種訊息各自的程式行為，並非已取得官方伺服器的完整發送順序。之前已確認 S2C `0007` 的 26-byte actor 描述可以建立 CMonster；本輪補上描述物件進場前後的生命週期。
+
+## 005F：場景選擇與安裝
+
+SceneManager 完整註冊函式 `4B7DC0..4B7EBF` 在 `4B7EAF` 寫入 `FD2FF4=4B99C0`。地址符合 `FD2CF8 + 0x5F*8 + 4`，因此這個入口不在先前的下游 main scene handler 清單內。
+
+`4B99C0` 使用 BYTE+2 減 2，先查 `4B9B74` 的 27-byte 壓縮表，再查 `4B9B54` 的 8 個 DWORD 分支。兩張表不當成函式指令反組譯，全部分支目標已驗證落在指令邊界。
+
+- type=2 → `4B9A55` → constructor `4C46F0` → RTTI `CScenarioField@Scene`。
+- type=6 → `4B9A95` → base constructor、vtable `C0710C` → RTTI `CDuelField@Scene`。
+- 其餘 type 的完整分支映射保存在 JSON；這輪沒有擴張其他 constructor 的語義。
+
+完整安裝函式 `4B7D50..4B7DBF` 先呼叫舊場景 virtual+14，再呼叫其 virtual+0（參數 1），清掉 manager+5EAC。它隨後把新場景寫入 manager+5EAC，呼叫新場景 virtual+10。
+
+重用既有 `audit_scene_controllers.py` 的證據：CScenarioField virtual+10=`4C4750`，建立 kind=3 的 CFormationController。場景已安裝與玩家控制器已建立，不等於怪物決策程式已啟用。
+
+### 原版與本地教學修補的差異
+
+`make_tutorial_transition_probe.py` 在 TUTO 條件下攔截 `4B99C0`：type=2 保留教學場景但呼叫 Scenario 初始化；type=6 恢復 Tutorial 控制器和操作旗標。這和原版 type=6 建立 CDuelField 不同。此處只檢查修補來源，沒有執行產生或套用修補。
+
+## 0012：進入地圖會清掉哪些內容
+
+`4B253A` 呼叫完整 `5449A0..5449FE`，遍歷 FB79F0 manager 的 +4/+8 指標陣列，對每筆呼叫 virtual+14 與 virtual+0（參數 1），最後把陣列 end 寫回 begin。這是刪除既有 managed actors 的路徑；各 actor 的間接生命週期函式還未逐一展開。
+
+`4B2545` 呼叫完整 `544F50..545039`，清掉目前控制器 +40/+44/+5C/+60，並對 3 個槽位呼叫 virtual+1C，處理資源引用，再把槽位兩個 DWORD 歸零、BYTE 旗標設為 1。這再次確認這段是三槽位控制器重置，沒有找到建立一般怪物 AI 槽的動作。
+
+最後才讀 packet DWORD+2 → `40F060` → 完整地圖變更 `4DF510`（已由先前 audit 驗證）。
+
+**可用的順序限制推論：** 如果先建立受該 manager 管理的怪物，再收到這條 0012，怪物會進入上述清理流程。生成器不能只確認 0007 描述成功，還要確認後面沒有場景／地圖重置。這是程式推論，目前沒有修改 fixture 排程，也沒有宣稱它就是怪物不動的原因。
+
+## 0014：就緒不是怪物 AI 開關
+
+完整 `4C5930..4C5934` 尾端轉跳 scene virtual+2C。CScenarioField 這個方法為 `4C4910..4C4918`，再尾端转交完整 `4B2570..4B2614`。`4B2593` 取得 FBA7A4 目前控制器，`4B259D` 寫其 +4=1；其餘分支初始化 UI 相關物件／旗標。
+
+9 個函式中没有直接呼叫 CMonster constructor `4D1710`、CAIControl `548FF0` 或先前兩個 B0 發送入口。這不排除未展開的 helper、間接 virtual call 或其他訊息來源。0014 本身不能當成原版怪物 AI 已開啟的證據。
+
+## 下一個追查邊界
+
+場景和資源載入流程已能與怪物描述建立分開。下一步應從 **CMonster 被 manager 註冊後的 update/virtual 路徑、owner 欄位與收到的動作訊息** 追到動作產生端，確認本地 tick 是否只播放接收結果，還是存在原生決策入口。官方地圖事件／波次排程、怪物 owner 指派來源、原生 AI 與 P2P 權責仍未證實。

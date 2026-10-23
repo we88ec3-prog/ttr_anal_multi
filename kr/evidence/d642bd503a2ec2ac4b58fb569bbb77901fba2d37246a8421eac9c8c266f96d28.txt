@@ -1,0 +1,79 @@
+"""Resource-backed tutorial monster cluster with provisional placement/combat.
+
+07 creates a native type-1 monster; 00 parameter 1 updates its HP percentage.
+0F supplies the native hit visual. 11 clears monsters after the final kill.
+The final kill completes the objective; a separate delayed completion returns
+the tutorial through its native scenario-ended notification.
+"""
+import math
+import struct
+import time
+from tutorial_monster_config import first_cluster
+
+
+class TutorialBattle:
+    def __init__(self):
+        self.active=False
+        self.completed=False
+        self.hp=60
+        self.monster=first_cluster()[0]
+        # Both spawn368/272 and this adjacent point were clear in map190's
+        # native collision snapshot. The previous368/252 was not checked.
+        self.target=(376.,272.)
+        self.entity=0x101
+        self.pending=[]
+        self.completion_at=None
+        self.returned=False
+        from tutorial_monster_ai import MonsterAI
+        self.ai=MonsterAI(self.entity,self.target)
+
+    def spawn(self):
+        if self.active or self.completed:return ()
+        self.active=True
+        # Field.stp tutorial cluster0/1 specifies1036/03_Assassin, PRE1,
+        # COUNT1. This is one cluster invocation, not inferred full wave count.
+        actor=struct.pack('<HBBHfffIBBBB',self.entity,1,0,self.monster['model'],
+                          *self.target,0.,0,128,0,0,self.monster['pre'])
+        return (struct.pack('<H',7)+actor,
+                struct.pack('<HHHh',0,self.entity,1,100))
+
+    def cast(self,packet,x,y,now=None):
+        if not self.active or self.completed:return
+        command,entity,direction,motion,speed=struct.unpack('<HHBHf',packet)
+        if command!=13 or entity!=256:return
+        dx,dy=self.target[0]-x,self.target[1]-y
+        radius=45 if motion<108 else 65
+        if math.hypot(dx,dy)>radius:return
+        angle=direction*math.tau/256
+        # A broad frontal cone; this fixture does not implement terrain LOS.
+        if dx*math.sin(angle)-dy*math.cos(angle)<0:return
+        damage=20 if 101<=motion<=107 else 35 if motion==108 else 60
+        self.pending.append(((time.monotonic() if now is None else now)+.2,damage))
+
+    def update(self,now=None,player=None):
+        now=time.monotonic() if now is None else now
+        packets=[]
+        due=[event for event in self.pending if event[0]<=now]
+        self.pending=[event for event in self.pending if event[0]>now]
+        for _,damage in due:
+            if self.completed:break
+            damage=min(self.hp,damage)
+            self.hp-=damage
+            packets.append(struct.pack('<HHHBBIHb',15,256,self.entity,0,0,damage,0,0))
+            packets.append(struct.pack('<HHHh',0,self.entity,1,round(self.hp*100/60)))
+            if self.hp==0:
+                self.completed=True
+                self.active=False
+                self.pending=[]
+                self.completion_at=now+.75
+                packets.append(struct.pack('<H',17))
+        if player is not None and self.active and not self.completed:
+            packets.extend(self.ai.update(now,player))
+            self.target=self.ai.position
+        return tuple(packets)
+
+    def take_completion(self,now=None):
+        now=time.monotonic() if now is None else now
+        if self.returned or self.completion_at is None or now<self.completion_at:return False
+        self.returned=True
+        return True

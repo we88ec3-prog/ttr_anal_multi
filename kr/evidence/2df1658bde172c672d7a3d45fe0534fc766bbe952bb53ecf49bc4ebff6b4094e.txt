@@ -1,0 +1,227 @@
+"""Confirmed 0x0bbb transport codec. Payload fields are not interpreted."""
+import argparse
+import json
+from pathlib import Path
+import struct
+
+MAGIC = 0x0BBB
+
+def login_response(success=False):
+    """Diagnostic fixture derived from client reads; no account validation."""
+    payload = bytearray(0x9F if success else 0x94)
+    struct.pack_into('<H', payload, 0, 0x13)
+    payload[0x16] = 0 if success else 1
+    if success:
+        # Name occupies 10 UTF-16 code units before the status byte.
+        name = 'LocalTest'.encode('utf-16le')
+        payload[2:2+len(name)] = name
+        struct.pack_into('<I', payload, 0x18, 1)  # synthetic account ID
+        struct.pack_into('<I', payload, 0x1C, 1)  # group count
+        # Empty optional UTF-16 notice at 0x20; remaining flags zero.
+        # Group: uint16 ID, uint8 channel count.
+        struct.pack_into('<HB', payload, 0x92, 1, 1)
+        # Channel: uint16 ID, 2 unknown bytes, IPv4 octets, enabled, load.
+        struct.pack_into('<H', payload, 0x95, 1)
+        payload[0x99:0x9D] = bytes([127, 0, 0, 1])
+        payload[0x9D] = 1
+    return bytes(payload)
+
+def channel_response(owned_character=False, all_characters=False, *, character_ids=None, expedition_name='LocalTest'):
+    """Experimental command 2 with no trailing character records."""
+    payload = bytearray(0x41)
+    struct.pack_into('<HI', payload, 0, 2, 1)
+    name = expedition_name.encode('utf-16le')
+    if len(name)>40 or '\0' in expedition_name:
+        raise ValueError('Expedition name must fit 20 UTF-16 code units')
+    payload[0x0C:0x0C+len(name)] = name
+    struct.pack_into('<HH', payload, 0x36, 1, 1)
+    if owned_character:
+        # 0x35-byte record parsed by 0x4d4150; 0x2e selects character.
+        for character_id in roster_ids(all_characters, character_ids):
+            record = bytearray(0x35)
+            name = ('LocalHero'+str(character_id)).encode('utf-16le')
+            record[:len(name)] = name
+            struct.pack_into('<I', record, 0x2A, 1)
+            record[0x2E] = character_id
+            payload.extend(record)
+    return bytes(payload)
+
+def roster_ids(all_characters=False, character_ids=None):
+    ids=tuple(character_ids) if character_ids is not None else tuple(range(1,10) if all_characters else (1,))
+    if not ids or len(set(ids))!=len(ids) or any(type(i)!=int or not 1<=i<=9 for i in ids):
+        raise ValueError('Character roster must contain unique IDs1..9')
+    return ids
+
+
+def character_scene_response(owned_character=False, appearance=False, all_characters=False, *, character_ids=None):
+    payload = bytearray(struct.pack('<H', 0x60))
+    if owned_character:
+        # Scene parser 0x4c22c0 consumes 27 bytes per character.
+        for character_id in roster_ids(all_characters, character_ids):
+            record = bytearray(27)
+            record[0] = character_id
+            if appearance and character_id==1:
+                # Soma appearance ID4; other characters need their own catalog.
+                struct.pack_into('<H', record, 8, 4)
+            payload.extend(record)
+    return bytes(payload)
+
+def plaza_appearance_response(combined=False, ids=None):
+    """Experimental FA appearance list, parsed by 496270 -> 6d6ff0.
+
+    Table +11A8, base208/stride10 => FA. Header UID1/character1,
+    reserved word0, one uint16 appearance ID4 and two zero variant bytes.
+    ID4/variant0/character1 exists in the live lookup catalog.
+    """
+    ids = ids if ids is not None else ((4, 5, 6) if combined else (4,))
+    return struct.pack('<HIHH', 0xFA, 1, 1, 0) + b''.join(struct.pack('<HBB', value, 0, 0) for value in ids)
+
+def combined_character_data_response():
+    """5C -> 4b3da0 -> 4d41a0, synthetic nonzero character data.
+
+    Basic callback offset2E4, base4/stride8 => 5C. Exact human labels
+    for all fields remain unverified; no skill/item list counts are changed.
+    """
+    payload=bytearray(35)
+    struct.pack_into('<HBBIII', payload, 0, 0x5C, 1, 5, 500, 100, 100)
+    struct.pack_into('<9H', payload, 16, 20, 20, 20, 20, 50, 50, 50, 300, 100)
+    return bytes(payload)
+
+def combined_entity_parameters_response():
+    """Command0 -> 4afaf0 -> entity virtual2C (4ce7f0).
+
+    One six-byte record: entity, parameter index1, signed value300.
+    Index1 writes +3B0, whose getter scales by .01; movement semantics
+    still require runtime validation. Uses existing packet handler.
+    """
+    return struct.pack('<HHHh', 0, 0x0100, 1, 300)
+
+def plaza_speed_response():
+    """4CAD40 displacement speed = entity+D0 *.01 * entity+CC.
+
+    Command0 parameter5 sets D0; parameter6 sets CC via4CE7F0.
+    Test values, not verified normal game balance or UI field mapping.
+    """
+    return struct.pack('<H', 0) + struct.pack('<HHh', 0x100, 5, 100) + struct.pack('<HHh', 0x100, 6, 50)
+
+def plaza_entry_responses():
+    """Experimental acknowledgement and square scene transition, not world initialization.
+
+    0x43 -> 4b1a90 removes type-6 pending objects. 0x69 -> 4b9090
+    reads a signed scene byte and two unsigned location bytes; scene 7
+    constructs the town module. The association with 0x42 is a test assumption.
+    """
+    return (struct.pack('<H', 0x43), struct.pack('<HBBB', 0x69, 7, 1, 1))
+
+def plaza_player_metadata_response():
+    """Synthetic account record for 4af530, sent before the associated entity.
+
+    Unknown fields remain zero; channel ID 1 matches the bootstrap. This is
+    a prerequisite experiment, not a complete player-control implementation.
+    """
+    record = bytearray(22)
+    struct.pack_into('<I', record, 0, 1)
+    struct.pack_into('<H', record, 14, 1)
+    struct.pack_into('<h', record, 20, -1)
+    return struct.pack('<HH', 8, 0) + record
+
+def plaza_map_response():
+    """Map table read from the client maps 511 to square001D.
+
+    The previous scene still had select18 loaded and no movement bounds.
+    Must precede entity creation/control binding because 4b24f0 resets control.
+    """
+    return struct.pack('<HI', 0x12, 511)
+
+def plaza_player_response():
+    """Experimental 26-byte entity-create record parsed by 4ae4d0.
+
+    Coordinates and flags are synthetic; this does not supply player statistics.
+    """
+    record = bytearray(26)
+    struct.pack_into('<H', record, 0, 0x0100)  # entity type 0, local index 1
+    record[2] = 1  # instance byte used in composite key
+    struct.pack_into('<H', record, 4, 1)  # Soma
+    # Nonzero synthetic planar position also forces 4cab80 to query terrain
+    # height; (0,0) equals constructor defaults and skips this update.
+    # User-selected initial spawn (900,900), retaining terrain-derived Z.
+    # Minimap visibility does not establish walkability or a valid spawn.
+    struct.pack_into('<fff', record, 6, 900.0, 900.0, 0.0)
+    struct.pack_into('<I', record, 18, 1)  # account ID, matches bootstrap
+    record[23] = 4  # parser's local-player registration branch
+    return struct.pack('<H', 7) + record
+
+def plaza_player_control_response():
+    """4af920 binds an account's entity list to the local controller.
+
+    Registration 4adda2 uses slot +54 => command 0A. Header contains
+    account ID and signed count, followed by source/target uint16 pairs.
+    Equal IDs follow the direct controller-add path (545040).
+    """
+    return struct.pack('<HIbHH', 0x0A, 1, 1, 0x0100, 0x0100)
+
+def plaza_movement_timing_responses():
+    """Diagnostic timing initialization through the existing 4959f0 callback.
+
+    Main callback slot FA8, base208/stride10 => DA. Each response adds 5
+    to fba7b0. Six restore the 30 used by normal 4b7f00 bootstrap.
+    Association with plaza-load is synthetic and requires runtime validation.
+    """
+    return (struct.pack('<H', 0xDA),) * 6
+
+def encode(payload):
+    if not 1 <= len(payload) <= 4090:
+        raise ValueError('Payload length outside observed transport bounds')
+    encoded = bytes([payload[0] ^ 0xB6]) + bytes(
+        payload[i] ^ payload[i-1] for i in range(1, len(payload)))
+    return struct.pack('<HHH', len(payload), MAGIC, sum(payload) & 0xFFFF) + encoded
+
+def decode(frame):
+    if len(frame) < 6:
+        raise ValueError('Incomplete header')
+    length, magic, checksum = struct.unpack_from('<HHH', frame)
+    if magic != MAGIC or not 1 <= length <= 4090:
+        raise ValueError('Unsupported transport header')
+    if len(frame) != length + 6:
+        raise ValueError('Incomplete frame or trailing bytes')
+    payload = bytearray([frame[6] ^ 0xB6])
+    for value in frame[7:]:
+        payload.append(value ^ payload[-1])
+    if sum(payload) & 0xFFFF != checksum:
+        raise ValueError('Checksum mismatch')
+    return bytes(payload)
+
+class StreamDecoder:
+    def __init__(self):
+        self.buffer = bytearray()
+    def feed(self, chunk):
+        self.buffer.extend(chunk)
+        frames = []
+        while len(self.buffer) >= 6:
+            length, magic = struct.unpack_from('<HH', self.buffer)
+            if magic != MAGIC or not 1 <= length <= 4090:
+                raise ValueError('Unsupported transport header')
+            size = length + 6
+            if len(self.buffer) < size:
+                break
+            frames.append(decode(bytes(self.buffer[:size])))
+            del self.buffer[:size]
+        return frames
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('capture', type=Path)
+    args = parser.parse_args()
+    raw = args.capture.read_bytes()
+    stream = StreamDecoder()
+    frames = stream.feed(raw)
+    summary = {'wire_bytes': len(raw), 'remaining_bytes':len(stream.buffer), 'frames':[]}
+    for index, payload in enumerate(frames, 1):
+        target = args.capture.with_name(args.capture.stem+f'.payload-{index:04d}.bin')
+        target.write_bytes(payload)
+        summary['frames'].append({'payload_bytes':len(payload),
+            'command':hex(struct.unpack_from('<H',payload)[0]) if len(payload)>=2 else None,
+            'checksum_valid':True, 'file':str(target)})
+    target = args.capture.with_suffix('.summary.json')
+    target.write_text(json.dumps(summary,indent=2),encoding='utf-8')
+    print(json.dumps(summary,indent=2))

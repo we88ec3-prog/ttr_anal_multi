@@ -1,0 +1,112 @@
+"""Analyst-authored bounded semantics, enriched with unmodified REA relationships."""
+import hashlib,json,sqlite3,struct,sys
+from pathlib import Path
+HERE=Path(__file__).resolve().parent;ROOT=HERE.parents[1]
+sys.path.insert(0,str(ROOT/'anal'));from build_native_index import PE
+SHA='9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91'
+pe=PE(ROOT/'Tartaros.bin');assert hashlib.sha256(pe.data).hexdigest()==SHA
+def param(storage,meaning,confidence='Listing-and-caller-confirmed'):return dict(storage=storage,meaning=meaning,confidence=confidence)
+notes=[
+ {'address':'0x7ac030','purpose':'以mode選擇資源字串與尺寸，建立CFieldPanel並加入視覺manager的panel list。',
+  'parameters':[param('EAX','mode；本輪000E caller傳0/1/2，其他caller未全部解析'),param('[EBP+8]','panel manager pointer'),param('[EBP+C/+10/+14]','三個座標float，寫panel+24/+28/+2C')],
+  'return_value':{'meaning':'RET10；原始正式回傳宣告未知，000E caller未消費業務回傳','confidence':'Listing-confirmed-unknown-declaration'},
+  'branches':['配置0x30-byte panel，首DWORD=C4FD0C（引擎RTTI識別IS3D::CFieldPanel），初始化+10=1及多個零欄位。',
+    '先以manager+CC+28*mode的small-string選擇inline/heap資源；mode>3在後續switch default返回，不能推定外部任意索引安全。',
+    'mode0/2使用20與10，mode1/3使用60與50；呼叫7BEDC0配置資源/幾何，7BEE40/7BE770更新panel設定。',
+    'manager+13C的float存panel+10，若panel+4介面非NULL，經77EF50傳三份相同float；再以74D700建立list node並更新manager+0/+4。'],
+  'fields':[{'owner':'manager','offsets':'+0/+4','access':'read/write','meaning':'list sentinel/count'},
+    {'owner':'manager','offsets':'+CC+28*mode / +E0+28*mode','access':'read','meaning':'資源small-string及capacity'},
+    {'owner':'manager','offsets':'+13C','access':'read float','meaning':'panel倍率'},
+    {'owner':'panel','offsets':'+0/+4/+10/+24/+28/+2C','access':'initialize/read/write','meaning':'vtable/下層介面/倍率/位置'}],
+  'side_effects':['配置視覺panel與list node，修改manager容器與下層圖形物件。'],
+  'unknowns':['未展開7BEDC0/7BEE40/7BE770全部資源與動畫行為；不能稱全部圖形API閉合。','mode官方enum、資源字串當前內容、配置失敗及mode越界的完整外部合約未知；native零配置分支後仍有解參照，不以偽碼假定安全。'],
+  'dataflow':[{'source':'000E case4/3的EAX mode與stack座標','destination':'CFieldPanel及manager list','meaning':'狀態圖形顯示，不是HP寫入方法'}]},
+ {'address':'0x7abcd0','purpose':'把有號輸入拆為十進位glyph，建立浮動數字CFieldPanel；style5加Critical.dds。',
+  'parameters':[param('ECX','有號整數顯示值；000E多個callsite來自row+6'),param('EDX','panel manager pointer'),param('[EBP+8]','style/index，呼叫者可傳0/1/5等'),param('[EBP+C/+10/+14]','三個float位置')],
+  'return_value':{'meaning':'正常RET10，無已確認業務回傳；caller未用EAX作數值裁決','confidence':'Listing-confirmed-unknown-declaration'},
+  'branches':['ECX<0時NEG並保存負號旗標；值0直接退出，不配置數字panel。極值INT_MIN的完整顯示結果未認證。',
+    '以10為基底取各位數，保存逆序digits；負號分支經manager+B4+4*style重映射style，使用manager+C+28*index的string。',
+    '配置0x30-byte CFieldPanel，將stack座標寫+24/+28/+2C；按digit index從manager+140的表取資源，逐字呼叫7BEDC0。',
+    'style==5額外使用Critical.dds；呼叫7BEE40/7BE770，套用manager+13C倍率，將panel加入manager+0/+4 list。'],
+  'fields':[{'owner':'manager','offsets':'+0/+4','access':'read/write','meaning':'panel list/count'},
+    {'owner':'manager','offsets':'+B4+4*style / +C+28*index / +13C / +140','access':'read','meaning':'負號style映射、字串、倍率、digit資源表'},
+    {'owner':'panel','offsets':'+0/+10/+24/+28/+2C','access':'write','meaning':'CFieldPanel identity/倍率/位置'}],
+  'side_effects':['配置panel與list node、資源引用／圖形helper呼叫；style5附加圖形。'],
+  'unknowns':['signed極值、資源表所有元素與style官方enum未恢復。','輸入可為傷害或恢復的顯示數值，但本方法沒有足以定義HP/傷害權威的actor資料流；不能把顯示值等同目前HP。','字型／幾何helper與全域FB79E8初始化下層未全閉合。'],
+  'dataflow':[{'source':'row+6 DWORD -> ECX','destination':'decimal digits -> CFieldPanel -> manager list','meaning':'結果數值的顯示消費端'}]},
+ {'address':'0x551f20','purpose':'依descriptor kind選取一般／自訂效果資源，再轉交551DD0建立附屬效果記錄。',
+  'parameters':[param('ECX','effect manager/context，保存於EDI'),param('EDX','descriptor：[kind,name-or-key,argA,argB,custom]'),param('[EBP+8]','關聯actor WORD/ID，實際stack DWORD傳入'),param('[EBP+C]','位置pointer'),param('[EBP+10/+14]','兩個float，000E block/critical呼叫為0/1')],
+  'return_value':{'meaning':'RET10；未明確覆蓋551DD0的EAX，但000E caller未用該返回作業務值','confidence':'Listing-bounded'},
+  'branches':['kind<0或不在0..3時資源保持0；kind0..2以descriptor+4/+8/+C轉交551B80。',
+    'kind3且descriptor+10非零時呼叫551CD0處理自訂資源。',
+    '不論資源是否0，都按已觀察ABI把manager、ID、位置、兩float與常數1轉交551DD0。'],
+  'fields':[{'owner':'descriptor','offsets':'+0/+4/+8/+C/+10','access':'read','meaning':'kind/name-or-key/indexA/indexB/custom resource pointer'}],
+  'side_effects':['呼叫資源查找與附屬效果建立helper；本body不直接修改actor HP或發封包。'],
+  'unknowns':['kind0..3正式enum與551B80完整查找來源未恢復。','551CD0/551DD0/550580下層沿既有actor附屬特效證據，不把舊結論當本輪新完成方法；本輪僅建立新的000E入口binding。'],
+  'dataflow':[{'source':'000E BLOCK/CRITICAL descriptor與targetID/位置','destination':'551B80或551CD0 -> 551DD0','meaning':'結果文字／效果資源分派'}]},
+ {'address':'0x5521d0','purpose':'依selector與row索引找STRUCK/MONSTER_STRUCK資源，建立0x7C-byte效果記錄並加入manager list。',
+  'parameters':[param('[EBP+8]','effect manager/context'),param('[EBP+C]','selector；000E case0/8由source actor WORD+4低byte==1產生'),param('[EBP+10]','位置pointer，移入EDI交550580'),param('[EBP+14]','target actor ID，移入ECX再作550580參數'),param('[EBP+18]','row+5 sign-extended byte：效果資源索引'),param('[EBP+1C] low byte','row+C sign-extended來源的低byte：交4F6F70；引擎預設signature漏列此第六stack參數')],
+  'return_value':{'storage':'EAX','meaning':'找不到資源返回0；成功正常返回新效果記錄pointer；RET18','confidence':'Listing-confirmed'},
+  'branches':['selector非零使用MONSTER_STRUCK與(0,index-1)，為零使用STRUCK與(index,-1)，呼叫551B80；資源NULL返回0。',
+    '配置0x7C，初始化+24/+28/+6C=0、+74=1、+78=30、+2C首byte=0。',
+    '以DL=第六stack參數低byte、ESI=FB7470呼叫4F6F70，回傳值交550580；該表與值意義未確認。',
+    '初始化必要singleton後，以資源名稱、4F6F70返回、targetID、0及FB90BC float等參數呼叫550580；位置pointer在EDI，ECX=1，EDX為新記錄。',
+    '以74D700建立node，更新manager+4 list sentinel及+8 count，正常EAX為新記錄。'],
+  'fields':[{'owner':'manager','offsets':'+4/+8','access':'read/write','meaning':'附屬效果list/count'},
+    {'owner':'effect record','offsets':'+24/+28/+2C/+6C/+74/+78','access':'initialize','meaning':'效果pointer/介面/name起點/未知控制欄位'},
+    {'owner':'globals','offsets':'FB7470 / FB90BC / FB75B0 / FB8828','access':'read/conditional singleton init','meaning':'查找table、傳入float與初始化guard'}],
+  'side_effects':['配置效果記錄與node、可能初始化資源/效果singleton、修改manager容器；下層資源取得依既有550580證據。'],
+  'unknowns':['row+5與row+C官方enum、4F6F70表欄位／回傳意義、FB90BC單位未知，不能猜作傷害倍率或MEF interpreter。','MONSTER_STRUCK字串不是一般怪物決策權限證據；selector在此caller的來源是確切byte比較。','配置失敗／throw路徑及所有helper副作用未全展開。'],
+  'dataflow':[{'source':'row+5,row+C,targetID,source ID low-byte比較與位置','destination':'STRUCK/MONSTER_STRUCK lookup -> 550580 -> manager effect list','meaning':'結果命中效果消費端，尚非完整MEF/傷害裁決'}]}
+]
+evidence={};locations={};records=[]
+for p in sorted((HERE/'mcp-evidence').glob('*-function-*.json')):
+    e=json.loads(p.read_text(encoding='utf-8'))['structuredContent'];assert e['subject']['digest']['sha256']==SHA
+    evidence[int(e['normalized_result']['procedure']['address'],16)]=e
+    locations[e['evidence_id']]={'path':p.relative_to(HERE).as_posix(),'sha256':hashlib.sha256(p.read_bytes()).hexdigest()}
+for note in notes:
+    a=int(note['address'],16);e=evidence[a];n=e['normalized_result'];r=dict(note)
+    ranges=[]
+    for b in n['procedure']['body']['ranges']:
+        start,end=int(b['start'],16),int(b['end'],16)+1
+        ranges.append(dict(start=start,end_exclusive=end,file_offset=pe.offset(start),sha256=hashlib.sha256(pe.read(start,end-start)).hexdigest()))
+    r.update(source_sha256=SHA,evidence_ids=[e['evidence_id']],profile_digest=e['analysis_profile']['digest'],
+             status='bounded-semantics-with-explicit-unknowns',ranges=ranges,
+             callers=n['callers'],callees=n['callees'],incoming_references=n['incoming_references'],
+             outgoing_references=n['outgoing_references'],unresolved_calls=n['unresolved_calls'],
+             pcode_truncated=n['native_value_flow']['truncated'],engine_limitations=n['limitations'])
+    records.append(r)
+(HERE/'effect-semantic-records.json').write_text(json.dumps(records,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+db=sqlite3.connect(HERE/'methods.sqlite')
+db.executescript('drop table if exists metadata;drop table if exists evidence;drop table if exists semantics;drop table if exists ranges;drop table if exists calls;drop table if exists pattern_identifications;create table metadata(key text primary key,value text);create table evidence(evidence_id text primary key,location text,record text);create table semantics(address integer primary key,purpose text,status text,record text);create table ranges(method integer,start integer,end_exclusive integer,file_offset integer,sha256 text);create table calls(method integer,site text,target text,status text,record text);create table pattern_identifications(name text primary key,record text);')
+db.executemany('insert into metadata values(?,?)',[('source_sha256',SHA),('scope','Four bounded effect/display callees; not full battle-result reconstruction')])
+for e in evidence.values():db.execute('insert into evidence values(?,?,?)',(e['evidence_id'],json.dumps(locations[e['evidence_id']]),json.dumps(e,ensure_ascii=False)))
+for r in records:
+    a=int(r['address'],16);db.execute('insert into semantics values(?,?,?,?)',(a,r['purpose'],r['status'],json.dumps(r,ensure_ascii=False)))
+    for b in r['ranges']:db.execute('insert into ranges values(?,?,?,?,?)',(a,b['start'],b['end_exclusive'],b['file_offset'],b['sha256']))
+    for ref in r['outgoing_references']:
+        if ref['kind']['call']:db.execute('insert into calls values(?,?,?,?,?)',(a,ref['source_address'],ref['target_address'],'typed-static-reference',json.dumps(ref,ensure_ascii=False)))
+    for ref in r['unresolved_calls']:db.execute('insert into calls values(?,?,?,?,?)',(a,ref['address'],None,'engine-unresolved',json.dumps(ref)))
+patterns=[{'name':'list-insertion-idiom','methods':['0x7ac030','0x7abcd0','0x5521d0'],'helper':'0x74d700',
+           'basis':'Sentinel/previous-node links, incremented count, maximum 0x3ffffffe, and original list<T> too long diagnostic.',
+           'confidence':'compiler-library-idiom-not-exact-source-template-identification','limits':'No claim to identify all standard-library functions or exact compiler release.'},
+          {'name':'CFieldPanel-vptr-construction','methods':['0x7ac030','0x7abcd0'],'vtable':'0xc4fd0c',
+           'basis':'Native literal vptr store, Ghidra RTTI-resolved symbol, 0x30 allocation and subsequent panel helper operations.',
+           'confidence':'native-vptr-and-operations','limits':'Allocation size is observed instance storage, not recovery of all class members or methods.'}]
+for r in patterns:db.execute('insert into pattern_identifications values(?,?)',(r['name'],json.dumps(r,ensure_ascii=False)))
+class_db=ROOT/'anal/kr-phase1-20261022/classes/classes.sqlite'
+classes=sqlite3.connect(class_db.as_uri()+'?mode=ro',uri=True);classes.row_factory=sqlite3.Row
+class_row=dict(classes.execute('select * from vtables where address=?',(0xc4fd0c,)).fetchone());classes.close()
+assert class_row['class_name']=='.?AVCFieldPanel@IS3D@@'
+relation={'source_sha256':SHA,'upstream_class_ledger':'anal/kr-phase1-20261022/classes/classes.sqlite',
+          'upstream_ledger_sha256':hashlib.sha256(class_db.read_bytes()).hexdigest(),
+          'class_metadata':class_row,'vptr_stores':[{'method':'0x7ac030','site':'0x7ac052'},{'method':'0x7abcd0','site':'0x7abe02'}],
+          'limits':'Observed vptr stores and existing RTTI links; candidate vtable termination and full class method semantics are not certified.'}
+db.executescript('drop table if exists class_relations;create table class_relations(vtable integer primary key,class_name text,record text);')
+db.execute('insert into class_relations values(?,?,?)',(0xc4fd0c,class_row['class_name'],json.dumps(relation,ensure_ascii=False)))
+(HERE/'class-relations.json').write_text(json.dumps(relation,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+db.commit();assert db.execute('pragma integrity_check').fetchone()[0]=='ok'
+progress={'source_sha256':SHA,'bounded_effect_semantics':len(records),'typed_call_references':db.execute('select count(*) from calls where status=?',('typed-static-reference',)).fetchone()[0],
+          'engine_unresolved_in_four_callees':db.execute('select count(*) from calls where status=?',('engine-unresolved',)).fetchone()[0],
+          'callee_behavior_exhaustively_known':False,'path_records':8,'corrections':1,'full_parent_semantic_complete':False,'global_valid_function_denominator':None,'byte_union_recomputed':False}
+db.close();(HERE/'progress.json').write_text(json.dumps(progress,indent=2)+'\n',encoding='utf-8');print(json.dumps(progress))

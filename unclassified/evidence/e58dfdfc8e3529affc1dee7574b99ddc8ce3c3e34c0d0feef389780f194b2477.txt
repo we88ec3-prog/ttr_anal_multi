@@ -1,0 +1,41 @@
+# CreateFileA 離線 DLL resolver 完整有限重播（2026-10-18）
+
+本輪由最新 F09624 WORD[7600003C] 邊界接續，使用獨立 pin 的本機 kernel32 磁碟 PE headers／raw sections 作唯讀映射，完成目前代表投影的 resolver 重播。在 F5DC6B 觀察到 EAX=7601EA40，與該 DLL 匯出表的 CreateFileA RVA=1EA40 相同；接著停於 F3B2F3 PUSHFD 前。沒有原生 DLL／API 執行、檔案開啟或檔名證據，MEF／AI／OEP 未定位。
+
+## 兩份證據的界線
+
+自由 timer／volatile 輸出的正式符號契約仍是父 `tc-stage10-count10-consumer-20261018-audit.json`，停 F09624。此輪沒有將它改成固定 timer 值，也沒有宣稱其所有自由值的 resolver 已被一般性證明。
+
+新的 `tc-stage10-createfile-disk-resolver-20261018-audit.json` 是另存的有限代表投影：使用前輪完整核對過的 T3=0、T4=1、T5至T13=2至10及當輪 volatile 樣本、保存 FLAGS 代表值。原 Δ>45／遞增 timer 及 SLDT 等假設全部保留。它完成整個 resolver 的這一份有限重播，不能取代父契約的任意值範圍。
+
+## 檔案映射與返回證據
+
+只唯讀 `C:/Windows/SysWOW64/kernel32.dll`，整檔 SHA 與前輪名稱索引相同。headers 與有 raw bytes 的各 section 按假設基址76000000映射；沒有補 gap／BSS／重定位／真實 loader 或程序資料。DLL 不載入、不呼叫，76000000不是實測程序地址。
+
+strict Python interpreter 從 F09624 開始112450步，包含末端未支援 PUSHFD 的遇見；3,919次唯讀 DLL 讀取，沒有 API／entry hooks、SEH 或 hypotheticalFlagReads，root零存取。
+
+唯一返回觀察在 F5DC6B：
+
+|register|代表投影值|
+|---|---|
+|EAX|7601EA40，磁碟索引的 CreateFileA 地址|
+|EBX／ECX／ESI|10／10／10|
+|EDX|FFFFFFFF|
+|EDI／EBP|FFFF8D14／F3E26014|
+|ESP|原 formal SP+12，與 RET8相符|
+
+EBX／ECX／EDX／ESI／EDI／EBP 均逐項與此次 caller 的 saved PUSHAD frame相符。這是有限值保存核對，尚未獨立證明對所有自由值的保存／控制流不變量。
+
+目前 bytes 的 resolver 末段是 F09AED POPAD、F09AEE CLC、F09AEF RET8；返回 F5DC6B 後 PUSH D138AFB，再 JMP F3B2F3，尚未執行 PUSHFD。該有限狀態的六個 final flags 是 ZF=false、OF=false、SF=true、CF=false、PF=false、DF=false；其餘 FLAGS bits 未宣稱已知。
+
+另保存112450-row完整指令觀察（含每條指令前的 register）及 read/write addresses。此完整路徑可用來核對自由資料依賴、控制分支及 saved-byte provenance；主 state 內的 path仍只是工具既有首段／尾段，不會誤當完整路徑。
+
+## 下一步
+
+正式符號線：對新完整 resolver 路徑建立自由資料的控制／地址依賴與 caller保存證明，或另以原生 resolver 所需指令擴充符號模型。任意 timer 契約仍從父 F09624 出發，不能以本輪代表值取代。
+
+有限磁碟映射線：從新的 state／buffer 與 F3B2F3 接續，使用已核對的 saved FLAGS consumer及必要獨立 proof，停在 API／未知資料讀取前，核實 CreateFileA 指標的首次用途。歷史另一有限 timer 樣本曾在 F4575B 先讀函式地址 DWORD，這是查驗線索，不能直接套作目前自由分支的結論或稱已開檔。若先讀 API bytes，必須保留其與任意真實環境 DATA 的區別；不臆填 actual DATA。
+
+目前尚未 CreateFileA 呼叫、檔名／裝置路徑、MEF或怪物AI證據。原 actual F54B02 SLDT、原 timer request不變，沒有目標執行／附加／API／程序讀寫、不改原檔、資源、帳號或存檔。原有限 SLDT／winmm／時間／plain命令列、H／arch0／outer28／45 native78 frames／worker18 key239DC1CE／ledger116 edges15、unknown DATA／完整FLAGS／failedESP F160BE、cache／lock／scratch／無外部writer等限制保留，不提高主觀5%估計。
+
+證據：`audit_tc_stage10_createfile_disk_resolver_20261018.py`；`native-index/tc-stage10-createfile-disk-resolver-20261018-audit.json`、`-state.json`、`.bin`、`-path.json`。audit保存各輸出 SHA／唯讀區 manifests／返回觀察／pins；只提取舊 input construction，不執行舊 recorder footer或重跑九輪 timer。

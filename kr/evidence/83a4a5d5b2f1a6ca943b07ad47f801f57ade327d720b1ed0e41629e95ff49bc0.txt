@@ -1,0 +1,19 @@
+"""Diagnostic server-generated displacement from input flags/direction."""
+import math,struct
+
+def advance(payload, positions, mode, step):
+    if mode not in ('input','direction') or not math.isfinite(step) or not 1<=step<=100:
+        return []
+    updates=[]
+    for offset in range(6,len(payload),5):
+        entity,flags,direction=struct.unpack_from('<HHB',payload,offset)
+        if entity!=0x100:continue
+        x,y,previous=positions.get(entity,(1000.,1000.,None))
+        moving=bool(flags&0x8000) or (mode=='direction' and previous is not None and previous!=direction)
+        if moving:
+            angle=direction*math.tau/256
+            # Client4449D0 table is (sin(angle), -cos(angle)).
+            x+=step*math.sin(angle); y-=step*math.cos(angle)
+            updates.append(struct.pack('<HHff',0x16,entity,x,y))
+        positions[entity]=(x,y,direction)
+    return updates

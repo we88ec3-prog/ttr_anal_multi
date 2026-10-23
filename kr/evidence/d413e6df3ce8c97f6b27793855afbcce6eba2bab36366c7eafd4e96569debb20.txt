@@ -1,0 +1,63 @@
+"""Independent original-byte checks for the shared-tail correction and row mapping."""
+import hashlib,json,sqlite3,struct,subprocess,sys
+from pathlib import Path
+HERE=Path(__file__).resolve().parent;ROOT=HERE.parents[1]
+sys.path.insert(0,str(ROOT/'anal'));from build_native_index import PE
+import capstone
+from capstone.x86 import X86_OP_IMM,X86_OP_MEM
+SHA='9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91'
+pe=PE(ROOT/'Tartaros.bin');assert hashlib.sha256(pe.data).hexdigest()==SHA
+d=json.loads((HERE/'binding-records.json').read_text(encoding='utf-8'));assert d['source_sha256']==SHA
+cs=capstone.Cs(capstone.CS_ARCH_X86,capstone.CS_MODE_32);cs.detail=True
+checks=[]
+def ins(a,mnemonic):
+    i=next(cs.disasm(pe.read(a,15),a,count=1));assert i.mnemonic==mnemonic,(hex(a),i.mnemonic)
+    checks.append({'address':hex(a),'mnemonic':i.mnemonic,'operand':i.op_str,'raw_hex':i.bytes.hex()});return i
+def immediate(i,n):assert any(o.type==X86_OP_IMM and o.imm==n for o in i.operands),(i.op_str,n)
+def mem(i,base,disp):assert any(o.type==X86_OP_MEM and i.reg_name(o.mem.base)==base and o.mem.disp==disp for o in i.operands),(i.op_str,base,disp)
+mem(ins(0x4b077f,'lea'),'eax',2) # EAX already multiplied by 13; row starts buffer+2
+immediate(ins(0x4b0770,'imul'),13)
+mem(ins(0x4b07af,'movzx'),'ebx',0);mem(ins(0x4b0819,'movzx'),'ebx',2)
+mem(ins(0x4b07e2,'mov'),'esp',0x28);mem(ins(0x4b0844,'mov'),'eax',0x10)
+mem(ins(0x4b0b55,'movsx'),'ebx',4);immediate(ins(0x4b0b59,'cmp'),8)
+immediate(ins(0x4b0b5c,'ja'),0x4b18d9)
+i=ins(0x4b0b62,'jmp');assert i.operands[0].mem.disp==0x4b1914 and i.operands[0].mem.scale==4
+immediate(ins(0x4b0d0f,'jmp'),0x4b189a)
+for load,model,constant,jump,result in [(0x4b0e22,0x4b0e26,0x4b0e50,0x4b0e55,1),(0x4b1153,0x4b1157,0x4b1181,0x4b1186,2)]:
+    mem(ins(load,'mov'),'esp',0x28);mem(ins(model,'mov'),'ecx',0x15c)
+    i=ins(constant,'mov');assert i.reg_name(i.operands[0].reg)=='edx';immediate(i,result)
+    immediate(ins(jump,'jmp'),0x4b18c9)
+i=ins(0x4b18c7,'xor');assert i.op_str=='edx, edx'
+i=ins(0x4b18c9,'add');assert i.reg_name(i.operands[0].reg)=='eax';immediate(i,0xb4)
+immediate(ins(0x4b18cf,'mov'),4);immediate(ins(0x4b18d4,'call'),0x7d28e0)
+for a,result in [(0x4b0e18,1),(0x4b1149,2)]:immediate(ins(a,'mov'),result)
+for a in [0x4b0e1d,0x4b114e,0x4b18a6]:immediate(ins(a,'call'),0x7d28e0)
+for a in [0x4b18a4]:assert ins(a,'xor').op_str=='edx, edx'
+targets=list(struct.unpack('<9I',pe.read(0x4b1914,36)))
+assert targets==[int(r['target'],16)for r in d['switch_cases']]
+for r in d['regions']:
+    assert hashlib.sha256(pe.read(r['start'],r['end_exclusive']-r['start'])).hexdigest()==r['sha256']
+routes=d['routes'];assert len(routes)==8
+tail=[r for r in routes if r['call_site']=='0x4b18d4']
+assert {(r['packet_result_case'],r['receiver_actor_role'],r['result_EDX'])for r in tail}=={(0,'target',0),(8,'target',0),(4,'source',1),(2,'source',2)}
+for r in tail:
+    assert r['group_ECX']==4
+    assert r['value_parameter']['section']=='ATTACKED'
+    assert r['value_parameter']['key']==r['value_key']
+    assert r['ratio_parameter']['key']==r['ratio_key']
+db=sqlite3.connect((HERE/'bindings.sqlite').as_uri()+'?mode=ro',uri=True)
+assert db.execute('pragma integrity_check').fetchone()[0]=='ok'
+assert db.execute('select count(*) from routes').fetchone()[0]==8
+assert db.execute('select count(distinct result_index) from routes where call_site=?',(0x4b18d4,)).fetchone()[0]==3
+assert db.execute('select count(*) from corrections').fetchone()[0]==1;db.close()
+queries=[]
+for args,key,count in [(['--case','4'],'routes',2),(['--callsite','0x4b18d4'],'routes',4),(['--corrections'],'corrections',1)]:
+    run=subprocess.run([sys.executable,str(HERE/'query_binding.py'),*args],check=True,capture_output=True,text=True,encoding='utf-8')
+    response=json.loads(run.stdout);assert len(response[key])==count
+    queries.append({'arguments':args,'rows':count})
+result={'source_sha256':SHA,'checks':'passed','capstone':capstone.__version__,
+        'critical_instructions':checks,'verified_switch_targets':9,'path_records':8,
+        'shared_tail_possible_result_indices':[0,1,2],'queries':queries,
+        'limits':'Static chosen-path and raw-byte checks; no target execution, global method denominator or full parent semantic completion.'}
+(HERE/'binding-validation.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+print(json.dumps({'checks':'passed','critical_instructions':len(checks),'path_records':8,'shared_tail_result_indices':[0,1,2]}))

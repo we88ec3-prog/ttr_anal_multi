@@ -1,0 +1,83 @@
+"""Offline receive/dispatch map. Does not attach, send packets or edit saves."""
+import hashlib
+import json
+import re
+from pathlib import Path
+from build_native_index import PE
+from capstone import Cs, CS_ARCH_X86, CS_MODE_32
+
+ROOT = Path(__file__).resolve().parent.parent
+OUT = ROOT/'anal/native-index'
+p = PE(ROOT/'Tartaros.bin')
+md = Cs(CS_ARCH_X86, CS_MODE_32)
+
+def dump(start, end, name):
+    ins = list(md.disasm(p.read(start, end-start), start))
+    assert ins and ins[-1].address+ins[-1].size == end
+    (OUT/(name+'.txt')).write_text('\n'.join(
+        f'{i.address:08X} {i.mnemonic:8} {i.op_str}' for i in ins)+'\n', encoding='utf-8')
+    return ins
+
+# Verified function entries/endpoints. Internal blocks after an early ret remain
+# part of the function if branched to from its entry.
+dump(0x807b40, 0x807e45, 'native-receive-frame-parser')
+dump(0x8040a0, 0x8040f8, 'native-pipeline-push')
+dump(0x804100, 0x80425e, 'native-pipeline-pop')
+dump(0x804740, 0x804a35, 'native-pipeline-consumer')
+dump(0x4930e0, 0x493161, 'client-receive-callback')
+dump(0x48aad0, 0x48ab68, 'client-packet-dispatch')
+dump(0x494360, 0x4943ac, 'client-default-to-scene-manager')
+dump(0x4c4670, 0x4c46f0, 'field-scene-overlay-dispatch')
+dump(0x4342a0, 0x434320, 'decision-scene-overlay-dispatch')
+reg = dump(0x493170, 0x494355, 'client-packet-registration')
+assert reg[-1].mnemonic == 'ret'
+
+constants = {}
+rows = []
+for i in reg:
+    if i.mnemonic != 'mov':
+        continue
+    r = re.fullmatch(r'(edx|edi), (0x[0-9a-f]+|[0-9]+)', i.op_str)
+    if r:
+        constants[r[1]] = int(r[2], 0)
+        continue
+    r = re.fullmatch(r'dword ptr \[eax \+ (0x[0-9a-f]+|[0-9]+)\], (edx|0x[0-9a-f]+)', i.op_str)
+    if not r:
+        continue
+    offset = int(r[1], 0)
+    value = constants.get(r[2]) if r[2] == 'edx' else int(r[2], 0)
+    if offset >= 0x208 and (offset-0x208) % 16 == 0 and value and 0x400000 <= value < 0xb00000:
+        rows.append(dict(command=(offset-0x208)//16, handler=value, registration=i.address))
+assert len(rows) == len({r['command'] for r in rows}) == 197
+assert any(r['command'] == 0x12a and r['handler'] == 0x494360 for r in rows)
+(OUT/'client-packet-overrides.json').write_text(json.dumps(rows, indent=2), encoding='utf-8')
+
+overlays = {}
+for name, start, end in [
+    ('mission', 0x4bc6e0, 0x4bc74c),
+    ('scenario', 0x4c46f0, 0x4c4745),
+    ('tutorial', 0x4c4ac0, 0x4c4b04)]:
+    ins = dump(start, end, name+'-scene-overlay-registration')
+    found = []
+    for i in ins:
+        r = re.fullmatch(r'dword ptr \[esi \+ (0x[0-9a-f]+)\], (0x[0-9a-f]+)', i.op_str)
+        if i.mnemonic == 'mov' and r:
+            offset, target = int(r[1], 0), int(r[2], 0)
+            if offset >= 0x5eac and (offset-0x5eac) % 8 == 0 and 0x400000 <= target < 0xb00000:
+                found.append(dict(command=(offset-0x5eac)//8, handler=target, registration=i.address))
+    overlays[name] = found
+assert [r['command'] for r in overlays['tutorial']] == [0x4c]
+assert len(overlays['mission']) == 5 and len(overlays['scenario']) == 2
+report = dict(
+    sha256=hashlib.sha256(p.data).hexdigest(),
+    clientDefaultSlots=3029, clientExplicitOverrides=rows,
+    overlays=overlays,
+    queue={'singleton': 'FC10D0', 'count': 6, 'packet': 'conn+0, size+4, payload+8',
+           'selectorSource': 'connection+A080', 'sceneDispatchQueueIndex': 2},
+    limitations=[
+        'Queue index is a pipeline category, not demonstrated peer/host identity.',
+        'Only three verified scene overlay registration functions included.',
+        'Static path does not prove runtime traffic uses no other transport.',
+        'Monster decision logic and P2P authority remain unverified.'])
+(OUT/'receive-dispatch-audit.json').write_text(json.dumps(report, indent=2), encoding='utf-8')
+print(json.dumps({'clientOverrides': len(rows), 'overlays': overlays, 'queueCount': 6}))

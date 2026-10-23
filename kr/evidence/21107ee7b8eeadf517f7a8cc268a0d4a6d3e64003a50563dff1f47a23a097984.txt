@@ -1,0 +1,80 @@
+"""Offline state consumers: animation work queue versus drawing batch."""
+import hashlib
+import json
+import struct
+from pathlib import Path
+from build_native_index import PE
+from capstone import Cs, CS_ARCH_X86, CS_MODE_32
+
+ROOT=Path(__file__).resolve().parent.parent
+OUT=ROOT/'anal/native-index'
+p=PE(ROOT/'Tartaros.bin')
+idx=json.loads((OUT/'Tartaros.bin.json').read_text(encoding='utf-8'))
+assert hashlib.sha256(p.data).hexdigest()==idx['sha256']
+md=Cs(CS_ARCH_X86,CS_MODE_32)
+specs=[
+    ('animation-worker-loop',0x7b65b0,0x7b6770),
+    ('animation-worker-start',0x7b6770,0x7b67d1),
+    ('animation-worker-task',0x7b6010,0x7b6191),
+    ('animation-completion-queue-consumer',0x7b6330,0x7b65ae),
+    ('animation-task-resource-load',0x7b5980,0x7b5c82),
+    ('drawing-batch-state-consumer',0x7b40a0,0x7b4ec7),
+]
+functions={}
+for name,start,end in specs:
+    ins=list(md.disasm(p.read(start,end-start),start))
+    assert sum(i.size for i in ins)==end-start,name
+    assert ins[-1].mnemonic=='ret',name
+    addresses={i.address for i in ins}
+    for i in ins:
+        if i.mnemonic.startswith('j') and i.op_str.startswith('0x'):
+            target=int(i.op_str,16)
+            if start<=target<end:assert target in addresses,(name,hex(target))
+    functions[name]={i.address:i for i in ins}
+    (OUT/(name+'.txt')).write_text('\n'.join(f'{i.address:08X} {i.mnemonic:8} {i.op_str}' for i in ins)+'\n',encoding='utf-8')
+checks=[
+    ('animation-worker-start',0x7b679e,'0x7b65b0'),
+    ('animation-worker-start',0x7b6798,'eax, dword ptr [ebp + 8]'),
+    ('animation-worker-loop',0x7b65ee,'eax, dword ptr [ebp + 8]'),
+    ('animation-worker-loop',0x7b660d,'0x7b6010'),
+    ('animation-worker-loop',0x7b65fb,'ebx, dword ptr [0xbd2304]'),
+    ('animation-worker-loop',0x7b66fa,'dword ptr [ecx + 0x90], 2'),
+    ('animation-worker-loop',0x7b6703,'1'),
+    ('animation-worker-loop',0x7b6736,'ebx'),
+    ('animation-worker-task',0x7b60b1,'0x7b5980'),
+    ('animation-worker-task',0x7b60ba,'ebx, [edi + 0x60]'),
+    ('animation-worker-task',0x7b60db,'0x7b6e80'),
+    ('animation-worker-task',0x7b60f8,'0xc4fb48'),
+    ('animation-completion-queue-consumer',0x7b636e,'ebx, 0x60'),
+    ('animation-completion-queue-consumer',0x7b637c,'0x7b6ba0'),
+    ('animation-completion-queue-consumer',0x7b6516,'edx'),
+    ('drawing-batch-state-consumer',0x7b40ce,'dword ptr [0xfba830], 0'),
+    ('drawing-batch-state-consumer',0x7b4dc1,'eax, dword ptr [ecx + 0x14c]'),
+    ('drawing-batch-state-consumer',0x7b4dc8,'eax'),
+]
+for name,a,operand in checks:assert functions[name][a].op_str==operand,(name,hex(a))
+assert p.cstring(0xc4fb48)=='Animation Load failed: %s'
+imports={r['iat']:r['symbol'] for r in idx['imports']}
+assert imports[0xbd2304]=='Sleep' and imports[0xbd22d4]=='GetTickCount'
+assert imports[0xbd20cc]=='CreateEventW' and imports[0xbd20d0]=='SetEvent'
+assert imports[0xbd224c]=='EnterCriticalSection' and imports[0xbd2248]=='LeaveCriticalSection'
+# Checked local roots/writers; these large callers are not full new audits.
+local=[(0x7b5641,'eax, 0xfd9420'),(0x7ab339,'0xfd9420'),(0x7ab33e,'0x7b6770'),
+       (0x491d3b,'0xfd9420'),(0x491d40,'0x7b6330'),
+       (0x4b1f24,'dword ptr [0xfd94b0], 2'),(0x492e47,'0x7b40a0')]
+for a,operand in local:assert next(md.disasm(p.read(a,10),a)).op_str==operand,hex(a)
+assert 0xfd9420+0x90==0xfd94b0
+report=dict(checks='passed',sha256=idx['sha256'],boundedFunctions=len(specs),
+    functions=[dict(name=n,start=hex(s),endExclusive=hex(e)) for n,s,e in specs],
+    stateField=dict(root='0xfd9420',offset='0x90',absolute='0xfd94b0',value2Behavior='Sleep(1) branch in animation worker'),
+    animationFailureString=p.cstring(0xc4fb48),
+    imports={hex(a):imports[a] for a in (0xbd2304,0xbd22d4,0xbd20cc,0xbd20d0,0xbd224c,0xbd2248)},
+    localInstructionChecks=[dict(address=hex(a),operand=o) for a,o in local],
+    directKnownMonsterOrB0Calls={n:[hex(i.address) for i in ins.values() if i.mnemonic=='call' and i.op_str in ('0x4d1710','0x548ff0','0x4e40a0','0x419070')] for n,ins in functions.items()},
+    limitations=['Original root/large client callers are local instruction checks, not full new audits.',
+        'Task callbacks, loader helpers and graphics virtual target not fully expanded.',
+        'State=2 has a verified wait-time effect, not a complete enum definition.',
+        'FBA830 controls this drawing-batch branch; other alias/indirect uses remain possible.',
+        'No original spawn scheduler, native AI activation or P2P authority established.'])
+(OUT/'map-state-consumers-audit.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+print(json.dumps(dict(checks='passed',boundedFunctions=len(specs),state2='Sleep(1)')))

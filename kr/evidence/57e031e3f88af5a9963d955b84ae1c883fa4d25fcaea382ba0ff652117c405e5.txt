@@ -1,0 +1,38 @@
+# 地圖流程、怪物群組與預載的邊界
+
+2026-10-07，原始韓版 Tartaros.bin 與資源離線分析。沒有啟動遊戲／服務、送封包或修改存檔。`audit_mapflow_cluster_loading.py` 已通過 9 個有明確起迄的函式、指令覆蓋、內部分支邊界、關鍵指令與原檔 SHA 檢查。反組譯與摘要在 `anal/native-index/mapflow-cluster-loading-audit.json` 及同目錄文字檔。
+
+## 正式教學資料的連結
+
+原版 Table/_CaseList.xml：Case **102**、Stage **18** 指向：
+
+- Field/MapFlow/CHART_scenario_town000_01.xml：Node 1，Map 190。
+- Field/Cluster/CLUST_scenario_town000_01.xml：CLUSTERSET 0、CLUSTER 1，OBJECT ID1036／PRE1／COUNT1。
+- 同一 Cluster 檔另有 PRELOADSET，列出 IMAGE1036 與1478..1486，共10個模型 ID。
+
+COUNT1 是群組每次使用的數量，不證明關卡只會生成一隻或只有一波。Chart Node 的 x350/y296 與 arrayx2/arrayy3 是節點配置資料，不能直接當怪物世界座標。
+
+## 客戶端實際讀了什麼
+
+| 函式 | 已核對行為 |
+| --- | --- |
+| 53E3F0..53E681 | 讀 Table/_CaseList.xml 的 CASELIST/CASE，保存 ID、STAGE、MAPFLOW 與 CLUSTER 檔名字串，配置每筆0x4C資料 |
+| 53E690..53E6CF | 查指定 Case；首次使用呼叫53E120，再增加+48引用計數 |
+| 53E120..53E1CC | 對 Case+8 的MapFlow名稱載入0x240節點資料到+40；對+24的Cluster名稱建立ID向量到+44 |
+| 53E230..53E3E5 | 讀 Field/Cluster/，定位MON_CLUST、CLUSTERSET與PRELOADSET，接著遍歷PRELOADSET/IMAGE，取ID並呼叫4A8680附加到向量 |
+| 53E800..53EB90 | 讀 Field/MapFlow/ 的MAPCHART/NodeList/Node，取arrayx/arrayy/id/type/icon/rotate；索引為(7×arrayx+arrayy+1)×16，存16byte節點資料及向量副本 |
+| 4B3350..4B34D3 | S→C0049接收器，使用目前Case的Chart資料找Map/Node ID，讀節點+0C的rotate並設定MinimapCached+68；完成後釋放Case引用 |
+
+53E230 雖然查到 CLUSTERSET 節點，但此完整函式沒有遍歷其CLUSTER/OBJECT，也没有讀取COUNT來建立怪物。定位CLUSTERSET不等於執行群組生成。
+
+53E800 這條完整路徑沒有讀NodeLink或Node底下的Map列表。因此它是客戶端地圖節點資料讀取的一部分，不能視為已找到完整關卡流程排程器。MAPCHART大小寫與資源MapChart的匹配由XML helper處理，helper未完整展開，不猜測其大小寫規則。
+
+這9個函式沒有直接呼叫CMonster建構4D1710或CAIControl548FF0。容器／XML helper與間接呼叫未全面展開，所以不能升級為「整個生成流程沒有AI」的結論。0049內ret之後的4B34D4..4B34E3是switch資料，不算程式指令。
+
+## 對目前測試的意義
+
+目前tutorial_monster_config.py由Python读取OBJECT/COUNT，再由tutorial_battle.py送0007建立怪物；生成座標、時機與v41行動仍由本機測試邏輯處理。原版配置已使用，但原版群組排程、生成者與控制權機制仍未重建。
+
+不能把53E230的預載清單當成生成清單：例如預載1478..1486，不代表該次戰鬥應生成它們。也不能直接呼叫這些Loader宣稱啟動官方怪物AI。
+
+下一步應以OBJECT/COUNT/BASELEVEL的實際消費端為目標，交叉查Table/Field載入及其他生成端；再追Case+44的預載ID向量與Monster模型管理器用途，區分資源預載與實體建立。若目前客戶端只消費顯示／預載部分，生成排程可能位於其他腳本、模組或原服務端；目前尚未定案，P2P也未證實。

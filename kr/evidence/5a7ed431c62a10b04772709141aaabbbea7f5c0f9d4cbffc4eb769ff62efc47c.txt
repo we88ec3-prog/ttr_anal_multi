@@ -1,0 +1,57 @@
+"""Enter combat UI/controller without deleting the live TUTO coroutine owner."""
+from pathlib import Path
+import struct,json,hashlib,sys
+root=Path(__file__).resolve().parent.parent
+sys.path.insert(0,str(root/'anal/python_deps'))
+from capstone import Cs,CS_ARCH_X86,CS_MODE_32
+source=root/'Tartaros.local.tc-ui-v1.exe';target=root/'Tartaros.local.tc-ui-tutorial-v4.exe'
+b=bytearray(source.read_bytes());pe=struct.unpack_from('<I',b,60)[0];opt=pe+24
+count=struct.unpack_from('<H',b,pe+6)[0];table=opt+struct.unpack_from('<H',b,pe+20)[0]
+base=struct.unpack_from('<I',b,opt+28)[0];sa,fa=struct.unpack_from('<II',b,opt+32)
+sections=[struct.unpack_from('<IIII',b,table+i*40+8) for i in range(count)]
+def off(a):
+    for vs,v,rs,p in sections:
+        if base+v<=a<base+v+rs:return p+a-base-v
+    raise ValueError(hex(a))
+def align(n,a):return (n+a-1)//a*a
+slot=table+count*40
+assert slot+40<=struct.unpack_from('<I',b,opt+60)[0] and b[slot:slot+40]==bytes(40)
+rva=align(max(v+max(vs,rs) for vs,v,rs,p in sections),sa);raw=align(len(b),fa);start=base+rva
+code=bytearray();labels={};fixups=[]
+def emit(s):code.extend(bytes.fromhex(s))
+def mark(s):labels[s]=start+len(code)
+def jump(op,label):emit(op);fixups.append((len(code),label));code.extend(bytes(4))
+def branch(op,addr):emit(op);code.extend(struct.pack('<i',addr-start-len(code)-4))
+mark('entry')
+emit('81 3d 74 a6 d6 00 4f 54 55 54');jump('0f 85','original')
+emit('8b 44 24 04 80 78 02 06');jump('0f 84','return_tutorial')
+emit('80 78 02 02');jump('0f 85','original')
+# SCEF init4C4750 uses globals only: creates controller3 and selects UI7.
+# Keep TUTO's extension callback4C and its per-frame Lua update untouched.
+branch('e8',0x4c4750);emit('31 c0 c2 0c 00')
+mark('return_tutorial')
+# Recreate native tutorial input controller4, without running TUTO init,
+# clearing scenario flags, or restarting Lua. Mirrors4C4C9A..4C4D0D.
+emit('56 57 68 38 01 00 00');branch('e8',0x891268);emit('83 c4 04 85 c0');jump('0f 84','return_done')
+emit('8b f0 8b 0d a4 a7 fb 00 85 c9');jump('0f 84','bind_tutorial')
+emit('8b 01 ff 50 28 8b 0d a4 a7 fb 00 85 c9');jump('0f 84','bind_tutorial')
+emit('8b 01 6a 01 ff 10')
+mark('bind_tutorial');branch('e8',0x548b90);emit('8b f8 89 3d a4 a7 fb 00 8b cf 8b 07 ff 50 24')
+# TutorialMain originally SetControlStatus(10,TRUE) once. Recreating the
+# controller zeroes index10/+DC, gating BOTH movement and camera in548CB0.
+# Restore only that master flag, through its native setter4A9F90.
+emit('6a 01 6a 0a');branch('e8',0x4a9f90)
+mark('return_done');emit('5f 5e 31 c0 c2 0c 00')
+mark('original');emit('55 8b ec 83 e4 f8');branch('e9',0x4b99c6)
+for p,label in fixups:struct.pack_into('<i',code,p,labels[label]-start-p-4)
+site=off(0x4b99c0);original=bytes.fromhex('55 8b ec 83 e4 f8');assert b[site:site+6]==original
+b[site:site+6]=b'\xe9'+struct.pack('<i',start-0x4b99c5)+b'\x90'
+md=Cs(CS_ARCH_X86,CS_MODE_32);dis=list(md.disasm(code,start));assert sum(i.size for i in dis)==len(code)
+size=align(len(code),fa)
+b[slot:slot+40]=struct.pack('<8sIIIIIIHHI',b'.tutofix',len(code),rva,size,raw,0,0,0,0,0x60000020)
+struct.pack_into('<H',b,pe+6,count+1);struct.pack_into('<I',b,opt+56,align(rva+len(code),sa));struct.pack_into('<I',b,opt+64,0)
+b.extend(bytes(raw-len(b)));b.extend(code);b.extend(bytes(size-len(code)));target.write_bytes(b)
+m={'source':str(source),'target':str(target),'target_sha256':hashlib.sha256(b).hexdigest(),'site':'0x4b99c0','original':original.hex(),'section_va':hex(start),'section_raw':raw,'code_bytes':len(code),'labels':{k:hex(v) for k,v in labels.items()},'runtime_verified':False}
+(root/'anal/tutorial-transition-probe.json').write_text(json.dumps(m,indent=2),encoding='utf-8')
+(root/'anal/tutorial-transition-disassembly.txt').write_text('\n'.join(f'{i.address:08x} {i.mnemonic} {i.op_str}' for i in dis),encoding='utf-8')
+print(target)

@@ -1,0 +1,45 @@
+# 地圖 TRIGGER 名稱與提示訊息的消費者
+
+2026-10-07，離線分析。沒有啟動服務或遊戲，也没有改動客戶端資源、封包或存檔。原版怪物 AI 尚未啟動。
+
+## MEF 名稱實際走到哪裡
+
+`4F5640..4F5D4D` 載入 `Table/_MapList.xml`，讀取 ID 及 trigger／map／bound 欄位，分別存入按地圖 ID 索引的字串容器：
+
+| 容器 | 內容 | 例：地圖 190 |
+| --- | --- | --- |
+| FB74C0 | TRIGGER 檔名 | scenario_town000.mef |
+| FB74B0 | MAP 模型名稱 | town000D |
+| FB74D0 | BOUND 碰撞名稱 | scenario_town000 |
+
+完整載入函式還處理 SysMapList 和 MapMusicList；不是 MEF 事件解譯器。
+
+換圖端 `4DF510..4DFA9C` 在 `4DF58D` 以地圖 ID 查找 FB74C0，使用 `4F7DF0`。完整 `4F7DF0..4F7F1A` 執行字串容器查找；缺值時插入空字串，回傳元素的字串欄位地址。
+
+**已初始化的分支**從 `4DF592` 經 `4DF599` 跳到 `4DF5B9`，其間沒有取出／解參照回傳字串，也沒有載入函式呼叫；`4DF5B9` 隨即覆寫 EAX。未初始化分支另有全域初始化呼叫 `4F3D80`，此次沒有完整展開，不作所有分支的副作用排除。
+
+與此相比，後面的 MAP 名稱會被取出並與現有名稱比較；BOUND 名稱也會被取出並傳給 `4DF1A0`。因此，目前不能把「地圖表有 MEF 檔名」等同於「這版客戶端有執行該 MEF」；既有換圖使用模型與碰撞的證據較明確。
+
+對 FB74C0 及容器頭 +4/+8 的原版 bin 執行區段精確 DWORD 指標掃描，命中載入、初始化／清理與上述換圖候選。這是精確地址掃描，不能排除別名、指標運算、間接讀取或其他模組。
+
+## 資源索引核對
+
+核對目前 Table.stp、Field.stp、Event.stp 和 Map 目錄下 39 個 STP，共 **42 個封裝檔**。索引中沒有 `.mef` 檔名項目，也沒有與 MapList 宣告 MEF 名稱匹配的檔名項目。每個封裝檔的 SHA、檔案數與命中清單都保存在 audit JSON。
+
+這只涵蓋所列封裝檔的索引，不涵蓋其他版本、機器上的所有檔案或內嵌／改名資料。原服務端保存與解譯 MEF 是仍需查證的可能性；尚不能据此確定怪物 AI 權威在伺服器或排除 P2P。
+
+## 另一個 TRIGGER 是畫面提示
+
+`536280..5366B8` 載入的是 `Table/TriggerMsgList.xml`，遍歷 TRIGGERMSG／TRIGGER，讀 ID、TEXT 與 COLOR；COLOR 的 `#RRGGBB` 會被轉成顏色值。這是提示資料，不是怪物生成條件。
+
+主封包表的 **S→C 005E** 指向 `4B3C10..4B3D9E`。它從封包 +2 讀 WORD ID，建構 `540250..540452` 的 `CTriggerMsgObject`（vtable C0F51C），按 ID 查提示文字、製作顯示資源，並加入畫面物件管理路徑。005E 不應被當成啟動怪物 AI 的封包。
+
+## 對後續分析的影響
+
+這輪沒有找到可直接啟用的 native MEF 生成接口。現在更適合追一般戰鬥中「誰產生怪物移動／技能命令」，交叉核對 client 的怪物狀態更新與傳輸路徑，而不是只因 MEF 名稱出現在表中就嘗試套入生成流程。需要保留原服務端事件調度的可能性，也繼續核對可能的客戶端／P2P 決策端。
+
+## 驗證
+
+`audit_map_trigger_consumers.py` 通過六個有邊界函式的原版 SHA、完整指令覆蓋、內部分支目標、關鍵指令、字串、RTTI 與 005E 註冊核對。換圖函式包含第一個 return 後的同地圖分支。六個函式未直接呼叫已知 CMonster 建構端 4D1710 或 CAIControl 的 548FF0；helpers 與間接呼叫仍未窮盡。
+
+輸出：`native-index/map-trigger-consumers-audit.json` 與 `map-trigger-*.txt`、`map-change-trigger-name-lookup.txt`、`map-id-string-map-subscript.txt`、`trigger-message-*.txt`。

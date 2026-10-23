@@ -1,0 +1,74 @@
+{
+  "sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+  "checks": "passed",
+  "boundedFunctions": 5,
+  "functions": [
+    {
+      "name": "actor-position-update-0001-0016",
+      "start": "0x4afb80",
+      "endExclusive": "0x4afe5a"
+    },
+    {
+      "name": "duel-decision-stop-reset",
+      "start": "0x4bd820",
+      "endExclusive": "0x4bdb99"
+    },
+    {
+      "name": "gvg-duel-decision-stop-reset",
+      "start": "0x4c06f0",
+      "endExclusive": "0x4c0b14"
+    },
+    {
+      "name": "tutorial-controller-field-initialization",
+      "start": "0x548b90",
+      "endExclusive": "0x548c73"
+    },
+    {
+      "name": "ui-list-content-offset-collision",
+      "start": "0x471830",
+      "endExclusive": "0x4718a6"
+    }
+  ],
+  "positionUpdate": {
+    "direction": "S2C",
+    "commands": [
+      "0001",
+      "0016"
+    ],
+    "headerBytes": 2,
+    "rowBytes": 10,
+    "fields": [
+      "row WORD0 actorID",
+      "row FLOAT2 X",
+      "row FLOAT6 Y"
+    ],
+    "common": "common actor lookup; clearD4; writeE8/EC; matching current actor clearscontroller74",
+    "command0016": "clear residualD8/DC, preserve cachedE0/E4, v58 heading, v44 absolute XY",
+    "command0001": "store target-current inD8/DC, keepcurrentXY; later known4CAD60consumes residual",
+    "firstReturn": "4AFD8E",
+    "postReturnBranch": "4AFD91..4AFE59"
+  },
+  "sceneResetClasses": {
+    "CDuelDecision@Scene": [
+      {
+        "vtable": "0xc070cc",
+        "slot": "0x38",
+        "thisOffset": 0
+      }
+    ],
+    "CGvGDuelDecision@Scene": [
+      {
+        "vtable": "0xc0718c",
+        "slot": "0x38",
+        "thisOffset": 0
+      }
+    ]
+  },
+  "limitations": [
+    "PosUpdate diagnosis does not prove observed backstep cause or wire timing.",
+    "0001 and0016 are externally supplied coordinate updates, not autonomous enemy selection.",
+    "Reset methods clear8000 and retain heading; full UI/helper semantics not all expanded.",
+    "Generic field candidates do not establish actor identity; UI and controller examples demonstrate collisions.",
+    "Original monster AI/wavescheduler/P2P remains unresolved; no deployment changes."
+  ]
+}

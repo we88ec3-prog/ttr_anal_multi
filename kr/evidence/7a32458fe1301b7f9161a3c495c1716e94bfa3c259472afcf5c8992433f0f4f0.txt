@@ -1,0 +1,97 @@
+"""Offline KR connection routing checks; resolves host export names only.
+
+No sockets are opened and no game process is accessed.
+"""
+from pathlib import Path
+import ctypes
+import hashlib
+import json
+import re
+import struct
+from build_native_index import PE
+from capstone import Cs, CS_ARCH_X86, CS_MODE_32
+
+ROOT = Path(__file__).resolve().parent.parent
+OUT = ROOT/'anal/native-index'
+p = PE(ROOT/'Tartaros.bin')
+md = Cs(CS_ARCH_X86, CS_MODE_32)
+idx = json.loads((OUT/'Tartaros.bin.json').read_text(encoding='utf-8'))
+assert hashlib.sha256(p.data).hexdigest() == idx['sha256']
+
+def dump(start, end, name):
+    ins = list(md.disasm(p.read(start, end-start), start))
+    assert ins[-1].address + ins[-1].size == end
+    (OUT/(name+'.txt')).write_text('\n'.join(
+        f'{i.address:08X} {i.mnemonic:8} {i.op_str}' for i in ins)+'\n', encoding='utf-8')
+    return {i.address: i for i in ins}
+
+handoff = dump(0x4b7ec0, 0x4b7ef2, 'scene-manager-current-handoff')
+assert handoff[0x4b7ecc].op_str == 'ecx, dword ptr [ecx + 0x5eac]'
+assert handoff[0x4b7ed4].op_str == 'eax, dword ptr [eax + 4]'
+connect = dump(0x806ad0, 0x806ced, 'network-connect-and-slot-map')
+assert connect[0x806b25].op_str == 'eax, dword ptr [ebp + 0x14]'
+assert connect[0x806b33].op_str == 'dword ptr [ebx + 0xa080], eax'
+assert connect[0x806cb8].op_str == 'edx, dword ptr [ebp + 0x10]'
+send = dump(0x8069a0, 0x8069f6, 'network-send-by-slot')
+assert send[0x8069b1].op_str == 'ecx, [esi + 0x18]'
+selection = dump(0x495610, 0x4957ba, 'client-connect-selection')
+login = dump(0x4957c0, 0x4959e6, 'client-connect-initial-pair')
+expected_pushes = {
+    0x495751: '2', 0x495753: '1', 0x495755: '0x20df',
+    0x4957e0: '2', 0x4957e2: '0', 0x4957e4: '0x20e0',
+    0x4957f2: '2', 0x4957f4: '2', 0x4957fd: '0x20de'}
+for address, value in expected_pushes.items():
+    ins = selection.get(address) or login.get(address)
+    assert ins.mnemonic == 'push' and ins.op_str == value
+
+# Find only direct absolute global-load patterns, stopping at the first call.
+# This is deliberately not advertised as complete virtual-call resolution.
+pos = 0
+candidates = []
+while True:
+    pos = p.data.find(struct.pack('<I', 0xfba854), pos)
+    if pos < 0:
+        break
+    address = p.va(pos)
+    pos += 1
+    if not address or p.read(address-2, 2) != b'\x8b\x0d':
+        continue
+    window = []
+    for ins in md.disasm(p.read(address-2, 75), address-2):
+        window.append(ins)
+        if ins.mnemonic == 'call':
+            break
+    if any(ins.mnemonic == 'mov' and re.search(
+        r'dword ptr \[(eax|edx) \+ 0x18\]', ins.op_str) for ins in window):
+        candidates.append(address-2)
+assert candidates == [0x495743, 0x4957d0, 0x4957ec]
+
+# Resolve ordinals by comparing exports in the installed Windows DLL, without
+# invoking any Winsock function or initializing networking.
+names = ['htons', 'setsockopt', 'WSAStartup', 'WSACleanup', 'gethostbyname',
+         'connect', 'shutdown', 'WSAGetLastError', 'closesocket']
+kernel = ctypes.WinDLL('kernel32', use_last_error=True)
+kernel.GetProcAddress.argtypes = [ctypes.c_void_p, ctypes.c_void_p]
+kernel.GetProcAddress.restype = ctypes.c_void_p
+winsock = ctypes.WinDLL('ws2_32')
+resolved = {}
+for ordinal in [9, 21, 115, 116, 52, 4, 22, 111, 3]:
+    ptr = kernel.GetProcAddress(winsock._handle, ordinal)
+    matches = [name for name in names if ctypes.cast(
+        getattr(winsock, name), ctypes.c_void_p).value == ptr]
+    assert len(matches) == 1
+    resolved['#'+str(ordinal)] = matches[0]
+imports = [{**item, 'resolvedName': resolved.get(item['symbol'], item['symbol'])}
+           for item in idx['imports'] if item['dll'].lower() in ('ws2_32.dll', 'wsock32.dll')]
+report = dict(sha256=idx['sha256'],
+    currentScenePointer='FD2CF8+5EAC (FD8BA4)',
+    connections=[{'call': '49575B', 'port': 8415, 'slot': 1, 'pipeline': 2},
+                 {'call': '4957EA', 'port': 8416, 'slot': 0, 'pipeline': 2},
+                 {'call': '495803', 'port': 8414, 'slot': 2, 'pipeline': 2}],
+    narrowConnectCandidates=candidates, winsockImports=imports,
+    limitations=['Direct global-load pattern excludes aliased/computed network pointers.',
+                 'Static connections do not prove runtime endpoint identity or exclude P2P.',
+                 'No runtime/client/server/save changes; no native monster AI activation.'])
+(OUT/'connection-route-audit.json').write_text(json.dumps(report, indent=2), encoding='utf-8')
+print(json.dumps({'connections': report['connections'], 'connectCandidates': candidates,
+                  'resolvedWinsock': resolved}))

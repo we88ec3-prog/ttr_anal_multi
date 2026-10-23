@@ -1,0 +1,106 @@
+"""Native plaza NPCs and the first resource-defined post-tutorial scenario.
+
+Town5 membership/models/quest are shipped data. Positions are provisional
+near the established900/900 plaza spawn; client MEF placements are unavailable.
+07 class is the LOW BYTE OF ENTITY ID, not the PRE byte that follows it.
+"""
+import struct
+from functools import lru_cache
+from pathlib import Path
+import xml.etree.ElementTree as ET
+from stp_resources import Archive
+
+ROOT=Path(__file__).resolve().parent.parent
+
+@lru_cache(maxsize=1)
+def definitions():
+    archive=Archive(ROOT/'Table.stp')
+    def xml(name):
+        path=next(p for p in archive.files if p.rsplit('/',1)[-1]==name)
+        return ET.fromstring(archive.read(path))
+    town=xml('_TownList.xml').find("./TOWN[@ID='5']")
+    ids=[int(n.attrib['ID']) for n in town.findall('./NPCLIST/NPC')]
+    actors=xml('_ActorList.xml')
+    npc=xml('npctable.xml')
+    quest=xml('QuestInfo.xml').find(".//Quest[@id='15']")
+    assert quest.attrib['giver']=='10338' and quest.attrib['type']=='2'
+    assert quest.find('./Demands/Demand').attrib['id']=='16'
+    # Put the continuation NPC first, within reach of the proven player spawn.
+    ids.remove(10338);ids.insert(0,10338)
+    result=[]
+    for index,model in enumerate(ids):
+        actor=actors.find(f".//ACTOR[@ID='{model}'][@PRE='1']")
+        info=npc.find(f"./NPC[@ID='{model}']")
+        if actor is None or info is None:raise ValueError(f'Missing NPC resource {model}')
+        x,y=(920.,900.) if index==0 else (850.+(index-1)%6*20,940.+(index-1)//6*25)
+        result.append(dict(entity=((index+1)<<8)|6,model=model,x=x,y=y,
+                           name=info.attrib['NAME'],file=actor.attrib['FILE']))
+    return tuple(result)
+
+def completed_packet(ids):
+    # QuestMgr502170 ->44AB70 ->44AA10: array of32-bit BITMAP WORDS.
+    # This is not a list of quest IDs. Bit i means completed quest i.
+    words=[0]*(max(ids)//32+1)
+    for ident in ids:words[ident//32]|=1<<(ident%32)
+    return struct.pack('<H',0x6f)+struct.pack('<'+'I'*len(words),*words)
+
+def interaction_packet():
+    # Main registration+13C is27 ->4B2AF0. Each18-byte record creates
+    # native543700 action object. Type3 / F6 NPC ID opens544070's
+    # resource-defined NPC dialogue. Manual activation (automatic0).
+    # Byte at packet+5 becomes object+105:544730 rejects zero before
+    # checking distance or Z. This is enabled, not a visual style.
+    records=[struct.pack('<HbBfffBB',n['model'],3,1,n['x'],n['y'],2.,0,0)
+             for n in definitions()]
+    return struct.pack('<H',0x27)+b''.join(records)
+
+class PlazaNPCs:
+    def __init__(self,data=None,persist=None):
+        self.ready=False
+        self.accepted=bool((data or {}).get('accepted'))
+        self.completed=bool((data or {}).get('completed'))
+        self.persist=persist
+
+    def save(self):
+        if self.persist:self.persist({'accepted':self.accepted,'completed':self.completed})
+
+    @staticmethod
+    def context():
+        # Native38/type0 is town context.4B208D stores town5 in FAB1BC;
+        # without it500240 would filter out the town5 scenario quest15.
+        return struct.pack('<HBHHH',0x38,0,5,0,0)
+
+    def enter(self):
+        if self.ready:return ()
+        self.ready=True
+        packets=[completed_packet((14,15,16) if self.completed else (14,16))]
+        for npc in definitions():
+            # Base constructor4C7070 provides state1 and motion1. State3
+            # enters4CB590 and forces motion7, absent from NPC ABF files.
+            # State1's entry is a no-op, preserving the native default1.
+            actor=struct.pack('<HBBHfffIBBBB',npc['entity'],1,0,npc['model'],
+                              npc['x'],npc['y'],1.,npc['model'],128,0,0,1)
+            packets.append(struct.pack('<H',7)+actor)
+        packets.append(interaction_packet())
+        return tuple(packets)
+
+    def request(self,payload):
+        if not self.ready:return ()
+        command=struct.unpack_from('<H',payload)[0]
+        if command==0x3c and len(payload)==8:
+            quest,choice=struct.unpack_from('<HI',payload,2)
+            if quest!=15 or choice not in (0,0xffffffff) or self.accepted or self.completed:return ()
+            self.accepted=True
+            self.save()
+            # QuestMgr502270 receives40,Hquest,Istatus;45/Hquest/Hscene
+            # invokes native561760 with shipped Square_Tutorial01.seq.
+            return (struct.pack('<HHI',0x40,15,0),struct.pack('<HHH',0x45,15,1))
+        if payload==struct.pack('<4H',0x3f,15,1,1) and not self.completed:
+            # Native scenario NPC dialogue starts scene15/1 locally and
+            # sends3F directly, without the ordinary3C accept request.
+            self.accepted=True
+            self.completed=True
+            self.save()
+            # QuestMgr5030C0 reads status at+4 (unlike TUTO's short4C).
+            return (struct.pack('<HHI',0x4c,15,0),completed_packet((14,15,16)))
+        return ()

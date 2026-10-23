@@ -1,0 +1,73 @@
+# 韓版 CRT 啟動到 frame／actor 更新的靜態呼叫鏈
+
+來源：原始 `E:/Tartaros/workspace/Tartaros.bin`，12,472,320 bytes，SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。僅離線唯讀原檔，沒有執行／附加遊戲、目標 API 或改寫資源／存檔。REA MCP6.5.0、Ghidra12.1.4；完整版本／分析 profile 見 toolchain.json 與 native Evidence。
+
+新增成果是 PE 入口到既有 WinMain 的 CRT 邊界，以及 CClient framework 子物件的 callback 註冊／消費關係。`492040→4E0200` 原已有報告；本輪重核其確切 callsite，不把舊 actor 下游再算成新方法語意。
+
+本階段保存10筆有限語意：9筆新紀錄與1筆WinMain補充；另有6筆CRT／函式庫分類。36份原生 dossier 包含必要的上下文，未逐份升級成語意完成。五筆分析者條件式 binding 與引擎未知並存。候選／指標表／解碼量不代表完整還原率。
+
+## 入口與參數
+
+`8978E6 CALL8AE111` 初始化安全cookie，`8978EB` 實際 bytes `E9 89 FE FF FF` 是尾跳 `897779`，不會壓入新的返回位址。Ghidra Listing mnemonic也是JMP，但flow/reference metadata標成CALL_TERMINATOR／UNCONDITIONAL_CALL；[原始精確指令](native/mcp-evidence/10-instruction-8978eb.json)與[更正](corrections.json)同時保存，沒有改寫引擎結果。
+
+`897779` 被Ghidra單一函式庫比對識別為Visual Studio2010 Release的 `___tmainCRTStartup`。其heap/thread/stdio/argv/environment初始化、錯誤分支及`__cinit`先於WinMain。這支持CRT家族分類，不能驗證原專案的精確compiler build。
+
+正常初始化成功後，`897872→8ADCEA` 回傳從ANSI命令列跳過program token與後續空白的指標。helper處理quote toggle與MBCS lead byte，沒有完整切分全部參數。四次push與`89788E CALL4A30C0`建立WinMain合約：
+
+| stack參數 | 呼叫者提供 | WinMain本體 |
+|---|---|---|
+| 1 | 400000（映像基址） | 本body未讀 |
+| 2 | 0 | 本body未讀 |
+| 3 | 8ADCEA回傳的命令列尾指標 | `[EBP+10]→ECX→4A2EC0` |
+| 4 | STARTUPINFO flag bit0為1時取wShowWindow，否則10 | 本body未讀 |
+
+WinMain `RET10`，4A2EC0返回值先存ESI，之後初始化／atexit註冊與4A2C10清理完成再還原EAX。Ghidra無參數原型不能代替此ABI證據。原檔PE CLI directory RVA/size均0，正常返回後走`89789C→8939B3 _exit(status)`；_exit內部終止合約未在本輪展開，不宣稱觀察到程序終止。
+
+CRT body精確為 `[897779,8978A8)` 與 `[8978D6,8978E6)`，共319 bytes。中間 `[8978A8,8978D6)` 的46 bytes，Ghidra回覆undecodable／not_in_procedure，仍列未知。不能因SEH前導或位址鄰接就填入同一函式。
+
+主要Evidence：entry `ev_d3c5313e9cfd5c8b466b4d717145de6f010e2f506e9e511ceb43d907183993c4`；CRT `ev_d74d9dd4cfa1814337d80290123612d1c935f6e6f6059ef7d1cd0ac1dfe3bc6a`；WinMain `ev_5924e393fd586099a8f2a37da5d3017e747eebf4eccc83ef02777f1292609621`。
+
+## 遊戲物件、迴圈與callback
+
+正常4A2EC0路徑先經既有登入模組檢查；`/version`、`geproc`與失敗路徑可跳過物件建立。已有登入證據仍以[input snapshot](input-snapshots/LOGIN-MODULE-COMMAND-LINE-AND-AUTH.md)為準，不誤稱命令列由CClient接收。
+
+通過登入gate後，`4A3046→48AB70`建構stack上的CClient；返回後`4A304B LEA ESI,[ESP+34]`是完整物件+8的framework子物件。建構函式`48ACA6`對該子物件寫vptr=C05AA4。其COL的this offset=8與RTTI `.?AVCClient@@`均經原檔bytes核對。這不代表全部vtable終點、所有virtual或整個CClient語意已解析。
+
+`4A305A→6DEB40`以ESI初始化：virtual+20失敗時寫receiver+2C=1並回80004005；成功時註冊九組callbacks。AnimateFrame這一組由`6DEBDD→6E1C70`完成：共享環境`FBA7CC`的`+378=6EB140`、`+3AC=ESI`。這兩次寫入各有條件鎖，並非原子pair。
+
+`4A305F→6DEC40`只在receiver+2C==0時顯示窗口、設+30並進入`6E76C0`，返回後清+30與隱藏窗口。`4A3066→6DEC90`為收尾呼叫；正常分支清理共享環境並dispatch virtual+24。這些是靜態API呼叫證據，分析時未呼叫這些目標API。
+
+`6E76C0`在建立／重入等gate成功後令D63D84=1，反覆呼叫`6E7A60`；後者PeekMessageW/TranslateMessage/DispatchMessageW，取不到訊息才走`6E7AB0`。D63D84停止來源、視窗程序及全部device-recovery分支仍未完成。
+
+`6E7AB0`只有特定條件進入AnimateFrame：device有效、環境+1374非零、6E1060回false及callback非NULL等。它把float32時間量累積於環境+1378，取出後清零；`6E1560`取+378、`6E1760`取+3AC，`6E8240 CALL ESI`傳device、累積float32、user-data三個stack參數。
+
+`6EB140`先拒絕NULL與七個填充值，再寫user-data+10=device，從其vtable+34取得目標並傳receiver／delta。若保有這條建構與註冊配置，`C05AA4+34=C05AD8`的原檔DWORD為492040。`492040`從stack參數2讀float32，`4925A5→4E0200(FAB130,delta)`接回已知actor更新鏈。
+
+這是**分析者依建構／欄位／vtable bytes建立的條件式路徑**。引擎對6E8240、6EB1A4原始resolver均回unresolved，兩者照樣保存。其他程式覆寫callback/user-data/vptr、並行pair變動未全域排除；不能升級成所有執行都必到492040或一般怪物決策已找到。
+
+主要Evidence：建構 `ev_0f868d142867ae7bbb508a2ce88ef2a4b1438785b2062d42475db9ee90fa942f`；註冊 `ev_0f31ec3ee4dcd5a1d1cde34db359f2b5d019e865af1566916e6db30249474cec`；frame context `ev_a48fecfefbd8e11b46a9d853425456edb882b0b4522c1ca9697de428bd87241c`；adapter `ev_96448e5607f6d0825de78d3938c084a9a99635943297347626f6bebf02fb0692`；492040 context `ev_19fe456a95e7b4a6b0fe16637963fea0223ce751a93ef50eec0eb19422d87b01`。
+
+## 初始化資料結構與限制
+
+`__cinit`使用兩個半開DWORD pointer表：`[BD26EC,BD2BA0)`共301 slots（300非零），`[BD2BA4,BD2BC8)`共9 slots（8非零）。第一個為C++ initializer走訪，第二個經8937B8 `__initterm_e`，遇callback非零status即停止。`__initterm_e`偽碼void不完整；Listing保留EAX，caller明確TEST EAX，資料庫保存返回status更正。
+
+301／9是表項數，不能算已解析函式，也不能把所有目標的語意視為標準庫。893840的engine resolver只列BCCB7F一個target，不能代替整張表的消費合約或表示其他299個非零目標不存在。FE83D4的條件式callback仍未確定runtime值。兩張表逐項bytes、range SHA與callsite均存[data-structures.json](data-structures.json)。
+
+完整Ghidra限制、PDB名但未確認載入、native high-pcode截斷與各間接呼叫保留於[native observations](native-observations.json)。尤其6E7AB0與492040僅作本輪鏈上context，不新增完整方法語意紀錄；不因pseudo輸出成功就宣稱全部分支完成。
+
+## 查詢與重現
+
+執行位置為workspace，以下只讀本輪證據／原檔，輸出只在本階段目錄：
+
+```powershell
+python anal/kr-crt-startup-20261023/query_records.py --method 6eb140
+python anal/kr-crt-startup-20261023/query_records.py --callsite 6e8240
+python anal/kr-crt-startup-20261023/query_records.py --callsite 8978eb
+python anal/kr-crt-startup-20261023/verify_records.py
+```
+
+SQLite為[methods.sqlite](methods.sqlite)，含semantics/libraries/observations/bindings/regions/call_edges/corrections。原檔、DB、summary與72個native Evidence hash不符時查詢拒絕。新區域claim保存在[region-evidence.json](region-evidence.json)，未反覆重建全域region ledger／atlas／decoded聯集。
+
+`build_records.py`從保留Evidence整理紀錄，使用既有PE reader核對bytes，不重新反編譯／模擬／建全索引。若明確要重建本階段派生DB，再執行該builder與verify；全程不要修改已封存舊階段。原生重現指令與版本見[交接](HANDOFF.md)及toolchain.json。
+
+驗證：10項驗收通過，37個body ranges、30個精確指令、9個critical rel32目標、兩張pointer表與RTTI bytes核對。959筆engine call/jump/unknown紀錄只提供查詢，不是959筆新有效關係或函式。具體進度拆分見progress.json；有效函式分母與語意完成百分比仍未知，MEF／普通怪物決策及完整程式解析尚未完成。

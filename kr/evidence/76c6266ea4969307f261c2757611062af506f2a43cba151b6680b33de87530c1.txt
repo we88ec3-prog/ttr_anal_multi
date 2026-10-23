@@ -1,0 +1,82 @@
+"""Offline skill-matrix caller audit; never attaches to or modifies a game."""
+from pathlib import Path
+import hashlib, json
+from build_native_index import PE
+from capstone import Cs, CS_ARCH_X86, CS_MODE_32
+
+ROOT = Path(__file__).resolve().parent.parent
+OUT = ROOT / 'anal/native-index'
+p = PE(ROOT / 'Tartaros.bin')
+idx = json.loads((OUT / 'Tartaros.bin.json').read_text(encoding='utf-8'))
+assert hashlib.sha256(p.data).hexdigest() == idx['sha256']
+md = Cs(CS_ARCH_X86, CS_MODE_32)
+
+def dump(start, end, name, terminal='ret'):
+    ins = list(md.disasm(p.read(start, end-start), start))
+    assert sum(i.size for i in ins) == end-start
+    assert ins[-1].mnemonic == terminal
+    bounds = {i.address for i in ins}
+    for i in ins:
+        if i.mnemonic.startswith('j') and i.op_str.startswith('0x'):
+            target = int(i.op_str, 16)
+            if start <= target < end:
+                assert target in bounds
+    (OUT / (name+'.txt')).write_text('\n'.join(
+        f'{i.address:08X} {i.mnemonic:8} {i.op_str}' for i in ins)+'\n', encoding='utf-8')
+    return {i.address:i for i in ins}
+
+condition = dump(0x549980, 0x549c51, 'skill-condition-hero-gate')
+adapter = dump(0x54ae70, 0x54ae92, 'skill-condition-subai-adapter')
+available = dump(0x54f270, 0x54f330, 'skill-flags-availability')
+snapshot = dump(0x54f330, 0x54f466, 'skill-cooldown-snapshot')
+# This function has a tail branch AFTER the normal return, so keep it.
+list_ui = dump(0x61c7c0, 0x61cab3, 'skill-list-hero-gate', 'jmp')
+matrix = dump(0x819220, 0x819278, 'skill-matrix-shared-lookup')
+key = dump(0x81a8e0, 0x81a909, 'skill-matrix-shared-key')
+other_tree = dump(0x52ccc0, 0x52cd0c, 'non-matrix-tree-lookup')
+assert other_tree[0x52cccb].op_str == 'ecx, [esi + 0x30]'
+assert other_tree[0x52ccd1].op_str == '0x8195e0'
+assert condition[0x5499f4].op_str == 'edi, 9'
+assert condition[0x5499f7].op_str == '0x549a20'
+assert condition[0x549a7f].op_str == '0x819220'
+assert adapter[0x54ae83].op_str == '0x549980'
+assert available[0x54f2d5].op_str == 'ecx, word ptr [esi + 2]'
+assert available[0x54f2e0].op_str == '0x819220'
+assert available[0x54f317].op_str == 'dword ptr [eax + 4], ecx'
+assert snapshot[0x54f3a7].op_str == '0x8195e0'
+assert snapshot[0x54f3c4].op_str == '0x8196d0'
+assert snapshot[0x54f423].op_str == 'dword ptr [ebx], ecx'
+assert snapshot[0x54f434].op_str == 'dword ptr [ebx + 0xc], edx'
+assert list_ui[0x61c82c].op_str == 'eax, 9'
+assert list_ui[0x61c82f].op_str == '0x61ca97'
+assert list_ui[0x61c898].op_str == '0x819220'
+assert list_ui[0x61cab1].op_str == '0x61ca44'
+assert key[0x81a8e3].op_str == 'al, 4'
+assert key[0x81a8e7].op_str == 'cl, 0xb'
+
+def references(target):
+    return [src for src,dst in idx['candidateDirectCalls'] if dst==target]
+assert references(0x819220) == [0x470715,0x549a7f,0x54f2e0,0x5cd806,0x60f330,0x61c898]
+assert references(0x54f270) == [0x5462dd,0x54827f,0x549c0e,0x549d54]
+assert references(0x54f330) == [0x5cdd2f,0x5cdeb0,0x5ce0a7]
+identities = [(0x410250,'CBuyPracticeTalentWnd',0xd0),
+              (0x5ceab0,'CBottomMenuFrame',0x198),
+              (0x60d820,'CSkillSlotToolTip',0x184),
+              (0x615420,'CBuySkillPhaseWnd',0x15c),
+              (0x61bfd0,'CBuyPracticeActiveWnd',0x15c),
+              (0x54ae70,'CSkillCheckCondition',4)]
+for entry,name,offset in identities:
+    assert any(name in v['className'] and len(v['entries'])>offset//4
+               and v['entries'][offset//4]==entry for v in idx['vtables'])
+
+report = dict(sha256=idx['sha256'], boundedFunctions=8,
+             lookupCandidates=references(0x819220),
+             availabilityCandidates=references(0x54f270),
+             snapshotCandidates=references(0x54f330),
+             indexedUIAndConditionIdentities=[dict(entry=a,className=n,virtualOffset=o)
+                                              for a,n,o in identities],
+             finding='Shared matrix and availability functions are generic; verified condition and skill-list entry points reject model IDs above 9 before lookup.',
+             limitation='Raw direct-call candidates are not an exhaustive graph; UI caller chains outside bounded functions are instruction/window evidence. No monster decision producer, host authority or runtime activation established.')
+(OUT / 'skill-matrix-consumer-audit.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8')
+print(json.dumps(dict(checks='passed',boundedFunctions=8,lookupCandidates=6,
+                     availabilityCandidates=4,snapshotCandidates=3)))

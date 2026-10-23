@@ -1,0 +1,20 @@
+"""Classify only named source-bound constants/import data and observed alignment gaps."""
+import hashlib,json,sys
+from pathlib import Path
+HERE=Path(__file__).resolve().parent;ROOT=HERE.parents[1]
+sys.path.insert(0,str(ROOT/'anal'));from build_native_index import PE
+pe=PE(ROOT/'Tartaros.bin');sha=hashlib.sha256(pe.data).hexdigest();assert sha=='9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91'
+def evidence(path):return json.loads((HERE/path).read_text(encoding='utf-8'))['structuredContent']['evidence_id']
+loader=evidence('followup/mcp-evidence/05-function-7d2170.json');setter=evidence('workbench/mcp-evidence/12-function-7d28e0.json');pathctor=evidence('followup/mcp-evidence/03-function-6edd50.json')
+specs=[(0xc559c8,8,'constant-f64-promoted-f32-value',loader),(0xc55680,4,'constant-f32-unsigned-conversion',loader),(0xc556b0,8,'constant-f64-half',setter),(0xbd22bc,12,'pe-import-address-table-entries','import-seeds.json'),(0xc50004,len('./FrameControl.ini')+1,'data-ascii-string',loader),(0x6eddbd,3,'padding-candidate',pathctor),(0x6edded,3,'padding-candidate',pathctor)]
+rows=[]
+for a,size,kind,eid in specs:
+ raw=pe.read(a,size)
+ if kind=='padding-candidate':assert raw.hex()=='8d4900'
+ if kind=='data-ascii-string':assert raw==b'./FrameControl.ini\0'
+ rows.append({'start':a,'end_exclusive':a+size,'file_offset':pe.offset(a),'classification':kind,'raw_hex':raw.hex(),'sha256':hashlib.sha256(raw).hexdigest(),'evidence_id_or_seed':eid})
+try:runtime_offset=pe.offset(0xfbab80)
+except ValueError:runtime_offset=None
+report={'source_sha256':sha,'regions':rows,'runtime_structure':{'start':0xfbab80,'end_exclusive':0xfbabf8,'classification':'runtime-float32-parameter-table','bytes':120,'shape':'5 groups x 6 fields','file_offset_if_file_backed':runtime_offset,'basis':'30 native FSTP destinations and consumer indexed reads; not a dump of observed runtime contents'},'limits':['Padding is inferred from exact LEA bytes in gaps excluded from the native body, not global unreachability.','IAT file bytes precede PE loader resolution and are not observed runtime API addresses.','This is a small overlay, not full image partition or byte completion percentage.']}
+(HERE/'region-evidence.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8')
+print(json.dumps({'classified_source_regions':len(rows),'runtime_structure_bytes':120}))

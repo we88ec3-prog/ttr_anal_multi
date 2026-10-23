@@ -1,0 +1,62 @@
+"""Offline scene/controller initialization audit. Does not access game memory."""
+from pathlib import Path
+import hashlib
+import json
+import struct
+from build_native_index import PE
+from capstone import Cs, CS_ARCH_X86, CS_MODE_32
+
+ROOT = Path(__file__).resolve().parent.parent
+OUT = ROOT / 'anal/native-index'
+p = PE(ROOT / 'Tartaros.bin')
+idx = json.loads((OUT / 'Tartaros.bin.json').read_text(encoding='utf-8'))
+assert hashlib.sha256(p.data).hexdigest() == idx['sha256']
+md = Cs(CS_ARCH_X86, CS_MODE_32)
+
+def dump(start, end, name):
+    instructions = list(md.disasm(p.read(start, end-start), start))
+    assert instructions[-1].address + instructions[-1].size == end
+    assert instructions[-1].mnemonic == 'ret'
+    # Every direct internal branch lands at an instruction boundary.
+    boundaries = {i.address for i in instructions}
+    for i in instructions:
+        if i.mnemonic.startswith('j') and i.op_str.startswith('0x'):
+            target = int(i.op_str, 16)
+            if start <= target < end:
+                assert target in boundaries
+    (OUT / (name+'.txt')).write_text('\n'.join(
+        f'{i.address:08X} {i.mnemonic:8} {i.op_str}' for i in instructions)+'\n', encoding='utf-8')
+    return {i.address: i for i in instructions}
+
+rows = [
+    ('CMissionField', 0x4bc750, 0x4bc926, 'CSingleController', 2, 0xc0fac4, 0x4bc865, '0x548540'),
+    ('CMissionRoom', 0x4bcba0, 0x4bceaf, 'CMissionRoomController', 1, 0xc0fa6c, 0x4bce20, 'dword ptr [esi], 0xc0fa6c'),
+    ('CScenarioField', 0x4c4750, 0x4c488d, 'CFormationController', 3, 0xc0fa14, 0x4c47ff, '0x547390'),
+    ('CTutorial', 0x4c4b10, 0x4c4d59, 'CTutorialController', 4, 0xc0fb1c, 0x4c4cf2, '0x548b90'),
+]
+result = []
+for scene, start, end, controller, kind, vtable, proof, operand in rows:
+    scene_table = next(v for v in idx['vtables']
+                       if v['className'] == f'.?AV{scene}@Scene@@' and v['thisOffset'] == 0)
+    assert scene_table['entries'][4] == start  # scene virtual +10
+    ins = dump(start, end, 'scene-controller-init-'+scene)
+    assert ins[proof].op_str == operand
+    controller_table = next(v for v in idx['vtables'] if v['address'] == vtable)
+    assert controller_table['className'] == f'.?AV{controller}@@'
+    assert controller_table['entries'][0x44//4] == 0x546ef0
+    result.append(dict(scene=scene, sceneInit=start, sceneInitEnd=end,
+                       controller=controller, controllerKind=kind, vtable=vtable,
+                       primaryInput=controller_table['entries'][0x48//4],
+                       extraFollow=controller_table['entries'][0x44//4]))
+
+formation = dump(0x547390, 0x5475c9, 'formation-controller-constructor')
+single = dump(0x548540, 0x5485f5, 'single-controller-constructor')
+assert formation[0x54741b].op_str == 'dword ptr [0xfba7ac], 3'
+assert single[0x5485d6].op_str == 'dword ptr [0xfba7ac], 2'
+assert formation[0x5473e6].op_str == '0x548da0'
+
+report = dict(sha256=idx['sha256'], scenes=result,
+              scope='Four RTTI-confirmed scene virtual+10 initializers; static mapping, not a live scene capture.',
+              conclusion='FBA7AC is a controller kind discriminator on these paths; not evidence of peer identity or monster authority.')
+(OUT/'scene-controller-audit.json').write_text(json.dumps(report, indent=2)+'\n', encoding='utf-8')
+print(json.dumps(report, indent=2))

@@ -1,0 +1,89 @@
+"""Tutorial casts: native speed/timing, per-character cooldown and held Z chain.
+No runtime helpers. Damage/costs and cooldown icon notification are pending.
+"""
+import json
+import struct
+import time
+from pathlib import Path
+
+CATALOG=json.loads(Path(__file__).with_name('tutorial-native-skills-v19.json').read_text())['characters']
+ACTIONS={int(c):tuple(s['motion'] for s in rows) for c,rows in CATALOG.items()}
+HOLD_TIMEOUT=.4  # Actual held inputs repeat every ~.133s; release at rest is silent.
+CHAIN_WINDOW=.65  # Client can resume input only after its cast animation ends.
+
+class SkillCast:
+    def __init__(self):
+        self.cooldowns={}
+        self.reset()
+
+    def reset(self):
+        # Rebuilding/switching a character must not bypass its cooldown.
+        self.character=None
+        self.held=0
+        self.last_input=None
+        self.deadline=None
+        self.key=0
+        self.combo_index=0
+        self.moving=0
+        self.direction=0
+        self.chain_until=0
+        self.next_combo=0
+
+    def is_casting(self):return self.deadline is not None
+
+    @staticmethod
+    def select_key(keys):
+        return 5 if keys&5==5 else 2 if keys&2 else 1 if keys&1 else 0
+
+    def _start(self,key,now,combo_index=0):
+        row=next(s for s in CATALOG[str(self.character)] if s['input_flags']==key)
+        if now<self.cooldowns.get((self.character,key),0):return ()
+        self.key=key
+        self.combo_index=combo_index
+        motion=row['combo_motions'][combo_index] if key==1 else row
+        # Basic attacks already include the native recovery frames. Additional
+        # safety padding makes every combo stage wait unnecessarily.
+        self.deadline=now+motion['duration_seconds']+(0 if key==1 else .1)
+        if row['cooldown_seconds']:
+            self.cooldowns[self.character,key]=now+row['cooldown_seconds']
+        return (struct.pack('<HHBHf',0x0d,0x100,self.direction,motion['motion'],1.),)
+
+    def input(self,character,entity,flags,direction,now=None):
+        if entity!=0x100 or character not in ACTIONS:return ()
+        now=time.monotonic() if now is None else now
+        if character!=self.character:
+            self.reset()
+            self.character=character
+        self.moving=int(bool(flags&0x8000))
+        self.direction=direction
+        self.held=flags&7
+        self.last_input=now
+        if self.is_casting():return ()
+        key=self.select_key(self.held)
+        if not key or self.moving:
+            self.chain_until=0
+            self.next_combo=0
+        if not key:return ()
+        # A packet after completion is a new attempt, even without a release packet.
+        index=self.next_combo if key==1 and not self.moving and now<=self.chain_until else 0
+        return self._start(key,now,index)
+
+    def finish(self,now=None):
+        now=time.monotonic() if now is None else now
+        if self.deadline is None or now<self.deadline:return ()
+        self.deadline=None
+        if (self.key==1 and self.held==1 and not self.moving
+                and self.last_input is not None and now-self.last_input<=HOLD_TIMEOUT):
+            row=next(s for s in CATALOG[str(self.character)] if s['input_flags']==1)
+            return self._start(1,now,(self.combo_index+1)%len(row['combo_motions']))
+        if self.key==1 and self.held==1 and not self.moving:
+            row=next(s for s in CATALOG[str(self.character)] if s['input_flags']==1)
+            self.next_combo=(self.combo_index+1)%len(row['combo_motions'])
+            self.chain_until=now+CHAIN_WINDOW
+        else:
+            self.chain_until=0
+            self.next_combo=0
+        self.key=0
+        self.combo_index=0
+        return (struct.pack('<HHb',0x0c,0x100,2 if self.moving else 1),
+                struct.pack('<HHBBHH',0x0b,0x100,self.direction,self.moving,0,0))

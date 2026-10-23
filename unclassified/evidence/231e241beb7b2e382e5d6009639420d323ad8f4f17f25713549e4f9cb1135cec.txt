@@ -1,0 +1,51 @@
+"""Offline candidate inventory for this+0xF0 calls, not object/AI identification."""
+import hashlib
+import json
+import sqlite3
+from pathlib import Path
+from build_native_index import PE
+from capstone import Cs, CS_ARCH_X86, CS_MODE_32
+from capstone.x86_const import X86_OP_MEM, X86_OP_REG
+
+ROOT = Path(__file__).resolve().parent.parent
+OUT = ROOT / 'anal/native-index'
+p = PE(ROOT / 'Tartaros.bin')
+md = Cs(CS_ARCH_X86, CS_MODE_32)
+md.detail = True
+db = sqlite3.connect((OUT / 'method-atlas/methods.sqlite').as_uri() + '?mode=ro', uri=True)
+sha = hashlib.sha256(p.data).hexdigest()
+assert sha == db.execute("select sha256 from modules where module='Tartaros.bin'").fetchone()[0]
+labels = {}
+for address, label in db.execute("select address,label from labels where module='Tartaros.bin'"):
+    labels.setdefault(address, set()).add(label)
+rows, scanned = [], 0
+for start, status, end in db.execute("select address,status,max_va_exclusive from methods where module='Tartaros.bin' and instructions>0 order by address"):
+    if end - start > 65536:
+        continue
+    scanned += 1
+    instructions = list(md.disasm(p.read(start, end - start), start))
+    for n, ins in enumerate(instructions):
+        if ins.mnemonic != 'lea' or len(ins.operands)!=2:
+            continue
+        dst,src=ins.operands
+        if dst.type!=X86_OP_REG or md.reg_name(dst.reg)!='ecx' or src.type!=X86_OP_MEM or src.mem.disp!=0xf0 or not src.mem.base or md.reg_name(src.mem.base) in ('esp','ebp'):
+            continue
+        call=None
+        for following in instructions[n+1:n+13]:
+            if following.mnemonic=='call':
+                call=following;break
+            if following.mnemonic.startswith('j') or following.mnemonic=='ret' or dst.reg in following.regs_access()[1]:break
+        if call is None:continue
+        context=instructions[max(0,n-6):min(len(instructions),n+13)]
+        rows.append({'method':hex(start),'status':status,'labels':sorted(labels.get(start,set())),
+                     'thisAdjust':hex(ins.address),'callsite':hex(call.address),
+                     'context':[{'site':hex(i.address),'mnemonic':i.mnemonic,'operand':i.op_str} for i in context]})
+
+result = {'sha256': sha, 'scannedEnvelopes': scanned, 'candidateOccurrences': len(rows),
+          'uniqueCallsites': len({r['callsite'] for r in rows}), 'candidates': rows,
+          'limitations': ['Linear heuristic envelopes may overlap or contain data/shared tails.',
+                          'Same offset 0xF0 also belongs to unrelated classes; no actor identity inferred.',
+                          'LEA ECX,[base+0xF0] followed by first call within 12 instructions; stop at branch/ECX clobber. Direct and indirect calls retained; slot identity must be checked.',
+                          'Aliases, indirect tails and unindexed methods not exhausted; no runtime execution.']}
+(OUT / 'actor-state-dispatch-call-candidates.json').write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding='utf-8')
+print(json.dumps({k: v for k, v in result.items() if k not in ('candidates', 'limitations')}))

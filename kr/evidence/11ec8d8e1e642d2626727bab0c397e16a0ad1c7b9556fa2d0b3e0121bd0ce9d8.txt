@@ -1,0 +1,24 @@
+"""First cluster of the shipped tutorial encounter, decoded from Field.stp.
+
+COUNT is per cluster invocation. The client does not supply the referenced
+scenario_town000.mef spawn trigger file, so total waves/placements are not
+claimed to be original. Keep the already verified fixture position for now.
+"""
+from functools import lru_cache
+from pathlib import Path
+import xml.etree.ElementTree as ET
+from stp_resources import Archive
+ROOT=Path(__file__).resolve().parent.parent
+CLUSTER_PATH='Field/Cluster/CLUST_scenario_town000_01.xml'
+CHART_PATH='Field/MapFlow/CHART_scenario_town000_01.xml'
+@lru_cache(maxsize=1)
+def first_cluster():
+    archive=Archive(ROOT/'Field.stp')
+    chart=ET.fromstring(archive.read(CHART_PATH).decode('euc-kr'))
+    assert chart.find('.//Map').attrib['id']=='190'
+    tree=ET.fromstring(archive.read(CLUSTER_PATH).decode('euc-kr'))
+    cluster=tree.find("./CLUSTERSET[@ID='0']/CLUSTER[@ID='1']")
+    assert cluster is not None
+    records=tuple({'model':int(r.attrib['ID']),'pre':int(r.attrib['PRE']),'count':int(r.attrib['COUNT'])} for r in cluster.findall('OBJECT'))
+    assert records==({'model':1036,'pre':1,'count':1},), 'Unknown layout requires explicit encounter implementation'
+    return records

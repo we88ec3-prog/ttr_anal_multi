@@ -1,0 +1,85 @@
+"""Independent original-byte checks at declared evidence sites; no target execution."""
+import hashlib,json,sqlite3,struct,sys
+from pathlib import Path
+HERE=Path(__file__).resolve().parent;ROOT=HERE.parents[1]
+sys.path.insert(0,str(ROOT/'anal'));from build_native_index import PE
+import capstone
+from capstone import Cs,CS_ARCH_X86,CS_MODE_32,CS_OP_IMM,CS_OP_REG,CS_OP_MEM
+EXPECTED='9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91'
+pe=PE(ROOT/'Tartaros.bin');assert hashlib.sha256(pe.data).hexdigest()==EXPECTED
+md=Cs(CS_ARCH_X86,CS_MODE_32);md.detail=True
+def decode(a):return next(md.disasm(pe.read(a,15),a,count=1))
+def one(a,m,o):
+ i=decode(a);assert (i.mnemonic,i.op_str)==(m,o),(hex(a),i.mnemonic,i.op_str)
+ return {'address':hex(a),'mnemonic':m,'operand':o,'raw_hex':i.bytes.hex()}
+evidence={};exact=[];unmodeled=[]
+for f in sorted(HERE.glob('**/mcp-evidence/*.json')):
+ r=json.loads(f.read_text(encoding='utf-8'))
+ if r.get('isError'):continue
+ e=r.get('structuredContent') or json.loads(next(v['text'] for v in r['content'] if v['type']=='text'))
+ if 'evidence_id' not in e:continue
+ assert e['subject']['digest']['sha256']==EXPECTED
+ evidence[e['evidence_id']]=e
+ if e['operation']=='inspect_native_instruction':
+  n=e['normalized_result']
+  if n['status']=='decoded':assert pe.read(int(n['address'],16),n['length']).hex()==n['bytes'];exact.append(n['address'])
+ if e['operation']=='resolve_containing_procedure' and not e['normalized_result']['found']:unmodeled.append(e['normalized_result'])
+api=[]
+for a,iat in [(0x6edeb0,0xbd22bc),(0x6dad61,0xbd22c0),(0x6f0152,0xbd22c0),(0x4406b8,0xbd22c4),(0x6dada8,0xbd22c4),(0x6ede39,0xbd22c4)]:
+ raw=pe.read(a,6);assert raw==b'\xff\x15'+struct.pack('<I',iat)
+ api.append({'site':hex(a),'iat':hex(iat),'raw_hex':raw.hex()})
+for a in [0x4406b8,0x6dada8,0x6ede39]:assert pe.read(a-6,6)==bytes.fromhex('6a006a006a00')
+assert pe.cstring(0xbfaffc)=='serverip.ini' and pe.cstring(0xbfb010)=='Login' and pe.cstring(0xbfb00c)=='IP'
+assert pe.cstring(0xc40ff8)=='packetlog.ini' and pe.cstring(0xc41010)=='LOG' and pe.cstring(0xc41008)=='Packet'
+assert pe.cstring(0xc420d4)=='\\' and pe.cstring(0xc420dc)=='./LogSetting.ini'
+assert pe.read(0xc559c8,8).hex()=='000000e04d62503f'
+scale=struct.unpack('<d',pe.read(0xc559c8,8))[0];assert scale==0.0010000000474974513
+assert struct.unpack('<f',pe.read(0xc55680,4))[0]==4294967296.0
+assert struct.unpack('<d',pe.read(0xc556b0,8))[0]==0.5
+checks=[one(a,m,o) for a,m,o in [
+ (0x4405f7,'mov','ebx, ecx'),(0x4405f9,'mov','eax, dword ptr [ebx + 8]'),(0x440654,'lea','ecx, [ebx + 0xc]'),
+ (0x6edeed,'mov','eax, esi'),(0x7d219d,'xor','ebx, ebx'),(0x7d22f5,'mov','esi, dword ptr [0xbd22c0]'),
+ (0x7d290d,'mov','dword ptr [eax + 0x1c], ecx'),(0x7d2910,'mov','dword ptr [eax + 0x20], edx'),
+ (0x7d2913,'lea','ecx, [ecx + ecx*2]'),(0x7d2916,'lea','edx, [edx + ecx*2]'),
+ (0x7d2919,'fld','dword ptr [edx*4 + 0xfbab80]'),(0x7d2927,'fstp','dword ptr [eax + 0x24]'),
+ (0x4b0de5,'mov','esi, dword ptr [edi + 0x15c]'),(0x4b0e0e,'add','esi, 0xb4'),(0x4b0e18,'mov','edx, 1'),
+ (0x4b1149,'mov','edx, 2'),(0x4b18a4,'xor','edx, edx'),(0x4b18c9,'add','eax, 0xb4'),(0x4b18cf,'mov','ecx, 4'),
+ (0x4c87d7,'mov','esi, ecx'),(0x4c87e6,'mov','eax, dword ptr [esi + 0x15c]'),(0x4c87f9,'push','eax'),
+ (0x7a5c90,'mov','ebx, dword ptr [ebp + 8]'),(0x7a5dd8,'push','ebx')]]
+direct=[]
+for a,t in [(0x44064e,0x6ede70),(0x44065c,0x402bb0),(0x4b0e1d,0x7d28e0),(0x4b114e,0x7d28e0),(0x4b18a6,0x7d28e0),(0x4b18d4,0x7d28e0),(0x4c87fa,0x7a5c50),(0x7a5dd9,0x7a87d0)]:
+ b=pe.read(a,5);assert b[0]==0xe8 and a+5+struct.unpack_from('<i',b,1)[0]==t
+ direct.append({'site':hex(a),'target':hex(t),'raw_hex':b.hex()})
+frame=json.loads((HERE/'framecontrol-table.json').read_text(encoding='utf-8'));assert len(frame['rows'])==30
+for row in frame['rows']:
+ assert pe.read(int(row['call_site'],16),2)==bytes.fromhex('ffd6')
+ assert row['native_import_binding']['name']=='KERNEL32.DLL::GetPrivateProfileIntA' and not row['engine_reference_manager_unresolved']
+ for arg in row['argument_pushes']:
+  i=decode(int(arg['site'],16));assert i.mnemonic=='push';op=i.operands[0];value=int(arg['value'],16)
+  if op.type==CS_OP_IMM:assert op.imm==value
+  else:assert op.type==CS_OP_REG and i.reg_name(op.reg)=='ebx' and value==0
+ i=decode(int(row['store_site'],16));assert i.mnemonic=='fstp' and i.operands[0].type==CS_OP_MEM and i.operands[0].mem.disp==int(row['destination'],16)
+for a in [0x7a89cd,0x7a89dd,0x7a8b90,0x7a8b9e]:
+ i=decode(a);assert any(v.type==CS_OP_MEM and v.mem.disp==0xfbab8c for v in i.operands)
+db=sqlite3.connect((HERE/'methods.sqlite').as_uri()+'?mode=ro',uri=True)
+assert db.execute('pragma integrity_check').fetchone()[0]=='ok'
+assert db.execute('select count(*) from methods').fetchone()[0]==12
+assert db.execute('select count(*) from semantics').fetchone()[0]==10
+assert db.execute('select count(*) from profile_calls').fetchone()[0]==36
+assert db.execute('select count(*) from frame_parameters').fetchone()[0]==30
+assert db.execute('select count(*) from region_classifications').fetchone()[0]==7
+assert db.execute('select count(*) from call_contexts').fetchone()[0]==5
+assert db.execute('select count(*) from data_structures').fetchone()[0]==2
+assert db.execute('select count(*) from methods where analysis_status=?',('engine-body-and-call-context-only',)).fetchone()[0]==2
+for a,z,offset,sha in db.execute('select start,end_exclusive,file_offset,sha256 from ranges'):
+ assert pe.offset(a)==offset and hashlib.sha256(pe.read(a,z-a)).hexdigest()==sha
+for a,record in db.execute('select address,record from semantics'):
+ r=json.loads(record);assert int(r['address'],16)==a and r['source_sha256']==EXPECTED
+ for eid in r['evidence_ids']:assert db.execute('select 1 from evidence where evidence_id=?',(eid,)).fetchone()
+for start,end,record in db.execute('select start,end_exclusive,record from region_classifications'):
+ r=json.loads(record);assert r['start']==start and r['end_exclusive']==end
+ assert hashlib.sha256(pe.read(start,end-start)).hexdigest()==r['sha256']
+db.close()
+result={'source_sha256':EXPECTED,'checks':'passed','python':sys.version,'capstone':capstone.__version__,'sqlite':sqlite3.sqlite_version,'native_instruction_byte_checks':len(set(exact)),'critical_instructions':checks,'direct_calls':direct,'direct_profile_api_calls':api,'null_data_argument_profile_calls':3,'frame_calls':30,'frame_argument_pushes':120,'frame_stores':30,'exact_scale_float64':scale,'ratio_read_sites':4,'unmodeled_procedure_observations':unmodeled,'known_pcode_truncation':['0x4b0640'],'scope':'Bounded original-byte and evidence checks only; no game/API execution and no global semantic completion claim.'}
+(HERE/'validation.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+print(json.dumps({'checks':'passed','critical_instructions':len(checks),'direct_calls':len(direct),'profile_calls':36,'frame_fields':30}))

@@ -1,0 +1,152 @@
+# 韓版主程式行為索引與戰鬥權限調查
+
+2026-10-23 最新：[CRT啟動及framework frame更新](kr-crt-startup-20261023/REPORT.md)。89788E呼叫WinMain四stack參數；CClient constructor把framework vptr設C05AA4（this offset8），6E1C70註冊6EB140／user-data，6E7AB0經getter與條件gate派送，再以virtual+34接到492040。其actor下游原已定位，並非新普通怪物決策。保留CRT不連續body、46未知bytes、兩張initializer pointer表、引擎未知與條件式綁定；有效函式與語意完成率仍未知。
+
+2026-10-23 最新區域查詢：[file-byte區域記錄](kr-region-ledger-20261023/README.md)、[query_kr_regions.py](query_kr_regions.py)。保留source-backed code、constant/data、shared、padding candidate、unknown/conflict；4B1914 table、4B18C9 shared tail、4F9B00未知gap與字串污染slot來源可追。這是區域帳務／資料結構交付，沒有新增目標功能語意；方法、callsite仍使用query_kr_evidence.py與下列功能證據。
+
+2026-10-23 最新導覽：[統一唯讀證據入口](query_kr_evidence.py)、[查詢規則與驗收](kr-unified-ledger-20261023/README.md)。`--method/--callsite/--address/--class-name/--vtable/--domain/--evidence`併讀既有來源，舊固定值與依路徑更正、原引擎未知與分析者binding均保留，不能因來源較新就全面覆寫。這輪新增功能語意0，以下各功能結論及未解限制仍以各自原生證據為準。
+
+2026-10-23 最新：[000E row+C 的命中音效消費](kr-hit-resource-20261023/REPORT.md)。4F6630把DamageSound XML的ATTACK/DEFENSE組合byte及名稱存FB7510；4F6F70以DL純查找返回char*或NULL，550580經80AF10/80E230建立CSound，記錄+28後呼叫virtual+C。此建構路徑以vtable bytes綁定到80E4C0，原engine-unresolved紀錄保留，方法行為仍未展開。另確認7300A0→CRT __stricmp的ASCII名稱比較，不能推廣成所有XML tag helper都忽略大小寫。row+C上游producer、MEF／普通怪物決策仍未知。
+
+2026-10-23 最新：[000E 結果、FrameControl 與效果消費](kr-battle-frame-binding-20261023/REPORT.md)。4B18D4 的 ECX=4 固定，但 EDX 依前驅為 0／1／2，模型亦依 case 來自 target 或 source；case4/2 的 JMP 跳過清零。不能沿用上一階段 result0 的 callsite-only 歸納。另確認 7ABCD0 數字 glyph panel、7AC030 mode panel、551F20 資源分派、5521D0 STRUCK 記錄建立；row+C 經 FB7470/4F6F70 進 550580，該查找值意義仍未知。這是結果消費與模型反應，尚非普通怪物決策或傷害權威證據。
+
+2026-10-23 最新：[FrameControl 來源與模型動畫消費端](kr-persistence-20261023/REPORT.md)。7D2170 把 FrameControl.ini 的 30 個值寫至 FBAB80..FBABF8；4B0640 四個有界 callsite 將 model+B4 與 group/result 交 7D28E0，7A87D0 在模型進度更新時消費 RATIO。這是動畫反應機制，尚非普通怪物選敵／技能決策來源。serverip.ini、packetlog.ini、LogSetting.ini 的讀取另已分類；三個全 NULL 資料參數 profile 清理呼叫不能認定為帳號／進度保存。完整戰鬥結果 schema 與 pcode 截斷保留未解。
+
+2026-10-23最新：[模型恢復鏈與非actor來源分類](kr-motion-sources-20261022/REPORT.md)。4C8060以CDoll共享參照重建模型後，從+38C重播motion；5CB110/74E4D0的slot68為圖形資源ABI，7D59A0的+F0為字串。這四個分支均未提供新的普通怪物決策producer，不能再只憑offset/slot反覆追成AI。
+
+2026-10-22邊界更正：[四個缺席入口與真正建構來源](kr-boundaries-20261022/REPORT.md)。4BC150位於CALL位移中，CMissionDecision建構/0037註冊應改為4BC170..4BC1E1。Rebind與兩個虛擬尾跳callback有明確證據，不能因Ghidra未建Function就刪除；630069只保留內部控制流片段，未認證為獨立方法。
+
+2026-10-22最新：[韓版第一階段報告](kr-phase1-20261022/FIRST-PHASE-REPORT.md)、[9筆語意與證據](kr-phase1-20261022/SEMANTIC-FINDINGS.md)、[接續導覽](kr-phase1-20261022/HANDOFF.md)。新增全域表初始化鏈、trigger 查找返回值未被該 caller 消費的邊界，以及 BOUND→小地圖 .mmt 路徑。effect/checkpoint、EventActor 與共享 FSM 分開分類；普通怪物決策來源、MEF interpreter、OBJECT/COUNT 排程及 P2P 權威仍未確認。
+
+2026-10-08最新：[動作接口呼叫點與來源分類](ACTOR-MOTION-CALLS-AND-SOURCE-CLASSIFICATION.md)。53個不同slot68呼叫候選，新增Wait／Move狀態及文字觸發動作的完整核對；仍未找到普通怪物自主決策來源。
+
+2026-10-07 已補上 [主程式整體方法索引與功能地圖](MAIN-PROGRAM-FUNCTION-MAP.md)，包括原始 Tartaros.bin／Tartaros.exe／Network.dll 的 SQLite 方法索引、搜尋介面、證據等級與重建工具。本文保留歷史逐項行為證據；整體數量、覆蓋率與最新查詢入口以新地圖為準。
+
+最新補充：[位置更新與移動欄位寫入來源](POSITION-UPDATE-AND-MOVEMENT-WRITERS.md)，包含0001／0016共用接收端、全域候選清單與UI／控制器／場景重設的物件分類。
+
+後續分類：[Lua物件移動與怪物AI邊界](SCRIPT-OBJECT-MOTION-BOUNDARY.md)，核對WalkObject／WarpObject／AniObject／StopObject及CEventActor目標抵達管線；普通怪物的決策來源仍待定位。
+
+建立來源已接續至[腳本物件建立與所有權](SCRIPT-OBJECT-CREATION-AND-OWNERSHIP.md)：Q.CreateObject配置CEventActor並插入腳本容器，含完整清除與單物件刪除空操作的原版證據。
+
+普通怪物另一建立入口：[lb.CreateObjectEx參數與控制邊界](LB-CREATE-OBJECT-ABI-AND-CONTROL.md)，區分lb／Q命名空間並對齊六參數及數值轉換。
+
+更新：2026-10-04。此份是可重用的分析入口，並非完整反編譯結果。
+分析基準為原始 Tartaros.bin，地址是該檔的靜態 VA；不可直接套用不同版本。
+
+## P2P 的判斷
+
+大量房間的 AI 與傳輸負載使客戶端主控值得優先調查，但負載估算不能證明架構。
+需要分開確認「連線拓樸」與「戰鬥權限」：玩家直接連線、伺服器中繼、
+房主計算怪物、伺服器計算怪物是不同問題；TCP 也可承載玩家間連線。
+
+目前已確認：
+
+- 主程式 806AD0 建立 AF_INET / SOCK_STREAM socket，之後 connect。
+- Network.dll 的 10012A27 與 10014843 亦為 SOCK_STREAM 建立路徑，
+  前者附近有 IOCP listen socket 錯誤訊息，後者接 connect。
+- DLL 的 10016F04 是 WSASocketA 匯入跳板，不能當成第三個獨立連線路徑。
+  本次直接呼叫候選中未找到指向此跳板的 E8；仍未涵蓋函式指標呼叫。
+- 0B 移動、0D 動作接收端共用 actor ID 查找，能處理怪物。
+- 現行測試怪物是 Python 伺服器 AI；其動作不能用來證明原版權限。
+
+仍待確認：房間主控選任、玩家端點交換、第二條實際連線、怪物決策更新入口、
+傷害裁決與同步方向，以及離開房間時是否移交主控。
+
+## 共用入口
+
+| 系統 | 已定位入口 | 證據與限制 |
+|---|---|---|
+| 主封包註冊 | 4ADD50；本次擷取 79 筆 | 僅指定區段與 EAX 寫入形式，不是全協定清單 |
+| 建立實體 | 07 → 4AE4D0；CMonster constructor 4D1710 | type 1 建立原生怪物，不代表啟用决策 AI |
+| 移動／狀態／動作 | 0B → 4AFE60；0C → 4B0130；0D → 4B01C0 | 動作落到 4C8A90；接收不等於決策 |
+| 動作通知／清除／地圖 | 0F → 4B19D0 → 545C50；1A → 4B28D0；11 → 4B1A70；12 → 4B24F0 | 0F 已確認 CANNOT_USE_SKILL 音效／提示，非命中決策；1A 刪除指定 actor |
+| 戰鬥／隊伍 | 38 → 4B1BF0；50 → 4B3600 | 須追資料來源與控制器切換 |
+| 房間控制器 | CMissionRoomController C0FA6C | 已列虛擬方法；用途不能只憑類別名稱推定 |
+| 隊形控制器 | CFormationController C0FA14；5480E0 | 548FF0 的 3 個 AI 槽是隊員 actor ID |
+| 怪物更新 | CMonster C0C9DC；4D1AF0 → 4C87D0 | 已見模型／狀態更新，尚未找到自主決策 |
+| 傳輸 | FBA854；CIocpNetwork C51748；send 8069A0 | 尚未證明所有戰鬥流量只走此物件 |
+| Lua 載入 | 6F4A50 | 固定與動態腳本呼叫見 kr-ai-loader-callers.json |
+| 任務資源／目前實作 | MAINLINE-FLOW.md | 區分資源定義與 Python 已實作流程 |
+
+## 可重建索引
+
+`build_native_index.py` 產出 native-index 下的 JSON，保留 SHA256、匯入、RTTI、
+虛擬函式表、直接呼叫候選與主封包註冊。
+韓版：422 匯入、1553 RTTI 描述、1558 虛擬表；Network.dll：88 匯入、9 描述、8 虛擬表。
+原始 E8 掃描包含可能的資料誤判；不是完整呼叫圖，必須從可靠函式起點反組譯核對。
+
+PowerShell 查詢例子（在 workspace 執行）：
+
+```powershell
+& 'C:\Programs\Python\Python310\python.exe' anal/query_native_index.py --packets
+& 'C:\Programs\Python\Python310\python.exe' anal/query_native_index.py --class-name MissionRoomController
+& 'C:\Programs\Python\Python310\python.exe' anal/query_native_index.py --callers 0x548FF0
+& 'C:\Programs\Python\Python310\python.exe' anal/query_native_index.py --module Network.dll --import-name WSASocketA
+```
+
+## 下一輪順序與驗收證據
+
+1. 從 38/50 的輸入資料與 MissionRoom／Formation 控制器切換追主控旗標。
+   本輪已保存 545C50、545E20、546100 等虛擬入口的反組譯候選至
+   native-index/battle-controller-paths.txt，尚未賦予主控語意。
+2. 沿主控條件找 CMonster 的更新與目標／技能選擇，對照一般關卡與教學。
+   找到「本機計算／接收更新」分支，才考慮修改初始化。
+3. 若需要動態證據，單次擷取戰鬥開始前後的連線端點、控制器、怪物更新呼叫來源，
+   合併檢查，而非每個功能各做一次探針。遊戲開關仍由使用者操作。
+4. 普攻連段沿同一戰鬥權限路徑追原生動作續接窗口；不能只縮短 Python 等待時間。
+5. 任務最後整合為可維護流程表，引用同一封包與場景索引。
+
+本輪無服務重啟、遊戲操作、存檔或執行檔修改；原版怪物 AI 尚未啟用。
+
+
+### SubAI target and attack executor
+See [SUBAI-ACTION-TRACE.md](SUBAI-ACTION-TRACE.md): verified hero AI target slots, candidate search and skill flag production; monster caster restriction and unresolved authority are documented separately.
+
+
+### TeamPack and faction predicates
+See [FACTION-WIRE-TRACE.md](FACTION-WIRE-TRACE.md): S->C82 record format, relation masks, actor+90 and confirmed current fixture same-faction mismatch. Offline audit utility does not modify the game.
+
+
+### Local actor creation and rule framework
+See [LOCAL-ACTOR-AND-AI-FRAMEWORK.md](LOCAL-ACTOR-AND-AI-FRAMEWORK.md): CreateObject/Ex native entries, ObsessionsAI condition/action execution and original monster1036 skill matrix.
+
+
+### Controller and skill timing source
+See [CONTROL-AND-SKILL-SOURCE.md](CONTROL-AND-SKILL-SOURCE.md): primary hero input model restriction, shared extra-follow virtual and S->C012A timing notification. The downstream4ADD50..4AE37F index now has101 explicit handlers; the upstream CClient index has197. See DYNAMIC-NETWORK-PATHS.md and RECEIVE-AND-SCENE-DISPATCH.md for separate routing scopes.
+
+### Scene controller selection
+See [SCENE-CONTROLLER-SELECTION.md](SCENE-CONTROLLER-SELECTION.md): four RTTI-confirmed scene initializers select Single/MissionRoom/Formation/Tutorial controllers. FBA7AC is a kind discriminator on these paths, not proof of host or peer identity. Shared extra-follow does not activate a monster decision engine.
+
+### Client manager and party routes
+See [CLIENT-MANAGER-AND-PARTY-ROUTES.md](CLIENT-MANAGER-AND-PARTY-ROUTES.md): seven RTTI-confirmed managers receive165 explicit client commands; party/union tables cover0088..0090 and0109..010C. Party roster54-byte rows and member9-byte rows are verified; membership flags are not established monster authority or host identities.
+
+### Party notification follow-up
+See [PARTY-NOTIFICATION-FOLLOWUP.md](PARTY-NOTIFICATION-FOLLOWUP.md): member notification helpers, union010A4-byte records and add/remove paths; add sends00C8/00C9 throughslot0. GlobalStatus97 local registrations differ from98 upstream routes; nested data receivers remain to be traced.
+
+### Nested data and TCP inheritance
+See [NESTED-DATA-AND-TCP-TYPES.md](NESTED-DATA-AND-TCP-TYPES.md): C2/C3 nested receivers update17-byte item-slot records; no assumed pairing to C8/C9 requests. All1558 indexed RTTI hierarchies decoded; onlyCClient derivesCTCPInterface inthismain-executable scope, notproofagainstothertransports orP2P.
+# 2026-10-08接續入口
+
+- [共用Lua載入來源與教學腳本邊界](SHARED-LUA-LOADING-AND-TUTORIAL-BOUNDARY.md)：9個完整範圍；補查UI/LUA.stp，仍未找到lb.CreateObjectEx腳本引用。下一步回到普通怪物欄位生產者與一般地圖生成訊息。
+
+
+
+- 2026-10-08：[普通怪物狀態建立與切換來源](MONSTER-STATE-TRANSITIONS-AND-SOURCES.md)。7個完整範圍，確認 CMonster Move 狀態建立與共用切換入口；另保存狀態寫入／派送候選，AI決策權限仍待確認。
+
+- 2026-10-08：[狀態上游候選分類](SCENE-STATE-SOURCE-EXCLUSIONS.md)：確認CExpedition展示建立與固定角色結果動作；5個完整範圍，補v8派送候選掃描，未找到新的怪物AI決策來源。
+
+- 2026-10-08：[發送端命令與怪物更新邊界](OUTGOING-COMMANDS-AND-MONSTER-UPDATE-BOUNDARY.md)：原生CCharChangeDialog送6-byte C2S000C角色選擇，與S2C000C狀態列分開；新增發送常數候選清單及5個完整範圍核對。
+
+- 2026-10-08：[場景發送父函式與連線分流](SCENE-OUTGOING-PARENTS-AND-CHANNEL-SPLIT.md)：6 個完整範圍，補上 15 個先前未定位發送點；辨識頻道初始化、槽 2 文字回應與 Decision 命令 0037，AI／P2P 尚未證實。
+
+- 2026-10-08：[場景與 keyed 資料回應](SCENE-KEYED-RESPONSES-AND-FLAG-MESSAGES.md)：11 個完整範圍，再補 9 個發送點，核對 0009/0025/EA/101/BBE/EC/ED/EE 的格式與收到訊息註冊來源；未證實怪物 AI／P2P。
+
+- 2026-10-08：[Messenger 發送與識別值回應](MESSENGER-SEND-PATHS-AND-IDENTIFIER-RESPONSES.md)：10 個完整範圍、10 個發送點；RTTI 證實 CMessengerWnd 選項送槽 2 的短命令，區分社交 UI 與尚未證實的戰鬥 P2P。
+
+- 2026-10-08：[發送缺口完成：公會與 UI](FINAL-SENDER-GAPS-GUILD-AND-UI.md)：14 個完整範圍、最後11個send，Guild RTTI與UI事件來源核對；45個歷史缺口聯集已驗證，仍非所有傳輸／AI語義完成。
+
+- 2026-10-08：[快捷槽緩衝區與掃描限制](QUICKSLOT-BUFFER-SOURCES-AND-SCAN-LIMITS.md)：8 個完整範圍、4 個發送點；0022／002A 快捷槽來源與 0007 旗標已核對，沒有 WORD 常數不代表動態 AI 命令。
+
+- 2026-10-08：[可變長度封包：拍賣搜尋與背包來源](VARIABLE-BUFFERS-AUCTION-AND-INVENTORY.md)：10 個完整函式、4 個送出點；Auction RTTI、0BD2 批次清單與 0021 可選記錄已核對，怪物決策來源仍待確認。
+
+- 2026-10-08：[Actor 鄰近的文字請求邊界](ACTOR-ADJACENT-TEXT-REQUEST-BOUNDARY.md)：6 個完整函式；0011 文字格式、表情／任務介面來源與本機指令分支已核對，不能以位址鄰近當成怪物 AI。

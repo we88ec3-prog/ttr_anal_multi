@@ -1,0 +1,74 @@
+# lb.CreateObjectEx的Lua參數與控制器邊界
+
+2026-10-08，原始韓版離線核對。未啟動服務／遊戲，未修改執行檔、資源、存檔、封包或v41 AI。
+
+## 同名CreateObject屬於不同接口
+
+完整4A14D0..4A15A9直接使用原版名稱`lb`（C06220），保存FE1774 Lua狀態並把FE1778初始化為FE7224。完整4A0950..4A0A20串接其註冊，包含：
+
+| 接口 | 成員指標／原生成員 | Lua wrapper／adapter | 建立來源 |
+|---|---|---|---|
+| lb.CreateObject | FE1788→4A0B40 | 4A1FB0→4A2460 | 四參數包裝，再呼叫4A0F70 |
+| lb.CreateObjectEx | FE178C→4A0F70 | 4A2010→4A25F0 | 依模型建立Character／CMonster／NPC，加入共同actor表 |
+| Q.CreateObject | FE27A4→562EC0 | 568E00，多參數adapter未全面核對 | 前輪已確認CEventActor，加入腳本this+18表 |
+
+因此舊報告提到「qbase的9參數與native CreateObject的4參數不同」，應修正為：**Q.CreateObject與lb.CreateObject是兩個已確認不同的註冊接口，不能拿來比較ABI或據此懷疑版本不相容。** qbase本身的Q呼叫仍保留既有證據。
+
+## CreateObjectEx六參數已對齊
+
+完整adapter4A25F0..4A2847含正常ret4A2811後的所有預設值分支，先取FE178C成員與FE1778實例。從Lua stack倒數六個值取參數，按原生cdecl／member的push順序對齊如下：
+
+| 六參數呼叫順序 | Lua相對stack slot | 原生stack | 確認使用 |
+|---|---|---|---|
+| 1 | -6 | +8 | 整數模型ID；選建立類別／資源 |
+| 2 | -5 | +C | FLOAT X |
+| 3 | -4 | +10 | FLOAT Y |
+| 4 | -3 | +14 | 整數係數，乘FB90BC後送v5C；沿用縮放係數的既有推定，不是FLOAT輸入 |
+| 5 | -2 | +18 | 整數朝向，送v58 |
+| 6 | -1 | +1C | 整數控制器掛接條件，非零才走目前控制器v4／v10 |
+
+轉換器接受Lua數值tag3，或字串tag4經6F7760成功轉數值；其他型別／轉換失敗使用零。整數用FISTP轉換，X／Y轉為FLOAT。它沒有把Lua boolean `true`轉成1的分支。**這是原版轉換行為，不代表實際腳本已傳錯型別，也不是建議用非零值啟用怪物AI。** Lua API參數數量／錯誤訊息的上層處理尚未完整展開。
+
+完整四參數adapter4A2460..4A25E9與wrapper4A0B40..4A0B65確認：
+
+`lb.CreateObject(modelID, X, Y, attachController)`
+
+會呼叫原生成員：
+
+`CreateObjectEx(modelID, X, Y, 12, 0, attachController)`
+
+這裡的固定12是第四參數係數，固定0是第五參數朝向；不是第六參數固定零。兩個Lua wrapper都回傳1個Lua結果的計數，但本輪adapter返回值為0；尚未全面追wrapper框架的結果堆疊語意，不當作actor指標回傳。
+
+## 建立與控制器掛接
+
+完整原生成員4A0F70..4A122A沿用既有建立分析，這輪補上ABI與完整範圍驗證：有號模型ID<10建立Character，10..10000（包含10000）建立CMonster4D1710，其餘走NPC4D2120。初始化XY、朝向、模型／顯示、狀態與CC=60後，4DFF30加入共同actor表。
+
+第六參數非零時只觀察到目前FBA7A4控制器v4登錄actor、v10完成設定及相關global更新。這沒有建立一個新怪物決策器；既有控制器槽位與模型限制仍需保留，不能把此條件改名為原生AI開關。
+
+完整怪物分支側路徑4A0DD0..4A0F5E以模型ID組資源／工作資料，交已確認的預載提交79DCE0並等待工作，再遍歷其他物件的虛擬方法與釋放引用。此函式的helper／虛擬callee未全面展開，仍不能以看不到直接AI呼叫證明不存在AI；也不能把這段資源提交当作怪物排程。
+
+Rebind wrapper4A1E70..4A1E81從Lua數值轉換4A2BB0取得值，再覆寫FE1778；因此FE7224只是此初始化路徑的值，不是永遠固定的實例身分。
+
+## 驗證、修正與下一步
+
+audit_lb_create_object_abi.py核對12個完整範圍、SHA、byte覆蓋、內部分支、terminal、lb名稱／兩組成員註冊、adapter的參數來源／push、預設分支、建立／控制器呼叫。結果在native-index/lb-create-object-abi-audit.json。
+
+已修正舊報告的Q／lb混用風險。下一步追lb接口的實際腳本引用、其載入與呼叫時機，以及普通怪物動作／目標生產者；一般關卡波次生成與P2P權限仍未定案。找到可生成怪物的接口，不等於已有原生AI可啟用。
+
+## 實際腳本引用盤點（2026-10-08接續）
+
+`scan_lb_script_references.py`唯讀掃描根目錄4份Lua、根目錄7個STP，以及現有Table／Synopsis兩個original-kr備份。共13份腳本：7份Lua5.1 bytecode完整解析至檔尾，6份非bytecode以原始文字搜尋。9個archive及各腳本SHA保存在`native-index/lb-script-references.json`；沒有執行任何腳本，沒有解析失敗。
+
+搜尋精確常數`lb`、`CreateObject`、`CreateObjectEx`、`Rebind`：
+
+- Coroutine.lua child0（來源行2..7）使用lb.GetTime，並呼叫coroutine.yield；不是建立怪物的呼叫。
+- Event/qbase.lua在主prototype宣告CreateObject，child61（行429..441）明確GETGLOBAL Q／GETTABLE CreateObject，再CALL B=10（9個參數），與已確認的Q接口一致。
+- 這13份檔案沒有CreateObjectEx／Rebind常數，也沒有lb.CreateObject呼叫的直接證據。
+
+這是**有限檔案範圍內的引用盤點**，不能證明接口未使用或遊戲沒有本機怪物AI。當前archives可能已中文化／修改，只有明列original-kr的備份代表那些備份輸入；不延伸為全套原版資源證明。未遍歷所有資產子目錄、XML內嵌腳本、動態拼接名稱、執行時腳本或DLL行為。常數盤點本身也不能證明執行時呼叫順序。
+
+整體索引提供4A0950的兩個direct-call候選：48C069、48C09C，父入口48BE50由RTTI標為CClient次表thisOffset8／v20。局部指令核對顯示FE726C bit1 guard控制註冊，再登記清理函式BCE6C0。這段是初始化引用，不是每波怪物生成的呼叫；父函式仍屬heuristic範圍，本輪不升級完整語意audit。4A0950已核對的內容是建立／註冊Lua接口，沒有在該完整範圍直接載入腳本檔。
+
+下一步應追Lua狀態FDF3C8的載入／執行入口及呼叫來源，同時沿普通CMonster位置／動作欄位生產者、一般地圖Case／Cluster訊息鏈繼續。不要把無引用結果改成修改第六參數的部署方案。
+
+索引更新後：Tartaros.bin 20,515個入口／候選，274個可匯入完整範圍，280筆來源範圍；三模組26,315筆。SQLite／SHA及164,557條edge指令核對通過；HTML查詢介面smoke通過，未做實際瀏覽器視覺檢查。byte覆蓋率54.40%仍不是行為解析比例。

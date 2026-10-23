@@ -1,0 +1,95 @@
+004D0DD0 push     ebp
+004D0DD1 mov      ebp, esp
+004D0DD3 and      esp, 0xfffffff8
+004D0DD6 sub      esp, 0x14
+004D0DD9 cmp      dword ptr [esi + 0xd4], 0
+004D0DE0 push     ebx
+004D0DE1 jne      0x4d0f00
+004D0DE7 mov      eax, 0x8000
+004D0DEC test     word ptr [esi + 0xe2], ax
+004D0DF3 je       0x4d0f00
+004D0DF9 mov      edx, dword ptr [esi]
+004D0DFB mov      eax, dword ptr [edx + 0x60]
+004D0DFE mov      ecx, esi
+004D0E00 call     eax
+004D0E02 fmul     qword ptr [0xc55b30]
+004D0E08 test     byte ptr [0xfb7c18], 1
+004D0E0F mov      bl, byte ptr [esi + 0xe4]
+004D0E15 fstp     dword ptr [esp + 4]
+004D0E19 jne      0x4d0e27
+004D0E1B or       dword ptr [0xfb7c18], 1
+004D0E22 call     0x4449d0
+004D0E27 movzx    eax, bl
+004D0E2A fld      dword ptr [eax*8 + 0xfb8020]
+004D0E31 lea      eax, [eax*8 + 0xfb8020]
+004D0E38 fld      dword ptr [esp + 4]
+004D0E3C lea      ecx, [esi + 0x424]
+004D0E42 fld      st(0)
+004D0E44 fmulp    st(2)
+004D0E46 fxch     st(1)
+004D0E48 fstp     dword ptr [esp + 0x10]
+004D0E4C fmul     dword ptr [eax + 4]
+004D0E4F fstp     dword ptr [esp + 0x14]
+004D0E53 fld      dword ptr [ecx]
+004D0E55 fsub     dword ptr [esi + 0xa0]
+004D0E5B fstp     dword ptr [esp + 8]
+004D0E5F fld      dword ptr [ecx + 4]
+004D0E62 fsub     dword ptr [esi + 0xa4]
+004D0E68 fstp     dword ptr [esp + 0xc]
+004D0E6C fld      dword ptr [esp + 8]
+004D0E70 fld      dword ptr [esp + 0xc]
+004D0E74 fmul     st(0), st(0)
+004D0E76 fld      st(1)
+004D0E78 fmulp    st(2)
+004D0E7A faddp    st(1)
+004D0E7C fstp     dword ptr [esp + 4]
+004D0E80 fld      dword ptr [esi + 0x430]
+004D0E86 fld      dword ptr [esp + 4]
+004D0E8A fcomi    st(1)
+004D0E8C fstp     st(1)
+004D0E8E ja       0x4d0ed5
+004D0E90 fld      dword ptr [esp + 0x10]
+004D0E94 fld      dword ptr [esp + 0x14]
+004D0E98 fmul     st(0), st(0)
+004D0E9A fld      st(1)
+004D0E9C fmulp    st(2)
+004D0E9E faddp    st(1)
+004D0EA0 fstp     dword ptr [esp + 8]
+004D0EA4 fld      dword ptr [esp + 8]
+004D0EA8 fmul     qword ptr [0xc556f8]
+004D0EAE fcompi   st(1)
+004D0EB0 fstp     st(0)
+004D0EB2 ja       0x4d0ed7
+004D0EB4 mov      edx, dword ptr [esi]
+004D0EB6 movss    xmm0, dword ptr [esp + 4]
+004D0EBC mov      edx, dword ptr [edx + 0x54]
+004D0EBF lea      eax, [esp + 0x10]
+004D0EC3 push     eax
+004D0EC4 mov      ecx, esi
+004D0EC6 movss    dword ptr [esi + 0x430], xmm0
+004D0ECE call     edx
+004D0ED0 pop      ebx
+004D0ED1 mov      esp, ebp
+004D0ED3 pop      ebp
+004D0ED4 ret      
+004D0ED5 fstp     st(0)
+004D0ED7 mov      eax, dword ptr [esi]
+004D0ED9 mov      edx, dword ptr [eax + 0x44]
+004D0EDC push     1
+004D0EDE push     ecx
+004D0EDF mov      ecx, esi
+004D0EE1 call     edx
+004D0EE3 fld1     
+004D0EE5 mov      eax, dword ptr [esi]
+004D0EE7 mov      edx, dword ptr [eax + 0x68]
+004D0EEA push     ecx
+004D0EEB fstp     dword ptr [esp]
+004D0EEE push     1
+004D0EF0 mov      ecx, esi
+004D0EF2 call     edx
+004D0EF4 mov      eax, 0x7fff
+004D0EF9 and      word ptr [esi + 0xe2], ax
+004D0F00 pop      ebx
+004D0F01 mov      esp, ebp
+004D0F03 pop      ebp
+004D0F04 ret      

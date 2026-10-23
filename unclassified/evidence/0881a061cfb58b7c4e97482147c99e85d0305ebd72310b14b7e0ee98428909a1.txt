@@ -1,0 +1,39 @@
+ENTRY 00819220 LIMIT 00819278
+00819220 push     ebp
+00819221 mov      ebp, esp
+00819223 push     ecx
+00819224 push     esi
+00819225 mov      esi, eax
+00819227 lea      eax, [ebp + 8]
+0081922A push     eax
+0081922B lea      eax, [ebp - 4]
+0081922E mov      ecx, esi
+00819230 call     0x8195e0
+00819235 mov      eax, dword ptr [ebp - 4]
+00819238 cmp      eax, dword ptr [esi + 4]
+0081923B jne      0x819246
+0081923D xor      eax, eax
+0081923F pop      esi
+00819240 mov      esp, ebp
+00819242 pop      ebp
+00819243 ret      8
+00819246 push     edi
+00819247 lea      esi, [eax + 0x10]
+0081924A lea      edi, [ebp + 0xc]
+0081924D lea      eax, [ebp + 8]
+00819250 call     0x8196d0
+00819255 mov      eax, dword ptr [esi + 4]
+00819258 mov      ecx, dword ptr [ebp + 8]
+0081925B pop      edi
+0081925C cmp      eax, ecx
+0081925E jne      0x81926e
+00819260 cmp      byte ptr [ebp + 0xc], 0
+00819264 jne      0x81923d
+00819266 cmp      dword ptr [esi + 8], 0
+0081926A je       0x81923d
+0081926C mov      ecx, dword ptr [eax]
+0081926E mov      eax, dword ptr [ecx + 0x10]
+00819271 pop      esi
+00819272 mov      esp, ebp
+00819274 pop      ebp
+00819275 ret      8

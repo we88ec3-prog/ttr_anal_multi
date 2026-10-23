@@ -1,0 +1,93 @@
+# Monster attributes and movement initialization
+
+2026-10-04 original KR offline analysis. User's three-primary-slot hypothesis
+(party characters under AI, possibly after disconnect) is plausible but the
+disconnect trigger itself is not yet established. This turn follows CMonster,
+not those hero decision slots.
+
+Reproduce: `C:\Programs\Python\Python310\python.exe anal/audit_monster_parameters.py`.
+Five bounded functions, switch tables, RTTI, branch destinations and original
+SHA pass. Constructor/Lua cross-links below are verified instructions decoded
+from their known entries; all their callees are not exhaustively expanded.
+No services, game process, client resources or saves were changed. Deployed v41
+remains custom AI; original monster decision AI is not activated.
+
+## Common attribute packet reaches a monster-specific setter
+
+**S→C0000 →4AFAF0–4AFB79**, header2, rows6:
+
+| Row offset | Field |
+|---|---|
+| 0 | WORD actor ID |
+| 2 | WORD parameter code |
+| 4 | WORD value, interpreted as signed16 by CMonster |
+
+Common GameInfo+8/FAB138 actor lookup leads to actor virtual+2C. CMonster
+vtableC0C9DC maps that slot to **4D1E10–4D1F31**. This setter has six switch
+destinations and a29-byte selector table, both checked as data separately.
+Only codes1/5/6/23/29 have dedicated handling; the others in1..29 and codes
+outside that range go to the `SetParam(mob)` unsupported-parameter diagnostic.
+
+| Code | Destination | Verified effect |
+|---|---|---|
+| 1 | 4D1E34 | Signed value to +3B0, also updates a +368 visual object using coefficient approximately0.0001. Existing fixture treats this as HP percentage; exact display scale needs care. |
+| 5 | 4D1EFC | Signed value to +D0, movement multiplier used by native effective-speed calculation. |
+| 6 | 4D1EB5 | Signed value converted to float at +CC. First application when +420==0 stores baseline +394 and sets +420=1; subsequent ratio +398=CC/394 affects movement animation selection. |
+| 23 | 4D1E6B | Signed value to +3D4 and rebuilds displayed name from model resource text. Often level-like; official label not established by this setter alone. |
+| 29 | 4D1F0B | Signed value to +90, faction field used by the previously traced relation checks. |
+
+No branch here performs enemy search, chooses a skill, emits input, or toggles
+a demonstrated AI enable flag. +420 is a baseline-latch flag on this path,
+not evidence of host authority or AI enablement.
+
+## Different initialization for network and Lua-created monsters
+
+CMonster constructor4D1710 calls common actor constructor4C7070, whose
+4C709D calls complete movement initializer **4CA730–4CA7F9**:
+
+- +CC floating base speed =0.
+- +D0 integer multiplier =100.
+- +90 faction =127 initially; spawn data can later replace it.
+- +E0 cached input and +E4 direction =0, residual/target fields reset.
+
+Monster constructor instruction4D1759 separately initializes +420=0. Complete
+model initializer **4D1910–4D1AD7** does not directly write +CC; its callees
+are not exhaustively checked, so this is not a claim that every network spawn
+always leaves speed zero.
+
+The known Lua creation function4A0F70 explicitly performs:
+
+```text
+4A1175 load float C55AB4 =60
+4A117D write actor+CC
+```
+
+Thus the local scripted creation route has an explicit speed assignment that
+is not present in the currently inspected network-spawn fixture.
+
+Complete speed getter **4CAD40–4CAD5F** computes
+`D0 * approximately0.01 * CC`. If no other initialization changed CC after
+construction, native directional movement speed remains0 despite nonzero
+movement flags. This is an initialization dependency, not proof of an absent
+monster brain.
+
+`tutorial_battle.py` currently spawns type1/model1036 with S→C07 and one
+S→C0000 row for parameter1. It does not send monster speed parameter6 there.
+`tutorial_monster_ai.py` calculates chase positions on the server and sends
+S→C16 direct positions, which bypasses the native speed-based directional
+movement consumer. That explains why custom chase movement is not a valid
+test of the missing initialization. No packet or fixture was changed this turn.
+
+## Consequences for the native AI investigation
+
+Before evaluating native movement commands on a network-created monster,
+inspect its actual CC/D0/394/398/420 and faction90. If CC is zero, an original
+command-consumption test is incomplete even when commands and controller data
+are correct. Values60/default100 are observed construction values, not a claim
+about balanced per-species server statistics.
+
+Continue tracing ordinary monster creation/control assignment and action
+producers. The Lua-versus-network initialization difference is concrete, but
+neither route has yet established the requested original enemy target/skill
+decision logic. Three hero slots, speed baseline latch and faction assignment
+must remain distinct from P2P host authority.

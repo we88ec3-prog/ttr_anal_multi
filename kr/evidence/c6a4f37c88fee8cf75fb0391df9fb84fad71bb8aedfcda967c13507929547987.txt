@@ -1,0 +1,65 @@
+"""Offline native movement consumer checks. No process access or mutations."""
+from pathlib import Path
+import hashlib
+import json
+import struct
+from build_native_index import PE
+from capstone import Cs, CS_ARCH_X86, CS_MODE_32
+
+ROOT = Path(__file__).resolve().parent.parent
+OUT = ROOT / 'anal/native-index'
+p = PE(ROOT / 'Tartaros.bin')
+md = Cs(CS_ARCH_X86, CS_MODE_32)
+idx = json.loads((OUT / 'Tartaros.bin.json').read_text(encoding='utf-8'))
+assert hashlib.sha256(p.data).hexdigest() == idx['sha256']
+
+def dump(start, end, name):
+    ins = list(md.disasm(p.read(start, end-start), start))
+    assert ins[-1].mnemonic == 'ret' and ins[-1].address + ins[-1].size == end
+    bounds = {i.address for i in ins}
+    for i in ins:
+        if i.mnemonic.startswith('j') and i.op_str.startswith('0x'):
+            target = int(i.op_str, 16)
+            if start <= target < end:
+                assert target in bounds
+    (OUT / (name+'.txt')).write_text('\n'.join(
+        f'{i.address:08X} {i.mnemonic:8} {i.op_str}' for i in ins)+'\n', encoding='utf-8')
+    return {i.address:i for i in ins}
+
+phase = dump(0x4e0060, 0x4e01fb, 'actor-input-phase')
+walk = dump(0x4e13f0, 0x4e1462, 'actor-input-tree-walk')
+base = dump(0x4c8580, 0x4c87c5, 'actor-input-phase-common')
+move = dump(0x4ca890, 0x4caaf8, 'native-movement-consumer')
+collision = dump(0x4cabe0, 0x4cacbc, 'native-movement-relative-position')
+speed = dump(0x4cad40, 0x4cad60, 'native-movement-speed')
+turn = dump(0x4c89a0, 0x4c8a87, 'native-heading-smoothing')
+assert phase[0x4e00c1].op_str == '0x4e13f0'
+assert phase[0x4e00b2].op_str == 'eax, dword ptr [edi + 0xc]'
+assert walk[0x4e1400].op_str == 'ecx, dword ptr [ecx + 0x10]'
+assert walk[0x4e1405].op_str == 'edx, dword ptr [eax + 0x20]'
+assert base[0x4c85ad].op_str == '0x4ca890'
+assert base[0x4c85c8].op_str == '0x4c89a0'
+assert move[0x4caa63].op_str == 'word ptr [esi + 0xe2], ax'
+assert move[0x4caa7e].op_str == 'bl, byte ptr [esi + 0xe4]'
+assert move[0x4caa9e].op_str == 'dword ptr [eax*8 + 0xfb8020]'
+assert move[0x4caac8].mnemonic == 'call' and move[0x4caac8].op_str == 'edx'
+assert collision[0x4cac78].op_str == '0x82cdf0'
+assert collision[0x4cac7f].op_str == '0x4caca9'
+assert collision[0x4caca7].op_str == 'edx'
+assert speed[0x4cad44].op_str == 'dword ptr [ecx + 0xd0]'
+assert speed[0x4cad50].op_str == 'dword ptr [ecx + 0xcc]'
+monster = next(v for v in idx['vtables'] if v['address'] == 0xc0c9dc)
+assert monster['entries'][0x20//4] == 0x4d1ae0
+thunk = next(md.disasm(p.read(0x4d1ae0,5),0x4d1ae0))
+assert thunk.mnemonic == 'jmp' and thunk.op_str == '0x4c8580'
+assert monster['entries'][0x54//4] == 0x4cabe0
+assert monster['entries'][0x60//4] == 0x4cad40
+coefficient = struct.unpack('<d', p.read(0xc557f8,8))[0]
+report = dict(sha256=idx['sha256'], actorTreeWalk=0x4e13f0,
+              actorVirtualOffset=32, monsterThunk=0x4d1ae0,
+              movementFunction=0x4ca890, movementFlag=32768, headingOffset=228,
+              speedCoefficient=coefficient, speedFields=[208,204],
+              collisionCheck=0x82cdf0,
+              limitation='Consumer of cached commands, not native monster target/skill decision. Exact wall-clock update frequency and whole callee graph unverified.')
+(OUT / 'native-movement-consumer-audit.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8')
+print(json.dumps(dict(checks='passed',boundedFunctions=7,speedCoefficient=coefficient)))

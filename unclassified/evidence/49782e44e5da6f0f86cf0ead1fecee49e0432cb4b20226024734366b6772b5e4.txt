@@ -1,0 +1,43 @@
+"""Offline S->C 012A decoder, based on KR 545E20. No network or runtime writes."""
+import argparse
+import json
+from pathlib import Path
+import struct
+
+
+def signed_div33(value):
+    # imul 3E0F83E1, arithmetic >>3, then add sign correction at 545EC2..ED5.
+    return value // 33 if value >= 0 else -((-value) // 33)
+
+
+def decode(payload):
+    if len(payload) < 8:
+        raise ValueError('012A requires an eight-byte header')
+    command, actor, reset = struct.unpack_from('<HHI', payload)
+    if command != 0x12A:
+        raise ValueError('Expected decoded S->C 012A payload')
+    if (len(payload)-8) % 6:
+        raise ValueError('Incomplete six-byte timing row')
+    records = [dict(skill=skill, wireValue=value,
+                    clientCounter=signed_div33(value))
+               for skill, value in struct.iter_unpack('<Hi', payload[8:])]
+    return dict(command='012A', actor=actor, resetField=reset,
+                behavior='clear actor timing map' if reset else 'set timing rows',
+                ignoredRows=bool(reset and records), records=records,
+                limits='Counter decrements on controller updates; wall-clock units and UI rendering are not verified.')
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('payload', type=Path, nargs='?')
+    parser.add_argument('--output', type=Path)
+    args = parser.parse_args()
+    # Illustrative fixture only, not official traffic or a message to the client.
+    payload = args.payload.read_bytes() if args.payload else (
+        struct.pack('<HHI', 0x12A, 256, 0)+struct.pack('<Hi', 2, 3300))
+    result = decode(payload)
+    result['source'] = str(args.payload) if args.payload else 'offline illustrative fixture'
+    text = json.dumps(result, indent=2)
+    if args.output:
+        args.output.write_text(text+'\n', encoding='utf-8')
+    print(text)

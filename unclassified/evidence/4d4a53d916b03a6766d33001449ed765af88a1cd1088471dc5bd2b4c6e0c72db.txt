@@ -1,0 +1,17 @@
+# 執行期登入追蹤與位址修正
+
+2026-10-01 已用 Frida 附加 PID 30668，主模組路徑確定為 E:/Tartaros/workspace/Tartaros.local.exe，架構 ia32。
+
+紀錄：login-runtime-20261001-231532.jsonl。多次呼叫顯示 hostname 與 connect sockaddr 都為 **0.127.0.1:8415**，connect 回傳 -1。初版追蹤器呼叫 WSAGetLastError 得到 0，該錯誤碼不可信；已改用 Frida onLeave 的 this.lastError，待再次實測。
+
+先前修改及 verify_localhost.py 錯誤理解 IPv4 格式化參數順序。0x440850 在 0x44087a 取得 [ebp+0xc]，於 0x44087f 取得 [ebp+8]，隨後將格式化參數依序推入。因此實際輸出順序是「呼叫端第二次 push、dl、cl、第一次 push」，不是先前驗證器使用的 dl、cl、第二次 push、第一次 push。舊硬編碼分支實際原始位址也須依此順序重新解讀，早期文件的位址順序說明不可信。
+
+修正 make_localhost.py 與 verify_localhost.py，從 hash 已確認的原始 Tartaros.bin 建立 **Tartaros.local.fixed.exe**。原有執行中副本未覆寫。新副本 SHA256：323cead4b646a6091914f7d025873ea5e80c940b864541a57195af888faab54b。
+
+新副本同長度且只有 8 bytes 差異；兩分支依實際格式化順序驗證為 127.0.0.1，INI API 仍回傳 127.0.0.1。尚未啟動新副本做執行期驗證。
+
+使用者需退出舊遊戲並從 workspace 啟動 fixed 副本。Wireshark 用 tcp.port == 8415 觀察。需要進一步追蹤時，先取得新 PID，再執行 `python anal/trace_login_runtime.py --pid PID --seconds 300`。hooks-installed 表示附加成功；按登入後記錄 host、port、connect 回傳值與錯誤。Ctrl+C 只解除追蹤，不結束遊戲。
+
+追蹤器不記錄帳密或封包內容。Frida 已安裝於 anal/python_deps。附加遊戲可能需要提升執行權限。
+
+05-login-port.md 的 8415 靜態結果已獲執行期確認；其中舊副本預期 127.0.0.1 的判斷由本文件修正。04-localhost-change.md 的舊副本 IP 驗證結論亦已失效。

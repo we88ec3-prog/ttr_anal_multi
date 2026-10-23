@@ -1,0 +1,56 @@
+004AFAF0 push     ebp
+004AFAF1 mov      ebp, esp
+004AFAF3 mov      eax, dword ptr [ebp + 0xc]
+004AFAF6 cmp      eax, 2
+004AFAF9 jae      0x4afaff
+004AFAFB xor      edx, edx
+004AFAFD jmp      0x4afb0c
+004AFAFF lea      ecx, [eax - 2]
+004AFB02 mov      eax, 0xaaaaaaab
+004AFB07 mul      ecx
+004AFB09 shr      edx, 2
+004AFB0C test     edx, edx
+004AFB0E je       0x4afb74
+004AFB10 push     ebx
+004AFB11 push     esi
+004AFB12 mov      esi, dword ptr [ebp + 8]
+004AFB15 push     edi
+004AFB16 add      esi, 4
+004AFB19 mov      ebx, edx
+004AFB1B jmp      0x4afb20
+004AFB1D lea      ecx, [ecx]
+004AFB20 movzx    edx, word ptr [esi - 2]
+004AFB24 mov      dword ptr [ebp + 0xc], edx
+004AFB27 call     0x40f060
+004AFB2C mov      edi, eax
+004AFB2E lea      eax, [ebp + 0xc]
+004AFB31 push     eax
+004AFB32 lea      ecx, [edi + 8]
+004AFB35 lea      eax, [ebp + 8]
+004AFB38 call     0x82ef00
+004AFB3D mov      eax, dword ptr [ebp + 8]
+004AFB40 cmp      eax, dword ptr [edi + 0xc]
+004AFB43 je       0x4afb4c
+004AFB45 mov      ecx, dword ptr [eax + 0x10]
+004AFB48 test     ecx, ecx
+004AFB4A jne      0x4afb5b
+004AFB4C push     0xc06a88
+004AFB51 call     0x6edb60
+004AFB56 add      esp, 4
+004AFB59 jmp      0x4afb6b
+004AFB5B movzx    eax, word ptr [esi + 2]
+004AFB5F mov      edx, dword ptr [ecx]
+004AFB61 mov      edx, dword ptr [edx + 0x2c]
+004AFB64 push     eax
+004AFB65 movzx    eax, word ptr [esi]
+004AFB68 push     eax
+004AFB69 call     edx
+004AFB6B add      esi, 6
+004AFB6E dec      ebx
+004AFB6F jne      0x4afb20
+004AFB71 pop      edi
+004AFB72 pop      esi
+004AFB73 pop      ebx
+004AFB74 xor      eax, eax
+004AFB76 pop      ebp
+004AFB77 ret      0xc

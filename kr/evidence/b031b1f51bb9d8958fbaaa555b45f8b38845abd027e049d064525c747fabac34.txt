@@ -1,0 +1,100 @@
+# 戰鬥結果到 FrameControl：共享尾段的路徑更正
+
+本階段已完成有界路徑更正、四個效果 callee 語意與獨立 bytes 驗證；最終時間與交付清單見 closeout.json／artifact-manifest.json。整體主程式解析仍未完成。
+
+來源為韓版 `E:/Tartaros/workspace/Tartaros.bin`，SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。只做離線唯讀分析，產物寫 anal，不執行／附加遊戲、不呼叫目標 API，不改資源、設定、帳號或存檔。
+
+本輪從已有 REA/Ghidra 4B0640 Listing、原生 CFG 與 jump-table 證據接續。舊 BATTLE-RESULT-AND-AI-FEEDBACK 已有 000E header2／row13 與 switch0..8，本輪不重算為新發現。新增的是 row result → FrameControl key／source-target 模型的路徑 binding，以及對上一階段 callsite-only 參數歸納的更正。
+
+## 必須優先套用的更正
+
+上一階段 `kr-persistence-20261023/battle-frame-contexts.json` 把 4B18D4 的 result_EDX 寫為固定 0，REPORT 也沿用了 group4/result0。這個歸納遺漏其他前驅。原始 snapshot／manifest 保留不變，由本輪 [corrections overlay](binding-records.json) 與 [資料庫](bindings.sqlite) 覆蓋其適用範圍。
+
+4B18C7 是 `XOR EDX,EDX`，4B18C9 是 `ADD EAX,B4`，4B18D4 呼叫 7D28E0。case4 在 4B0E50 設 EDX=1、4B0E55 跳入 **4B18C9**；case2 在 4B1181 設 EDX=2、4B1186 亦跳入 **4B18C9**。它們跳過清零，EAX 先從 source actor 的 +15C 取得，因此同一 callsite 會帶不同模型與 result。
+
+| row+4 case | 7D28E0 site | 模型來源 | group ECX | result EDX／INI 欄位 |
+|---:|---|---|---|---|
+| 0、8 | 4B18A6 | source actor+15C | source motion.v30() 的 AL | 0／NORMAL |
+| 0、8 | 4B18D4 | target actor+15C | 4／ATTACKED | 0／NORMAL |
+| 4 | 4B0E1D | target actor+15C | target motion.v30() 的 AL | 1／BLOCKED |
+| 4 | 4B18D4 | source actor+15C | 4／ATTACKED | 1／BLOCKED |
+| 2 | 4B114E | target actor+15C | target motion.v30() 的 AL | 2／CRITICAL |
+| 2 | 4B18D4 | source actor+15C | 4／ATTACKED | 2／CRITICAL |
+
+每次呼叫仍受所選 actor 的 model 非 NULL、actor+370 非零、model+AC 非 NULL 等 guard 限制。source 分支被略過也可能繼續執行 target 分支；表格不代表兩者一定同時執行。case0 與 case8 的視覺處理不同，只共享這組 FrameControl 路徑，不將完整行為視為相同。BLOCKED／CRITICAL 對應由實際表索引與鍵名成立，並有 BLOCK／CRITICAL 字串旁證；不承諾原始 enum 名稱。
+
+```mermaid
+flowchart TD
+  R["row+4 signed result"] --> S["4B0B62 switch / 4B1914 table"]
+  S --> N["case0/8: source motion group, NORMAL"]
+  N --> NT["target ATTACKED / NORMAL"]
+  S --> B["case4: target motion group, BLOCKED"]
+  B --> BS["source ATTACKED / BLOCKED"]
+  S --> C["case2: target motion group, CRITICAL"]
+  C --> CS["source ATTACKED / CRITICAL"]
+  NT --> T["7D28E0 model+B4 control view"]
+  BS --> T
+  CS --> T
+  T --> M["7A87D0 consumes VALUE/RATIO-derived state"]
+```
+
+## 證據、區域與驗證
+
+上游 REA Evidence `ev_b8987634de68d8afdbfbe21ef6d0c113aa044bfb2b23b7544cfacdf7559a4c16`，Ghidra 12.1.4，profile `965552102e88fd60a1ccde827b92cc552a22c4f08ddda16a7fc2bea3c04307c0`。輸入原始 JSON／相關報告／表格與 public MCP driver 保存於 input-snapshots，input-provenance.json 保存來源與 SHA。Python 整理原生 CFG 中選定的六條邊，不重建 CFG、不逐指令模擬。
+
+`[4B1914,4B1938)` 是九個 little-endian DWORD 的 switch target table，依原生 indexed JMP 與檔案 bytes 核對，屬資料，不能算函式 body。`[4B18C7,4B18D9)` 是含多種入站狀態的共享程式尾段，不能另算獨立函式或固定 ABI 的 thunk。4B0640 body 仍為 `[4B0640,4B1914)`，pcode 截斷，只有本輪指定分支語意完成核對。
+
+已保存 8 條有來源的路徑紀錄、9 個已核對 switch 目的地、1 項更正、2 個區域分類，沒有新增有效函式分母。binding-validation.json 已通過 29 個關鍵原始指令／分支、9 個 table entries、SQL integrity 及按 case／callsite／correction 的查詢；其中明確檢查 4B18D4 存在 result 0／1／2 三種輸入，避免再次退化為單一常數。
+
+```powershell
+python anal/kr-battle-frame-binding-20261023/build_binding.py
+python anal/kr-battle-frame-binding-20261023/verify_binding.py
+python anal/kr-battle-frame-binding-20261023/query_binding.py --callsite 0x4b18d4
+python anal/kr-battle-frame-binding-20261023/query_binding.py --case 4
+python anal/kr-battle-frame-binding-20261023/query_binding.py --corrections
+```
+
+這是既有方法的新路徑語意與錯誤校正，不是新增八支方法，也不增加全域解碼覆蓋率。未知的 motion.v30 producer／索引界限、完整 000E 語意、其他 effect callee、MEF interpreter／普通怪物決策與權限仍需個別核對。source／target 名稱依舊有 lookup diagnostics 與本輪原生資料傳遞證據，不把 packet 結果接收視為產生決策。
+
+## 效果與數值顯示消費端
+
+REA MCP 6.5.0／Ghidra 12.1.4 使用相同 profile，在 09:07–09:12 UTC 完成四個 callee 的 native dossier；四個 pcode 均未截斷，export／close 成功，執行 handle 93915 已返回 exit 0。公開 driver 與輸入 snapshot 版本有保存；沒有重建 atlas 或執行目標。起始延遲為 native engine 載入／分析，其餘函式查詢隨後完成。
+
+| 方法與原生右開範圍 | 有限語意與參數 | 尚未確認 |
+|---|---|---|
+| 7AC030..7AC215 | EAX mode、stack manager/X/Y/Z；配置 0x30-byte CFieldPanel；mode0/2 使用 20、10，1/3 使用 60、50，選資源並加入 manager list | 正式 mode enum、全部下層圖形行為與外部索引合約 |
+| 7ABCD0..7ABE58、7ABE60..7AC02A | ECX 有號顯示值、EDX manager、stack style/X/Y/Z；拆十進位數字，建立 CFieldPanel，style5 額外加 Critical.dds | INT_MIN 顯示結果、所有 style／digit 資源，不能當 HP 或傷害裁決方法 |
+| 551F20..551F85 | ECX manager、EDX descriptor、stack ID/位置/兩 float；kind0..2 走 551B80，kind3 可走 551CD0，再交 551DD0 | descriptor enum、資源表完整來源；下層沿既有附屬特效報告，不重算新完成 |
+| 5521D0..55235F | 六個 stack 參數；selector 決定 STRUCK／MONSTER_STRUCK 查找，配置 0x7C 記錄、交 550580 並插入 manager list；EAX 返回新記錄或找不到時 0 | row+5／row+C 正式 enum、FB7470 查找結果與 FB90BC float 的意義 |
+
+5521D0 的預設偽碼只列五個 stack 參數，但 Listing 在 552289 讀 `[EBP+1C]` 低 byte，且正常／找不到資源兩條出口均 RET18，證明第六個參數存在。在 000E case0／8，row+C、row+5 被 sign extend 後傳入；resource index 是 row+5，row+C 的低 byte 經 DL 交 `4F6F70(ESI=FB7470)`，結果再進 550580。selector 由 source actor WORD+4 的低 byte 是否等於 1 產生；不只憑 MONSTER_STRUCK 字串反推完整 actor type enum。
+
+row+6 在多個 callsite 進入 7ABCD0 的 ECX，經正負號處理、逐位 glyph 與 panel list 成為顯示輸出。舊 common receiver 有 in-place 改寫 row+6 的分支，因此顯示輸入不保證等於未處理的 wire bytes。此方法可說明結果數值的視覺消費，但沒有本輪證據支持它是 actor HP 更新或本機傷害權威。
+
+```mermaid
+flowchart LR
+  V["row+6 current value"] --> D["7ABCD0 decimal glyphs / style5 Critical.dds"]
+  D --> P["CFieldPanel / panel list"]
+  I["row+5 resource index + row+C byte + ID/position"] --> F["5521D0 STRUCK / MONSTER_STRUCK"]
+  F --> G["4F6F70 with FB7470; return meaning unknown"]
+  G --> A["550580 initializes effect record"]
+  F --> A
+  A --> L["effect manager list"]
+  B["BLOCK / CRITICAL descriptor"] --> S["551F20 resource dispatch"]
+  S --> E["551DD0 existing attachment-effect chain"]
+```
+
+[effect-semantic-records.json](effect-semantic-records.json) 保存四筆用途、ABI 確認度、主要分支、欄位、回傳、副作用、callers/callees／未知；[methods.sqlite](methods.sqlite) 保存 33 條 typed call references。這四支內沒有引擎未解析呼叫 site，不表示所有 callee 行為已解，父函式的四個 motion.v30 site 仍未解析。
+
+兩個 panel builder 的 literal vptr C4FD0C 與既有 RTTI `.?AVCFieldPanel@IS3D@@` 已逐 bytes 核對 vtable／COL／hierarchy／base array 四段，見 class-relations.json。這是 class ledger 的新方法關係，不聲稱已還原完整類別。list 插入、count 上限與 `list<T> too long` 診斷保存為標準庫 idiom 識別依據，不推定精確原始 template／編譯器版本。
+
+effect-validation.json 通過 48 個 ABI／欄位／分支／呼叫指令、資源字串、mode table、常數與四段 RTTI bytes；所有四支 body range SHA、Evidence 檔案 hash、source binding 與 SQL integrity 另已核對。
+
+```powershell
+python anal/kr-battle-frame-binding-20261023/build_effect_semantics.py
+python anal/kr-battle-frame-binding-20261023/verify_effects.py
+python anal/kr-battle-frame-binding-20261023/query_binding.py --method 0x5521d0
+python anal/kr-battle-frame-binding-20261023/query_binding.py --method 0x7abcd0
+```
+
+四份 dossier／四筆有限語意、八條路徑、更正一項、區域兩處需分開報告；均非全域有效函式總數或整體還原率。下一步見 HANDOFF.md 與 unknowns.json。

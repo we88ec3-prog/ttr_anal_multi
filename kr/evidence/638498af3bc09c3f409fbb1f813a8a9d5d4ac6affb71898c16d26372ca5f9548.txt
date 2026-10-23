@@ -1,0 +1,95 @@
+# 000E row+C：命中音效名稱表與 CSound 消費鏈
+
+本輪主鏈與PATH/path比較合約已核對，最終時間與交付清單見closeout.json／artifact-manifest.json。整體主程式解析未完成。
+
+唯一主程式為韓版 `E:/Tartaros/workspace/Tartaros.bin`，SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。僅離線唯讀原檔，產物寫 anal；沒有執行／附加遊戲、呼叫目標 API、播放音效或修改原檔／資源／設定／帳號／存檔。launcher 與繁中殼沒有擴展。
+
+## 確認的消費鏈
+
+row+C 在此 caller 作為 **DamageSound 的完整 byte 查找 key** 使用。4F6F70 返回的是音效路徑的 `char*` 或 NULL；沒有發現數值倍率運算。載入端將 `_DamageSound.xml` 的 ATTACK／DEFENSE 屬性組成同一 byte-key domain，視覺資源選擇與音效名稱查找分開。
+
+```mermaid
+flowchart TD
+  Init["4F4960 固定載入序列"] --> Load["4F6630: DamageSound XML loader"]
+  XML["ATTACK / DEFENSE / FILE + BaseFolder"] --> Load
+  Load -->|"((ATTACK & 31)<<3) OR (DEFENSE & 7)"| Map["FB7510 byte-key -> sound path string"]
+  Row["000E row+C -> 第六 stack 參數低byte"] --> Get["552291 -> 4F6F70"]
+  Map --> Get
+  Get -->|"char* or NULL"| Bind["550580 第二 stack 字串參數"]
+  Bind -->|"非NULL且非空"| Factory["80AF10 alloc2C -> 80E230"]
+  Factory --> Sound["CSound vptr C51B50"]
+  Sound --> Store["效果記錄+28"]
+  Store --> Call["virtual+C(position) -> 80E4C0；方法語意未展開"]
+  Row5["row+5 + STRUCK/MONSTER_STRUCK selector"] --> Variant["551B80 視覺資源variant"]
+  Variant --> Visual["550580 視覺名稱+2C -> 5506B0；既有鏈"]
+```
+
+目前可確認的是客戶端的消費方式，尚未追到 row+C 上游如何產生。ATTACK／DEFENSE 的正式 enum、材質或武器解釋不由檔名猜測；這條結果消費鏈也不是怪物選敵／選技能或傷害裁決的來源證明。
+
+## 方法與 ABI
+
+全部 end 為右開；不連續 body 保存每段 SHA／file offset，不用包絡取代實際 body。
+
+| 方法 | 已核對 body | 有限語意／ABI |
+|---|---|---|
+| 4F6F70 | 4F6F70..4F6FD5 | ESI=全域集合、DL=key；以 ESI+A4 的 sentinel 找 signed-byte key，返回字串資料或0；無 callee、無樹寫入或插入 |
+| 4F6630 | 4F6630..4F674F、4F6750..4F694A | 固定 XML 載入來源；組 byte key、建立 key/string node，送入 FB7510；兩個 XML virtual+14 未解 |
+| 550580 | 550580..55063D、550640..5506AB | EDX=記錄、EDI=位置、ECX=模式，stack name/sound/ID/兩float；正常 EAX=1、RET14；record+28為可選CSound |
+| 551B80 | 551B80..551CC2 | ECX=category、EDX=manager、stack兩級index；返回string物件pointer或0、RET8；不是直接返回char buffer |
+| 80AF10 | 80AF10..80AFD8 | ECX=路徑；非NULL時配置2C並交80E230，返回CSound或配置失敗0；NULL另交80AE20，非本鏈路徑 |
+| 80E230 | 80E230..80E2AC | stack receiver/source string；寫CSound vptr、複製路徑與計數初始化，返回同一receiver，RET8 |
+| 7300A0 | 7300A0..7300AD、7300B0..7300E1 | EDI=attribute集合，stack name；以__stricmp比對名稱，回傳第一個匹配attribute或0，RET4 |
+
+七筆語意中，六筆為新增或把先前 engine-only loader 補成有界語意；550580 是既有附屬效果初始化方法的音效來源補充，不能重算為首次解析。另列 4F9A60 tree-node allocation/string-move 與893CB1 CRT __stricmp兩筆函式庫識別，不當作額外業務語意。4F9A60分支可見 std::bad_alloc／__CxxThrowException，layout 為三個 links、byte key+C、string+10、flags+2C/+2D；不聲稱恢復原始 template spelling 或精確 compiler release。
+
+4F6F70 與第一階段 4F7DF0 的契約不同：前者是 signed-byte 純查找，後者是 uint32 key、miss 可插入的 string 物件查找。不能因兩者都處理名稱 map 就混用返回型態或副作用。4F6F70 的兩個 key 比較使用 JGE／JL；高位 bit 的排序屬 signed byte，原始 8-bit identity 沒有丟失。
+
+551B80 先查 category map，再按第一 index（負值改0）選群組。第二 index 非負時查指定key；負值時按 flag 選首項，或以 89289D 返回 `% count` 選項後遍歷，再查 manager 資源表。89289D 尚未可靠識別為特定 PRNG，只保留返回值取模，不採用自動命名。Ghidra 預設 void 偽碼不能取代 Listing／caller 使用 EAX 的實際回傳契約。
+
+550580 的視覺名稱在記錄+2C 的64-byte buffer，CSound pointer 在+28，既有視覺實例在+24；三者必須分開。第二個字串為NULL／空時不建立CSound，視覺綁定分支仍獨立執行。80AF10 在此路徑實際配置新物件，不能把它稱為純名稱cache lookup。80E230 設 receiver+4=1、+24/+28=0、FBA864加1；計數的完整生命週期未解析。
+
+## 類別與間接呼叫證據
+
+constructor 在 80E260 寫 literal C51B50，與既有 RTTI `.?AVCSound@@` 的 vtable／COL／hierarchy／base-array bytes 相符。C51B50+0C 的 DWORD 為 80E4C0。80AF10 非NULL字串路徑把建構回傳指標交回550580，後者立即保存並 dispatch 該slot，因此在這條有guard的建立路徑可綁定550691→80E4C0。
+
+這筆是 **analyst construction/vtable binding**，不是 Ghidra Reference Manager 原先已直接解析的 call。資料庫同時保留 `engine-unresolved` 與 `constructor-and-vtable-bound-path-target` 兩種不同來源狀態，不刪掉原始未知。80E4C0 body、具體啟動／播放／排程與音效後端仍未展開，沒有以類別名稱或WAV副檔名冒充已觀察到播放。
+
+## 資源來源與大小寫限制
+
+只讀取 `anal/backups/Table.original-kr.stp` 的 `Table/_DamageSound.xml`，重用已存在、具有原生格式核對依據的 stp_resources.py；沒有實作新封包解碼器、重建STP或改資源。來源 archive SHA256 `09e2cc48be98ad491afe394f966feb5812983fbf35da9037a8fa477d9848a442`，解碼 XML SHA256 `1e34297754d0904887a3b6d6c00d3157ff0447d4dd326e33e9b2f42c31270c27`，UTF-8 BOM。resource-provenance.json 另保存block、reader SHA與當時current Table.stp SHA；備份與主程式的精確發行build配對未獨立證明。
+
+該 XML 有45筆唯一key，ATTACK=1..15、DEFENSE=1..3、BaseFolder `path="Sound/DAMAGE/"`。例如 key9 對應 SHIT_NORM.wav、key123 對應 EXPL_L.wav；這是此 hashed member 的內容，不是目前 runtime map dump。完整屬性、key、path 在 resource-rows.json／CSV／SQLite。
+
+驗證發現 binary 查找的是大寫 `PATH`（C0D5F0），XML 為小寫 `path`。新增REA/Ghidra補查7300A0確認它以893CB1（引擎識別為CRT `__stricmp`）比較名稱，零返回表示匹配。另以獨立原始bytes核對71-byte wrapper與其57-byte ASCII分支，兩個字串的A..Z都加20h後比較，支持標準函式身分與ASCII PATH/path相容；不是單因函式名稱就相信舊報告。這個57-byte窗口只作驗證，沒有逐指令模擬或另宣稱獨立函式邊界。其他locale分支未全解，見attribute-contract.json；發行build配對限制仍保留。
+
+## 分開的進度與驗證
+
+| 項目 | 本輪結果 | 限制 |
+|---|---|---|
+| 區域分類 | 兩個padding候選（NOP／LEA）、一個21-byte未判定gap、CSound列出的8-slot指標資料區 | 非完整image partition，未證明vtable終止邊界 |
+| 有效方法辨識 | 7個新native dossier（含必要attribute補查），加3個上游loader/caller/dispatch dossier，另1個CRT callee facet | 不當作新增11個有效函式；全域分母仍未知 |
+| 方法語意 | 7筆有用途、參數/回傳確認度、分支、欄位、副作用、callers/callees與未知 | 不等於所有callee已閉合；另2函式庫模式分類 |
+| 功能鏈 | byte→DamageSound map→char*→CSound→record+28→具體slot target | 上游byte producer及CSound+0C行為仍未完成 |
+| 間接呼叫／未知資料 | 十份dossier共71 typed call references，3個engine-unresolved；其中1個另有分析者path binding | 不是全域新增edge數；2個XML虛擬call與音效方法語意仍需分開處理 |
+
+4F9B00..4F9B15 不在4F9A60原生body但含bytes，沒有當padding或獨立函式；共享／例外片段與owner未知。區域SHA與理由保留。45筆XML row不是45個已解析方法。歷史解碼聯集未重新合併，仍不能以35.85%整檔／54.57% executable當語意完成率。
+
+REA MCP6.5.0／SDK2.3.1、Ghidra12.1.4、Java21.0.12.1、技能42；沿用僅停用X86 Function Callee Purge的profile digest `965552102e88fd60a1ccde827b92cc552a22c4f08ddda16a7fc2bea3c04307c0`。native/mcp-evidence 保存完整原生證據；table loader 與上游caller另存input-snapshots及來源SHA。Python只整理引擎資料、解析此明確資源member及獨立bytes驗證。所有metadata／body range／Evidence location SHA可查。
+
+validation.json 已通過69個關鍵指令、4F6F70全部39條指令的無call／無非stack寫入檢查、十份dossier及CRT facet範圍SHA、四段CSound RTTI、字串literal、DB integrity與查詢。resource-validation.json 核對45列及key inverse／來源hash。原驗證中的PATH/path差異已取得原生attribute helper與CRT ASCII bytes雙重證據，不以改expected bytes掩蓋語意限制。
+
+```powershell
+python anal/kr-hit-resource-20261023/extract_resource.py
+python anal/kr-hit-resource-20261023/build_resource_rows.py
+python anal/kr-hit-resource-20261023/verify_resource.py
+python anal/kr-hit-resource-20261023/build_records.py
+python anal/kr-hit-resource-20261023/verify_records.py
+python anal/kr-hit-resource-20261023/query_records.py --method 0x4f6f70
+python anal/kr-hit-resource-20261023/query_records.py --key 9
+python anal/kr-hit-resource-20261023/query_records.py --callsite 0x550691
+python anal/kr-hit-resource-20261023/query_records.py --unresolved
+```
+
+資料庫僅為分析用SQLite，與遊戲帳號資料無關。原生重播使用input-snapshots/rea_workbench.cjs及workbench-queue.json，須指定新的anal輸出、同版REA／profile和保存snapshot；大小寫補查另有attribute-plan.json及通用public MCP driver。已保存證據足以重建衍生資料，無須重建atlas或重新導入整個程式。最終manifest核對應在重建之前進行，重建後另存新hash。
+
+接續與未解項見 HANDOFF.md／unknowns.json；整體目標維持全程式範圍。

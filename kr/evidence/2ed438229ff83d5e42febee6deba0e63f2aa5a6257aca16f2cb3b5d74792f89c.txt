@@ -1,0 +1,70 @@
+"""Offline monster parameter initialization, distinct from AI decision logic."""
+from pathlib import Path
+import hashlib, json, struct
+from build_native_index import PE
+from capstone import Cs, CS_ARCH_X86, CS_MODE_32
+
+ROOT=Path(__file__).resolve().parent.parent
+OUT=ROOT/'anal/native-index'
+p=PE(ROOT/'Tartaros.bin')
+idx=json.loads((OUT/'Tartaros.bin.json').read_text(encoding='utf-8'))
+assert hashlib.sha256(p.data).hexdigest()==idx['sha256']
+md=Cs(CS_ARCH_X86,CS_MODE_32)
+def dump(start,end,name):
+    ins=list(md.disasm(p.read(start,end-start),start))
+    assert sum(i.size for i in ins)==end-start and ins[-1].mnemonic=='ret'
+    bounds={i.address for i in ins}
+    for i in ins:
+        if i.mnemonic.startswith('j') and i.op_str.startswith('0x'):
+            target=int(i.op_str,16)
+            if start<=target<end:assert target in bounds
+    (OUT/(name+'.txt')).write_text('\n'.join(
+        f'{i.address:08X} {i.mnemonic:8} {i.op_str}' for i in ins)+'\n',encoding='utf-8')
+    return {i.address:i for i in ins}
+
+receive=dump(0x4afaf0,0x4afb7a,'monster-parameter-common-receiver')
+setter=dump(0x4d1e10,0x4d1f32,'monster-parameter-setter')
+base=dump(0x4ca730,0x4ca7fa,'actor-movement-default-initialization')
+speed=dump(0x4cad40,0x4cad60,'monster-effective-speed')
+visual=dump(0x4d1910,0x4d1ad8,'monster-model-initialization')
+assert next(r for r in idx['mainPacketHandlers'] if r['command']==0)['handler']==0x4afaf0
+monster=next(v for v in idx['vtables'] if v['address']==0xc0c9dc)
+assert monster['entries'][0x2c//4]==0x4d1e10
+assert monster['entries'][0x60//4]==0x4cad40
+assert receive[0x4afb61].op_str=='edx, dword ptr [edx + 0x2c]'
+assert receive[0x4afb6b].op_str=='esi, 6'
+assert setter[0x4d1efc].op_str=='edx, word ptr [ebp + 0xc]'
+assert setter[0x4d1f00].op_str=='dword ptr [esi + 0xd0], edx'
+assert setter[0x4d1ecc].op_str=='dword ptr [esi + 0xcc], xmm0'
+assert setter[0x4d1ed6].op_str=='dword ptr [esi + 0x394], xmm0'
+assert setter[0x4d1ede].op_str=='dword ptr [esi + 0x420], 1'
+assert setter[0x4d1eeb].op_str=='dword ptr [esi + 0x394]'
+assert setter[0x4d1ef1].op_str=='dword ptr [esi + 0x398]'
+assert base[0x4ca79b].op_str=='dword ptr [esi + 0xcc], xmm0'
+assert base[0x4ca7a3].op_str=='dword ptr [esi + 0xd0], 0x64'
+assert base[0x4ca740].mnemonic=='xorps'
+assert speed[0x4cad44].op_str=='dword ptr [ecx + 0xd0]'
+assert speed[0x4cad50].op_str=='dword ptr [ecx + 0xcc]'
+targets=struct.unpack('<6I',p.read(0x4d1f34,24))
+keys=list(p.read(0x4d1f4c,29))
+mapping={i+1:targets[k] for i,k in enumerate(keys)}
+assert {k:v for k,v in mapping.items() if v!=0x4d1f1a}=={
+    1:0x4d1e34,5:0x4d1efc,6:0x4d1eb5,23:0x4d1e6b,29:0x4d1f0b}
+assert all(v in setter for v in targets)
+# Decode from the already investigated constructor / Lua function boundaries.
+ctor={i.address:i for i in md.disasm(p.read(0x4d1710,0x1c0),0x4d1710)}
+assert ctor[0x4d173a].op_str=='0x4c7070'
+assert ctor[0x4d1759].op_str=='dword ptr [edi + 0x420], ebx'
+actor={i.address:i for i in md.disasm(p.read(0x4c7070,0x130),0x4c7070)}
+assert actor[0x4c709d].op_str=='0x4ca730'
+local={i.address:i for i in md.disasm(p.read(0x4a0f70,0x270),0x4a0f70)}
+assert local[0x4a1175].op_str=='xmm0, dword ptr [0xc55ab4]'
+assert local[0x4a117d].op_str=='dword ptr [esi + 0xcc], xmm0'
+local_speed=struct.unpack('<f',p.read(0xc55ab4,4))[0]
+report=dict(sha256=idx['sha256'],boundedFunctions=5,
+    receive=dict(command=0,headerBytes=2,rowBytes=6,fields=['actor WORD','parameter WORD','value signed WORD in monster setter']),
+    monsterCases={str(k):hex(v) for k,v in mapping.items() if v!=0x4d1f1a},
+    defaults=dict(CC=0,D0=100),localLuaCreationSpeed=local_speed,
+    limitation='Movement/stat initialization, not monster target/skill decision or an AI enable switch. Spawn/model-init callees not exhaustively expanded; no live state read or packet sent.')
+(OUT/'monster-parameter-audit.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8')
+print(json.dumps(dict(checks='passed',boundedFunctions=5,monsterParameterCodes=[1,5,6,23,29],localLuaSpeed=local_speed)))

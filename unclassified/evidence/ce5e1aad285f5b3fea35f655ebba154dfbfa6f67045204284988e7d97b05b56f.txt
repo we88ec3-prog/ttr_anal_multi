@@ -1,0 +1,22 @@
+# Collision-grid candidate and instrumentation crash
+
+Newest dump 20261002-221921-135204 reports c0000005 reading address 0xC
+at 0x6a023ad4, inside frida-agent.dll (base69fc0000), not the main game.
+This is evidence of instrumentation failure; stop function interception.
+Both earlier tracing sessions ended. Do not repeat the hook-based collision
+test without resolving this crash. Packet recording continues server-side.
+
+Read-only grid extraction on the restarted game succeeded. Both layers are
+32x32 blocks, each 24x24 grid cells, with coordinate scales .5/.5. Both
+override counts are zero. The local reimplementation of 832da0 classifies
+the old spawn as clear, contrary to the previous hook callback result.
+Thus the prior conclusion that the spawn is blocked is NOT established.
+Need resolve discrepancy; do not infer causality from those hook values.
+
+63 coarse candidates have clear center and offsets +/-8 grid cells
+(+/-16 world units). Nearest candidate is (896,640), distance39 from prior
+marker. Update only command7 spawn planar coordinates for comparison.
+No ability fields, binary guards, map ID or model ID changed.
+8416 restarted with capture20261002-222257-312005; existing login8415,
+auxiliary8414 and crashFTP21 remain running. User must relog because current
+client state cannot pick up the new initialization. No runtime result yet.

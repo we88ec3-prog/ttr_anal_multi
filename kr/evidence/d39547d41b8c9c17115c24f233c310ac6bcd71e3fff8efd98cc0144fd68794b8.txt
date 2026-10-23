@@ -1,0 +1,86 @@
+"""Offline bounded map-chart/case/cluster preload audit; no process access."""
+import hashlib
+import json
+from pathlib import Path
+import xml.etree.ElementTree as ET
+from build_native_index import PE
+from capstone import Cs, CS_ARCH_X86, CS_MODE_32
+from stp_resources import Archive
+
+ROOT = Path(__file__).resolve().parent.parent
+OUT = ROOT / 'anal/native-index'
+pe = PE(ROOT / 'Tartaros.bin')
+index = json.loads((OUT / 'Tartaros.bin.json').read_text(encoding='utf-8'))
+assert hashlib.sha256(pe.data).hexdigest() == index['sha256']
+decoder = Cs(CS_ARCH_X86, CS_MODE_32)
+
+def bounded(name, start, end):
+    instructions = list(decoder.disasm(pe.read(start, end-start), start))
+    assert sum(i.size for i in instructions) == end-start, name
+    assert instructions[-1].mnemonic == 'ret', name
+    addresses = {i.address for i in instructions}
+    for i in instructions:
+        if i.mnemonic.startswith('j') and i.op_str.startswith('0x'):
+            target = int(i.op_str, 16)
+            if start <= target < end:
+                assert target in addresses, (name, hex(target))
+    (OUT / (name + '.txt')).write_text('\n'.join(
+        f'{i.address:08X} {i.mnemonic:8} {i.op_str}' for i in instructions)+'\n', encoding='utf-8')
+    return {i.address: i for i in instructions}
+
+specs = [
+    ('case-resource-acquire', 0x53e690, 0x53e6d0),
+    ('case-resource-load', 0x53e120, 0x53e1cd),
+    ('case-resource-release', 0x53e1d0, 0x53e22b),
+    ('case-list-loader', 0x53e3f0, 0x53e682),
+    ('cluster-image-preload-list', 0x53e230, 0x53e3e6),
+    ('map-chart-node-loader', 0x53e800, 0x53eb91),
+    ('map-chart-node-copy', 0x53eba0, 0x53ebf4),
+    ('preload-image-id-append', 0x4a8680, 0x4a86dc),
+    ('packet-49-map-chart-rotation', 0x4b3350, 0x4b34d4),
+]
+functions = {name: bounded(name, start, end) for name, start, end in specs}
+strings = {hex(a): pe.cstring(a) for a in (
+    0xc0f3b0, 0xc0f3c0, 0xc0f3cc, 0xc0f3d8, 0xbfcab0,
+    0xbfb82c, 0xc0f3e4, 0xc0f3f8, 0xc0f404, 0xc0f40c, 0xc0f414,
+    0xc0f41c, 0xc0f42c, 0xc0f438, 0xc0f444, 0xc0f44c, 0xc0f454,
+    0xc0f45c, 0xc0f464)}
+assert strings['0xbfcab0'] == 'IMAGE'
+assert strings['0xc0f3d8'] == 'PRELOADSET'
+assert strings['0xc0f3e4'] == 'Table/_CaseList.xml'
+assert strings['0xc0f464'] == 'rotate'
+assert functions['cluster-image-preload-list'][0x53e309].op_str == '0xbfcab0'
+assert functions['cluster-image-preload-list'][0x53e370].op_str == '0x4a8680'
+assert functions['case-resource-load'][0x53e182].op_str == '0x53e800'
+assert functions['case-resource-load'][0x53e1b9].op_str == '0x53e230'
+assert functions['map-chart-node-loader'][0x53eaf0].op_str == 'byte ptr [esi + 0xc], al'
+assert functions['packet-49-map-chart-rotation'][0x4b345a].op_str == 'esi, byte ptr [edx + 0xc]'
+assert next(r for r in index['mainPacketHandlers'] if r['command'] == 0x49)['handler'] == 0x4b3350
+archive = Archive(ROOT / 'Field.stp')
+chart_path = 'Field/MapFlow/CHART_scenario_town000_01.xml'
+cluster_path = 'Field/Cluster/CLUST_scenario_town000_01.xml'
+chart = ET.fromstring(archive.read(chart_path).decode('euc-kr'))
+cluster = ET.fromstring(archive.read(cluster_path).decode('euc-kr'))
+table = Archive(ROOT / 'anal/backups/Table.original-kr.stp')
+cases = ET.fromstring(table.read('Table/_CaseList.xml').decode('utf-8-sig'))
+case_records = [e.attrib for e in cases.iter('CASE') if e.get('CLUSTER') == Path(cluster_path).name]
+direct_calls = {name: sorted({i.op_str for i in instructions.values() if i.mnemonic == 'call' and i.op_str.startswith('0x')})
+                for name, instructions in functions.items()}
+for calls in direct_calls.values():
+    assert '0x4d1710' not in calls and '0x548ff0' not in calls
+report = dict(sha256=index['sha256'], boundedFunctions=len(specs),
+              functions=[dict(name=n, start=hex(s), endExclusive=hex(e), directCalls=direct_calls[n]) for n,s,e in specs],
+              strings=strings, caseRecords=case_records,
+              tutorial=dict(chart=chart_path, cluster=cluster_path,
+                            nodes=[e.attrib for e in chart.iter('Node')],
+                            maps=[e.attrib for e in chart.iter('Map')],
+                            objects=[e.attrib for e in cluster.iter('OBJECT')],
+                            preload=[e.attrib for e in cluster.iter('IMAGE')]),
+              conclusions=['Located cluster reader collects PRELOADSET/IMAGE IDs, not OBJECT/COUNT spawn records.',
+                           'Located chart reader builds arrayx/arrayy grid, ID/type/icon/rotate records; NodeLink and nested Map are not consumed by this bounded function.',
+                           'Packet 49 consumes chart rotate to alter MinimapCached +68.',
+                           'No direct CMonster construction or SubAI call in these functions; helper/indirect paths not exhaustive.',
+                           'No native monster decision activation or P2P authority established.'])
+(OUT / 'mapflow-cluster-loading-audit.json').write_text(json.dumps(report, ensure_ascii=False, indent=2)+'\n', encoding='utf-8')
+print(json.dumps(dict(checks='passed', boundedFunctions=len(specs), caseRecords=case_records,
+                      monsterObjects=report['tutorial']['objects'], preloadImages=len(report['tutorial']['preload'])), ensure_ascii=True))

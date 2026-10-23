@@ -1,0 +1,105 @@
+"""Offline original KR scene entry/reset/ready audit. No runtime access."""
+import hashlib
+import json
+import struct
+from pathlib import Path
+from build_native_index import PE
+from capstone import Cs, CS_ARCH_X86, CS_MODE_32
+
+ROOT = Path(__file__).resolve().parent.parent
+OUT = ROOT / 'anal/native-index'
+p = PE(ROOT / 'Tartaros.bin')
+idx = json.loads((OUT / 'Tartaros.bin.json').read_text(encoding='utf-8'))
+assert hashlib.sha256(p.data).hexdigest() == idx['sha256']
+md = Cs(CS_ARCH_X86, CS_MODE_32)
+specs = [
+    ('scene-manager-type-switch', 0x4b99c0, 0x4b9b52, 'ret'),
+    ('scene-manager-install', 0x4b7d50, 0x4b7dc0, 'ret'),
+    ('scene-manager-message-registration', 0x4b7dc0, 0x4b7ec0, 'ret'),
+    ('scene-map-reset-message', 0x4b24f0, 0x4b2566, 'ret'),
+    ('actor-manager-clear-before-map', 0x5449a0, 0x5449ff, 'ret'),
+    ('controller-reset-before-map', 0x544f50, 0x54503a, 'ret'),
+    ('scene-ready-message', 0x4c5930, 0x4c5935, 'jmp'),
+    ('scenario-ready-forward', 0x4c4910, 0x4c4919, 'jmp'),
+    ('scene-ready-controller-flag', 0x4b2570, 0x4b2615, 'ret'),
+]
+functions = {}
+for name, start, end, terminal in specs:
+    ins = list(md.disasm(p.read(start, end-start), start))
+    assert sum(i.size for i in ins) == end-start, name
+    assert ins[-1].mnemonic == terminal, name
+    boundaries = {i.address for i in ins}
+    for i in ins:
+        if i.mnemonic.startswith('j') and i.op_str.startswith('0x'):
+            target = int(i.op_str, 16)
+            if start <= target < end:
+                assert target in boundaries, (name, hex(target))
+    functions[name] = {i.address: i for i in ins}
+    (OUT / (name+'.txt')).write_text('\n'.join(
+        f'{i.address:08X} {i.mnemonic:8} {i.op_str}' for i in ins)+'\n', encoding='utf-8')
+
+checks = [
+    ('scene-manager-type-switch', 0x4b9a26, 'eax, byte ptr [ecx + 2]'),
+    ('scene-manager-type-switch', 0x4b9a3b, 'eax, -2'),
+    ('scene-manager-type-switch', 0x4b9a47, 'eax, byte ptr [eax + 0x4b9b74]'),
+    ('scene-manager-type-switch', 0x4b9a4e, 'dword ptr [eax*4 + 0x4b9b54]'),
+    ('scene-manager-type-switch', 0x4b9a6c, '0x4c46f0'),
+    ('scene-manager-type-switch', 0x4b9aad, 'dword ptr [esi], 0xc0710c'),
+    ('scene-manager-type-switch', 0x4b9b36, '0x4b7d50'),
+    ('scene-manager-install', 0x4b7d5f, 'ecx, dword ptr [esi + 0x5eac]'),
+    ('scene-manager-install', 0x4b7d6b, 'edx, dword ptr [eax + 0x14]'),
+    ('scene-manager-install', 0x4b7da7, 'dword ptr [esi + 0x5eac], edi'),
+    ('scene-manager-install', 0x4b7db4, 'edx, dword ptr [eax + 0x10]'),
+    ('scene-manager-message-registration', 0x4b7eaf, 'dword ptr [0xfd2ff4], 0x4b99c0'),
+    ('scene-map-reset-message', 0x4b253a, '0x5449a0'),
+    ('scene-map-reset-message', 0x4b2545, '0x544f50'),
+    ('scene-map-reset-message', 0x4b254d, 'ecx, dword ptr [eax + 2]'),
+    ('scene-map-reset-message', 0x4b2557, '0x4df510'),
+    ('actor-manager-clear-before-map', 0x5449b4, 'edx, dword ptr [eax + 0x14]'),
+    ('actor-manager-clear-before-map', 0x5449c3, '1'),
+    ('actor-manager-clear-before-map', 0x5449f5, 'dword ptr [ebx + 8], edi'),
+    ('controller-reset-before-map', 0x544f7f, 'dword ptr [edi + 0x60], ebx'),
+    ('controller-reset-before-map', 0x544fa8, 'edx, dword ptr [edx + 0x1c]'),
+    ('controller-reset-before-map', 0x54500f, 'dword ptr [esi - 8], ebx'),
+    ('controller-reset-before-map', 0x545012, 'dword ptr [esi - 4], ebx'),
+    ('controller-reset-before-map', 0x54501f, 'eax, 3'),
+    ('scene-ready-message', 0x4c5930, 'eax, dword ptr [ecx]'),
+    ('scene-ready-message', 0x4c5932, 'dword ptr [eax + 0x2c]'),
+    ('scenario-ready-forward', 0x4c4914, '0x4b2570'),
+    ('scene-ready-controller-flag', 0x4b2593, 'eax, dword ptr [0xfba7a4]'),
+    ('scene-ready-controller-flag', 0x4b259d, 'dword ptr [eax + 4], ebx'),
+]
+for name, address, operand in checks:
+    assert functions[name][address].op_str == operand, (name, hex(address))
+table = struct.unpack('<8I', p.read(0x4b9b54, 32))
+compression = list(p.read(0x4b9b74, 27))
+assert max(compression) < len(table)
+boundaries = set(functions['scene-manager-type-switch'])
+assert all(t in boundaries for t in table)
+mapping = {str(n+2): hex(table[entry]) for n, entry in enumerate(compression)}
+assert mapping['2'] == '0x4b9a55' and mapping['6'] == '0x4b9a95'
+assert 0xfd2cf8 + 0x5f*8 + 4 == 0xfd2ff4
+handlers = {r['command']: r['handler'] for r in idx['mainPacketHandlers']}
+assert handlers[0x12] == 0x4b24f0 and handlers[0x14] == 0x4c5930
+vts = {r['address']: r for r in idx['vtables']}
+assert vts[0xc073b4]['className'] == '.?AVCScenarioField@Scene@@'
+assert vts[0xc073b4]['entries'][4] == 0x4c4750
+assert vts[0xc073b4]['entries'][11] == 0x4c4910
+assert vts[0xc0710c]['className'] == '.?AVCDuelField@Scene@@'
+report = dict(checks='passed', sha256=idx['sha256'], boundedFunctions=len(specs),
+    functions=[dict(name=n, start=hex(s), endExclusive=hex(e)) for n,s,e,_ in specs],
+    sceneTypeBranches=mapping, switchTable=hex(0x4b9b54), compressionTable=hex(0x4b9b74),
+    messages={'005F': 'SceneManager type switch/install', '0012': 'actor/controller clear then map change',
+              '0014': 'scene virtual+2C then current controller+4=1'},
+    reusedEvidence=['audit_scene_controllers.py: scenario virtual+10 -> CFormationController kind3',
+                    'audit_receive_dispatch.py: scenario constructor/overlay registration',
+                    'audit_map_trigger_consumers.py: complete 4DF510 map change'],
+    directKnownMonsterOrB0Calls={n: [hex(i.address) for i in ins.values()
+        if i.mnemonic=='call' and i.op_str in ('0x4d1710','0x548ff0','0x4e40a0','0x419070')]
+        for n,ins in functions.items()},
+    limitations=['Indirect lifecycle calls/helpers are not fully expanded.',
+        'Original type6 constructs CDuelField; local tutorial detour has different behavior.',
+        'Reset ordering inference is not a captured official server packet sequence.',
+        'No monster brain, authoritative peer identity or original wave scheduler established.'])
+(OUT/'scene-entry-lifecycle-audit.json').write_text(json.dumps(report, ensure_ascii=False, indent=2)+'\n', encoding='utf-8')
+print(json.dumps(dict(checks='passed', boundedFunctions=len(specs), type2=mapping['2'], type6=mapping['6'])))

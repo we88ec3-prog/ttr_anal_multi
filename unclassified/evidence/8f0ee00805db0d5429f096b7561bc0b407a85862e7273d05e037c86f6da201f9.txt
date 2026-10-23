@@ -1,0 +1,50 @@
+004930E0 push     ebp
+004930E1 mov      ebp, esp
+004930E3 push     ecx
+004930E4 mov      eax, dword ptr [ebp + 0xc]
+004930E7 push     ebx
+004930E8 mov      ebx, dword ptr [ebp + 0x10]
+004930EB push     esi
+004930EC push     edi
+004930ED movzx    edi, word ptr [eax]
+004930F0 mov      esi, ecx
+004930F2 mov      byte ptr [ebp - 1], 0
+004930F6 test     ebx, ebx
+004930F8 jne      0x493105
+004930FA pop      edi
+004930FB pop      esi
+004930FC xor      eax, eax
+004930FE pop      ebx
+004930FF mov      esp, ebp
+00493101 pop      ebp
+00493102 ret      0x10
+00493105 mov      eax, dword ptr [ebp + 0x14]
+00493108 sub      eax, 2
+0049310B jne      0x493154
+0049310D push     ebx
+0049310E push     edi
+0049310F lea      eax, [esi + 0xbee0]
+00493115 call     0x6db1f0
+0049311A call     dword ptr [0xbd25a0]
+00493120 mov      edx, dword ptr [esi + 0xb8]
+00493126 mov      eax, dword ptr [ebp + 0xc]
+00493129 mov      edx, dword ptr [edx + 4]
+0049312C push     edi
+0049312D lea      ecx, [esi + 0xb8]
+00493133 push     ebx
+00493134 push     eax
+00493135 call     edx
+00493137 mov      edi, eax
+00493139 call     dword ptr [0xbd25a0]
+0049313F cmp      edi, 0x100
+00493145 jne      0x493154
+00493147 cmp      dword ptr [esi + 0xbe8c], 0
+0049314E je       0x493154
+00493150 mov      byte ptr [ebp - 1], 1
+00493154 movzx    eax, byte ptr [ebp - 1]
+00493158 pop      edi
+00493159 pop      esi
+0049315A pop      ebx
+0049315B mov      esp, ebp
+0049315D pop      ebp
+0049315E ret      0x10

@@ -1,0 +1,39 @@
+"""Candidate current-state and state-table writes; offset alone is not actor identity."""
+import hashlib,json,sqlite3
+from pathlib import Path
+from build_native_index import PE
+from capstone import Cs,CS_ARCH_X86,CS_MODE_32,CS_AC_WRITE
+from capstone.x86_const import X86_OP_MEM
+ROOT=Path(__file__).resolve().parent.parent;OUT=ROOT/'anal/native-index'
+p=PE(ROOT/'Tartaros.bin');md=Cs(CS_ARCH_X86,CS_MODE_32);md.detail=True
+d=sqlite3.connect((OUT/'method-atlas/methods.sqlite').as_uri()+'?mode=ro',uri=True)
+sha=hashlib.sha256(p.data).hexdigest()
+assert d.execute("select sha256 from modules where module='Tartaros.bin'").fetchone()[0]==sha
+fields={0x158,0xf4}
+labels={};rows=[];skipped=[];stack=0;methods=0
+for a,label in d.execute("select address,label from labels where module='Tartaros.bin'"):
+ labels.setdefault(a,set()).add(label)
+for a,status,end in d.execute("select address,status,max_va_exclusive from methods where module='Tartaros.bin' and instructions>0 order by address"):
+ if end-a>65536:skipped.append(hex(a));continue
+ methods+=1;writes=[]
+ for i in md.disasm(p.read(a,end-a),a):
+  for op in i.operands:
+   if op.type!=X86_OP_MEM or not op.access&CS_AC_WRITE or op.mem.disp not in fields:continue
+   base=md.reg_name(op.mem.base);index=md.reg_name(op.mem.index)
+   if base in ['esp','ebp']:stack+=1;continue
+   if not base:continue
+   writes.append(dict(site=hex(i.address),field=hex(op.mem.disp),size=op.size,
+    base=base,index=index,mnemonic=i.mnemonic,operand=i.op_str))
+ if writes:rows.append(dict(method=hex(a),status=status,envelopeEnd=hex(end),
+  labels=sorted(labels.get(a,set())),writes=writes))
+result=dict(sha256=sha,checks='source-hash-passed',scannedMethodEnvelopes=methods,
+ candidateMethods=len(rows),candidateWriteOccurrences=sum(len(r['writes']) for r in rows),
+ uniqueWriteSites=len({w['site'] for r in rows for w in r['writes']}),
+ stackWriteOccurrencesExcluded=stack,oversizeEnvelopesSkipped=skipped,methods=rows,
+ limitations=['Heuristic linear decode of atlas min/max envelopes, not full CFG reconstruction.',
+  'Overlapping envelopes may duplicate sites or cross embedded tables; candidate only.',
+  'Field offset matching does not establish actor/monster identity or behavior.',
+  'Register/index aliases, differently encoded offsets, unindexed methods and omitted envelopes not covered.',
+  'No runtime or deployed behavior changes.'])
+(OUT/'actor-state-writer-candidates.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+print(json.dumps({k:v for k,v in result.items() if k not in ['methods','oversizeEnvelopesSkipped','limitations']},ensure_ascii=False))

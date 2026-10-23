@@ -1,0 +1,127 @@
+# 戰鬥開始與主控權限追查：2026-10-04
+
+基準：原始韓版 Tartaros.bin，SHA256 見 native-index/summary.json。
+這輪僅離線分析，未修改遊戲、服務、AI 或存檔。
+
+## 已核對的分流
+
+### 0x38 → 4B1BF0
+
+接收端將 payload 的 +0 DWORD、+4 DWORD、+8 BYTE 複製至
+FAB134 所指物件的 +34/+38/+3C；另依 payload+2 BYTE 分流。
+這些複製區間重疊其他解析欄位，不能先命名成 IP、port 或 host ID。
+
+| 位移 | 讀取方式 | 已看到的行為 |
+|---|---|---|
+| +2 | BYTE | 0、2、6 各有分支；後段另外比較 0、5 |
+| +3 | WORD | 供資源／場景資料查找或模式資料設定 |
+| +7 | WORD | 模式2、6傳至 540980 |
+| +8 | BYTE | 複製至上述物件+3C，語意待核對 |
+
+模式0、2走 552FC0：依 +3 WORD 查 FB7490/FB74A0 字串資料，
+轉小寫並處理 .dds 後綴。這段是資源名稱處理，不是 peer IP 建立。
+後段取得 FAB090 物件並呼叫 vtable+18、傳入2/3/4；
+其確切介面語意未確認，不能命名為主控切換。
+
+完整反組譯：native-index/battle-start-full.txt。
+目前本地教學 new_expedition.py 送出的 38 模式是2；不要據此推論官方所有房間模式。
+
+### 0x50 → 4B3600
+
+| payload | FE18F8 指向資料 |
+|---|---|
+| +0 DWORD | +0C |
+| +4 WORD | +10 |
+| +6 BYTE | +12 |
+| +7起 WORD清單 | +14/+18/+1C 的 vector，數量 floor((length-7)/2) |
+
+FE18F8 在 506E4A 被設定；50828A/508290 所在解構路徑的 RTTI 是
+CSingleton<CScenarioDescData>（vtable C0DD7C）。因此可確定它屬於劇情資料路徑。
+此 handler 未見 socket、connect 或端點交換；各欄位是否隊長、角色、其他ID
+仍需用資料消費端逐項確認，不能把 DWORD 自動視為IP。
+
+## 一般戰鬥與教學須分開
+
+CMissionField 的虛擬入口 4BC750：
+
+1. 查 FBA7A4 控制器；若 FBA7AC==2，呼叫544F50保留／重設既有控制器。
+2. 其他情況釋放舊控制器，配置0xC0，呼叫548540。
+3. 548540 明確寫入 C0FAC4，即 CSingleController；並將 FBA7AC 設為2。
+
+所以 FBA7AC==2 在此可解讀為控制器種類判別，不能直接解讀為「我是房主」。
+548540 配置的附屬物件 RTTI 是 CFieldPanel、CCircleShadow，屬於呈現輔助，
+並不是找到的怪物決策物件。
+
+目前使用者教學快照則是 CFormationController（C0FA14）。
+這說明只查教學控制器，可能漏掉一般任務的初始化路徑；
+但不表示 CSingleController 就是 P2P 房主。
+
+核對來源：native-index/mission-scene-update.txt、single-controller-objects.txt、
+single-controller-actions.txt。檔名中的 update 僅代表調查範圍；其中也有初始化、
+封包回呼與相鄰函式，不能全部當成每幀更新。
+
+## 網路證據的範圍
+
+原主程式靜態匯入沒有 Network.dll 項目；因此不能把 DLL 裡的 socket 建立路徑
+直接算成遊戲當前的連線。是否動態載入仍待查，現有 TCP 證據主要來自主程式。
+ASCII候選字串另存 authority-string-candidates.json；未見明確 peer/P2P/authority
+名稱不是不存在的證明。EternalTowerRelayPlayMsg 也不能僅凭 Relay 命名當成網路中繼。
+
+## 接續入口
+
+- CSingleController 548730、548A90 已擷取，後續核對輸入／更新用途與其外發資料。
+- CMissionField 初始化與實體登錄後，追 CMonster 更新的呼叫者及目標／技能選擇來源。
+- 若需 runtime，應一次對照一般任務與教學的控制器、連線端點及怪物更新堆疊。
+  當前 Python 教學 AI 不能充當官方同步流量證據。
+
+本輪沒有找到房主選任或原生怪物決策入口，P2P 尚未證實，也沒有被排除。
+
+## 後續：一般控制器輸入與共用發送（同日）
+
+### CSingleController 548730 / 548A90
+
+548730 讀 FB9004 附近的按鍵狀態；5489AC、5489EC 透過
+FBA854 的 vtable+10 發送3bytes指令（命令68及07的不同路徑）。
+兩处皆先判 FBA798==0。尚未命名這兩個 C→S 命令的遊戲語意，
+也不能套用同編號 S→C 命令的語意。
+
+548A90 呼叫共用5452C0，主要操作本機控制角色+0C，並依其狀態決定
+控制器+88的目標候選資料。544A00在候選中選一個物件再呼叫其vtable+64；
+這還不是怪物自主尋敵的證據。
+
+### 5452C0 的0A輸入封包
+
+已從函式起點核對到發送尾端545B71：
+
+| 欄位 | 結構 |
+|---|---|
+| 命令 | WORD 0A |
+| 時序欄位 | DWORD，來源F93944，寫到buffer+2 |
+| 後續每筆 | 5bytes：actor ID WORD / 控制flags WORD / 方向BYTE |
+
+先走三個控制角色槽，再走controller+30/+34的額外控制清單，
+將資料累積到FE38D0；長度FE48D0>6才呼叫FBA854+10發送。
+這與現行login_test_server.py的0A `<HHB>`解析一致。
+額外清單是否可包含怪物仍需追其建立者，不能只憑共用ID斷言怪物在此決策。
+
+發送前的5457A4..5457F9另有節流：依据FBA7B0選取常數100/120/180/300，
+與FB1318物件+BF74乘2比較取較大者，再與F9423C減controller+64的差值比較。
+目前只確定數值和比較方式；時鐘單位、計數器和+BF74的確切語意未證明，
+所以尚不能稱為「延遲毫秒」或將其判為普攻卡頓原因。未修改任何常數。
+
+### 發送閘門不能冒充房主旗標
+
+FBA798位於.data的零初始化虛擬尾段；本次直接絕對位址搜尋找到大量
+跨UI／任務／商城等發送路徑的參照。尚未找到直接絕對位址寫入，
+不代表無人寫入（可能經物件基址／相對位移）。需要追它所在物件的初始化。
+如此廣泛的用途使「房主旗標」目前沒有證據支持。
+
+### 怪物更新
+
+CMonster vtable+24=4D1AF0；其呼叫4C87D0，最後派送當前state的vtable+8。
+直接E8候選沒有4D1AF0的caller，符合虛擬派送入口但尚未定位派送者。
+本次再次核對仍看到模型／特效／狀態更新，未看到獨立目標或技能決策分支。
+
+新增證據：controller-input-and-actor-tick.txt、base-controller-input-full.txt、
+network-send-gate-xrefs.json。下一個有效入口是額外控制清單的建立者、
+怪物vtable+24的呼叫者，以及FBA798所在物件，而不是硬填三個隊伍AI槽。
