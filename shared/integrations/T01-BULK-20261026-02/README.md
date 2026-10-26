@@ -38,3 +38,5 @@ python -B kr-bulk-roy/lookup.py 0x4df510 --metadata-only
 交接只透過檔案，未向其他對話傳訊。各功能任務未因此整體完成。
 
 本輪驗證：118,021 份來源檔案／329,507,800 bytes 的 Git index SHA 全數相符，111,054 筆偽碼與狀態一對一，21 份 seed 依賴閉合，凍結後變動為零；詳 [validation.json](validation.json)。
+
+完整上傳已成功進入 `origin/main`：[`db2654db6fa816ce7005b40c0e3197f981981cbe`](https://github.com/we88ec3-prog/ttr_anal_multi/commit/db2654db6fa816ce7005b40c0e3197f981981cbe)。遠端查詢確認相符，詳 [push-receipt.json](push-receipt.json)。接續可採此 commit 或包含它的較新 main；後續收據文件提交不改變本批來源 SHA 與審核範圍。
