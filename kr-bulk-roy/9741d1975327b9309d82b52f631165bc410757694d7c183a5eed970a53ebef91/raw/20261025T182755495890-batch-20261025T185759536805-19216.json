@@ -1,0 +1,353 @@
+{
+  "evidence_id": "ev_5960380ac718d699612b5436d6ec2a6a559214699c42f421dd2cf7fc75f025bc",
+  "subject": {
+    "name": "Tartaros.bin",
+    "digest": {
+      "sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91"
+    },
+    "local_path": "E:\\Tartaros\\workspace\\Tartaros.bin",
+    "format": "pe",
+    "architecture": "x86"
+  },
+  "provider": {
+    "id": "rea-workflow",
+    "name": "REA composed investigation workflow",
+    "version": "1"
+  },
+  "analysis_profile": {
+    "provider": {
+      "id": "rea-workflow",
+      "name": "REA composed investigation workflow",
+      "version": "1"
+    },
+    "parameters": {
+      "upstream_analysis_profile": {
+        "provider": {
+          "id": "ghidra",
+          "name": "Ghidra",
+          "version": "12.1.4"
+        },
+        "parameters": {
+          "target_kind": "executable",
+          "target_format": "pe",
+          "executable_role": "application",
+          "managed": false,
+          "native_aot_metadata": {
+            "contract_revision": "rtr-9.1-x64-pe-read-only-v3",
+            "source_bytes": 134217728,
+            "work_units": 67108864,
+            "working_memory_bytes": 67108864,
+            "report_bytes": 4194304
+          },
+          "architecture": "x86",
+          "available_architectures": [
+            "x86"
+          ],
+          "import_mode": "ephemeral-source-immutable",
+          "pdb_observations": "program-info-v1",
+          "annotation_policy": "atomic-function-entry-metadata-v1",
+          "load_image_observations": "source-mappings-entry-context-v2",
+          "function_body_evidence": "complete-inclusive-ranges-v1",
+          "function_references": "complete-body-and-entry-reference-manager-v2",
+          "call_relationship_coverage": "function-body-call-coverage-v5",
+          "function_dossier_coverage": "observed-facets-and-call-relationships-v1",
+          "string_inventory_evidence": "defined-data-coverage-v1",
+          "location_resolution": "explicit-address-exact-entry-symbol-first-v3",
+          "procedure_file_offset_resolution": "address-first-unique-target-source-mapping-v2",
+          "instruction_flow_evidence": "decoded-return-pcode-v1",
+          "instruction_references": "exact-address-incoming-v1",
+          "function_boundary_observations": "ghidra-function-boundary-limitations-v3",
+          "no_return_repair": "disabled-windows-p0",
+          "process_launch": "official-headless-script-v1",
+          "jump_table_evidence": "typed-case-default-blocks-v1",
+          "decompiler_jump_loads": true,
+          "loader": "auto-from-header",
+          "language_id": "auto-from-header",
+          "compiler_spec_id": "auto-default",
+          "analyzer_preset": "ghidra-default"
+        },
+        "digest": "3c06738e45e144d5f073edbd3244c6bff46222f389525fe659bc92dca2ccdece"
+      },
+      "workflow_revision": 2
+    },
+    "digest": "d4471786e332c0336f066a85a651a368051028dfaa0c1d7a5ac78db2f422f47e"
+  },
+  "predicate_type": "rea.analysis",
+  "operation": "batch_decompile",
+  "parameters": {
+    "addresses": [
+      "0x895a36",
+      "0x895a82",
+      "0x895b67",
+      "0x895c05",
+      "0x895c72",
+      "0x895c9f",
+      "0x895ce0",
+      "0x895d39",
+      "0x895de0",
+      "0x895e94",
+      "0x895e9e",
+      "0x895eb5",
+      "0x895efc",
+      "0x895f6a",
+      "0x895f8c",
+      "0x895fae"
+    ]
+  },
+  "raw_result": null,
+  "normalized_result": {
+    "items": [
+      {
+        "address": "0x895a36",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x895a36",
+          "name": "_wcsncpy"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Single Match\r\n    _wcsncpy\r\n   \r\n   Libraries: Visual Studio 2010 Release, Visual Studio 2012 Release, Visual Studio 2019 Release */\r\n\r\nwchar_t * __cdecl _wcsncpy(wchar_t *_Dest,wchar_t *_Source,size_t _Count)\r\n\r\n{\r\n  wchar_t wVar1;\r\n  uint uVar2;\r\n  uint uVar3;\r\n  wchar_t *pwVar4;\r\n  \r\n  if (_Count != 0) {\r\n    pwVar4 = _Dest;\r\n    do {\r\n      wVar1 = *(wchar_t *)(((int)_Source - (int)_Dest) + (int)pwVar4);\r\n      *pwVar4 = wVar1;\r\n      pwVar4 = pwVar4 + 1;\r\n      if (wVar1 == L'\\0') break;\r\n      _Count = _Count - 1;\r\n    } while (_Count != 0);\r\n    if ((_Count != 0) && (uVar2 = _Count - 1, uVar2 != 0)) {\r\n      for (uVar3 = uVar2 >> 1; uVar3 != 0; uVar3 = uVar3 - 1) {\r\n        pwVar4[0] = L'\\0';\r\n        pwVar4[1] = L'\\0';\r\n        pwVar4 = pwVar4 + 2;\r\n      }\r\n      for (uVar2 = (uint)((uVar2 & 1) != 0); uVar2 != 0; uVar2 = uVar2 - 1) {\r\n        *pwVar4 = L'\\0';\r\n        pwVar4 = pwVar4 + 1;\r\n      }\r\n    }\r\n  }\r\n  return _Dest;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x895a82",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x895a82",
+          "name": "__wcsnicmp_l"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Single Match\r\n    __wcsnicmp_l\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nint __cdecl __wcsnicmp_l(wchar_t *_Str1,wchar_t *_Str2,size_t _MaxCount,_locale_t _Locale)\r\n\r\n{\r\n  wint_t wVar1;\r\n  wint_t wVar2;\r\n  int iVar3;\r\n  int *piVar4;\r\n  uint uVar5;\r\n  uint uVar6;\r\n  localeinfo_struct local_14;\r\n  int local_c;\r\n  char local_8;\r\n  \r\n  iVar3 = 0;\r\n  if (_MaxCount != 0) {\r\n    if ((_Str1 == (wchar_t *)0x0) || (_Str2 == (wchar_t *)0x0)) {\r\n      piVar4 = __errno();\r\n      *piVar4 = 0x16;\r\n      FUN_00893343();\r\n      iVar3 = 0x7fffffff;\r\n    }\r\n    else {\r\n      _LocaleUpdate::_LocaleUpdate((_LocaleUpdate *)&local_14,_Locale);\r\n      if ((local_14.locinfo)->lc_category[0].wlocale == (wchar_t *)0x0) {\r\n        iVar3 = (int)_Str1 - (int)_Str2;\r\n        do {\r\n          uVar5 = (uint)*(ushort *)(iVar3 + (int)_Str2);\r\n          if ((0x40 < uVar5) && (uVar5 < 0x5b)) {\r\n            uVar5 = uVar5 + 0x20 & 0xffff;\r\n          }\r\n          uVar6 = (uint)(ushort)*_Str2;\r\n          if ((0x40 < uVar6) && (uVar6 < 0x5b)) {\r\n            uVar6 = uVar6 + 0x20 & 0xffff;\r\n          }\r\n          _Str2 = _Str2 + 1;\r\n          _MaxCount = _MaxCount - 1;\r\n        } while (((_MaxCount != 0) && ((short)uVar5 != 0)) && ((short)uVar5 == (short)uVar6));\r\n      }\r\n      else {\r\n        do {\r\n          wVar1 = __towlower_l(*_Str1,&local_14);\r\n          uVar5 = (uint)wVar1;\r\n          wVar2 = __towlower_l(*_Str2,&local_14);\r\n          _Str1 = _Str1 + 1;\r\n          _Str2 = _Str2 + 1;\r\n          _MaxCount = _MaxCount - 1;\r\n          uVar6 = (uint)wVar2;\r\n          if ((_MaxCount == 0) || (wVar1 == 0)) break;\r\n        } while (wVar1 == wVar2);\r\n      }\r\n      iVar3 = uVar5 - uVar6;\r\n      if (local_8 != '\\0') {\r\n        *(uint *)(local_c + 0x70) = *(uint *)(local_c + 0x70) & 0xfffffffd;\r\n      }\r\n    }\r\n  }\r\n  return iVar3;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x895b67",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x895b67",
+          "name": "__wcsnicmp"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Single Match\r\n    __wcsnicmp\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nint __cdecl __wcsnicmp(wchar_t *_Str1,wchar_t *_Str2,size_t _MaxCount)\r\n\r\n{\r\n  int iVar1;\r\n  int *piVar2;\r\n  uint uVar3;\r\n  ushort uVar4;\r\n  \r\n  if (DAT_00f8cb10 == 0) {\r\n    iVar1 = 0;\r\n    if (_MaxCount != 0) {\r\n      if ((_Str1 == (wchar_t *)0x0) || (_Str2 == (wchar_t *)0x0)) {\r\n        piVar2 = __errno();\r\n        *piVar2 = 0x16;\r\n        FUN_00893343();\r\n        iVar1 = 0x7fffffff;\r\n      }\r\n      else {\r\n        iVar1 = (int)_Str1 - (int)_Str2;\r\n        do {\r\n          uVar4 = *(ushort *)(iVar1 + (int)_Str2);\r\n          if ((0x40 < uVar4) && (uVar4 < 0x5b)) {\r\n            uVar4 = uVar4 + 0x20;\r\n          }\r\n          uVar3 = (uint)(ushort)*_Str2;\r\n          if ((0x40 < uVar3) && (uVar3 < 0x5b)) {\r\n            uVar3 = uVar3 + 0x20 & 0xffff;\r\n          }\r\n          _Str2 = _Str2 + 1;\r\n          _MaxCount = _MaxCount - 1;\r\n        } while (((_MaxCount != 0) && (uVar4 != 0)) && (uVar4 == (ushort)uVar3));\r\n        iVar1 = uVar4 - uVar3;\r\n      }\r\n    }\r\n  }\r\n  else {\r\n    iVar1 = __wcsnicmp_l(_Str1,_Str2,_MaxCount,(_locale_t)0x0);\r\n  }\r\n  return iVar1;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x895c05",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x895c05",
+          "name": "_strcat_s"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Single Match\r\n    _strcat_s\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nerrno_t __cdecl _strcat_s(char *_Dst,rsize_t _SizeInBytes,char *_Src)\r\n\r\n{\r\n  char cVar1;\r\n  int *piVar2;\r\n  char *pcVar3;\r\n  int iVar4;\r\n  errno_t eStack_10;\r\n  \r\n  if ((_Dst != (char *)0x0) && (_SizeInBytes != 0)) {\r\n    pcVar3 = _Dst;\r\n    if (_Src != (char *)0x0) {\r\n      do {\r\n        if (*pcVar3 == '\\0') break;\r\n        pcVar3 = pcVar3 + 1;\r\n        _SizeInBytes = _SizeInBytes - 1;\r\n      } while (_SizeInBytes != 0);\r\n      if (_SizeInBytes != 0) {\r\n        iVar4 = (int)pcVar3 - (int)_Src;\r\n        do {\r\n          cVar1 = *_Src;\r\n          _Src[iVar4] = cVar1;\r\n          _Src = _Src + 1;\r\n          if (cVar1 == '\\0') break;\r\n          _SizeInBytes = _SizeInBytes - 1;\r\n        } while (_SizeInBytes != 0);\r\n        if (_SizeInBytes != 0) {\r\n          return 0;\r\n        }\r\n        *_Dst = '\\0';\r\n        piVar2 = __errno();\r\n        eStack_10 = 0x22;\r\n        *piVar2 = 0x22;\r\n        goto LAB_00895c24;\r\n      }\r\n    }\r\n    *_Dst = '\\0';\r\n  }\r\n  piVar2 = __errno();\r\n  eStack_10 = 0x16;\r\n  *piVar2 = 0x16;\r\nLAB_00895c24:\r\n  FUN_00893343();\r\n  return eStack_10;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x895c72",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x895c72",
+          "name": "__endthread"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Single Match\r\n    __endthread\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nvoid __cdecl __endthread(void)\r\n\r\n{\r\n  _ptiddata _Ptd;\r\n  \r\n  _Ptd = __getptd_noexit();\r\n  if (_Ptd != (_ptiddata)0x0) {\r\n    if ((HANDLE)_Ptd->_thandle != (HANDLE)0xffffffff) {\r\n      CloseHandle((HANDLE)_Ptd->_thandle);\r\n    }\r\n    __freeptd(_Ptd);\r\n  }\r\n                    /* WARNING: Subroutine does not return */\r\n  ExitThread(0);\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x895c9f",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x895c9f",
+          "name": "__callthreadstart"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* WARNING: Function: __SEH_prolog4 replaced with injection: SEH_prolog4 */\r\n/* Library Function - Single Match\r\n    __callthreadstart\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nvoid __callthreadstart(void)\r\n\r\n{\r\n  _ptiddata p_Var1;\r\n  _EXCEPTION_POINTERS *local_18;\r\n  \r\n  p_Var1 = __getptd();\r\n  (*p_Var1->_initaddr)(p_Var1->_initarg);\r\n  __endthread();\r\n  __XcptFilter(local_18->ExceptionRecord->ExceptionCode,local_18);\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x895ce0",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x895ce0",
+          "name": "__threadstart@4"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Single Match\r\n    __threadstart@4\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nvoid __threadstart_4(int param_1)\r\n\r\n{\r\n  code *pcVar1;\r\n  undefined4 uVar2;\r\n  int iVar3;\r\n  DWORD dwExitCode;\r\n  \r\n  ___set_flsgetvalue();\r\n  uVar2 = FUN_008a556f();\r\n  iVar3 = ___fls_getvalue_4(uVar2);\r\n  if (iVar3 == 0) {\r\n    uVar2 = FUN_008a556f(param_1);\r\n    iVar3 = ___fls_setvalue_8(uVar2,param_1);\r\n    if (iVar3 == 0) {\r\n      dwExitCode = GetLastError();\r\n                    /* WARNING: Subroutine does not return */\r\n      ExitThread(dwExitCode);\r\n    }\r\n  }\r\n  else {\r\n    *(undefined4 *)(iVar3 + 0x54) = *(undefined4 *)(param_1 + 0x54);\r\n    *(undefined4 *)(iVar3 + 0x58) = *(undefined4 *)(param_1 + 0x58);\r\n    *(undefined4 *)(iVar3 + 4) = *(undefined4 *)(param_1 + 4);\r\n    __freefls_4(param_1);\r\n  }\r\n  __callthreadstart();\r\n  pcVar1 = (code *)swi(3);\r\n  (*pcVar1)();\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x895d39",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x895d39",
+          "name": "__beginthread"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Single Match\r\n    __beginthread\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nuintptr_t __cdecl __beginthread(_StartAddress *_StartAddress,uint _StackSize,void *_ArgList)\r\n\r\n{\r\n  int *piVar1;\r\n  _ptiddata _Ptd;\r\n  _ptiddata p_Var2;\r\n  HANDLE hThread;\r\n  DWORD DVar3;\r\n  \r\n  DVar3 = 0;\r\n  if (_StartAddress == (_StartAddress *)0x0) {\r\n    piVar1 = __errno();\r\n    *piVar1 = 0x16;\r\n    FUN_00893343();\r\n  }\r\n  else {\r\n    ___set_flsgetvalue();\r\n    _Ptd = __calloc_crt(1,0x214);\r\n    if (_Ptd != (_ptiddata)0x0) {\r\n      p_Var2 = __getptd();\r\n      __initptd(_Ptd,p_Var2->ptlocinfo);\r\n      _Ptd->_initaddr = _StartAddress;\r\n      _Ptd->_initarg = _ArgList;\r\n      hThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0,_StackSize,__threadstart_4,_Ptd,4,\r\n                             &_Ptd->_tid);\r\n      _Ptd->_thandle = (uintptr_t)hThread;\r\n      if ((hThread != (HANDLE)0x0) && (DVar3 = ResumeThread(hThread), DVar3 != 0xffffffff)) {\r\n        return (uintptr_t)hThread;\r\n      }\r\n      DVar3 = GetLastError();\r\n    }\r\n    _free(_Ptd);\r\n    if (DVar3 != 0) {\r\n      __dosmaperr(DVar3);\r\n    }\r\n  }\r\n  return 0xffffffff;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x895de0",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x895de0",
+          "name": "__wfsopen"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* WARNING: Function: __SEH_prolog4 replaced with injection: SEH_prolog4 */\r\n/* WARNING: Function: __SEH_epilog4 replaced with injection: EH_epilog3 */\r\n/* Library Function - Single Match\r\n    __wfsopen\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nFILE * __cdecl __wfsopen(wchar_t *_Filename,wchar_t *_Mode,int _ShFlag)\r\n\r\n{\r\n  int *piVar1;\r\n  FILE *pFVar2;\r\n  undefined1 local_14 [8];\r\n  undefined4 uStack_c;\r\n  undefined *local_8;\r\n  \r\n  local_8 = &DAT_00c84ea0;\r\n  uStack_c = 0x895dec;\r\n  if (((_Filename == (wchar_t *)0x0) || (_Mode == (wchar_t *)0x0)) || (*_Mode == L'\\0')) {\r\n    piVar1 = __errno();\r\n    *piVar1 = 0x16;\r\n    FUN_00893343();\r\n  }\r\n  else {\r\n    pFVar2 = __getstream();\r\n    if (pFVar2 == (FILE *)0x0) {\r\n      piVar1 = __errno();\r\n      *piVar1 = 0x18;\r\n    }\r\n    else {\r\n      local_8 = (undefined *)0x0;\r\n      if (*_Filename != L'\\0') {\r\n        pFVar2 = __wopenfile(_Filename,_Mode,_ShFlag,pFVar2);\r\n        local_8 = (undefined *)0xfffffffe;\r\n        FUN_00895e94();\r\n        return pFVar2;\r\n      }\r\n      piVar1 = __errno();\r\n      *piVar1 = 0x16;\r\n      __local_unwind4(&DAT_00d61f20,local_14,0xfffffffe);\r\n    }\r\n  }\r\n  return (FILE *)0x0;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x895e94",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x895e94",
+          "name": "FUN_00895e94"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_00895e94(void)\r\n\r\n{\r\n  int unaff_EBP;\r\n  \r\n  __unlock_file(*(FILE **)(unaff_EBP + 8));\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x895e9e",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x895e9e",
+          "name": "__wfopen"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Single Match\r\n    __wfopen\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nFILE * __cdecl __wfopen(wchar_t *_Filename,wchar_t *_Mode)\r\n\r\n{\r\n  FILE *pFVar1;\r\n  \r\n  pFVar1 = __wfsopen(_Filename,_Mode,0x40);\r\n  return pFVar1;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x895eb5",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x895eb5",
+          "name": "__wfopen_s"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Single Match\r\n    __wfopen_s\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nerrno_t __cdecl __wfopen_s(FILE **_File,wchar_t *_Filename,wchar_t *_Mode)\r\n\r\n{\r\n  int *piVar1;\r\n  FILE *pFVar2;\r\n  int iVar3;\r\n  \r\n  if (_File == (FILE **)0x0) {\r\n    piVar1 = __errno();\r\n    iVar3 = 0x16;\r\n    *piVar1 = 0x16;\r\n    FUN_00893343();\r\n  }\r\n  else {\r\n    pFVar2 = __wfsopen(_Filename,_Mode,0x80);\r\n    *_File = pFVar2;\r\n    if (pFVar2 == (FILE *)0x0) {\r\n      piVar1 = __errno();\r\n      iVar3 = *piVar1;\r\n    }\r\n    else {\r\n      iVar3 = 0;\r\n    }\r\n  }\r\n  return iVar3;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x895efc",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x895efc",
+          "name": "vscan_fn"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Single Match\r\n    _vscan_fn\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nundefined4 __cdecl vscan_fn(code *param_1,int param_2,undefined4 param_3,undefined4 param_4)\r\n\r\n{\r\n  int *piVar1;\r\n  size_t sVar2;\r\n  undefined4 uVar3;\r\n  int iVar4;\r\n  char *unaff_ESI;\r\n  size_t *psVar5;\r\n  size_t local_20;\r\n  undefined4 local_18;\r\n  \r\n  psVar5 = &local_20;\r\n  for (iVar4 = 7; iVar4 != 0; iVar4 = iVar4 + -1) {\r\n    *psVar5 = 0;\r\n    psVar5 = psVar5 + 1;\r\n  }\r\n  if ((unaff_ESI != (char *)0x0) && (param_2 != 0)) {\r\n    sVar2 = _strlen(unaff_ESI);\r\n    local_18 = 0x49;\r\n    local_20 = 0x7fffffff;\r\n    if (sVar2 < 0x80000000) {\r\n      local_20 = sVar2;\r\n    }\r\n    uVar3 = (*param_1)(&stack0xffffffdc,param_2,param_3,param_4);\r\n    return uVar3;\r\n  }\r\n  piVar1 = __errno();\r\n  *piVar1 = 0x16;\r\n  FUN_00893343();\r\n  return 0xffffffff;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x895f6a",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x895f6a",
+          "name": "FID_conflict:_sscanf"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Multiple Matches With Different Base Names\r\n    _sscanf\r\n    _sscanf_s\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nint __cdecl FID_conflict__sscanf(char *_Src,char *_Format,...)\r\n\r\n{\r\n  int iVar1;\r\n  \r\n  iVar1 = vscan_fn(__input_l,_Format,0,&stack0x0000000c);\r\n  return iVar1;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x895f8c",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x895f8c",
+          "name": "FID_conflict:_sscanf"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Multiple Matches With Different Base Names\r\n    _sscanf\r\n    _sscanf_s\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nint __cdecl FID_conflict__sscanf(char *_Src,char *_Format,...)\r\n\r\n{\r\n  int iVar1;\r\n  \r\n  iVar1 = vscan_fn(__input_s_l,_Format,0,&stack0x0000000c);\r\n  return iVar1;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x895fae",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x895fae",
+          "name": "_fgetws"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* WARNING: Function: __SEH_prolog4 replaced with injection: SEH_prolog4 */\r\n/* WARNING: Function: __SEH_epilog4 replaced with injection: EH_epilog3 */\r\n/* Library Function - Single Match\r\n    _fgetws\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nwchar_t * __cdecl _fgetws(wchar_t *_Dst,int _SizeInWords,FILE *_File)\r\n\r\n{\r\n  wchar_t wVar1;\r\n  int *piVar2;\r\n  wchar_t *pwVar3;\r\n  wchar_t *local_20;\r\n  \r\n  local_20 = _Dst;\r\n  if ((((_Dst == (wchar_t *)0x0) && (_SizeInWords != 0)) || (_SizeInWords < 0)) ||\r\n     (_File == (FILE *)0x0)) {\r\n    piVar2 = __errno();\r\n    *piVar2 = 0x16;\r\n    FUN_00893343();\r\n  }\r\n  else if (_SizeInWords != 0) {\r\n    __lock_file(_File);\r\n    pwVar3 = _Dst;\r\n    if (_Dst != (wchar_t *)0x0) {\r\n      do {\r\n        _SizeInWords = _SizeInWords + -1;\r\n        if (_SizeInWords == 0) break;\r\n        wVar1 = __fgetwc_nolock(_File);\r\n        if (wVar1 == L'\\xffff') {\r\n          if (pwVar3 == _Dst) {\r\n            local_20 = (wchar_t *)0x0;\r\n            goto LAB_00896048;\r\n          }\r\n          break;\r\n        }\r\n        *pwVar3 = wVar1;\r\n        pwVar3 = pwVar3 + 1;\r\n      } while (wVar1 != L'\\n');\r\n      *pwVar3 = L'\\0';\r\n    }\r\nLAB_00896048:\r\n    FUN_0089605d();\r\n    return local_20;\r\n  }\r\n  return (wchar_t *)0x0;\r\n}\r\n\r\n"
+      }
+    ],
+    "total": 16,
+    "succeeded": 16,
+    "failed": 0
+  },
+  "confidence": "derived",
+  "authority": "shipped-artifact",
+  "environment": null,
+  "limitations": [
+    "Derived by an REA composed workflow.",
+    "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+    "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+    "External functions and functions without an analyzable body return null; other decompiler failures remain explicit.",
+    "External functions and local thunks are distinct; procedure metadata identifies both and preserves a thunk target when Ghidra resolves one.",
+    "Ghidra Listing reports a terminal call at 0x895c98 to EXTERNAL:0x51 KERNEL32.DLL::ExitThread (external=true, thunk=false, hasNoReturn=true); fallthrough is excluded by Ghidra's flow model. This records Ghidra's FunctionManager flag, not an independent verification that the callee cannot return.",
+    "Ghidra Listing reports a terminal call at 0x895d12 to EXTERNAL:0x51 KERNEL32.DLL::ExitThread (external=true, thunk=false, hasNoReturn=true); fallthrough is excluded by Ghidra's flow model. This records Ghidra's FunctionManager flag, not an independent verification that the callee cannot return.",
+    "Ghidra Listing reports a terminal call at 0x895d38 with no resolved callee; its no-return basis is unknown.",
+    "Pseudocode is Ghidra decompiler output, not original source and not text-equivalent to Hopper output.",
+    "The Windows bridge uses authenticated IPv4 loopback because Node path-based IPC does not expose Java AF_UNIX sockets; the endpoint file contains no bearer token.",
+    "The imported Program and temporary project are ephemeral and deleted on close. Annotation operations edit session database metadata; original executable bytes are never written.",
+    "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+    "The target references PDB Tartaros.pdb (GUID 491a189d-6d27-43d1-a6b5-81ace6a1df8b, age (hex) 1, signature unknown, version RSDS); Ghidra reports load state unknown. Original names and types may be missing; an empty name search does not prove a procedure is absent. Use list_procedures and address-based analysis to inspect recovered functions. REA does not admit a caller-selected PDB companion.",
+    "Windows Ghidra P0 accepts native x86 and x86-64 PE applications and DLLs, and explicitly selected raw 6502 images; managed, hostile, sensitive, and mutable-path targets are unsupported.",
+    "Windows sessions require the matching packaged Windows x64 native addon, local NTFS targets and runtimes, and Windows 10 or later. Native handles enforce path admission, private DACLs, and Job Object ownership automatically."
+  ],
+  "relationship_coverage": null,
+  "locations": [
+    {
+      "kind": "address",
+      "address": "0x895a36"
+    },
+    {
+      "kind": "address",
+      "address": "0x895a82"
+    },
+    {
+      "kind": "address",
+      "address": "0x895b67"
+    },
+    {
+      "kind": "address",
+      "address": "0x895c05"
+    },
+    {
+      "kind": "address",
+      "address": "0x895c72"
+    },
+    {
+      "kind": "address",
+      "address": "0x895c9f"
+    },
+    {
+      "kind": "address",
+      "address": "0x895ce0"
+    },
+    {
+      "kind": "address",
+      "address": "0x895d39"
+    },
+    {
+      "kind": "address",
+      "address": "0x895de0"
+    },
+    {
+      "kind": "address",
+      "address": "0x895e94"
+    },
+    {
+      "kind": "address",
+      "address": "0x895e9e"
+    },
+    {
+      "kind": "address",
+      "address": "0x895eb5"
+    },
+    {
+      "kind": "address",
+      "address": "0x895efc"
+    },
+    {
+      "kind": "address",
+      "address": "0x895f6a"
+    },
+    {
+      "kind": "address",
+      "address": "0x895f8c"
+    },
+    {
+      "kind": "address",
+      "address": "0x895fae"
+    }
+  ],
+  "evidence_links": []
+}

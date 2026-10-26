@@ -1,0 +1,351 @@
+{
+  "evidence_id": "ev_af43246524d6e109874e90f8f55addccf980c4a67552fc85bcf27acfbfd1d43a",
+  "subject": {
+    "name": "Tartaros.bin",
+    "digest": {
+      "sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91"
+    },
+    "local_path": "E:\\Tartaros\\workspace\\Tartaros.bin",
+    "format": "pe",
+    "architecture": "x86"
+  },
+  "provider": {
+    "id": "rea-workflow",
+    "name": "REA composed investigation workflow",
+    "version": "1"
+  },
+  "analysis_profile": {
+    "provider": {
+      "id": "rea-workflow",
+      "name": "REA composed investigation workflow",
+      "version": "1"
+    },
+    "parameters": {
+      "upstream_analysis_profile": {
+        "provider": {
+          "id": "ghidra",
+          "name": "Ghidra",
+          "version": "12.1.4"
+        },
+        "parameters": {
+          "target_kind": "executable",
+          "target_format": "pe",
+          "executable_role": "application",
+          "managed": false,
+          "native_aot_metadata": {
+            "contract_revision": "rtr-9.1-x64-pe-read-only-v3",
+            "source_bytes": 134217728,
+            "work_units": 67108864,
+            "working_memory_bytes": 67108864,
+            "report_bytes": 4194304
+          },
+          "architecture": "x86",
+          "available_architectures": [
+            "x86"
+          ],
+          "import_mode": "ephemeral-source-immutable",
+          "pdb_observations": "program-info-v1",
+          "annotation_policy": "atomic-function-entry-metadata-v1",
+          "load_image_observations": "source-mappings-entry-context-v2",
+          "function_body_evidence": "complete-inclusive-ranges-v1",
+          "function_references": "complete-body-and-entry-reference-manager-v2",
+          "call_relationship_coverage": "function-body-call-coverage-v5",
+          "function_dossier_coverage": "observed-facets-and-call-relationships-v1",
+          "string_inventory_evidence": "defined-data-coverage-v1",
+          "location_resolution": "explicit-address-exact-entry-symbol-first-v3",
+          "procedure_file_offset_resolution": "address-first-unique-target-source-mapping-v2",
+          "instruction_flow_evidence": "decoded-return-pcode-v1",
+          "instruction_references": "exact-address-incoming-v1",
+          "function_boundary_observations": "ghidra-function-boundary-limitations-v3",
+          "no_return_repair": "disabled-windows-p0",
+          "process_launch": "official-headless-script-v1",
+          "jump_table_evidence": "typed-case-default-blocks-v1",
+          "decompiler_jump_loads": true,
+          "loader": "auto-from-header",
+          "language_id": "auto-from-header",
+          "compiler_spec_id": "auto-default",
+          "analyzer_preset": "ghidra-default"
+        },
+        "digest": "3c06738e45e144d5f073edbd3244c6bff46222f389525fe659bc92dca2ccdece"
+      },
+      "workflow_revision": 2
+    },
+    "digest": "d4471786e332c0336f066a85a651a368051028dfaa0c1d7a5ac78db2f422f47e"
+  },
+  "predicate_type": "rea.analysis",
+  "operation": "batch_decompile",
+  "parameters": {
+    "addresses": [
+      "0x867750",
+      "0x8678e0",
+      "0x867910",
+      "0x867960",
+      "0x8679b0",
+      "0x867a00",
+      "0x867a50",
+      "0x867ab0",
+      "0x867b20",
+      "0x867b90",
+      "0x867c10",
+      "0x867c90",
+      "0x867d10",
+      "0x867d70",
+      "0x867f30",
+      "0x867f40"
+    ]
+  },
+  "raw_result": null,
+  "normalized_result": {
+    "items": [
+      {
+        "address": "0x867750",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x867750",
+          "name": "FUN_00867750"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nulonglong FUN_00867750(void)\r\n\r\n{\r\n  float fVar1;\r\n  float fVar2;\r\n  double dVar3;\r\n  double dVar4;\r\n  byte bVar5;\r\n  float *pfVar6;\r\n  float *pfVar7;\r\n  int iVar8;\r\n  uint in_EAX;\r\n  byte *pbVar9;\r\n  uint uVar10;\r\n  int in_ECX;\r\n  double *in_EDX;\r\n  undefined3 uVar11;\r\n  byte *pbVar12;\r\n  bool bVar13;\r\n  ushort uVar14;\r\n  ulonglong uVar15;\r\n  \r\n  uVar10 = in_EAX;\r\n  if (*(int *)(in_EAX + 4) == *(int *)(in_ECX + 4)) {\r\n    pbVar9 = *(byte **)(in_EAX + 0xc);\r\n    pbVar12 = *(byte **)(in_ECX + 0xc);\r\n    do {\r\n      bVar5 = *pbVar9;\r\n      uVar11 = (undefined3)((uint)in_EDX >> 8);\r\n      in_EDX = (double *)CONCAT31(uVar11,bVar5);\r\n      bVar13 = bVar5 < *pbVar12;\r\n      if (bVar5 != *pbVar12) {\r\nLAB_00867787:\r\n        uVar10 = (1 - (uint)bVar13) - (uint)(bVar13 != 0);\r\n        goto LAB_0086778c;\r\n      }\r\n      if (bVar5 == 0) break;\r\n      bVar5 = pbVar9[1];\r\n      in_EDX = (double *)CONCAT31(uVar11,bVar5);\r\n      bVar13 = bVar5 < pbVar12[1];\r\n      if (bVar5 != pbVar12[1]) goto LAB_00867787;\r\n      pbVar9 = pbVar9 + 2;\r\n      pbVar12 = pbVar12 + 2;\r\n    } while (bVar5 != 0);\r\n    uVar10 = 0;\r\nLAB_0086778c:\r\n    if (uVar10 == 0) {\r\n      in_EDX = (double *)(*(int *)(in_EAX + 4) + -1);\r\n      uVar10 = 0;\r\n      switch(in_EDX) {\r\n      case (double *)0x0:\r\n        return CONCAT44(CONCAT31((int3)((uint)in_EDX >> 8),**(char **)(in_EAX + 8)),\r\n                        CONCAT31((int3)((uint)*(char **)(in_ECX + 8) >> 8),\r\n                                 **(char **)(in_EAX + 8) == **(char **)(in_ECX + 8)));\r\n      case (double *)0x1:\r\n      case (double *)0xb:\r\n      case (double *)0xc:\r\n        return CONCAT44(**(int **)(in_EAX + 8),\r\n                        CONCAT31((int3)((uint)*(int **)(in_ECX + 8) >> 8),\r\n                                 **(int **)(in_EAX + 8) == **(int **)(in_ECX + 8)));\r\n      case (double *)0x2:\r\n        fVar1 = **(float **)(in_EAX + 8);\r\n        fVar2 = **(float **)(in_ECX + 8);\r\n        uVar10 = CONCAT22((short)((uint)*(float **)(in_EAX + 8) >> 0x10),\r\n                          (ushort)(fVar2 < fVar1) << 8 | (ushort)(NAN(fVar2) || NAN(fVar1)) << 10 |\r\n                          (ushort)(fVar2 == fVar1) << 0xe);\r\n        if (fVar2 == fVar1) {\r\n          return CONCAT44(in_EDX,CONCAT31((int3)(uVar10 >> 8),1));\r\n        }\r\n        break;\r\n      case (double *)0x3:\r\n        pbVar9 = *(byte **)(in_ECX + 8);\r\n        pbVar12 = *(byte **)(in_EAX + 8);\r\n        do {\r\n          bVar5 = *pbVar12;\r\n          bVar13 = bVar5 < *pbVar9;\r\n          if (bVar5 != *pbVar9) {\r\nLAB_0086781e:\r\n            iVar8 = (1 - (uint)bVar13) - (uint)(bVar13 != 0);\r\n            return CONCAT44(in_EDX,CONCAT31((int3)((uint)iVar8 >> 8),iVar8 == 0));\r\n          }\r\n          if (bVar5 == 0) break;\r\n          bVar5 = pbVar12[1];\r\n          bVar13 = bVar5 < pbVar9[1];\r\n          if (bVar5 != pbVar9[1]) goto LAB_0086781e;\r\n          pbVar12 = pbVar12 + 2;\r\n          pbVar9 = pbVar9 + 2;\r\n        } while (bVar5 != 0);\r\n        return CONCAT44(in_EDX,1);\r\n      case (double *)0x4:\r\n        fVar1 = **(float **)(in_EAX + 8);\r\n        fVar2 = **(float **)(in_ECX + 8);\r\n        uVar10 = (uint)(ushort)((ushort)(fVar2 < fVar1) << 8 |\r\n                                (ushort)(NAN(fVar2) || NAN(fVar1)) << 10 |\r\n                               (ushort)(fVar2 == fVar1) << 0xe);\r\n        if (fVar2 == fVar1) {\r\n          fVar1 = (*(float **)(in_EAX + 8))[1];\r\n          fVar2 = (*(float **)(in_ECX + 8))[1];\r\n          uVar14 = (ushort)(fVar2 < fVar1) << 8 | (ushort)(NAN(fVar2) || NAN(fVar1)) << 10 |\r\n                   (ushort)(fVar2 == fVar1) << 0xe;\r\n          uVar10 = (uint)uVar14;\r\n          if (fVar2 == fVar1) {\r\n            return CONCAT44(in_EDX,CONCAT31((uint3)(byte)(uVar14 >> 8),1));\r\n          }\r\n        }\r\n        break;\r\n      case (double *)0x5:\r\n        pfVar6 = *(float **)(in_EAX + 8);\r\n        pfVar7 = *(float **)(in_ECX + 8);\r\n        if (((*pfVar7 == *pfVar6) && (pfVar7[1] == pfVar6[1])) && (pfVar7[2] == pfVar6[2])) {\r\n          return CONCAT44(pfVar6,1);\r\n        }\r\n        return ZEXT48(pfVar6) << 0x20;\r\n      case (double *)0x6:\r\n        uVar15 = FUN_00868b50();\r\n        return uVar15;\r\n      case (double *)0x7:\r\n        pbVar9 = *(byte **)(in_ECX + 8);\r\n        pbVar12 = *(byte **)(in_EAX + 8);\r\n        uVar10 = 0x34;\r\n        do {\r\n          if (*(int *)pbVar9 != *(int *)pbVar12) {\r\n            iVar8 = (uint)*pbVar9 - (uint)*pbVar12;\r\n            if (((iVar8 == 0) && (iVar8 = (uint)pbVar9[1] - (uint)pbVar12[1], iVar8 == 0)) &&\r\n               (iVar8 = (uint)pbVar9[2] - (uint)pbVar12[2], iVar8 == 0)) {\r\n              iVar8 = (uint)pbVar9[3] - (uint)pbVar12[3];\r\n            }\r\n            return (ulonglong)CONCAT31((int3)(iVar8 >> 0x1f),(iVar8 >> 0x1f | 1U) == 0);\r\n          }\r\n          uVar10 = uVar10 - 4;\r\n          pbVar12 = pbVar12 + 4;\r\n          pbVar9 = pbVar9 + 4;\r\n        } while (3 < uVar10);\r\n        return 1;\r\n      case (double *)0x8:\r\n        pbVar9 = *(byte **)(in_ECX + 8);\r\n        pbVar12 = *(byte **)(in_EAX + 8);\r\n        uVar10 = 0x44;\r\n        do {\r\n          if (*(int *)pbVar9 != *(int *)pbVar12) {\r\n            iVar8 = (uint)*pbVar9 - (uint)*pbVar12;\r\n            if (((iVar8 == 0) && (iVar8 = (uint)pbVar9[1] - (uint)pbVar12[1], iVar8 == 0)) &&\r\n               (iVar8 = (uint)pbVar9[2] - (uint)pbVar12[2], iVar8 == 0)) {\r\n              iVar8 = (uint)pbVar9[3] - (uint)pbVar12[3];\r\n            }\r\n            return (ulonglong)CONCAT31((int3)(iVar8 >> 0x1f),(iVar8 >> 0x1f | 1U) == 0);\r\n          }\r\n          uVar10 = uVar10 - 4;\r\n          pbVar12 = pbVar12 + 4;\r\n          pbVar9 = pbVar9 + 4;\r\n        } while (3 < uVar10);\r\n        return 1;\r\n      case (double *)0x9:\r\n        in_EDX = *(double **)(in_EAX + 8);\r\n        dVar3 = *in_EDX;\r\n        dVar4 = **(double **)(in_ECX + 8);\r\n        uVar10 = CONCAT22((short)((uint)*(double **)(in_ECX + 8) >> 0x10),\r\n                          (ushort)(dVar4 < dVar3) << 8 | (ushort)(NAN(dVar4) || NAN(dVar3)) << 10 |\r\n                          (ushort)(dVar4 == dVar3) << 0xe);\r\n        if (dVar4 == dVar3) {\r\n          return CONCAT44(in_EDX,CONCAT31((int3)(uVar10 >> 8),1));\r\n        }\r\n        break;\r\n      case (double *)0xa:\r\n        return CONCAT44(*(int **)(in_EAX + 8),\r\n                        CONCAT31((int3)((uint)**(int **)(in_ECX + 8) >> 8),\r\n                                 **(int **)(in_EAX + 8) == **(int **)(in_ECX + 8)));\r\n      default:\r\n        goto switchD_008677a3_default;\r\n      }\r\n    }\r\n  }\r\n  uVar10 = uVar10 & 0xffffff00;\r\nswitchD_008677a3_default:\r\n  return CONCAT44(in_EDX,uVar10);\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8678e0",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8678e0",
+          "name": "FUN_008678e0"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_008678e0(byte param_1)\r\n\r\n{\r\n  undefined4 *in_ECX;\r\n  \r\n  *in_ECX = gbParam::vftable;\r\n  FUN_00867f40();\r\n  if ((param_1 & 1) != 0) {\r\n    FUN_0089120c();\r\n  }\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x867910",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x867910",
+          "name": "FUN_00867910"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nundefined4 * FUN_00867910(undefined4 *param_1,undefined1 *param_2)\r\n\r\n{\r\n  undefined4 uVar1;\r\n  \r\n  *param_1 = gbParam::vftable;\r\n  param_1[1] = 1;\r\n  param_1[2] = 0;\r\n  param_1[3] = 0;\r\n  FUN_008673c0();\r\n  if (param_1[2] == 0) {\r\n    uVar1 = FUN_00891268(1);\r\n    param_1[2] = uVar1;\r\n  }\r\n  *(undefined1 *)param_1[2] = *param_2;\r\n  return param_1;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x867960",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x867960",
+          "name": "FUN_00867960"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nundefined4 * FUN_00867960(undefined4 *param_1,undefined4 *param_2)\r\n\r\n{\r\n  undefined4 uVar1;\r\n  \r\n  *param_1 = gbParam::vftable;\r\n  param_1[1] = 2;\r\n  param_1[2] = 0;\r\n  param_1[3] = 0;\r\n  FUN_008673c0();\r\n  if (param_1[2] == 0) {\r\n    uVar1 = FUN_00891268(4);\r\n    param_1[2] = uVar1;\r\n  }\r\n  *(undefined4 *)param_1[2] = *param_2;\r\n  return param_1;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8679b0",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8679b0",
+          "name": "FUN_008679b0"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nundefined4 * FUN_008679b0(undefined4 *param_1,undefined4 *param_2)\r\n\r\n{\r\n  undefined4 uVar1;\r\n  \r\n  *param_1 = gbParam::vftable;\r\n  param_1[1] = 3;\r\n  param_1[2] = 0;\r\n  param_1[3] = 0;\r\n  FUN_008673c0();\r\n  if (param_1[2] == 0) {\r\n    uVar1 = FUN_00891268(4);\r\n    param_1[2] = uVar1;\r\n  }\r\n  *(undefined4 *)param_1[2] = *param_2;\r\n  return param_1;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x867a00",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x867a00",
+          "name": "FUN_00867a00"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nundefined4 * FUN_00867a00(undefined4 *param_1,undefined8 *param_2)\r\n\r\n{\r\n  undefined4 uVar1;\r\n  \r\n  *param_1 = gbParam::vftable;\r\n  param_1[1] = 10;\r\n  param_1[2] = 0;\r\n  param_1[3] = 0;\r\n  FUN_008673c0();\r\n  if (param_1[2] == 0) {\r\n    uVar1 = FUN_00891268(8);\r\n    param_1[2] = uVar1;\r\n  }\r\n  *(undefined8 *)param_1[2] = *param_2;\r\n  return param_1;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x867a50",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x867a50",
+          "name": "FUN_00867a50"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nundefined4 * FUN_00867a50(undefined4 *param_1)\r\n\r\n{\r\n  *param_1 = gbParam::vftable;\r\n  param_1[1] = 4;\r\n  param_1[2] = 0;\r\n  param_1[3] = 0;\r\n  FUN_008673c0();\r\n  if (param_1[2] != 0) {\r\n    FUN_00891d3d(param_1[2]);\r\n    param_1[2] = 0;\r\n  }\r\n  FUN_008673c0();\r\n  return param_1;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x867ab0",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x867ab0",
+          "name": "FUN_00867ab0"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nundefined4 * FUN_00867ab0(undefined4 *param_1,undefined4 *param_2)\r\n\r\n{\r\n  undefined4 *puVar1;\r\n  \r\n  *param_1 = gbParam::vftable;\r\n  param_1[1] = 5;\r\n  param_1[2] = 0;\r\n  param_1[3] = 0;\r\n  FUN_008673c0();\r\n  if (param_1[2] == 0) {\r\n    puVar1 = (undefined4 *)FUN_00891268(0xc);\r\n    if (puVar1 == (undefined4 *)0x0) {\r\n      puVar1 = (undefined4 *)0x0;\r\n    }\r\n    else {\r\n      *puVar1 = 0;\r\n      puVar1[1] = 0;\r\n      puVar1[2] = 0;\r\n    }\r\n    param_1[2] = puVar1;\r\n  }\r\n  puVar1 = (undefined4 *)param_1[2];\r\n  *puVar1 = *param_2;\r\n  puVar1[1] = param_2[1];\r\n  puVar1[2] = param_2[2];\r\n  return param_1;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x867b20",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x867b20",
+          "name": "FUN_00867b20"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nundefined4 * FUN_00867b20(undefined4 *param_1,undefined4 *param_2)\r\n\r\n{\r\n  undefined4 *puVar1;\r\n  \r\n  *param_1 = gbParam::vftable;\r\n  param_1[1] = 6;\r\n  param_1[2] = 0;\r\n  param_1[3] = 0;\r\n  FUN_008673c0();\r\n  if (param_1[2] == 0) {\r\n    puVar1 = (undefined4 *)FUN_00891268(8);\r\n    if (puVar1 == (undefined4 *)0x0) {\r\n      puVar1 = (undefined4 *)0x0;\r\n    }\r\n    else {\r\n      *puVar1 = 0;\r\n      puVar1[1] = 0;\r\n    }\r\n    param_1[2] = puVar1;\r\n  }\r\n  puVar1 = (undefined4 *)param_1[2];\r\n  *puVar1 = *param_2;\r\n  puVar1[1] = param_2[1];\r\n  return param_1;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x867b90",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x867b90",
+          "name": "FUN_00867b90"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nundefined4 * FUN_00867b90(undefined4 *param_1,undefined4 *param_2)\r\n\r\n{\r\n  undefined4 *puVar1;\r\n  \r\n  *param_1 = gbParam::vftable;\r\n  param_1[1] = 7;\r\n  param_1[2] = 0;\r\n  param_1[3] = 0;\r\n  FUN_008673c0();\r\n  if (param_1[2] == 0) {\r\n    puVar1 = (undefined4 *)FUN_00891268(0x10);\r\n    if (puVar1 == (undefined4 *)0x0) {\r\n      puVar1 = (undefined4 *)0x0;\r\n    }\r\n    else {\r\n      *puVar1 = 0;\r\n      puVar1[1] = 0;\r\n      puVar1[2] = 0;\r\n      puVar1[3] = 0x3f800000;\r\n    }\r\n    param_1[2] = puVar1;\r\n  }\r\n  puVar1 = (undefined4 *)param_1[2];\r\n  *puVar1 = *param_2;\r\n  puVar1[1] = param_2[1];\r\n  puVar1[2] = param_2[2];\r\n  puVar1[3] = param_2[3];\r\n  return param_1;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x867c10",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x867c10",
+          "name": "FUN_00867c10"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nundefined4 * FUN_00867c10(undefined4 *param_1,undefined4 *param_2)\r\n\r\n{\r\n  undefined4 *puVar1;\r\n  int iVar2;\r\n  \r\n  *param_1 = gbParam::vftable;\r\n  param_1[1] = 8;\r\n  param_1[2] = 0;\r\n  param_1[3] = 0;\r\n  FUN_008673c0();\r\n  if (param_1[2] == 0) {\r\n    puVar1 = (undefined4 *)FUN_00891268(0x34);\r\n    if (puVar1 == (undefined4 *)0x0) {\r\n      puVar1 = (undefined4 *)0x0;\r\n    }\r\n    else {\r\n      puVar1[0xc] = 7;\r\n      _memset(puVar1,0,0x34);\r\n      puVar1[8] = 0x3f800000;\r\n      puVar1[4] = 0x3f800000;\r\n      *puVar1 = 0x3f800000;\r\n    }\r\n    param_1[2] = puVar1;\r\n  }\r\n  puVar1 = (undefined4 *)param_1[2];\r\n  for (iVar2 = 0xd; iVar2 != 0; iVar2 = iVar2 + -1) {\r\n    *puVar1 = *param_2;\r\n    param_2 = param_2 + 1;\r\n    puVar1 = puVar1 + 1;\r\n  }\r\n  return param_1;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x867c90",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x867c90",
+          "name": "FUN_00867c90"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nundefined4 * FUN_00867c90(undefined4 *param_1,undefined4 *param_2)\r\n\r\n{\r\n  undefined4 *puVar1;\r\n  int iVar2;\r\n  \r\n  *param_1 = gbParam::vftable;\r\n  param_1[1] = 9;\r\n  param_1[2] = 0;\r\n  param_1[3] = 0;\r\n  FUN_008673c0();\r\n  if (param_1[2] == 0) {\r\n    puVar1 = (undefined4 *)FUN_00891268(0x44);\r\n    if (puVar1 == (undefined4 *)0x0) {\r\n      puVar1 = (undefined4 *)0x0;\r\n    }\r\n    else {\r\n      _memset(puVar1,0,0x44);\r\n      puVar1[0xf] = 0x3f800000;\r\n      puVar1[10] = 0x3f800000;\r\n      puVar1[5] = 0x3f800000;\r\n      *puVar1 = 0x3f800000;\r\n    }\r\n    param_1[2] = puVar1;\r\n  }\r\n  puVar1 = (undefined4 *)param_1[2];\r\n  for (iVar2 = 0x11; iVar2 != 0; iVar2 = iVar2 + -1) {\r\n    *puVar1 = *param_2;\r\n    param_2 = param_2 + 1;\r\n    puVar1 = puVar1 + 1;\r\n  }\r\n  return param_1;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x867d10",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x867d10",
+          "name": "FUN_00867d10"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nundefined4 * FUN_00867d10(undefined4 *param_1,undefined4 *param_2)\r\n\r\n{\r\n  undefined4 *puVar1;\r\n  \r\n  *param_1 = gbParam::vftable;\r\n  param_1[1] = 0xb;\r\n  param_1[2] = 0;\r\n  param_1[3] = 0;\r\n  FUN_008673c0();\r\n  if (param_1[2] == 0) {\r\n    puVar1 = (undefined4 *)FUN_00891268(4);\r\n    if (puVar1 == (undefined4 *)0x0) {\r\n      puVar1 = (undefined4 *)0x0;\r\n    }\r\n    else {\r\n      *puVar1 = 0;\r\n    }\r\n    param_1[2] = puVar1;\r\n  }\r\n  *(undefined4 *)param_1[2] = *param_2;\r\n  return param_1;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x867d70",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x867d70",
+          "name": "FUN_00867d70"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nundefined4 * FUN_00867d70(undefined4 *param_1,int param_2)\r\n\r\n{\r\n  int iVar1;\r\n  char cVar2;\r\n  \r\n  iVar1 = param_2;\r\n  param_1[1] = 0;\r\n  param_1[2] = 0;\r\n  param_1[3] = 0;\r\n  *param_1 = gbParam::vftable;\r\n  cVar2 = FUN_00867750();\r\n  if (cVar2 == '\\0') {\r\n    param_1[1] = *(undefined4 *)(iVar1 + 4);\r\n    FUN_008673c0();\r\n    switch(param_1[1]) {\r\n    case 1:\r\n      FUN_00867410(*(undefined4 *)(param_2 + 8));\r\n      return param_1;\r\n    case 2:\r\n      FUN_00867670(*(undefined4 *)(param_2 + 8));\r\n      return param_1;\r\n    case 3:\r\n      FUN_00867470(*(undefined4 *)(param_2 + 8));\r\n      return param_1;\r\n    case 4:\r\n      param_2 = (int)**(char **)(param_2 + 8);\r\n      FUN_00867670(&param_2);\r\n      return param_1;\r\n    case 5:\r\n      FUN_008674a0();\r\n      return param_1;\r\n    case 6:\r\n      FUN_008674e0();\r\n      return param_1;\r\n    case 7:\r\n      FUN_00867520();\r\n      return param_1;\r\n    case 8:\r\n      FUN_00867570(*(undefined4 *)(param_2 + 8));\r\n      return param_1;\r\n    case 9:\r\n      FUN_008675d0(*(undefined4 *)(param_2 + 8));\r\n      return param_1;\r\n    case 10:\r\n      FUN_00867440(*(undefined4 *)(param_2 + 8));\r\n      return param_1;\r\n    case 0xb:\r\n      FUN_00867630(*(undefined4 *)(param_2 + 8));\r\n      return param_1;\r\n    case 0xc:\r\n      FUN_00867670(*(undefined4 *)(param_2 + 8));\r\n      return param_1;\r\n    case 0xd:\r\n      FUN_00867670(*(undefined4 *)(param_2 + 8));\r\n    }\r\n  }\r\n  return param_1;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x867f30",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x867f30",
+          "name": "FUN_00867f30"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_00867f30(void)\r\n\r\n{\r\n  undefined4 *in_ECX;\r\n  \r\n  *in_ECX = gbParam::vftable;\r\n  FUN_00867f40();\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x867f40",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x867f40",
+          "name": "FUN_00867f40"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_00867f40(void)\r\n\r\n{\r\n  int unaff_ESI;\r\n  undefined4 uVar1;\r\n  \r\n  switch(*(undefined4 *)(unaff_ESI + 4)) {\r\n  case 1:\r\n  case 6:\r\n  case 9:\r\n  case 10:\r\n  case 0xd:\r\n    uVar1 = *(undefined4 *)(unaff_ESI + 8);\r\n    break;\r\n  case 2:\r\n  case 7:\r\n  case 0xb:\r\n    uVar1 = *(undefined4 *)(unaff_ESI + 8);\r\n    break;\r\n  case 3:\r\n  case 5:\r\n  case 8:\r\n  case 0xc:\r\n    uVar1 = *(undefined4 *)(unaff_ESI + 8);\r\n    break;\r\n  case 4:\r\n    FUN_00891d3d(*(undefined4 *)(unaff_ESI + 8));\r\n  default:\r\n    goto switchD_00867f49_default;\r\n  }\r\n  FUN_0089120c(uVar1);\r\nswitchD_00867f49_default:\r\n  *(undefined4 *)(unaff_ESI + 8) = 0;\r\n  if (*(int *)(unaff_ESI + 0xc) != 0) {\r\n    FUN_00891d3d(*(int *)(unaff_ESI + 0xc));\r\n    *(undefined4 *)(unaff_ESI + 0xc) = 0;\r\n  }\r\n  return;\r\n}\r\n\r\n"
+      }
+    ],
+    "total": 16,
+    "succeeded": 16,
+    "failed": 0
+  },
+  "confidence": "derived",
+  "authority": "shipped-artifact",
+  "environment": null,
+  "limitations": [
+    "Derived by an REA composed workflow.",
+    "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+    "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+    "External functions and functions without an analyzable body return null; other decompiler failures remain explicit.",
+    "External functions and local thunks are distinct; procedure metadata identifies both and preserves a thunk target when Ghidra resolves one.",
+    "Ghidra Listing reports a terminal call at 0x867867 to 0x868b50 FUN_00868b50 (external=false, thunk=false, hasNoReturn=false); fallthrough is excluded by Ghidra's flow model. The reason for the terminal flow is not established by this observation.",
+    "Pseudocode is Ghidra decompiler output, not original source and not text-equivalent to Hopper output.",
+    "The Windows bridge uses authenticated IPv4 loopback because Node path-based IPC does not expose Java AF_UNIX sockets; the endpoint file contains no bearer token.",
+    "The imported Program and temporary project are ephemeral and deleted on close. Annotation operations edit session database metadata; original executable bytes are never written.",
+    "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+    "The target references PDB Tartaros.pdb (GUID 491a189d-6d27-43d1-a6b5-81ace6a1df8b, age (hex) 1, signature unknown, version RSDS); Ghidra reports load state unknown. Original names and types may be missing; an empty name search does not prove a procedure is absent. Use list_procedures and address-based analysis to inspect recovered functions. REA does not admit a caller-selected PDB companion.",
+    "Windows Ghidra P0 accepts native x86 and x86-64 PE applications and DLLs, and explicitly selected raw 6502 images; managed, hostile, sensitive, and mutable-path targets are unsupported.",
+    "Windows sessions require the matching packaged Windows x64 native addon, local NTFS targets and runtimes, and Windows 10 or later. Native handles enforce path admission, private DACLs, and Job Object ownership automatically."
+  ],
+  "relationship_coverage": null,
+  "locations": [
+    {
+      "kind": "address",
+      "address": "0x867750"
+    },
+    {
+      "kind": "address",
+      "address": "0x8678e0"
+    },
+    {
+      "kind": "address",
+      "address": "0x867910"
+    },
+    {
+      "kind": "address",
+      "address": "0x867960"
+    },
+    {
+      "kind": "address",
+      "address": "0x8679b0"
+    },
+    {
+      "kind": "address",
+      "address": "0x867a00"
+    },
+    {
+      "kind": "address",
+      "address": "0x867a50"
+    },
+    {
+      "kind": "address",
+      "address": "0x867ab0"
+    },
+    {
+      "kind": "address",
+      "address": "0x867b20"
+    },
+    {
+      "kind": "address",
+      "address": "0x867b90"
+    },
+    {
+      "kind": "address",
+      "address": "0x867c10"
+    },
+    {
+      "kind": "address",
+      "address": "0x867c90"
+    },
+    {
+      "kind": "address",
+      "address": "0x867d10"
+    },
+    {
+      "kind": "address",
+      "address": "0x867d70"
+    },
+    {
+      "kind": "address",
+      "address": "0x867f30"
+    },
+    {
+      "kind": "address",
+      "address": "0x867f40"
+    }
+  ],
+  "evidence_links": []
+}

@@ -1,0 +1,365 @@
+{
+  "evidence_id": "ev_93707471827e8535815ccd467d7a3aa9a3173849f3b75c999c92acbdbb4e700f",
+  "subject": {
+    "name": "Tartaros.bin",
+    "digest": {
+      "sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91"
+    },
+    "local_path": "E:\\Tartaros\\workspace\\Tartaros.bin",
+    "format": "pe",
+    "architecture": "x86"
+  },
+  "provider": {
+    "id": "rea-workflow",
+    "name": "REA composed investigation workflow",
+    "version": "1"
+  },
+  "analysis_profile": {
+    "provider": {
+      "id": "rea-workflow",
+      "name": "REA composed investigation workflow",
+      "version": "1"
+    },
+    "parameters": {
+      "upstream_analysis_profile": {
+        "provider": {
+          "id": "ghidra",
+          "name": "Ghidra",
+          "version": "12.1.4"
+        },
+        "parameters": {
+          "target_kind": "executable",
+          "target_format": "pe",
+          "executable_role": "application",
+          "managed": false,
+          "native_aot_metadata": {
+            "contract_revision": "rtr-9.1-x64-pe-read-only-v3",
+            "source_bytes": 134217728,
+            "work_units": 67108864,
+            "working_memory_bytes": 67108864,
+            "report_bytes": 4194304
+          },
+          "architecture": "x86",
+          "available_architectures": [
+            "x86"
+          ],
+          "import_mode": "ephemeral-source-immutable",
+          "pdb_observations": "program-info-v1",
+          "annotation_policy": "atomic-function-entry-metadata-v1",
+          "load_image_observations": "source-mappings-entry-context-v2",
+          "function_body_evidence": "complete-inclusive-ranges-v1",
+          "function_references": "complete-body-and-entry-reference-manager-v2",
+          "call_relationship_coverage": "function-body-call-coverage-v5",
+          "function_dossier_coverage": "observed-facets-and-call-relationships-v1",
+          "string_inventory_evidence": "defined-data-coverage-v1",
+          "location_resolution": "explicit-address-exact-entry-symbol-first-v3",
+          "procedure_file_offset_resolution": "address-first-unique-target-source-mapping-v2",
+          "instruction_flow_evidence": "decoded-return-pcode-v1",
+          "instruction_references": "exact-address-incoming-v1",
+          "function_boundary_observations": "ghidra-function-boundary-limitations-v3",
+          "no_return_repair": "disabled-windows-p0",
+          "process_launch": "official-headless-script-v1",
+          "jump_table_evidence": "typed-case-default-blocks-v1",
+          "decompiler_jump_loads": true,
+          "loader": "auto-from-header",
+          "language_id": "auto-from-header",
+          "compiler_spec_id": "auto-default",
+          "analyzer_preset": "ghidra-default"
+        },
+        "digest": "3c06738e45e144d5f073edbd3244c6bff46222f389525fe659bc92dca2ccdece"
+      },
+      "workflow_revision": 2
+    },
+    "digest": "d4471786e332c0336f066a85a651a368051028dfaa0c1d7a5ac78db2f422f47e"
+  },
+  "predicate_type": "rea.analysis",
+  "operation": "batch_decompile",
+  "parameters": {
+    "addresses": [
+      "0x8828af",
+      "0x88294c",
+      "0x8829e9",
+      "0x882a86",
+      "0x882b23",
+      "0x882bc0",
+      "0x882c5d",
+      "0x882cfa",
+      "0x882d97",
+      "0x882e34",
+      "0x882ed1",
+      "0x882f6e",
+      "0x88300b",
+      "0x8830a8",
+      "0x883145",
+      "0x8831e2"
+    ]
+  },
+  "raw_result": null,
+  "normalized_result": {
+    "items": [
+      {
+        "address": "0x8828af",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8828af",
+          "name": "use_facet<>"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* WARNING: Function: __EH_prolog3 replaced with injection: EH_prolog3 */\r\n/* WARNING: Function: __EH_epilog3 replaced with injection: EH_epilog3 */\r\n/* Library Function - Multiple Matches With Same Base Name\r\n    class std::ctype<unsigned short> const & __cdecl std::use_facet<class std::ctype<unsigned short>\r\n   >(class std::locale const &)\r\n    class std::ctype<wchar_t> const & __cdecl std::use_facet<class std::ctype<wchar_t> >(class\r\n   std::locale const &)\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nfacet * use_facet<>(undefined4 param_1)\r\n\r\n{\r\n  facet *pfVar1;\r\n  uint uVar2;\r\n  facet *pfVar3;\r\n  int iVar4;\r\n  bad_cast local_24 [12];\r\n  _Lockit local_18 [4];\r\n  facet *local_14 [3];\r\n  undefined4 local_8;\r\n  undefined4 uStack_4;\r\n  \r\n  uStack_4 = 0x14;\r\n  local_8 = 0x8828bb;\r\n  std::_Lockit::_Lockit(local_18,0);\r\n  pfVar1 = DAT_00f8c9c8;\r\n  local_8 = 0;\r\n  local_14[0] = DAT_00f8c9c8;\r\n  uVar2 = std::locale::id::operator_unsigned_int((id *)&DAT_00f8c860);\r\n  pfVar3 = (facet *)FUN_004311c0(uVar2);\r\n  if ((pfVar3 == (facet *)0x0) && (pfVar3 = pfVar1, pfVar1 == (facet *)0x0)) {\r\n    iVar4 = Getcat(local_14,param_1);\r\n    pfVar3 = local_14[0];\r\n    if (iVar4 == -1) {\r\n      std::bad_cast::bad_cast(local_24,\"bad cast\");\r\n                    /* WARNING: Subroutine does not return */\r\n      __CxxThrowException_8(local_24,&DAT_00c85874);\r\n    }\r\n    DAT_00f8c9c8 = local_14[0];\r\n    FUN_00431db0();\r\n    std::locale::facet::_Facet_Register(pfVar3);\r\n  }\r\n  local_8 = 0xffffffff;\r\n  FUN_0087dd6f();\r\n  return pfVar3;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x88294c",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x88294c",
+          "name": "use_facet<>"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* WARNING: Function: __EH_prolog3 replaced with injection: EH_prolog3 */\r\n/* WARNING: Function: __EH_epilog3 replaced with injection: EH_epilog3 */\r\n/* Library Function - Multiple Matches With Same Base Name\r\n    class std::codecvt<unsigned short,char,int> const & __cdecl std::use_facet<class\r\n   std::codecvt<unsigned short,char,int> >(class std::locale const &)\r\n    class std::codecvt<wchar_t,char,int> const & __cdecl std::use_facet<class\r\n   std::codecvt<wchar_t,char,int> >(class std::locale const &)\r\n    class std::money_get<unsigned short,class std::istreambuf_iterator<unsigned short,struct\r\n   std::char_traits<unsigned short> > > const & __cdecl std::use_facet<class std::money_get<unsigned\r\n   short,class std::istreambuf_iterator<unsigned short,struct std::char_traits<unsigned short> > >\r\n   >(class std::locale const &)\r\n    class std::money_get<wchar_t,class std::istreambuf_iterator<wchar_t,struct\r\n   std::char_traits<wchar_t> > > const & __cdecl std::use_facet<class std::money_get<wchar_t,class\r\n   std::istreambuf_iterator<wchar_t,struct std::char_traits<wchar_t> > > >(class std::locale const\r\n   &)\r\n     10 names - too many to list\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nfacet * use_facet<>(undefined4 param_1)\r\n\r\n{\r\n  facet *pfVar1;\r\n  uint uVar2;\r\n  facet *pfVar3;\r\n  int iVar4;\r\n  bad_cast local_24 [12];\r\n  _Lockit local_18 [4];\r\n  facet *local_14 [3];\r\n  undefined4 local_8;\r\n  undefined4 uStack_4;\r\n  \r\n  uStack_4 = 0x14;\r\n  local_8 = 0x882958;\r\n  std::_Lockit::_Lockit(local_18,0);\r\n  pfVar1 = DAT_00f8c9cc;\r\n  local_8 = 0;\r\n  local_14[0] = DAT_00f8c9cc;\r\n  uVar2 = std::locale::id::operator_unsigned_int((id *)&DAT_00f8ca44);\r\n  pfVar3 = (facet *)FUN_004311c0(uVar2);\r\n  if ((pfVar3 == (facet *)0x0) && (pfVar3 = pfVar1, pfVar1 == (facet *)0x0)) {\r\n    iVar4 = Getcat(local_14,param_1);\r\n    pfVar3 = local_14[0];\r\n    if (iVar4 == -1) {\r\n      std::bad_cast::bad_cast(local_24,\"bad cast\");\r\n                    /* WARNING: Subroutine does not return */\r\n      __CxxThrowException_8(local_24,&DAT_00c85874);\r\n    }\r\n    DAT_00f8c9cc = local_14[0];\r\n    FUN_00431db0();\r\n    std::locale::facet::_Facet_Register(pfVar3);\r\n  }\r\n  local_8 = 0xffffffff;\r\n  FUN_0087dd6f();\r\n  return pfVar3;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8829e9",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8829e9",
+          "name": "use_facet<>"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* WARNING: Function: __EH_prolog3 replaced with injection: EH_prolog3 */\r\n/* WARNING: Function: __EH_epilog3 replaced with injection: EH_epilog3 */\r\n/* Library Function - Multiple Matches With Same Base Name\r\n    class std::messages<unsigned short> const & __cdecl std::use_facet<class std::messages<unsigned\r\n   short> >(class std::locale const &)\r\n    class std::messages<wchar_t> const & __cdecl std::use_facet<class std::messages<wchar_t> >(class\r\n   std::locale const &)\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nfacet * use_facet<>(undefined4 param_1)\r\n\r\n{\r\n  facet *pfVar1;\r\n  uint uVar2;\r\n  facet *pfVar3;\r\n  int iVar4;\r\n  bad_cast local_24 [12];\r\n  _Lockit local_18 [4];\r\n  facet *local_14 [3];\r\n  undefined4 local_8;\r\n  undefined4 uStack_4;\r\n  \r\n  uStack_4 = 0x14;\r\n  local_8 = 0x8829f5;\r\n  std::_Lockit::_Lockit(local_18,0);\r\n  pfVar1 = DAT_00f8c9d0;\r\n  local_8 = 0;\r\n  local_14[0] = DAT_00f8c9d0;\r\n  uVar2 = std::locale::id::operator_unsigned_int((id *)&DAT_00f8ca40);\r\n  pfVar3 = (facet *)FUN_004311c0(uVar2);\r\n  if ((pfVar3 == (facet *)0x0) && (pfVar3 = pfVar1, pfVar1 == (facet *)0x0)) {\r\n    iVar4 = Getcat(local_14,param_1);\r\n    pfVar3 = local_14[0];\r\n    if (iVar4 == -1) {\r\n      std::bad_cast::bad_cast(local_24,\"bad cast\");\r\n                    /* WARNING: Subroutine does not return */\r\n      __CxxThrowException_8(local_24,&DAT_00c85874);\r\n    }\r\n    DAT_00f8c9d0 = local_14[0];\r\n    FUN_00431db0();\r\n    std::locale::facet::_Facet_Register(pfVar3);\r\n  }\r\n  local_8 = 0xffffffff;\r\n  FUN_0087dd6f();\r\n  return pfVar3;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x882a86",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x882a86",
+          "name": "use_facet<>"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* WARNING: Function: __EH_prolog3 replaced with injection: EH_prolog3 */\r\n/* WARNING: Function: __EH_epilog3 replaced with injection: EH_epilog3 */\r\n/* Library Function - Multiple Matches With Same Base Name\r\n    class std::codecvt<unsigned short,char,int> const & __cdecl std::use_facet<class\r\n   std::codecvt<unsigned short,char,int> >(class std::locale const &)\r\n    class std::codecvt<wchar_t,char,int> const & __cdecl std::use_facet<class\r\n   std::codecvt<wchar_t,char,int> >(class std::locale const &)\r\n    class std::money_get<unsigned short,class std::istreambuf_iterator<unsigned short,struct\r\n   std::char_traits<unsigned short> > > const & __cdecl std::use_facet<class std::money_get<unsigned\r\n   short,class std::istreambuf_iterator<unsigned short,struct std::char_traits<unsigned short> > >\r\n   >(class std::locale const &)\r\n    class std::money_get<wchar_t,class std::istreambuf_iterator<wchar_t,struct\r\n   std::char_traits<wchar_t> > > const & __cdecl std::use_facet<class std::money_get<wchar_t,class\r\n   std::istreambuf_iterator<wchar_t,struct std::char_traits<wchar_t> > > >(class std::locale const\r\n   &)\r\n     10 names - too many to list\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nfacet * use_facet<>(undefined4 param_1)\r\n\r\n{\r\n  facet *pfVar1;\r\n  uint uVar2;\r\n  facet *pfVar3;\r\n  int iVar4;\r\n  bad_cast local_24 [12];\r\n  _Lockit local_18 [4];\r\n  facet *local_14 [3];\r\n  undefined4 local_8;\r\n  undefined4 uStack_4;\r\n  \r\n  uStack_4 = 0x14;\r\n  local_8 = 0x882a92;\r\n  std::_Lockit::_Lockit(local_18,0);\r\n  pfVar1 = DAT_00f8c9d4;\r\n  local_8 = 0;\r\n  local_14[0] = DAT_00f8c9d4;\r\n  uVar2 = std::locale::id::operator_unsigned_int((id *)&DAT_00f8ca64);\r\n  pfVar3 = (facet *)FUN_004311c0(uVar2);\r\n  if ((pfVar3 == (facet *)0x0) && (pfVar3 = pfVar1, pfVar1 == (facet *)0x0)) {\r\n    iVar4 = Getcat(local_14,param_1);\r\n    pfVar3 = local_14[0];\r\n    if (iVar4 == -1) {\r\n      std::bad_cast::bad_cast(local_24,\"bad cast\");\r\n                    /* WARNING: Subroutine does not return */\r\n      __CxxThrowException_8(local_24,&DAT_00c85874);\r\n    }\r\n    DAT_00f8c9d4 = local_14[0];\r\n    FUN_00431db0();\r\n    std::locale::facet::_Facet_Register(pfVar3);\r\n  }\r\n  local_8 = 0xffffffff;\r\n  FUN_0087dd6f();\r\n  return pfVar3;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x882b23",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x882b23",
+          "name": "use_facet<>"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* WARNING: Function: __EH_prolog3 replaced with injection: EH_prolog3 */\r\n/* WARNING: Function: __EH_epilog3 replaced with injection: EH_epilog3 */\r\n/* Library Function - Multiple Matches With Same Base Name\r\n    class std::codecvt<unsigned short,char,int> const & __cdecl std::use_facet<class\r\n   std::codecvt<unsigned short,char,int> >(class std::locale const &)\r\n    class std::codecvt<wchar_t,char,int> const & __cdecl std::use_facet<class\r\n   std::codecvt<wchar_t,char,int> >(class std::locale const &)\r\n    class std::money_get<unsigned short,class std::istreambuf_iterator<unsigned short,struct\r\n   std::char_traits<unsigned short> > > const & __cdecl std::use_facet<class std::money_get<unsigned\r\n   short,class std::istreambuf_iterator<unsigned short,struct std::char_traits<unsigned short> > >\r\n   >(class std::locale const &)\r\n    class std::money_get<wchar_t,class std::istreambuf_iterator<wchar_t,struct\r\n   std::char_traits<wchar_t> > > const & __cdecl std::use_facet<class std::money_get<wchar_t,class\r\n   std::istreambuf_iterator<wchar_t,struct std::char_traits<wchar_t> > > >(class std::locale const\r\n   &)\r\n     10 names - too many to list\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nfacet * use_facet<>(undefined4 param_1)\r\n\r\n{\r\n  facet *pfVar1;\r\n  uint uVar2;\r\n  facet *pfVar3;\r\n  int iVar4;\r\n  bad_cast local_24 [12];\r\n  _Lockit local_18 [4];\r\n  facet *local_14 [3];\r\n  undefined4 local_8;\r\n  undefined4 uStack_4;\r\n  \r\n  uStack_4 = 0x14;\r\n  local_8 = 0x882b2f;\r\n  std::_Lockit::_Lockit(local_18,0);\r\n  pfVar1 = DAT_00f8c9d8;\r\n  local_8 = 0;\r\n  local_14[0] = DAT_00f8c9d8;\r\n  uVar2 = std::locale::id::operator_unsigned_int((id *)&DAT_00f8ca68);\r\n  pfVar3 = (facet *)FUN_004311c0(uVar2);\r\n  if ((pfVar3 == (facet *)0x0) && (pfVar3 = pfVar1, pfVar1 == (facet *)0x0)) {\r\n    iVar4 = Getcat(local_14,param_1);\r\n    pfVar3 = local_14[0];\r\n    if (iVar4 == -1) {\r\n      std::bad_cast::bad_cast(local_24,\"bad cast\");\r\n                    /* WARNING: Subroutine does not return */\r\n      __CxxThrowException_8(local_24,&DAT_00c85874);\r\n    }\r\n    DAT_00f8c9d8 = local_14[0];\r\n    FUN_00431db0();\r\n    std::locale::facet::_Facet_Register(pfVar3);\r\n  }\r\n  local_8 = 0xffffffff;\r\n  FUN_0087dd6f();\r\n  return pfVar3;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x882bc0",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x882bc0",
+          "name": "use_facet<>"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* WARNING: Function: __EH_prolog3 replaced with injection: EH_prolog3 */\r\n/* WARNING: Function: __EH_epilog3 replaced with injection: EH_epilog3 */\r\n/* Library Function - Multiple Matches With Same Base Name\r\n    class std::time_put<unsigned short,class std::ostreambuf_iterator<unsigned short,struct\r\n   std::char_traits<unsigned short> > > const & __cdecl std::use_facet<class std::time_put<unsigned\r\n   short,class std::ostreambuf_iterator<unsigned short,struct std::char_traits<unsigned short> > >\r\n   >(class std::locale const &)\r\n    class std::time_put<wchar_t,class std::ostreambuf_iterator<wchar_t,struct\r\n   std::char_traits<wchar_t> > > const & __cdecl std::use_facet<class std::time_put<wchar_t,class\r\n   std::ostreambuf_iterator<wchar_t,struct std::char_traits<wchar_t> > > >(class std::locale const\r\n   &)\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nfacet * use_facet<>(undefined4 param_1)\r\n\r\n{\r\n  facet *pfVar1;\r\n  uint uVar2;\r\n  facet *pfVar3;\r\n  int iVar4;\r\n  bad_cast local_24 [12];\r\n  _Lockit local_18 [4];\r\n  facet *local_14 [3];\r\n  undefined4 local_8;\r\n  undefined4 uStack_4;\r\n  \r\n  uStack_4 = 0x14;\r\n  local_8 = 0x882bcc;\r\n  std::_Lockit::_Lockit(local_18,0);\r\n  pfVar1 = DAT_00f8c9dc;\r\n  local_8 = 0;\r\n  local_14[0] = DAT_00f8c9dc;\r\n  uVar2 = std::locale::id::operator_unsigned_int((id *)&DAT_00f8ca50);\r\n  pfVar3 = (facet *)FUN_004311c0(uVar2);\r\n  if ((pfVar3 == (facet *)0x0) && (pfVar3 = pfVar1, pfVar1 == (facet *)0x0)) {\r\n    iVar4 = Getcat(local_14,param_1);\r\n    pfVar3 = local_14[0];\r\n    if (iVar4 == -1) {\r\n      std::bad_cast::bad_cast(local_24,\"bad cast\");\r\n                    /* WARNING: Subroutine does not return */\r\n      __CxxThrowException_8(local_24,&DAT_00c85874);\r\n    }\r\n    DAT_00f8c9dc = local_14[0];\r\n    FUN_00431db0();\r\n    std::locale::facet::_Facet_Register(pfVar3);\r\n  }\r\n  local_8 = 0xffffffff;\r\n  FUN_0087dd6f();\r\n  return pfVar3;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x882c5d",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x882c5d",
+          "name": "use_facet<>"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* WARNING: Function: __EH_prolog3 replaced with injection: EH_prolog3 */\r\n/* WARNING: Function: __EH_epilog3 replaced with injection: EH_epilog3 */\r\n/* Library Function - Multiple Matches With Same Base Name\r\n    class std::codecvt<unsigned short,char,int> const & __cdecl std::use_facet<class\r\n   std::codecvt<unsigned short,char,int> >(class std::locale const &)\r\n    class std::codecvt<wchar_t,char,int> const & __cdecl std::use_facet<class\r\n   std::codecvt<wchar_t,char,int> >(class std::locale const &)\r\n    class std::money_get<unsigned short,class std::istreambuf_iterator<unsigned short,struct\r\n   std::char_traits<unsigned short> > > const & __cdecl std::use_facet<class std::money_get<unsigned\r\n   short,class std::istreambuf_iterator<unsigned short,struct std::char_traits<unsigned short> > >\r\n   >(class std::locale const &)\r\n    class std::money_get<wchar_t,class std::istreambuf_iterator<wchar_t,struct\r\n   std::char_traits<wchar_t> > > const & __cdecl std::use_facet<class std::money_get<wchar_t,class\r\n   std::istreambuf_iterator<wchar_t,struct std::char_traits<wchar_t> > > >(class std::locale const\r\n   &)\r\n     10 names - too many to list\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nfacet * use_facet<>(undefined4 param_1)\r\n\r\n{\r\n  facet *pfVar1;\r\n  uint uVar2;\r\n  facet *pfVar3;\r\n  int iVar4;\r\n  bad_cast local_24 [12];\r\n  _Lockit local_18 [4];\r\n  facet *local_14 [3];\r\n  undefined4 local_8;\r\n  undefined4 uStack_4;\r\n  \r\n  uStack_4 = 0x14;\r\n  local_8 = 0x882c69;\r\n  std::_Lockit::_Lockit(local_18,0);\r\n  pfVar1 = DAT_00f8c9e0;\r\n  local_8 = 0;\r\n  local_14[0] = DAT_00f8c9e0;\r\n  uVar2 = std::locale::id::operator_unsigned_int((id *)&DAT_00f8c858);\r\n  pfVar3 = (facet *)FUN_004311c0(uVar2);\r\n  if ((pfVar3 == (facet *)0x0) && (pfVar3 = pfVar1, pfVar1 == (facet *)0x0)) {\r\n    iVar4 = Getcat(local_14,param_1);\r\n    pfVar3 = local_14[0];\r\n    if (iVar4 == -1) {\r\n      std::bad_cast::bad_cast(local_24,\"bad cast\");\r\n                    /* WARNING: Subroutine does not return */\r\n      __CxxThrowException_8(local_24,&DAT_00c85874);\r\n    }\r\n    DAT_00f8c9e0 = local_14[0];\r\n    FUN_00431db0();\r\n    std::locale::facet::_Facet_Register(pfVar3);\r\n  }\r\n  local_8 = 0xffffffff;\r\n  FUN_0087dd6f();\r\n  return pfVar3;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x882cfa",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x882cfa",
+          "name": "use_facet<>"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* WARNING: Function: __EH_prolog3 replaced with injection: EH_prolog3 */\r\n/* WARNING: Function: __EH_epilog3 replaced with injection: EH_epilog3 */\r\n/* Library Function - Multiple Matches With Same Base Name\r\n    class std::codecvt<unsigned short,char,int> const & __cdecl std::use_facet<class\r\n   std::codecvt<unsigned short,char,int> >(class std::locale const &)\r\n    class std::codecvt<wchar_t,char,int> const & __cdecl std::use_facet<class\r\n   std::codecvt<wchar_t,char,int> >(class std::locale const &)\r\n    class std::money_get<unsigned short,class std::istreambuf_iterator<unsigned short,struct\r\n   std::char_traits<unsigned short> > > const & __cdecl std::use_facet<class std::money_get<unsigned\r\n   short,class std::istreambuf_iterator<unsigned short,struct std::char_traits<unsigned short> > >\r\n   >(class std::locale const &)\r\n    class std::money_get<wchar_t,class std::istreambuf_iterator<wchar_t,struct\r\n   std::char_traits<wchar_t> > > const & __cdecl std::use_facet<class std::money_get<wchar_t,class\r\n   std::istreambuf_iterator<wchar_t,struct std::char_traits<wchar_t> > > >(class std::locale const\r\n   &)\r\n     10 names - too many to list\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nfacet * use_facet<>(undefined4 param_1)\r\n\r\n{\r\n  facet *pfVar1;\r\n  uint uVar2;\r\n  facet *pfVar3;\r\n  int iVar4;\r\n  bad_cast local_24 [12];\r\n  _Lockit local_18 [4];\r\n  facet *local_14 [3];\r\n  undefined4 local_8;\r\n  undefined4 uStack_4;\r\n  \r\n  uStack_4 = 0x14;\r\n  local_8 = 0x882d06;\r\n  std::_Lockit::_Lockit(local_18,0);\r\n  pfVar1 = DAT_00f8c9e4;\r\n  local_8 = 0;\r\n  local_14[0] = DAT_00f8c9e4;\r\n  uVar2 = std::locale::id::operator_unsigned_int((id *)&DAT_00f8ca60);\r\n  pfVar3 = (facet *)FUN_004311c0(uVar2);\r\n  if ((pfVar3 == (facet *)0x0) && (pfVar3 = pfVar1, pfVar1 == (facet *)0x0)) {\r\n    iVar4 = Getcat(local_14,param_1);\r\n    pfVar3 = local_14[0];\r\n    if (iVar4 == -1) {\r\n      std::bad_cast::bad_cast(local_24,\"bad cast\");\r\n                    /* WARNING: Subroutine does not return */\r\n      __CxxThrowException_8(local_24,&DAT_00c85874);\r\n    }\r\n    DAT_00f8c9e4 = local_14[0];\r\n    FUN_00431db0();\r\n    std::locale::facet::_Facet_Register(pfVar3);\r\n  }\r\n  local_8 = 0xffffffff;\r\n  FUN_0087dd6f();\r\n  return pfVar3;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x882d97",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x882d97",
+          "name": "use_facet<>"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* WARNING: Function: __EH_prolog3 replaced with injection: EH_prolog3 */\r\n/* WARNING: Function: __EH_epilog3 replaced with injection: EH_epilog3 */\r\n/* Library Function - Multiple Matches With Same Base Name\r\n    class std::codecvt<unsigned short,char,int> const & __cdecl std::use_facet<class\r\n   std::codecvt<unsigned short,char,int> >(class std::locale const &)\r\n    class std::codecvt<wchar_t,char,int> const & __cdecl std::use_facet<class\r\n   std::codecvt<wchar_t,char,int> >(class std::locale const &)\r\n    class std::money_get<unsigned short,class std::istreambuf_iterator<unsigned short,struct\r\n   std::char_traits<unsigned short> > > const & __cdecl std::use_facet<class std::money_get<unsigned\r\n   short,class std::istreambuf_iterator<unsigned short,struct std::char_traits<unsigned short> > >\r\n   >(class std::locale const &)\r\n    class std::money_get<wchar_t,class std::istreambuf_iterator<wchar_t,struct\r\n   std::char_traits<wchar_t> > > const & __cdecl std::use_facet<class std::money_get<wchar_t,class\r\n   std::istreambuf_iterator<wchar_t,struct std::char_traits<wchar_t> > > >(class std::locale const\r\n   &)\r\n     10 names - too many to list\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nfacet * use_facet<>(undefined4 param_1)\r\n\r\n{\r\n  facet *pfVar1;\r\n  uint uVar2;\r\n  facet *pfVar3;\r\n  int iVar4;\r\n  bad_cast local_24 [12];\r\n  _Lockit local_18 [4];\r\n  facet *local_14 [3];\r\n  undefined4 local_8;\r\n  undefined4 uStack_4;\r\n  \r\n  uStack_4 = 0x14;\r\n  local_8 = 0x882da3;\r\n  std::_Lockit::_Lockit(local_18,0);\r\n  pfVar1 = DAT_00f8c9e8;\r\n  local_8 = 0;\r\n  local_14[0] = DAT_00f8c9e8;\r\n  uVar2 = std::locale::id::operator_unsigned_int((id *)&DAT_00f8ca58);\r\n  pfVar3 = (facet *)FUN_004311c0(uVar2);\r\n  if ((pfVar3 == (facet *)0x0) && (pfVar3 = pfVar1, pfVar1 == (facet *)0x0)) {\r\n    iVar4 = Getcat(local_14,param_1);\r\n    pfVar3 = local_14[0];\r\n    if (iVar4 == -1) {\r\n      std::bad_cast::bad_cast(local_24,\"bad cast\");\r\n                    /* WARNING: Subroutine does not return */\r\n      __CxxThrowException_8(local_24,&DAT_00c85874);\r\n    }\r\n    DAT_00f8c9e8 = local_14[0];\r\n    FUN_00431db0();\r\n    std::locale::facet::_Facet_Register(pfVar3);\r\n  }\r\n  local_8 = 0xffffffff;\r\n  FUN_0087dd6f();\r\n  return pfVar3;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x882e34",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x882e34",
+          "name": "use_facet<>"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* WARNING: Function: __EH_prolog3 replaced with injection: EH_prolog3 */\r\n/* WARNING: Function: __EH_epilog3 replaced with injection: EH_epilog3 */\r\n/* Library Function - Multiple Matches With Same Base Name\r\n    class std::numpunct<unsigned short> const & __cdecl std::use_facet<class std::numpunct<unsigned\r\n   short> >(class std::locale const &)\r\n    class std::numpunct<wchar_t> const & __cdecl std::use_facet<class std::numpunct<wchar_t> >(class\r\n   std::locale const &)\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nfacet * use_facet<>(undefined4 param_1)\r\n\r\n{\r\n  facet *pfVar1;\r\n  uint uVar2;\r\n  facet *pfVar3;\r\n  int iVar4;\r\n  bad_cast local_24 [12];\r\n  _Lockit local_18 [4];\r\n  facet *local_14 [3];\r\n  undefined4 local_8;\r\n  undefined4 uStack_4;\r\n  \r\n  uStack_4 = 0x14;\r\n  local_8 = 0x882e40;\r\n  std::_Lockit::_Lockit(local_18,0);\r\n  pfVar1 = DAT_00f8c9ec;\r\n  local_8 = 0;\r\n  local_14[0] = DAT_00f8c9ec;\r\n  uVar2 = std::locale::id::operator_unsigned_int((id *)&DAT_00f8ca4c);\r\n  pfVar3 = (facet *)FUN_004311c0(uVar2);\r\n  if ((pfVar3 == (facet *)0x0) && (pfVar3 = pfVar1, pfVar1 == (facet *)0x0)) {\r\n    iVar4 = Getcat(local_14,param_1);\r\n    pfVar3 = local_14[0];\r\n    if (iVar4 == -1) {\r\n      std::bad_cast::bad_cast(local_24,\"bad cast\");\r\n                    /* WARNING: Subroutine does not return */\r\n      __CxxThrowException_8(local_24,&DAT_00c85874);\r\n    }\r\n    DAT_00f8c9ec = local_14[0];\r\n    FUN_00431db0();\r\n    std::locale::facet::_Facet_Register(pfVar3);\r\n  }\r\n  local_8 = 0xffffffff;\r\n  FUN_0087dd6f();\r\n  return pfVar3;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x882ed1",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x882ed1",
+          "name": "use_facet<>"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* WARNING: Function: __EH_prolog3 replaced with injection: EH_prolog3 */\r\n/* WARNING: Function: __EH_epilog3 replaced with injection: EH_epilog3 */\r\n/* Library Function - Multiple Matches With Same Base Name\r\n    class std::messages<unsigned short> const & __cdecl std::use_facet<class std::messages<unsigned\r\n   short> >(class std::locale const &)\r\n    class std::messages<wchar_t> const & __cdecl std::use_facet<class std::messages<wchar_t> >(class\r\n   std::locale const &)\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nfacet * use_facet<>(undefined4 param_1)\r\n\r\n{\r\n  facet *pfVar1;\r\n  uint uVar2;\r\n  facet *pfVar3;\r\n  int iVar4;\r\n  bad_cast local_24 [12];\r\n  _Lockit local_18 [4];\r\n  facet *local_14 [3];\r\n  undefined4 local_8;\r\n  undefined4 uStack_4;\r\n  \r\n  uStack_4 = 0x14;\r\n  local_8 = 0x882edd;\r\n  std::_Lockit::_Lockit(local_18,0);\r\n  pfVar1 = DAT_00f8c9f0;\r\n  local_8 = 0;\r\n  local_14[0] = DAT_00f8c9f0;\r\n  uVar2 = std::locale::id::operator_unsigned_int((id *)&DAT_00f8ca3c);\r\n  pfVar3 = (facet *)FUN_004311c0(uVar2);\r\n  if ((pfVar3 == (facet *)0x0) && (pfVar3 = pfVar1, pfVar1 == (facet *)0x0)) {\r\n    iVar4 = Getcat(local_14,param_1);\r\n    pfVar3 = local_14[0];\r\n    if (iVar4 == -1) {\r\n      std::bad_cast::bad_cast(local_24,\"bad cast\");\r\n                    /* WARNING: Subroutine does not return */\r\n      __CxxThrowException_8(local_24,&DAT_00c85874);\r\n    }\r\n    DAT_00f8c9f0 = local_14[0];\r\n    FUN_00431db0();\r\n    std::locale::facet::_Facet_Register(pfVar3);\r\n  }\r\n  local_8 = 0xffffffff;\r\n  FUN_0087dd6f();\r\n  return pfVar3;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x882f6e",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x882f6e",
+          "name": "use_facet<>"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* WARNING: Function: __EH_prolog3 replaced with injection: EH_prolog3 */\r\n/* WARNING: Function: __EH_epilog3 replaced with injection: EH_epilog3 */\r\n/* Library Function - Multiple Matches With Same Base Name\r\n    class std::codecvt<unsigned short,char,int> const & __cdecl std::use_facet<class\r\n   std::codecvt<unsigned short,char,int> >(class std::locale const &)\r\n    class std::codecvt<wchar_t,char,int> const & __cdecl std::use_facet<class\r\n   std::codecvt<wchar_t,char,int> >(class std::locale const &)\r\n    class std::money_get<unsigned short,class std::istreambuf_iterator<unsigned short,struct\r\n   std::char_traits<unsigned short> > > const & __cdecl std::use_facet<class std::money_get<unsigned\r\n   short,class std::istreambuf_iterator<unsigned short,struct std::char_traits<unsigned short> > >\r\n   >(class std::locale const &)\r\n    class std::money_get<wchar_t,class std::istreambuf_iterator<wchar_t,struct\r\n   std::char_traits<wchar_t> > > const & __cdecl std::use_facet<class std::money_get<wchar_t,class\r\n   std::istreambuf_iterator<wchar_t,struct std::char_traits<wchar_t> > > >(class std::locale const\r\n   &)\r\n     10 names - too many to list\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nfacet * use_facet<>(undefined4 param_1)\r\n\r\n{\r\n  facet *pfVar1;\r\n  uint uVar2;\r\n  facet *pfVar3;\r\n  int iVar4;\r\n  bad_cast local_24 [12];\r\n  _Lockit local_18 [4];\r\n  facet *local_14 [3];\r\n  undefined4 local_8;\r\n  undefined4 uStack_4;\r\n  \r\n  uStack_4 = 0x14;\r\n  local_8 = 0x882f7a;\r\n  std::_Lockit::_Lockit(local_18,0);\r\n  pfVar1 = DAT_00f8c9f4;\r\n  local_8 = 0;\r\n  local_14[0] = DAT_00f8c9f4;\r\n  uVar2 = std::locale::id::operator_unsigned_int((id *)&DAT_00f8ca24);\r\n  pfVar3 = (facet *)FUN_004311c0(uVar2);\r\n  if ((pfVar3 == (facet *)0x0) && (pfVar3 = pfVar1, pfVar1 == (facet *)0x0)) {\r\n    iVar4 = Getcat(local_14,param_1);\r\n    pfVar3 = local_14[0];\r\n    if (iVar4 == -1) {\r\n      std::bad_cast::bad_cast(local_24,\"bad cast\");\r\n                    /* WARNING: Subroutine does not return */\r\n      __CxxThrowException_8(local_24,&DAT_00c85874);\r\n    }\r\n    DAT_00f8c9f4 = local_14[0];\r\n    FUN_00431db0();\r\n    std::locale::facet::_Facet_Register(pfVar3);\r\n  }\r\n  local_8 = 0xffffffff;\r\n  FUN_0087dd6f();\r\n  return pfVar3;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x88300b",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x88300b",
+          "name": "use_facet<>"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* WARNING: Function: __EH_prolog3 replaced with injection: EH_prolog3 */\r\n/* WARNING: Function: __EH_epilog3 replaced with injection: EH_epilog3 */\r\n/* Library Function - Multiple Matches With Same Base Name\r\n    class std::codecvt<unsigned short,char,int> const & __cdecl std::use_facet<class\r\n   std::codecvt<unsigned short,char,int> >(class std::locale const &)\r\n    class std::codecvt<wchar_t,char,int> const & __cdecl std::use_facet<class\r\n   std::codecvt<wchar_t,char,int> >(class std::locale const &)\r\n    class std::money_get<unsigned short,class std::istreambuf_iterator<unsigned short,struct\r\n   std::char_traits<unsigned short> > > const & __cdecl std::use_facet<class std::money_get<unsigned\r\n   short,class std::istreambuf_iterator<unsigned short,struct std::char_traits<unsigned short> > >\r\n   >(class std::locale const &)\r\n    class std::money_get<wchar_t,class std::istreambuf_iterator<wchar_t,struct\r\n   std::char_traits<wchar_t> > > const & __cdecl std::use_facet<class std::money_get<wchar_t,class\r\n   std::istreambuf_iterator<wchar_t,struct std::char_traits<wchar_t> > > >(class std::locale const\r\n   &)\r\n     10 names - too many to list\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nfacet * use_facet<>(undefined4 param_1)\r\n\r\n{\r\n  facet *pfVar1;\r\n  uint uVar2;\r\n  facet *pfVar3;\r\n  int iVar4;\r\n  bad_cast local_24 [12];\r\n  _Lockit local_18 [4];\r\n  facet *local_14 [3];\r\n  undefined4 local_8;\r\n  undefined4 uStack_4;\r\n  \r\n  uStack_4 = 0x14;\r\n  local_8 = 0x883017;\r\n  std::_Lockit::_Lockit(local_18,0);\r\n  pfVar1 = DAT_00f8c9f8;\r\n  local_8 = 0;\r\n  local_14[0] = DAT_00f8c9f8;\r\n  uVar2 = std::locale::id::operator_unsigned_int((id *)&DAT_00f8ca6c);\r\n  pfVar3 = (facet *)FUN_004311c0(uVar2);\r\n  if ((pfVar3 == (facet *)0x0) && (pfVar3 = pfVar1, pfVar1 == (facet *)0x0)) {\r\n    iVar4 = Getcat(local_14,param_1);\r\n    pfVar3 = local_14[0];\r\n    if (iVar4 == -1) {\r\n      std::bad_cast::bad_cast(local_24,\"bad cast\");\r\n                    /* WARNING: Subroutine does not return */\r\n      __CxxThrowException_8(local_24,&DAT_00c85874);\r\n    }\r\n    DAT_00f8c9f8 = local_14[0];\r\n    FUN_00431db0();\r\n    std::locale::facet::_Facet_Register(pfVar3);\r\n  }\r\n  local_8 = 0xffffffff;\r\n  FUN_0087dd6f();\r\n  return pfVar3;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8830a8",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8830a8",
+          "name": "use_facet<>"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* WARNING: Function: __EH_prolog3 replaced with injection: EH_prolog3 */\r\n/* WARNING: Function: __EH_epilog3 replaced with injection: EH_epilog3 */\r\n/* Library Function - Multiple Matches With Same Base Name\r\n    class std::time_put<unsigned short,class std::ostreambuf_iterator<unsigned short,struct\r\n   std::char_traits<unsigned short> > > const & __cdecl std::use_facet<class std::time_put<unsigned\r\n   short,class std::ostreambuf_iterator<unsigned short,struct std::char_traits<unsigned short> > >\r\n   >(class std::locale const &)\r\n    class std::time_put<wchar_t,class std::ostreambuf_iterator<wchar_t,struct\r\n   std::char_traits<wchar_t> > > const & __cdecl std::use_facet<class std::time_put<wchar_t,class\r\n   std::ostreambuf_iterator<wchar_t,struct std::char_traits<wchar_t> > > >(class std::locale const\r\n   &)\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nfacet * use_facet<>(undefined4 param_1)\r\n\r\n{\r\n  facet *pfVar1;\r\n  uint uVar2;\r\n  facet *pfVar3;\r\n  int iVar4;\r\n  bad_cast local_24 [12];\r\n  _Lockit local_18 [4];\r\n  facet *local_14 [3];\r\n  undefined4 local_8;\r\n  undefined4 uStack_4;\r\n  \r\n  uStack_4 = 0x14;\r\n  local_8 = 0x8830b4;\r\n  std::_Lockit::_Lockit(local_18,0);\r\n  pfVar1 = DAT_00f8c9fc;\r\n  local_8 = 0;\r\n  local_14[0] = DAT_00f8c9fc;\r\n  uVar2 = std::locale::id::operator_unsigned_int((id *)&DAT_00f8ca34);\r\n  pfVar3 = (facet *)FUN_004311c0(uVar2);\r\n  if ((pfVar3 == (facet *)0x0) && (pfVar3 = pfVar1, pfVar1 == (facet *)0x0)) {\r\n    iVar4 = Getcat(local_14,param_1);\r\n    pfVar3 = local_14[0];\r\n    if (iVar4 == -1) {\r\n      std::bad_cast::bad_cast(local_24,\"bad cast\");\r\n                    /* WARNING: Subroutine does not return */\r\n      __CxxThrowException_8(local_24,&DAT_00c85874);\r\n    }\r\n    DAT_00f8c9fc = local_14[0];\r\n    FUN_00431db0();\r\n    std::locale::facet::_Facet_Register(pfVar3);\r\n  }\r\n  local_8 = 0xffffffff;\r\n  FUN_0087dd6f();\r\n  return pfVar3;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x883145",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x883145",
+          "name": "use_facet<>"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* WARNING: Function: __EH_prolog3 replaced with injection: EH_prolog3 */\r\n/* WARNING: Function: __EH_epilog3 replaced with injection: EH_epilog3 */\r\n/* Library Function - Multiple Matches With Same Base Name\r\n    class std::codecvt<unsigned short,char,int> const & __cdecl std::use_facet<class\r\n   std::codecvt<unsigned short,char,int> >(class std::locale const &)\r\n    class std::codecvt<wchar_t,char,int> const & __cdecl std::use_facet<class\r\n   std::codecvt<wchar_t,char,int> >(class std::locale const &)\r\n    class std::money_get<unsigned short,class std::istreambuf_iterator<unsigned short,struct\r\n   std::char_traits<unsigned short> > > const & __cdecl std::use_facet<class std::money_get<unsigned\r\n   short,class std::istreambuf_iterator<unsigned short,struct std::char_traits<unsigned short> > >\r\n   >(class std::locale const &)\r\n    class std::money_get<wchar_t,class std::istreambuf_iterator<wchar_t,struct\r\n   std::char_traits<wchar_t> > > const & __cdecl std::use_facet<class std::money_get<wchar_t,class\r\n   std::istreambuf_iterator<wchar_t,struct std::char_traits<wchar_t> > > >(class std::locale const\r\n   &)\r\n     10 names - too many to list\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nfacet * use_facet<>(undefined4 param_1)\r\n\r\n{\r\n  facet *pfVar1;\r\n  uint uVar2;\r\n  facet *pfVar3;\r\n  int iVar4;\r\n  bad_cast local_24 [12];\r\n  _Lockit local_18 [4];\r\n  facet *local_14 [3];\r\n  undefined4 local_8;\r\n  undefined4 uStack_4;\r\n  \r\n  uStack_4 = 0x14;\r\n  local_8 = 0x883151;\r\n  std::_Lockit::_Lockit(local_18,0);\r\n  pfVar1 = DAT_00f8ca00;\r\n  local_8 = 0;\r\n  local_14[0] = DAT_00f8ca00;\r\n  uVar2 = std::locale::id::operator_unsigned_int((id *)&DAT_00f8c850);\r\n  pfVar3 = (facet *)FUN_004311c0(uVar2);\r\n  if ((pfVar3 == (facet *)0x0) && (pfVar3 = pfVar1, pfVar1 == (facet *)0x0)) {\r\n    iVar4 = Getcat(local_14,param_1);\r\n    pfVar3 = local_14[0];\r\n    if (iVar4 == -1) {\r\n      std::bad_cast::bad_cast(local_24,\"bad cast\");\r\n                    /* WARNING: Subroutine does not return */\r\n      __CxxThrowException_8(local_24,&DAT_00c85874);\r\n    }\r\n    DAT_00f8ca00 = local_14[0];\r\n    FUN_00431db0();\r\n    std::locale::facet::_Facet_Register(pfVar3);\r\n  }\r\n  local_8 = 0xffffffff;\r\n  FUN_0087dd6f();\r\n  return pfVar3;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8831e2",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8831e2",
+          "name": "Getcat"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* WARNING: Function: __EH_prolog3 replaced with injection: EH_prolog3 */\r\n/* WARNING: Function: __EH_epilog3 replaced with injection: EH_epilog3 */\r\n/* Library Function - Multiple Matches With Same Base Name\r\n    public: static unsigned int __cdecl std::moneypunct<unsigned short,0>::_Getcat(class\r\n   std::locale::facet const * *,class std::locale const *)\r\n    public: static unsigned int __cdecl std::moneypunct<wchar_t,0>::_Getcat(class std::locale::facet\r\n   const * *,class std::locale const *)\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nundefined4 Getcat(int *param_1,int *param_2)\r\n\r\n{\r\n  bool bVar1;\r\n  undefined4 *puVar2;\r\n  int iVar3;\r\n  undefined4 uVar4;\r\n  \r\n  bVar1 = false;\r\n  if ((param_1 != (int *)0x0) && (*param_1 == 0)) {\r\n    puVar2 = (undefined4 *)FUN_00891268(0x34);\r\n    if (puVar2 == (undefined4 *)0x0) {\r\n      puVar2 = (undefined4 *)0x0;\r\n    }\r\n    else {\r\n      iVar3 = *(int *)(*param_2 + 0x18);\r\n      if (iVar3 == 0) {\r\n        iVar3 = *param_2 + 0x1c;\r\n      }\r\n      uVar4 = FUN_00431550(iVar3);\r\n      bVar1 = true;\r\n      puVar2[1] = 0;\r\n      *puVar2 = std::_Mpunct<wchar_t>::vftable;\r\n      *(undefined1 *)(puVar2 + 10) = 0;\r\n      Init(uVar4,1);\r\n      *puVar2 = std::moneypunct<wchar_t,0>::vftable;\r\n    }\r\n    *param_1 = (int)puVar2;\r\n    if (bVar1) {\r\n      FUN_00431620();\r\n    }\r\n  }\r\n  return 3;\r\n}\r\n\r\n"
+      }
+    ],
+    "total": 16,
+    "succeeded": 16,
+    "failed": 0
+  },
+  "confidence": "derived",
+  "authority": "shipped-artifact",
+  "environment": null,
+  "limitations": [
+    "Derived by an REA composed workflow.",
+    "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+    "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+    "External functions and functions without an analyzable body return null; other decompiler failures remain explicit.",
+    "External functions and local thunks are distinct; procedure metadata identifies both and preserves a thunk target when Ghidra resolves one.",
+    "Ghidra Listing reports a terminal call at 0x88291c to 0x89c9f0 __CxxThrowException@8 (external=false, thunk=false, hasNoReturn=true); fallthrough is excluded by Ghidra's flow model. This records Ghidra's FunctionManager flag, not an independent verification that the callee cannot return.",
+    "Ghidra Listing reports a terminal call at 0x8829b9 to 0x89c9f0 __CxxThrowException@8 (external=false, thunk=false, hasNoReturn=true); fallthrough is excluded by Ghidra's flow model. This records Ghidra's FunctionManager flag, not an independent verification that the callee cannot return.",
+    "Ghidra Listing reports a terminal call at 0x882a56 to 0x89c9f0 __CxxThrowException@8 (external=false, thunk=false, hasNoReturn=true); fallthrough is excluded by Ghidra's flow model. This records Ghidra's FunctionManager flag, not an independent verification that the callee cannot return.",
+    "Ghidra Listing reports a terminal call at 0x882af3 to 0x89c9f0 __CxxThrowException@8 (external=false, thunk=false, hasNoReturn=true); fallthrough is excluded by Ghidra's flow model. This records Ghidra's FunctionManager flag, not an independent verification that the callee cannot return.",
+    "Ghidra Listing reports a terminal call at 0x882b90 to 0x89c9f0 __CxxThrowException@8 (external=false, thunk=false, hasNoReturn=true); fallthrough is excluded by Ghidra's flow model. This records Ghidra's FunctionManager flag, not an independent verification that the callee cannot return.",
+    "Ghidra Listing reports a terminal call at 0x882c2d to 0x89c9f0 __CxxThrowException@8 (external=false, thunk=false, hasNoReturn=true); fallthrough is excluded by Ghidra's flow model. This records Ghidra's FunctionManager flag, not an independent verification that the callee cannot return.",
+    "Ghidra Listing reports a terminal call at 0x882cca to 0x89c9f0 __CxxThrowException@8 (external=false, thunk=false, hasNoReturn=true); fallthrough is excluded by Ghidra's flow model. This records Ghidra's FunctionManager flag, not an independent verification that the callee cannot return.",
+    "Ghidra Listing reports a terminal call at 0x882d67 to 0x89c9f0 __CxxThrowException@8 (external=false, thunk=false, hasNoReturn=true); fallthrough is excluded by Ghidra's flow model. This records Ghidra's FunctionManager flag, not an independent verification that the callee cannot return.",
+    "Ghidra Listing reports a terminal call at 0x882e04 to 0x89c9f0 __CxxThrowException@8 (external=false, thunk=false, hasNoReturn=true); fallthrough is excluded by Ghidra's flow model. This records Ghidra's FunctionManager flag, not an independent verification that the callee cannot return.",
+    "Ghidra Listing reports a terminal call at 0x882ea1 to 0x89c9f0 __CxxThrowException@8 (external=false, thunk=false, hasNoReturn=true); fallthrough is excluded by Ghidra's flow model. This records Ghidra's FunctionManager flag, not an independent verification that the callee cannot return.",
+    "Ghidra Listing reports a terminal call at 0x882f3e to 0x89c9f0 __CxxThrowException@8 (external=false, thunk=false, hasNoReturn=true); fallthrough is excluded by Ghidra's flow model. This records Ghidra's FunctionManager flag, not an independent verification that the callee cannot return.",
+    "Ghidra Listing reports a terminal call at 0x882fdb to 0x89c9f0 __CxxThrowException@8 (external=false, thunk=false, hasNoReturn=true); fallthrough is excluded by Ghidra's flow model. This records Ghidra's FunctionManager flag, not an independent verification that the callee cannot return.",
+    "Ghidra Listing reports a terminal call at 0x883078 to 0x89c9f0 __CxxThrowException@8 (external=false, thunk=false, hasNoReturn=true); fallthrough is excluded by Ghidra's flow model. This records Ghidra's FunctionManager flag, not an independent verification that the callee cannot return.",
+    "Ghidra Listing reports a terminal call at 0x883115 to 0x89c9f0 __CxxThrowException@8 (external=false, thunk=false, hasNoReturn=true); fallthrough is excluded by Ghidra's flow model. This records Ghidra's FunctionManager flag, not an independent verification that the callee cannot return.",
+    "Ghidra Listing reports a terminal call at 0x8831b2 to 0x89c9f0 __CxxThrowException@8 (external=false, thunk=false, hasNoReturn=true); fallthrough is excluded by Ghidra's flow model. This records Ghidra's FunctionManager flag, not an independent verification that the callee cannot return.",
+    "Pseudocode is Ghidra decompiler output, not original source and not text-equivalent to Hopper output.",
+    "The Windows bridge uses authenticated IPv4 loopback because Node path-based IPC does not expose Java AF_UNIX sockets; the endpoint file contains no bearer token.",
+    "The imported Program and temporary project are ephemeral and deleted on close. Annotation operations edit session database metadata; original executable bytes are never written.",
+    "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+    "The target references PDB Tartaros.pdb (GUID 491a189d-6d27-43d1-a6b5-81ace6a1df8b, age (hex) 1, signature unknown, version RSDS); Ghidra reports load state unknown. Original names and types may be missing; an empty name search does not prove a procedure is absent. Use list_procedures and address-based analysis to inspect recovered functions. REA does not admit a caller-selected PDB companion.",
+    "Windows Ghidra P0 accepts native x86 and x86-64 PE applications and DLLs, and explicitly selected raw 6502 images; managed, hostile, sensitive, and mutable-path targets are unsupported.",
+    "Windows sessions require the matching packaged Windows x64 native addon, local NTFS targets and runtimes, and Windows 10 or later. Native handles enforce path admission, private DACLs, and Job Object ownership automatically."
+  ],
+  "relationship_coverage": null,
+  "locations": [
+    {
+      "kind": "address",
+      "address": "0x8828af"
+    },
+    {
+      "kind": "address",
+      "address": "0x88294c"
+    },
+    {
+      "kind": "address",
+      "address": "0x8829e9"
+    },
+    {
+      "kind": "address",
+      "address": "0x882a86"
+    },
+    {
+      "kind": "address",
+      "address": "0x882b23"
+    },
+    {
+      "kind": "address",
+      "address": "0x882bc0"
+    },
+    {
+      "kind": "address",
+      "address": "0x882c5d"
+    },
+    {
+      "kind": "address",
+      "address": "0x882cfa"
+    },
+    {
+      "kind": "address",
+      "address": "0x882d97"
+    },
+    {
+      "kind": "address",
+      "address": "0x882e34"
+    },
+    {
+      "kind": "address",
+      "address": "0x882ed1"
+    },
+    {
+      "kind": "address",
+      "address": "0x882f6e"
+    },
+    {
+      "kind": "address",
+      "address": "0x88300b"
+    },
+    {
+      "kind": "address",
+      "address": "0x8830a8"
+    },
+    {
+      "kind": "address",
+      "address": "0x883145"
+    },
+    {
+      "kind": "address",
+      "address": "0x8831e2"
+    }
+  ],
+  "evidence_links": []
+}

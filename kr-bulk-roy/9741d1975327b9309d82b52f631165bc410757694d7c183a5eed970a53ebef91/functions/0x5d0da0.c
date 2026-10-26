@@ -1,0 +1,29 @@
+
+void FUN_005d0da0(void)
+
+{
+  undefined4 *puVar1;
+  int unaff_ESI;
+  undefined2 *unaff_EDI;
+  undefined **local_14 [3];
+  char *local_8;
+  
+  puVar1 = (undefined4 *)FUN_00891268(0x14);
+  if (puVar1 != (undefined4 *)0x0) {
+    *puVar1 = *(undefined4 *)(unaff_ESI + 4);
+    puVar1[1] = *(undefined4 *)(unaff_ESI + 4);
+    puVar1[2] = *(undefined4 *)(unaff_ESI + 4);
+    *(undefined2 *)(puVar1 + 4) = 0;
+    if (puVar1 + 3 != (undefined4 *)0x0) {
+      *(undefined2 *)(puVar1 + 3) = *unaff_EDI;
+      *(undefined1 *)((int)puVar1 + 0xe) = *(undefined1 *)(unaff_EDI + 1);
+    }
+    return;
+  }
+  local_8 = (char *)0x0;
+  std::exception::exception((exception *)local_14,&local_8);
+  local_14[0] = std::bad_alloc::vftable;
+                    /* WARNING: Subroutine does not return */
+  __CxxThrowException_8(local_14,&DAT_00c857a8);
+}
+

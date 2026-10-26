@@ -1,0 +1,49 @@
+
+undefined4 * FUN_008525e0(int param_1,undefined4 *param_2)
+
+{
+  char cVar1;
+  undefined4 *puVar2;
+  int in_EAX;
+  undefined4 *puVar3;
+  undefined4 *puVar4;
+  bool bVar5;
+  
+  puVar2 = param_2;
+  puVar4 = (undefined4 *)(*(undefined4 **)(param_1 + 4))[1];
+  bVar5 = true;
+  cVar1 = *(char *)((int)puVar4 + 0x35);
+  param_2 = *(undefined4 **)(param_1 + 4);
+  while (cVar1 == '\0') {
+    bVar5 = *(uint *)(in_EAX + 0xc) < (uint)puVar4[3];
+    if (bVar5) {
+      puVar3 = (undefined4 *)*puVar4;
+    }
+    else {
+      puVar3 = (undefined4 *)puVar4[2];
+    }
+    param_2 = puVar4;
+    puVar4 = puVar3;
+    cVar1 = *(char *)((int)puVar3 + 0x35);
+  }
+  if (bVar5) {
+    if (param_2 == (undefined4 *)**(int **)(param_1 + 4)) {
+      bVar5 = true;
+      goto LAB_00852630;
+    }
+    FUN_008532f0();
+  }
+  if (*(uint *)(in_EAX + 0xc) <= (uint)param_2[3]) {
+    FUN_008507b0();
+    FUN_0089120c();
+    *puVar2 = param_2;
+    *(undefined1 *)(puVar2 + 1) = 0;
+    return puVar2;
+  }
+LAB_00852630:
+  puVar4 = (undefined4 *)FUN_00852c10(&param_1,bVar5,in_EAX);
+  *puVar2 = *puVar4;
+  *(undefined1 *)(puVar2 + 1) = 1;
+  return puVar2;
+}
+

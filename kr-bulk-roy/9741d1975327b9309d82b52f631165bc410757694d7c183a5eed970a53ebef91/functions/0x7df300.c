@@ -1,0 +1,30 @@
+
+void FUN_007df300(undefined4 *param_1)
+
+{
+  uint uVar1;
+  void *local_10;
+  undefined1 *puStack_c;
+  undefined4 local_8;
+  
+  puStack_c = &LAB_00909d40;
+  local_10 = ExceptionList;
+  uVar1 = DAT_00d61f20 ^ (uint)&stack0xfffffffc;
+  ExceptionList = &local_10;
+  *param_1 = IS3D::CStaticMeshMgr::vftable;
+  local_8 = 0;
+  if (param_1[6] != 0) {
+    FUN_007e0170(param_1[7],param_1,uVar1);
+    FUN_0089120c(param_1[6]);
+  }
+  param_1[6] = 0;
+  param_1[7] = 0;
+  param_1[8] = 0;
+  local_8 = CONCAT31(local_8._1_3_,1);
+  FUN_004ca160(*(undefined4 *)param_1[3],(undefined4 *)param_1[3]);
+  FUN_0089120c(param_1[3]);
+  *param_1 = IS3D::IRenderable::vftable;
+  ExceptionList = local_10;
+  return;
+}
+

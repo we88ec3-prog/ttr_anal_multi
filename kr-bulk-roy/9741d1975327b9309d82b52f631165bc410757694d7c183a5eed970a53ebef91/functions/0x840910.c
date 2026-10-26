@@ -1,0 +1,14 @@
+
+void FUN_00840910(undefined4 param_1,undefined4 *param_2)
+
+{
+  undefined1 *unaff_ESI;
+  
+  *(undefined4 *)(unaff_ESI + 0x10) = 0;
+  *(undefined4 *)(unaff_ESI + 0x14) = 0xf;
+  *unaff_ESI = 0;
+  FUN_00403040(param_1,0,0xffffffff);
+  *(undefined4 *)(unaff_ESI + 0x1c) = *param_2;
+  return;
+}
+

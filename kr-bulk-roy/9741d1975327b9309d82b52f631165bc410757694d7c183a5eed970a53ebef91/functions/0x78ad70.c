@@ -1,0 +1,34 @@
+
+void FUN_0078ad70(undefined4 *param_1)
+
+{
+  undefined4 *puVar1;
+  undefined4 *in_EAX;
+  undefined4 *puVar2;
+  undefined4 *in_EDX;
+  
+  if (param_1 != in_EDX) {
+    puVar2 = param_1 + 2;
+    do {
+      if (in_EAX != (undefined4 *)0x0) {
+        *in_EAX = gbKey<float>::vftable;
+        in_EAX[1] = puVar2[-1];
+        in_EAX[2] = *puVar2;
+        in_EAX[3] = puVar2[1];
+        *in_EAX = gbTCBKey<float>::vftable;
+        in_EAX[4] = puVar2[2];
+        in_EAX[5] = puVar2[3];
+        in_EAX[6] = puVar2[4];
+        in_EAX[7] = puVar2[5];
+        in_EAX[8] = puVar2[6];
+        in_EAX[9] = puVar2[7];
+        in_EAX[10] = puVar2[8];
+      }
+      puVar1 = puVar2 + 9;
+      in_EAX = in_EAX + 0xb;
+      puVar2 = puVar2 + 0xb;
+    } while (puVar1 != in_EDX);
+  }
+  return;
+}
+

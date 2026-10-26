@@ -1,0 +1,350 @@
+{
+  "evidence_id": "ev_49abdfdc9599a5aaf02c023f2eeb312630c82970fbde8f04cc19455ab61ea613",
+  "subject": {
+    "name": "Tartaros.bin",
+    "digest": {
+      "sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91"
+    },
+    "local_path": "E:\\Tartaros\\workspace\\Tartaros.bin",
+    "format": "pe",
+    "architecture": "x86"
+  },
+  "provider": {
+    "id": "rea-workflow",
+    "name": "REA composed investigation workflow",
+    "version": "1"
+  },
+  "analysis_profile": {
+    "provider": {
+      "id": "rea-workflow",
+      "name": "REA composed investigation workflow",
+      "version": "1"
+    },
+    "parameters": {
+      "upstream_analysis_profile": {
+        "provider": {
+          "id": "ghidra",
+          "name": "Ghidra",
+          "version": "12.1.4"
+        },
+        "parameters": {
+          "target_kind": "executable",
+          "target_format": "pe",
+          "executable_role": "application",
+          "managed": false,
+          "native_aot_metadata": {
+            "contract_revision": "rtr-9.1-x64-pe-read-only-v3",
+            "source_bytes": 134217728,
+            "work_units": 67108864,
+            "working_memory_bytes": 67108864,
+            "report_bytes": 4194304
+          },
+          "architecture": "x86",
+          "available_architectures": [
+            "x86"
+          ],
+          "import_mode": "ephemeral-source-immutable",
+          "pdb_observations": "program-info-v1",
+          "annotation_policy": "atomic-function-entry-metadata-v1",
+          "load_image_observations": "source-mappings-entry-context-v2",
+          "function_body_evidence": "complete-inclusive-ranges-v1",
+          "function_references": "complete-body-and-entry-reference-manager-v2",
+          "call_relationship_coverage": "function-body-call-coverage-v5",
+          "function_dossier_coverage": "observed-facets-and-call-relationships-v1",
+          "string_inventory_evidence": "defined-data-coverage-v1",
+          "location_resolution": "explicit-address-exact-entry-symbol-first-v3",
+          "procedure_file_offset_resolution": "address-first-unique-target-source-mapping-v2",
+          "instruction_flow_evidence": "decoded-return-pcode-v1",
+          "instruction_references": "exact-address-incoming-v1",
+          "function_boundary_observations": "ghidra-function-boundary-limitations-v3",
+          "no_return_repair": "disabled-windows-p0",
+          "process_launch": "official-headless-script-v1",
+          "jump_table_evidence": "typed-case-default-blocks-v1",
+          "decompiler_jump_loads": true,
+          "loader": "auto-from-header",
+          "language_id": "auto-from-header",
+          "compiler_spec_id": "auto-default",
+          "analyzer_preset": "ghidra-default"
+        },
+        "digest": "3c06738e45e144d5f073edbd3244c6bff46222f389525fe659bc92dca2ccdece"
+      },
+      "workflow_revision": 2
+    },
+    "digest": "d4471786e332c0336f066a85a651a368051028dfaa0c1d7a5ac78db2f422f47e"
+  },
+  "predicate_type": "rea.analysis",
+  "operation": "batch_decompile",
+  "parameters": {
+    "addresses": [
+      "0x765af0",
+      "0x765bc0",
+      "0x765c20",
+      "0x765c70",
+      "0x765d70",
+      "0x765de0",
+      "0x765ed0",
+      "0x765ef0",
+      "0x765f70",
+      "0x766030",
+      "0x7660d0",
+      "0x7661a0",
+      "0x766260",
+      "0x766390",
+      "0x766720",
+      "0x766bc0"
+    ]
+  },
+  "raw_result": null,
+  "normalized_result": {
+    "items": [
+      {
+        "address": "0x765af0",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x765af0",
+          "name": "FUN_00765af0"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_00765af0(void)\r\n\r\n{\r\n  int iVar1;\r\n  void *_Dst;\r\n  int unaff_ESI;\r\n  uint uVar2;\r\n  \r\n  uVar2 = 0;\r\n  if (*(int *)(unaff_ESI + 0x114) - *(int *)(unaff_ESI + 0x110) >> 2 != 0) {\r\n    do {\r\n      if (*(int *)(*(int *)(unaff_ESI + 0x110) + uVar2 * 4) != 0) {\r\n        iVar1 = *(int *)(*(int *)(unaff_ESI + 0x110) + uVar2 * 4);\r\n        if (iVar1 != 0) {\r\n          FUN_00757640(iVar1);\r\n          FUN_0089120c(iVar1);\r\n        }\r\n        *(undefined4 *)(*(int *)(unaff_ESI + 0x110) + uVar2 * 4) = 0;\r\n      }\r\n      uVar2 = uVar2 + 1;\r\n    } while (uVar2 < (uint)(*(int *)(unaff_ESI + 0x114) - *(int *)(unaff_ESI + 0x110) >> 2));\r\n  }\r\n  _Dst = *(void **)(unaff_ESI + 0x110);\r\n  if (_Dst != *(void **)(unaff_ESI + 0x114)) {\r\n    FID_conflict__memcpy(_Dst,*(void **)(unaff_ESI + 0x114),0);\r\n    *(void **)(unaff_ESI + 0x114) = _Dst;\r\n  }\r\n  *(undefined4 *)(unaff_ESI + 0x140) = 0;\r\n  *(undefined4 *)(unaff_ESI + 0x13c) = 0;\r\n  *(undefined4 *)(unaff_ESI + 0x14c) = 0;\r\n  *(undefined4 *)(unaff_ESI + 0x154) = 0;\r\n  *(undefined4 *)(unaff_ESI + 0x150) = 0;\r\n  *(undefined4 *)(unaff_ESI + 0x158) = 0;\r\n  *(undefined4 *)(unaff_ESI + 0x134) = 0;\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x765bc0",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x765bc0",
+          "name": "FUN_00765bc0"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_00765bc0(int param_1)\r\n\r\n{\r\n  int iVar1;\r\n  int unaff_ESI;\r\n  uint uVar2;\r\n  \r\n  uVar2 = 0;\r\n  if (*(int *)(unaff_ESI + 0x114) - *(int *)(unaff_ESI + 0x110) >> 2 != 0) {\r\n    do {\r\n      iVar1 = *(int *)(*(int *)(unaff_ESI + 0x110) + uVar2 * 4);\r\n      FUN_00757c60(param_1,iVar1,0,*(undefined4 *)(iVar1 + 0x10),*(undefined4 *)(param_1 + 0x10));\r\n      uVar2 = uVar2 + 1;\r\n    } while (uVar2 < (uint)(*(int *)(unaff_ESI + 0x114) - *(int *)(unaff_ESI + 0x110) >> 2));\r\n  }\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x765c20",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x765c20",
+          "name": "FUN_00765c20"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_00765c20(void)\r\n\r\n{\r\n  int unaff_ESI;\r\n  uint uVar1;\r\n  \r\n  uVar1 = 0;\r\n  if (*(int *)(unaff_ESI + 0x114) - *(int *)(unaff_ESI + 0x110) >> 2 != 0) {\r\n    do {\r\n      FUN_004041f0(*(undefined4 *)(*(int *)(unaff_ESI + 0x110) + uVar1 * 4),0,0xffffffff);\r\n      uVar1 = uVar1 + 1;\r\n    } while (uVar1 < (uint)(*(int *)(unaff_ESI + 0x114) - *(int *)(unaff_ESI + 0x110) >> 2));\r\n  }\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x765c70",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x765c70",
+          "name": "FUN_00765c70"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_00765c70(undefined4 param_1,undefined4 param_2,undefined4 param_3,undefined4 param_4,\r\n                 undefined4 param_5,undefined4 param_6,undefined4 param_7)\r\n\r\n{\r\n  uint uVar1;\r\n  void *pvVar2;\r\n  int *piVar3;\r\n  int *in_ECX;\r\n  void *local_10;\r\n  undefined1 *puStack_c;\r\n  undefined4 local_8;\r\n  \r\n  local_8 = 0xffffffff;\r\n  puStack_c = &LAB_00919048;\r\n  local_10 = ExceptionList;\r\n  uVar1 = DAT_00d61f20 ^ (uint)&stack0xfffffffc;\r\n  ExceptionList = &local_10;\r\n  in_ECX[0x4a] = 0x14;\r\n  FUN_00745a50(param_1,param_2,param_3,param_4,param_5,param_6,param_7);\r\n  (**(code **)(*in_ECX + 0x180))(uVar1);\r\n  pvVar2 = _malloc(0xe0);\r\n  local_8 = 0;\r\n  if (pvVar2 == (void *)0x0) {\r\n    piVar3 = (int *)0x0;\r\n  }\r\n  else {\r\n    piVar3 = (int *)FUN_0075da10();\r\n  }\r\n  local_8 = 0xffffffff;\r\n  in_ECX[0x43] = (int)piVar3;\r\n  (**(code **)(*piVar3 + 0x38))\r\n            (0,0x41c3,(in_ECX[4] - in_ECX[2]) - in_ECX[0x4a],0,in_ECX[4] - in_ECX[2],\r\n             in_ECX[5] - in_ECX[3]);\r\n  FUN_00767ec0();\r\n  ExceptionList = local_10;\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x765d70",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x765d70",
+          "name": "FUN_00765d70"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_00765d70(void)\r\n\r\n{\r\n  void *_Src;\r\n  int iVar1;\r\n  int iVar2;\r\n  int in_EAX;\r\n  void *_Dst;\r\n  int unaff_ESI;\r\n  \r\n  iVar2 = in_EAX * 4;\r\n  if (*(int *)(*(int *)(unaff_ESI + 0x110) + iVar2) != 0) {\r\n    iVar1 = *(int *)(*(int *)(unaff_ESI + 0x110) + iVar2);\r\n    if (iVar1 != 0) {\r\n      FUN_00757640(iVar1);\r\n      FUN_0089120c(iVar1);\r\n    }\r\n    *(undefined4 *)(iVar2 + *(int *)(unaff_ESI + 0x110)) = 0;\r\n  }\r\n  _Dst = (void *)(*(int *)(unaff_ESI + 0x110) + iVar2);\r\n  _Src = (void *)((int)_Dst + 4);\r\n  FID_conflict__memcpy(_Dst,_Src,(*(int *)(unaff_ESI + 0x114) - (int)_Src >> 2) * 4);\r\n  *(int *)(unaff_ESI + 0x114) = *(int *)(unaff_ESI + 0x114) + -4;\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x765de0",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x765de0",
+          "name": "FUN_00765de0"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_00765de0(void)\r\n\r\n{\r\n  int in_ECX;\r\n  int iVar1;\r\n  \r\n  FUN_00754430();\r\n  iVar1 = (*(int *)(in_ECX + 0x10) - *(int *)(in_ECX + 0x128)) - *(int *)(in_ECX + 8);\r\n  if (-1 < iVar1) {\r\n    (**(code **)(**(int **)(in_ECX + 0x10c) + 0xbc))\r\n              (iVar1,0,*(int *)(in_ECX + 0x128) + iVar1,\r\n               *(int *)(in_ECX + 0x14) - *(int *)(in_ECX + 0xc));\r\n  }\r\n  if ((*(int *)(in_ECX + 0xf4) == 0) || (iVar1 = FUN_008fed10(), iVar1 == 0)) {\r\n    *(undefined4 *)(in_ECX + 0x138) = 0;\r\n  }\r\n  else {\r\n    *(int *)(in_ECX + 0x138) = (*(int *)(in_ECX + 0xb0) - *(int *)(in_ECX + 0xa8)) / iVar1;\r\n  }\r\n  FUN_00766390(0,1,1);\r\n  FUN_00767ba0();\r\n  FUN_00767ec0();\r\n  FUN_00767b30();\r\n  FUN_00767fa0();\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x765ed0",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x765ed0",
+          "name": "FUN_00765ed0"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_00765ed0(void)\r\n\r\n{\r\n  int extraout_ECX;\r\n  \r\n  FUN_007542c0();\r\n  *(int *)(extraout_ECX + 0xac) = *(int *)(extraout_ECX + 0xac) - *(int *)(extraout_ECX + 0x128);\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x765ef0",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x765ef0",
+          "name": "FUN_00765ef0"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_00765ef0(int param_1,int param_2)\r\n\r\n{\r\n  int iVar1;\r\n  int iVar2;\r\n  int in_ECX;\r\n  int in_EDX;\r\n  int iVar3;\r\n  int iVar4;\r\n  \r\n  iVar1 = *(int *)(param_1 + 0x114);\r\n  iVar2 = *(int *)(param_1 + 0x110);\r\n  iVar3 = param_2;\r\n  do {\r\n    if (iVar1 - iVar2 >> 2 <= iVar3) {\r\nLAB_00765f4b:\r\n      FUN_00766390(param_2,0,0);\r\n      return;\r\n    }\r\n    iVar4 = (in_EDX - *(int *)(*(int *)(*(int *)(param_1 + 0x110) + iVar3 * 4) + 0x10)) + in_ECX;\r\n    if (iVar4 < 1) {\r\n      FUN_00757e40(in_EDX,in_ECX);\r\n      goto LAB_00765f4b;\r\n    }\r\n    FUN_00757e40(in_EDX,in_ECX);\r\n    iVar3 = iVar3 + 1;\r\n    in_ECX = 0;\r\n    in_EDX = iVar4;\r\n  } while( true );\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x765f70",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x765f70",
+          "name": "FUN_00765f70"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_00765f70(undefined4 param_1,short *param_2)\r\n\r\n{\r\n  short sVar1;\r\n  int iVar2;\r\n  undefined4 uVar3;\r\n  void *local_10;\r\n  undefined1 *puStack_c;\r\n  undefined4 local_8;\r\n  \r\n  local_8 = 0xffffffff;\r\n  puStack_c = &LAB_0090ccab;\r\n  local_10 = ExceptionList;\r\n  ExceptionList = &local_10;\r\n  FUN_00765af0(DAT_00d61f20 ^ (uint)&stack0xfffffffc);\r\n  iVar2 = FUN_00891268(0x38);\r\n  local_8 = 0;\r\n  if (iVar2 == 0) {\r\n    uVar3 = 0;\r\n  }\r\n  else {\r\n    uVar3 = FUN_00757200(iVar2);\r\n  }\r\n  local_8 = 0xffffffff;\r\n  do {\r\n    sVar1 = *param_2;\r\n    param_2 = param_2 + 1;\r\n  } while (sVar1 != 0);\r\n  FUN_00757da0(uVar3);\r\n  FUN_007bb350();\r\n  FUN_00766390(0,0,0);\r\n  FUN_00767fa0();\r\n  ExceptionList = local_10;\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x766030",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x766030",
+          "name": "FUN_00766030"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_00766030(void)\r\n\r\n{\r\n  int iVar1;\r\n  int in_ECX;\r\n  void *local_10;\r\n  undefined1 *puStack_c;\r\n  undefined4 local_8;\r\n  \r\n  local_8 = 0xffffffff;\r\n  puStack_c = &LAB_0091cc2b;\r\n  local_10 = ExceptionList;\r\n  ExceptionList = &local_10;\r\n  FUN_00765af0(DAT_00d61f20 ^ (uint)&stack0xfffffffc);\r\n  iVar1 = FUN_00891268(0x38);\r\n  local_8 = 0;\r\n  if (iVar1 == 0) {\r\n    iVar1 = 0;\r\n  }\r\n  else {\r\n    iVar1 = FUN_00757200(iVar1);\r\n  }\r\n  local_8 = 0xffffffff;\r\n  FUN_00757c60(iVar1,in_ECX,0,*(undefined4 *)(in_ECX + 0x10),*(undefined4 *)(iVar1 + 0x10));\r\n  FUN_007bb350();\r\n  FUN_00766390(0,0,0);\r\n  FUN_00767fa0();\r\n  ExceptionList = local_10;\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x7660d0",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x7660d0",
+          "name": "FUN_007660d0"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_007660d0(int param_1,undefined4 param_2,uint param_3)\r\n\r\n{\r\n  int iVar1;\r\n  undefined4 uVar2;\r\n  void *local_10;\r\n  undefined1 *puStack_c;\r\n  undefined4 local_8;\r\n  \r\n  local_8 = 0xffffffff;\r\n  puStack_c = &LAB_0091cc2b;\r\n  local_10 = ExceptionList;\r\n  ExceptionList = &local_10;\r\n  if (param_3 < (uint)(*(int *)(param_1 + 0x114) - *(int *)(param_1 + 0x110) >> 2)) {\r\n    FUN_00757da0(*(undefined4 *)(*(int *)(param_1 + 0x110) + param_3 * 4));\r\n  }\r\n  else {\r\n    iVar1 = FUN_00891268(0x38,DAT_00d61f20 ^ (uint)&stack0xfffffffc);\r\n    local_8 = 0;\r\n    if (iVar1 == 0) {\r\n      uVar2 = 0;\r\n    }\r\n    else {\r\n      uVar2 = FUN_00757200(iVar1);\r\n    }\r\n    local_8 = 0xffffffff;\r\n    FUN_00757da0(uVar2);\r\n    FUN_007bb350();\r\n  }\r\n  FUN_00766390(param_3,0,0);\r\n  ExceptionList = local_10;\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x7661a0",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x7661a0",
+          "name": "FUN_007661a0"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_007661a0(int param_1)\r\n\r\n{\r\n  int iVar1;\r\n  int iVar2;\r\n  int iVar3;\r\n  undefined4 uVar4;\r\n  void *local_10;\r\n  undefined1 *puStack_c;\r\n  undefined4 local_8;\r\n  \r\n  local_8 = 0xffffffff;\r\n  puStack_c = &LAB_0091cc2b;\r\n  local_10 = ExceptionList;\r\n  ExceptionList = &local_10;\r\n  iVar1 = *(int *)(param_1 + 0x114);\r\n  iVar2 = *(int *)(param_1 + 0x110);\r\n  iVar3 = FUN_00891268(0x38,DAT_00d61f20 ^ (uint)&stack0xfffffffc);\r\n  uVar4 = 0;\r\n  local_8 = 0;\r\n  if (iVar3 != 0) {\r\n    uVar4 = FUN_00757200(iVar3);\r\n  }\r\n  local_8 = 0xffffffff;\r\n  FUN_00405300(uVar4);\r\n  FUN_00757da0(uVar4);\r\n  FUN_007bb350();\r\n  FUN_00766390(iVar1 - iVar2 >> 2,0,0);\r\n  FUN_00767fa0();\r\n  ExceptionList = local_10;\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x766260",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x766260",
+          "name": "FUN_00766260"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_00766260(int param_1,undefined4 param_2,undefined4 param_3,int param_4,char param_5)\r\n\r\n{\r\n  int iVar1;\r\n  int iVar2;\r\n  int in_ECX;\r\n  int in_EDX;\r\n  int iVar3;\r\n  int *piVar4;\r\n  void *local_10;\r\n  undefined1 *puStack_c;\r\n  undefined4 local_8;\r\n  \r\n  local_8 = 0xffffffff;\r\n  puStack_c = &LAB_009157db;\r\n  local_10 = ExceptionList;\r\n  ExceptionList = &local_10;\r\n  if (param_5 == '\\0') {\r\n    FUN_00757c60(*(undefined4 *)(*(int *)(in_EDX + 0x110) + param_1 * 4),\r\n                 *(undefined4 *)(*(int *)(in_EDX + 0x110) + in_ECX * 4),param_3,param_4,param_2);\r\n  }\r\n  else {\r\n    iVar2 = FUN_00891268(0x38,DAT_00d61f20 ^ (uint)&stack0xfffffffc);\r\n    iVar3 = 0;\r\n    local_8 = 0;\r\n    if (iVar2 != 0) {\r\n      iVar3 = FUN_00757200(iVar2);\r\n    }\r\n    local_8 = 0xffffffff;\r\n    piVar4 = (int *)(in_EDX + 0x110);\r\n    FUN_00757c60(iVar3,*(undefined4 *)(in_ECX * 4 + *(int *)(in_EDX + 0x110)),param_3,param_4,\r\n                 *(undefined4 *)(iVar3 + 0x10));\r\n    iVar2 = *piVar4;\r\n    iVar1 = *piVar4;\r\n    if (*(int *)(in_EDX + 0x114) == *(int *)(in_EDX + 0x118)) {\r\n      FUN_00797930();\r\n    }\r\n    if (*(int **)(in_EDX + 0x114) != (int *)0x0) {\r\n      **(int **)(in_EDX + 0x114) = iVar3;\r\n    }\r\n    *(int *)(in_EDX + 0x114) = *(int *)(in_EDX + 0x114) + 4;\r\n    iVar3 = *(int *)(in_EDX + 0x114);\r\n    iVar2 = *piVar4 + ((iVar2 + in_ECX * 4 + 4) - iVar1 >> 2) * 4;\r\n    if ((iVar2 != iVar3 + -4) && (iVar3 + -4 != iVar3)) {\r\n      FUN_00474630(iVar2,iVar3);\r\n    }\r\n  }\r\n  if (0 < param_4) {\r\n    FUN_00757e40(param_4,param_3);\r\n  }\r\n  ExceptionList = local_10;\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x766390",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x766390",
+          "name": "FUN_00766390"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_00766390(uint param_1,undefined4 param_2,undefined4 param_3)\r\n\r\n{\r\n  int *piVar1;\r\n  uint uVar2;\r\n  uint uVar3;\r\n  int iVar4;\r\n  int *piVar5;\r\n  undefined4 *puVar6;\r\n  undefined4 *****pppppuVar7;\r\n  int in_ECX;\r\n  int iVar8;\r\n  undefined4 *puVar9;\r\n  uint uVar10;\r\n  undefined1 auStack_6c [4];\r\n  uint local_68;\r\n  uint local_64;\r\n  int local_60;\r\n  uint local_5c;\r\n  undefined4 uStack_58;\r\n  undefined4 ****appppuStack_54 [4];\r\n  undefined4 uStack_44;\r\n  uint uStack_40;\r\n  uint local_1c;\r\n  void *local_14;\r\n  undefined1 *puStack_10;\r\n  undefined4 uStack_c;\r\n  \r\n  uStack_c = 0xffffffff;\r\n  puStack_10 = &LAB_0091cbea;\r\n  local_14 = ExceptionList;\r\n  local_1c = DAT_00d61f20 ^ (uint)auStack_6c;\r\n  uVar3 = DAT_00d61f20 ^ (uint)&stack0xffffff88;\r\n  ExceptionList = &local_14;\r\n  local_5c = param_1;\r\n  if ((*(int *)(in_ECX + 0xf4) == 0) ||\r\n     (iVar4 = *(int *)(in_ECX + 0x110), (uint)(*(int *)(in_ECX + 0x114) - iVar4 >> 2) <= param_1))\r\n  goto LAB_007666f7;\r\n  local_64 = param_1 + 1;\r\n  if (*(int *)(*(int *)(iVar4 + param_1 * 4) + 0x10) != 0) {\r\n    local_68 = 0;\r\n    piVar1 = *(int **)(iVar4 + param_1 * 4);\r\n    local_60 = 10;\r\n    iVar4 = FUN_00466df0(piVar1,&local_60,1);\r\n    local_60 = piVar1[4];\r\n    piVar5 = piVar1;\r\n    if (7 < (uint)piVar1[5]) {\r\n      piVar5 = (int *)*piVar1;\r\n    }\r\n    (**(code **)(**(int **)(in_ECX + 0xf4) + 0x38))\r\n              (&local_68,*(int *)(in_ECX + 0xac) - *(int *)(in_ECX + 0xa4),piVar5,local_60);\r\n    uVar2 = local_64;\r\n    if (((int)local_68 < iVar4) || (iVar4 == -1)) {\r\n      if ((local_68 != 0) && (local_68 < (uint)piVar1[4])) {\r\n        FUN_00766260(local_64,0,local_68,piVar1[4] - local_68,1);\r\n        FUN_00766390(uVar2,0,param_3);\r\n        goto LAB_007666f7;\r\n      }\r\n      if (iVar4 == -1) goto LAB_0076652a;\r\n    }\r\n    iVar8 = (piVar1[4] - iVar4) + -1;\r\n    if (iVar8 < 1) {\r\n      if ((local_64 < (uint)(*(int *)(in_ECX + 0x114) - *(int *)(in_ECX + 0x110) >> 2)) &&\r\n         (*(int *)(*(int *)(*(int *)(in_ECX + 0x110) + local_64 * 4) + 0x10) == 0)) {\r\n        FUN_00765d70();\r\n      }\r\n    }\r\n    else {\r\n      FUN_00766260(local_64,0,iVar4 + 1,iVar8,1);\r\n      FUN_00766390(uVar2,0,param_3);\r\n    }\r\n    if ((char)param_3 == '\\0') goto LAB_007666f7;\r\n    FUN_00766390(local_64,1,1);\r\n  }\r\nLAB_0076652a:\r\n  uVar10 = local_5c;\r\n  uVar2 = local_64;\r\n  puVar6 = *(undefined4 **)(*(int *)(in_ECX + 0x110) + local_5c * 4);\r\n  local_68 = puVar6[4];\r\n  if (local_68 == 0) {\r\n    local_68 = 0;\r\n  }\r\n  else {\r\n    puVar9 = puVar6;\r\n    if (7 < (uint)puVar6[5]) {\r\n      puVar9 = (undefined4 *)*puVar6;\r\n    }\r\n    if (*(short *)((int)puVar9 + local_68 * 2 + -2) == 10) {\r\n      local_68 = local_68 - 1;\r\n    }\r\n  }\r\n  if ((uint)(*(int *)(in_ECX + 0x114) - *(int *)(in_ECX + 0x110) >> 2) <= local_64)\r\n  goto LAB_007666f7;\r\n  if (7 < (uint)puVar6[5]) {\r\n    puVar6 = (undefined4 *)*puVar6;\r\n  }\r\n  if (*(short *)((int)puVar6 + local_68 * 2) == 10) goto LAB_007666f7;\r\n  FUN_00526870(appppuStack_54);\r\n  uStack_c = 0;\r\n  local_60 = 0;\r\n  uStack_58 = 0;\r\n  iVar4 = *(int *)(*(int *)(*(int *)(in_ECX + 0x110) + uVar2 * 4) + 0x10);\r\n  if (iVar4 == 0) {\r\n    FUN_00765d70();\r\nLAB_007666de:\r\n    FUN_00766390(uVar10,param_2,param_3);\r\n  }\r\n  else {\r\n    local_68 = 0;\r\n    if (iVar4 == 0) {\r\nLAB_007666cb:\r\n      if (((char)param_3 != '\\0') || ((char)param_2 != '\\0')) {\r\n        param_2 = 0;\r\n        uVar10 = local_64;\r\n        goto LAB_007666de;\r\n      }\r\n    }\r\n    else {\r\n      do {\r\n        FUN_00757da0(appppuStack_54);\r\n        pppppuVar7 = (undefined4 *****)appppuStack_54[0];\r\n        if (uStack_40 < 8) {\r\n          pppppuVar7 = appppuStack_54;\r\n        }\r\n        (**(code **)(**(int **)(in_ECX + 0xf4) + 0x30))\r\n                  (&local_60,&uStack_58,pppppuVar7,uStack_44,uVar3);\r\n        uVar10 = local_5c;\r\n        uVar2 = local_64;\r\n      } while ((local_60 <= *(int *)(in_ECX + 0xac) - *(int *)(in_ECX + 0xa4)) &&\r\n              (local_68 = local_68 + 1,\r\n              local_68 < *(uint *)(*(int *)(*(int *)(in_ECX + 0x110) + local_64 * 4) + 0x10)));\r\n      if ((int)local_68 < 1) goto LAB_007666cb;\r\n      FUN_00757c60(*(undefined4 *)(*(int *)(in_ECX + 0x110) + local_5c * 4),\r\n                   *(undefined4 *)(*(int *)(in_ECX + 0x110) + local_64 * 4),0,local_68,\r\n                   *(undefined4 *)(*(int *)(*(int *)(in_ECX + 0x110) + local_5c * 4) + 0x10));\r\n      FUN_00757e40(local_68,0);\r\n      if (*(int *)(*(int *)(*(int *)(in_ECX + 0x110) + uVar2 * 4) + 0x10) == 0) {\r\n        FUN_00765d70();\r\n      }\r\n      FUN_00766390(uVar10,1,param_3);\r\n    }\r\n  }\r\n  uStack_c = 0xffffffff;\r\n  FUN_00757640(appppuStack_54);\r\nLAB_007666f7:\r\n  ExceptionList = local_14;\r\n  __security_check_cookie(local_1c ^ (uint)auStack_6c);\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x766720",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x766720",
+          "name": "FUN_00766720"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* WARNING: Type propagation algorithm not settling */\r\n\r\nvoid FUN_00766720(int param_1,int param_2)\r\n\r\n{\r\n  int iVar1;\r\n  int iVar2;\r\n  uint uVar3;\r\n  int *piVar4;\r\n  int in_ECX;\r\n  int iVar5;\r\n  int iVar6;\r\n  uint uVar7;\r\n  int unaff_EBX;\r\n  undefined4 *puVar8;\r\n  uint uVar9;\r\n  int unaff_ESI;\r\n  int unaff_EDI;\r\n  int *piVar10;\r\n  int local_e4;\r\n  int local_e0;\r\n  int local_dc;\r\n  int local_d8;\r\n  uint local_d4;\r\n  uint local_d0;\r\n  undefined1 auStack_cc [4];\r\n  int local_c8;\r\n  int *local_c4;\r\n  int local_c0 [3];\r\n  uint local_b4;\r\n  int local_b0;\r\n  int local_ac;\r\n  int local_a8;\r\n  int local_a4;\r\n  undefined1 auStack_a0 [88];\r\n  undefined4 uStack_48;\r\n  undefined4 uStack_2c;\r\n  int *piStack_28;\r\n  uint local_1c;\r\n  void *local_14;\r\n  undefined1 *puStack_10;\r\n  undefined4 uStack_c;\r\n  \r\n  uStack_c = 0xffffffff;\r\n  puStack_10 = &LAB_0090ece3;\r\n  local_14 = ExceptionList;\r\n  local_1c = DAT_00d61f20 ^ (uint)&local_e4;\r\n  uVar3 = DAT_00d61f20 ^ (uint)&stack0xffffff10;\r\n  ExceptionList = &local_14;\r\n  FUN_00744640(param_1,param_2);\r\n  local_a4 = *(int *)(*(int *)(in_ECX + 0x24) + 0x1c);\r\n  if ((local_a4 != 0) && (*(int *)(in_ECX + 0xf4) != 0)) {\r\n    local_a8 = *(int *)(*(int *)(in_ECX + 0xf4) + 0x10);\r\n    local_c0[2] = FUN_008fed10(uVar3);\r\n    local_e0 = 0;\r\n    if (0 < *(int *)(in_ECX + 0x138)) {\r\n      local_e4 = 0;\r\n      do {\r\n        local_d0 = *(int *)(in_ECX + 0x134) + local_e0;\r\n        if ((uint)(*(int *)(in_ECX + 0x114) - *(int *)(in_ECX + 0x110) >> 2) <= local_d0) break;\r\n        local_c8 = *(int *)(in_ECX + 0xa8) + local_e4;\r\n        iVar5 = *(int *)(in_ECX + 0xa4);\r\n        iVar6 = *(int *)(in_ECX + 0xac);\r\n        local_c0[0] = local_c0[2] + local_c8;\r\n        if (*(char *)(in_ECX + 0x120) != '\\0') {\r\n          iVar5 = iVar5 + 0xf;\r\n          iVar6 = iVar6 + -0xf;\r\n        }\r\n        if (*(int *)(in_ECX + 0xb0) < local_c0[0]) {\r\n          local_c0[0] = *(int *)(in_ECX + 0xb0);\r\n        }\r\n        local_c0[0] = local_c0[0] + param_2;\r\n        local_c8 = local_c8 + param_2;\r\n        iVar1 = *(int *)(*(int *)(in_ECX + 0x110) + local_d0 * 4);\r\n        iVar2 = *(int *)(iVar1 + 0x10);\r\n        if (iVar2 != 0) {\r\n          FUN_007586b0(iVar1,0,iVar2,0,*(undefined4 *)(in_ECX + 0xf8),\r\n                       *(undefined4 *)(in_ECX + 0x100),iVar5 + param_1,local_c8,iVar6 + param_1,\r\n                       local_c0[0]);\r\n        }\r\n        local_e4 = local_e4 + local_c0[2];\r\n        local_e0 = local_e0 + 1;\r\n      } while (local_e0 < *(int *)(in_ECX + 0x138));\r\n    }\r\n    if (*(char *)(in_ECX + 0x148) != '\\0') {\r\n      uVar3 = *(uint *)(in_ECX + 0x14c);\r\n      local_d4 = *(uint *)(in_ECX + 0x150);\r\n      if ((int)local_d4 < (int)uVar3) {\r\n        iVar5 = *(int *)(in_ECX + 0x158);\r\n        local_e4 = *(int *)(in_ECX + 0x154);\r\n        uVar9 = local_d4;\r\n        local_d4 = uVar3;\r\n      }\r\n      else {\r\n        iVar5 = *(int *)(in_ECX + 0x154);\r\n        local_e4 = *(int *)(in_ECX + 0x158);\r\n        uVar9 = uVar3;\r\n      }\r\n      uVar7 = local_e4 - iVar5 >> 0x1f;\r\n      uVar3 = local_e4 - iVar5 ^ uVar7;\r\n      iVar6 = local_d4 - uVar9;\r\n      local_b4 = uVar9;\r\n      local_b0 = iVar5;\r\n      if ((0 < iVar6) || ((iVar6 == 0 && (uVar3 != uVar7 && -1 < (int)(uVar3 - uVar7))))) {\r\n        iVar6 = iVar6 + 1;\r\n        local_ac = 0;\r\n        local_a8 = iVar6;\r\n        if (0 < iVar6) {\r\n          do {\r\n            local_d0 = uVar9;\r\n            if (*(int *)(in_ECX + 0x134) <= (int)uVar9) {\r\n              iVar6 = *(int *)(in_ECX + 0x110);\r\n              if (((uint)(*(int *)(in_ECX + 0x114) - iVar6 >> 2) <= uVar9) ||\r\n                 (*(int *)(in_ECX + 0x138) + *(int *)(in_ECX + 0x134) <= (int)uVar9)) break;\r\n              local_d8 = local_e4;\r\n              if (uVar9 == local_b4) {\r\n                local_dc = iVar5;\r\n                if (uVar9 == local_d4) {\r\n                  if ((local_e4 <= iVar5) && (local_dc = local_e4, local_e4 < iVar5)) {\r\n                    local_d8 = iVar5;\r\n                  }\r\n                }\r\n                else {\r\n                  local_d8 = *(int *)(*(int *)(iVar6 + uVar9 * 4) + 0x10);\r\n                }\r\n              }\r\n              else {\r\n                local_dc = 0;\r\n                if (uVar9 != local_d4) {\r\n                  local_d8 = *(int *)(*(int *)(iVar6 + uVar9 * 4) + 0x10);\r\n                }\r\n              }\r\n              local_c4 = *(int **)(in_ECX + 0xac);\r\n              local_c8 = *(int *)(in_ECX + 0xa8);\r\n              iVar5 = *(int *)(in_ECX + 0xa4);\r\n              local_e0 = 0;\r\n              local_c0[1] = 0;\r\n              piVar4 = *(int **)(iVar6 + uVar9 * 4);\r\n              local_c0[0] = *(int *)(in_ECX + 0xb0);\r\n              if (7 < (uint)piVar4[5]) {\r\n                piVar4 = (int *)*piVar4;\r\n              }\r\n              piVar10 = local_c0 + 1;\r\n              (**(code **)(**(int **)(in_ECX + 0xf4) + 0x30))(&local_e0,piVar10,piVar4,local_dc);\r\n              iVar5 = iVar5 + unaff_EDI;\r\n              puVar8 = *(undefined4 **)(*(int *)(in_ECX + 0x110) + uVar9 * 4);\r\n              local_d8 = local_d8 + (uVar9 - *(int *)(in_ECX + 0x134)) * local_c8;\r\n              if (7 < (uint)puVar8[5]) {\r\n                puVar8 = (undefined4 *)*puVar8;\r\n              }\r\n              (**(code **)(**(int **)(in_ECX + 0xf4) + 0x30))\r\n                        (&stack0xffffff10,auStack_cc,(int)puVar8 + unaff_ESI * 2,\r\n                         unaff_EBX - unaff_ESI);\r\n              iVar6 = unaff_EBX + local_dc;\r\n              if (*(int *)(in_ECX + 0xb0) <= unaff_EBX + local_dc) {\r\n                iVar6 = *(int *)(in_ECX + 0xb0);\r\n              }\r\n              local_e4 = (int)piVar10 + param_1 + iVar5;\r\n              unaff_EBX = unaff_EBX + param_2;\r\n              _eh_vector_constructor_iterator_\r\n                        (local_c0,0x14,6,(_func_void_void_ptr *)&LAB_0074d950,FUN_005f5d10);\r\n              uStack_48 = 0;\r\n              uStack_2c = 0;\r\n              FUN_0077bc10(iVar5 + param_1,unaff_EBX,local_e4,iVar6 + param_2);\r\n              piVar4 = local_c4;\r\n              (**(code **)(*local_c4 + 0x164))(local_c4,0x44);\r\n              (**(code **)(*piVar4 + 0x104))(piVar4,0,0);\r\n              (**(code **)(*piVar4 + 0x14c))(piVar4,4,2,&local_d4,0x14);\r\n              uStack_c = 1;\r\n              if (piStack_28 != (int *)0x0) {\r\n                (**(code **)(*piStack_28 + 8))(piStack_28);\r\n                piStack_28 = (int *)0x0;\r\n              }\r\n              uStack_c = 0xffffffff;\r\n              _eh_vector_destructor_iterator_(auStack_a0,0x14,6,FUN_005f5d10);\r\n              iVar6 = local_a8;\r\n              iVar5 = local_b0;\r\n            }\r\n            local_ac = local_ac + 1;\r\n            uVar9 = local_d0 + 1;\r\n            local_d0 = uVar9;\r\n          } while (local_ac < iVar6);\r\n        }\r\n      }\r\n    }\r\n  }\r\n  ExceptionList = local_14;\r\n  __security_check_cookie(local_1c ^ (uint)&local_e4);\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x766bc0",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x766bc0",
+          "name": "FUN_00766bc0"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nundefined4\r\nFUN_00766bc0(undefined4 param_1,undefined4 param_2,undefined4 param_3,undefined4 param_4,\r\n            undefined4 *param_5)\r\n\r\n{\r\n  int *piVar1;\r\n  char cVar2;\r\n  int in_ECX;\r\n  \r\n  if (((*(int *)(in_ECX + 0x24) != 0) &&\r\n      (piVar1 = *(int **)(*(int *)(in_ECX + 0x24) + 0x165b4), piVar1 != (int *)0x0)) &&\r\n     (cVar2 = (**(code **)(*piVar1 + 0x1c))(), cVar2 != '\\0')) {\r\n    switch(param_3) {\r\n    case 8:\r\n      FUN_00767400();\r\n      *param_5 = 1;\r\n      return 0;\r\n    case 0x21:\r\n      FUN_00767160();\r\n      *param_5 = 1;\r\n      return 0;\r\n    case 0x22:\r\n      FUN_00767220();\r\n      *param_5 = 1;\r\n      return 0;\r\n    case 0x23:\r\n      FUN_00766d50();\r\n      *param_5 = 1;\r\n      return 0;\r\n    case 0x24:\r\n      FUN_00766dd0();\r\n      *param_5 = 1;\r\n      return 0;\r\n    case 0x25:\r\n      FUN_00766e10();\r\n      *param_5 = 1;\r\n      return 0;\r\n    case 0x26:\r\n      FUN_00766fd0();\r\n      *param_5 = 1;\r\n      return 0;\r\n    case 0x27:\r\n      FUN_00766ed0();\r\n      *param_5 = 1;\r\n      return 0;\r\n    case 0x28:\r\n      FUN_00767070();\r\n      *param_5 = 1;\r\n      return 0;\r\n    case 0x2e:\r\n      FUN_00767320();\r\n    }\r\n  }\r\n  *param_5 = 1;\r\n  return 0;\r\n}\r\n\r\n"
+      }
+    ],
+    "total": 16,
+    "succeeded": 16,
+    "failed": 0
+  },
+  "confidence": "derived",
+  "authority": "shipped-artifact",
+  "environment": null,
+  "limitations": [
+    "Derived by an REA composed workflow.",
+    "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+    "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+    "External functions and functions without an analyzable body return null; other decompiler failures remain explicit.",
+    "External functions and local thunks are distinct; procedure metadata identifies both and preserves a thunk target when Ghidra resolves one.",
+    "Pseudocode is Ghidra decompiler output, not original source and not text-equivalent to Hopper output.",
+    "The Windows bridge uses authenticated IPv4 loopback because Node path-based IPC does not expose Java AF_UNIX sockets; the endpoint file contains no bearer token.",
+    "The imported Program and temporary project are ephemeral and deleted on close. Annotation operations edit session database metadata; original executable bytes are never written.",
+    "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+    "The target references PDB Tartaros.pdb (GUID 491a189d-6d27-43d1-a6b5-81ace6a1df8b, age (hex) 1, signature unknown, version RSDS); Ghidra reports load state unknown. Original names and types may be missing; an empty name search does not prove a procedure is absent. Use list_procedures and address-based analysis to inspect recovered functions. REA does not admit a caller-selected PDB companion.",
+    "Windows Ghidra P0 accepts native x86 and x86-64 PE applications and DLLs, and explicitly selected raw 6502 images; managed, hostile, sensitive, and mutable-path targets are unsupported.",
+    "Windows sessions require the matching packaged Windows x64 native addon, local NTFS targets and runtimes, and Windows 10 or later. Native handles enforce path admission, private DACLs, and Job Object ownership automatically."
+  ],
+  "relationship_coverage": null,
+  "locations": [
+    {
+      "kind": "address",
+      "address": "0x765af0"
+    },
+    {
+      "kind": "address",
+      "address": "0x765bc0"
+    },
+    {
+      "kind": "address",
+      "address": "0x765c20"
+    },
+    {
+      "kind": "address",
+      "address": "0x765c70"
+    },
+    {
+      "kind": "address",
+      "address": "0x765d70"
+    },
+    {
+      "kind": "address",
+      "address": "0x765de0"
+    },
+    {
+      "kind": "address",
+      "address": "0x765ed0"
+    },
+    {
+      "kind": "address",
+      "address": "0x765ef0"
+    },
+    {
+      "kind": "address",
+      "address": "0x765f70"
+    },
+    {
+      "kind": "address",
+      "address": "0x766030"
+    },
+    {
+      "kind": "address",
+      "address": "0x7660d0"
+    },
+    {
+      "kind": "address",
+      "address": "0x7661a0"
+    },
+    {
+      "kind": "address",
+      "address": "0x766260"
+    },
+    {
+      "kind": "address",
+      "address": "0x766390"
+    },
+    {
+      "kind": "address",
+      "address": "0x766720"
+    },
+    {
+      "kind": "address",
+      "address": "0x766bc0"
+    }
+  ],
+  "evidence_links": []
+}

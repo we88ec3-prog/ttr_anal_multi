@@ -1,0 +1,10 @@
+
+void FUN_007ff0a0(undefined4 param_1,undefined4 param_2,undefined4 param_3)
+
+{
+  int in_ECX;
+  
+  FUN_007caec0(param_1,*(undefined4 *)(in_ECX + 0x28),0,param_2,param_3,0);
+  return;
+}
+

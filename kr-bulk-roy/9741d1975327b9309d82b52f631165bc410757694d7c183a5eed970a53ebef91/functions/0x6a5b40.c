@@ -1,0 +1,29 @@
+
+uint * FUN_006a5b40(uint param_1)
+
+{
+  uint *puVar1;
+  uint uVar2;
+  void *local_10;
+  undefined1 *puStack_c;
+  undefined4 local_8;
+  
+  local_8 = 0xffffffff;
+  puStack_c = &LAB_0091b93b;
+  local_10 = ExceptionList;
+  ExceptionList = &local_10;
+  uVar2 = -(uint)((int)((ulonglong)param_1 * 0x264 >> 0x20) != 0) |
+          (uint)((ulonglong)param_1 * 0x264);
+  puVar1 = (uint *)FUN_0087dc3d(-(uint)(0xfffffffb < uVar2) | uVar2 + 4,
+                                DAT_00d61f20 ^ (uint)&stack0xfffffffc);
+  local_8 = 0;
+  if (puVar1 != (uint *)0x0) {
+    *puVar1 = param_1;
+    _eh_vector_constructor_iterator_(puVar1 + 1,0x264,param_1,FUN_006a5dc0,FUN_00450400);
+    ExceptionList = local_10;
+    return puVar1 + 1;
+  }
+  ExceptionList = local_10;
+  return (uint *)0x0;
+}
+

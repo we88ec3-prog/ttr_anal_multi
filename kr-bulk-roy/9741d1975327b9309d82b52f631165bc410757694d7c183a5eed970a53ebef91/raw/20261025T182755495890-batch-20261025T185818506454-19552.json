@@ -1,0 +1,350 @@
+{
+  "evidence_id": "ev_1b639de05fcdb0eddec55e39fa91c21a176aeacf436c5fb953d2e718ad28b1a1",
+  "subject": {
+    "name": "Tartaros.bin",
+    "digest": {
+      "sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91"
+    },
+    "local_path": "E:\\Tartaros\\workspace\\Tartaros.bin",
+    "format": "pe",
+    "architecture": "x86"
+  },
+  "provider": {
+    "id": "rea-workflow",
+    "name": "REA composed investigation workflow",
+    "version": "1"
+  },
+  "analysis_profile": {
+    "provider": {
+      "id": "rea-workflow",
+      "name": "REA composed investigation workflow",
+      "version": "1"
+    },
+    "parameters": {
+      "upstream_analysis_profile": {
+        "provider": {
+          "id": "ghidra",
+          "name": "Ghidra",
+          "version": "12.1.4"
+        },
+        "parameters": {
+          "target_kind": "executable",
+          "target_format": "pe",
+          "executable_role": "application",
+          "managed": false,
+          "native_aot_metadata": {
+            "contract_revision": "rtr-9.1-x64-pe-read-only-v3",
+            "source_bytes": 134217728,
+            "work_units": 67108864,
+            "working_memory_bytes": 67108864,
+            "report_bytes": 4194304
+          },
+          "architecture": "x86",
+          "available_architectures": [
+            "x86"
+          ],
+          "import_mode": "ephemeral-source-immutable",
+          "pdb_observations": "program-info-v1",
+          "annotation_policy": "atomic-function-entry-metadata-v1",
+          "load_image_observations": "source-mappings-entry-context-v2",
+          "function_body_evidence": "complete-inclusive-ranges-v1",
+          "function_references": "complete-body-and-entry-reference-manager-v2",
+          "call_relationship_coverage": "function-body-call-coverage-v5",
+          "function_dossier_coverage": "observed-facets-and-call-relationships-v1",
+          "string_inventory_evidence": "defined-data-coverage-v1",
+          "location_resolution": "explicit-address-exact-entry-symbol-first-v3",
+          "procedure_file_offset_resolution": "address-first-unique-target-source-mapping-v2",
+          "instruction_flow_evidence": "decoded-return-pcode-v1",
+          "instruction_references": "exact-address-incoming-v1",
+          "function_boundary_observations": "ghidra-function-boundary-limitations-v3",
+          "no_return_repair": "disabled-windows-p0",
+          "process_launch": "official-headless-script-v1",
+          "jump_table_evidence": "typed-case-default-blocks-v1",
+          "decompiler_jump_loads": true,
+          "loader": "auto-from-header",
+          "language_id": "auto-from-header",
+          "compiler_spec_id": "auto-default",
+          "analyzer_preset": "ghidra-default"
+        },
+        "digest": "3c06738e45e144d5f073edbd3244c6bff46222f389525fe659bc92dca2ccdece"
+      },
+      "workflow_revision": 2
+    },
+    "digest": "d4471786e332c0336f066a85a651a368051028dfaa0c1d7a5ac78db2f422f47e"
+  },
+  "predicate_type": "rea.analysis",
+  "operation": "batch_decompile",
+  "parameters": {
+    "addresses": [
+      "0x8a675b",
+      "0x8a6833",
+      "0x8a6f30",
+      "0x8a6ffc",
+      "0x8a7004",
+      "0x8a70d5",
+      "0x8a70dd",
+      "0x8a7127",
+      "0x8a717e",
+      "0x8a7195",
+      "0x8a724e",
+      "0x8a7257",
+      "0x8a728a",
+      "0x8a7326",
+      "0x8a735a",
+      "0x8a73d7"
+    ]
+  },
+  "raw_result": null,
+  "normalized_result": {
+    "items": [
+      {
+        "address": "0x8a675b",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8a675b",
+          "name": "__ceil_default"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Single Match\r\n    __ceil_default\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nfloat10 __ceil_default(double param_1)\r\n\r\n{\r\n  double dVar1;\r\n  uint uVar2;\r\n  int iVar3;\r\n  float10 fVar4;\r\n  undefined4 uVar5;\r\n  \r\n  uVar2 = __ctrlfp(DAT_00d62884,0xffff);\r\n  if ((param_1._6_2_ & 0x7ff0) == 0x7ff0) {\r\n    iVar3 = __sptype();\r\n    if (0 < iVar3) {\r\n      if (iVar3 < 3) {\r\n        __ctrlfp(uVar2,0xffff);\r\n        return (float10)param_1;\r\n      }\r\n      if (iVar3 == 3) {\r\n        fVar4 = (float10)__handle_qnan1();\r\n        return fVar4;\r\n      }\r\n    }\r\n    dVar1 = param_1 + 1.0;\r\n    uVar5 = 8;\r\n  }\r\n  else {\r\n    fVar4 = (float10)__frnd(SUB84(param_1,0),(int)((ulonglong)param_1 >> 0x20));\r\n    dVar1 = (double)fVar4;\r\n    if ((param_1 == dVar1) || ((uVar2 & 0x20) != 0)) {\r\n      __ctrlfp(uVar2,0xffff);\r\n      return (float10)dVar1;\r\n    }\r\n    uVar5 = 0x10;\r\n  }\r\n  fVar4 = (float10)__except1(uVar5,0xc,param_1,dVar1,uVar2);\r\n  return fVar4;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8a6833",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8a6833",
+          "name": "__write_nolock"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* WARNING: Function: __alloca_probe replaced with injection: alloca_probe */\r\n/* Library Function - Single Match\r\n    __write_nolock\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nint __cdecl __write_nolock(int _FileHandle,void *_Buf,uint _MaxCharCount)\r\n\r\n{\r\n  char cVar1;\r\n  wchar_t *pwVar2;\r\n  WCHAR WVar3;\r\n  wchar_t wVar4;\r\n  ulong *puVar5;\r\n  int *piVar6;\r\n  int iVar7;\r\n  _ptiddata p_Var8;\r\n  BOOL BVar9;\r\n  DWORD nNumberOfBytesToWrite;\r\n  WCHAR *pWVar10;\r\n  int iVar11;\r\n  uint uVar12;\r\n  int unaff_EBX;\r\n  WCHAR *pWVar13;\r\n  uint uVar14;\r\n  int iVar15;\r\n  ushort uVar16;\r\n  uint local_1ae8;\r\n  WCHAR *local_1ae4;\r\n  int *local_1ae0;\r\n  uint local_1adc;\r\n  WCHAR *local_1ad8;\r\n  int local_1ad4;\r\n  WCHAR *local_1ad0;\r\n  uint local_1acc;\r\n  char local_1ac5;\r\n  uint local_1ac4;\r\n  DWORD local_1ac0;\r\n  WCHAR local_1abc [852];\r\n  CHAR local_1414 [3416];\r\n  WCHAR local_6bc [854];\r\n  undefined2 local_10;\r\n  uint local_8;\r\n  \r\n  local_8 = DAT_00d61f20 ^ (uint)&stack0xfffffffc;\r\n  local_1ad0 = _Buf;\r\n  local_1acc = 0;\r\n  local_1ad4 = 0;\r\n  if (_MaxCharCount == 0) goto LAB_008a6f22;\r\n  if (_Buf == (void *)0x0) {\r\n    puVar5 = ___doserrno();\r\n    *puVar5 = 0;\r\n    piVar6 = __errno();\r\n    *piVar6 = 0x16;\r\n    FUN_00893343();\r\n    goto LAB_008a6f22;\r\n  }\r\n  piVar6 = &DAT_00fe72a0 + (_FileHandle >> 5);\r\n  iVar11 = (_FileHandle & 0x1fU) * 0x40;\r\n  local_1ac5 = (char)(*(char *)(*piVar6 + 0x24 + iVar11) * '\\x02') >> 1;\r\n  local_1ae0 = piVar6;\r\n  if (((local_1ac5 == '\\x02') || (local_1ac5 == '\\x01')) && ((~_MaxCharCount & 1) == 0)) {\r\n    puVar5 = ___doserrno();\r\n    *puVar5 = 0;\r\n    piVar6 = __errno();\r\n    *piVar6 = 0x16;\r\n    FUN_00893343();\r\n    goto LAB_008a6f22;\r\n  }\r\n  if ((*(byte *)(*piVar6 + 4 + iVar11) & 0x20) != 0) {\r\n    __lseeki64_nolock(_FileHandle,0x200000000,unaff_EBX);\r\n  }\r\n  iVar7 = __isatty(_FileHandle);\r\n  if ((iVar7 == 0) || ((*(byte *)(iVar11 + 4 + *piVar6) & 0x80) == 0)) {\r\nLAB_008a6bb3:\r\n    if ((*(byte *)(*piVar6 + 4 + iVar11) & 0x80) == 0) {\r\n      BVar9 = WriteFile(*(HANDLE *)(*piVar6 + iVar11),local_1ad0,_MaxCharCount,&local_1adc,\r\n                        (LPOVERLAPPED)0x0);\r\n      if (BVar9 == 0) {\r\nLAB_008a6e94:\r\n        local_1ac0 = GetLastError();\r\n      }\r\n      else {\r\n        local_1ac0 = 0;\r\n        local_1acc = local_1adc;\r\n      }\r\nLAB_008a6ea0:\r\n      if (local_1acc != 0) goto LAB_008a6f22;\r\n      goto LAB_008a6ea9;\r\n    }\r\n    local_1ac0 = 0;\r\n    if (local_1ac5 == '\\0') {\r\n      pWVar13 = local_1ad0;\r\n      if (_MaxCharCount == 0) goto LAB_008a6edf;\r\n      do {\r\n        uVar14 = 0;\r\n        uVar12 = (int)pWVar13 - (int)local_1ad0;\r\n        pWVar10 = local_1abc;\r\n        do {\r\n          if (_MaxCharCount <= uVar12) break;\r\n          WVar3 = *pWVar13;\r\n          pWVar13 = (WCHAR *)((int)pWVar13 + 1);\r\n          uVar12 = uVar12 + 1;\r\n          if ((char)WVar3 == '\\n') {\r\n            local_1ad4 = local_1ad4 + 1;\r\n            *(char *)pWVar10 = '\\r';\r\n            pWVar10 = (WCHAR *)((int)pWVar10 + 1);\r\n            uVar14 = uVar14 + 1;\r\n          }\r\n          *(char *)pWVar10 = (char)WVar3;\r\n          pWVar10 = (WCHAR *)((int)pWVar10 + 1);\r\n          uVar14 = uVar14 + 1;\r\n          local_1ae4 = pWVar13;\r\n        } while (uVar14 < 0x13ff);\r\n        BVar9 = WriteFile(*(HANDLE *)(iVar11 + *local_1ae0),local_1abc,\r\n                          (int)pWVar10 - (int)local_1abc,&local_1adc,(LPOVERLAPPED)0x0);\r\n        if (BVar9 == 0) goto LAB_008a6e94;\r\n        local_1acc = local_1acc + local_1adc;\r\n      } while (((int)pWVar10 - (int)local_1abc <= (int)local_1adc) &&\r\n              ((uint)((int)pWVar13 - (int)local_1ad0) < _MaxCharCount));\r\n      goto LAB_008a6ea0;\r\n    }\r\n    if (local_1ac5 == '\\x02') {\r\n      pWVar13 = local_1ad0;\r\n      if (_MaxCharCount != 0) {\r\n        do {\r\n          local_1ac4 = 0;\r\n          uVar12 = (int)pWVar13 - (int)local_1ad0;\r\n          pWVar10 = local_1abc;\r\n          do {\r\n            if (_MaxCharCount <= uVar12) break;\r\n            WVar3 = *pWVar13;\r\n            pWVar13 = pWVar13 + 1;\r\n            uVar12 = uVar12 + 2;\r\n            if (WVar3 == L'\\n') {\r\n              local_1ad4 = local_1ad4 + 2;\r\n              *pWVar10 = L'\\r';\r\n              pWVar10 = pWVar10 + 1;\r\n              local_1ac4 = local_1ac4 + 2;\r\n            }\r\n            local_1ac4 = local_1ac4 + 2;\r\n            *pWVar10 = WVar3;\r\n            pWVar10 = pWVar10 + 1;\r\n            local_1ae4 = pWVar13;\r\n          } while (local_1ac4 < 0x13fe);\r\n          BVar9 = WriteFile(*(HANDLE *)(iVar11 + *local_1ae0),local_1abc,\r\n                            (int)pWVar10 - (int)local_1abc,&local_1adc,(LPOVERLAPPED)0x0);\r\n          if (BVar9 == 0) goto LAB_008a6e94;\r\n          local_1acc = local_1acc + local_1adc;\r\n        } while (((int)pWVar10 - (int)local_1abc <= (int)local_1adc) &&\r\n                ((uint)((int)pWVar13 - (int)local_1ad0) < _MaxCharCount));\r\n        goto LAB_008a6ea0;\r\n      }\r\n    }\r\n    else {\r\n      local_1ad8 = local_1ad0;\r\n      if (_MaxCharCount != 0) {\r\n        do {\r\n          local_1ac4 = 0;\r\n          uVar12 = (int)local_1ad8 - (int)local_1ad0;\r\n          pWVar13 = local_6bc;\r\n          do {\r\n            if (_MaxCharCount <= uVar12) break;\r\n            WVar3 = *local_1ad8;\r\n            local_1ad8 = local_1ad8 + 1;\r\n            uVar12 = uVar12 + 2;\r\n            if (WVar3 == L'\\n') {\r\n              *pWVar13 = L'\\r';\r\n              pWVar13 = pWVar13 + 1;\r\n              local_1ac4 = local_1ac4 + 2;\r\n            }\r\n            local_1ac4 = local_1ac4 + 2;\r\n            *pWVar13 = WVar3;\r\n            pWVar13 = pWVar13 + 1;\r\n          } while (local_1ac4 < 0x6a8);\r\n          iVar15 = 0;\r\n          iVar7 = WideCharToMultiByte(0xfde9,0,local_6bc,((int)pWVar13 - (int)local_6bc) / 2,\r\n                                      local_1414,0xd55,(LPCSTR)0x0,(LPBOOL)0x0);\r\n          if (iVar7 == 0) goto LAB_008a6e94;\r\n          do {\r\n            BVar9 = WriteFile(*(HANDLE *)(iVar11 + *local_1ae0),local_1414 + iVar15,iVar7 - iVar15,\r\n                              &local_1adc,(LPOVERLAPPED)0x0);\r\n            if (BVar9 == 0) {\r\n              local_1ac0 = GetLastError();\r\n              break;\r\n            }\r\n            iVar15 = iVar15 + local_1adc;\r\n          } while (iVar15 < iVar7);\r\n        } while ((iVar7 <= iVar15) &&\r\n                (local_1acc = (int)local_1ad8 - (int)local_1ad0, local_1acc < _MaxCharCount));\r\n        goto LAB_008a6ea0;\r\n      }\r\n    }\r\n  }\r\n  else {\r\n    p_Var8 = __getptd();\r\n    pwVar2 = p_Var8->ptlocinfo->lc_category[0].wlocale;\r\n    BVar9 = GetConsoleMode(*(HANDLE *)(iVar11 + *piVar6),(LPDWORD)&local_1ae4);\r\n    if ((BVar9 == 0) || ((pwVar2 == (wchar_t *)0x0 && (local_1ac5 == '\\0')))) goto LAB_008a6bb3;\r\n    local_1ae4 = (WCHAR *)GetConsoleCP();\r\n    local_1ad8 = (WCHAR *)0x0;\r\n    if (_MaxCharCount != 0) {\r\n      local_1ac4 = 0;\r\n      pWVar13 = local_1ad0;\r\n      do {\r\n        piVar6 = local_1ae0;\r\n        if (local_1ac5 == '\\0') {\r\n          cVar1 = (char)*pWVar13;\r\n          local_1ae8 = (uint)(cVar1 == '\\n');\r\n          iVar7 = *local_1ae0 + iVar11;\r\n          if (*(int *)(iVar7 + 0x38) == 0) {\r\n            iVar7 = _isleadbyte(CONCAT22(cVar1 >> 7,(short)cVar1));\r\n            if (iVar7 == 0) {\r\n              uVar16 = 1;\r\n              pWVar10 = pWVar13;\r\n              goto LAB_008a6a1a;\r\n            }\r\n            if ((char *)((int)local_1ad0 + (_MaxCharCount - (int)pWVar13)) < (char *)0x2) {\r\n              local_1acc = local_1acc + 1;\r\n              *(char *)(iVar11 + 0x34 + *piVar6) = (char)*pWVar13;\r\n              *(undefined4 *)(iVar11 + 0x38 + *piVar6) = 1;\r\n              break;\r\n            }\r\n            iVar7 = _mbtowc((wchar_t *)&local_1ac0,(char *)pWVar13,2);\r\n            if (iVar7 == -1) break;\r\n            pWVar13 = (WCHAR *)((int)pWVar13 + 1);\r\n            local_1ac4 = local_1ac4 + 1;\r\n          }\r\n          else {\r\n            local_10._0_1_ = *(CHAR *)(iVar7 + 0x34);\r\n            *(undefined4 *)(iVar7 + 0x38) = 0;\r\n            uVar16 = 2;\r\n            pWVar10 = &local_10;\r\n            local_10._1_1_ = cVar1;\r\nLAB_008a6a1a:\r\n            iVar7 = _mbtowc((wchar_t *)&local_1ac0,(char *)pWVar10,(uint)uVar16);\r\n            if (iVar7 == -1) break;\r\n          }\r\n          pWVar13 = (WCHAR *)((int)pWVar13 + 1);\r\n          local_1ac4 = local_1ac4 + 1;\r\n          nNumberOfBytesToWrite =\r\n               WideCharToMultiByte((UINT)local_1ae4,0,(LPCWSTR)&local_1ac0,1,(LPSTR)&local_10,5,\r\n                                   (LPCSTR)0x0,(LPBOOL)0x0);\r\n          if (nNumberOfBytesToWrite == 0) break;\r\n          BVar9 = WriteFile(*(HANDLE *)(iVar11 + *local_1ae0),&local_10,nNumberOfBytesToWrite,\r\n                            (LPDWORD)&local_1ad8,(LPOVERLAPPED)0x0);\r\n          if (BVar9 == 0) goto LAB_008a6e94;\r\n          local_1acc = local_1ac4 + local_1ad4;\r\n          if ((int)local_1ad8 < (int)nNumberOfBytesToWrite) break;\r\n          if (local_1ae8 != 0) {\r\n            local_10._0_1_ = '\\r';\r\n            BVar9 = WriteFile(*(HANDLE *)(iVar11 + *local_1ae0),&local_10,1,(LPDWORD)&local_1ad8,\r\n                              (LPOVERLAPPED)0x0);\r\n            if (BVar9 == 0) goto LAB_008a6e94;\r\n            if ((int)local_1ad8 < 1) break;\r\n            local_1ad4 = local_1ad4 + 1;\r\n            local_1acc = local_1acc + 1;\r\n          }\r\n        }\r\n        else {\r\n          if ((local_1ac5 == '\\x01') || (local_1ac5 == '\\x02')) {\r\n            local_1ac0 = (DWORD)(ushort)*pWVar13;\r\n            local_1ae8 = (uint)(local_1ac0 == 10);\r\n            pWVar13 = pWVar13 + 1;\r\n            local_1ac4 = local_1ac4 + 2;\r\n          }\r\n          if ((local_1ac5 == '\\x01') || (local_1ac5 == '\\x02')) {\r\n            wVar4 = __putwch_nolock((wchar_t)local_1ac0);\r\n            if (wVar4 != (wchar_t)local_1ac0) goto LAB_008a6e94;\r\n            local_1acc = local_1acc + 2;\r\n            if (local_1ae8 != 0) {\r\n              local_1ac0 = 0xd;\r\n              wVar4 = __putwch_nolock(L'\\r');\r\n              if (wVar4 != (wchar_t)local_1ac0) goto LAB_008a6e94;\r\n              local_1acc = local_1acc + 1;\r\n              local_1ad4 = local_1ad4 + 1;\r\n            }\r\n          }\r\n        }\r\n      } while (local_1ac4 < _MaxCharCount);\r\n      goto LAB_008a6ea0;\r\n    }\r\nLAB_008a6ea9:\r\n    if (local_1ac0 != 0) {\r\n      if (local_1ac0 == 5) {\r\n        piVar6 = __errno();\r\n        *piVar6 = 9;\r\n        puVar5 = ___doserrno();\r\n        *puVar5 = 5;\r\n      }\r\n      else {\r\n        __dosmaperr(local_1ac0);\r\n      }\r\n      goto LAB_008a6f22;\r\n    }\r\n  }\r\nLAB_008a6edf:\r\n  if (((*(byte *)(iVar11 + 4 + *local_1ae0) & 0x40) == 0) || ((char)*local_1ad0 != '\\x1a')) {\r\n    piVar6 = __errno();\r\n    *piVar6 = 0x1c;\r\n    puVar5 = ___doserrno();\r\n    *puVar5 = 0;\r\n  }\r\nLAB_008a6f22:\r\n  iVar11 = __security_check_cookie(local_8 ^ (uint)&stack0xfffffffc);\r\n  return iVar11;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8a6f30",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8a6f30",
+          "name": "__write"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* WARNING: Function: __SEH_prolog4 replaced with injection: SEH_prolog4 */\r\n/* WARNING: Function: __SEH_epilog4 replaced with injection: EH_epilog3 */\r\n/* Library Function - Single Match\r\n    __write\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nint __cdecl __write(int _FileHandle,void *_Buf,uint _MaxCharCount)\r\n\r\n{\r\n  ulong *puVar1;\r\n  int *piVar2;\r\n  int iVar3;\r\n  int local_20;\r\n  \r\n  if (_FileHandle == -2) {\r\n    puVar1 = ___doserrno();\r\n    *puVar1 = 0;\r\n    piVar2 = __errno();\r\n    *piVar2 = 9;\r\n  }\r\n  else {\r\n    if ((-1 < _FileHandle) && ((uint)_FileHandle < DAT_00fe7294)) {\r\n      iVar3 = (_FileHandle & 0x1fU) * 0x40;\r\n      if ((*(byte *)((&DAT_00fe72a0)[_FileHandle >> 5] + 4 + iVar3) & 1) != 0) {\r\n        ___lock_fhandle(_FileHandle);\r\n        if ((*(byte *)((&DAT_00fe72a0)[_FileHandle >> 5] + 4 + iVar3) & 1) == 0) {\r\n          piVar2 = __errno();\r\n          *piVar2 = 9;\r\n          puVar1 = ___doserrno();\r\n          *puVar1 = 0;\r\n          local_20 = -1;\r\n        }\r\n        else {\r\n          local_20 = __write_nolock(_FileHandle,_Buf,_MaxCharCount);\r\n        }\r\n        FUN_008a6ffc();\r\n        return local_20;\r\n      }\r\n    }\r\n    puVar1 = ___doserrno();\r\n    *puVar1 = 0;\r\n    piVar2 = __errno();\r\n    *piVar2 = 9;\r\n    FUN_00893343();\r\n  }\r\n  return -1;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8a6ffc",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8a6ffc",
+          "name": "FUN_008a6ffc"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_008a6ffc(void)\r\n\r\n{\r\n  int unaff_EBX;\r\n  \r\n  __unlock_fhandle(unaff_EBX);\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8a7004",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8a7004",
+          "name": "__commit"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* WARNING: Function: __SEH_prolog4 replaced with injection: SEH_prolog4 */\r\n/* WARNING: Function: __SEH_epilog4 replaced with injection: EH_epilog3 */\r\n/* Library Function - Single Match\r\n    __commit\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nint __cdecl __commit(int _FileHandle)\r\n\r\n{\r\n  int *piVar1;\r\n  HANDLE hFile;\r\n  BOOL BVar2;\r\n  ulong *puVar3;\r\n  int iVar4;\r\n  DWORD local_20;\r\n  \r\n  if (_FileHandle == -2) {\r\n    piVar1 = __errno();\r\n    *piVar1 = 9;\r\n  }\r\n  else {\r\n    if ((-1 < _FileHandle) && ((uint)_FileHandle < DAT_00fe7294)) {\r\n      iVar4 = (_FileHandle & 0x1fU) * 0x40;\r\n      if ((*(byte *)(iVar4 + 4 + (&DAT_00fe72a0)[_FileHandle >> 5]) & 1) != 0) {\r\n        ___lock_fhandle(_FileHandle);\r\n        if ((*(byte *)(iVar4 + 4 + (&DAT_00fe72a0)[_FileHandle >> 5]) & 1) != 0) {\r\n          hFile = (HANDLE)__get_osfhandle(_FileHandle);\r\n          BVar2 = FlushFileBuffers(hFile);\r\n          if (BVar2 == 0) {\r\n            local_20 = GetLastError();\r\n          }\r\n          else {\r\n            local_20 = 0;\r\n          }\r\n          if (local_20 == 0) goto LAB_008a70bd;\r\n          puVar3 = ___doserrno();\r\n          *puVar3 = local_20;\r\n        }\r\n        piVar1 = __errno();\r\n        *piVar1 = 9;\r\n        local_20 = 0xffffffff;\r\nLAB_008a70bd:\r\n        FUN_008a70d5();\r\n        return local_20;\r\n      }\r\n    }\r\n    piVar1 = __errno();\r\n    *piVar1 = 9;\r\n    FUN_00893343();\r\n  }\r\n  return -1;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8a70d5",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8a70d5",
+          "name": "FUN_008a70d5"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_008a70d5(void)\r\n\r\n{\r\n  int unaff_EBX;\r\n  \r\n  __unlock_fhandle(unaff_EBX);\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8a70dd",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8a70dd",
+          "name": "__mtinitlocks"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Single Match\r\n    __mtinitlocks\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nint __cdecl __mtinitlocks(void)\r\n\r\n{\r\n  BOOL BVar1;\r\n  int iVar2;\r\n  undefined *puVar3;\r\n  \r\n  iVar2 = 0;\r\n  puVar3 = &DAT_00f8d518;\r\n  do {\r\n    if ((&DAT_00d6288c)[iVar2 * 2] == 1) {\r\n      (&DAT_00d62888)[iVar2 * 2] = puVar3;\r\n      puVar3 = puVar3 + 0x18;\r\n      BVar1 = InitializeCriticalSectionAndSpinCount\r\n                        ((LPCRITICAL_SECTION)(&DAT_00d62888)[iVar2 * 2],4000);\r\n      if (BVar1 == 0) {\r\n        (&DAT_00d62888)[iVar2 * 2] = 0;\r\n        return 0;\r\n      }\r\n    }\r\n    iVar2 = iVar2 + 1;\r\n  } while (iVar2 < 0x24);\r\n  return 1;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8a7127",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8a7127",
+          "name": "__mtdeletelocks"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Single Match\r\n    __mtdeletelocks\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nvoid __cdecl __mtdeletelocks(void)\r\n\r\n{\r\n  LPCRITICAL_SECTION lpCriticalSection;\r\n  undefined4 *puVar1;\r\n  \r\n  puVar1 = &DAT_00d62888;\r\n  do {\r\n    lpCriticalSection = (LPCRITICAL_SECTION)*puVar1;\r\n    if ((lpCriticalSection != (LPCRITICAL_SECTION)0x0) && (puVar1[1] != 1)) {\r\n      DeleteCriticalSection(lpCriticalSection);\r\n      _free(lpCriticalSection);\r\n      *puVar1 = 0;\r\n    }\r\n    puVar1 = puVar1 + 2;\r\n  } while ((int)puVar1 < 0xd629a8);\r\n  puVar1 = &DAT_00d62888;\r\n  do {\r\n    if (((LPCRITICAL_SECTION)*puVar1 != (LPCRITICAL_SECTION)0x0) && (puVar1[1] == 1)) {\r\n      DeleteCriticalSection((LPCRITICAL_SECTION)*puVar1);\r\n    }\r\n    puVar1 = puVar1 + 2;\r\n  } while ((int)puVar1 < 0xd629a8);\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8a717e",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8a717e",
+          "name": "FUN_008a717e"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_008a717e(int param_1)\r\n\r\n{\r\n  LeaveCriticalSection((LPCRITICAL_SECTION)(&DAT_00d62888)[param_1 * 2]);\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8a7195",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8a7195",
+          "name": "__mtinitlocknum"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* WARNING: Function: __SEH_prolog4 replaced with injection: SEH_prolog4 */\r\n/* WARNING: Function: __SEH_epilog4 replaced with injection: EH_epilog3 */\r\n/* Library Function - Single Match\r\n    __mtinitlocknum\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nint __cdecl __mtinitlocknum(int _LockNum)\r\n\r\n{\r\n  LPCRITICAL_SECTION lpCriticalSection;\r\n  int *piVar1;\r\n  BOOL BVar2;\r\n  int iVar3;\r\n  int local_20;\r\n  \r\n  iVar3 = 1;\r\n  local_20 = 1;\r\n  if (DAT_00f8d4dc == 0) {\r\n    __FF_MSGBANNER();\r\n    __NMSG_WRITE(0x1e);\r\n    ___crtExitProcess(0xff);\r\n  }\r\n  piVar1 = &DAT_00d62888 + _LockNum * 2;\r\n  if (*piVar1 == 0) {\r\n    lpCriticalSection = __malloc_crt(0x18);\r\n    if (lpCriticalSection == (LPCRITICAL_SECTION)0x0) {\r\n      piVar1 = __errno();\r\n      *piVar1 = 0xc;\r\n      iVar3 = 0;\r\n    }\r\n    else {\r\n      __lock(10);\r\n      if (*piVar1 == 0) {\r\n        BVar2 = InitializeCriticalSectionAndSpinCount(lpCriticalSection,4000);\r\n        if (BVar2 == 0) {\r\n          _free(lpCriticalSection);\r\n          piVar1 = __errno();\r\n          *piVar1 = 0xc;\r\n          local_20 = 0;\r\n        }\r\n        else {\r\n          *piVar1 = (int)lpCriticalSection;\r\n        }\r\n      }\r\n      else {\r\n        _free(lpCriticalSection);\r\n      }\r\n      FUN_008a724e();\r\n      iVar3 = local_20;\r\n    }\r\n  }\r\n  return iVar3;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8a724e",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8a724e",
+          "name": "FUN_008a724e"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_008a724e(void)\r\n\r\n{\r\n  FUN_008a717e(10);\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8a7257",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8a7257",
+          "name": "__lock"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Single Match\r\n    __lock\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nvoid __cdecl __lock(int _File)\r\n\r\n{\r\n  int iVar1;\r\n  \r\n  if ((&DAT_00d62888)[_File * 2] == 0) {\r\n    iVar1 = __mtinitlocknum(_File);\r\n    if (iVar1 == 0) {\r\n      __amsg_exit(0x11);\r\n    }\r\n  }\r\n  EnterCriticalSection((LPCRITICAL_SECTION)(&DAT_00d62888)[_File * 2]);\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8a728a",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8a728a",
+          "name": "__stbuf"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */\r\n/* Library Function - Single Match\r\n    __stbuf\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nint __cdecl __stbuf(FILE *_File)\r\n\r\n{\r\n  int *piVar1;\r\n  char *pcVar2;\r\n  int iVar3;\r\n  void *pvVar4;\r\n  \r\n  iVar3 = __fileno(_File);\r\n  iVar3 = __isatty(iVar3);\r\n  if (iVar3 == 0) {\r\n    return 0;\r\n  }\r\n  iVar3 = FUN_00894fab();\r\n  if (_File == (FILE *)(iVar3 + 0x20)) {\r\n    iVar3 = 0;\r\n  }\r\n  else {\r\n    iVar3 = FUN_00894fab();\r\n    if (_File != (FILE *)(iVar3 + 0x40)) {\r\n      return 0;\r\n    }\r\n    iVar3 = 1;\r\n  }\r\n  _DAT_00f8cb14 = _DAT_00f8cb14 + 1;\r\n  if ((_File->_flag & 0x10cU) != 0) {\r\n    return 0;\r\n  }\r\n  piVar1 = &DAT_00f8d668 + iVar3;\r\n  if (*piVar1 == 0) {\r\n    pvVar4 = __malloc_crt(0x1000);\r\n    *piVar1 = (int)pvVar4;\r\n    if (pvVar4 == (void *)0x0) {\r\n      _File->_base = (char *)&_File->_charbuf;\r\n      _File->_ptr = (char *)&_File->_charbuf;\r\n      _File->_bufsiz = 2;\r\n      _File->_cnt = 2;\r\n      goto LAB_008a7313;\r\n    }\r\n  }\r\n  pcVar2 = (char *)*piVar1;\r\n  _File->_base = pcVar2;\r\n  _File->_ptr = pcVar2;\r\n  _File->_bufsiz = 0x1000;\r\n  _File->_cnt = 0x1000;\r\nLAB_008a7313:\r\n  _File->_flag = _File->_flag | 0x1102;\r\n  return 1;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8a7326",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8a7326",
+          "name": "__ftbuf"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Single Match\r\n    __ftbuf\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nvoid __cdecl __ftbuf(int _Flag,FILE *_File)\r\n\r\n{\r\n  if ((_Flag != 0) && ((_File->_flag & 0x1000U) != 0)) {\r\n    __flush(_File);\r\n    _File->_flag = _File->_flag & 0xffffeeff;\r\n    _File->_bufsiz = 0;\r\n    _File->_ptr = (char *)0x0;\r\n    _File->_base = (char *)0x0;\r\n  }\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8a735a",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8a735a",
+          "name": "FID_conflict:_vprintf_helper"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* WARNING: Function: __SEH_prolog4 replaced with injection: SEH_prolog4 */\r\n/* WARNING: Function: __SEH_epilog4 replaced with injection: EH_epilog3 */\r\n/* Library Function - Multiple Matches With Different Base Names\r\n    _vprintf_helper\r\n    _vwprintf_helper\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nundefined4\r\nFID_conflict__vprintf_helper(code *param_1,int param_2,undefined4 param_3,undefined4 param_4)\r\n\r\n{\r\n  FILE *_File;\r\n  int iVar1;\r\n  int *piVar2;\r\n  undefined4 uVar3;\r\n  \r\n  iVar1 = FUN_00894fab();\r\n  _File = (FILE *)(iVar1 + 0x20);\r\n  if (param_2 == 0) {\r\n    piVar2 = __errno();\r\n    *piVar2 = 0x16;\r\n    FUN_00893343();\r\n    uVar3 = 0xffffffff;\r\n  }\r\n  else {\r\n    __lock_file(_File);\r\n    iVar1 = __stbuf(_File);\r\n    uVar3 = (*param_1)(_File,param_2,param_3,param_4);\r\n    __ftbuf(iVar1,_File);\r\n    FUN_008a73d7();\r\n  }\r\n  return uVar3;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8a73d7",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8a73d7",
+          "name": "FUN_008a73d7"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_008a73d7(void)\r\n\r\n{\r\n  FILE *unaff_ESI;\r\n  \r\n  __unlock_file(unaff_ESI);\r\n  return;\r\n}\r\n\r\n"
+      }
+    ],
+    "total": 16,
+    "succeeded": 16,
+    "failed": 0
+  },
+  "confidence": "derived",
+  "authority": "shipped-artifact",
+  "environment": null,
+  "limitations": [
+    "Derived by an REA composed workflow.",
+    "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+    "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+    "External functions and functions without an analyzable body return null; other decompiler failures remain explicit.",
+    "External functions and local thunks are distinct; procedure metadata identifies both and preserves a thunk target when Ghidra resolves one.",
+    "Pseudocode is Ghidra decompiler output, not original source and not text-equivalent to Hopper output.",
+    "The Windows bridge uses authenticated IPv4 loopback because Node path-based IPC does not expose Java AF_UNIX sockets; the endpoint file contains no bearer token.",
+    "The imported Program and temporary project are ephemeral and deleted on close. Annotation operations edit session database metadata; original executable bytes are never written.",
+    "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+    "The target references PDB Tartaros.pdb (GUID 491a189d-6d27-43d1-a6b5-81ace6a1df8b, age (hex) 1, signature unknown, version RSDS); Ghidra reports load state unknown. Original names and types may be missing; an empty name search does not prove a procedure is absent. Use list_procedures and address-based analysis to inspect recovered functions. REA does not admit a caller-selected PDB companion.",
+    "Windows Ghidra P0 accepts native x86 and x86-64 PE applications and DLLs, and explicitly selected raw 6502 images; managed, hostile, sensitive, and mutable-path targets are unsupported.",
+    "Windows sessions require the matching packaged Windows x64 native addon, local NTFS targets and runtimes, and Windows 10 or later. Native handles enforce path admission, private DACLs, and Job Object ownership automatically."
+  ],
+  "relationship_coverage": null,
+  "locations": [
+    {
+      "kind": "address",
+      "address": "0x8a675b"
+    },
+    {
+      "kind": "address",
+      "address": "0x8a6833"
+    },
+    {
+      "kind": "address",
+      "address": "0x8a6f30"
+    },
+    {
+      "kind": "address",
+      "address": "0x8a6ffc"
+    },
+    {
+      "kind": "address",
+      "address": "0x8a7004"
+    },
+    {
+      "kind": "address",
+      "address": "0x8a70d5"
+    },
+    {
+      "kind": "address",
+      "address": "0x8a70dd"
+    },
+    {
+      "kind": "address",
+      "address": "0x8a7127"
+    },
+    {
+      "kind": "address",
+      "address": "0x8a717e"
+    },
+    {
+      "kind": "address",
+      "address": "0x8a7195"
+    },
+    {
+      "kind": "address",
+      "address": "0x8a724e"
+    },
+    {
+      "kind": "address",
+      "address": "0x8a7257"
+    },
+    {
+      "kind": "address",
+      "address": "0x8a728a"
+    },
+    {
+      "kind": "address",
+      "address": "0x8a7326"
+    },
+    {
+      "kind": "address",
+      "address": "0x8a735a"
+    },
+    {
+      "kind": "address",
+      "address": "0x8a73d7"
+    }
+  ],
+  "evidence_links": []
+}

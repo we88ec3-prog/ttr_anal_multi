@@ -1,0 +1,351 @@
+{
+  "evidence_id": "ev_afca2c5fe4101a23ba11008f20f17647fae491e48171daec2c2d2dc72e137182",
+  "subject": {
+    "name": "Tartaros.bin",
+    "digest": {
+      "sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91"
+    },
+    "local_path": "E:\\Tartaros\\workspace\\Tartaros.bin",
+    "format": "pe",
+    "architecture": "x86"
+  },
+  "provider": {
+    "id": "rea-workflow",
+    "name": "REA composed investigation workflow",
+    "version": "1"
+  },
+  "analysis_profile": {
+    "provider": {
+      "id": "rea-workflow",
+      "name": "REA composed investigation workflow",
+      "version": "1"
+    },
+    "parameters": {
+      "upstream_analysis_profile": {
+        "provider": {
+          "id": "ghidra",
+          "name": "Ghidra",
+          "version": "12.1.4"
+        },
+        "parameters": {
+          "target_kind": "executable",
+          "target_format": "pe",
+          "executable_role": "application",
+          "managed": false,
+          "native_aot_metadata": {
+            "contract_revision": "rtr-9.1-x64-pe-read-only-v3",
+            "source_bytes": 134217728,
+            "work_units": 67108864,
+            "working_memory_bytes": 67108864,
+            "report_bytes": 4194304
+          },
+          "architecture": "x86",
+          "available_architectures": [
+            "x86"
+          ],
+          "import_mode": "ephemeral-source-immutable",
+          "pdb_observations": "program-info-v1",
+          "annotation_policy": "atomic-function-entry-metadata-v1",
+          "load_image_observations": "source-mappings-entry-context-v2",
+          "function_body_evidence": "complete-inclusive-ranges-v1",
+          "function_references": "complete-body-and-entry-reference-manager-v2",
+          "call_relationship_coverage": "function-body-call-coverage-v5",
+          "function_dossier_coverage": "observed-facets-and-call-relationships-v1",
+          "string_inventory_evidence": "defined-data-coverage-v1",
+          "location_resolution": "explicit-address-exact-entry-symbol-first-v3",
+          "procedure_file_offset_resolution": "address-first-unique-target-source-mapping-v2",
+          "instruction_flow_evidence": "decoded-return-pcode-v1",
+          "instruction_references": "exact-address-incoming-v1",
+          "function_boundary_observations": "ghidra-function-boundary-limitations-v3",
+          "no_return_repair": "disabled-windows-p0",
+          "process_launch": "official-headless-script-v1",
+          "jump_table_evidence": "typed-case-default-blocks-v1",
+          "decompiler_jump_loads": true,
+          "loader": "auto-from-header",
+          "language_id": "auto-from-header",
+          "compiler_spec_id": "auto-default",
+          "analyzer_preset": "ghidra-default"
+        },
+        "digest": "3c06738e45e144d5f073edbd3244c6bff46222f389525fe659bc92dca2ccdece"
+      },
+      "workflow_revision": 2
+    },
+    "digest": "d4471786e332c0336f066a85a651a368051028dfaa0c1d7a5ac78db2f422f47e"
+  },
+  "predicate_type": "rea.analysis",
+  "operation": "batch_decompile",
+  "parameters": {
+    "addresses": [
+      "0x8f4e50",
+      "0x8f5120",
+      "0x8f5160",
+      "0x8f5430",
+      "0x8f55a0",
+      "0x8f5890",
+      "0x8f58b0",
+      "0x8f5a60",
+      "0x8f5af0",
+      "0x8f5b50",
+      "0x8f5cc0",
+      "0x8f5cf0",
+      "0x8f5d00",
+      "0x8f61f0",
+      "0x8f62b0",
+      "0x8f6460"
+    ]
+  },
+  "raw_result": null,
+  "normalized_result": {
+    "items": [
+      {
+        "address": "0x8f4e50",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8f4e50",
+          "name": "FUN_008f4e50"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_008f4e50(int param_1,int param_2)\r\n\r\n{\r\n  int *piVar1;\r\n  longlong lVar2;\r\n  uint uVar3;\r\n  uint uVar4;\r\n  int iVar5;\r\n  int iVar6;\r\n  int in_ECX;\r\n  byte *pbVar7;\r\n  uint uVar8;\r\n  int iVar9;\r\n  int *piVar10;\r\n  uint local_18;\r\n  int local_c;\r\n  int local_8;\r\n  \r\n  if (param_2 == 0) {\r\n    local_8 = *(int *)(param_1 + 4);\r\n    local_c = *(int *)(param_1 + 0xc);\r\n  }\r\n  else {\r\n    local_c = *(int *)(param_1 + 0x10);\r\n    local_8 = *(int *)(param_1 + 8);\r\n  }\r\n  piVar1 = (int *)(param_2 * 0x42c + 0x2c + in_ECX);\r\n  if ((piVar1[0x109] != local_8) || (piVar1[0x10a] != local_c)) {\r\n    piVar1[0x109] = local_8;\r\n    piVar1[0x10a] = local_c;\r\n    uVar3 = 0;\r\n    if (*(uint *)(in_ECX + 0x530) != 0) {\r\n      pbVar7 = (byte *)(in_ECX + 0x54c);\r\n      do {\r\n        if ((*pbVar7 & 4) != 0) {\r\n          iVar5 = in_ECX + 0x534 + uVar3 * 0x1c;\r\n          if (iVar5 != 0) {\r\n            lVar2 = (longlong)*(int *)(iVar5 + 0xc) * (longlong)*(int *)(param_1 + 8);\r\n            lVar2 = lVar2 + (ulonglong)((int)(lVar2 >> 0x3f) + 0x8000);\r\n            uVar4 = ((uint)lVar2 >> 0x10) + (int)((ulonglong)lVar2 >> 0x20) * 0x10000;\r\n            uVar3 = *(uint *)(*(int *)(in_ECX + 0x24) + 0xc);\r\n            uVar8 = (uint)*(ushort *)(*(int *)(*(int *)(in_ECX + 4) + 0x58) + 0xc);\r\n            iVar5 = 0x28;\r\n            if (((uVar3 != 0) && (uVar8 <= uVar3)) && (5 < uVar8)) {\r\n              iVar5 = 0x34;\r\n            }\r\n            uVar3 = uVar4 + iVar5 & 0xffffffc0;\r\n            if ((uVar4 != uVar3) && (param_2 == 1)) {\r\n              local_8 = FUN_008b7dc0(local_8,uVar3,uVar4);\r\n            }\r\n          }\r\n          break;\r\n        }\r\n        uVar3 = uVar3 + 1;\r\n        pbVar7 = pbVar7 + 0x1c;\r\n      } while (uVar3 < *(uint *)(in_ECX + 0x530));\r\n    }\r\n    *piVar1 = local_8;\r\n    piVar1[1] = local_c;\r\n    if (param_2 == 0) {\r\n      *(int *)(in_ECX + 8) = local_8;\r\n      *(int *)(in_ECX + 0x10) = local_c;\r\n    }\r\n    else {\r\n      *(int *)(in_ECX + 0xc) = local_8;\r\n      *(int *)(in_ECX + 0x14) = local_c;\r\n    }\r\n    if (piVar1[2] != 0) {\r\n      piVar10 = piVar1 + 5;\r\n      uVar3 = 0;\r\n      do {\r\n        lVar2 = (longlong)piVar10[-2] * (longlong)local_8 +\r\n                (ulonglong)((int)((longlong)piVar10[-2] * (longlong)local_8 >> 0x3f) + 0x8000);\r\n        iVar5 = ((uint)lVar2 >> 0x10) + (int)((ulonglong)lVar2 >> 0x20) * 0x10000;\r\n        piVar10[-1] = iVar5;\r\n        *piVar10 = iVar5;\r\n        uVar3 = uVar3 + 1;\r\n        piVar10 = piVar10 + 3;\r\n      } while (uVar3 < (uint)piVar1[2]);\r\n    }\r\n    lVar2 = (longlong)piVar1[0x34] * (longlong)local_8 +\r\n            (ulonglong)((int)((longlong)piVar1[0x34] * (longlong)local_8 >> 0x3f) + 0x8000);\r\n    *(bool *)(piVar1 + 0x35) =\r\n         (int)(((uint)lVar2 >> 0x10) + (int)((ulonglong)lVar2 >> 0x20) * 0x10000) < 0x28;\r\n    if ((param_2 == 1) && (local_18 = 0, piVar1[0x36] != 0)) {\r\n      piVar10 = piVar1 + 0x3a;\r\n      do {\r\n        lVar2 = (longlong)piVar10[-3] * (longlong)local_8 +\r\n                (ulonglong)((int)((longlong)piVar10[-3] * (longlong)local_8 >> 0x3f) + 0x8000);\r\n        iVar5 = ((uint)lVar2 >> 0x10) + (int)((ulonglong)lVar2 >> 0x20) * 0x10000 + local_c;\r\n        piVar10[-2] = iVar5;\r\n        piVar10[-1] = iVar5;\r\n        lVar2 = (longlong)*piVar10 * (longlong)local_8 +\r\n                (ulonglong)((int)((longlong)*piVar10 * (longlong)local_8 >> 0x3f) + 0x8000);\r\n        piVar10[3] = piVar10[3] & 0xfffffffe;\r\n        iVar5 = ((uint)lVar2 >> 0x10) + (int)((ulonglong)lVar2 >> 0x20) * 0x10000 + local_c;\r\n        piVar10[1] = iVar5;\r\n        piVar10[2] = iVar5;\r\n        lVar2 = (longlong)(piVar10[-3] - *piVar10) * (longlong)local_8;\r\n        lVar2 = lVar2 + (ulonglong)((int)(lVar2 >> 0x3f) + 0x8000);\r\n        iVar5 = ((uint)lVar2 >> 0x10) + (int)((ulonglong)lVar2 >> 0x20) * 0x10000;\r\n        if (iVar5 + 0x30U < 0x61) {\r\n          iVar6 = iVar5;\r\n          if (iVar5 < 0) {\r\n            iVar6 = -iVar5;\r\n          }\r\n          iVar9 = 0;\r\n          if (0x1f < iVar6) {\r\n            iVar9 = ((0x2f < iVar6) - 1 & 0xffffffe0) + 0x40;\r\n          }\r\n          if (iVar5 < 0) {\r\n            iVar9 = -iVar9;\r\n          }\r\n          uVar3 = piVar10[-2] + 0x20U & 0xffffffc0;\r\n          piVar10[-1] = uVar3;\r\n          piVar10[3] = piVar10[3] | 1;\r\n          piVar10[2] = uVar3 - iVar9;\r\n        }\r\n        local_18 = local_18 + 1;\r\n        piVar10 = piVar10 + 7;\r\n      } while (local_18 < (uint)piVar1[0x36]);\r\n    }\r\n  }\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8f5120",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8f5120",
+          "name": "FUN_008f5120"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_008f5120(int param_1,undefined4 *param_2)\r\n\r\n{\r\n  *(undefined4 *)(param_1 + 0x18) = param_2[5];\r\n  *(undefined4 *)(param_1 + 4) = *param_2;\r\n  *(undefined4 *)(param_1 + 0x1c) = param_2[6];\r\n  FUN_008f4e50(param_2,0);\r\n  FUN_008f4e50(param_2,1);\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8f5160",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8f5160",
+          "name": "FUN_008f5160"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nint FUN_008f5160(void)\r\n\r\n{\r\n  uint uVar1;\r\n  int *piVar2;\r\n  byte bVar3;\r\n  int iVar4;\r\n  bool bVar5;\r\n  int in_EAX;\r\n  int iVar6;\r\n  uint uVar7;\r\n  int iVar8;\r\n  int iVar9;\r\n  undefined4 *in_ECX;\r\n  int iVar10;\r\n  short *psVar11;\r\n  byte *pbVar12;\r\n  byte *pbVar13;\r\n  undefined4 *puVar14;\r\n  byte *pbVar15;\r\n  undefined4 local_64 [8];\r\n  undefined4 local_44;\r\n  byte *local_34;\r\n  undefined4 local_30;\r\n  undefined4 *local_2c;\r\n  int local_20;\r\n  undefined4 *local_1c;\r\n  byte *local_10;\r\n  int local_c;\r\n  char local_5;\r\n  \r\n  local_30 = *in_ECX;\r\n  piVar2 = in_ECX + in_EAX * 7 + 0xb;\r\n  local_1c = (undefined4 *)in_ECX[10];\r\n  pbVar13 = (byte *)0x0;\r\n  local_2c = local_1c + in_ECX[9];\r\n  local_10 = (byte *)0x0;\r\n  _memset(local_64,0,0x30);\r\n  iVar6 = piVar2[6];\r\n  local_44 = 32000;\r\n  local_64[0]._0_1_ = 0;\r\n  if (iVar6 < 0) {\r\n    iVar6 = -iVar6;\r\n  }\r\n  *piVar2 = 0;\r\n  uVar7 = in_ECX[7];\r\n  uVar1 = uVar7 + in_ECX[6] * 0x28;\r\n  if (in_EAX == 0) {\r\n    for (; uVar7 < uVar1; uVar7 = uVar7 + 0x28) {\r\n      *(int *)(uVar7 + 0x18) = (int)*(short *)(uVar7 + 0xc);\r\n      *(int *)(uVar7 + 0x1c) = (int)*(short *)(uVar7 + 0xe);\r\n    }\r\n  }\r\n  else {\r\n    for (; uVar7 < uVar1; uVar7 = uVar7 + 0x28) {\r\n      *(int *)(uVar7 + 0x18) = (int)*(short *)(uVar7 + 0xe);\r\n      *(int *)(uVar7 + 0x1c) = (int)*(short *)(uVar7 + 0xc);\r\n    }\r\n  }\r\n  local_20 = iVar6;\r\n  if (local_1c < local_2c) {\r\n    do {\r\n      pbVar15 = (byte *)*local_1c;\r\n      bVar5 = false;\r\n      local_c = 32000;\r\n      iVar10 = -32000;\r\n      if (pbVar15 != *(byte **)(pbVar15 + 0x24)) {\r\n        bVar3 = (*(byte **)(pbVar15 + 0x24))[3];\r\n        iVar8 = (int)(char)bVar3;\r\n        if ((char)bVar3 < '\\0') {\r\n          iVar8 = -iVar8;\r\n        }\r\n        pbVar12 = pbVar15;\r\n        if (iVar8 == iVar6) {\r\n          iVar8 = (int)(char)pbVar15[3];\r\n          if ((char)pbVar15[3] < '\\0') {\r\n            iVar8 = -iVar8;\r\n          }\r\n          if (iVar8 == iVar6) {\r\n            do {\r\n              pbVar12 = *(byte **)(pbVar12 + 0x24);\r\n              iVar8 = (int)(char)pbVar12[3];\r\n              if ((char)pbVar12[3] < '\\0') {\r\n                iVar8 = -iVar8;\r\n              }\r\n              if (iVar8 != iVar6) {\r\n                pbVar12 = *(byte **)(pbVar12 + 0x20);\r\n                break;\r\n              }\r\n            } while (pbVar12 != pbVar15);\r\n          }\r\n        }\r\n        local_5 = '\\0';\r\n        pbVar15 = pbVar12;\r\n        local_34 = pbVar12;\r\n        do {\r\n          if (bVar5) {\r\n            iVar8 = *(int *)(pbVar12 + 0x18);\r\n            if (iVar8 < local_c) {\r\n              local_c = iVar8;\r\n            }\r\n            if (iVar10 < iVar8) {\r\n              iVar10 = iVar8;\r\n            }\r\n            if (((char)pbVar12[3] != local_20) || (pbVar12 == pbVar15)) {\r\n              *(byte **)(pbVar13 + 0x2c) = pbVar12;\r\n              *(short *)(pbVar13 + 2) = (short)(iVar10 + local_c >> 1);\r\n              if (((**(byte **)(pbVar13 + 0x28) | *pbVar12) & 3) != 0) {\r\n                *pbVar13 = *pbVar13 | 1;\r\n              }\r\n              iVar10 = *(int *)(pbVar12 + 0x1c);\r\n              iVar8 = *(int *)(*(int *)(pbVar13 + 0x28) + 0x1c);\r\n              local_c = iVar10;\r\n              if (iVar8 < iVar10) {\r\n                local_c = iVar8;\r\n              }\r\n              if (iVar10 < iVar8) {\r\n                iVar10 = iVar8;\r\n              }\r\n              *(undefined2 *)(pbVar13 + 4) = (undefined2)local_c;\r\n              *(short *)(pbVar13 + 6) = (short)iVar10;\r\n              *(short *)(pbVar13 + 8) = (short)iVar10 - *(short *)(pbVar13 + 4);\r\n              bVar5 = false;\r\n              local_10 = (byte *)0x0;\r\n              pbVar13 = (byte *)0x0;\r\n              goto LAB_008f530c;\r\n            }\r\n          }\r\n          else {\r\nLAB_008f530c:\r\n            if (pbVar12 == pbVar15) {\r\n              if (local_5 != '\\0') break;\r\n              local_5 = '\\x01';\r\n            }\r\n          }\r\n          if (!bVar5) {\r\n            bVar3 = pbVar12[3];\r\n            iVar9 = (int)(char)bVar3;\r\n            iVar8 = iVar9;\r\n            if ((char)bVar3 < '\\0') {\r\n              iVar8 = -iVar9;\r\n            }\r\n            if (iVar8 == iVar6) {\r\n              iVar10 = FUN_008f40d0(local_30,&local_10);\r\n              if (iVar10 != 0) {\r\n                return iVar10;\r\n              }\r\n              puVar14 = local_64;\r\n              pbVar13 = local_10;\r\n              for (iVar10 = 0xc; iVar10 != 0; iVar10 = iVar10 + -1) {\r\n                *(undefined4 *)pbVar13 = *puVar14;\r\n                puVar14 = puVar14 + 1;\r\n                pbVar13 = pbVar13 + 4;\r\n              }\r\n              local_10[1] = bVar3;\r\n              iVar10 = *(int *)(pbVar12 + 0x18);\r\n              *(byte **)(local_10 + 0x28) = pbVar12;\r\n              *(byte **)(local_10 + 0x2c) = pbVar12;\r\n              bVar5 = true;\r\n              pbVar13 = local_10;\r\n              pbVar15 = local_34;\r\n              local_20 = iVar9;\r\n              local_c = iVar10;\r\n            }\r\n          }\r\n          pbVar12 = *(byte **)(pbVar12 + 0x20);\r\n        } while( true );\r\n      }\r\n      local_1c = local_1c + 1;\r\n    } while (local_1c < local_2c);\r\n  }\r\n  uVar1 = piVar2[2];\r\n  uVar7 = *piVar2 * 0x30 + uVar1;\r\n  if (uVar1 < uVar7) {\r\n    psVar11 = (short *)(uVar1 + 8);\r\n    iVar6 = ((uVar7 - uVar1) - 1) / 0x30 + 1;\r\n    do {\r\n      iVar10 = *(int *)(psVar11 + 0x10);\r\n      iVar8 = *(int *)(psVar11 + 0x12);\r\n      iVar9 = *(int *)(iVar10 + 0x1c);\r\n      iVar4 = *(int *)(iVar8 + 0x1c);\r\n      if (iVar10 != iVar8) {\r\n        iVar10 = *(int *)(*(int *)(iVar10 + 0x24) + 0x1c);\r\n        if (iVar9 < iVar4) {\r\n          if (iVar10 < iVar9) {\r\n            *psVar11 = *psVar11 + (short)(iVar9 - iVar10 >> 1);\r\n          }\r\n          iVar10 = *(int *)(*(int *)(iVar8 + 0x20) + 0x1c);\r\n          if (iVar4 < iVar10) {\r\n            *psVar11 = *psVar11 + (short)(iVar10 - iVar4 >> 1);\r\n          }\r\n        }\r\n        else {\r\n          if (iVar9 < iVar10) {\r\n            *psVar11 = *psVar11 + (short)(iVar10 - iVar9 >> 1);\r\n          }\r\n          iVar10 = *(int *)(*(int *)(iVar8 + 0x20) + 0x1c);\r\n          if (iVar10 < iVar4) {\r\n            *psVar11 = *psVar11 + (short)(iVar4 - iVar10 >> 1);\r\n          }\r\n        }\r\n      }\r\n      psVar11 = psVar11 + 0x18;\r\n      iVar6 = iVar6 + -1;\r\n    } while (iVar6 != 0);\r\n  }\r\n  return 0;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8f5430",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8f5430",
+          "name": "FUN_008f5430"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_008f5430(void)\r\n\r\n{\r\n  int iVar1;\r\n  int iVar2;\r\n  int in_EAX;\r\n  int iVar3;\r\n  int iVar4;\r\n  int iVar5;\r\n  int *piVar6;\r\n  int in_ECX;\r\n  int *piVar7;\r\n  int *piVar8;\r\n  int *piVar9;\r\n  int local_10;\r\n  int local_c;\r\n  int local_8;\r\n  \r\n  iVar2 = in_ECX + 0x2c + in_EAX * 0x1c;\r\n  piVar6 = *(int **)(iVar2 + 8);\r\n  iVar3 = *(int *)(*(int *)(in_ECX + 0x6c) + 0x28);\r\n  iVar1 = iVar3 * 8;\r\n  local_8 = (int)(iVar1 + (iVar1 >> 0x1f & 0x7ffU)) >> 0xb;\r\n  piVar9 = piVar6 + *(int *)(in_ECX + 0x2c + in_EAX * 0x1c) * 0xc;\r\n  if (local_8 == 0) {\r\n    local_8 = 1;\r\n  }\r\n  iVar3 = iVar3 * 6000;\r\n  if (piVar6 < piVar9) {\r\n    iVar1 = (uint)((int)piVar9 + (-1 - (int)piVar6)) / 0x30 + 1;\r\n    piVar7 = piVar6 + 10;\r\n    local_10 = iVar1;\r\n    do {\r\n      if (((int)*(char *)((int)piVar7 + -0x27) == *(int *)(iVar2 + 0x18)) && (*piVar7 != piVar7[1]))\r\n      {\r\n        piVar8 = piVar6 + 1;\r\n        local_c = iVar1;\r\n        do {\r\n          if (((int)*(char *)((int)piVar8 + -3) + (int)*(char *)((int)piVar7 + -0x27) == 0) &&\r\n             ((int)*(short *)((int)piVar7 + -0x26) < (int)*(short *)((int)piVar8 + -2))) {\r\n            iVar5 = (int)(short)piVar7[-9];\r\n            if ((int)(short)piVar7[-9] < (int)(short)*piVar8) {\r\n              iVar5 = (int)(short)*piVar8;\r\n            }\r\n            iVar4 = (int)*(short *)((int)piVar7 + -0x22);\r\n            if ((int)*(short *)((int)piVar8 + 2) < (int)*(short *)((int)piVar7 + -0x22)) {\r\n              iVar4 = (int)*(short *)((int)piVar8 + 2);\r\n            }\r\n            if (local_8 <= iVar4 - iVar5) {\r\n              iVar5 = ((int)(iVar3 + (iVar3 >> 0x1f & 0x7ffU)) >> 0xb) / (iVar4 - iVar5) +\r\n                      ((int)*(short *)((int)piVar8 + -2) - (int)*(short *)((int)piVar7 + -0x26));\r\n              if (iVar5 < piVar7[-2]) {\r\n                piVar7[-2] = iVar5;\r\n                piVar7[-5] = (int)(piVar8 + -1);\r\n              }\r\n              if (iVar5 < piVar8[7]) {\r\n                piVar8[7] = iVar5;\r\n                piVar8[4] = (int)(piVar7 + -10);\r\n              }\r\n            }\r\n          }\r\n          piVar8 = piVar8 + 0xc;\r\n          local_c = local_c + -1;\r\n        } while (local_c != 0);\r\n      }\r\n      piVar7 = piVar7 + 0xc;\r\n      local_10 = local_10 + -1;\r\n    } while (local_10 != 0);\r\n    if (piVar6 < piVar9) {\r\n      piVar6 = piVar6 + 5;\r\n      do {\r\n        iVar1 = *piVar6;\r\n        if ((iVar1 != 0) && (*(int **)(iVar1 + 0x14) != piVar6 + -5)) {\r\n          *piVar6 = 0;\r\n          piVar6[1] = *(int *)(iVar1 + 0x14);\r\n        }\r\n        piVar7 = piVar6 + 7;\r\n        piVar6 = piVar6 + 0xc;\r\n      } while (piVar7 < piVar9);\r\n    }\r\n  }\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8f55a0",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8f55a0",
+          "name": "FUN_008f55a0"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nint FUN_008f55a0(void)\r\n\r\n{\r\n  char *pcVar1;\r\n  int *piVar2;\r\n  longlong lVar3;\r\n  bool bVar4;\r\n  undefined2 *puVar5;\r\n  int in_EAX;\r\n  int iVar6;\r\n  short *psVar7;\r\n  undefined4 *in_ECX;\r\n  int iVar8;\r\n  undefined1 *puVar9;\r\n  undefined1 *puVar10;\r\n  int iVar11;\r\n  undefined1 *puVar12;\r\n  char *pcVar13;\r\n  byte *pbVar14;\r\n  char *pcVar15;\r\n  undefined2 *local_28;\r\n  undefined4 local_24;\r\n  int local_20;\r\n  char *local_1c;\r\n  int local_14;\r\n  int local_10;\r\n  int local_c;\r\n  \r\n  piVar2 = in_ECX + in_EAX * 7 + 0xb;\r\n  local_24 = *in_ECX;\r\n  iVar6 = in_ECX[0x1b];\r\n  pcVar13 = (char *)piVar2[2];\r\n  pcVar15 = pcVar13 + *piVar2 * 0x30;\r\n  piVar2[3] = 0;\r\n  local_1c = pcVar15;\r\n  if (in_EAX == 0) {\r\n    local_c = in_ECX[1];\r\n    local_10 = FUN_008b7f40(0x40,in_ECX[3]);\r\n  }\r\n  else {\r\n    local_c = in_ECX[3];\r\n    local_10 = 0;\r\n  }\r\n  local_20 = *(int *)(in_EAX * 0x42c + iVar6 + 0xf8);\r\n  lVar3 = (longlong)local_20 * (longlong)local_c +\r\n          (ulonglong)((int)((longlong)local_20 * (longlong)local_c >> 0x3f) + 0x8000);\r\n  iVar6 = ((uint)lVar3 >> 0x10) + (int)((ulonglong)lVar3 >> 0x20) * 0x10000;\r\n  if (0x10 < iVar6) {\r\n    iVar6 = 0x10;\r\n  }\r\n  local_20 = FUN_008b7f40(iVar6,local_c);\r\n  if (pcVar13 < pcVar15) {\r\n    pcVar13 = pcVar13 + 1;\r\n    do {\r\n      if ((local_10 <= *(short *)(pcVar13 + 7)) &&\r\n         ((*(int *)(pcVar13 + 0x17) == 0 || (local_10 * 3 <= *(short *)(pcVar13 + 7) * 2)))) {\r\n        iVar6 = 0;\r\n        if (0 < piVar2[3]) {\r\n          psVar7 = (short *)piVar2[5];\r\n          do {\r\n            iVar8 = (int)*(short *)(pcVar13 + 1) - (int)*psVar7;\r\n            if (iVar8 < 0) {\r\n              iVar8 = -iVar8;\r\n            }\r\n            if ((iVar8 < local_20) && (*(char *)((int)psVar7 + 0xd) == *pcVar13)) {\r\n              *(undefined4 *)(pcVar13 + 0xf) = *(undefined4 *)(psVar7 + 0x14);\r\n              *(char **)(*(int *)(psVar7 + 0x16) + 0x10) = pcVar13 + -1;\r\n              *(char **)(psVar7 + 0x16) = pcVar13 + -1;\r\n              pcVar15 = local_1c;\r\n              goto LAB_008f5751;\r\n            }\r\n            iVar6 = iVar6 + 1;\r\n            psVar7 = psVar7 + 0x18;\r\n          } while (iVar6 < piVar2[3]);\r\n        }\r\n        iVar6 = FUN_008f4160(piVar2,(int)*(short *)(pcVar13 + 1),(int)*pcVar13,local_24,&local_28);\r\n        puVar5 = local_28;\r\n        if (iVar6 != 0) {\r\n          return iVar6;\r\n        }\r\n        _memset(local_28,0,0x30);\r\n        *(char **)(puVar5 + 0x14) = pcVar13 + -1;\r\n        *(char **)(puVar5 + 0x16) = pcVar13 + -1;\r\n        *(char *)((int)puVar5 + 0xd) = *pcVar13;\r\n        *puVar5 = *(undefined2 *)(pcVar13 + 1);\r\n        lVar3 = (longlong)(int)*(short *)(pcVar13 + 1) * (longlong)local_c +\r\n                (ulonglong)\r\n                ((int)((longlong)(int)*(short *)(pcVar13 + 1) * (longlong)local_c >> 0x3f) + 0x8000)\r\n        ;\r\n        iVar6 = ((uint)lVar3 >> 0x10) + (int)((ulonglong)lVar3 >> 0x20) * 0x10000;\r\n        *(int *)(puVar5 + 2) = iVar6;\r\n        *(int *)(puVar5 + 4) = iVar6;\r\n        *(char **)(pcVar13 + 0xf) = pcVar13 + -1;\r\n        pcVar15 = local_1c;\r\n      }\r\nLAB_008f5751:\r\n      pcVar1 = pcVar13 + 0x2f;\r\n      pcVar13 = pcVar13 + 0x30;\r\n    } while (pcVar1 < pcVar15);\r\n  }\r\n  puVar9 = (undefined1 *)piVar2[5];\r\n  puVar12 = puVar9 + piVar2[3] * 0x30;\r\n  puVar10 = puVar9;\r\n  if (puVar9 < puVar12) {\r\n    do {\r\n      iVar6 = *(int *)(puVar10 + 0x28);\r\n      if (iVar6 != 0) {\r\n        do {\r\n          *(undefined1 **)(iVar6 + 0xc) = puVar10;\r\n          iVar6 = *(int *)(iVar6 + 0x10);\r\n        } while (iVar6 != *(int *)(puVar10 + 0x28));\r\n      }\r\n      puVar10 = puVar10 + 0x30;\r\n    } while (puVar10 < puVar12);\r\n    if (puVar9 < puVar12) {\r\n      puVar9 = puVar9 + 0xc;\r\n      do {\r\n        pbVar14 = *(byte **)(puVar9 + 0x1c);\r\n        local_10 = 0;\r\n        local_14 = 0;\r\n        do {\r\n          if ((*pbVar14 & 1) == 0) {\r\n            local_14 = local_14 + 1;\r\n          }\r\n          else {\r\n            local_10 = local_10 + 1;\r\n          }\r\n          iVar6 = *(int *)(pbVar14 + 0x18);\r\n          if (((iVar6 == 0) || (*(undefined1 **)(iVar6 + 0xc) == (undefined1 *)0x0)) ||\r\n             (*(undefined1 **)(iVar6 + 0xc) == puVar9 + -0xc)) {\r\n            bVar4 = false;\r\n          }\r\n          else {\r\n            bVar4 = true;\r\n          }\r\n          iVar8 = *(int *)(pbVar14 + 0x14);\r\n          if (((iVar8 != 0) && (*(int *)(iVar8 + 0xc) != 0)) || (bVar4)) {\r\n            psVar7 = *(short **)(puVar9 + 0xc);\r\n            if (bVar4) {\r\n              psVar7 = *(short **)(puVar9 + 0x10);\r\n              iVar8 = iVar6;\r\n            }\r\n            if (psVar7 == (short *)0x0) {\r\nLAB_008f582a:\r\n              psVar7 = *(short **)(iVar8 + 0xc);\r\n            }\r\n            else {\r\n              iVar6 = (int)*(short *)(puVar9 + -0xc) - (int)*psVar7;\r\n              if (iVar6 < 0) {\r\n                iVar6 = -iVar6;\r\n              }\r\n              iVar11 = (int)*(short *)(pbVar14 + 2) - (int)*(short *)(iVar8 + 2);\r\n              if (iVar11 < 0) {\r\n                iVar11 = -iVar11;\r\n              }\r\n              if (iVar11 < iVar6) goto LAB_008f582a;\r\n            }\r\n            if (bVar4) {\r\n              *(short **)(puVar9 + 0x10) = psVar7;\r\n              *(byte *)(psVar7 + 6) = *(byte *)(psVar7 + 6) | 2;\r\n            }\r\n            else {\r\n              *(short **)(puVar9 + 0xc) = psVar7;\r\n            }\r\n          }\r\n          pbVar14 = *(byte **)(pbVar14 + 0x10);\r\n        } while (pbVar14 != *(byte **)(puVar9 + 0x1c));\r\n        *puVar9 = 0;\r\n        if ((0 < local_10) && (local_14 <= local_10)) {\r\n          *puVar9 = 1;\r\n        }\r\n        if ((*(int *)(puVar9 + 0x10) != 0) && (*(int *)(puVar9 + 0xc) != 0)) {\r\n          *(undefined4 *)(puVar9 + 0x10) = 0;\r\n        }\r\n        puVar10 = puVar9 + 0x24;\r\n        puVar9 = puVar9 + 0x30;\r\n      } while (puVar10 < puVar12);\r\n    }\r\n  }\r\n  return 0;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8f5890",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8f5890",
+          "name": "FUN_008f5890"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_008f5890(void)\r\n\r\n{\r\n  int iVar1;\r\n  \r\n  iVar1 = FUN_008f5160();\r\n  if (iVar1 == 0) {\r\n    FUN_008f5430();\r\n    FUN_008f55a0();\r\n    return;\r\n  }\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8f58b0",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8f58b0",
+          "name": "FUN_008f58b0"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_008f58b0(int param_1,int param_2)\r\n\r\n{\r\n  int iVar1;\r\n  longlong lVar2;\r\n  bool bVar3;\r\n  int iVar4;\r\n  short *psVar5;\r\n  short *psVar6;\r\n  int *piVar7;\r\n  uint local_28;\r\n  int *local_18;\r\n  int local_10;\r\n  int local_c;\r\n  \r\n  psVar5 = *(short **)(param_1 + 0x5c);\r\n  iVar1 = *(int *)(param_2 + 0x458);\r\n  psVar6 = psVar5 + *(int *)(param_1 + 0x54) * 0x18;\r\n  for (; psVar5 < psVar6; psVar5 = psVar5 + 0x18) {\r\n    local_18 = (int *)0x0;\r\n    lVar2 = (longlong)(int)(*(uint *)(param_2 + 0x28) / 0x28) * (longlong)iVar1;\r\n    lVar2 = lVar2 + (ulonglong)((int)(lVar2 >> 0x3f) + 0x8000);\r\n    local_10 = ((uint)lVar2 >> 0x10) + (int)((ulonglong)lVar2 >> 0x20) * 0x10000;\r\n    if (0x20 < local_10) {\r\n      local_10 = 0x20;\r\n    }\r\n    local_28 = 0;\r\n    if (*(int *)(param_2 + 0x530) != 0) {\r\n      piVar7 = (int *)(param_2 + 0x540);\r\n      do {\r\n        if (((piVar7[3] & 1U) != 0) &&\r\n           (bVar3 = (bool)((byte)((uint)piVar7[3] >> 1) & 1),\r\n           ((int)*(char *)((int)psVar5 + 0xd) == *(int *)(param_1 + 0x60)) != bVar3)) {\r\n          local_c = (int)*psVar5 - piVar7[-3];\r\n          if (local_c < 0) {\r\n            local_c = -local_c;\r\n          }\r\n          lVar2 = (longlong)local_c * (longlong)iVar1 +\r\n                  (ulonglong)((int)((longlong)local_c * (longlong)iVar1 >> 0x3f) + 0x8000);\r\n          iVar4 = ((uint)lVar2 >> 0x10) + (int)((ulonglong)lVar2 >> 0x20) * 0x10000;\r\n          if (iVar4 < local_10) {\r\n            local_18 = piVar7 + -3;\r\n            local_10 = iVar4;\r\n          }\r\n          if ((((*(byte *)(psVar5 + 6) & 1) != 0) && (iVar4 != 0)) &&\r\n             ((int)*psVar5 < piVar7[-3] != bVar3)) {\r\n            local_c = (int)*psVar5 - *piVar7;\r\n            if (local_c < 0) {\r\n              local_c = -local_c;\r\n            }\r\n            lVar2 = (longlong)local_c * (longlong)iVar1 +\r\n                    (ulonglong)((int)((longlong)local_c * (longlong)iVar1 >> 0x3f) + 0x8000);\r\n            iVar4 = ((uint)lVar2 >> 0x10) + (int)((ulonglong)lVar2 >> 0x20) * 0x10000;\r\n            if (iVar4 < local_10) {\r\n              local_18 = piVar7;\r\n              local_10 = iVar4;\r\n            }\r\n          }\r\n        }\r\n        local_28 = local_28 + 1;\r\n        piVar7 = piVar7 + 7;\r\n      } while (local_28 < *(uint *)(param_2 + 0x530));\r\n      if (local_18 != (int *)0x0) {\r\n        *(int **)(psVar5 + 10) = local_18;\r\n      }\r\n    }\r\n  }\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8f5a60",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8f5a60",
+          "name": "FUN_008f5a60"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nundefined4 FUN_008f5a60(undefined4 param_1,int param_2)\r\n\r\n{\r\n  int iVar1;\r\n  int iVar2;\r\n  uint uVar3;\r\n  int extraout_ECX;\r\n  int extraout_EDX;\r\n  uint uVar4;\r\n  \r\n  iVar1 = *(int *)(param_2 + 4);\r\n  FUN_008f4350();\r\n  uVar4 = *(uint *)(extraout_ECX + 100);\r\n  *(undefined4 *)(extraout_ECX + 4) = *(undefined4 *)(extraout_EDX + 0x2c);\r\n  *(undefined4 *)(extraout_ECX + 8) = *(undefined4 *)(extraout_EDX + 0x30);\r\n  *(undefined4 *)(extraout_ECX + 0xc) = *(undefined4 *)(extraout_EDX + 0x458);\r\n  *(undefined4 *)(extraout_ECX + 0x10) = *(undefined4 *)(extraout_EDX + 0x45c);\r\n  iVar2 = *(int *)(extraout_EDX + 0x18);\r\n  uVar3 = 0;\r\n  if ((iVar2 == 2) || (iVar2 == 3)) {\r\n    uVar3 = 1;\r\n  }\r\n  if ((iVar2 == 2) || (iVar2 == 4)) {\r\n    uVar3 = uVar3 | 2;\r\n  }\r\n  if (iVar2 != 1) {\r\n    uVar3 = uVar3 | 4;\r\n  }\r\n  if (iVar2 == 2) {\r\n    uVar3 = uVar3 | 8;\r\nLAB_008f5ace:\r\n    if ((*(byte *)(iVar1 + 0xc) & 1) == 0) goto LAB_008f5ad7;\r\n  }\r\n  else if (iVar2 != 1) goto LAB_008f5ace;\r\n  uVar4 = uVar4 | 1;\r\nLAB_008f5ad7:\r\n  *(uint *)(extraout_ECX + 100) = uVar4;\r\n  *(uint *)(extraout_ECX + 0x68) = uVar3;\r\n  return 0;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8f5af0",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8f5af0",
+          "name": "FUN_008f5af0"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nint FUN_008f5af0(void)\r\n\r\n{\r\n  int in_EAX;\r\n  int in_ECX;\r\n  int iVar1;\r\n  uint uVar2;\r\n  int in_EDX;\r\n  int iVar3;\r\n  int *piVar4;\r\n  int iVar5;\r\n  int local_8;\r\n  \r\n  iVar5 = 0x62;\r\n  iVar3 = in_EAX;\r\n  if (0 < in_ECX) {\r\n    piVar4 = (int *)(in_EDX + 4);\r\n    local_8 = in_ECX;\r\n    do {\r\n      iVar1 = in_EAX - *piVar4;\r\n      if (iVar1 < 0) {\r\n        iVar1 = -iVar1;\r\n      }\r\n      if (iVar1 < iVar5) {\r\n        iVar3 = *piVar4;\r\n        iVar5 = iVar1;\r\n      }\r\n      piVar4 = piVar4 + 3;\r\n      local_8 = local_8 + -1;\r\n    } while (local_8 != 0);\r\n  }\r\n  uVar2 = iVar3 + 0x20U & 0xffffffc0;\r\n  if (in_EAX < iVar3) {\r\n    if ((int)(uVar2 - 0x30) < in_EAX) {\r\n      in_EAX = iVar3;\r\n    }\r\n  }\r\n  else if (in_EAX < (int)(uVar2 + 0x30)) {\r\n    return iVar3;\r\n  }\r\n  return in_EAX;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8f5b50",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8f5b50",
+          "name": "FUN_008f5b50"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_008f5b50(void)\r\n\r\n{\r\n  uint uVar1;\r\n  int in_ECX;\r\n  int in_EDX;\r\n  \r\n  uVar1 = *(uint *)(in_EDX + 0x68);\r\n  if (((uVar1 & 4) != 0) && (*(char *)(in_ECX * 0x42c + *(int *)(in_EDX + 0x6c) + 0x100) == '\\0')) {\r\n    if (in_ECX == 1) {\r\n      uVar1 = uVar1 & 2;\r\n    }\r\n    else {\r\n      uVar1 = uVar1 & 1;\r\n    }\r\n    if (uVar1 != 0) {\r\n      FUN_008f5af0();\r\n    }\r\n  }\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8f5cc0",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8f5cc0",
+          "name": "FUN_008f5cc0"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_008f5cc0(void)\r\n\r\n{\r\n  int iVar1;\r\n  int unaff_ESI;\r\n  int unaff_EDI;\r\n  \r\n  iVar1 = FUN_008f5b50(*(undefined1 *)(unaff_EDI + 0xc),*(undefined1 *)(unaff_ESI + 0xc));\r\n  *(int *)(unaff_ESI + 8) = iVar1 + *(int *)(unaff_EDI + 8);\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8f5cf0",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8f5cf0",
+          "name": "FUN_008f5cf0"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_008f5cf0(void)\r\n\r\n{\r\n  int in_EAX;\r\n  int in_ECX;\r\n  \r\n  *(int *)(in_EAX + 8) = (*(int *)(in_ECX + 8) - *(int *)(in_ECX + 4)) + *(int *)(in_EAX + 4);\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8f5d00",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8f5d00",
+          "name": "FUN_008f5d00"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nbyte * FUN_008f5d00(byte *param_1,int param_2)\r\n\r\n{\r\n  int *piVar1;\r\n  byte bVar2;\r\n  undefined1 uVar3;\r\n  byte *pbVar4;\r\n  undefined4 uVar5;\r\n  byte *pbVar6;\r\n  int iVar7;\r\n  int iVar8;\r\n  byte *pbVar9;\r\n  uint uVar10;\r\n  int iVar11;\r\n  int iVar12;\r\n  byte *pbVar13;\r\n  int iVar14;\r\n  uint uVar15;\r\n  byte *pbVar16;\r\n  byte *pbVar17;\r\n  int iVar18;\r\n  int local_1c;\r\n  byte *local_10;\r\n  \r\n  iVar8 = (int)param_1 + 0x2c + param_2 * 0x1c;\r\n  pbVar4 = *(byte **)(iVar8 + 0x14);\r\n  pbVar6 = pbVar4 + *(int *)(iVar8 + 0xc) * 0x30;\r\n  local_10 = (byte *)0x0;\r\n  local_1c = 0;\r\n  if (param_2 == 1) {\r\n    pbVar13 = pbVar4;\r\n    if (pbVar4 < pbVar6) {\r\n      do {\r\n        if ((pbVar13[0xc] & 4) == 0) {\r\n          iVar8 = *(int *)(pbVar13 + 0x14);\r\n          pbVar16 = *(byte **)(pbVar13 + 0x18);\r\n          pbVar9 = pbVar16;\r\n          pbVar17 = pbVar13;\r\n          if (((iVar8 != 0) ||\r\n              ((pbVar16 != (byte *)0x0 &&\r\n               (iVar8 = *(int *)(pbVar16 + 0x14), pbVar9 = pbVar13, pbVar17 = pbVar16, iVar8 != 0)))\r\n              ) && (pbVar17 != (byte *)0x0)) {\r\n            uVar5 = *(undefined4 *)(iVar8 + 8);\r\n            pbVar17[0xc] = pbVar17[0xc] | 4;\r\n            *(undefined4 *)(pbVar17 + 8) = uVar5;\r\n            if ((pbVar9 != (byte *)0x0) && (*(int *)(pbVar9 + 0x14) == 0)) {\r\n              FUN_008f5cc0(1);\r\n              pbVar9[0xc] = pbVar9[0xc] | 4;\r\n            }\r\n            if (local_10 == (byte *)0x0) {\r\n              local_10 = pbVar13;\r\n            }\r\n          }\r\n        }\r\n        pbVar13 = pbVar13 + 0x30;\r\n      } while (pbVar13 < pbVar6);\r\n      goto LAB_008f5da9;\r\n    }\r\n  }\r\n  else {\r\nLAB_008f5da9:\r\n    if (pbVar4 < pbVar6) {\r\n      pbVar13 = pbVar4 + 0xc;\r\n      do {\r\n        bVar2 = *pbVar13;\r\n        if ((bVar2 & 4) == 0) {\r\n          iVar8 = *(int *)(pbVar13 + 0xc);\r\n          if (iVar8 == 0) {\r\n            local_1c = local_1c + 1;\r\n          }\r\n          else if (*(int *)(iVar8 + 0x14) == 0) {\r\n            if (local_10 == (byte *)0x0) {\r\n              iVar11 = *(int *)(iVar8 + 4);\r\n              iVar14 = *(int *)(pbVar13 + -8);\r\n              iVar7 = FUN_008f5b50(bVar2,*(undefined1 *)(iVar8 + 0xc));\r\n              if (iVar7 < 0x41) {\r\n                iVar12 = 0x20;\r\n                local_10 = (byte *)0x20;\r\n              }\r\n              else {\r\n                iVar12 = 0x26;\r\n                local_10 = (byte *)0x1a;\r\n              }\r\n              if (iVar7 < 0x60) {\r\n                iVar14 = (iVar11 - iVar14 >> 1) + iVar14;\r\n                uVar10 = iVar14 + 0x20U & 0xffffffc0;\r\n                iVar14 = iVar14 - uVar10;\r\n                iVar11 = iVar14 + iVar12;\r\n                if (iVar11 < 0) {\r\n                  iVar11 = -iVar11;\r\n                }\r\n                iVar14 = iVar14 - (int)local_10;\r\n                if (iVar14 < 0) {\r\n                  iVar14 = -iVar14;\r\n                }\r\n                if (iVar11 < iVar14) {\r\n                  local_10 = (byte *)-iVar12;\r\n                }\r\n                iVar11 = (uVar10 + (int)local_10) - iVar7 / 2;\r\n                *(int *)(pbVar13 + -4) = iVar11;\r\n                *(int *)(iVar8 + 8) = iVar11 + iVar7;\r\n              }\r\n              else {\r\n                *(uint *)(pbVar13 + -4) = iVar14 + 0x20U & 0xffffffc0;\r\n              }\r\n              *pbVar13 = *pbVar13 | 4;\r\n              local_10 = pbVar13 + -0xc;\r\n              FUN_008f5cc0(param_2);\r\n            }\r\n            else {\r\n              iVar7 = *(int *)(iVar8 + 4) - *(int *)(pbVar13 + -8);\r\n              iVar14 = (*(int *)(local_10 + 8) - *(int *)(local_10 + 4)) + *(int *)(pbVar13 + -8);\r\n              uVar3 = *(undefined1 *)(iVar8 + 0xc);\r\n              iVar12 = iVar7 >> 1;\r\n              iVar18 = iVar12 + iVar14;\r\n              iVar11 = FUN_008f5b50(bVar2,uVar3);\r\n              if ((*(byte *)(iVar8 + 0xc) & 4) == 0) {\r\n                if (iVar11 < 0x60) {\r\n                  uVar10 = iVar18 + 0x20U & 0xffffffc0;\r\n                  if (iVar11 < 0x41) {\r\n                    iVar7 = 0x20;\r\n                    iVar14 = 0x20;\r\n                  }\r\n                  else {\r\n                    iVar7 = 0x26;\r\n                    iVar14 = 0x1a;\r\n                  }\r\n                  iVar12 = (iVar7 - uVar10) + iVar18;\r\n                  if (iVar12 < 0) {\r\n                    iVar12 = -iVar12;\r\n                  }\r\n                  iVar18 = (iVar18 - iVar14) - uVar10;\r\n                  if (iVar18 < 0) {\r\n                    iVar18 = -iVar18;\r\n                  }\r\n                  if (iVar12 < iVar18) {\r\n                    iVar14 = -iVar7;\r\n                  }\r\n                  *(uint *)(pbVar13 + -4) = (uVar10 + iVar14) - iVar11 / 2;\r\n                  *(uint *)(iVar8 + 8) = iVar11 / 2 + uVar10 + iVar14;\r\n                }\r\n                else {\r\n                  iVar18 = FUN_008f5b50(bVar2,uVar3);\r\n                  uVar10 = iVar14 + 0x20U & 0xffffffc0;\r\n                  iVar12 = (iVar18 >> 1) - (iVar12 + iVar14);\r\n                  iVar11 = iVar12 + uVar10;\r\n                  if (iVar11 < 0) {\r\n                    iVar11 = -iVar11;\r\n                  }\r\n                  uVar15 = (iVar7 + 0x20 + iVar14 & 0xffffffc0U) - iVar18;\r\n                  iVar12 = iVar12 + uVar15;\r\n                  if (iVar12 < 0) {\r\n                    iVar12 = -iVar12;\r\n                  }\r\n                  if (iVar12 <= iVar11) {\r\n                    uVar10 = uVar15;\r\n                  }\r\n                  *(uint *)(pbVar13 + -4) = uVar10;\r\n                  *(uint *)(iVar8 + 8) = uVar10 + iVar18;\r\n                }\r\n              }\r\n              else {\r\n                *(int *)(pbVar13 + -4) = *(int *)(iVar8 + 8) - iVar11;\r\n              }\r\n              *pbVar13 = *pbVar13 | 4;\r\n              *(byte *)(iVar8 + 0xc) = *(byte *)(iVar8 + 0xc) | 4;\r\n              if ((pbVar4 < pbVar13 + -0xc) && (*(int *)(pbVar13 + -4) < *(int *)(pbVar13 + -0x34)))\r\n              {\r\n                *(int *)(pbVar13 + -4) = *(int *)(pbVar13 + -0x34);\r\n              }\r\n            }\r\n          }\r\n          else {\r\n            FUN_008f5cc0(param_2);\r\n            *pbVar13 = *pbVar13 | 4;\r\n          }\r\n        }\r\n        pbVar16 = pbVar13 + 0x24;\r\n        pbVar13 = pbVar13 + 0x30;\r\n      } while (pbVar16 < pbVar6);\r\n    }\r\n  }\r\n  pbVar13 = (byte *)(((int)pbVar6 - (int)pbVar4) * 0x2aaaaaab);\r\n  iVar8 = ((int)pbVar6 - (int)pbVar4) / 0x30;\r\n  if (param_2 == 0) {\r\n    if (iVar8 == 6) {\r\n      param_1 = pbVar4 + 0x60;\r\n      pbVar13 = pbVar4 + 0xc0;\r\n      pbVar16 = pbVar4;\r\n    }\r\n    else {\r\n      if (iVar8 != 0xc) goto LAB_008f6093;\r\n      param_1 = pbVar4 + 0xf0;\r\n      pbVar13 = pbVar4 + 0x1b0;\r\n      pbVar16 = pbVar4 + 0x30;\r\n    }\r\n    iVar11 = (*(int *)(param_1 + 4) * 2 - *(int *)(pbVar13 + 4)) - *(int *)(pbVar16 + 4);\r\n    if (iVar11 < 0) {\r\n      iVar11 = -iVar11;\r\n    }\r\n    if (iVar11 < 8) {\r\n      iVar11 = *(int *)(pbVar16 + 8) + *(int *)(param_1 + 8) * -2 + *(int *)(pbVar13 + 8);\r\n      *(int *)(pbVar13 + 8) = *(int *)(pbVar13 + 8) - iVar11;\r\n      if (*(int *)(pbVar13 + 0x18) != 0) {\r\n        piVar1 = (int *)(*(int *)(pbVar13 + 0x18) + 8);\r\n        *piVar1 = *piVar1 - iVar11;\r\n      }\r\n      if (iVar8 == 0xc) {\r\n        *(int *)(pbVar4 + 0x188) = *(int *)(pbVar4 + 0x188) - iVar11;\r\n        *(int *)(pbVar4 + 0x218) = *(int *)(pbVar4 + 0x218) - iVar11;\r\n      }\r\n      pbVar13[0xc] = pbVar13[0xc] | 4;\r\n      pbVar13 = *(byte **)(pbVar13 + 0x18);\r\n      if (pbVar13 != (byte *)0x0) {\r\n        pbVar13[0xc] = pbVar13[0xc] | 4;\r\n      }\r\n    }\r\n  }\r\nLAB_008f6093:\r\n  if (((local_1c != 0) || (local_10 == (byte *)0x0)) && (pbVar4 < pbVar6)) {\r\n    pbVar16 = pbVar4 + 0x1c;\r\n    do {\r\n      if ((pbVar16[-0x10] & 4) == 0) {\r\n        if (*(int *)pbVar16 == 0) {\r\nLAB_008f60f5:\r\n          if (local_10 == (byte *)0x0) {\r\n            local_10 = pbVar16 + -0x1c;\r\n            *(uint *)(pbVar16 + -0x14) = *(int *)(pbVar16 + -0x18) + 0x20U & 0xffffffc0;\r\n          }\r\n          else {\r\n            for (pbVar13 = pbVar16 + -0x4c; (pbVar4 <= pbVar13 && ((pbVar13[0xc] & 4) == 0));\r\n                pbVar13 = pbVar13 + -0x30) {\r\n            }\r\n            for (pbVar9 = pbVar16 + 0x14; (pbVar9 < pbVar6 && ((pbVar9[0xc] & 4) == 0));\r\n                pbVar9 = pbVar9 + 0x30) {\r\n            }\r\n            if ((((pbVar13 < pbVar4) || (pbVar16 + -0x1c <= pbVar13)) || (pbVar6 <= pbVar9)) ||\r\n               (pbVar9 <= pbVar16 + -0x1c)) {\r\n              *(uint *)(pbVar16 + -0x14) =\r\n                   ((*(int *)(pbVar16 + -0x18) - *(int *)(local_10 + 4)) + 0x10U & 0xffffffe0) +\r\n                   *(int *)(local_10 + 8);\r\n            }\r\n            else if (*(int *)(pbVar9 + 4) == *(int *)(pbVar13 + 4)) {\r\n              *(undefined4 *)(pbVar16 + -0x14) = *(undefined4 *)(pbVar13 + 8);\r\n            }\r\n            else {\r\n              iVar8 = FUN_008b7dc0(*(int *)(pbVar16 + -0x18) - *(int *)(pbVar13 + 4),\r\n                                   *(int *)(pbVar9 + 8) - *(int *)(pbVar13 + 8),\r\n                                   *(int *)(pbVar9 + 4) - *(int *)(pbVar13 + 4));\r\n              *(int *)(pbVar16 + -0x14) = iVar8 + *(int *)(pbVar13 + 8);\r\n            }\r\n          }\r\n        }\r\n        else {\r\n          iVar8 = *(int *)(*(int *)pbVar16 + 4) - *(int *)(pbVar16 + -0x18);\r\n          if (iVar8 < 0) {\r\n            iVar8 = -iVar8;\r\n          }\r\n          if (0x4f < iVar8) goto LAB_008f60f5;\r\n          FUN_008f5cf0();\r\n        }\r\n        pbVar16[-0x10] = pbVar16[-0x10] | 4;\r\n        pbVar13 = pbVar16 + -0x1c;\r\n        if ((pbVar4 < pbVar13) &&\r\n           (pbVar13 = *(byte **)(pbVar16 + -0x44), *(int *)(pbVar16 + -0x14) < (int)pbVar13)) {\r\n          *(byte **)(pbVar16 + -0x14) = pbVar13;\r\n        }\r\n        if (((pbVar16 + 0x14 < pbVar6) && ((pbVar16[0x20] & 4) != 0)) &&\r\n           (pbVar13 = *(byte **)(pbVar16 + 0x1c), (int)pbVar13 < *(int *)(pbVar16 + -0x14))) {\r\n          *(byte **)(pbVar16 + -0x14) = pbVar13;\r\n        }\r\n      }\r\n      pbVar9 = pbVar16 + 0x14;\r\n      pbVar16 = pbVar16 + 0x30;\r\n    } while (pbVar9 < pbVar6);\r\n  }\r\n  return pbVar13;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8f61f0",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8f61f0",
+          "name": "FUN_008f61f0"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nint FUN_008f61f0(int param_1,undefined4 param_2,undefined4 param_3)\r\n\r\n{\r\n  byte bVar1;\r\n  int iVar2;\r\n  int iVar3;\r\n  \r\n  iVar2 = FUN_008f4360(param_2);\r\n  if ((iVar2 == 0) &&\r\n     (((*(byte *)(param_1 + 100) & 1) != 0 || (iVar2 = FUN_008f5890(), iVar2 == 0)))) {\r\n    if ((*(byte *)(param_1 + 100) & 2) == 0) {\r\n      iVar2 = FUN_008f5890();\r\n      if (iVar2 != 0) {\r\n        return iVar2;\r\n      }\r\n      FUN_008f58b0(param_1,param_3);\r\n      iVar2 = 0;\r\n    }\r\n    iVar3 = 0;\r\n    do {\r\n      if (iVar3 == 0) {\r\n        bVar1 = *(byte *)(param_1 + 100) & 1;\r\njoined_r0x008f6265:\r\n        if (bVar1 == 0) {\r\n          FUN_008f5d00(param_1,iVar3);\r\n          FUN_008f47f0();\r\n          FUN_008f48c0(iVar3);\r\n          FUN_008f4c20(iVar3);\r\n        }\r\n      }\r\n      else if (iVar3 == 1) {\r\n        bVar1 = *(byte *)(param_1 + 100) & 2;\r\n        goto joined_r0x008f6265;\r\n      }\r\n      iVar3 = iVar3 + 1;\r\n    } while (iVar3 < 2);\r\n    FUN_008f47a0();\r\n  }\r\n  return iVar2;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8f62b0",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8f62b0",
+          "name": "FUN_008f62b0"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_008f62b0(int param_1)\r\n\r\n{\r\n  int *piVar1;\r\n  longlong lVar2;\r\n  int in_EAX;\r\n  int iVar3;\r\n  int iVar4;\r\n  uint uVar5;\r\n  int iVar6;\r\n  int in_ECX;\r\n  int iVar7;\r\n  int *piVar8;\r\n  uint local_1c;\r\n  int local_14;\r\n  \r\n  if (in_EAX == 0) {\r\n    iVar3 = *(int *)(in_ECX + 4);\r\n    iVar7 = *(int *)(in_ECX + 0xc);\r\n  }\r\n  else {\r\n    iVar3 = *(int *)(in_ECX + 8);\r\n    iVar7 = *(int *)(in_ECX + 0x10);\r\n  }\r\n  piVar1 = (int *)(in_EAX * 0x42c + 0x2c + param_1);\r\n  if ((piVar1[0x109] != iVar3) || (piVar1[0x10a] != iVar7)) {\r\n    piVar1[0x109] = iVar3;\r\n    piVar1[0x10a] = iVar7;\r\n    *piVar1 = iVar3;\r\n    piVar1[1] = iVar7;\r\n    local_1c = 0;\r\n    if (piVar1[0x36] != 0) {\r\n      piVar8 = piVar1 + 0x3a;\r\n      do {\r\n        lVar2 = (longlong)piVar8[-3] * (longlong)iVar3 +\r\n                (ulonglong)((int)((longlong)piVar8[-3] * (longlong)iVar3 >> 0x3f) + 0x8000);\r\n        iVar4 = ((uint)lVar2 >> 0x10) + (int)((ulonglong)lVar2 >> 0x20) * 0x10000 + iVar7;\r\n        piVar8[-2] = iVar4;\r\n        piVar8[-1] = iVar4;\r\n        lVar2 = (longlong)*piVar8 * (longlong)iVar3 +\r\n                (ulonglong)((int)((longlong)*piVar8 * (longlong)iVar3 >> 0x3f) + 0x8000);\r\n        piVar8[3] = piVar8[3] & 0xfffffffe;\r\n        iVar4 = ((uint)lVar2 >> 0x10) + (int)((ulonglong)lVar2 >> 0x20) * 0x10000 + iVar7;\r\n        piVar8[1] = iVar4;\r\n        piVar8[2] = iVar4;\r\n        lVar2 = (longlong)(piVar8[-3] - *piVar8) * (longlong)iVar3;\r\n        lVar2 = lVar2 + (ulonglong)((int)(lVar2 >> 0x3f) + 0x8000);\r\n        if (((uint)lVar2 >> 0x10) + (int)((ulonglong)lVar2 >> 0x20) * 0x10000 + 0x30 < 0x61) {\r\n          uVar5 = piVar8[-2] + 0x20U & 0xffffffc0;\r\n          piVar8[-1] = uVar5;\r\n          iVar4 = FUN_008b7f40(uVar5,iVar3);\r\n          iVar4 = iVar4 - *piVar8;\r\n          local_14 = iVar4;\r\n          if (iVar4 < 0) {\r\n            local_14 = -iVar4;\r\n          }\r\n          lVar2 = (longlong)local_14 * (longlong)iVar3 +\r\n                  (ulonglong)((int)((longlong)local_14 * (longlong)iVar3 >> 0x3f) + 0x8000);\r\n          iVar6 = ((uint)lVar2 >> 0x10) + (int)((ulonglong)lVar2 >> 0x20) * 0x10000;\r\n          if (iVar6 < 0x20) {\r\n            uVar5 = 0;\r\n          }\r\n          else {\r\n            uVar5 = iVar6 + 0x20U & 0xffffffc0;\r\n          }\r\n          if (iVar4 < 0) {\r\n            uVar5 = -uVar5;\r\n          }\r\n          piVar8[3] = piVar8[3] | 1;\r\n          piVar8[2] = piVar8[-1] - uVar5;\r\n        }\r\n        local_1c = local_1c + 1;\r\n        piVar8 = piVar8 + 7;\r\n      } while (local_1c < (uint)piVar1[0x36]);\r\n    }\r\n  }\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8f6460",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8f6460",
+          "name": "FUN_008f6460"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_008f6460(undefined4 *param_1,undefined4 *param_2)\r\n\r\n{\r\n  int iVar1;\r\n  undefined4 *puVar2;\r\n  \r\n  puVar2 = param_1;\r\n  for (iVar1 = 7; puVar2 = puVar2 + 1, iVar1 != 0; iVar1 = iVar1 + -1) {\r\n    *puVar2 = *param_2;\r\n    param_2 = param_2 + 1;\r\n  }\r\n  FUN_008f62b0(param_1);\r\n  FUN_008f62b0(param_1);\r\n  return;\r\n}\r\n\r\n"
+      }
+    ],
+    "total": 16,
+    "succeeded": 16,
+    "failed": 0
+  },
+  "confidence": "derived",
+  "authority": "shipped-artifact",
+  "environment": null,
+  "limitations": [
+    "Derived by an REA composed workflow.",
+    "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+    "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+    "External functions and functions without an analyzable body return null; other decompiler failures remain explicit.",
+    "External functions and local thunks are distinct; procedure metadata identifies both and preserves a thunk target when Ghidra resolves one.",
+    "Ghidra Listing reports a terminal call at 0x8f58aa to 0x8f55a0 FUN_008f55a0 (external=false, thunk=false, hasNoReturn=false); fallthrough is excluded by Ghidra's flow model. The reason for the terminal flow is not established by this observation.",
+    "Pseudocode is Ghidra decompiler output, not original source and not text-equivalent to Hopper output.",
+    "The Windows bridge uses authenticated IPv4 loopback because Node path-based IPC does not expose Java AF_UNIX sockets; the endpoint file contains no bearer token.",
+    "The imported Program and temporary project are ephemeral and deleted on close. Annotation operations edit session database metadata; original executable bytes are never written.",
+    "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+    "The target references PDB Tartaros.pdb (GUID 491a189d-6d27-43d1-a6b5-81ace6a1df8b, age (hex) 1, signature unknown, version RSDS); Ghidra reports load state unknown. Original names and types may be missing; an empty name search does not prove a procedure is absent. Use list_procedures and address-based analysis to inspect recovered functions. REA does not admit a caller-selected PDB companion.",
+    "Windows Ghidra P0 accepts native x86 and x86-64 PE applications and DLLs, and explicitly selected raw 6502 images; managed, hostile, sensitive, and mutable-path targets are unsupported.",
+    "Windows sessions require the matching packaged Windows x64 native addon, local NTFS targets and runtimes, and Windows 10 or later. Native handles enforce path admission, private DACLs, and Job Object ownership automatically."
+  ],
+  "relationship_coverage": null,
+  "locations": [
+    {
+      "kind": "address",
+      "address": "0x8f4e50"
+    },
+    {
+      "kind": "address",
+      "address": "0x8f5120"
+    },
+    {
+      "kind": "address",
+      "address": "0x8f5160"
+    },
+    {
+      "kind": "address",
+      "address": "0x8f5430"
+    },
+    {
+      "kind": "address",
+      "address": "0x8f55a0"
+    },
+    {
+      "kind": "address",
+      "address": "0x8f5890"
+    },
+    {
+      "kind": "address",
+      "address": "0x8f58b0"
+    },
+    {
+      "kind": "address",
+      "address": "0x8f5a60"
+    },
+    {
+      "kind": "address",
+      "address": "0x8f5af0"
+    },
+    {
+      "kind": "address",
+      "address": "0x8f5b50"
+    },
+    {
+      "kind": "address",
+      "address": "0x8f5cc0"
+    },
+    {
+      "kind": "address",
+      "address": "0x8f5cf0"
+    },
+    {
+      "kind": "address",
+      "address": "0x8f5d00"
+    },
+    {
+      "kind": "address",
+      "address": "0x8f61f0"
+    },
+    {
+      "kind": "address",
+      "address": "0x8f62b0"
+    },
+    {
+      "kind": "address",
+      "address": "0x8f6460"
+    }
+  ],
+  "evidence_links": []
+}

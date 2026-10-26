@@ -1,0 +1,62 @@
+
+undefined4 FUN_00496380(int param_1)
+
+{
+  undefined4 uVar1;
+  void *local_10;
+  undefined1 *puStack_c;
+  undefined4 local_8;
+  
+  local_8 = 0xffffffff;
+  puStack_c = &LAB_00931068;
+  local_10 = ExceptionList;
+  ExceptionList = &local_10;
+  switch(*(undefined4 *)(param_1 + 2)) {
+  case 1:
+    FUN_004054c0();
+    FUN_00402250();
+    local_8 = 0;
+    break;
+  case 2:
+    FUN_004054c0();
+    FUN_00402250();
+    local_8 = 1;
+    break;
+  case 3:
+    FUN_004054c0();
+    FUN_00402250();
+    local_8 = 2;
+    break;
+  case 4:
+    FUN_004054c0();
+    FUN_00402250();
+    local_8 = 3;
+    break;
+  case 5:
+    FUN_004054c0();
+    FUN_00402250();
+    local_8 = 4;
+    break;
+  case 6:
+    FUN_004054c0();
+    FUN_00402250();
+    local_8 = 5;
+    break;
+  case 7:
+    FUN_004054c0();
+    FUN_00402250();
+    local_8 = 6;
+    break;
+  default:
+    goto switchD_004963b6_default;
+  }
+  FUN_005854b0();
+  uVar1 = FUN_00585330();
+  FUN_00402250(uVar1);
+  local_8 = 0xffffffff;
+  FUN_0058b270(0xca);
+switchD_004963b6_default:
+  ExceptionList = local_10;
+  return 0;
+}
+

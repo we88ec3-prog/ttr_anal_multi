@@ -1,0 +1,352 @@
+{
+  "evidence_id": "ev_9e940218d23a51d66b26e5f768bc799ca2f8674b3c8e795112c30e84a413a268",
+  "subject": {
+    "name": "Tartaros.bin",
+    "digest": {
+      "sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91"
+    },
+    "local_path": "E:\\Tartaros\\workspace\\Tartaros.bin",
+    "format": "pe",
+    "architecture": "x86"
+  },
+  "provider": {
+    "id": "rea-workflow",
+    "name": "REA composed investigation workflow",
+    "version": "1"
+  },
+  "analysis_profile": {
+    "provider": {
+      "id": "rea-workflow",
+      "name": "REA composed investigation workflow",
+      "version": "1"
+    },
+    "parameters": {
+      "upstream_analysis_profile": {
+        "provider": {
+          "id": "ghidra",
+          "name": "Ghidra",
+          "version": "12.1.4"
+        },
+        "parameters": {
+          "target_kind": "executable",
+          "target_format": "pe",
+          "executable_role": "application",
+          "managed": false,
+          "native_aot_metadata": {
+            "contract_revision": "rtr-9.1-x64-pe-read-only-v3",
+            "source_bytes": 134217728,
+            "work_units": 67108864,
+            "working_memory_bytes": 67108864,
+            "report_bytes": 4194304
+          },
+          "architecture": "x86",
+          "available_architectures": [
+            "x86"
+          ],
+          "import_mode": "ephemeral-source-immutable",
+          "pdb_observations": "program-info-v1",
+          "annotation_policy": "atomic-function-entry-metadata-v1",
+          "load_image_observations": "source-mappings-entry-context-v2",
+          "function_body_evidence": "complete-inclusive-ranges-v1",
+          "function_references": "complete-body-and-entry-reference-manager-v2",
+          "call_relationship_coverage": "function-body-call-coverage-v5",
+          "function_dossier_coverage": "observed-facets-and-call-relationships-v1",
+          "string_inventory_evidence": "defined-data-coverage-v1",
+          "location_resolution": "explicit-address-exact-entry-symbol-first-v3",
+          "procedure_file_offset_resolution": "address-first-unique-target-source-mapping-v2",
+          "instruction_flow_evidence": "decoded-return-pcode-v1",
+          "instruction_references": "exact-address-incoming-v1",
+          "function_boundary_observations": "ghidra-function-boundary-limitations-v3",
+          "no_return_repair": "disabled-windows-p0",
+          "process_launch": "official-headless-script-v1",
+          "jump_table_evidence": "typed-case-default-blocks-v1",
+          "decompiler_jump_loads": true,
+          "loader": "auto-from-header",
+          "language_id": "auto-from-header",
+          "compiler_spec_id": "auto-default",
+          "analyzer_preset": "ghidra-default"
+        },
+        "digest": "3c06738e45e144d5f073edbd3244c6bff46222f389525fe659bc92dca2ccdece"
+      },
+      "workflow_revision": 2
+    },
+    "digest": "d4471786e332c0336f066a85a651a368051028dfaa0c1d7a5ac78db2f422f47e"
+  },
+  "predicate_type": "rea.analysis",
+  "operation": "batch_decompile",
+  "parameters": {
+    "addresses": [
+      "0x897750",
+      "0x897779",
+      "0x8978e6",
+      "0x8978f0",
+      "0x89792a",
+      "0x897958",
+      "0x897978",
+      "0x897a49",
+      "0x897a66",
+      "0x897b20",
+      "0x897bb0",
+      "0x897e3b",
+      "0x8980a2",
+      "0x8980bc",
+      "0x89816e",
+      "0x89818e"
+    ]
+  },
+  "raw_result": null,
+  "normalized_result": {
+    "items": [
+      {
+        "address": "0x897750",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x897750",
+          "name": "fast_error_exit"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Single Match\r\n    _fast_error_exit\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nvoid __cdecl fast_error_exit(int param_1)\r\n\r\n{\r\n  if (DAT_00f8cb20 == 1) {\r\n    __FF_MSGBANNER();\r\n  }\r\n  __NMSG_WRITE(param_1);\r\n  ___crtExitProcess(0xff);\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x897779",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x897779",
+          "name": "___tmainCRTStartup"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* WARNING: Function: __SEH_prolog4 replaced with injection: SEH_prolog4 */\r\n/* WARNING: Function: __SEH_epilog4 replaced with injection: EH_epilog3 */\r\n/* WARNING: Removing unreachable block (ram,0x008977b2) */\r\n/* Library Function - Single Match\r\n    ___tmainCRTStartup\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nint ___tmainCRTStartup(void)\r\n\r\n{\r\n  int iVar1;\r\n  undefined4 uVar2;\r\n  _STARTUPINFOW local_6c;\r\n  int local_24;\r\n  int local_20;\r\n  undefined4 uStack_c;\r\n  undefined *local_8;\r\n  \r\n  local_8 = &DAT_00c84f80;\r\n  uStack_c = 0x897785;\r\n  GetStartupInfoW(&local_6c);\r\n  if (DAT_00fe73a8 == 0) {\r\n    HeapSetInformation((HANDLE)0x0,HeapEnableTerminationOnCorruption,(PVOID)0x0,0);\r\n  }\r\n  local_20 = 0;\r\n  iVar1 = __heap_init();\r\n  if (iVar1 == 0) {\r\n    fast_error_exit(0x1c);\r\n  }\r\n  iVar1 = __mtinit();\r\n  if (iVar1 == 0) {\r\n    fast_error_exit(0x10);\r\n  }\r\n  __RTC_Initialize();\r\n  local_8 = (undefined *)0x0;\r\n  iVar1 = __ioinit();\r\n  if (iVar1 < 0) {\r\n    __amsg_exit(0x1b);\r\n  }\r\n  DAT_00fe73a4 = GetCommandLineA();\r\n  DAT_00f8cb18 = ___crtGetEnvironmentStringsA();\r\n  iVar1 = __setargv();\r\n  if (iVar1 < 0) {\r\n    __amsg_exit(8);\r\n  }\r\n  iVar1 = FUN_008add49();\r\n  if (iVar1 < 0) {\r\n    __amsg_exit(9);\r\n  }\r\n  iVar1 = __cinit(1);\r\n  if (iVar1 != 0) {\r\n    __amsg_exit(iVar1);\r\n  }\r\n  uVar2 = __wincmdln();\r\n  if (((byte)local_6c.dwFlags & 1) == 0) {\r\n    local_6c.wShowWindow = 10;\r\n  }\r\n  local_24 = FUN_004a30c0(0x400000,0,uVar2,local_6c.wShowWindow);\r\n  if (local_20 != 0) {\r\n    __cexit();\r\n    return local_24;\r\n  }\r\n                    /* WARNING: Subroutine does not return */\r\n  _exit(local_24);\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8978e6",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8978e6",
+          "name": "entry"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid entry(void)\r\n\r\n{\r\n  ___security_init_cookie();\r\n  ___tmainCRTStartup();\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8978f0",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8978f0",
+          "name": "_clock"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */\r\n/* Library Function - Single Match\r\n    _clock\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nclock_t __cdecl _clock(void)\r\n\r\n{\r\n  clock_t cVar1;\r\n  _FILETIME local_c;\r\n  \r\n  GetSystemTimeAsFileTime(&local_c);\r\n  cVar1 = __aulldiv(-_DAT_00f8cb28 + local_c.dwLowDateTime,\r\n                    ((local_c.dwHighDateTime - _DAT_00f8cb2c) - (uint)(_DAT_00f8cb28 != 0)) +\r\n                    (uint)CARRY4(-_DAT_00f8cb28,local_c.dwLowDateTime),10000,0);\r\n  return cVar1;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x89792a",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x89792a",
+          "name": "___inittime"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */\r\n/* Library Function - Single Match\r\n    ___inittime\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nundefined4 ___inittime(void)\r\n\r\n{\r\n  _FILETIME local_c;\r\n  \r\n  GetSystemTimeAsFileTime(&local_c);\r\n  _DAT_00f8cb28 = local_c.dwLowDateTime;\r\n  _DAT_00f8cb2c = local_c.dwHighDateTime;\r\n  return 0;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x897958",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x897958",
+          "name": "__freea"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Single Match\r\n    __freea\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nvoid __cdecl __freea(void *_Memory)\r\n\r\n{\r\n  if ((_Memory != (void *)0x0) && (*(int *)((int)_Memory + -8) == 0xdddd)) {\r\n    _free((int *)((int)_Memory + -8));\r\n  }\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x897978",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x897978",
+          "name": "__vsnwprintf_l"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Single Match\r\n    __vsnwprintf_l\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nint __cdecl\r\n__vsnwprintf_l(wchar_t *_DstBuf,size_t _MaxCount,wchar_t *_Format,_locale_t _Locale,va_list _ArgList\r\n              )\r\n\r\n{\r\n  int *piVar1;\r\n  int iVar2;\r\n  char **ppcVar3;\r\n  FILE local_24;\r\n  \r\n  local_24._ptr = (char *)0x0;\r\n  ppcVar3 = (char **)&local_24._cnt;\r\n  for (iVar2 = 7; iVar2 != 0; iVar2 = iVar2 + -1) {\r\n    *ppcVar3 = (char *)0x0;\r\n    ppcVar3 = ppcVar3 + 1;\r\n  }\r\n  if (_Format == (wchar_t *)0x0) {\r\n    piVar1 = __errno();\r\n    *piVar1 = 0x16;\r\n    FUN_00893343();\r\n    iVar2 = -1;\r\n  }\r\n  else if ((_MaxCount == 0) || (_DstBuf != (wchar_t *)0x0)) {\r\n    local_24._flag = 0x42;\r\n    local_24._base = (char *)_DstBuf;\r\n    local_24._ptr = (char *)_DstBuf;\r\n    if (_MaxCount < 0x40000000) {\r\n      local_24._cnt = _MaxCount * 2;\r\n    }\r\n    else {\r\n      local_24._cnt = 0x7fffffff;\r\n    }\r\n    iVar2 = FUN_008a3d54(&local_24,_Format,_Locale,_ArgList);\r\n    if (_DstBuf != (wchar_t *)0x0) {\r\n      local_24._cnt = local_24._cnt + -1;\r\n      if (local_24._cnt < 0) {\r\n        __flsbuf(0,&local_24);\r\n      }\r\n      else {\r\n        *local_24._ptr = 0;\r\n        local_24._ptr = (char *)((int)local_24._ptr + 1);\r\n      }\r\n      local_24._cnt = local_24._cnt + -1;\r\n      if (local_24._cnt < 0) {\r\n        __flsbuf(0,&local_24);\r\n      }\r\n      else {\r\n        *local_24._ptr = 0;\r\n      }\r\n    }\r\n  }\r\n  else {\r\n    piVar1 = __errno();\r\n    *piVar1 = 0x16;\r\n    FUN_00893343();\r\n    iVar2 = -1;\r\n  }\r\n  return iVar2;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x897a49",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x897a49",
+          "name": "__vsnwprintf"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Single Match\r\n    __vsnwprintf\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nint __cdecl __vsnwprintf(wchar_t *_Dest,size_t _Count,wchar_t *_Format,va_list _Args)\r\n\r\n{\r\n  int iVar1;\r\n  \r\n  iVar1 = __vsnwprintf_l(_Dest,_Count,_Format,(_locale_t)0x0,_Args);\r\n  return iVar1;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x897a66",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x897a66",
+          "name": "_realloc"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Single Match\r\n    _realloc\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nvoid * __cdecl _realloc(void *_Memory,size_t _NewSize)\r\n\r\n{\r\n  void *pvVar1;\r\n  LPVOID pvVar2;\r\n  int iVar3;\r\n  int *piVar4;\r\n  DWORD DVar5;\r\n  \r\n  if (_Memory == (void *)0x0) {\r\n    pvVar1 = _malloc(_NewSize);\r\n    return pvVar1;\r\n  }\r\n  if (_NewSize == 0) {\r\n    _free(_Memory);\r\n  }\r\n  else {\r\n    do {\r\n      if (0xffffffe0 < _NewSize) {\r\n        __callnewh(_NewSize);\r\n        piVar4 = __errno();\r\n        *piVar4 = 0xc;\r\n        return (void *)0x0;\r\n      }\r\n      if (_NewSize == 0) {\r\n        _NewSize = 1;\r\n      }\r\n      pvVar2 = HeapReAlloc(DAT_00f8d4dc,0,_Memory,_NewSize);\r\n      if (pvVar2 != (LPVOID)0x0) {\r\n        return pvVar2;\r\n      }\r\n      if (DAT_00f8d4e0 == 0) {\r\n        piVar4 = __errno();\r\n        DVar5 = GetLastError();\r\n        iVar3 = __get_errno_from_oserr(DVar5);\r\n        *piVar4 = iVar3;\r\n        return (void *)0x0;\r\n      }\r\n      iVar3 = __callnewh(_NewSize);\r\n    } while (iVar3 != 0);\r\n    piVar4 = __errno();\r\n    DVar5 = GetLastError();\r\n    iVar3 = __get_errno_from_oserr(DVar5);\r\n    *piVar4 = iVar3;\r\n  }\r\n  return (void *)0x0;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x897b20",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x897b20",
+          "name": "shortsort"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Single Match\r\n    _shortsort\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nvoid __cdecl shortsort(undefined1 *param_1,int param_2,code *param_3)\r\n\r\n{\r\n  undefined1 uVar1;\r\n  undefined1 *puVar2;\r\n  undefined1 *in_EAX;\r\n  int iVar3;\r\n  undefined1 *puVar4;\r\n  \r\n  for (; puVar2 = param_1, puVar4 = param_1, param_1 < in_EAX; in_EAX = in_EAX + -param_2) {\r\n    while (puVar4 = puVar4 + param_2, puVar4 <= in_EAX) {\r\n      iVar3 = (*param_3)(puVar4,puVar2);\r\n      if (0 < iVar3) {\r\n        puVar2 = puVar4;\r\n      }\r\n    }\r\n    if ((puVar2 != in_EAX) && (param_2 != 0)) {\r\n      puVar4 = in_EAX;\r\n      iVar3 = param_2;\r\n      do {\r\n        uVar1 = puVar4[(int)puVar2 - (int)in_EAX];\r\n        puVar4[(int)puVar2 - (int)in_EAX] = *puVar4;\r\n        *puVar4 = uVar1;\r\n        puVar4 = puVar4 + 1;\r\n        iVar3 = iVar3 + -1;\r\n      } while (iVar3 != 0);\r\n    }\r\n  }\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x897bb0",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x897bb0",
+          "name": "_qsort"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Single Match\r\n    _qsort\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nvoid __cdecl\r\n_qsort(void *_Base,size_t _NumOfElements,size_t _SizeOfElements,_PtFuncCompare *_PtFuncCompare)\r\n\r\n{\r\n  undefined1 uVar1;\r\n  int *piVar2;\r\n  uint uVar3;\r\n  int iVar4;\r\n  undefined1 *puVar5;\r\n  undefined1 *puVar6;\r\n  undefined1 *puVar7;\r\n  size_t sVar8;\r\n  undefined1 *puVar9;\r\n  undefined1 *puVar10;\r\n  undefined4 auStack_104 [30];\r\n  undefined4 auStack_8c [30];\r\n  size_t local_14;\r\n  int local_10;\r\n  undefined1 *local_c;\r\n  undefined1 *local_8;\r\n  \r\n  if ((_Base == (void *)0x0) && (_NumOfElements != 0)) {\r\n    piVar2 = __errno();\r\n    *piVar2 = 0x16;\r\n    FUN_00893343();\r\n    return;\r\n  }\r\n  if ((_SizeOfElements == 0) || (_PtFuncCompare == (_PtFuncCompare *)0x0)) {\r\n    piVar2 = __errno();\r\n    *piVar2 = 0x16;\r\n    FUN_00893343();\r\n  }\r\n  else if (1 < _NumOfElements) {\r\n    local_10 = 0;\r\n    local_8 = _Base;\r\n    local_c = (undefined1 *)((_NumOfElements - 1) * _SizeOfElements + (int)_Base);\r\nLAB_00897c20:\r\n    while (puVar7 = local_8, puVar10 = local_c,\r\n          uVar3 = (uint)((int)local_c - (int)local_8) / _SizeOfElements + 1, 8 < uVar3) {\r\n      puVar9 = local_8 + _SizeOfElements * (uVar3 >> 1);\r\n      iVar4 = (*_PtFuncCompare)(local_8,puVar9);\r\n      if ((0 < iVar4) && (puVar7 != puVar9)) {\r\n        puVar5 = puVar9;\r\n        local_14 = _SizeOfElements;\r\n        do {\r\n          local_14 = local_14 - 1;\r\n          uVar1 = puVar5[(int)puVar7 - (int)puVar9];\r\n          puVar5[(int)puVar7 - (int)puVar9] = *puVar5;\r\n          *puVar5 = uVar1;\r\n          puVar5 = puVar5 + 1;\r\n        } while (local_14 != 0);\r\n      }\r\n      iVar4 = (*_PtFuncCompare)(puVar7,puVar10);\r\n      puVar5 = puVar7;\r\n      if ((0 < iVar4) && (puVar7 != puVar10)) {\r\n        puVar6 = puVar10;\r\n        sVar8 = _SizeOfElements;\r\n        do {\r\n          uVar1 = puVar6[(int)puVar7 - (int)puVar10];\r\n          puVar6[(int)puVar7 - (int)puVar10] = *puVar6;\r\n          *puVar6 = uVar1;\r\n          puVar6 = puVar6 + 1;\r\n          sVar8 = sVar8 - 1;\r\n          puVar5 = local_8;\r\n        } while (sVar8 != 0);\r\n      }\r\n      iVar4 = (*_PtFuncCompare)(puVar9,puVar10);\r\n      if ((0 < iVar4) && (puVar9 != puVar10)) {\r\n        puVar7 = puVar10;\r\n        sVar8 = _SizeOfElements;\r\n        do {\r\n          uVar1 = puVar7[(int)puVar9 - (int)puVar10];\r\n          puVar7[(int)puVar9 - (int)puVar10] = *puVar7;\r\n          *puVar7 = uVar1;\r\n          puVar7 = puVar7 + 1;\r\n          sVar8 = sVar8 - 1;\r\n          puVar5 = local_8;\r\n        } while (sVar8 != 0);\r\n      }\r\nLAB_00897cf0:\r\n      if (puVar5 < puVar9) {\r\n        do {\r\n          puVar5 = puVar5 + _SizeOfElements;\r\n          if (puVar9 <= puVar5) goto LAB_00897d10;\r\n          iVar4 = (*_PtFuncCompare)(puVar5,puVar9);\r\n        } while (iVar4 < 1);\r\n        if (puVar9 <= puVar5) goto LAB_00897d10;\r\n      }\r\n      else {\r\nLAB_00897d10:\r\n        do {\r\n          puVar5 = puVar5 + _SizeOfElements;\r\n          if (local_c < puVar5) break;\r\n          iVar4 = (*_PtFuncCompare)(puVar5,puVar9);\r\n        } while (iVar4 < 1);\r\n      }\r\n      do {\r\n        puVar10 = puVar10 + -_SizeOfElements;\r\n        if (puVar10 <= puVar9) break;\r\n        iVar4 = (*_PtFuncCompare)(puVar10,puVar9);\r\n      } while (0 < iVar4);\r\n      if (puVar5 <= puVar10) {\r\n        if (puVar5 != puVar10) {\r\n          puVar7 = puVar10;\r\n          local_14 = _SizeOfElements;\r\n          do {\r\n            local_14 = local_14 - 1;\r\n            uVar1 = puVar7[(int)puVar5 - (int)puVar10];\r\n            puVar7[(int)puVar5 - (int)puVar10] = *puVar7;\r\n            *puVar7 = uVar1;\r\n            puVar7 = puVar7 + 1;\r\n          } while (local_14 != 0);\r\n        }\r\n        if (puVar9 == puVar10) {\r\n          puVar9 = puVar5;\r\n        }\r\n        goto LAB_00897cf0;\r\n      }\r\n      puVar10 = puVar10 + _SizeOfElements;\r\n      if (puVar9 < puVar10) {\r\n        do {\r\n          puVar10 = puVar10 + -_SizeOfElements;\r\n          if (puVar10 <= puVar9) goto LAB_00897d90;\r\n          iVar4 = (*_PtFuncCompare)(puVar10,puVar9);\r\n        } while (iVar4 == 0);\r\n        if (puVar10 <= puVar9) goto LAB_00897d90;\r\n      }\r\n      else {\r\nLAB_00897d90:\r\n        do {\r\n          puVar10 = puVar10 + -_SizeOfElements;\r\n          if (puVar10 <= local_8) break;\r\n          iVar4 = (*_PtFuncCompare)(puVar10,puVar9);\r\n        } while (iVar4 == 0);\r\n      }\r\n      puVar9 = local_8;\r\n      puVar7 = local_c;\r\n      if ((int)puVar10 - (int)local_8 < (int)local_c - (int)puVar5) goto LAB_00897de3;\r\n      if (local_8 < puVar10) {\r\n        auStack_8c[local_10] = local_8;\r\n        auStack_104[local_10] = puVar10;\r\n        local_10 = local_10 + 1;\r\n      }\r\n      local_8 = puVar5;\r\n      if (puVar7 <= puVar5) goto LAB_00897e11;\r\n    }\r\n    shortsort(local_8,_SizeOfElements,_PtFuncCompare);\r\n    goto LAB_00897e11;\r\n  }\r\n  return;\r\nLAB_00897de3:\r\n  if (puVar5 < local_c) {\r\n    auStack_8c[local_10] = puVar5;\r\n    auStack_104[local_10] = local_c;\r\n    local_10 = local_10 + 1;\r\n  }\r\n  local_c = puVar10;\r\n  if (puVar10 <= puVar9) {\r\nLAB_00897e11:\r\n    local_10 = local_10 + -1;\r\n    if (local_10 < 0) {\r\n      return;\r\n    }\r\n    local_c = (undefined1 *)auStack_104[local_10];\r\n    local_8 = (undefined1 *)auStack_8c[local_10];\r\n  }\r\n  goto LAB_00897c20;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x897e3b",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x897e3b",
+          "name": "__wcstombs_l_helper"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Single Match\r\n    __wcstombs_l_helper\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nvoid __wcstombs_l_helper(LPSTR param_1,WCHAR *param_2,uint param_3,localeinfo_struct *param_4)\r\n\r\n{\r\n  char cVar1;\r\n  int *piVar2;\r\n  uint uVar3;\r\n  LPCWSTR pWVar4;\r\n  int iVar5;\r\n  DWORD DVar6;\r\n  WCHAR WVar7;\r\n  int local_30;\r\n  uint local_28;\r\n  int local_24 [2];\r\n  int local_1c;\r\n  char local_18;\r\n  BOOL local_14;\r\n  CHAR local_10 [8];\r\n  uint local_8;\r\n  \r\n  local_8 = DAT_00d61f20 ^ (uint)&stack0xfffffffc;\r\n  local_14 = 0;\r\n  if ((param_1 != (LPSTR)0x0) && (param_3 == 0)) goto LAB_00898093;\r\n  if (param_2 == (LPCWSTR)0x0) {\r\n    piVar2 = __errno();\r\n    *piVar2 = 0x16;\r\n    FUN_00893343();\r\n    goto LAB_00898093;\r\n  }\r\n  _LocaleUpdate::_LocaleUpdate((_LocaleUpdate *)local_24,param_4);\r\n  if (param_1 == (LPSTR)0x0) {\r\n    if (*(int *)(local_24[0] + 0x14) != 0) {\r\n      iVar5 = WideCharToMultiByte(*(UINT *)(local_24[0] + 4),0,param_2,-1,(LPSTR)0x0,0,(LPCSTR)0x0,\r\n                                  &local_14);\r\njoined_r0x00898073:\r\n      if (iVar5 != 0) {\r\njoined_r0x00897f6a:\r\n        if (local_14 == 0) goto LAB_00897ed0;\r\n      }\r\nLAB_00898079:\r\n      piVar2 = __errno();\r\n      *piVar2 = 0x2a;\r\n      if (local_18 != '\\0') {\r\n        *(uint *)(local_1c + 0x70) = *(uint *)(local_1c + 0x70) & 0xfffffffd;\r\n      }\r\n      goto LAB_00898093;\r\n    }\r\n    WVar7 = *param_2;\r\n    while (WVar7 != L'\\0') {\r\n      if (0xff < (ushort)WVar7) goto LAB_00898079;\r\n      param_2 = param_2 + 1;\r\n      WVar7 = *param_2;\r\n    }\r\n  }\r\n  else {\r\n    if (*(int *)(local_24[0] + 0x14) != 0) {\r\n      if (*(int *)(local_24[0] + 0xac) == 1) {\r\n        pWVar4 = param_2;\r\n        uVar3 = param_3;\r\n        if (param_3 != 0) {\r\n          do {\r\n            if (*pWVar4 == L'\\0') break;\r\n            pWVar4 = pWVar4 + 1;\r\n            uVar3 = uVar3 - 1;\r\n          } while (uVar3 != 0);\r\n          if ((uVar3 != 0) && (*pWVar4 == L'\\0')) {\r\n            param_3 = ((int)pWVar4 - (int)param_2 >> 1) + 1;\r\n          }\r\n        }\r\n        iVar5 = WideCharToMultiByte(*(UINT *)(local_24[0] + 4),0,param_2,param_3,param_1,param_3,\r\n                                    (LPCSTR)0x0,&local_14);\r\n        goto joined_r0x00898073;\r\n      }\r\n      iVar5 = WideCharToMultiByte(*(UINT *)(local_24[0] + 4),0,param_2,-1,param_1,param_3,\r\n                                  (LPCSTR)0x0,&local_14);\r\n      if (iVar5 != 0) goto joined_r0x00897f6a;\r\n      if ((local_14 == 0) && (DVar6 = GetLastError(), DVar6 == 0x7a)) {\r\n        local_28 = 0;\r\n        if (param_3 != 0) {\r\n          do {\r\n            uVar3 = WideCharToMultiByte(*(UINT *)(local_24[0] + 4),0,param_2,1,local_10,\r\n                                        *(int *)(local_24[0] + 0xac),(LPCSTR)0x0,&local_14);\r\n            if ((((uVar3 == 0) || (local_14 != 0)) || ((int)uVar3 < 0)) || (5 < uVar3))\r\n            goto LAB_00898079;\r\n            if (param_3 < uVar3 + local_28) goto LAB_00897ed0;\r\n            local_30 = 0;\r\n            if (0 < (int)uVar3) {\r\n              do {\r\n                cVar1 = local_10[local_30];\r\n                param_1[local_28] = cVar1;\r\n                if (cVar1 == '\\0') goto LAB_00897ed0;\r\n                local_30 = local_30 + 1;\r\n                local_28 = local_28 + 1;\r\n              } while (local_30 < (int)uVar3);\r\n            }\r\n            param_2 = param_2 + 1;\r\n          } while (local_28 < param_3);\r\n        }\r\n        if (local_18 != '\\0') {\r\n          *(uint *)(local_1c + 0x70) = *(uint *)(local_1c + 0x70) & 0xfffffffd;\r\n        }\r\n        goto LAB_00898093;\r\n      }\r\n      goto LAB_00898079;\r\n    }\r\n    uVar3 = 0;\r\n    if (param_3 != 0) {\r\n      do {\r\n        if (0xff < (ushort)*param_2) goto LAB_00898079;\r\n        param_1[uVar3] = (CHAR)*param_2;\r\n        WVar7 = *param_2;\r\n        param_2 = param_2 + 1;\r\n      } while ((WVar7 != L'\\0') && (uVar3 = uVar3 + 1, uVar3 < param_3));\r\n    }\r\n  }\r\nLAB_00897ed0:\r\n  if (local_18 != '\\0') {\r\n    *(uint *)(local_1c + 0x70) = *(uint *)(local_1c + 0x70) & 0xfffffffd;\r\n  }\r\nLAB_00898093:\r\n  __security_check_cookie(local_8 ^ (uint)&stack0xfffffffc);\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8980a2",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8980a2",
+          "name": "_wcstombs"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Single Match\r\n    _wcstombs\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nsize_t __cdecl _wcstombs(char *_Dest,wchar_t *_Source,size_t _MaxCount)\r\n\r\n{\r\n  size_t sVar1;\r\n  \r\n  sVar1 = __wcstombs_l_helper(_Dest,_Source,_MaxCount,0);\r\n  return sVar1;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8980bc",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8980bc",
+          "name": "__wcstombs_s_l"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Single Match\r\n    __wcstombs_s_l\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nerrno_t __cdecl\r\n__wcstombs_s_l(size_t *_PtNumOfCharConverted,char *_Dst,size_t _DstSizeInBytes,wchar_t *_Src,\r\n              size_t _MaxCountInBytes,_locale_t _Locale)\r\n\r\n{\r\n  size_t sVar1;\r\n  int iVar2;\r\n  int *piVar3;\r\n  uint uVar4;\r\n  errno_t local_8;\r\n  \r\n  local_8 = 0;\r\n  if (_Dst == (char *)0x0) {\r\n    if (_DstSizeInBytes == 0) goto LAB_008980d8;\r\n  }\r\n  else if (_DstSizeInBytes != 0) {\r\nLAB_008980d8:\r\n    if (_Dst != (char *)0x0) {\r\n      *_Dst = '\\0';\r\n    }\r\n    if (_PtNumOfCharConverted != (size_t *)0x0) {\r\n      *_PtNumOfCharConverted = 0;\r\n    }\r\n    sVar1 = _MaxCountInBytes;\r\n    if (_DstSizeInBytes < _MaxCountInBytes) {\r\n      sVar1 = _DstSizeInBytes;\r\n    }\r\n    if (sVar1 < 0x80000000) {\r\n      iVar2 = __wcstombs_l_helper(_Dst,_Src,sVar1,_Locale);\r\n      if (iVar2 == -1) {\r\n        if (_Dst != (char *)0x0) {\r\n          *_Dst = '\\0';\r\n        }\r\n        piVar3 = __errno();\r\n        return *piVar3;\r\n      }\r\n      uVar4 = iVar2 + 1;\r\n      if (_Dst != (char *)0x0) {\r\n        if (_DstSizeInBytes < uVar4) {\r\n          if ((_MaxCountInBytes != 0xffffffff) && (*_Dst = '\\0', _DstSizeInBytes <= uVar4)) {\r\n            piVar3 = __errno();\r\n            iVar2 = 0x22;\r\n            goto LAB_00898126;\r\n          }\r\n          local_8 = 0x50;\r\n          uVar4 = _DstSizeInBytes;\r\n        }\r\n        _Dst[uVar4 - 1] = '\\0';\r\n      }\r\n      if (_PtNumOfCharConverted == (size_t *)0x0) {\r\n        return local_8;\r\n      }\r\n      *_PtNumOfCharConverted = uVar4;\r\n      return local_8;\r\n    }\r\n  }\r\n  piVar3 = __errno();\r\n  iVar2 = 0x16;\r\nLAB_00898126:\r\n  *piVar3 = iVar2;\r\n  FUN_00893343();\r\n  return iVar2;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x89816e",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x89816e",
+          "name": "_wcstombs_s"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Single Match\r\n    _wcstombs_s\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nerrno_t __cdecl\r\n_wcstombs_s(size_t *_PtNumOfCharConverted,char *_Dst,size_t _DstSizeInBytes,wchar_t *_Src,\r\n           size_t _MaxCountInBytes)\r\n\r\n{\r\n  errno_t eVar1;\r\n  \r\n  eVar1 = __wcstombs_s_l(_PtNumOfCharConverted,_Dst,_DstSizeInBytes,_Src,_MaxCountInBytes,\r\n                         (_locale_t)0x0);\r\n  return eVar1;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x89818e",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x89818e",
+          "name": "_fputs"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* WARNING: Function: __SEH_prolog4 replaced with injection: SEH_prolog4 */\r\n/* WARNING: Function: __SEH_epilog4 replaced with injection: EH_epilog3 */\r\n/* Library Function - Single Match\r\n    _fputs\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nint __cdecl _fputs(char *_Str,FILE *_File)\r\n\r\n{\r\n  int *piVar1;\r\n  uint uVar2;\r\n  size_t _Count;\r\n  int _Flag;\r\n  size_t sVar3;\r\n  undefined *puVar4;\r\n  \r\n  if ((_Str != (char *)0x0) && (_File != (FILE *)0x0)) {\r\n    if ((_File->_flag & 0x40) != 0) {\r\nLAB_00898231:\r\n      _Count = _strlen(_Str);\r\n      __lock_file(_File);\r\n      _Flag = __stbuf(_File);\r\n      sVar3 = __fwrite_nolock(_Str,1,_Count,_File);\r\n      __ftbuf(_Flag,_File);\r\n      FUN_0089828c();\r\n      return (sVar3 == _Count) - 1;\r\n    }\r\n    uVar2 = __fileno(_File);\r\n    if ((uVar2 == 0xffffffff) || (uVar2 == 0xfffffffe)) {\r\n      puVar4 = &DAT_00d61f50;\r\n    }\r\n    else {\r\n      puVar4 = (undefined *)((uVar2 & 0x1f) * 0x40 + (&DAT_00fe72a0)[(int)uVar2 >> 5]);\r\n    }\r\n    if ((puVar4[0x24] & 0x7f) == 0) {\r\n      if ((uVar2 == 0xffffffff) || (uVar2 == 0xfffffffe)) {\r\n        puVar4 = &DAT_00d61f50;\r\n      }\r\n      else {\r\n        puVar4 = (undefined *)((uVar2 & 0x1f) * 0x40 + (&DAT_00fe72a0)[(int)uVar2 >> 5]);\r\n      }\r\n      if ((puVar4[0x24] & 0x80) == 0) goto LAB_00898231;\r\n    }\r\n  }\r\n  piVar1 = __errno();\r\n  *piVar1 = 0x16;\r\n  FUN_00893343();\r\n  return -1;\r\n}\r\n\r\n"
+      }
+    ],
+    "total": 16,
+    "succeeded": 16,
+    "failed": 0
+  },
+  "confidence": "derived",
+  "authority": "shipped-artifact",
+  "environment": null,
+  "limitations": [
+    "Derived by an REA composed workflow.",
+    "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+    "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+    "External functions and functions without an analyzable body return null; other decompiler failures remain explicit.",
+    "External functions and local thunks are distinct; procedure metadata identifies both and preserves a thunk target when Ghidra resolves one.",
+    "Ghidra Listing reports a terminal call at 0x89789c to 0x8939b3 _exit (external=false, thunk=false, hasNoReturn=true); fallthrough is excluded by Ghidra's flow model. This records Ghidra's FunctionManager flag, not an independent verification that the callee cannot return.",
+    "Ghidra Listing reports a terminal call at 0x8978eb to 0x897779 ___tmainCRTStartup (external=false, thunk=false, hasNoReturn=false); fallthrough is excluded by Ghidra's flow model. The reason for the terminal flow is not established by this observation.",
+    "Pseudocode is Ghidra decompiler output, not original source and not text-equivalent to Hopper output.",
+    "The Windows bridge uses authenticated IPv4 loopback because Node path-based IPC does not expose Java AF_UNIX sockets; the endpoint file contains no bearer token.",
+    "The imported Program and temporary project are ephemeral and deleted on close. Annotation operations edit session database metadata; original executable bytes are never written.",
+    "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+    "The target references PDB Tartaros.pdb (GUID 491a189d-6d27-43d1-a6b5-81ace6a1df8b, age (hex) 1, signature unknown, version RSDS); Ghidra reports load state unknown. Original names and types may be missing; an empty name search does not prove a procedure is absent. Use list_procedures and address-based analysis to inspect recovered functions. REA does not admit a caller-selected PDB companion.",
+    "Windows Ghidra P0 accepts native x86 and x86-64 PE applications and DLLs, and explicitly selected raw 6502 images; managed, hostile, sensitive, and mutable-path targets are unsupported.",
+    "Windows sessions require the matching packaged Windows x64 native addon, local NTFS targets and runtimes, and Windows 10 or later. Native handles enforce path admission, private DACLs, and Job Object ownership automatically."
+  ],
+  "relationship_coverage": null,
+  "locations": [
+    {
+      "kind": "address",
+      "address": "0x897750"
+    },
+    {
+      "kind": "address",
+      "address": "0x897779"
+    },
+    {
+      "kind": "address",
+      "address": "0x8978e6"
+    },
+    {
+      "kind": "address",
+      "address": "0x8978f0"
+    },
+    {
+      "kind": "address",
+      "address": "0x89792a"
+    },
+    {
+      "kind": "address",
+      "address": "0x897958"
+    },
+    {
+      "kind": "address",
+      "address": "0x897978"
+    },
+    {
+      "kind": "address",
+      "address": "0x897a49"
+    },
+    {
+      "kind": "address",
+      "address": "0x897a66"
+    },
+    {
+      "kind": "address",
+      "address": "0x897b20"
+    },
+    {
+      "kind": "address",
+      "address": "0x897bb0"
+    },
+    {
+      "kind": "address",
+      "address": "0x897e3b"
+    },
+    {
+      "kind": "address",
+      "address": "0x8980a2"
+    },
+    {
+      "kind": "address",
+      "address": "0x8980bc"
+    },
+    {
+      "kind": "address",
+      "address": "0x89816e"
+    },
+    {
+      "kind": "address",
+      "address": "0x89818e"
+    }
+  ],
+  "evidence_links": []
+}

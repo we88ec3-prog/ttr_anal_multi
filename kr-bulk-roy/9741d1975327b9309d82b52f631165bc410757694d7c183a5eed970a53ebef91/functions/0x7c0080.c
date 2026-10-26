@@ -1,0 +1,48 @@
+
+void FUN_007c0080(undefined4 param_1)
+
+{
+  char cVar1;
+  uint uVar2;
+  int iVar3;
+  undefined4 uVar4;
+  int unaff_EDI;
+  uint local_40 [4];
+  undefined4 local_30;
+  uint local_2c;
+  undefined4 local_20;
+  undefined4 local_1c;
+  uint local_18;
+  void *local_10;
+  undefined1 *puStack_c;
+  undefined4 local_8;
+  
+  local_8 = 0xffffffff;
+  puStack_c = &LAB_00911888;
+  local_10 = ExceptionList;
+  uVar2 = DAT_00d61f20 ^ (uint)&stack0xfffffffc;
+  ExceptionList = &local_10;
+  local_18 = uVar2;
+  iVar3 = FUN_007c0840(param_1);
+  if (iVar3 != *(int *)(unaff_EDI + 4)) {
+    cVar1 = FUN_0049ae30(uVar2);
+    if (cVar1 == '\0') goto LAB_007c0120;
+  }
+  local_2c = 0xf;
+  local_30 = 0;
+  local_40[0] = local_40[0] & 0xffffff00;
+  FUN_00403040(param_1,0,0xffffffff);
+  local_20 = 0;
+  local_1c = 0;
+  local_8 = 0;
+  uVar4 = FUN_007c1c40(local_40);
+  FUN_007c0df0(iVar3,uVar4);
+  if (0xf < local_2c) {
+    FUN_0089120c(local_40[0]);
+  }
+LAB_007c0120:
+  ExceptionList = local_10;
+  __security_check_cookie(local_18 ^ (uint)&stack0xfffffffc);
+  return;
+}
+

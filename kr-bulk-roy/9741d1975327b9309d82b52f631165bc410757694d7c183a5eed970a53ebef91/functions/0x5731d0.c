@@ -1,0 +1,30 @@
+
+undefined4 FUN_005731d0(int *param_1)
+
+{
+  int iVar1;
+  int *piVar2;
+  char cVar3;
+  int *piVar4;
+  undefined4 unaff_EDI;
+  int local_8;
+  
+  piVar2 = param_1;
+  iVar1 = *param_1;
+  param_1 = (int *)FUN_006cf160(unaff_EDI);
+  if (param_1 != (int *)*(int *)(iVar1 + 4)) {
+    cVar3 = FUN_005436a0();
+    if (cVar3 == '\0') {
+      piVar4 = (int *)&param_1;
+      goto LAB_00573207;
+    }
+  }
+  local_8 = *(int *)(iVar1 + 4);
+  piVar4 = &local_8;
+LAB_00573207:
+  if (*piVar4 != *(int *)(*piVar2 + 4)) {
+    return *(undefined4 *)(*(int *)(*piVar4 + 0x28) + 0x1c);
+  }
+  return 2;
+}
+

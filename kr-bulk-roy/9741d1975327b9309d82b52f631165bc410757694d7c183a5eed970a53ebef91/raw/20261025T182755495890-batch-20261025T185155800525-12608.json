@@ -1,0 +1,351 @@
+{
+  "evidence_id": "ev_2bf5a38bdc640985708c3d3c22615e94c20b2cf298ba53eb349c2cf82fb640be",
+  "subject": {
+    "name": "Tartaros.bin",
+    "digest": {
+      "sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91"
+    },
+    "local_path": "E:\\Tartaros\\workspace\\Tartaros.bin",
+    "format": "pe",
+    "architecture": "x86"
+  },
+  "provider": {
+    "id": "rea-workflow",
+    "name": "REA composed investigation workflow",
+    "version": "1"
+  },
+  "analysis_profile": {
+    "provider": {
+      "id": "rea-workflow",
+      "name": "REA composed investigation workflow",
+      "version": "1"
+    },
+    "parameters": {
+      "upstream_analysis_profile": {
+        "provider": {
+          "id": "ghidra",
+          "name": "Ghidra",
+          "version": "12.1.4"
+        },
+        "parameters": {
+          "target_kind": "executable",
+          "target_format": "pe",
+          "executable_role": "application",
+          "managed": false,
+          "native_aot_metadata": {
+            "contract_revision": "rtr-9.1-x64-pe-read-only-v3",
+            "source_bytes": 134217728,
+            "work_units": 67108864,
+            "working_memory_bytes": 67108864,
+            "report_bytes": 4194304
+          },
+          "architecture": "x86",
+          "available_architectures": [
+            "x86"
+          ],
+          "import_mode": "ephemeral-source-immutable",
+          "pdb_observations": "program-info-v1",
+          "annotation_policy": "atomic-function-entry-metadata-v1",
+          "load_image_observations": "source-mappings-entry-context-v2",
+          "function_body_evidence": "complete-inclusive-ranges-v1",
+          "function_references": "complete-body-and-entry-reference-manager-v2",
+          "call_relationship_coverage": "function-body-call-coverage-v5",
+          "function_dossier_coverage": "observed-facets-and-call-relationships-v1",
+          "string_inventory_evidence": "defined-data-coverage-v1",
+          "location_resolution": "explicit-address-exact-entry-symbol-first-v3",
+          "procedure_file_offset_resolution": "address-first-unique-target-source-mapping-v2",
+          "instruction_flow_evidence": "decoded-return-pcode-v1",
+          "instruction_references": "exact-address-incoming-v1",
+          "function_boundary_observations": "ghidra-function-boundary-limitations-v3",
+          "no_return_repair": "disabled-windows-p0",
+          "process_launch": "official-headless-script-v1",
+          "jump_table_evidence": "typed-case-default-blocks-v1",
+          "decompiler_jump_loads": true,
+          "loader": "auto-from-header",
+          "language_id": "auto-from-header",
+          "compiler_spec_id": "auto-default",
+          "analyzer_preset": "ghidra-default"
+        },
+        "digest": "3c06738e45e144d5f073edbd3244c6bff46222f389525fe659bc92dca2ccdece"
+      },
+      "workflow_revision": 2
+    },
+    "digest": "d4471786e332c0336f066a85a651a368051028dfaa0c1d7a5ac78db2f422f47e"
+  },
+  "predicate_type": "rea.analysis",
+  "operation": "batch_decompile",
+  "parameters": {
+    "addresses": [
+      "0x72b700",
+      "0x72b9c0",
+      "0x72b9e0",
+      "0x72ba00",
+      "0x72be90",
+      "0x72bef0",
+      "0x72bf70",
+      "0x72c050",
+      "0x72c250",
+      "0x72c2e0",
+      "0x72c4e0",
+      "0x72c5c0",
+      "0x72cb40",
+      "0x72cc10",
+      "0x72ce60",
+      "0x72cf00"
+    ]
+  },
+  "raw_result": null,
+  "normalized_result": {
+    "items": [
+      {
+        "address": "0x72b700",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x72b700",
+          "name": "FUN_0072b700"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nuint FUN_0072b700(uint param_1)\r\n\r\n{\r\n  uint in_EAX;\r\n  uint uVar1;\r\n  uint *in_ECX;\r\n  uint *puVar2;\r\n  uint uVar3;\r\n  \r\n  uVar1 = ~in_EAX;\r\n  for (; (param_1 != 0 && (((uint)in_ECX & 3) != 0)); in_ECX = (uint *)((int)in_ECX + 1)) {\r\n    uVar1 = uVar1 >> 8 ^ *(uint *)(&DAT_00c08ce8 + (((byte)*in_ECX ^ uVar1) & 0xff) * 4);\r\n    param_1 = param_1 - 1;\r\n  }\r\n  if (0x1f < param_1) {\r\n    uVar3 = param_1 >> 5;\r\n    puVar2 = in_ECX;\r\n    do {\r\n      uVar1 = uVar1 ^ *puVar2;\r\n      uVar1 = *(uint *)(&DAT_00c090e8 + (uVar1 >> 0x10 & 0xff) * 4) ^\r\n              *(uint *)(&DAT_00c094e8 + (uVar1 >> 8 & 0xff) * 4) ^\r\n              *(uint *)(&DAT_00c08ce8 + (uVar1 >> 0x18) * 4) ^\r\n              *(uint *)(&DAT_00c098e8 + (uVar1 & 0xff) * 4) ^ puVar2[1];\r\n      uVar1 = *(uint *)(&DAT_00c090e8 + (uVar1 >> 0x10 & 0xff) * 4) ^\r\n              *(uint *)(&DAT_00c094e8 + (uVar1 >> 8 & 0xff) * 4) ^\r\n              *(uint *)(&DAT_00c08ce8 + (uVar1 >> 0x18) * 4) ^\r\n              *(uint *)(&DAT_00c098e8 + (uVar1 & 0xff) * 4) ^ puVar2[2];\r\n      uVar1 = *(uint *)(&DAT_00c090e8 + (uVar1 >> 0x10 & 0xff) * 4) ^\r\n              *(uint *)(&DAT_00c094e8 + (uVar1 >> 8 & 0xff) * 4) ^\r\n              *(uint *)(&DAT_00c08ce8 + (uVar1 >> 0x18) * 4) ^\r\n              *(uint *)(&DAT_00c098e8 + (uVar1 & 0xff) * 4) ^ puVar2[3];\r\n      uVar1 = *(uint *)(&DAT_00c090e8 + (uVar1 >> 0x10 & 0xff) * 4) ^\r\n              *(uint *)(&DAT_00c094e8 + (uVar1 >> 8 & 0xff) * 4) ^\r\n              *(uint *)(&DAT_00c08ce8 + (uVar1 >> 0x18) * 4) ^\r\n              *(uint *)(&DAT_00c098e8 + (uVar1 & 0xff) * 4) ^ puVar2[4];\r\n      uVar1 = *(uint *)(&DAT_00c090e8 + (uVar1 >> 0x10 & 0xff) * 4) ^\r\n              *(uint *)(&DAT_00c094e8 + (uVar1 >> 8 & 0xff) * 4) ^\r\n              *(uint *)(&DAT_00c08ce8 + (uVar1 >> 0x18) * 4) ^\r\n              *(uint *)(&DAT_00c098e8 + (uVar1 & 0xff) * 4) ^ puVar2[5];\r\n      in_ECX = puVar2 + 8;\r\n      uVar1 = *(uint *)(&DAT_00c090e8 + (uVar1 >> 0x10 & 0xff) * 4) ^\r\n              *(uint *)(&DAT_00c094e8 + (uVar1 >> 8 & 0xff) * 4) ^\r\n              *(uint *)(&DAT_00c08ce8 + (uVar1 >> 0x18) * 4) ^\r\n              *(uint *)(&DAT_00c098e8 + (uVar1 & 0xff) * 4) ^ puVar2[6];\r\n      param_1 = param_1 - 0x20;\r\n      uVar1 = *(uint *)(&DAT_00c090e8 + (uVar1 >> 0x10 & 0xff) * 4) ^\r\n              *(uint *)(&DAT_00c094e8 + (uVar1 >> 8 & 0xff) * 4) ^\r\n              *(uint *)(&DAT_00c08ce8 + (uVar1 >> 0x18) * 4) ^\r\n              *(uint *)(&DAT_00c098e8 + (uVar1 & 0xff) * 4) ^ puVar2[7];\r\n      uVar1 = *(uint *)(&DAT_00c090e8 + (uVar1 >> 0x10 & 0xff) * 4) ^\r\n              *(uint *)(&DAT_00c094e8 + (uVar1 >> 8 & 0xff) * 4) ^\r\n              *(uint *)(&DAT_00c08ce8 + (uVar1 >> 0x18) * 4) ^\r\n              *(uint *)(&DAT_00c098e8 + (uVar1 & 0xff) * 4);\r\n      uVar3 = uVar3 - 1;\r\n      puVar2 = in_ECX;\r\n    } while (uVar3 != 0);\r\n  }\r\n  if (3 < param_1) {\r\n    uVar3 = param_1 >> 2;\r\n    do {\r\n      uVar1 = uVar1 ^ *in_ECX;\r\n      in_ECX = in_ECX + 1;\r\n      uVar1 = *(uint *)(&DAT_00c090e8 + (uVar1 >> 0x10 & 0xff) * 4) ^\r\n              *(uint *)(&DAT_00c094e8 + (uVar1 >> 8 & 0xff) * 4) ^\r\n              *(uint *)(&DAT_00c08ce8 + (uVar1 >> 0x18) * 4) ^\r\n              *(uint *)(&DAT_00c098e8 + (uVar1 & 0xff) * 4);\r\n      param_1 = param_1 - 4;\r\n      uVar3 = uVar3 - 1;\r\n    } while (uVar3 != 0);\r\n  }\r\n  for (; param_1 != 0; param_1 = param_1 - 1) {\r\n    uVar1 = uVar1 >> 8 ^ *(uint *)(&DAT_00c08ce8 + (((byte)*in_ECX ^ uVar1) & 0xff) * 4);\r\n    in_ECX = (uint *)((int)in_ECX + 1);\r\n  }\r\n  return ~uVar1;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x72b9c0",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x72b9c0",
+          "name": "FUN_0072b9c0"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_0072b9c0(undefined4 param_1,int param_2,int param_3)\r\n\r\n{\r\n  _malloc(param_2 * param_3);\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x72b9e0",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x72b9e0",
+          "name": "FUN_0072b9e0"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_0072b9e0(undefined4 param_1,void *param_2)\r\n\r\n{\r\n  _free(param_2);\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x72ba00",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x72ba00",
+          "name": "FUN_0072ba00"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_0072ba00(int param_1,int param_2,uint param_3,ushort *param_4)\r\n\r\n{\r\n  byte bVar1;\r\n  ushort uVar2;\r\n  uint uVar3;\r\n  uint uVar4;\r\n  uint uVar5;\r\n  uint uVar6;\r\n  byte bVar7;\r\n  uint *in_ECX;\r\n  undefined4 *puVar8;\r\n  int iVar9;\r\n  int *in_EDX;\r\n  uint uVar10;\r\n  byte bVar11;\r\n  int iVar12;\r\n  ushort *puVar13;\r\n  uint local_84;\r\n  uint local_80;\r\n  ushort *local_78;\r\n  ushort *local_74;\r\n  ushort *local_70;\r\n  uint local_6c;\r\n  int local_68;\r\n  int local_60;\r\n  uint local_5c;\r\n  uint local_54;\r\n  uint local_50;\r\n  undefined4 local_4c;\r\n  ushort auStack_48 [16];\r\n  ushort local_28 [16];\r\n  uint local_8;\r\n  \r\n  local_8 = DAT_00d61f20 ^ (uint)&stack0xfffffffc;\r\n  local_28[0] = 0;\r\n  local_28[1] = 0;\r\n  local_28[2] = 0;\r\n  local_28[3] = 0;\r\n  local_28[4] = 0;\r\n  local_28[5] = 0;\r\n  local_28[6] = 0;\r\n  local_28[7] = 0;\r\n  local_28[8] = 0;\r\n  local_28[9] = 0;\r\n  local_28[10] = 0;\r\n  local_28[0xb] = 0;\r\n  local_28[0xc] = 0;\r\n  local_28[0xd] = 0;\r\n  local_28[0xe] = 0;\r\n  local_28[0xf] = 0;\r\n  uVar3 = 0;\r\n  if (param_3 != 0) {\r\n    do {\r\n      local_28[*(ushort *)(param_2 + uVar3 * 2)] = local_28[*(ushort *)(param_2 + uVar3 * 2)] + 1;\r\n      uVar3 = uVar3 + 1;\r\n    } while (uVar3 < param_3);\r\n  }\r\n  uVar3 = 0xf;\r\n  do {\r\n    if (local_28[uVar3] != 0) break;\r\n    uVar3 = uVar3 - 1;\r\n  } while (uVar3 != 0);\r\n  local_54 = *in_ECX;\r\n  if (uVar3 < *in_ECX) {\r\n    local_54 = uVar3;\r\n  }\r\n  if (uVar3 == 0) {\r\n    *(undefined4 *)*in_EDX = 0x140;\r\n    *in_EDX = *in_EDX + 4;\r\n    *(undefined4 *)*in_EDX = 0x140;\r\n    *in_EDX = *in_EDX + 4;\r\n    *in_ECX = 1;\r\n    __security_check_cookie(local_8 ^ (uint)&stack0xfffffffc);\r\n    return;\r\n  }\r\n  local_50 = 1;\r\n  do {\r\n    if (local_28[local_50] != 0) break;\r\n    if (local_28[local_50 + 1] != 0) {\r\n      local_50 = local_50 + 1;\r\n      break;\r\n    }\r\n    if (local_28[local_50 + 2] != 0) {\r\n      local_50 = local_50 + 2;\r\n      break;\r\n    }\r\n    if (local_28[local_50 + 3] != 0) {\r\n      local_50 = local_50 + 3;\r\n      break;\r\n    }\r\n    if (local_28[local_50 + 4] != 0) {\r\n      local_50 = local_50 + 4;\r\n      break;\r\n    }\r\n    local_50 = local_50 + 5;\r\n  } while (local_50 < 0x10);\r\n  if (local_54 < local_50) {\r\n    local_54 = local_50;\r\n  }\r\n  iVar12 = 1;\r\n  uVar4 = 1;\r\n  do {\r\n    iVar12 = iVar12 * 2 - (uint)local_28[uVar4];\r\n    if (iVar12 < 0) goto LAB_0072bbbf;\r\n    uVar4 = uVar4 + 1;\r\n  } while (uVar4 < 0x10);\r\n  if ((0 < iVar12) && ((param_1 == 0 || (uVar3 != 1)))) {\r\nLAB_0072bbbf:\r\n    __security_check_cookie(local_8 ^ (uint)&stack0xfffffffc);\r\n    return;\r\n  }\r\n  auStack_48[1] = 0;\r\n  uVar4 = 2;\r\n  do {\r\n    uVar5 = uVar4 + 2;\r\n    *(short *)((int)auStack_48 + uVar4 + 2) =\r\n         *(short *)((int)auStack_48 + uVar4) + *(short *)((int)local_28 + uVar4);\r\n    uVar4 = uVar5;\r\n  } while (uVar5 < 0x1e);\r\n  uVar4 = 0;\r\n  if (param_3 != 0) {\r\n    do {\r\n      if (*(short *)(param_2 + uVar4 * 2) != 0) {\r\n        param_4[auStack_48[*(ushort *)(param_2 + uVar4 * 2)]] = (ushort)uVar4;\r\n        auStack_48[*(ushort *)(param_2 + uVar4 * 2)] =\r\n             auStack_48[*(ushort *)(param_2 + uVar4 * 2)] + 1;\r\n      }\r\n      uVar4 = uVar4 + 1;\r\n    } while (uVar4 < param_3);\r\n  }\r\n  if (param_1 == 0) {\r\n    local_74 = param_4;\r\n    local_78 = param_4;\r\n    local_68 = 0x13;\r\n  }\r\n  else if (param_1 == 1) {\r\n    local_78 = (ushort *)&DAT_00c089be;\r\n    local_74 = (ushort *)&DAT_00c089fe;\r\n    local_68 = 0x100;\r\n  }\r\n  else {\r\n    local_78 = (ushort *)&DAT_00c08c40;\r\n    local_74 = (ushort *)&DAT_00c08c80;\r\n    local_68 = -1;\r\n  }\r\n  local_60 = *in_EDX;\r\n  local_5c = 0xffffffff;\r\n  bVar7 = (byte)local_54;\r\n  local_84 = 1 << (bVar7 & 0x1f);\r\n  local_80 = 0;\r\n  uVar5 = 0;\r\n  uVar4 = local_84 - 1;\r\n  if ((param_1 == 1) && (0x5af < local_84)) {\r\n    __security_check_cookie(local_8 ^ (uint)&stack0xfffffffc);\r\n    return;\r\n  }\r\n  local_70 = param_4;\r\n  local_6c = local_84;\r\nLAB_0072bc56:\r\n  do {\r\n    bVar11 = (byte)uVar5;\r\n    bVar1 = (char)local_50 - bVar11;\r\n    uVar2 = *local_70;\r\n    if ((int)(uint)uVar2 < local_68) {\r\n      local_4c._0_2_ = (ushort)bVar1 << 8;\r\nLAB_0072bc91:\r\n      local_4c = CONCAT22(uVar2,(ushort)local_4c);\r\n    }\r\n    else {\r\n      if ((int)(uint)uVar2 <= local_68) {\r\n        local_4c = CONCAT31((uint3)bVar1,0x60);\r\n        uVar2 = 0;\r\n        goto LAB_0072bc91;\r\n      }\r\n      local_4c = CONCAT22(local_78[*local_70],CONCAT11(bVar1,(char)local_74[*local_70]));\r\n    }\r\n    iVar12 = 1 << ((char)local_50 - bVar11 & 0x1f);\r\n    puVar8 = (undefined4 *)(local_60 + ((local_80 >> (bVar11 & 0x1f)) + local_84) * 4);\r\n    uVar6 = local_84;\r\n    do {\r\n      puVar8 = puVar8 + -iVar12;\r\n      uVar6 = uVar6 - iVar12;\r\n      *puVar8 = local_4c;\r\n    } while (uVar6 != 0);\r\n    for (uVar6 = 1 << ((char)local_50 - 1U & 0x1f); (local_80 & uVar6) != 0; uVar6 = uVar6 >> 1) {\r\n    }\r\n    if (uVar6 == 0) {\r\n      local_80 = 0;\r\n    }\r\n    else {\r\n      local_80 = (uVar6 - 1 & local_80) + uVar6;\r\n    }\r\n    local_70 = local_70 + 1;\r\n    puVar13 = local_28 + local_50;\r\n    *puVar13 = *puVar13 - 1;\r\n    if (*puVar13 == 0) {\r\n      if (local_50 == uVar3) {\r\n        local_4c._0_2_ = CONCAT11((char)local_50 - bVar11,0x40);\r\n        local_4c = (uint)(ushort)local_4c;\r\n        goto joined_r0x0072be03;\r\n      }\r\n      local_50 = (uint)*(ushort *)(param_2 + (uint)*local_70 * 2);\r\n    }\r\n  } while ((local_50 <= local_54) || (uVar6 = uVar4 & local_80, uVar6 == local_5c));\r\n  if (uVar5 == 0) {\r\n    uVar5 = local_54;\r\n  }\r\n  local_60 = local_60 + local_84 * 4;\r\n  iVar9 = local_50 - uVar5;\r\n  uVar10 = uVar5 + iVar9;\r\n  iVar12 = 1 << ((byte)iVar9 & 0x1f);\r\n  if (uVar10 < uVar3) {\r\n    puVar13 = local_28 + uVar10;\r\n    do {\r\n      uVar2 = *puVar13;\r\n      if ((int)(iVar12 - (uint)uVar2) < 1) break;\r\n      uVar10 = uVar10 + 1;\r\n      iVar9 = iVar9 + 1;\r\n      puVar13 = puVar13 + 1;\r\n      iVar12 = (iVar12 - (uint)uVar2) * 2;\r\n    } while (uVar10 < uVar3);\r\n  }\r\n  local_84 = 1 << ((byte)iVar9 & 0x1f);\r\n  local_6c = local_6c + local_84;\r\n  if ((param_1 != 1) || (local_6c < 0x5b0)) {\r\n    *(byte *)(*in_EDX + uVar6 * 4) = (byte)iVar9;\r\n    *(byte *)(*in_EDX + 1 + uVar6 * 4) = bVar7;\r\n    *(short *)(*in_EDX + 2 + uVar6 * 4) = (short)(local_60 - *in_EDX >> 2);\r\n    local_5c = uVar6;\r\n    goto LAB_0072bc56;\r\n  }\r\nLAB_0072be7f:\r\n  __security_check_cookie(local_8 ^ (uint)&stack0xfffffffc);\r\n  return;\r\njoined_r0x0072be03:\r\n  if (local_80 == 0) goto LAB_0072be63;\r\n  if ((uVar5 != 0) && ((uVar4 & local_80) != local_5c)) {\r\n    local_60 = *in_EDX;\r\n    uVar5 = 0;\r\n    local_50 = local_54;\r\n    local_4c._0_2_ = CONCAT11(bVar7,(undefined1)local_4c);\r\n    local_4c = (uint)(ushort)local_4c;\r\n  }\r\n  *(uint *)(local_60 + (local_80 >> ((byte)uVar5 & 0x1f)) * 4) = local_4c;\r\n  for (uVar3 = 1 << ((char)local_50 - 1U & 0x1f); (local_80 & uVar3) != 0; uVar3 = uVar3 >> 1) {\r\n  }\r\n  if (uVar3 == 0) goto LAB_0072be63;\r\n  local_80 = (local_80 & uVar3 - 1) + uVar3;\r\n  goto joined_r0x0072be03;\r\nLAB_0072be63:\r\n  *in_EDX = *in_EDX + local_6c * 4;\r\n  *in_ECX = local_54;\r\n  goto LAB_0072be7f;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x72be90",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x72be90",
+          "name": "FUN_0072be90"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_0072be90(void)\r\n\r\n{\r\n  int in_EDX;\r\n  \r\n  *(int *)(in_EDX + 0xb18) = in_EDX + 0x94;\r\n  *(int *)(in_EDX + 0xb24) = in_EDX + 0x988;\r\n  *(undefined ***)(in_EDX + 0xb20) = &PTR_DAT_00d63d0c;\r\n  *(undefined ***)(in_EDX + 0xb2c) = &PTR_DAT_00d63d20;\r\n  *(int *)(in_EDX + 0xb30) = in_EDX + 0xa7c;\r\n  *(undefined **)(in_EDX + 0xb38) = &DAT_00d63d34;\r\n  *(undefined2 *)(in_EDX + 0x16b8) = 0;\r\n  *(undefined4 *)(in_EDX + 0x16bc) = 0;\r\n  *(undefined4 *)(in_EDX + 0x16b4) = 8;\r\n  FUN_0072bef0();\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x72bef0",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x72bef0",
+          "name": "FUN_0072bef0"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_0072bef0(void)\r\n\r\n{\r\n  undefined2 *puVar1;\r\n  int iVar2;\r\n  int in_EDX;\r\n  \r\n  puVar1 = (undefined2 *)(in_EDX + 0x94);\r\n  iVar2 = 0x11e;\r\n  do {\r\n    *puVar1 = 0;\r\n    puVar1 = puVar1 + 2;\r\n    iVar2 = iVar2 + -1;\r\n  } while (iVar2 != 0);\r\n  puVar1 = (undefined2 *)(in_EDX + 0x988);\r\n  iVar2 = 0x1e;\r\n  do {\r\n    *puVar1 = 0;\r\n    puVar1 = puVar1 + 2;\r\n    iVar2 = iVar2 + -1;\r\n  } while (iVar2 != 0);\r\n  puVar1 = (undefined2 *)(in_EDX + 0xa7c);\r\n  iVar2 = 0x13;\r\n  do {\r\n    *puVar1 = 0;\r\n    puVar1 = puVar1 + 2;\r\n    iVar2 = iVar2 + -1;\r\n  } while (iVar2 != 0);\r\n  *(undefined2 *)(in_EDX + 0x494) = 1;\r\n  *(undefined4 *)(in_EDX + 0x16ac) = 0;\r\n  *(undefined4 *)(in_EDX + 0x16a8) = 0;\r\n  *(undefined4 *)(in_EDX + 0x16b0) = 0;\r\n  *(undefined4 *)(in_EDX + 0x16a0) = 0;\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x72bf70",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x72bf70",
+          "name": "FUN_0072bf70"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_0072bf70(int param_1)\r\n\r\n{\r\n  ushort uVar1;\r\n  ushort uVar2;\r\n  int iVar3;\r\n  int iVar4;\r\n  int iVar5;\r\n  int in_EAX;\r\n  int iVar6;\r\n  int iVar7;\r\n  int unaff_EDI;\r\n  bool bVar8;\r\n  \r\n  iVar7 = *(int *)(in_EAX + 0x1450);\r\n  iVar3 = *(int *)(in_EAX + 0xb5c + param_1 * 4);\r\n  iVar6 = param_1 * 2;\r\n  bVar8 = SBORROW4(iVar6,iVar7);\r\n  iVar5 = iVar6 - iVar7;\r\n  if (iVar7 < iVar6) {\r\n    *(int *)(in_EAX + 0xb5c + param_1 * 4) = iVar3;\r\n    return;\r\n  }\r\n  while( true ) {\r\n    iVar7 = iVar6;\r\n    if (bVar8 != iVar5 < 0) {\r\n      iVar5 = *(int *)(in_EAX + 0xb60 + iVar6 * 4);\r\n      uVar1 = *(ushort *)(unaff_EDI + iVar5 * 4);\r\n      uVar2 = *(ushort *)(unaff_EDI + *(int *)(in_EAX + 0xb5c + iVar6 * 4) * 4);\r\n      if ((uVar1 < uVar2) ||\r\n         ((uVar1 == uVar2 &&\r\n          (*(byte *)(iVar5 + 0x1458 + in_EAX) <=\r\n           *(byte *)(*(int *)(in_EAX + 0xb5c + iVar6 * 4) + 0x1458 + in_EAX))))) {\r\n        iVar7 = iVar6 + 1;\r\n      }\r\n    }\r\n    iVar5 = *(int *)(in_EAX + 0xb5c + iVar7 * 4);\r\n    uVar1 = *(ushort *)(unaff_EDI + iVar3 * 4);\r\n    uVar2 = *(ushort *)(unaff_EDI + iVar5 * 4);\r\n    if ((uVar1 < uVar2) ||\r\n       ((uVar1 == uVar2 &&\r\n        (*(byte *)(iVar3 + 0x1458 + in_EAX) <= *(byte *)(iVar5 + 0x1458 + in_EAX))))) break;\r\n    *(int *)(in_EAX + 0xb5c + param_1 * 4) = iVar5;\r\n    iVar4 = *(int *)(in_EAX + 0x1450);\r\n    iVar6 = iVar7 * 2;\r\n    bVar8 = SBORROW4(iVar6,iVar4);\r\n    iVar5 = iVar6 - iVar4;\r\n    param_1 = iVar7;\r\n    if (iVar4 < iVar6) {\r\n      *(int *)(in_EAX + 0xb5c + iVar7 * 4) = iVar3;\r\n      return;\r\n    }\r\n  }\r\n  *(int *)(in_EAX + 0xb5c + param_1 * 4) = iVar3;\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x72c050",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x72c050",
+          "name": "FUN_0072c050"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_0072c050(void)\r\n\r\n{\r\n  short sVar1;\r\n  int iVar2;\r\n  int iVar3;\r\n  int *piVar4;\r\n  int iVar5;\r\n  int iVar6;\r\n  int iVar7;\r\n  int in_EAX;\r\n  int *in_ECX;\r\n  uint uVar8;\r\n  int iVar9;\r\n  short *psVar10;\r\n  uint uVar11;\r\n  int iVar12;\r\n  int iVar13;\r\n  uint uVar14;\r\n  ushort *puVar15;\r\n  int local_18;\r\n  int local_14;\r\n  int *local_10;\r\n  int local_c;\r\n  \r\n  iVar2 = in_ECX[1];\r\n  iVar3 = *in_ECX;\r\n  piVar4 = (int *)in_ECX[2];\r\n  iVar9 = *piVar4;\r\n  iVar5 = piVar4[1];\r\n  iVar6 = piVar4[2];\r\n  uVar11 = piVar4[4];\r\n  *(undefined4 *)(in_EAX + 0xb3c) = 0;\r\n  *(undefined4 *)(in_EAX + 0xb40) = 0;\r\n  *(undefined4 *)(in_EAX + 0xb44) = 0;\r\n  *(undefined4 *)(in_EAX + 0xb48) = 0;\r\n  *(undefined4 *)(in_EAX + 0xb4c) = 0;\r\n  *(undefined4 *)(in_EAX + 0xb50) = 0;\r\n  *(undefined4 *)(in_EAX + 0xb54) = 0;\r\n  *(undefined4 *)(in_EAX + 0xb58) = 0;\r\n  *(undefined2 *)(iVar3 + 2 + *(int *)(in_EAX + 0xb5c + *(int *)(in_EAX + 0x1454) * 4) * 4) = 0;\r\n  iVar12 = 0;\r\n  local_14 = *(int *)(in_EAX + 0x1454) + 1;\r\n  local_c = 0;\r\n  if (local_14 < 0x23d) {\r\n    local_10 = (int *)(in_EAX + 0xb5c + local_14 * 4);\r\n    local_18 = 0x23d - local_14;\r\n    local_14 = local_14 + local_18;\r\n    do {\r\n      iVar7 = *local_10;\r\n      uVar8 = *(ushort *)(iVar3 + 2 + (uint)*(ushort *)(iVar3 + 2 + iVar7 * 4) * 4) + 1;\r\n      if ((int)uVar11 < (int)uVar8) {\r\n        iVar12 = iVar12 + 1;\r\n        uVar8 = uVar11;\r\n        local_c = iVar12;\r\n      }\r\n      *(short *)(iVar3 + 2 + iVar7 * 4) = (short)uVar8;\r\n      if (iVar7 <= iVar2) {\r\n        psVar10 = (short *)(in_EAX + 0xb3c + uVar8 * 2);\r\n        *psVar10 = *psVar10 + 1;\r\n        iVar13 = 0;\r\n        if (iVar6 <= iVar7) {\r\n          iVar13 = *(int *)(iVar5 + (iVar7 - iVar6) * 4);\r\n        }\r\n        uVar14 = (uint)*(ushort *)(iVar3 + iVar7 * 4);\r\n        *(int *)(in_EAX + 0x16a8) = *(int *)(in_EAX + 0x16a8) + (uVar8 + iVar13) * uVar14;\r\n        iVar12 = local_c;\r\n        if (iVar9 != 0) {\r\n          *(int *)(in_EAX + 0x16ac) =\r\n               *(int *)(in_EAX + 0x16ac) +\r\n               ((uint)*(ushort *)(iVar9 + 2 + iVar7 * 4) + iVar13) * uVar14;\r\n        }\r\n      }\r\n      local_10 = local_10 + 1;\r\n      local_18 = local_18 + -1;\r\n    } while (local_18 != 0);\r\n    if (iVar12 != 0) {\r\n      puVar15 = (ushort *)(in_EAX + 0xb3c + uVar11 * 2);\r\n      do {\r\n        iVar9 = uVar11 - 1;\r\n        psVar10 = (short *)(in_EAX + 0xb3c + iVar9 * 2);\r\n        sVar1 = *(short *)(in_EAX + 0xb3c + iVar9 * 2);\r\n        while (sVar1 == 0) {\r\n          psVar10 = psVar10 + -1;\r\n          iVar9 = iVar9 + -1;\r\n          sVar1 = *psVar10;\r\n        }\r\n        psVar10 = (short *)(in_EAX + 0xb3e + iVar9 * 2);\r\n        *psVar10 = *psVar10 + 2;\r\n        psVar10 = (short *)(in_EAX + 0xb3c + iVar9 * 2);\r\n        *psVar10 = *psVar10 + -1;\r\n        *puVar15 = *puVar15 - 1;\r\n        iVar12 = iVar12 + -2;\r\n      } while (0 < iVar12);\r\n      for (; uVar11 != 0; uVar11 = uVar11 - 1) {\r\n        uVar8 = (uint)*puVar15;\r\n        if (uVar8 != 0) {\r\n          iVar9 = in_EAX + 0xb5c + local_14 * 4;\r\n          local_10 = (int *)uVar8;\r\n          do {\r\n            iVar5 = *(int *)(iVar9 + -4);\r\n            local_14 = local_14 + -1;\r\n            iVar9 = iVar9 + -4;\r\n            if (iVar5 <= iVar2) {\r\n              uVar8 = (uint)*(ushort *)(iVar3 + 2 + iVar5 * 4);\r\n              if (uVar8 != uVar11) {\r\n                *(int *)(in_EAX + 0x16a8) =\r\n                     *(int *)(in_EAX + 0x16a8) +\r\n                     (uVar11 - uVar8) * (uint)*(ushort *)(iVar3 + iVar5 * 4);\r\n                *(short *)(iVar3 + 2 + iVar5 * 4) = (short)uVar11;\r\n              }\r\n              uVar8 = (int)local_10 - 1;\r\n              local_10 = (int *)uVar8;\r\n            }\r\n          } while (uVar8 != 0);\r\n        }\r\n        puVar15 = puVar15 + -1;\r\n      }\r\n    }\r\n  }\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x72c250",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x72c250",
+          "name": "FUN_0072c250"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_0072c250(int param_1)\r\n\r\n{\r\n  uint uVar1;\r\n  int iVar2;\r\n  uint uVar3;\r\n  uint uVar4;\r\n  ushort uVar5;\r\n  int in_EDX;\r\n  uint uVar6;\r\n  uint uVar7;\r\n  int unaff_EDI;\r\n  ushort auStack_28 [16];\r\n  uint local_8;\r\n  \r\n  local_8 = DAT_00d61f20 ^ (uint)&stack0xfffffffc;\r\n  iVar2 = 1;\r\n  uVar5 = 0;\r\n  do {\r\n    uVar5 = (*(short *)(in_EDX + iVar2 * 2 + -2) + uVar5) * 2;\r\n    auStack_28[iVar2] = uVar5;\r\n    iVar2 = iVar2 + 1;\r\n  } while (iVar2 < 0x10);\r\n  iVar2 = 0;\r\n  if (-1 < param_1) {\r\n    do {\r\n      uVar6 = (uint)*(ushort *)(unaff_EDI + 2 + iVar2 * 4);\r\n      if (uVar6 != 0) {\r\n        uVar3 = (uint)auStack_28[uVar6];\r\n        auStack_28[uVar6] = auStack_28[uVar6] + 1;\r\n        uVar1 = 0;\r\n        do {\r\n          uVar4 = uVar1;\r\n          uVar7 = uVar3 & 1;\r\n          uVar6 = uVar6 - 1;\r\n          uVar3 = uVar3 >> 1;\r\n          uVar1 = (uVar4 | uVar7) * 2;\r\n        } while (0 < (int)uVar6);\r\n        *(ushort *)(unaff_EDI + iVar2 * 4) = (ushort)uVar4 | (ushort)uVar7;\r\n      }\r\n      iVar2 = iVar2 + 1;\r\n    } while (iVar2 <= param_1);\r\n  }\r\n  __security_check_cookie(local_8 ^ (uint)&stack0xfffffffc);\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x72c2e0",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x72c2e0",
+          "name": "FUN_0072c2e0"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_0072c2e0(int *param_1)\r\n\r\n{\r\n  byte bVar1;\r\n  byte bVar2;\r\n  int iVar3;\r\n  undefined4 uVar4;\r\n  int iVar5;\r\n  int iVar6;\r\n  int iVar7;\r\n  int unaff_ESI;\r\n  int local_c;\r\n  int local_8;\r\n  \r\n  iVar3 = *param_1;\r\n  local_c = ((int *)param_1[2])[3];\r\n  iVar7 = *(int *)param_1[2];\r\n  iVar6 = -1;\r\n  iVar5 = 0;\r\n  local_8 = -1;\r\n  *(undefined4 *)(unaff_ESI + 0x1450) = 0;\r\n  *(undefined4 *)(unaff_ESI + 0x1454) = 0x23d;\r\n  if (0 < local_c) {\r\n    do {\r\n      if (*(short *)(iVar3 + iVar5 * 4) == 0) {\r\n        *(undefined2 *)(iVar3 + 2 + iVar5 * 4) = 0;\r\n      }\r\n      else {\r\n        *(int *)(unaff_ESI + 0x1450) = *(int *)(unaff_ESI + 0x1450) + 1;\r\n        *(int *)(unaff_ESI + 0xb5c + *(int *)(unaff_ESI + 0x1450) * 4) = iVar5;\r\n        *(undefined1 *)(iVar5 + 0x1458 + unaff_ESI) = 0;\r\n        iVar6 = iVar5;\r\n        local_8 = iVar5;\r\n      }\r\n      iVar5 = iVar5 + 1;\r\n    } while (iVar5 < local_c);\r\n  }\r\n  iVar5 = *(int *)(unaff_ESI + 0x1450);\r\n  while (iVar5 < 2) {\r\n    if (iVar6 < 2) {\r\n      iVar5 = iVar6 + 1;\r\n      iVar6 = iVar5;\r\n    }\r\n    else {\r\n      iVar5 = 0;\r\n    }\r\n    *(int *)(unaff_ESI + 0x1450) = *(int *)(unaff_ESI + 0x1450) + 1;\r\n    *(int *)(unaff_ESI + 0xb5c + *(int *)(unaff_ESI + 0x1450) * 4) = iVar5;\r\n    *(undefined2 *)(iVar3 + iVar5 * 4) = 1;\r\n    *(undefined1 *)(unaff_ESI + 0x1458 + iVar5) = 0;\r\n    *(int *)(unaff_ESI + 0x16a8) = *(int *)(unaff_ESI + 0x16a8) + -1;\r\n    if (iVar7 != 0) {\r\n      *(int *)(unaff_ESI + 0x16ac) =\r\n           *(int *)(unaff_ESI + 0x16ac) - (uint)*(ushort *)(iVar7 + 2 + iVar5 * 4);\r\n    }\r\n    local_8 = iVar6;\r\n    iVar5 = *(int *)(unaff_ESI + 0x1450);\r\n  }\r\n  param_1[1] = iVar6;\r\n  for (iVar7 = *(int *)(unaff_ESI + 0x1450) / 2; 0 < iVar7; iVar7 = iVar7 + -1) {\r\n    FUN_0072bf70(iVar7);\r\n  }\r\n  do {\r\n    uVar4 = *(undefined4 *)(unaff_ESI + 0xb5c + *(int *)(unaff_ESI + 0x1450) * 4);\r\n    iVar7 = *(int *)(unaff_ESI + 0xb60);\r\n    *(int *)(unaff_ESI + 0x1450) = *(int *)(unaff_ESI + 0x1450) + -1;\r\n    *(undefined4 *)(unaff_ESI + 0xb60) = uVar4;\r\n    FUN_0072bf70(1);\r\n    iVar6 = *(int *)(unaff_ESI + 0xb60);\r\n    *(int *)(unaff_ESI + 0x1454) = *(int *)(unaff_ESI + 0x1454) + -1;\r\n    *(int *)(unaff_ESI + 0xb5c + *(int *)(unaff_ESI + 0x1454) * 4) = iVar7;\r\n    *(int *)(unaff_ESI + 0x1454) = *(int *)(unaff_ESI + 0x1454) + -1;\r\n    *(int *)(unaff_ESI + 0xb5c + *(int *)(unaff_ESI + 0x1454) * 4) = iVar6;\r\n    *(short *)(iVar3 + local_c * 4) = *(short *)(iVar3 + iVar6 * 4) + *(short *)(iVar3 + iVar7 * 4);\r\n    bVar1 = *(byte *)(unaff_ESI + 0x1458 + iVar7);\r\n    bVar2 = *(byte *)(unaff_ESI + 0x1458 + iVar6);\r\n    if (bVar1 < bVar2) {\r\n      bVar1 = bVar2;\r\n    }\r\n    *(byte *)(unaff_ESI + 0x1458 + local_c) = bVar1 + 1;\r\n    *(short *)(iVar3 + 2 + iVar6 * 4) = (short)local_c;\r\n    *(short *)(iVar3 + 2 + iVar7 * 4) = (short)local_c;\r\n    *(int *)(unaff_ESI + 0xb60) = local_c;\r\n    local_c = local_c + 1;\r\n    FUN_0072bf70(1);\r\n  } while (1 < *(int *)(unaff_ESI + 0x1450));\r\n  *(int *)(unaff_ESI + 0x1454) = *(int *)(unaff_ESI + 0x1454) + -1;\r\n  *(undefined4 *)(unaff_ESI + 0xb5c + *(int *)(unaff_ESI + 0x1454) * 4) =\r\n       *(undefined4 *)(unaff_ESI + 0xb60);\r\n  FUN_0072c050();\r\n  FUN_0072c250(local_8);\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x72c4e0",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x72c4e0",
+          "name": "FUN_0072c4e0"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_0072c4e0(int param_1,ushort *param_2)\r\n\r\n{\r\n  short *psVar1;\r\n  ushort uVar2;\r\n  int in_EAX;\r\n  int iVar3;\r\n  int iVar4;\r\n  uint uVar5;\r\n  uint uVar6;\r\n  int iVar7;\r\n  int local_c;\r\n  uint local_8;\r\n  \r\n  uVar2 = *(ushort *)(in_EAX + 2);\r\n  iVar4 = 0;\r\n  local_8 = 0xffffffff;\r\n  iVar3 = 7;\r\n  iVar7 = 4;\r\n  if (uVar2 == 0) {\r\n    iVar3 = 0x8a;\r\n    iVar7 = 3;\r\n  }\r\n  *(undefined2 *)(in_EAX + 6 + (int)param_2 * 4) = 0xffff;\r\n  if (-1 < (int)param_2) {\r\n    local_c = (int)param_2 + 1;\r\n    uVar5 = (uint)uVar2;\r\n    param_2 = (ushort *)(in_EAX + 6);\r\n    do {\r\n      uVar6 = (uint)*param_2;\r\n      iVar4 = iVar4 + 1;\r\n      if ((iVar3 <= iVar4) || (uVar5 != uVar6)) {\r\n        if (iVar4 < iVar7) {\r\n          psVar1 = (short *)(param_1 + 0xa7c + uVar5 * 4);\r\n          *psVar1 = *psVar1 + (short)iVar4;\r\n        }\r\n        else if (uVar5 == 0) {\r\n          if (iVar4 < 0xb) {\r\n            *(short *)(param_1 + 0xac0) = *(short *)(param_1 + 0xac0) + 1;\r\n          }\r\n          else {\r\n            *(short *)(param_1 + 0xac4) = *(short *)(param_1 + 0xac4) + 1;\r\n          }\r\n        }\r\n        else {\r\n          if (uVar5 != local_8) {\r\n            psVar1 = (short *)(param_1 + 0xa7c + uVar5 * 4);\r\n            *psVar1 = *psVar1 + 1;\r\n          }\r\n          *(short *)(param_1 + 0xabc) = *(short *)(param_1 + 0xabc) + 1;\r\n        }\r\n        iVar4 = 0;\r\n        local_8 = uVar5;\r\n        if (uVar6 == 0) {\r\n          iVar3 = 0x8a;\r\n          iVar7 = 3;\r\n        }\r\n        else if (uVar5 == uVar6) {\r\n          iVar3 = 6;\r\n          iVar7 = 3;\r\n        }\r\n        else {\r\n          iVar3 = 7;\r\n          iVar7 = 4;\r\n        }\r\n      }\r\n      param_2 = param_2 + 2;\r\n      local_c = local_c + -1;\r\n      uVar5 = uVar6;\r\n    } while (local_c != 0);\r\n  }\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x72c5c0",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x72c5c0",
+          "name": "FUN_0072c5c0"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_0072c5c0(int param_1)\r\n\r\n{\r\n  int in_EAX;\r\n  byte bVar1;\r\n  int in_ECX;\r\n  int iVar2;\r\n  ushort uVar3;\r\n  int iVar4;\r\n  uint uVar5;\r\n  uint uVar6;\r\n  int local_18;\r\n  uint local_14;\r\n  ushort *local_10;\r\n  uint local_c;\r\n  int local_8;\r\n  \r\n  local_14 = 0xffffffff;\r\n  iVar2 = 7;\r\n  local_8 = 4;\r\n  if (*(ushort *)(param_1 + 2) == 0) {\r\n    iVar2 = 0x8a;\r\n    local_8 = 3;\r\n  }\r\n  if (-1 < in_ECX) {\r\n    local_10 = (ushort *)(param_1 + 6);\r\n    local_18 = in_ECX + 1;\r\n    iVar4 = 0;\r\n    local_c = (uint)*(ushort *)(param_1 + 2);\r\n    do {\r\n      uVar5 = (uint)*local_10;\r\n      param_1 = iVar4 + 1;\r\n      if ((iVar2 <= param_1) || (local_c != uVar5)) {\r\n        if (param_1 < local_8) {\r\n          do {\r\n            uVar6 = (uint)*(ushort *)(in_EAX + 0xa7e + local_c * 4);\r\n            iVar2 = *(int *)(in_EAX + 0x16bc);\r\n            if ((int)(0x10 - uVar6) < iVar2) {\r\n              uVar3 = *(ushort *)(in_EAX + 0xa7c + local_c * 4);\r\n              *(ushort *)(in_EAX + 0x16b8) =\r\n                   *(ushort *)(in_EAX + 0x16b8) | uVar3 << ((byte)iVar2 & 0x1f);\r\n              *(undefined1 *)(*(int *)(in_EAX + 8) + *(int *)(in_EAX + 0x14)) =\r\n                   *(undefined1 *)(in_EAX + 0x16b8);\r\n              *(int *)(in_EAX + 0x14) = *(int *)(in_EAX + 0x14) + 1;\r\n              *(undefined1 *)(*(int *)(in_EAX + 0x14) + *(int *)(in_EAX + 8)) =\r\n                   *(undefined1 *)(in_EAX + 0x16b9);\r\n              *(int *)(in_EAX + 0x14) = *(int *)(in_EAX + 0x14) + 1;\r\n              iVar2 = *(int *)(in_EAX + 0x16bc) + -0x10;\r\n              *(ushort *)(in_EAX + 0x16b8) =\r\n                   uVar3 >> (0x10U - (char)*(int *)(in_EAX + 0x16bc) & 0x1f);\r\n            }\r\n            else {\r\n              *(ushort *)(in_EAX + 0x16b8) =\r\n                   *(ushort *)(in_EAX + 0x16b8) |\r\n                   *(short *)(in_EAX + 0xa7c + local_c * 4) << ((byte)iVar2 & 0x1f);\r\n            }\r\n            param_1 = param_1 + -1;\r\n            *(uint *)(in_EAX + 0x16bc) = iVar2 + uVar6;\r\n          } while (param_1 != 0);\r\n        }\r\n        else if (local_c == 0) {\r\n          if (param_1 < 0xb) {\r\n            uVar6 = (uint)*(ushort *)(in_EAX + 0xac2);\r\n            bVar1 = (byte)*(int *)(in_EAX + 0x16bc);\r\n            if ((int)(0x10 - uVar6) < *(int *)(in_EAX + 0x16bc)) {\r\n              uVar3 = *(ushort *)(in_EAX + 0xac0);\r\n              *(ushort *)(in_EAX + 0x16b8) = *(ushort *)(in_EAX + 0x16b8) | uVar3 << (bVar1 & 0x1f);\r\n              *(undefined1 *)(*(int *)(in_EAX + 8) + *(int *)(in_EAX + 0x14)) =\r\n                   *(undefined1 *)(in_EAX + 0x16b8);\r\n              *(int *)(in_EAX + 0x14) = *(int *)(in_EAX + 0x14) + 1;\r\n              *(undefined1 *)(*(int *)(in_EAX + 0x14) + *(int *)(in_EAX + 8)) =\r\n                   *(undefined1 *)(in_EAX + 0x16b9);\r\n              iVar2 = *(int *)(in_EAX + 0x16bc);\r\n              *(int *)(in_EAX + 0x14) = *(int *)(in_EAX + 0x14) + 1;\r\n              *(uint *)(in_EAX + 0x16bc) = iVar2 + -0x10 + uVar6;\r\n              *(ushort *)(in_EAX + 0x16b8) = uVar3 >> (0x10U - (char)iVar2 & 0x1f);\r\n            }\r\n            else {\r\n              *(ushort *)(in_EAX + 0x16b8) =\r\n                   *(ushort *)(in_EAX + 0x16b8) | *(short *)(in_EAX + 0xac0) << (bVar1 & 0x1f);\r\n              *(uint *)(in_EAX + 0x16bc) = *(int *)(in_EAX + 0x16bc) + uVar6;\r\n            }\r\n            iVar2 = *(int *)(in_EAX + 0x16bc);\r\n            uVar3 = (ushort)(iVar4 + -2);\r\n            if (iVar2 < 0xe) {\r\n              *(ushort *)(in_EAX + 0x16b8) =\r\n                   *(ushort *)(in_EAX + 0x16b8) | uVar3 << ((byte)iVar2 & 0x1f);\r\n              iVar2 = iVar2 + 3;\r\nLAB_0072cae9:\r\n              *(int *)(in_EAX + 0x16bc) = iVar2;\r\n            }\r\n            else {\r\n              *(ushort *)(in_EAX + 0x16b8) =\r\n                   *(ushort *)(in_EAX + 0x16b8) | uVar3 << ((byte)iVar2 & 0x1f);\r\n              *(undefined1 *)(*(int *)(in_EAX + 8) + *(int *)(in_EAX + 0x14)) =\r\n                   *(undefined1 *)(in_EAX + 0x16b8);\r\n              *(int *)(in_EAX + 0x14) = *(int *)(in_EAX + 0x14) + 1;\r\n              *(undefined1 *)(*(int *)(in_EAX + 0x14) + *(int *)(in_EAX + 8)) =\r\n                   *(undefined1 *)(in_EAX + 0x16b9);\r\n              iVar2 = *(int *)(in_EAX + 0x16bc);\r\n              *(int *)(in_EAX + 0x14) = *(int *)(in_EAX + 0x14) + 1;\r\n              *(int *)(in_EAX + 0x16bc) = iVar2 + -0xd;\r\n              *(ushort *)(in_EAX + 0x16b8) = uVar3 >> (0x10U - (char)iVar2 & 0x1f);\r\n            }\r\n          }\r\n          else {\r\n            uVar6 = (uint)*(ushort *)(in_EAX + 0xac6);\r\n            bVar1 = (byte)*(int *)(in_EAX + 0x16bc);\r\n            if ((int)(0x10 - uVar6) < *(int *)(in_EAX + 0x16bc)) {\r\n              uVar3 = *(ushort *)(in_EAX + 0xac4);\r\n              *(ushort *)(in_EAX + 0x16b8) = *(ushort *)(in_EAX + 0x16b8) | uVar3 << (bVar1 & 0x1f);\r\n              *(undefined1 *)(*(int *)(in_EAX + 8) + *(int *)(in_EAX + 0x14)) =\r\n                   *(undefined1 *)(in_EAX + 0x16b8);\r\n              *(int *)(in_EAX + 0x14) = *(int *)(in_EAX + 0x14) + 1;\r\n              *(undefined1 *)(*(int *)(in_EAX + 0x14) + *(int *)(in_EAX + 8)) =\r\n                   *(undefined1 *)(in_EAX + 0x16b9);\r\n              iVar2 = *(int *)(in_EAX + 0x16bc);\r\n              *(int *)(in_EAX + 0x14) = *(int *)(in_EAX + 0x14) + 1;\r\n              *(uint *)(in_EAX + 0x16bc) = iVar2 + -0x10 + uVar6;\r\n              *(ushort *)(in_EAX + 0x16b8) = uVar3 >> (0x10U - (char)iVar2 & 0x1f);\r\n            }\r\n            else {\r\n              *(ushort *)(in_EAX + 0x16b8) =\r\n                   *(ushort *)(in_EAX + 0x16b8) | *(short *)(in_EAX + 0xac4) << (bVar1 & 0x1f);\r\n              *(uint *)(in_EAX + 0x16bc) = *(int *)(in_EAX + 0x16bc) + uVar6;\r\n            }\r\n            iVar2 = *(int *)(in_EAX + 0x16bc);\r\n            uVar3 = (ushort)(iVar4 + -10);\r\n            if (iVar2 < 10) {\r\n              *(ushort *)(in_EAX + 0x16b8) =\r\n                   *(ushort *)(in_EAX + 0x16b8) | uVar3 << ((byte)iVar2 & 0x1f);\r\n              iVar2 = iVar2 + 7;\r\n              goto LAB_0072cae9;\r\n            }\r\n            *(ushort *)(in_EAX + 0x16b8) =\r\n                 *(ushort *)(in_EAX + 0x16b8) | uVar3 << ((byte)iVar2 & 0x1f);\r\n            *(undefined1 *)(*(int *)(in_EAX + 8) + *(int *)(in_EAX + 0x14)) =\r\n                 *(undefined1 *)(in_EAX + 0x16b8);\r\n            *(int *)(in_EAX + 0x14) = *(int *)(in_EAX + 0x14) + 1;\r\n            *(undefined1 *)(*(int *)(in_EAX + 0x14) + *(int *)(in_EAX + 8)) =\r\n                 *(undefined1 *)(in_EAX + 0x16b9);\r\n            iVar2 = *(int *)(in_EAX + 0x16bc);\r\n            *(int *)(in_EAX + 0x14) = *(int *)(in_EAX + 0x14) + 1;\r\n            *(int *)(in_EAX + 0x16bc) = iVar2 + -9;\r\n            *(ushort *)(in_EAX + 0x16b8) = uVar3 >> (0x10U - (char)iVar2 & 0x1f);\r\n          }\r\n        }\r\n        else {\r\n          if (local_c != local_14) {\r\n            uVar6 = (uint)*(ushort *)(in_EAX + 0xa7e + local_c * 4);\r\n            bVar1 = (byte)*(int *)(in_EAX + 0x16bc);\r\n            param_1 = iVar4;\r\n            if ((int)(0x10 - uVar6) < *(int *)(in_EAX + 0x16bc)) {\r\n              uVar3 = *(ushort *)(in_EAX + 0xa7c + local_c * 4);\r\n              *(ushort *)(in_EAX + 0x16b8) = *(ushort *)(in_EAX + 0x16b8) | uVar3 << (bVar1 & 0x1f);\r\n              *(undefined1 *)(*(int *)(in_EAX + 8) + *(int *)(in_EAX + 0x14)) =\r\n                   *(undefined1 *)(in_EAX + 0x16b8);\r\n              *(int *)(in_EAX + 0x14) = *(int *)(in_EAX + 0x14) + 1;\r\n              *(undefined1 *)(*(int *)(in_EAX + 0x14) + *(int *)(in_EAX + 8)) =\r\n                   *(undefined1 *)(in_EAX + 0x16b9);\r\n              iVar2 = *(int *)(in_EAX + 0x16bc);\r\n              *(int *)(in_EAX + 0x14) = *(int *)(in_EAX + 0x14) + 1;\r\n              *(uint *)(in_EAX + 0x16bc) = iVar2 + -0x10 + uVar6;\r\n              *(ushort *)(in_EAX + 0x16b8) = uVar3 >> (0x10U - (char)iVar2 & 0x1f);\r\n            }\r\n            else {\r\n              *(ushort *)(in_EAX + 0x16b8) =\r\n                   *(ushort *)(in_EAX + 0x16b8) |\r\n                   *(short *)(in_EAX + 0xa7c + local_c * 4) << (bVar1 & 0x1f);\r\n              *(uint *)(in_EAX + 0x16bc) = *(int *)(in_EAX + 0x16bc) + uVar6;\r\n            }\r\n          }\r\n          uVar6 = (uint)*(ushort *)(in_EAX + 0xabe);\r\n          iVar2 = *(int *)(in_EAX + 0x16bc);\r\n          if ((int)(0x10 - uVar6) < iVar2) {\r\n            uVar3 = *(ushort *)(in_EAX + 0xabc);\r\n            *(ushort *)(in_EAX + 0x16b8) =\r\n                 *(ushort *)(in_EAX + 0x16b8) | uVar3 << ((byte)iVar2 & 0x1f);\r\n            *(undefined1 *)(*(int *)(in_EAX + 8) + *(int *)(in_EAX + 0x14)) =\r\n                 *(undefined1 *)(in_EAX + 0x16b8);\r\n            *(int *)(in_EAX + 0x14) = *(int *)(in_EAX + 0x14) + 1;\r\n            *(undefined1 *)(*(int *)(in_EAX + 0x14) + *(int *)(in_EAX + 8)) =\r\n                 *(undefined1 *)(in_EAX + 0x16b9);\r\n            iVar2 = *(int *)(in_EAX + 0x16bc);\r\n            *(int *)(in_EAX + 0x14) = *(int *)(in_EAX + 0x14) + 1;\r\n            *(uint *)(in_EAX + 0x16bc) = iVar2 + -0x10 + uVar6;\r\n            *(ushort *)(in_EAX + 0x16b8) = uVar3 >> (0x10U - (char)iVar2 & 0x1f);\r\n          }\r\n          else {\r\n            *(ushort *)(in_EAX + 0x16b8) =\r\n                 *(ushort *)(in_EAX + 0x16b8) | *(short *)(in_EAX + 0xabc) << ((byte)iVar2 & 0x1f);\r\n            *(uint *)(in_EAX + 0x16bc) = iVar2 + uVar6;\r\n          }\r\n          iVar2 = *(int *)(in_EAX + 0x16bc);\r\n          uVar3 = (ushort)(param_1 + -3);\r\n          if (iVar2 < 0xf) {\r\n            *(ushort *)(in_EAX + 0x16b8) =\r\n                 *(ushort *)(in_EAX + 0x16b8) | uVar3 << ((byte)iVar2 & 0x1f);\r\n            iVar2 = iVar2 + 2;\r\n            goto LAB_0072cae9;\r\n          }\r\n          *(ushort *)(in_EAX + 0x16b8) =\r\n               *(ushort *)(in_EAX + 0x16b8) | uVar3 << ((byte)iVar2 & 0x1f);\r\n          *(undefined1 *)(*(int *)(in_EAX + 8) + *(int *)(in_EAX + 0x14)) =\r\n               *(undefined1 *)(in_EAX + 0x16b8);\r\n          *(int *)(in_EAX + 0x14) = *(int *)(in_EAX + 0x14) + 1;\r\n          *(undefined1 *)(*(int *)(in_EAX + 0x14) + *(int *)(in_EAX + 8)) =\r\n               *(undefined1 *)(in_EAX + 0x16b9);\r\n          iVar2 = *(int *)(in_EAX + 0x16bc);\r\n          *(int *)(in_EAX + 0x14) = *(int *)(in_EAX + 0x14) + 1;\r\n          *(int *)(in_EAX + 0x16bc) = iVar2 + -0xe;\r\n          *(ushort *)(in_EAX + 0x16b8) = uVar3 >> (0x10U - (char)iVar2 & 0x1f);\r\n        }\r\n        param_1 = 0;\r\n        local_14 = local_c;\r\n        if (uVar5 == 0) {\r\n          iVar2 = 0x8a;\r\n          local_8 = 3;\r\n        }\r\n        else if (local_c == uVar5) {\r\n          iVar2 = 6;\r\n          local_8 = 3;\r\n        }\r\n        else {\r\n          iVar2 = 7;\r\n          local_8 = 4;\r\n        }\r\n      }\r\n      local_10 = local_10 + 2;\r\n      local_18 = local_18 + -1;\r\n      iVar4 = param_1;\r\n      local_c = uVar5;\r\n    } while (local_18 != 0);\r\n  }\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x72cb40",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x72cb40",
+          "name": "FUN_0072cb40"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_0072cb40(void)\r\n\r\n{\r\n  int in_EAX;\r\n  int iVar1;\r\n  \r\n  FUN_0072c4e0();\r\n  FUN_0072c4e0();\r\n  FUN_0072c2e0(in_EAX + 0xb30);\r\n  iVar1 = 0x12;\r\n  do {\r\n    if (*(short *)(in_EAX + 0xa7e + (uint)(byte)(&DAT_00c081cc)[iVar1] * 4) != 0) {\r\nLAB_0072cbfb:\r\n      *(int *)(in_EAX + 0x16a8) = *(int *)(in_EAX + 0x16a8) + iVar1 * 3 + 0x11;\r\n      return;\r\n    }\r\n    if (*(short *)(in_EAX + 0xa7e + (uint)(byte)(&UNK_00c081cb)[iVar1] * 4) != 0) {\r\n      *(int *)(in_EAX + 0x16a8) = *(int *)(in_EAX + 0x16a8) + (iVar1 + -1) * 3 + 0x11;\r\n      return;\r\n    }\r\n    if (*(short *)(in_EAX + 0xa7e + (uint)(byte)(&UNK_00c081ca)[iVar1] * 4) != 0) {\r\n      *(int *)(in_EAX + 0x16a8) = *(int *)(in_EAX + 0x16a8) + (iVar1 + -2) * 3 + 0x11;\r\n      return;\r\n    }\r\n    if (*(short *)(in_EAX + 0xa7e + (uint)(byte)(&UNK_00c081c9)[iVar1] * 4) != 0) {\r\n      iVar1 = iVar1 + -3;\r\n      goto LAB_0072cbfb;\r\n    }\r\n    iVar1 = iVar1 + -4;\r\n    if (iVar1 < 3) {\r\n      *(int *)(in_EAX + 0x16a8) = *(int *)(in_EAX + 0x16a8) + iVar1 * 3 + 0x11;\r\n      return;\r\n    }\r\n  } while( true );\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x72cc10",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x72cc10",
+          "name": "FUN_0072cc10"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_0072cc10(short param_1,short param_2,int param_3)\r\n\r\n{\r\n  int iVar1;\r\n  ushort uVar2;\r\n  int unaff_ESI;\r\n  int iVar3;\r\n  \r\n  iVar3 = *(int *)(unaff_ESI + 0x16bc);\r\n  uVar2 = param_1 - 0x101;\r\n  if (iVar3 < 0xc) {\r\n    *(ushort *)(unaff_ESI + 0x16b8) =\r\n         *(ushort *)(unaff_ESI + 0x16b8) | uVar2 << ((byte)iVar3 & 0x1f);\r\n    *(int *)(unaff_ESI + 0x16bc) = iVar3 + 5;\r\n  }\r\n  else {\r\n    *(ushort *)(unaff_ESI + 0x16b8) =\r\n         *(ushort *)(unaff_ESI + 0x16b8) | uVar2 << ((byte)iVar3 & 0x1f);\r\n    *(undefined1 *)(*(int *)(unaff_ESI + 0x14) + *(int *)(unaff_ESI + 8)) =\r\n         *(undefined1 *)(unaff_ESI + 0x16b8);\r\n    *(int *)(unaff_ESI + 0x14) = *(int *)(unaff_ESI + 0x14) + 1;\r\n    *(undefined1 *)(*(int *)(unaff_ESI + 0x14) + *(int *)(unaff_ESI + 8)) =\r\n         *(undefined1 *)(unaff_ESI + 0x16b9);\r\n    iVar3 = *(int *)(unaff_ESI + 0x16bc);\r\n    *(int *)(unaff_ESI + 0x14) = *(int *)(unaff_ESI + 0x14) + 1;\r\n    *(int *)(unaff_ESI + 0x16bc) = iVar3 + -0xb;\r\n    *(ushort *)(unaff_ESI + 0x16b8) = uVar2 >> (0x10U - (char)iVar3 & 0x1f);\r\n  }\r\n  iVar3 = *(int *)(unaff_ESI + 0x16bc);\r\n  uVar2 = param_2 - 1;\r\n  if (iVar3 < 0xc) {\r\n    *(ushort *)(unaff_ESI + 0x16b8) =\r\n         *(ushort *)(unaff_ESI + 0x16b8) | uVar2 << ((byte)iVar3 & 0x1f);\r\n    *(int *)(unaff_ESI + 0x16bc) = iVar3 + 5;\r\n  }\r\n  else {\r\n    *(ushort *)(unaff_ESI + 0x16b8) =\r\n         *(ushort *)(unaff_ESI + 0x16b8) | uVar2 << ((byte)iVar3 & 0x1f);\r\n    *(undefined1 *)(*(int *)(unaff_ESI + 0x14) + *(int *)(unaff_ESI + 8)) =\r\n         *(undefined1 *)(unaff_ESI + 0x16b8);\r\n    *(int *)(unaff_ESI + 0x14) = *(int *)(unaff_ESI + 0x14) + 1;\r\n    *(undefined1 *)(*(int *)(unaff_ESI + 0x14) + *(int *)(unaff_ESI + 8)) =\r\n         *(undefined1 *)(unaff_ESI + 0x16b9);\r\n    iVar3 = *(int *)(unaff_ESI + 0x16bc);\r\n    *(int *)(unaff_ESI + 0x14) = *(int *)(unaff_ESI + 0x14) + 1;\r\n    *(int *)(unaff_ESI + 0x16bc) = iVar3 + -0xb;\r\n    *(ushort *)(unaff_ESI + 0x16b8) = uVar2 >> (0x10U - (char)iVar3 & 0x1f);\r\n  }\r\n  iVar3 = *(int *)(unaff_ESI + 0x16bc);\r\n  uVar2 = (short)param_3 - 4;\r\n  if (iVar3 < 0xd) {\r\n    *(ushort *)(unaff_ESI + 0x16b8) =\r\n         *(ushort *)(unaff_ESI + 0x16b8) | uVar2 << ((byte)iVar3 & 0x1f);\r\n    *(int *)(unaff_ESI + 0x16bc) = iVar3 + 4;\r\n  }\r\n  else {\r\n    *(ushort *)(unaff_ESI + 0x16b8) =\r\n         *(ushort *)(unaff_ESI + 0x16b8) | uVar2 << ((byte)iVar3 & 0x1f);\r\n    *(undefined1 *)(*(int *)(unaff_ESI + 0x14) + *(int *)(unaff_ESI + 8)) =\r\n         *(undefined1 *)(unaff_ESI + 0x16b8);\r\n    *(int *)(unaff_ESI + 0x14) = *(int *)(unaff_ESI + 0x14) + 1;\r\n    *(undefined1 *)(*(int *)(unaff_ESI + 0x14) + *(int *)(unaff_ESI + 8)) =\r\n         *(undefined1 *)(unaff_ESI + 0x16b9);\r\n    iVar3 = *(int *)(unaff_ESI + 0x16bc);\r\n    *(int *)(unaff_ESI + 0x14) = *(int *)(unaff_ESI + 0x14) + 1;\r\n    *(int *)(unaff_ESI + 0x16bc) = iVar3 + -0xc;\r\n    *(ushort *)(unaff_ESI + 0x16b8) = uVar2 >> (0x10U - (char)iVar3 & 0x1f);\r\n  }\r\n  iVar3 = 0;\r\n  if (0 < param_3) {\r\n    do {\r\n      iVar1 = *(int *)(unaff_ESI + 0x16bc);\r\n      if (iVar1 < 0xe) {\r\n        *(ushort *)(unaff_ESI + 0x16b8) =\r\n             *(ushort *)(unaff_ESI + 0x16b8) |\r\n             *(short *)(unaff_ESI + 0xa7e + (uint)(byte)(&DAT_00c081cc)[iVar3] * 4) <<\r\n             ((byte)iVar1 & 0x1f);\r\n        *(int *)(unaff_ESI + 0x16bc) = iVar1 + 3;\r\n      }\r\n      else {\r\n        uVar2 = *(ushort *)(unaff_ESI + 0xa7e + (uint)(byte)(&DAT_00c081cc)[iVar3] * 4);\r\n        *(ushort *)(unaff_ESI + 0x16b8) =\r\n             *(ushort *)(unaff_ESI + 0x16b8) | uVar2 << ((byte)iVar1 & 0x1f);\r\n        *(undefined1 *)(*(int *)(unaff_ESI + 0x14) + *(int *)(unaff_ESI + 8)) =\r\n             *(undefined1 *)(unaff_ESI + 0x16b8);\r\n        *(int *)(unaff_ESI + 0x14) = *(int *)(unaff_ESI + 0x14) + 1;\r\n        *(undefined1 *)(*(int *)(unaff_ESI + 0x14) + *(int *)(unaff_ESI + 8)) =\r\n             *(undefined1 *)(unaff_ESI + 0x16b9);\r\n        *(int *)(unaff_ESI + 0x14) = *(int *)(unaff_ESI + 0x14) + 1;\r\n        *(ushort *)(unaff_ESI + 0x16b8) =\r\n             uVar2 >> (0x10U - (char)*(int *)(unaff_ESI + 0x16bc) & 0x1f);\r\n        *(int *)(unaff_ESI + 0x16bc) = *(int *)(unaff_ESI + 0x16bc) + -0xd;\r\n      }\r\n      iVar3 = iVar3 + 1;\r\n    } while (iVar3 < param_3);\r\n  }\r\n  FUN_0072c5c0(unaff_ESI + 0x94);\r\n  FUN_0072c5c0(unaff_ESI + 0x988);\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x72ce60",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x72ce60",
+          "name": "FUN_0072ce60"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_0072ce60(undefined4 param_1,undefined4 param_2)\r\n\r\n{\r\n  int iVar1;\r\n  int in_EAX;\r\n  ushort in_CX;\r\n  \r\n  iVar1 = *(int *)(in_EAX + 0x16bc);\r\n  if (0xd < iVar1) {\r\n    *(ushort *)(in_EAX + 0x16b8) = *(ushort *)(in_EAX + 0x16b8) | in_CX << ((byte)iVar1 & 0x1f);\r\n    *(undefined1 *)(*(int *)(in_EAX + 8) + *(int *)(in_EAX + 0x14)) =\r\n         *(undefined1 *)(in_EAX + 0x16b8);\r\n    *(int *)(in_EAX + 0x14) = *(int *)(in_EAX + 0x14) + 1;\r\n    *(undefined1 *)(*(int *)(in_EAX + 0x14) + *(int *)(in_EAX + 8)) =\r\n         *(undefined1 *)(in_EAX + 0x16b9);\r\n    *(int *)(in_EAX + 0x14) = *(int *)(in_EAX + 0x14) + 1;\r\n    *(ushort *)(in_EAX + 0x16b8) = in_CX >> (0x10U - (char)*(int *)(in_EAX + 0x16bc) & 0x1f);\r\n    *(int *)(in_EAX + 0x16bc) = *(int *)(in_EAX + 0x16bc) + -0xd;\r\n    FUN_0072d8c0(param_2);\r\n    return;\r\n  }\r\n  *(int *)(in_EAX + 0x16bc) = iVar1 + 3;\r\n  *(ushort *)(in_EAX + 0x16b8) = *(ushort *)(in_EAX + 0x16b8) | in_CX << ((byte)iVar1 & 0x1f);\r\n  FUN_0072d8c0(param_2);\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x72cf00",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x72cf00",
+          "name": "FUN_0072cf00"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_0072cf00(void)\r\n\r\n{\r\n  int in_EAX;\r\n  int iVar1;\r\n  int iVar2;\r\n  \r\n  iVar2 = *(int *)(in_EAX + 0x16bc);\r\n  *(ushort *)(in_EAX + 0x16b8) = *(ushort *)(in_EAX + 0x16b8) | 2 << ((byte)iVar2 & 0x1f);\r\n  if (iVar2 < 0xe) {\r\n    *(int *)(in_EAX + 0x16bc) = iVar2 + 3;\r\n  }\r\n  else {\r\n    *(undefined1 *)(*(int *)(in_EAX + 8) + *(int *)(in_EAX + 0x14)) =\r\n         *(undefined1 *)(in_EAX + 0x16b8);\r\n    *(int *)(in_EAX + 0x14) = *(int *)(in_EAX + 0x14) + 1;\r\n    *(undefined1 *)(*(int *)(in_EAX + 0x14) + *(int *)(in_EAX + 8)) =\r\n         *(undefined1 *)(in_EAX + 0x16b9);\r\n    iVar2 = *(int *)(in_EAX + 0x16bc);\r\n    *(int *)(in_EAX + 0x14) = *(int *)(in_EAX + 0x14) + 1;\r\n    *(int *)(in_EAX + 0x16bc) = iVar2 + -0xd;\r\n    *(ushort *)(in_EAX + 0x16b8) = 2 >> (0x10U - (char)iVar2 & 0x1f);\r\n  }\r\n  iVar2 = *(int *)(in_EAX + 0x16bc);\r\n  *(ushort *)(in_EAX + 0x16b8) = *(ushort *)(in_EAX + 0x16b8) | 0 << ((byte)iVar2 & 0x1f);\r\n  if (iVar2 < 10) {\r\n    *(int *)(in_EAX + 0x16bc) = iVar2 + 7;\r\n  }\r\n  else {\r\n    *(undefined1 *)(*(int *)(in_EAX + 8) + *(int *)(in_EAX + 0x14)) =\r\n         *(undefined1 *)(in_EAX + 0x16b8);\r\n    *(int *)(in_EAX + 0x14) = *(int *)(in_EAX + 0x14) + 1;\r\n    *(undefined1 *)(*(int *)(in_EAX + 0x14) + *(int *)(in_EAX + 8)) =\r\n         *(undefined1 *)(in_EAX + 0x16b9);\r\n    iVar2 = *(int *)(in_EAX + 0x16bc);\r\n    *(int *)(in_EAX + 0x14) = *(int *)(in_EAX + 0x14) + 1;\r\n    *(int *)(in_EAX + 0x16bc) = iVar2 + -9;\r\n    *(ushort *)(in_EAX + 0x16b8) = 0 >> (0x10U - (char)iVar2 & 0x1f);\r\n  }\r\n  iVar1 = FUN_0072d7e0();\r\n  iVar2 = *(int *)(iVar1 + 0x16bc);\r\n  if ((*(int *)(iVar1 + 0x16b4) - iVar2) + 0xb < 9) {\r\n    *(ushort *)(iVar1 + 0x16b8) = *(ushort *)(iVar1 + 0x16b8) | 2 << ((byte)iVar2 & 0x1f);\r\n    if (iVar2 < 0xe) {\r\n      *(int *)(iVar1 + 0x16bc) = iVar2 + 3;\r\n    }\r\n    else {\r\n      *(undefined1 *)(*(int *)(iVar1 + 8) + *(int *)(iVar1 + 0x14)) =\r\n           *(undefined1 *)(iVar1 + 0x16b8);\r\n      *(int *)(iVar1 + 0x14) = *(int *)(iVar1 + 0x14) + 1;\r\n      *(undefined1 *)(*(int *)(iVar1 + 0x14) + *(int *)(iVar1 + 8)) =\r\n           *(undefined1 *)(iVar1 + 0x16b9);\r\n      iVar2 = *(int *)(iVar1 + 0x16bc);\r\n      *(int *)(iVar1 + 0x14) = *(int *)(iVar1 + 0x14) + 1;\r\n      *(int *)(iVar1 + 0x16bc) = iVar2 + -0xd;\r\n      *(ushort *)(iVar1 + 0x16b8) = 2 >> (0x10U - (char)iVar2 & 0x1f);\r\n    }\r\n    iVar2 = *(int *)(iVar1 + 0x16bc);\r\n    *(ushort *)(iVar1 + 0x16b8) = *(ushort *)(iVar1 + 0x16b8) | 0 << ((byte)iVar2 & 0x1f);\r\n    if (9 < iVar2) {\r\n      *(undefined1 *)(*(int *)(iVar1 + 8) + *(int *)(iVar1 + 0x14)) =\r\n           *(undefined1 *)(iVar1 + 0x16b8);\r\n      *(int *)(iVar1 + 0x14) = *(int *)(iVar1 + 0x14) + 1;\r\n      *(undefined1 *)(*(int *)(iVar1 + 0x14) + *(int *)(iVar1 + 8)) =\r\n           *(undefined1 *)(iVar1 + 0x16b9);\r\n      iVar2 = *(int *)(iVar1 + 0x16bc);\r\n      *(int *)(iVar1 + 0x14) = *(int *)(iVar1 + 0x14) + 1;\r\n      *(int *)(iVar1 + 0x16bc) = iVar2 + -9;\r\n      *(ushort *)(iVar1 + 0x16b8) = 0 >> (0x10U - (char)iVar2 & 0x1f);\r\n      iVar2 = FUN_0072d7e0();\r\n      *(undefined4 *)(iVar2 + 0x16b4) = 7;\r\n      return;\r\n    }\r\n    *(int *)(iVar1 + 0x16bc) = iVar2 + 7;\r\n    iVar1 = FUN_0072d7e0();\r\n  }\r\n  *(undefined4 *)(iVar1 + 0x16b4) = 7;\r\n  return;\r\n}\r\n\r\n"
+      }
+    ],
+    "total": 16,
+    "succeeded": 16,
+    "failed": 0
+  },
+  "confidence": "derived",
+  "authority": "shipped-artifact",
+  "environment": null,
+  "limitations": [
+    "Derived by an REA composed workflow.",
+    "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+    "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+    "External functions and functions without an analyzable body return null; other decompiler failures remain explicit.",
+    "External functions and local thunks are distinct; procedure metadata identifies both and preserves a thunk target when Ghidra resolves one.",
+    "Ghidra Listing reports a terminal call at 0x72beeb to 0x72bef0 FUN_0072bef0 (external=false, thunk=false, hasNoReturn=false); fallthrough is excluded by Ghidra's flow model. The reason for the terminal flow is not established by this observation.",
+    "Pseudocode is Ghidra decompiler output, not original source and not text-equivalent to Hopper output.",
+    "The Windows bridge uses authenticated IPv4 loopback because Node path-based IPC does not expose Java AF_UNIX sockets; the endpoint file contains no bearer token.",
+    "The imported Program and temporary project are ephemeral and deleted on close. Annotation operations edit session database metadata; original executable bytes are never written.",
+    "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+    "The target references PDB Tartaros.pdb (GUID 491a189d-6d27-43d1-a6b5-81ace6a1df8b, age (hex) 1, signature unknown, version RSDS); Ghidra reports load state unknown. Original names and types may be missing; an empty name search does not prove a procedure is absent. Use list_procedures and address-based analysis to inspect recovered functions. REA does not admit a caller-selected PDB companion.",
+    "Windows Ghidra P0 accepts native x86 and x86-64 PE applications and DLLs, and explicitly selected raw 6502 images; managed, hostile, sensitive, and mutable-path targets are unsupported.",
+    "Windows sessions require the matching packaged Windows x64 native addon, local NTFS targets and runtimes, and Windows 10 or later. Native handles enforce path admission, private DACLs, and Job Object ownership automatically."
+  ],
+  "relationship_coverage": null,
+  "locations": [
+    {
+      "kind": "address",
+      "address": "0x72b700"
+    },
+    {
+      "kind": "address",
+      "address": "0x72b9c0"
+    },
+    {
+      "kind": "address",
+      "address": "0x72b9e0"
+    },
+    {
+      "kind": "address",
+      "address": "0x72ba00"
+    },
+    {
+      "kind": "address",
+      "address": "0x72be90"
+    },
+    {
+      "kind": "address",
+      "address": "0x72bef0"
+    },
+    {
+      "kind": "address",
+      "address": "0x72bf70"
+    },
+    {
+      "kind": "address",
+      "address": "0x72c050"
+    },
+    {
+      "kind": "address",
+      "address": "0x72c250"
+    },
+    {
+      "kind": "address",
+      "address": "0x72c2e0"
+    },
+    {
+      "kind": "address",
+      "address": "0x72c4e0"
+    },
+    {
+      "kind": "address",
+      "address": "0x72c5c0"
+    },
+    {
+      "kind": "address",
+      "address": "0x72cb40"
+    },
+    {
+      "kind": "address",
+      "address": "0x72cc10"
+    },
+    {
+      "kind": "address",
+      "address": "0x72ce60"
+    },
+    {
+      "kind": "address",
+      "address": "0x72cf00"
+    }
+  ],
+  "evidence_links": []
+}

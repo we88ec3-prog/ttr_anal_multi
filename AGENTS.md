@@ -1,5 +1,9 @@
 # 分工接續規則
 
+## 已上傳的大量反編譯與審核狀態
+
+使用 KR 原生證據前，先讀 [完整反編譯上傳與狀態索引](shared/integrations/T01-BULK-20261026-02/README.md)。`kr-bulk-roy/<目標SHA>/functions/` 與 `raw/` 已完整保存於 Git；按位址選讀，避免重做全量反編譯。`python -B kr-bulk-roy/review_status.py 0x4df510` 可查逐函式狀態。上傳、方法登記及來源被引用均不等於整個函式已逐項審核，既有正式結論僅在 catalog 指定的有限範圍成立。
+
 ## 使用者全任務政策（2026-10-26）
 
 所有 KR／TC 任務先讀 [客戶端修改與封包恢復政策](shared/CLIENT-MODIFICATION-POLICY.md)。遊玩流程優先以封包／伺服器資料恢復；主程式調整以 IP、Windows 相容性、翻譯為主，其他修改須先提出具體方案並獲使用者確認。原始證據唯讀與既有不執行／附加等限制維持。本政策適用所有任務，不只 T06。

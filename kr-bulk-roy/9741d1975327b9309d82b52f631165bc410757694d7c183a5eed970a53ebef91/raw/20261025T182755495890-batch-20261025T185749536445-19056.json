@@ -1,0 +1,351 @@
+{
+  "evidence_id": "ev_7548f748b7980d28b2a9bb080938bc204b1723570ba661d37f1f3260631d63cf",
+  "subject": {
+    "name": "Tartaros.bin",
+    "digest": {
+      "sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91"
+    },
+    "local_path": "E:\\Tartaros\\workspace\\Tartaros.bin",
+    "format": "pe",
+    "architecture": "x86"
+  },
+  "provider": {
+    "id": "rea-workflow",
+    "name": "REA composed investigation workflow",
+    "version": "1"
+  },
+  "analysis_profile": {
+    "provider": {
+      "id": "rea-workflow",
+      "name": "REA composed investigation workflow",
+      "version": "1"
+    },
+    "parameters": {
+      "upstream_analysis_profile": {
+        "provider": {
+          "id": "ghidra",
+          "name": "Ghidra",
+          "version": "12.1.4"
+        },
+        "parameters": {
+          "target_kind": "executable",
+          "target_format": "pe",
+          "executable_role": "application",
+          "managed": false,
+          "native_aot_metadata": {
+            "contract_revision": "rtr-9.1-x64-pe-read-only-v3",
+            "source_bytes": 134217728,
+            "work_units": 67108864,
+            "working_memory_bytes": 67108864,
+            "report_bytes": 4194304
+          },
+          "architecture": "x86",
+          "available_architectures": [
+            "x86"
+          ],
+          "import_mode": "ephemeral-source-immutable",
+          "pdb_observations": "program-info-v1",
+          "annotation_policy": "atomic-function-entry-metadata-v1",
+          "load_image_observations": "source-mappings-entry-context-v2",
+          "function_body_evidence": "complete-inclusive-ranges-v1",
+          "function_references": "complete-body-and-entry-reference-manager-v2",
+          "call_relationship_coverage": "function-body-call-coverage-v5",
+          "function_dossier_coverage": "observed-facets-and-call-relationships-v1",
+          "string_inventory_evidence": "defined-data-coverage-v1",
+          "location_resolution": "explicit-address-exact-entry-symbol-first-v3",
+          "procedure_file_offset_resolution": "address-first-unique-target-source-mapping-v2",
+          "instruction_flow_evidence": "decoded-return-pcode-v1",
+          "instruction_references": "exact-address-incoming-v1",
+          "function_boundary_observations": "ghidra-function-boundary-limitations-v3",
+          "no_return_repair": "disabled-windows-p0",
+          "process_launch": "official-headless-script-v1",
+          "jump_table_evidence": "typed-case-default-blocks-v1",
+          "decompiler_jump_loads": true,
+          "loader": "auto-from-header",
+          "language_id": "auto-from-header",
+          "compiler_spec_id": "auto-default",
+          "analyzer_preset": "ghidra-default"
+        },
+        "digest": "3c06738e45e144d5f073edbd3244c6bff46222f389525fe659bc92dca2ccdece"
+      },
+      "workflow_revision": 2
+    },
+    "digest": "d4471786e332c0336f066a85a651a368051028dfaa0c1d7a5ac78db2f422f47e"
+  },
+  "predicate_type": "rea.analysis",
+  "operation": "batch_decompile",
+  "parameters": {
+    "addresses": [
+      "0x8918d9",
+      "0x8919c7",
+      "0x8919cf",
+      "0x8919f5",
+      "0x891bb1",
+      "0x891c35",
+      "0x891c3f",
+      "0x891c5c",
+      "0x891cc9",
+      "0x891d35",
+      "0x891d3d",
+      "0x891d48",
+      "0x891e12",
+      "0x891e89",
+      "0x891ea6",
+      "0x891f92"
+    ]
+  },
+  "raw_result": null,
+  "normalized_result": {
+    "items": [
+      {
+        "address": "0x8918d9",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8918d9",
+          "name": "__filelength"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* WARNING: Function: __SEH_prolog4 replaced with injection: SEH_prolog4 */\r\n/* WARNING: Function: __SEH_epilog4 replaced with injection: EH_epilog3 */\r\n/* Library Function - Single Match\r\n    __filelength\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nlong __cdecl __filelength(int _FileHandle)\r\n\r\n{\r\n  ulong *puVar1;\r\n  int *piVar2;\r\n  long _Offset;\r\n  int iVar3;\r\n  long local_20;\r\n  \r\n  if (_FileHandle == -2) {\r\n    puVar1 = ___doserrno();\r\n    *puVar1 = 0;\r\n    piVar2 = __errno();\r\n    *piVar2 = 9;\r\n  }\r\n  else {\r\n    if ((-1 < _FileHandle) && ((uint)_FileHandle < DAT_00fe7294)) {\r\n      iVar3 = (_FileHandle & 0x1fU) * 0x40;\r\n      if ((*(byte *)((&DAT_00fe72a0)[_FileHandle >> 5] + 4 + iVar3) & 1) != 0) {\r\n        ___lock_fhandle(_FileHandle);\r\n        if ((*(byte *)((&DAT_00fe72a0)[_FileHandle >> 5] + 4 + iVar3) & 1) == 0) {\r\n          piVar2 = __errno();\r\n          *piVar2 = 9;\r\n          puVar1 = ___doserrno();\r\n          *puVar1 = 0;\r\n        }\r\n        else {\r\n          _Offset = __lseek_nolock(_FileHandle,0,1);\r\n          if (_Offset != -1) {\r\n            local_20 = __lseek_nolock(_FileHandle,0,2);\r\n            if (_Offset != local_20) {\r\n              __lseek_nolock(_FileHandle,_Offset,0);\r\n            }\r\n            goto LAB_008919af;\r\n          }\r\n        }\r\n        local_20 = -1;\r\nLAB_008919af:\r\n        FUN_008919c7();\r\n        return local_20;\r\n      }\r\n    }\r\n    puVar1 = ___doserrno();\r\n    *puVar1 = 0;\r\n    piVar2 = __errno();\r\n    *piVar2 = 9;\r\n    FUN_00893343();\r\n  }\r\n  return -1;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8919c7",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8919c7",
+          "name": "FUN_008919c7"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_008919c7(void)\r\n\r\n{\r\n  int unaff_EBX;\r\n  \r\n  __unlock_fhandle(unaff_EBX);\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8919cf",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8919cf",
+          "name": "__fileno"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Single Match\r\n    __fileno\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nint __cdecl __fileno(FILE *_File)\r\n\r\n{\r\n  int *piVar1;\r\n  \r\n  if (_File == (FILE *)0x0) {\r\n    piVar1 = __errno();\r\n    *piVar1 = 0x16;\r\n    FUN_00893343();\r\n    return -1;\r\n  }\r\n  return _File->_file;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8919f5",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8919f5",
+          "name": "__fread_nolock_s"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Single Match\r\n    __fread_nolock_s\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nsize_t __cdecl\r\n__fread_nolock_s(void *_DstBuf,size_t _DstSize,size_t _ElementSize,size_t _Count,FILE *_File)\r\n\r\n{\r\n  uint uVar1;\r\n  undefined1 *puVar2;\r\n  int *piVar3;\r\n  uint uVar4;\r\n  int iVar5;\r\n  uint uVar6;\r\n  uint uVar7;\r\n  uint uVar8;\r\n  undefined1 *_DstBuf_00;\r\n  uint local_10;\r\n  \r\n  if ((_ElementSize != 0) && (_Count != 0)) {\r\n    if (_DstBuf != (void *)0x0) {\r\n      if ((_File != (FILE *)0x0) && (_Count <= (uint)(0xffffffff / (ulonglong)_ElementSize))) {\r\nLAB_00891a68:\r\n        uVar8 = _ElementSize * _Count;\r\n        uVar7 = uVar8;\r\n        puVar2 = _DstBuf;\r\n        uVar1 = _DstSize;\r\n        if ((_File->_flag & 0x10cU) == 0) {\r\n          local_10 = 0x1000;\r\n        }\r\n        else {\r\n          local_10 = _File->_bufsiz;\r\n        }\r\n        do {\r\n          while( true ) {\r\n            if (uVar7 == 0) {\r\n              return _Count;\r\n            }\r\n            if ((_File->_flag & 0x10cU) != 0) break;\r\nLAB_00891ade:\r\n            if (uVar7 < local_10) {\r\n              iVar5 = __filbuf(_File);\r\n              if (iVar5 == -1) goto LAB_00891b9d;\r\n              if (uVar1 == 0) goto LAB_00891b73;\r\n              *puVar2 = (char)iVar5;\r\n              local_10 = _File->_bufsiz;\r\n              uVar7 = uVar7 - 1;\r\n              uVar1 = uVar1 - 1;\r\n              puVar2 = puVar2 + 1;\r\n            }\r\n            else {\r\n              if (local_10 == 0) {\r\n                uVar4 = 0x7fffffff;\r\n                if (uVar7 < 0x80000000) {\r\n                  uVar4 = uVar7;\r\n                }\r\n              }\r\n              else {\r\n                if (uVar7 < 0x80000000) {\r\n                  uVar6 = uVar7 % local_10;\r\n                  uVar4 = uVar7;\r\n                }\r\n                else {\r\n                  uVar6 = (uint)(0x7fffffff % (ulonglong)local_10);\r\n                  uVar4 = 0x7fffffff;\r\n                }\r\n                uVar4 = uVar4 - uVar6;\r\n              }\r\n              if (uVar1 < uVar4) goto LAB_00891b73;\r\n              _DstBuf_00 = puVar2;\r\n              iVar5 = __fileno(_File);\r\n              iVar5 = __read(iVar5,_DstBuf_00,uVar4);\r\n              if (iVar5 == 0) {\r\n                _File->_flag = _File->_flag | 0x10;\r\n                goto LAB_00891b9d;\r\n              }\r\n              if (iVar5 == -1) goto LAB_00891b99;\r\n              uVar7 = uVar7 - iVar5;\r\n              uVar1 = uVar1 - iVar5;\r\n              puVar2 = puVar2 + iVar5;\r\n            }\r\n          }\r\n          uVar4 = _File->_cnt;\r\n          if (uVar4 == 0) goto LAB_00891ade;\r\n          if ((int)uVar4 < 0) {\r\nLAB_00891b99:\r\n            _File->_flag = _File->_flag | 0x20;\r\nLAB_00891b9d:\r\n            return (uVar8 - uVar7) / _ElementSize;\r\n          }\r\n          uVar6 = uVar7;\r\n          if (uVar4 <= uVar7) {\r\n            uVar6 = uVar4;\r\n          }\r\n          if (uVar1 < uVar6) {\r\nLAB_00891b73:\r\n            if (_DstSize != 0xffffffff) {\r\n              _memset(_DstBuf,0,_DstSize);\r\n            }\r\n            piVar3 = __errno();\r\n            *piVar3 = 0x22;\r\n            goto LAB_00891a28;\r\n          }\r\n          _memcpy_s(puVar2,uVar1,_File->_ptr,uVar6);\r\n          _File->_cnt = _File->_cnt - uVar6;\r\n          _File->_ptr = _File->_ptr + uVar6;\r\n          uVar7 = uVar7 - uVar6;\r\n          uVar1 = uVar1 - uVar6;\r\n          puVar2 = puVar2 + uVar6;\r\n        } while( true );\r\n      }\r\n      if (_DstSize != 0xffffffff) {\r\n        _memset(_DstBuf,0,_DstSize);\r\n      }\r\n      if ((_File != (FILE *)0x0) && (_Count <= (uint)(0xffffffff / (ulonglong)_ElementSize)))\r\n      goto LAB_00891a68;\r\n    }\r\n    piVar3 = __errno();\r\n    *piVar3 = 0x16;\r\nLAB_00891a28:\r\n    FUN_00893343();\r\n  }\r\n  return 0;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x891bb1",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x891bb1",
+          "name": "_fread_s"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* WARNING: Function: __SEH_prolog4 replaced with injection: SEH_prolog4 */\r\n/* WARNING: Function: __SEH_epilog4 replaced with injection: EH_epilog3 */\r\n/* Library Function - Single Match\r\n    _fread_s\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nsize_t __cdecl _fread_s(void *_DstBuf,size_t _DstSize,size_t _ElementSize,size_t _Count,FILE *_File)\r\n\r\n{\r\n  int *piVar1;\r\n  size_t sVar2;\r\n  \r\n  if ((_ElementSize != 0) && (_Count != 0)) {\r\n    if (_File != (FILE *)0x0) {\r\n      __lock_file(_File);\r\n      sVar2 = __fread_nolock_s(_DstBuf,_DstSize,_ElementSize,_Count,_File);\r\n      FUN_00891c35();\r\n      return sVar2;\r\n    }\r\n    if (_DstSize != 0xffffffff) {\r\n      _memset(_DstBuf,0,_DstSize);\r\n    }\r\n    piVar1 = __errno();\r\n    *piVar1 = 0x16;\r\n    FUN_00893343();\r\n  }\r\n  return 0;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x891c35",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x891c35",
+          "name": "FUN_00891c35"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_00891c35(void)\r\n\r\n{\r\n  int unaff_EBP;\r\n  \r\n  __unlock_file(*(FILE **)(unaff_EBP + 0x18));\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x891c3f",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x891c3f",
+          "name": "_fread"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Single Match\r\n    _fread\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nsize_t __cdecl _fread(void *_DstBuf,size_t _ElementSize,size_t _Count,FILE *_File)\r\n\r\n{\r\n  size_t sVar1;\r\n  \r\n  sVar1 = _fread_s(_DstBuf,0xffffffff,_ElementSize,_Count,_File);\r\n  return sVar1;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x891c5c",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x891c5c",
+          "name": "__fclose_nolock"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Single Match\r\n    __fclose_nolock\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nint __cdecl __fclose_nolock(FILE *_File)\r\n\r\n{\r\n  int *piVar1;\r\n  int iVar2;\r\n  int iVar3;\r\n  \r\n  iVar3 = -1;\r\n  if (_File == (FILE *)0x0) {\r\n    piVar1 = __errno();\r\n    *piVar1 = 0x16;\r\n    FUN_00893343();\r\n    iVar3 = -1;\r\n  }\r\n  else {\r\n    if ((_File->_flag & 0x83) != 0) {\r\n      iVar3 = __flush(_File);\r\n      __freebuf(_File);\r\n      iVar2 = __fileno(_File);\r\n      iVar2 = __close(iVar2);\r\n      if (iVar2 < 0) {\r\n        iVar3 = -1;\r\n      }\r\n      else if (_File->_tmpfname != (char *)0x0) {\r\n        _free(_File->_tmpfname);\r\n        _File->_tmpfname = (char *)0x0;\r\n      }\r\n    }\r\n    _File->_flag = 0;\r\n  }\r\n  return iVar3;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x891cc9",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x891cc9",
+          "name": "_fclose"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* WARNING: Function: __SEH_prolog4 replaced with injection: SEH_prolog4 */\r\n/* WARNING: Function: __SEH_epilog4 replaced with injection: EH_epilog3 */\r\n/* Library Function - Single Match\r\n    _fclose\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nint __cdecl _fclose(FILE *_File)\r\n\r\n{\r\n  int *piVar1;\r\n  int local_20;\r\n  \r\n  local_20 = -1;\r\n  if (_File == (FILE *)0x0) {\r\n    piVar1 = __errno();\r\n    *piVar1 = 0x16;\r\n    FUN_00893343();\r\n    local_20 = -1;\r\n  }\r\n  else if ((_File->_flag & 0x40) == 0) {\r\n    __lock_file(_File);\r\n    local_20 = __fclose_nolock(_File);\r\n    FUN_00891d35();\r\n  }\r\n  else {\r\n    _File->_flag = 0;\r\n  }\r\n  return local_20;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x891d35",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x891d35",
+          "name": "FUN_00891d35"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_00891d35(void)\r\n\r\n{\r\n  FILE *unaff_ESI;\r\n  \r\n  __unlock_file(unaff_ESI);\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x891d3d",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x891d3d",
+          "name": "FUN_00891d3d"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_00891d3d(void)\r\n\r\n{\r\n  FUN_0089120c();\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x891d48",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x891d48",
+          "name": "__vsnprintf_helper"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Single Match\r\n    __vsnprintf_helper\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nint __vsnprintf_helper(code *param_1,char *param_2,uint param_3,int param_4,undefined4 param_5,\r\n                      undefined4 param_6)\r\n\r\n{\r\n  int *piVar1;\r\n  int iVar2;\r\n  int iVar3;\r\n  char **ppcVar4;\r\n  FILE local_24;\r\n  \r\n  local_24._ptr = (char *)0x0;\r\n  ppcVar4 = (char **)&local_24._cnt;\r\n  for (iVar3 = 7; iVar3 != 0; iVar3 = iVar3 + -1) {\r\n    *ppcVar4 = (char *)0x0;\r\n    ppcVar4 = ppcVar4 + 1;\r\n  }\r\n  if (param_4 == 0) {\r\n    piVar1 = __errno();\r\n    *piVar1 = 0x16;\r\n    FUN_00893343();\r\n    iVar3 = -1;\r\n  }\r\n  else if ((param_3 == 0) || (param_2 != (char *)0x0)) {\r\n    local_24._cnt = 0x7fffffff;\r\n    if (param_3 < 0x80000000) {\r\n      local_24._cnt = param_3;\r\n    }\r\n    local_24._flag = 0x42;\r\n    local_24._base = param_2;\r\n    local_24._ptr = param_2;\r\n    iVar3 = (*param_1)(&local_24,param_4,param_5,param_6);\r\n    if (param_2 != (char *)0x0) {\r\n      if (-1 < iVar3) {\r\n        local_24._cnt = local_24._cnt - 1;\r\n        if (-1 < local_24._cnt) {\r\n          *local_24._ptr = '\\0';\r\n          return iVar3;\r\n        }\r\n        iVar2 = __flsbuf(0,&local_24);\r\n        if (iVar2 != -1) {\r\n          return iVar3;\r\n        }\r\n      }\r\n      param_2[param_3 - 1] = '\\0';\r\n      iVar3 = (-1 < local_24._cnt) - 2;\r\n    }\r\n  }\r\n  else {\r\n    piVar1 = __errno();\r\n    *piVar1 = 0x16;\r\n    FUN_00893343();\r\n    iVar3 = -1;\r\n  }\r\n  return iVar3;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x891e12",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x891e12",
+          "name": "__vsprintf_s_l"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Single Match\r\n    __vsprintf_s_l\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nint __cdecl\r\n__vsprintf_s_l(char *_DstBuf,size_t _DstSize,char *_Format,_locale_t _Locale,va_list _ArgList)\r\n\r\n{\r\n  int *piVar1;\r\n  int iVar2;\r\n  \r\n  if (_Format == (char *)0x0) {\r\n    piVar1 = __errno();\r\n    *piVar1 = 0x16;\r\n    FUN_00893343();\r\n    return -1;\r\n  }\r\n  if ((_DstBuf == (char *)0x0) || (_DstSize == 0)) {\r\n    piVar1 = __errno();\r\n    *piVar1 = 0x16;\r\n  }\r\n  else {\r\n    iVar2 = __vsnprintf_helper(FUN_008a2ba0,_DstBuf,_DstSize,_Format,_Locale,_ArgList);\r\n    if (iVar2 < 0) {\r\n      *_DstBuf = '\\0';\r\n    }\r\n    if (iVar2 != -2) {\r\n      return iVar2;\r\n    }\r\n    piVar1 = __errno();\r\n    *piVar1 = 0x22;\r\n  }\r\n  FUN_00893343();\r\n  return -1;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x891e89",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x891e89",
+          "name": "_vsprintf_s"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Single Match\r\n    _vsprintf_s\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nint __cdecl _vsprintf_s(char *_DstBuf,size_t _SizeInBytes,char *_Format,va_list _ArgList)\r\n\r\n{\r\n  int iVar1;\r\n  \r\n  iVar1 = __vsprintf_s_l(_DstBuf,_SizeInBytes,_Format,(_locale_t)0x0,_ArgList);\r\n  return iVar1;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x891ea6",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x891ea6",
+          "name": "__vsnprintf_s_l"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Single Match\r\n    __vsnprintf_s_l\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nint __cdecl\r\n__vsnprintf_s_l(char *_DstBuf,size_t _DstSize,size_t _MaxCount,char *_Format,_locale_t _Locale,\r\n               va_list _ArgList)\r\n\r\n{\r\n  int iVar1;\r\n  int *piVar2;\r\n  int iVar3;\r\n  \r\n  if (_Format == (char *)0x0) {\r\n    piVar2 = __errno();\r\n    *piVar2 = 0x16;\r\n    FUN_00893343();\r\n    return -1;\r\n  }\r\n  if (_MaxCount == 0) {\r\n    if (_DstBuf == (char *)0x0) {\r\n      if (_DstSize == 0) {\r\n        return 0;\r\n      }\r\n    }\r\n    else {\r\nLAB_00891ee7:\r\n      if (_DstSize != 0) {\r\n        piVar2 = __errno();\r\n        if (_MaxCount < _DstSize) {\r\n          iVar1 = *piVar2;\r\n          iVar3 = __vsnprintf_helper(FUN_008a2ba0,_DstBuf,_MaxCount + 1,_Format,_Locale,_ArgList);\r\n          if (iVar3 == -2) {\r\n            piVar2 = __errno();\r\n            if (*piVar2 != 0x22) {\r\n              return -1;\r\n            }\r\n            piVar2 = __errno();\r\n            *piVar2 = iVar1;\r\n            return -1;\r\n          }\r\nLAB_00891f6e:\r\n          if (-1 < iVar3) {\r\n            return iVar3;\r\n          }\r\n        }\r\n        else {\r\n          iVar1 = *piVar2;\r\n          iVar3 = __vsnprintf_helper(FUN_008a2ba0,_DstBuf,_DstSize,_Format,_Locale,_ArgList);\r\n          _DstBuf[_DstSize - 1] = '\\0';\r\n          if (iVar3 != -2) goto LAB_00891f6e;\r\n          if (_MaxCount == 0xffffffff) {\r\n            piVar2 = __errno();\r\n            if (*piVar2 != 0x22) {\r\n              return -1;\r\n            }\r\n            piVar2 = __errno();\r\n            *piVar2 = iVar1;\r\n            return -1;\r\n          }\r\n        }\r\n        *_DstBuf = '\\0';\r\n        if (iVar3 != -2) {\r\n          return -1;\r\n        }\r\n        piVar2 = __errno();\r\n        *piVar2 = 0x22;\r\n        goto LAB_00891f85;\r\n      }\r\n    }\r\n  }\r\n  else if (_DstBuf != (char *)0x0) goto LAB_00891ee7;\r\n  piVar2 = __errno();\r\n  *piVar2 = 0x16;\r\nLAB_00891f85:\r\n  FUN_00893343();\r\n  return -1;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x891f92",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x891f92",
+          "name": "__vsnprintf_s"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Single Match\r\n    __vsnprintf_s\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nint __cdecl\r\n__vsnprintf_s(char *_DstBuf,size_t _SizeInBytes,size_t _MaxCount,char *_Format,va_list _ArgList)\r\n\r\n{\r\n  int iVar1;\r\n  \r\n  iVar1 = __vsnprintf_s_l(_DstBuf,_SizeInBytes,_MaxCount,_Format,(_locale_t)0x0,_ArgList);\r\n  return iVar1;\r\n}\r\n\r\n"
+      }
+    ],
+    "total": 16,
+    "succeeded": 16,
+    "failed": 0
+  },
+  "confidence": "derived",
+  "authority": "shipped-artifact",
+  "environment": null,
+  "limitations": [
+    "Derived by an REA composed workflow.",
+    "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+    "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+    "External functions and functions without an analyzable body return null; other decompiler failures remain explicit.",
+    "External functions and local thunks are distinct; procedure metadata identifies both and preserves a thunk target when Ghidra resolves one.",
+    "Ghidra Listing reports a terminal call at 0x891d43 to 0x89120c FUN_0089120c (external=false, thunk=false, hasNoReturn=false); fallthrough is excluded by Ghidra's flow model. The reason for the terminal flow is not established by this observation.",
+    "Pseudocode is Ghidra decompiler output, not original source and not text-equivalent to Hopper output.",
+    "The Windows bridge uses authenticated IPv4 loopback because Node path-based IPC does not expose Java AF_UNIX sockets; the endpoint file contains no bearer token.",
+    "The imported Program and temporary project are ephemeral and deleted on close. Annotation operations edit session database metadata; original executable bytes are never written.",
+    "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+    "The target references PDB Tartaros.pdb (GUID 491a189d-6d27-43d1-a6b5-81ace6a1df8b, age (hex) 1, signature unknown, version RSDS); Ghidra reports load state unknown. Original names and types may be missing; an empty name search does not prove a procedure is absent. Use list_procedures and address-based analysis to inspect recovered functions. REA does not admit a caller-selected PDB companion.",
+    "Windows Ghidra P0 accepts native x86 and x86-64 PE applications and DLLs, and explicitly selected raw 6502 images; managed, hostile, sensitive, and mutable-path targets are unsupported.",
+    "Windows sessions require the matching packaged Windows x64 native addon, local NTFS targets and runtimes, and Windows 10 or later. Native handles enforce path admission, private DACLs, and Job Object ownership automatically."
+  ],
+  "relationship_coverage": null,
+  "locations": [
+    {
+      "kind": "address",
+      "address": "0x8918d9"
+    },
+    {
+      "kind": "address",
+      "address": "0x8919c7"
+    },
+    {
+      "kind": "address",
+      "address": "0x8919cf"
+    },
+    {
+      "kind": "address",
+      "address": "0x8919f5"
+    },
+    {
+      "kind": "address",
+      "address": "0x891bb1"
+    },
+    {
+      "kind": "address",
+      "address": "0x891c35"
+    },
+    {
+      "kind": "address",
+      "address": "0x891c3f"
+    },
+    {
+      "kind": "address",
+      "address": "0x891c5c"
+    },
+    {
+      "kind": "address",
+      "address": "0x891cc9"
+    },
+    {
+      "kind": "address",
+      "address": "0x891d35"
+    },
+    {
+      "kind": "address",
+      "address": "0x891d3d"
+    },
+    {
+      "kind": "address",
+      "address": "0x891d48"
+    },
+    {
+      "kind": "address",
+      "address": "0x891e12"
+    },
+    {
+      "kind": "address",
+      "address": "0x891e89"
+    },
+    {
+      "kind": "address",
+      "address": "0x891ea6"
+    },
+    {
+      "kind": "address",
+      "address": "0x891f92"
+    }
+  ],
+  "evidence_links": []
+}

@@ -1,0 +1,355 @@
+{
+  "evidence_id": "ev_aecbc421e4480f8255e1f634f80832bf0e5893465a40124d3ad812c002413df0",
+  "subject": {
+    "name": "Tartaros.bin",
+    "digest": {
+      "sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91"
+    },
+    "local_path": "E:\\Tartaros\\workspace\\Tartaros.bin",
+    "format": "pe",
+    "architecture": "x86"
+  },
+  "provider": {
+    "id": "rea-workflow",
+    "name": "REA composed investigation workflow",
+    "version": "1"
+  },
+  "analysis_profile": {
+    "provider": {
+      "id": "rea-workflow",
+      "name": "REA composed investigation workflow",
+      "version": "1"
+    },
+    "parameters": {
+      "upstream_analysis_profile": {
+        "provider": {
+          "id": "ghidra",
+          "name": "Ghidra",
+          "version": "12.1.4"
+        },
+        "parameters": {
+          "target_kind": "executable",
+          "target_format": "pe",
+          "executable_role": "application",
+          "managed": false,
+          "native_aot_metadata": {
+            "contract_revision": "rtr-9.1-x64-pe-read-only-v3",
+            "source_bytes": 134217728,
+            "work_units": 67108864,
+            "working_memory_bytes": 67108864,
+            "report_bytes": 4194304
+          },
+          "architecture": "x86",
+          "available_architectures": [
+            "x86"
+          ],
+          "import_mode": "ephemeral-source-immutable",
+          "pdb_observations": "program-info-v1",
+          "annotation_policy": "atomic-function-entry-metadata-v1",
+          "load_image_observations": "source-mappings-entry-context-v2",
+          "function_body_evidence": "complete-inclusive-ranges-v1",
+          "function_references": "complete-body-and-entry-reference-manager-v2",
+          "call_relationship_coverage": "function-body-call-coverage-v5",
+          "function_dossier_coverage": "observed-facets-and-call-relationships-v1",
+          "string_inventory_evidence": "defined-data-coverage-v1",
+          "location_resolution": "explicit-address-exact-entry-symbol-first-v3",
+          "procedure_file_offset_resolution": "address-first-unique-target-source-mapping-v2",
+          "instruction_flow_evidence": "decoded-return-pcode-v1",
+          "instruction_references": "exact-address-incoming-v1",
+          "function_boundary_observations": "ghidra-function-boundary-limitations-v3",
+          "no_return_repair": "disabled-windows-p0",
+          "process_launch": "official-headless-script-v1",
+          "jump_table_evidence": "typed-case-default-blocks-v1",
+          "decompiler_jump_loads": true,
+          "loader": "auto-from-header",
+          "language_id": "auto-from-header",
+          "compiler_spec_id": "auto-default",
+          "analyzer_preset": "ghidra-default"
+        },
+        "digest": "3c06738e45e144d5f073edbd3244c6bff46222f389525fe659bc92dca2ccdece"
+      },
+      "workflow_revision": 2
+    },
+    "digest": "d4471786e332c0336f066a85a651a368051028dfaa0c1d7a5ac78db2f422f47e"
+  },
+  "predicate_type": "rea.analysis",
+  "operation": "batch_decompile",
+  "parameters": {
+    "addresses": [
+      "0x8485b0",
+      "0x848691",
+      "0x8486b0",
+      "0x8486f0",
+      "0x848740",
+      "0x848940",
+      "0x8489a0",
+      "0x8489c0",
+      "0x848abb",
+      "0x848b00",
+      "0x848b60",
+      "0x848bc0",
+      "0x848ca0",
+      "0x848cd0",
+      "0x848d10",
+      "0x848d40"
+    ]
+  },
+  "raw_result": null,
+  "normalized_result": {
+    "items": [
+      {
+        "address": "0x8485b0",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8485b0",
+          "name": "FUN_008485b0"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_008485b0(uint param_1)\r\n\r\n{\r\n  int iVar1;\r\n  int iVar2;\r\n  int iVar3;\r\n  int *in_ECX;\r\n  void *local_10;\r\n  undefined1 *puStack_c;\r\n  undefined4 local_8;\r\n  \r\n  local_8 = 0xffffffff;\r\n  puStack_c = &LAB_009140b0;\r\n  local_10 = ExceptionList;\r\n  ExceptionList = &local_10;\r\n  if (0x28f5c28 < param_1) {\r\n                    /* WARNING: Subroutine does not return */\r\n    FUN_0087db30(\"vector<T> too long\");\r\n  }\r\n  if ((uint)((in_ECX[2] - *in_ECX) / 100) < param_1) {\r\n    iVar3 = FUN_008486f0();\r\n    local_8 = 0;\r\n    FUN_00848d70(*in_ECX,in_ECX[1],iVar3,param_1);\r\n    iVar1 = in_ECX[1];\r\n    iVar2 = *in_ECX;\r\n    if (iVar2 != 0) {\r\n      FUN_00848b60(param_1);\r\n      FUN_0089120c(*in_ECX);\r\n    }\r\n    in_ECX[2] = param_1 * 100 + iVar3;\r\n    in_ECX[1] = ((iVar1 - iVar2) / 100) * 100 + iVar3;\r\n    *in_ECX = iVar3;\r\n  }\r\n  ExceptionList = local_10;\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x848691",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x848691",
+          "name": "Catch_All@00848691"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid Catch_All_00848691(void)\r\n\r\n{\r\n  int unaff_EBP;\r\n  \r\n  FUN_0089120c(*(undefined4 *)(unaff_EBP + -0x14));\r\n                    /* WARNING: Subroutine does not return */\r\n  __CxxThrowException_8(0,0);\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8486b0",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8486b0",
+          "name": "FUN_008486b0"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_008486b0(void)\r\n\r\n{\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8486f0",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8486f0",
+          "name": "FUN_008486f0"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nint FUN_008486f0(void)\r\n\r\n{\r\n  int iVar1;\r\n  uint in_ECX;\r\n  undefined **local_14 [3];\r\n  char *local_8;\r\n  \r\n  if (in_ECX == 0) {\r\n    return 0;\r\n  }\r\n  if ((in_ECX < 0x28f5c29) && (iVar1 = FUN_00891268(in_ECX * 100), iVar1 != 0)) {\r\n    return iVar1;\r\n  }\r\n  local_8 = (char *)0x0;\r\n  std::exception::exception((exception *)local_14,&local_8);\r\n  local_14[0] = std::bad_alloc::vftable;\r\n                    /* WARNING: Subroutine does not return */\r\n  __CxxThrowException_8(local_14,&DAT_00c857a8);\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x848740",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x848740",
+          "name": "FUN_00848740"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_00848740(int *param_1,undefined4 *param_2,undefined4 *param_3)\r\n\r\n{\r\n  undefined4 uVar1;\r\n  int iVar2;\r\n  size_t _Size;\r\n  int *piVar3;\r\n  uint in_EAX;\r\n  int iVar4;\r\n  uint uVar5;\r\n  void *pvVar6;\r\n  void *pvVar7;\r\n  uint uVar8;\r\n  undefined4 *puVar9;\r\n  void *_Src;\r\n  \r\n  piVar3 = param_1;\r\n  if (in_EAX != 0) {\r\n    pvVar6 = (void *)param_1[1];\r\n    iVar4 = (int)pvVar6 - *param_1 >> 2;\r\n    if (0x3fffffffU - iVar4 < in_EAX) {\r\n                    /* WARNING: Subroutine does not return */\r\n      FUN_0087db30(\"vector<T> too long\");\r\n    }\r\n    uVar8 = iVar4 + in_EAX;\r\n    uVar5 = param_1[2] - *param_1 >> 2;\r\n    if (uVar5 < uVar8) {\r\n      if (0x3fffffff - (uVar5 >> 1) < uVar5) {\r\n        param_1 = (int *)0x0;\r\n      }\r\n      else {\r\n        param_1 = (int *)(uVar5 + (uVar5 >> 1));\r\n      }\r\n      if (param_1 < uVar8) {\r\n        param_1 = (int *)uVar8;\r\n      }\r\n      pvVar6 = (void *)FUN_007d01e0();\r\n      iVar4 = (int)param_2 - *piVar3 >> 2;\r\n      puVar9 = (undefined4 *)((int)pvVar6 + iVar4 * 4);\r\n      for (uVar8 = in_EAX; uVar8 != 0; uVar8 = uVar8 - 1) {\r\n        *puVar9 = *param_3;\r\n        puVar9 = puVar9 + 1;\r\n      }\r\n      FID_conflict__memcpy(pvVar6,(void *)*piVar3,((int)param_2 - *piVar3 >> 2) * 4);\r\n      FID_conflict__memcpy\r\n                ((void *)((int)pvVar6 + (iVar4 + in_EAX) * 4),param_2,\r\n                 (piVar3[1] - (int)param_2 >> 2) * 4);\r\n      iVar4 = *piVar3;\r\n      iVar2 = piVar3[1];\r\n      if (iVar4 != 0) {\r\n        FUN_0089120c(iVar4);\r\n      }\r\n      *piVar3 = (int)pvVar6;\r\n      piVar3[2] = (int)((int)pvVar6 + (int)param_1 * 4);\r\n      piVar3[1] = (int)((int)pvVar6 + (in_EAX + (iVar2 - iVar4 >> 2)) * 4);\r\n      return;\r\n    }\r\n    uVar1 = *param_3;\r\n    uVar8 = (int)pvVar6 - (int)param_2 >> 2;\r\n    if (uVar8 < in_EAX) {\r\n      FID_conflict__memcpy(param_2 + in_EAX,param_2,uVar8 * 4);\r\n      puVar9 = (undefined4 *)param_1[1];\r\n      iVar4 = in_EAX - ((int)puVar9 - (int)param_2 >> 2);\r\n      if (iVar4 != 0) {\r\n        for (; iVar4 != 0; iVar4 = iVar4 + -1) {\r\n          *puVar9 = uVar1;\r\n          puVar9 = puVar9 + 1;\r\n        }\r\n      }\r\n      param_1[1] = param_1[1] + in_EAX * 4;\r\n      puVar9 = (undefined4 *)(param_1[1] + in_EAX * -4);\r\n      if (param_2 != puVar9) {\r\n        do {\r\n          *param_2 = uVar1;\r\n          param_2 = param_2 + 1;\r\n        } while (param_2 != puVar9);\r\n        return;\r\n      }\r\n    }\r\n    else {\r\n      _Src = (void *)((int)pvVar6 + in_EAX * -4);\r\n      _Size = ((int)pvVar6 - (int)_Src >> 2) * 4;\r\n      pvVar7 = FID_conflict__memcpy(pvVar6,_Src,_Size);\r\n      param_1[1] = (int)((int)pvVar7 + _Size);\r\n      iVar4 = (int)_Src - (int)param_2 >> 2;\r\n      FID_conflict__memcpy((void *)((int)pvVar6 + iVar4 * -4),param_2,iVar4 * 4);\r\n      puVar9 = param_2;\r\n      if (param_2 != param_2 + in_EAX) {\r\n        do {\r\n          *puVar9 = uVar1;\r\n          puVar9 = puVar9 + 1;\r\n        } while (puVar9 != param_2 + in_EAX);\r\n      }\r\n    }\r\n  }\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x848940",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x848940",
+          "name": "FUN_00848940"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_00848940(undefined4 *param_1,int param_2)\r\n\r\n{\r\n  int iVar1;\r\n  undefined4 *puVar2;\r\n  undefined4 *puVar3;\r\n  undefined4 local_38 [4];\r\n  undefined4 local_28;\r\n  undefined4 local_18;\r\n  \r\n  for (; param_2 != 0; param_2 = param_2 + -1) {\r\n    _memset(local_38,0,0x34);\r\n    local_18 = 0x3f800000;\r\n    local_28 = 0x3f800000;\r\n    local_38[0] = 0x3f800000;\r\n    if (param_1 != (undefined4 *)0x0) {\r\n      puVar2 = local_38;\r\n      puVar3 = param_1;\r\n      for (iVar1 = 0xd; iVar1 != 0; iVar1 = iVar1 + -1) {\r\n        *puVar3 = *puVar2;\r\n        puVar2 = puVar2 + 1;\r\n        puVar3 = puVar3 + 1;\r\n      }\r\n    }\r\n    param_1 = param_1 + 0xd;\r\n  }\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8489a0",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8489a0",
+          "name": "FUN_008489a0"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_008489a0(void)\r\n\r\n{\r\n  undefined4 *in_EAX;\r\n  int in_ECX;\r\n  \r\n  for (; in_ECX != 0; in_ECX = in_ECX + -1) {\r\n    if (in_EAX != (undefined4 *)0x0) {\r\n      in_EAX[1] = 0;\r\n      *in_EAX = 0;\r\n    }\r\n    in_EAX = in_EAX + 2;\r\n  }\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8489c0",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8489c0",
+          "name": "FUN_008489c0"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_008489c0(undefined1 *param_1,int param_2)\r\n\r\n{\r\n  int iVar1;\r\n  undefined4 *puVar2;\r\n  undefined4 *puVar3;\r\n  uint uStack_98;\r\n  uint local_7c [4];\r\n  undefined4 local_6c;\r\n  uint local_68;\r\n  undefined4 local_60 [4];\r\n  undefined4 local_50;\r\n  undefined4 local_40;\r\n  undefined4 local_30;\r\n  undefined4 local_2c;\r\n  int local_28 [4];\r\n  uint local_18;\r\n  undefined1 *local_14;\r\n  void *local_10;\r\n  undefined1 *puStack_c;\r\n  int local_8;\r\n  \r\n  puStack_c = &LAB_00911497;\r\n  local_10 = ExceptionList;\r\n  uStack_98 = DAT_00d61f20 ^ (uint)&stack0xfffffffc;\r\n  local_14 = (undefined1 *)&uStack_98;\r\n  ExceptionList = &local_10;\r\n  local_8 = 0;\r\n  local_18 = uStack_98;\r\n  for (; param_2 != 0; param_2 = param_2 + -1) {\r\n    local_68 = 0xf;\r\n    local_6c = 0;\r\n    local_7c[0] = local_7c[0] & 0xffffff00;\r\n    local_30 = 7;\r\n    _memset(local_60,0,0x34);\r\n    local_40 = 0x3f800000;\r\n    local_50 = 0x3f800000;\r\n    local_60[0] = 0x3f800000;\r\n    local_28[0] = 0;\r\n    local_28[1] = 0;\r\n    local_28[2] = 0;\r\n    local_8._0_1_ = 2;\r\n    if (param_1 != (undefined1 *)0x0) {\r\n      *(undefined4 *)(param_1 + 0x14) = 0xf;\r\n      *(undefined4 *)(param_1 + 0x10) = 0;\r\n      *param_1 = 0;\r\n      FUN_00403040(local_7c,0,0xffffffff);\r\n      local_8._0_1_ = 3;\r\n      puVar2 = local_60;\r\n      puVar3 = (undefined4 *)(param_1 + 0x1c);\r\n      for (iVar1 = 0xd; iVar1 != 0; iVar1 = iVar1 + -1) {\r\n        *puVar3 = *puVar2;\r\n        puVar2 = puVar2 + 1;\r\n        puVar3 = puVar3 + 1;\r\n      }\r\n      *(undefined4 *)(param_1 + 0x50) = local_2c;\r\n      FUN_00848e90(param_1 + 0x54,local_28);\r\n    }\r\n    local_8 = (uint)local_8._1_3_ << 8;\r\n    if (local_28[0] != 0) {\r\n      FUN_0089120c(local_28[0]);\r\n    }\r\n    if (0xf < local_68) {\r\n      FUN_0089120c(local_7c[0]);\r\n    }\r\n    param_1 = param_1 + 100;\r\n  }\r\n  ExceptionList = local_10;\r\n  __security_check_cookie(local_18 ^ (uint)&stack0xfffffffc);\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x848abb",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x848abb",
+          "name": "Catch_All@00848abb"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid Catch_All_00848abb(void)\r\n\r\n{\r\n  int iVar1;\r\n  int unaff_EBP;\r\n  int iVar2;\r\n  \r\n  iVar1 = *(int *)(unaff_EBP + -0x7c);\r\n  for (iVar2 = *(int *)(unaff_EBP + -0x80); iVar2 != iVar1; iVar2 = iVar2 + 100) {\r\n    FUN_00848cd0();\r\n  }\r\n                    /* WARNING: Subroutine does not return */\r\n  __CxxThrowException_8(0,0);\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x848b00",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x848b00",
+          "name": "FUN_00848b00"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nint FUN_00848b00(undefined4 *param_1,int param_2)\r\n\r\n{\r\n  undefined4 *in_EAX;\r\n  int iVar1;\r\n  undefined4 *puVar2;\r\n  undefined4 *puVar3;\r\n  undefined4 *puVar4;\r\n  \r\n  if (in_EAX != param_1) {\r\n    puVar2 = in_EAX + 0x14;\r\n    do {\r\n      FUN_00403040(puVar2 + -0x14,0,0xffffffff);\r\n      puVar3 = puVar2 + -0xd;\r\n      puVar4 = (undefined4 *)(param_2 + 0x1c);\r\n      for (iVar1 = 0xd; iVar1 != 0; iVar1 = iVar1 + -1) {\r\n        *puVar4 = *puVar3;\r\n        puVar3 = puVar3 + 1;\r\n        puVar4 = puVar4 + 1;\r\n      }\r\n      *(undefined4 *)(param_2 + 0x50) = *puVar2;\r\n      FUN_00848bc0(param_2 + 0x54,puVar2 + 1);\r\n      param_2 = param_2 + 100;\r\n      puVar3 = puVar2 + 5;\r\n      puVar2 = puVar2 + 0x19;\r\n    } while (puVar3 != param_1);\r\n  }\r\n  return param_2;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x848b60",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x848b60",
+          "name": "FUN_00848b60"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_00848b60(void)\r\n\r\n{\r\n  int *piVar1;\r\n  int *in_EAX;\r\n  int *piVar2;\r\n  int *unaff_EDI;\r\n  \r\n  if (in_EAX != unaff_EDI) {\r\n    piVar2 = in_EAX + 0x15;\r\n    do {\r\n      if (*piVar2 != 0) {\r\n        FUN_0089120c(*piVar2);\r\n      }\r\n      *piVar2 = 0;\r\n      piVar2[1] = 0;\r\n      piVar2[2] = 0;\r\n      if (0xf < (uint)piVar2[-0x10]) {\r\n        FUN_0089120c(piVar2[-0x15]);\r\n      }\r\n      piVar2[-0x10] = 0xf;\r\n      piVar2[-0x11] = 0;\r\n      *(undefined1 *)(piVar2 + -0x15) = 0;\r\n      piVar1 = piVar2 + 4;\r\n      piVar2 = piVar2 + 0x19;\r\n    } while (piVar1 != unaff_EDI);\r\n  }\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x848bc0",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x848bc0",
+          "name": "FUN_00848bc0"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nint * FUN_00848bc0(int *param_1,int *param_2)\r\n\r\n{\r\n  int iVar1;\r\n  char cVar2;\r\n  int iVar3;\r\n  uint uVar4;\r\n  uint uVar5;\r\n  \r\n  if (param_1 != param_2) {\r\n    iVar3 = *param_2;\r\n    uVar4 = param_2[1] - iVar3 >> 3;\r\n    if (uVar4 == 0) {\r\n      FUN_00848ca0();\r\n      return param_1;\r\n    }\r\n    iVar1 = *param_1;\r\n    uVar5 = param_1[1] - iVar1 >> 3;\r\n    if (uVar4 <= uVar5) {\r\n      FUN_00848e60();\r\n      param_1[1] = *param_1 + (param_2[1] - *param_2 >> 3) * 8;\r\n      return param_1;\r\n    }\r\n    if (uVar4 <= (uint)(param_1[2] - iVar1 >> 3)) {\r\n      FUN_00848e60();\r\n      iVar3 = FUN_00848d40(iVar3 + uVar5 * 8,param_2);\r\n      param_1[1] = iVar3;\r\n      return param_1;\r\n    }\r\n    if (iVar1 != 0) {\r\n      FUN_0089120c(iVar1);\r\n    }\r\n    cVar2 = FUN_004bb3e0();\r\n    if (cVar2 != '\\0') {\r\n      iVar3 = FUN_00848d40(*param_2,param_2);\r\n      param_1[1] = iVar3;\r\n    }\r\n  }\r\n  return param_1;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x848ca0",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x848ca0",
+          "name": "FUN_00848ca0"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* WARNING: Removing unreachable block (ram,0x00848caf) */\r\n/* WARNING: Removing unreachable block (ram,0x00848cb5) */\r\n/* WARNING: Removing unreachable block (ram,0x00848cca) */\r\n\r\nvoid FUN_00848ca0(void)\r\n\r\n{\r\n  int *unaff_EDI;\r\n  \r\n  if (*unaff_EDI != unaff_EDI[1]) {\r\n    unaff_EDI[1] = *unaff_EDI;\r\n  }\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x848cd0",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x848cd0",
+          "name": "FUN_00848cd0"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_00848cd0(void)\r\n\r\n{\r\n  undefined4 *unaff_ESI;\r\n  \r\n  if (unaff_ESI[0x15] != 0) {\r\n    FUN_0089120c(unaff_ESI[0x15]);\r\n  }\r\n  unaff_ESI[0x15] = 0;\r\n  unaff_ESI[0x16] = 0;\r\n  unaff_ESI[0x17] = 0;\r\n  if (0xf < (uint)unaff_ESI[5]) {\r\n    FUN_0089120c(*unaff_ESI);\r\n  }\r\n  unaff_ESI[4] = 0;\r\n  unaff_ESI[5] = 0xf;\r\n  *(undefined1 *)unaff_ESI = 0;\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x848d10",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x848d10",
+          "name": "FUN_00848d10"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_00848d10(undefined4 *param_1)\r\n\r\n{\r\n  undefined4 *in_EAX;\r\n  int iVar1;\r\n  undefined4 *in_EDX;\r\n  undefined4 *puVar2;\r\n  undefined4 *puVar3;\r\n  \r\n  for (; in_EDX != param_1; in_EDX = in_EDX + 0xd) {\r\n    if (in_EAX != (undefined4 *)0x0) {\r\n      puVar2 = in_EDX;\r\n      puVar3 = in_EAX;\r\n      for (iVar1 = 0xd; iVar1 != 0; iVar1 = iVar1 + -1) {\r\n        *puVar3 = *puVar2;\r\n        puVar2 = puVar2 + 1;\r\n        puVar3 = puVar3 + 1;\r\n      }\r\n    }\r\n    in_EAX = in_EAX + 0xd;\r\n  }\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x848d40",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x848d40",
+          "name": "FUN_00848d40"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_00848d40(undefined4 *param_1)\r\n\r\n{\r\n  undefined4 *in_EAX;\r\n  undefined4 *in_EDX;\r\n  \r\n  for (; param_1 != in_EDX; param_1 = param_1 + 2) {\r\n    if (in_EAX != (undefined4 *)0x0) {\r\n      *in_EAX = *param_1;\r\n      in_EAX[1] = param_1[1];\r\n    }\r\n    in_EAX = in_EAX + 2;\r\n  }\r\n  return;\r\n}\r\n\r\n"
+      }
+    ],
+    "total": 16,
+    "succeeded": 16,
+    "failed": 0
+  },
+  "confidence": "derived",
+  "authority": "shipped-artifact",
+  "environment": null,
+  "limitations": [
+    "Derived by an REA composed workflow.",
+    "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+    "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+    "External functions and functions without an analyzable body return null; other decompiler failures remain explicit.",
+    "External functions and local thunks are distinct; procedure metadata identifies both and preserves a thunk target when Ghidra resolves one.",
+    "Ghidra Listing reports a terminal call at 0x8485ed to 0x87db30 FUN_0087db30 (external=false, thunk=false, hasNoReturn=true); fallthrough is excluded by Ghidra's flow model. This records Ghidra's FunctionManager flag, not an independent verification that the callee cannot return.",
+    "Ghidra Listing reports a terminal call at 0x8486a1 to 0x89c9f0 __CxxThrowException@8 (external=false, thunk=false, hasNoReturn=true); fallthrough is excluded by Ghidra's flow model. This records Ghidra's FunctionManager flag, not an independent verification that the callee cannot return.",
+    "Ghidra Listing reports a terminal call at 0x848737 to 0x89c9f0 __CxxThrowException@8 (external=false, thunk=false, hasNoReturn=true); fallthrough is excluded by Ghidra's flow model. This records Ghidra's FunctionManager flag, not an independent verification that the callee cannot return.",
+    "Ghidra Listing reports a terminal call at 0x848770 to 0x87db30 FUN_0087db30 (external=false, thunk=false, hasNoReturn=true); fallthrough is excluded by Ghidra's flow model. This records Ghidra's FunctionManager flag, not an independent verification that the callee cannot return.",
+    "Ghidra Listing reports a terminal call at 0x848ad5 to 0x89c9f0 __CxxThrowException@8 (external=false, thunk=false, hasNoReturn=true); fallthrough is excluded by Ghidra's flow model. This records Ghidra's FunctionManager flag, not an independent verification that the callee cannot return.",
+    "Pseudocode is Ghidra decompiler output, not original source and not text-equivalent to Hopper output.",
+    "The Windows bridge uses authenticated IPv4 loopback because Node path-based IPC does not expose Java AF_UNIX sockets; the endpoint file contains no bearer token.",
+    "The imported Program and temporary project are ephemeral and deleted on close. Annotation operations edit session database metadata; original executable bytes are never written.",
+    "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+    "The target references PDB Tartaros.pdb (GUID 491a189d-6d27-43d1-a6b5-81ace6a1df8b, age (hex) 1, signature unknown, version RSDS); Ghidra reports load state unknown. Original names and types may be missing; an empty name search does not prove a procedure is absent. Use list_procedures and address-based analysis to inspect recovered functions. REA does not admit a caller-selected PDB companion.",
+    "Windows Ghidra P0 accepts native x86 and x86-64 PE applications and DLLs, and explicitly selected raw 6502 images; managed, hostile, sensitive, and mutable-path targets are unsupported.",
+    "Windows sessions require the matching packaged Windows x64 native addon, local NTFS targets and runtimes, and Windows 10 or later. Native handles enforce path admission, private DACLs, and Job Object ownership automatically."
+  ],
+  "relationship_coverage": null,
+  "locations": [
+    {
+      "kind": "address",
+      "address": "0x8485b0"
+    },
+    {
+      "kind": "address",
+      "address": "0x848691"
+    },
+    {
+      "kind": "address",
+      "address": "0x8486b0"
+    },
+    {
+      "kind": "address",
+      "address": "0x8486f0"
+    },
+    {
+      "kind": "address",
+      "address": "0x848740"
+    },
+    {
+      "kind": "address",
+      "address": "0x848940"
+    },
+    {
+      "kind": "address",
+      "address": "0x8489a0"
+    },
+    {
+      "kind": "address",
+      "address": "0x8489c0"
+    },
+    {
+      "kind": "address",
+      "address": "0x848abb"
+    },
+    {
+      "kind": "address",
+      "address": "0x848b00"
+    },
+    {
+      "kind": "address",
+      "address": "0x848b60"
+    },
+    {
+      "kind": "address",
+      "address": "0x848bc0"
+    },
+    {
+      "kind": "address",
+      "address": "0x848ca0"
+    },
+    {
+      "kind": "address",
+      "address": "0x848cd0"
+    },
+    {
+      "kind": "address",
+      "address": "0x848d10"
+    },
+    {
+      "kind": "address",
+      "address": "0x848d40"
+    }
+  ],
+  "evidence_links": []
+}

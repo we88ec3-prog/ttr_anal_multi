@@ -1,0 +1,24 @@
+
+void FUN_00776d70(void *param_1)
+
+{
+  int *piVar1;
+  void *local_10;
+  undefined1 *puStack_c;
+  undefined4 local_8;
+  
+  puStack_c = &LAB_00907cd3;
+  local_10 = ExceptionList;
+  ExceptionList = &local_10;
+  local_8 = 0;
+  piVar1 = *(int **)((int)param_1 + 0x28);
+  if (piVar1 != (int *)0x0) {
+    (**(code **)(*piVar1 + 8))(piVar1,DAT_00d61f20 ^ (uint)&stack0xfffffffc);
+    *(undefined4 *)((int)param_1 + 0x28) = 0;
+  }
+  local_8 = 0xffffffff;
+  _eh_vector_destructor_iterator_(param_1,0x14,2,FUN_005f5d10);
+  ExceptionList = local_10;
+  return;
+}
+

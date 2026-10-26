@@ -1,0 +1,23 @@
+
+int FUN_0082efd0(void)
+
+{
+  int *piVar1;
+  uint uVar2;
+  int iVar3;
+  
+  FUN_004d8460();
+  piVar1 = (int *)FUN_008634e0();
+  if ((int *)*piVar1 == (int *)0x0) {
+    iVar3 = 0;
+  }
+  else {
+    iVar3 = *(int *)*piVar1;
+  }
+  uVar2 = (uint)piVar1[2] >> 1;
+  if (*(uint *)(iVar3 + 8) <= uVar2) {
+    uVar2 = uVar2 - *(uint *)(iVar3 + 8);
+  }
+  return *(int *)(*(int *)(iVar3 + 4) + uVar2 * 4) + (piVar1[2] & 1U) * 8;
+}
+

@@ -1,0 +1,15 @@
+
+void FUN_007a3900(void)
+
+{
+  int iVar1;
+  int in_ECX;
+  
+  iVar1 = *(int *)(in_ECX + 0xc);
+  if (iVar1 != 0) {
+    FUN_007a37f0();
+    FUN_0089120c(iVar1);
+  }
+  return;
+}
+

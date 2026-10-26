@@ -1,0 +1,351 @@
+{
+  "evidence_id": "ev_156adb7afd5733830c380d6d95c30abd56e28d8628775e4ac0f3c625de0202b5",
+  "subject": {
+    "name": "Tartaros.bin",
+    "digest": {
+      "sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91"
+    },
+    "local_path": "E:\\Tartaros\\workspace\\Tartaros.bin",
+    "format": "pe",
+    "architecture": "x86"
+  },
+  "provider": {
+    "id": "rea-workflow",
+    "name": "REA composed investigation workflow",
+    "version": "1"
+  },
+  "analysis_profile": {
+    "provider": {
+      "id": "rea-workflow",
+      "name": "REA composed investigation workflow",
+      "version": "1"
+    },
+    "parameters": {
+      "upstream_analysis_profile": {
+        "provider": {
+          "id": "ghidra",
+          "name": "Ghidra",
+          "version": "12.1.4"
+        },
+        "parameters": {
+          "target_kind": "executable",
+          "target_format": "pe",
+          "executable_role": "application",
+          "managed": false,
+          "native_aot_metadata": {
+            "contract_revision": "rtr-9.1-x64-pe-read-only-v3",
+            "source_bytes": 134217728,
+            "work_units": 67108864,
+            "working_memory_bytes": 67108864,
+            "report_bytes": 4194304
+          },
+          "architecture": "x86",
+          "available_architectures": [
+            "x86"
+          ],
+          "import_mode": "ephemeral-source-immutable",
+          "pdb_observations": "program-info-v1",
+          "annotation_policy": "atomic-function-entry-metadata-v1",
+          "load_image_observations": "source-mappings-entry-context-v2",
+          "function_body_evidence": "complete-inclusive-ranges-v1",
+          "function_references": "complete-body-and-entry-reference-manager-v2",
+          "call_relationship_coverage": "function-body-call-coverage-v5",
+          "function_dossier_coverage": "observed-facets-and-call-relationships-v1",
+          "string_inventory_evidence": "defined-data-coverage-v1",
+          "location_resolution": "explicit-address-exact-entry-symbol-first-v3",
+          "procedure_file_offset_resolution": "address-first-unique-target-source-mapping-v2",
+          "instruction_flow_evidence": "decoded-return-pcode-v1",
+          "instruction_references": "exact-address-incoming-v1",
+          "function_boundary_observations": "ghidra-function-boundary-limitations-v3",
+          "no_return_repair": "disabled-windows-p0",
+          "process_launch": "official-headless-script-v1",
+          "jump_table_evidence": "typed-case-default-blocks-v1",
+          "decompiler_jump_loads": true,
+          "loader": "auto-from-header",
+          "language_id": "auto-from-header",
+          "compiler_spec_id": "auto-default",
+          "analyzer_preset": "ghidra-default"
+        },
+        "digest": "3c06738e45e144d5f073edbd3244c6bff46222f389525fe659bc92dca2ccdece"
+      },
+      "workflow_revision": 2
+    },
+    "digest": "d4471786e332c0336f066a85a651a368051028dfaa0c1d7a5ac78db2f422f47e"
+  },
+  "predicate_type": "rea.analysis",
+  "operation": "batch_decompile",
+  "parameters": {
+    "addresses": [
+      "0x89828c",
+      "0x898294",
+      "0x898334",
+      "0x898347",
+      "0x8983db",
+      "0x8983ee",
+      "0x898416",
+      "0x89843e",
+      "0x898466",
+      "0x8984d0",
+      "0x8985b3",
+      "0x898612",
+      "0x898620",
+      "0x8986a6",
+      "0x8986e8",
+      "0x8986fb"
+    ]
+  },
+  "raw_result": null,
+  "normalized_result": {
+    "items": [
+      {
+        "address": "0x89828c",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x89828c",
+          "name": "FUN_0089828c"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_0089828c(void)\r\n\r\n{\r\n  FILE *unaff_EDI;\r\n  \r\n  __unlock_file(unaff_EDI);\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x898294",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x898294",
+          "name": "__towlower_l"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Single Match\r\n    __towlower_l\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nwint_t __cdecl __towlower_l(wint_t _C,_locale_t _Locale)\r\n\r\n{\r\n  WCHAR WVar1;\r\n  int iVar2;\r\n  undefined2 in_stack_00000006;\r\n  int local_18 [2];\r\n  int local_10;\r\n  char local_c;\r\n  WCHAR local_8 [2];\r\n  \r\n  WVar1 = L'\\xffff';\r\n  if (_C != 0xffff) {\r\n    _LocaleUpdate::_LocaleUpdate((_LocaleUpdate *)local_18,_Locale);\r\n    if (*(LPCWSTR *)(local_18[0] + 0x14) == (LPCWSTR)0x0) {\r\n      WVar1 = _C;\r\n      if ((ushort)(_C - 0x41) < 0x1a) {\r\n        WVar1 = _C + L' ';\r\n      }\r\n    }\r\n    else if (_C < 0x100) {\r\n      iVar2 = _iswctype(_C,1);\r\n      WVar1 = _C;\r\n      if (iVar2 != 0) {\r\n        WVar1 = (ushort)*(byte *)(*(int *)(local_18[0] + 0xcc) + (__C & 0xffff));\r\n      }\r\n    }\r\n    else {\r\n      iVar2 = ___crtLCMapStringW(*(LPCWSTR *)(local_18[0] + 0x14),0x100,(LPCWSTR)&_C,1,local_8,1);\r\n      WVar1 = _C;\r\n      if (iVar2 != 0) {\r\n        WVar1 = local_8[0];\r\n      }\r\n    }\r\n    if (local_c != '\\0') {\r\n      *(uint *)(local_10 + 0x70) = *(uint *)(local_10 + 0x70) & 0xfffffffd;\r\n    }\r\n  }\r\n  return WVar1;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x898334",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x898334",
+          "name": "_towlower"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Single Match\r\n    _towlower\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nwint_t __cdecl _towlower(wint_t _C)\r\n\r\n{\r\n  wint_t wVar1;\r\n  \r\n  wVar1 = __towlower_l(_C,(_locale_t)0x0);\r\n  return wVar1;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x898347",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x898347",
+          "name": "FID_conflict:_wprintf"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* WARNING: Function: __SEH_prolog4 replaced with injection: SEH_prolog4 */\r\n/* WARNING: Function: __SEH_epilog4 replaced with injection: EH_epilog3 */\r\n/* Library Function - Multiple Matches With Different Base Names\r\n    _printf\r\n    _wprintf\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nint __cdecl FID_conflict__wprintf(char *_Format,...)\r\n\r\n{\r\n  int *piVar1;\r\n  int iVar2;\r\n  int iVar3;\r\n  int iVar4;\r\n  \r\n  if (_Format == (char *)0x0) {\r\n    piVar1 = __errno();\r\n    *piVar1 = 0x16;\r\n    FUN_00893343();\r\n    iVar2 = -1;\r\n  }\r\n  else {\r\n    iVar3 = FUN_00894fab();\r\n    __lock_file2(1,(void *)(iVar3 + 0x20));\r\n    iVar3 = FUN_00894fab();\r\n    iVar3 = __stbuf((FILE *)(iVar3 + 0x20));\r\n    iVar4 = FUN_00894fab(_Format,0,&stack0x00000008);\r\n    iVar2 = FUN_008a3d54(iVar4 + 0x20);\r\n    iVar4 = FUN_00894fab();\r\n    __ftbuf(iVar3,(FILE *)(iVar4 + 0x20));\r\n    FUN_008983db();\r\n  }\r\n  return iVar2;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8983db",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8983db",
+          "name": "FUN_008983db"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_008983db(void)\r\n\r\n{\r\n  int iVar1;\r\n  \r\n  iVar1 = FUN_00894fab();\r\n  __unlock_file2(1,(void *)(iVar1 + 0x20));\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8983ee",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8983ee",
+          "name": "_feof"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Single Match\r\n    _feof\r\n   \r\n   Libraries: Visual Studio 2010 Release, Visual Studio 2012 Release */\r\n\r\nint __cdecl _feof(FILE *_File)\r\n\r\n{\r\n  int *piVar1;\r\n  \r\n  if (_File == (FILE *)0x0) {\r\n    piVar1 = __errno();\r\n    *piVar1 = 0x16;\r\n    FUN_00893343();\r\n    return 0;\r\n  }\r\n  return _File->_flag & 0x10;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x898416",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x898416",
+          "name": "_ferror"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Single Match\r\n    _ferror\r\n   \r\n   Libraries: Visual Studio 2010 Release, Visual Studio 2012 Release */\r\n\r\nint __cdecl _ferror(FILE *_File)\r\n\r\n{\r\n  int *piVar1;\r\n  \r\n  if (_File == (FILE *)0x0) {\r\n    piVar1 = __errno();\r\n    *piVar1 = 0x16;\r\n    FUN_00893343();\r\n    return 0;\r\n  }\r\n  return _File->_flag & 0x20;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x89843e",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x89843e",
+          "name": "FUN_0089843e"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nundefined4 FUN_0089843e(int param_1)\r\n\r\n{\r\n  int *piVar1;\r\n  int iVar2;\r\n  \r\n  if (-1 < param_1) {\r\n    piVar1 = (int *)FUN_008ae1c3();\r\n    if (param_1 < *piVar1) goto LAB_0089845b;\r\n  }\r\n  piVar1 = (int *)FUN_008ae1c3();\r\n  param_1 = *piVar1;\r\nLAB_0089845b:\r\n  iVar2 = FUN_008ae1c9();\r\n  return *(undefined4 *)(iVar2 + param_1 * 4);\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x898466",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x898466",
+          "name": "FUN_00898466"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nchar * FUN_00898466(undefined4 param_1)\r\n\r\n{\r\n  _ptiddata p_Var1;\r\n  char *pcVar2;\r\n  char *_Src;\r\n  errno_t eVar3;\r\n  \r\n  p_Var1 = __getptd_noexit();\r\n  if (p_Var1 == (_ptiddata)0x0) {\r\n    pcVar2 = \"Visual C++ CRT: Not enough memory to complete call to strerror.\";\r\n  }\r\n  else {\r\n    if (p_Var1->_errmsg == (char *)0x0) {\r\n      pcVar2 = __calloc_crt(0x86,1);\r\n      p_Var1->_errmsg = pcVar2;\r\n      if (pcVar2 == (char *)0x0) {\r\n        return \"Visual C++ CRT: Not enough memory to complete call to strerror.\";\r\n      }\r\n    }\r\n    pcVar2 = p_Var1->_errmsg;\r\n    _Src = (char *)FUN_0089843e(param_1);\r\n    eVar3 = _strcpy_s(pcVar2,0x86,_Src);\r\n    if (eVar3 != 0) {\r\n                    /* WARNING: Subroutine does not return */\r\n      __invoke_watson((wchar_t *)0x0,(wchar_t *)0x0,(wchar_t *)0x0,0,0);\r\n    }\r\n  }\r\n  return pcVar2;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8984d0",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8984d0",
+          "name": "__ungetc_nolock"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Single Match\r\n    __ungetc_nolock\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nint __cdecl __ungetc_nolock(int _Ch,FILE *_File)\r\n\r\n{\r\n  char *pcVar1;\r\n  uint uVar2;\r\n  int *piVar3;\r\n  undefined *puVar4;\r\n  \r\n  if ((_File->_flag & 0x40) == 0) {\r\n    uVar2 = __fileno(_File);\r\n    if ((uVar2 == 0xffffffff) || (uVar2 == 0xfffffffe)) {\r\n      puVar4 = &DAT_00d61f50;\r\n    }\r\n    else {\r\n      puVar4 = (undefined *)((uVar2 & 0x1f) * 0x40 + (&DAT_00fe72a0)[(int)uVar2 >> 5]);\r\n    }\r\n    if ((puVar4[0x24] & 0x7f) == 0) {\r\n      if ((uVar2 == 0xffffffff) || (uVar2 == 0xfffffffe)) {\r\n        puVar4 = &DAT_00d61f50;\r\n      }\r\n      else {\r\n        puVar4 = (undefined *)((uVar2 & 0x1f) * 0x40 + (&DAT_00fe72a0)[(int)uVar2 >> 5]);\r\n      }\r\n      if ((puVar4[0x24] & 0x80) == 0) goto LAB_00898553;\r\n    }\r\n    piVar3 = __errno();\r\n    *piVar3 = 0x16;\r\n    FUN_00893343();\r\n  }\r\n  else {\r\nLAB_00898553:\r\n    if (_Ch != -1) {\r\n      uVar2 = _File->_flag;\r\n      if (((uVar2 & 1) != 0) || (((char)uVar2 < '\\0' && ((uVar2 & 2) == 0)))) {\r\n        if (_File->_base == (char *)0x0) {\r\n          __getbuf(_File);\r\n        }\r\n        if (_File->_ptr == _File->_base) {\r\n          if (_File->_cnt != 0) {\r\n            return -1;\r\n          }\r\n          _File->_ptr = _File->_ptr + 1;\r\n        }\r\n        _File->_ptr = _File->_ptr + -1;\r\n        pcVar1 = _File->_ptr;\r\n        if ((_File->_flag & 0x40) == 0) {\r\n          *pcVar1 = (char)_Ch;\r\n        }\r\n        else if (*pcVar1 != (char)_Ch) {\r\n          _File->_ptr = pcVar1 + 1;\r\n          return -1;\r\n        }\r\n        _File->_cnt = _File->_cnt + 1;\r\n        _File->_flag = _File->_flag & 0xffffffefU | 1;\r\n        return _Ch & 0xff;\r\n      }\r\n    }\r\n  }\r\n  return -1;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8985b3",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8985b3",
+          "name": "_ungetc"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* WARNING: Function: __SEH_prolog4 replaced with injection: SEH_prolog4 */\r\n/* WARNING: Function: __SEH_epilog4 replaced with injection: EH_epilog3 */\r\n/* Library Function - Single Match\r\n    _ungetc\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nint __cdecl _ungetc(int _Ch,FILE *_File)\r\n\r\n{\r\n  int *piVar1;\r\n  int iVar2;\r\n  \r\n  if (_File == (FILE *)0x0) {\r\n    piVar1 = __errno();\r\n    *piVar1 = 0x16;\r\n    FUN_00893343();\r\n    iVar2 = -1;\r\n  }\r\n  else {\r\n    __lock_file(_File);\r\n    iVar2 = __ungetc_nolock(_Ch,_File);\r\n    FUN_00898612();\r\n  }\r\n  return iVar2;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x898612",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x898612",
+          "name": "FUN_00898612"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_00898612(void)\r\n\r\n{\r\n  int unaff_EBP;\r\n  \r\n  __unlock_file(*(FILE **)(unaff_EBP + 0xc));\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x898620",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x898620",
+          "name": "_strstr"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Single Match\r\n    _strstr\r\n   \r\n   Libraries: Visual Studio 2005, Visual Studio 2008, Visual Studio 2010, Visual Studio 2019 */\r\n\r\nchar * __cdecl _strstr(char *_Str,char *_SubStr)\r\n\r\n{\r\n  char *pcVar1;\r\n  char *pcVar2;\r\n  char cVar3;\r\n  uint uVar4;\r\n  char cVar5;\r\n  uint uVar6;\r\n  uint uVar7;\r\n  char *pcVar8;\r\n  uint *puVar9;\r\n  char *pcVar10;\r\n  \r\n  cVar3 = *_SubStr;\r\n  if (cVar3 == '\\0') {\r\n    return _Str;\r\n  }\r\n  if (_SubStr[1] == '\\0') {\r\n    while (((uint)_Str & 3) != 0) {\r\n      uVar4 = *(uint *)_Str;\r\n      if ((char)uVar4 == cVar3) {\r\n        return (char *)(uint *)_Str;\r\n      }\r\n      _Str = (char *)((int)_Str + 1);\r\n      if ((char)uVar4 == '\\0') {\r\n        return (char *)0x0;\r\n      }\r\n    }\r\n    while( true ) {\r\n      while( true ) {\r\n        uVar4 = *(uint *)_Str;\r\n        uVar7 = uVar4 ^ CONCAT22(CONCAT11(cVar3,cVar3),CONCAT11(cVar3,cVar3));\r\n        uVar6 = uVar4 ^ 0xffffffff ^ uVar4 + 0x7efefeff;\r\n        puVar9 = (uint *)((int)_Str + 4);\r\n        if (((uVar7 ^ 0xffffffff ^ uVar7 + 0x7efefeff) & 0x81010100) != 0) break;\r\n        _Str = (char *)puVar9;\r\n        if ((uVar6 & 0x81010100) != 0) {\r\n          if ((uVar6 & 0x1010100) != 0) {\r\n            return (char *)0x0;\r\n          }\r\n          if ((uVar4 + 0x7efefeff & 0x80000000) == 0) {\r\n            return (char *)0x0;\r\n          }\r\n        }\r\n      }\r\n      uVar4 = *(uint *)_Str;\r\n      if ((char)uVar4 == cVar3) {\r\n        return (char *)(uint *)_Str;\r\n      }\r\n      if ((char)uVar4 == '\\0') {\r\n        return (char *)0x0;\r\n      }\r\n      cVar5 = (char)(uVar4 >> 8);\r\n      if (cVar5 == cVar3) {\r\n        return (char *)((int)_Str + 1);\r\n      }\r\n      if (cVar5 == '\\0') {\r\n        return (char *)0x0;\r\n      }\r\n      cVar5 = (char)(uVar4 >> 0x10);\r\n      if (cVar5 == cVar3) {\r\n        return (char *)((int)_Str + 2);\r\n      }\r\n      if (cVar5 == '\\0') break;\r\n      cVar5 = (char)(uVar4 >> 0x18);\r\n      if (cVar5 == cVar3) {\r\n        return (char *)((int)_Str + 3);\r\n      }\r\n      _Str = (char *)puVar9;\r\n      if (cVar5 == '\\0') {\r\n        return (char *)0x0;\r\n      }\r\n    }\r\n    return (char *)0x0;\r\n  }\r\n  do {\r\n    cVar5 = *_Str;\r\n    do {\r\n      while (_Str = _Str + 1, cVar5 != cVar3) {\r\n        if (cVar5 == '\\0') {\r\n          return (char *)0x0;\r\n        }\r\n        cVar5 = *_Str;\r\n      }\r\n      cVar5 = *_Str;\r\n      pcVar10 = _Str + 1;\r\n      pcVar8 = _SubStr;\r\n    } while (cVar5 != _SubStr[1]);\r\n    do {\r\n      if (pcVar8[2] == '\\0') {\r\nLAB_00898699:\r\n        return _Str + -1;\r\n      }\r\n      if (*pcVar10 != pcVar8[2]) break;\r\n      pcVar1 = pcVar8 + 3;\r\n      if (*pcVar1 == '\\0') goto LAB_00898699;\r\n      pcVar2 = pcVar10 + 1;\r\n      pcVar8 = pcVar8 + 2;\r\n      pcVar10 = pcVar10 + 2;\r\n    } while (*pcVar1 == *pcVar2);\r\n  } while( true );\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8986a6",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8986a6",
+          "name": "__get_errno_from_oserr"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Single Match\r\n    __get_errno_from_oserr\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nint __cdecl __get_errno_from_oserr(ulong param_1)\r\n\r\n{\r\n  uint uVar1;\r\n  \r\n  uVar1 = 0;\r\n  do {\r\n    if (param_1 == (&DAT_00d61d80)[uVar1 * 2]) {\r\n      return *(int *)(uVar1 * 8 + 0xd61d84);\r\n    }\r\n    uVar1 = uVar1 + 1;\r\n  } while (uVar1 < 0x2d);\r\n  if (param_1 - 0x13 < 0x12) {\r\n    return 0xd;\r\n  }\r\n  return (-(uint)(0xe < param_1 - 0xbc) & 0xe) + 8;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8986e8",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8986e8",
+          "name": "__errno"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Single Match\r\n    __errno\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nint * __cdecl __errno(void)\r\n\r\n{\r\n  _ptiddata p_Var1;\r\n  \r\n  p_Var1 = __getptd_noexit();\r\n  if (p_Var1 == (_ptiddata)0x0) {\r\n    return (int *)&DAT_00d61ee8;\r\n  }\r\n  return &p_Var1->_terrno;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8986fb",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8986fb",
+          "name": "___doserrno"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Single Match\r\n    ___doserrno\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nulong * __cdecl ___doserrno(void)\r\n\r\n{\r\n  _ptiddata p_Var1;\r\n  \r\n  p_Var1 = __getptd_noexit();\r\n  if (p_Var1 == (_ptiddata)0x0) {\r\n    return (ulong *)&DAT_00d61eec;\r\n  }\r\n  return &p_Var1->_tdoserrno;\r\n}\r\n\r\n"
+      }
+    ],
+    "total": 16,
+    "succeeded": 16,
+    "failed": 0
+  },
+  "confidence": "derived",
+  "authority": "shipped-artifact",
+  "environment": null,
+  "limitations": [
+    "Derived by an REA composed workflow.",
+    "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+    "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+    "External functions and functions without an analyzable body return null; other decompiler failures remain explicit.",
+    "External functions and local thunks are distinct; procedure metadata identifies both and preserves a thunk target when Ghidra resolves one.",
+    "Ghidra Listing reports a terminal call at 0x8984ca to 0x8932f1 __invoke_watson (external=false, thunk=false, hasNoReturn=true); fallthrough is excluded by Ghidra's flow model. This records Ghidra's FunctionManager flag, not an independent verification that the callee cannot return.",
+    "Pseudocode is Ghidra decompiler output, not original source and not text-equivalent to Hopper output.",
+    "The Windows bridge uses authenticated IPv4 loopback because Node path-based IPC does not expose Java AF_UNIX sockets; the endpoint file contains no bearer token.",
+    "The imported Program and temporary project are ephemeral and deleted on close. Annotation operations edit session database metadata; original executable bytes are never written.",
+    "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+    "The target references PDB Tartaros.pdb (GUID 491a189d-6d27-43d1-a6b5-81ace6a1df8b, age (hex) 1, signature unknown, version RSDS); Ghidra reports load state unknown. Original names and types may be missing; an empty name search does not prove a procedure is absent. Use list_procedures and address-based analysis to inspect recovered functions. REA does not admit a caller-selected PDB companion.",
+    "Windows Ghidra P0 accepts native x86 and x86-64 PE applications and DLLs, and explicitly selected raw 6502 images; managed, hostile, sensitive, and mutable-path targets are unsupported.",
+    "Windows sessions require the matching packaged Windows x64 native addon, local NTFS targets and runtimes, and Windows 10 or later. Native handles enforce path admission, private DACLs, and Job Object ownership automatically."
+  ],
+  "relationship_coverage": null,
+  "locations": [
+    {
+      "kind": "address",
+      "address": "0x89828c"
+    },
+    {
+      "kind": "address",
+      "address": "0x898294"
+    },
+    {
+      "kind": "address",
+      "address": "0x898334"
+    },
+    {
+      "kind": "address",
+      "address": "0x898347"
+    },
+    {
+      "kind": "address",
+      "address": "0x8983db"
+    },
+    {
+      "kind": "address",
+      "address": "0x8983ee"
+    },
+    {
+      "kind": "address",
+      "address": "0x898416"
+    },
+    {
+      "kind": "address",
+      "address": "0x89843e"
+    },
+    {
+      "kind": "address",
+      "address": "0x898466"
+    },
+    {
+      "kind": "address",
+      "address": "0x8984d0"
+    },
+    {
+      "kind": "address",
+      "address": "0x8985b3"
+    },
+    {
+      "kind": "address",
+      "address": "0x898612"
+    },
+    {
+      "kind": "address",
+      "address": "0x898620"
+    },
+    {
+      "kind": "address",
+      "address": "0x8986a6"
+    },
+    {
+      "kind": "address",
+      "address": "0x8986e8"
+    },
+    {
+      "kind": "address",
+      "address": "0x8986fb"
+    }
+  ],
+  "evidence_links": []
+}

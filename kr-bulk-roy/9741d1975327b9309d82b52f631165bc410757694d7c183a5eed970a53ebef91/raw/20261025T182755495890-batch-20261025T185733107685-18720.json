@@ -1,0 +1,351 @@
+{
+  "evidence_id": "ev_251669147cecadf3138d427c9feee7c7a3b44730d3d6a2d03254ecc2ee2f051a",
+  "subject": {
+    "name": "Tartaros.bin",
+    "digest": {
+      "sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91"
+    },
+    "local_path": "E:\\Tartaros\\workspace\\Tartaros.bin",
+    "format": "pe",
+    "architecture": "x86"
+  },
+  "provider": {
+    "id": "rea-workflow",
+    "name": "REA composed investigation workflow",
+    "version": "1"
+  },
+  "analysis_profile": {
+    "provider": {
+      "id": "rea-workflow",
+      "name": "REA composed investigation workflow",
+      "version": "1"
+    },
+    "parameters": {
+      "upstream_analysis_profile": {
+        "provider": {
+          "id": "ghidra",
+          "name": "Ghidra",
+          "version": "12.1.4"
+        },
+        "parameters": {
+          "target_kind": "executable",
+          "target_format": "pe",
+          "executable_role": "application",
+          "managed": false,
+          "native_aot_metadata": {
+            "contract_revision": "rtr-9.1-x64-pe-read-only-v3",
+            "source_bytes": 134217728,
+            "work_units": 67108864,
+            "working_memory_bytes": 67108864,
+            "report_bytes": 4194304
+          },
+          "architecture": "x86",
+          "available_architectures": [
+            "x86"
+          ],
+          "import_mode": "ephemeral-source-immutable",
+          "pdb_observations": "program-info-v1",
+          "annotation_policy": "atomic-function-entry-metadata-v1",
+          "load_image_observations": "source-mappings-entry-context-v2",
+          "function_body_evidence": "complete-inclusive-ranges-v1",
+          "function_references": "complete-body-and-entry-reference-manager-v2",
+          "call_relationship_coverage": "function-body-call-coverage-v5",
+          "function_dossier_coverage": "observed-facets-and-call-relationships-v1",
+          "string_inventory_evidence": "defined-data-coverage-v1",
+          "location_resolution": "explicit-address-exact-entry-symbol-first-v3",
+          "procedure_file_offset_resolution": "address-first-unique-target-source-mapping-v2",
+          "instruction_flow_evidence": "decoded-return-pcode-v1",
+          "instruction_references": "exact-address-incoming-v1",
+          "function_boundary_observations": "ghidra-function-boundary-limitations-v3",
+          "no_return_repair": "disabled-windows-p0",
+          "process_launch": "official-headless-script-v1",
+          "jump_table_evidence": "typed-case-default-blocks-v1",
+          "decompiler_jump_loads": true,
+          "loader": "auto-from-header",
+          "language_id": "auto-from-header",
+          "compiler_spec_id": "auto-default",
+          "analyzer_preset": "ghidra-default"
+        },
+        "digest": "3c06738e45e144d5f073edbd3244c6bff46222f389525fe659bc92dca2ccdece"
+      },
+      "workflow_revision": 2
+    },
+    "digest": "d4471786e332c0336f066a85a651a368051028dfaa0c1d7a5ac78db2f422f47e"
+  },
+  "predicate_type": "rea.analysis",
+  "operation": "batch_decompile",
+  "parameters": {
+    "addresses": [
+      "0x880e64",
+      "0x880ed5",
+      "0x880ed9",
+      "0x880f68",
+      "0x880f6b",
+      "0x880f8d",
+      "0x880fae",
+      "0x880fcc",
+      "0x880ffc",
+      "0x88102c",
+      "0x881043",
+      "0x881074",
+      "0x88108b",
+      "0x8810bc",
+      "0x8810f2",
+      "0x8810fd"
+    ]
+  },
+  "raw_result": null,
+  "normalized_result": {
+    "items": [
+      {
+        "address": "0x880e64",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x880e64",
+          "name": "do_length"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Multiple Matches With Same Base Name\r\n    protected: virtual int __thiscall std::codecvt<unsigned short,char,int>::do_length(int const\r\n   &,char const *,char const *,unsigned int)const \r\n    protected: virtual int __thiscall std::codecvt<wchar_t,char,int>::do_length(int const &,char\r\n   const *,char const *,unsigned int)const \r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nuint do_length(mbstate_t *param_1,char *param_2,char *param_3,uint param_4)\r\n\r\n{\r\n  int iVar1;\r\n  size_t sVar2;\r\n  int in_ECX;\r\n  uint uVar3;\r\n  char *_Str;\r\n  mbstate_t local_8;\r\n  \r\n  local_8 = *param_1;\r\n  uVar3 = 0;\r\n  _Str = param_2;\r\n  if (param_4 != 0) {\r\n    while (_Str != param_3) {\r\n      iVar1 = __Mbrtowc((wchar_t *)&param_1,_Str,(int)param_3 - (int)_Str,&local_8,\r\n                        (_Cvtvec *)(in_ECX + 8));\r\n      if (iVar1 == -2) {\r\n        return uVar3;\r\n      }\r\n      if (iVar1 == -1) {\r\n        return uVar3;\r\n      }\r\n      if (iVar1 == 0) {\r\n        if ((wchar_t)param_1 == L'\\0') {\r\n          sVar2 = _strlen(_Str);\r\n          iVar1 = sVar2 + 1;\r\n          goto LAB_00880ebd;\r\n        }\r\n      }\r\n      else {\r\nLAB_00880ebd:\r\n        if (iVar1 == -3) {\r\n          iVar1 = 0;\r\n        }\r\n      }\r\n      _Str = _Str + iVar1;\r\n      uVar3 = uVar3 + 1;\r\n      if (param_4 <= uVar3) {\r\n        return uVar3;\r\n      }\r\n    }\r\n  }\r\n  return uVar3;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x880ed5",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x880ed5",
+          "name": "FUN_00880ed5"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nundefined4 FUN_00880ed5(void)\r\n\r\n{\r\n  return 5;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x880ed9",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x880ed9",
+          "name": "do_unshift"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Multiple Matches With Same Base Name\r\n    protected: virtual int __thiscall std::codecvt<unsigned short,char,int>::do_unshift(int &,char\r\n   *,char *,char * &)const \r\n    protected: virtual int __thiscall std::codecvt<wchar_t,char,int>::do_unshift(int &,char *,char\r\n   *,char * &)const \r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nvoid do_unshift(mbstate_t *param_1,int param_2,int param_3,int *param_4)\r\n\r\n{\r\n  int iVar1;\r\n  int in_ECX;\r\n  undefined4 extraout_EDX;\r\n  undefined4 extraout_EDX_00;\r\n  undefined4 uVar2;\r\n  size_t _Size;\r\n  mbstate_t mVar3;\r\n  undefined4 uVar4;\r\n  char local_10 [8];\r\n  uint local_8;\r\n  \r\n  local_8 = DAT_00d61f20 ^ (uint)&stack0xfffffffc;\r\n  uVar4 = 0;\r\n  *param_4 = param_2;\r\n  mVar3 = *param_1;\r\n  iVar1 = __Wcrtomb(local_10,L'\\0',param_1,(_Cvtvec *)(in_ECX + 8));\r\n  uVar2 = extraout_EDX;\r\n  if (iVar1 < 1) {\r\n    uVar4 = 2;\r\n  }\r\n  else {\r\n    _Size = iVar1 - 1;\r\n    if (param_3 - *param_4 < (int)_Size) {\r\n      *param_1 = mVar3;\r\n      uVar4 = 1;\r\n    }\r\n    else if (0 < (int)_Size) {\r\n      FID_conflict__memcpy((void *)*param_4,local_10,_Size);\r\n      *param_4 = *param_4 + _Size;\r\n      uVar2 = extraout_EDX_00;\r\n    }\r\n  }\r\n  __security_check_cookie(local_8 ^ (uint)&stack0xfffffffc,uVar2,mVar3,uVar4);\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x880f68",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x880f68",
+          "name": "FUN_00880f68"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nundefined1 FUN_00880f68(void)\r\n\r\n{\r\n  return 0;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x880f6b",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x880f6b",
+          "name": "~ctype<>"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Multiple Matches With Same Base Name\r\n    protected: virtual __thiscall std::ctype<unsigned short>::~ctype<unsigned short>(void)\r\n    protected: virtual __thiscall std::ctype<wchar_t>::~ctype<wchar_t>(void)\r\n   \r\n   Library: Visual Studio */\r\n\r\nvoid ~ctype<>(void)\r\n\r\n{\r\n  undefined4 *in_ECX;\r\n  \r\n  *in_ECX = std::ctype<unsigned_short>::vftable;\r\n  if (in_ECX[5] != 0) {\r\n    _free((void *)in_ECX[4]);\r\n  }\r\n  *in_ECX = std::locale::facet::vftable;\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x880f8d",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x880f8d",
+          "name": "do_is"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Multiple Matches With Same Base Name\r\n    protected: virtual bool __thiscall std::ctype<unsigned short>::do_is(short,unsigned short)const \r\n    protected: virtual bool __thiscall std::ctype<wchar_t>::do_is(short,wchar_t)const \r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nbool do_is(ushort param_1,wchar_t param_2)\r\n\r\n{\r\n  ushort uVar1;\r\n  int in_ECX;\r\n  \r\n  uVar1 = __Getwctype(param_2,(_Ctypevec *)(in_ECX + 8));\r\n  return (param_1 & uVar1) != 0;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x880fae",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x880fae",
+          "name": "do_is"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Multiple Matches With Same Base Name\r\n    protected: virtual unsigned short const * __thiscall std::ctype<unsigned short>::do_is(unsigned\r\n   short const *,unsigned short const *,short *)const \r\n    protected: virtual wchar_t const * __thiscall std::ctype<wchar_t>::do_is(wchar_t const *,wchar_t\r\n   const *,short *)const \r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nvoid do_is(wchar_t *param_1,wchar_t *param_2,short *param_3)\r\n\r\n{\r\n  int in_ECX;\r\n  \r\n  __Getwctypes(param_1,param_2,param_3,(_Ctypevec *)(in_ECX + 8));\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x880fcc",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x880fcc",
+          "name": "do_scan_is"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Multiple Matches With Same Base Name\r\n    protected: virtual unsigned short const * __thiscall std::ctype<unsigned\r\n   short>::do_scan_is(short,unsigned short const *,unsigned short const *)const \r\n    protected: virtual wchar_t const * __thiscall std::ctype<wchar_t>::do_scan_is(short,wchar_t\r\n   const *,wchar_t const *)const \r\n   \r\n   Libraries: Visual Studio 2010 Release, Visual Studio 2012 Release */\r\n\r\nundefined2 * do_scan_is(undefined4 param_1,undefined2 *param_2,undefined2 *param_3)\r\n\r\n{\r\n  char cVar1;\r\n  int *in_ECX;\r\n  \r\n  while( true ) {\r\n    if (param_2 == param_3) {\r\n      return param_2;\r\n    }\r\n    cVar1 = (**(code **)(*in_ECX + 8))(param_1,*param_2);\r\n    if (cVar1 != '\\0') break;\r\n    param_2 = param_2 + 1;\r\n  }\r\n  return param_2;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x880ffc",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x880ffc",
+          "name": "do_scan_not"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Multiple Matches With Same Base Name\r\n    protected: virtual unsigned short const * __thiscall std::ctype<unsigned\r\n   short>::do_scan_not(short,unsigned short const *,unsigned short const *)const \r\n    protected: virtual wchar_t const * __thiscall std::ctype<wchar_t>::do_scan_not(short,wchar_t\r\n   const *,wchar_t const *)const \r\n   \r\n   Libraries: Visual Studio 2010 Release, Visual Studio 2012 Release */\r\n\r\nundefined2 * do_scan_not(undefined4 param_1,undefined2 *param_2,undefined2 *param_3)\r\n\r\n{\r\n  char cVar1;\r\n  int *in_ECX;\r\n  \r\n  while( true ) {\r\n    if (param_2 == param_3) {\r\n      return param_2;\r\n    }\r\n    cVar1 = (**(code **)(*in_ECX + 8))(param_1,*param_2);\r\n    if (cVar1 == '\\0') break;\r\n    param_2 = param_2 + 1;\r\n  }\r\n  return param_2;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x88102c",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x88102c",
+          "name": "do_tolower"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Multiple Matches With Same Base Name\r\n    protected: virtual unsigned short __thiscall std::ctype<unsigned short>::do_tolower(unsigned\r\n   short)const \r\n    protected: virtual wchar_t __thiscall std::ctype<wchar_t>::do_tolower(wchar_t)const \r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nvoid do_tolower(wchar_t param_1)\r\n\r\n{\r\n  int in_ECX;\r\n  \r\n  __Towlower(param_1,(_Ctypevec *)(in_ECX + 8));\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x881043",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x881043",
+          "name": "do_tolower"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Multiple Matches With Same Base Name\r\n    protected: virtual unsigned short const * __thiscall std::ctype<unsigned\r\n   short>::do_tolower(unsigned short *,unsigned short const *)const \r\n    protected: virtual wchar_t const * __thiscall std::ctype<wchar_t>::do_tolower(wchar_t *,wchar_t\r\n   const *)const \r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nwchar_t * do_tolower(wchar_t *param_1,wchar_t *param_2)\r\n\r\n{\r\n  wchar_t wVar1;\r\n  int in_ECX;\r\n  \r\n  if (param_1 != param_2) {\r\n    do {\r\n      wVar1 = __Towlower(*param_1,(_Ctypevec *)(in_ECX + 8));\r\n      *param_1 = wVar1;\r\n      param_1 = param_1 + 1;\r\n    } while (param_1 != param_2);\r\n  }\r\n  return param_1;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x881074",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x881074",
+          "name": "do_toupper"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Multiple Matches With Same Base Name\r\n    protected: virtual unsigned short __thiscall std::ctype<unsigned short>::do_toupper(unsigned\r\n   short)const \r\n    protected: virtual wchar_t __thiscall std::ctype<wchar_t>::do_toupper(wchar_t)const \r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nvoid do_toupper(wchar_t param_1)\r\n\r\n{\r\n  int in_ECX;\r\n  \r\n  __Towupper(param_1,(_Ctypevec *)(in_ECX + 8));\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x88108b",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x88108b",
+          "name": "do_toupper"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Multiple Matches With Same Base Name\r\n    protected: virtual unsigned short const * __thiscall std::ctype<unsigned\r\n   short>::do_toupper(unsigned short *,unsigned short const *)const \r\n    protected: virtual wchar_t const * __thiscall std::ctype<wchar_t>::do_toupper(wchar_t *,wchar_t\r\n   const *)const \r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nwchar_t * do_toupper(wchar_t *param_1,wchar_t *param_2)\r\n\r\n{\r\n  wchar_t wVar1;\r\n  int in_ECX;\r\n  \r\n  if (param_1 != param_2) {\r\n    do {\r\n      wVar1 = __Towupper(*param_1,(_Ctypevec *)(in_ECX + 8));\r\n      *param_1 = wVar1;\r\n      param_1 = param_1 + 1;\r\n    } while (param_1 != param_2);\r\n  }\r\n  return param_1;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8810bc",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8810bc",
+          "name": "Dowiden"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Multiple Matches With Same Base Name\r\n    protected: unsigned short __thiscall std::ctype<unsigned short>::_Dowiden(char)const \r\n    protected: wchar_t __thiscall std::ctype<wchar_t>::_Dowiden(char)const \r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nuint Dowiden(void)\r\n\r\n{\r\n  int iVar1;\r\n  uint uVar2;\r\n  uint in_ECX;\r\n  mbstate_t local_c;\r\n  uint local_8;\r\n  \r\n  local_c = 0;\r\n  local_8 = in_ECX;\r\n  iVar1 = __Mbrtowc((wchar_t *)&local_8,&stack0x00000004,1,&local_c,(_Cvtvec *)(in_ECX + 0x18));\r\n  uVar2 = 0xffff;\r\n  if (-1 < iVar1) {\r\n    uVar2 = local_8 & 0xffff;\r\n  }\r\n  return uVar2;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8810f2",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8810f2",
+          "name": "FUN_008810f2"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_008810f2(void)\r\n\r\n{\r\n  Dowiden();\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8810fd",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8810fd",
+          "name": "do_widen"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Multiple Matches With Same Base Name\r\n    protected: virtual char const * __thiscall std::ctype<unsigned short>::do_widen(char const\r\n   *,char const *,unsigned short *)const \r\n    protected: virtual char const * __thiscall std::ctype<wchar_t>::do_widen(char const *,char const\r\n   *,wchar_t *)const \r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nundefined1 * do_widen(undefined1 *param_1,undefined1 *param_2,undefined2 *param_3)\r\n\r\n{\r\n  undefined2 uVar1;\r\n  \r\n  for (; param_1 != param_2; param_1 = param_1 + 1) {\r\n    uVar1 = Dowiden(*param_1);\r\n    *param_3 = uVar1;\r\n    param_3 = param_3 + 1;\r\n  }\r\n  return param_1;\r\n}\r\n\r\n"
+      }
+    ],
+    "total": 16,
+    "succeeded": 16,
+    "failed": 0
+  },
+  "confidence": "derived",
+  "authority": "shipped-artifact",
+  "environment": null,
+  "limitations": [
+    "Derived by an REA composed workflow.",
+    "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+    "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+    "External functions and functions without an analyzable body return null; other decompiler failures remain explicit.",
+    "External functions and local thunks are distinct; procedure metadata identifies both and preserves a thunk target when Ghidra resolves one.",
+    "Ghidra Listing reports a terminal call at 0x8810f8 to 0x8810bc Dowiden (external=false, thunk=false, hasNoReturn=false); fallthrough is excluded by Ghidra's flow model. The reason for the terminal flow is not established by this observation.",
+    "Pseudocode is Ghidra decompiler output, not original source and not text-equivalent to Hopper output.",
+    "The Windows bridge uses authenticated IPv4 loopback because Node path-based IPC does not expose Java AF_UNIX sockets; the endpoint file contains no bearer token.",
+    "The imported Program and temporary project are ephemeral and deleted on close. Annotation operations edit session database metadata; original executable bytes are never written.",
+    "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+    "The target references PDB Tartaros.pdb (GUID 491a189d-6d27-43d1-a6b5-81ace6a1df8b, age (hex) 1, signature unknown, version RSDS); Ghidra reports load state unknown. Original names and types may be missing; an empty name search does not prove a procedure is absent. Use list_procedures and address-based analysis to inspect recovered functions. REA does not admit a caller-selected PDB companion.",
+    "Windows Ghidra P0 accepts native x86 and x86-64 PE applications and DLLs, and explicitly selected raw 6502 images; managed, hostile, sensitive, and mutable-path targets are unsupported.",
+    "Windows sessions require the matching packaged Windows x64 native addon, local NTFS targets and runtimes, and Windows 10 or later. Native handles enforce path admission, private DACLs, and Job Object ownership automatically."
+  ],
+  "relationship_coverage": null,
+  "locations": [
+    {
+      "kind": "address",
+      "address": "0x880e64"
+    },
+    {
+      "kind": "address",
+      "address": "0x880ed5"
+    },
+    {
+      "kind": "address",
+      "address": "0x880ed9"
+    },
+    {
+      "kind": "address",
+      "address": "0x880f68"
+    },
+    {
+      "kind": "address",
+      "address": "0x880f6b"
+    },
+    {
+      "kind": "address",
+      "address": "0x880f8d"
+    },
+    {
+      "kind": "address",
+      "address": "0x880fae"
+    },
+    {
+      "kind": "address",
+      "address": "0x880fcc"
+    },
+    {
+      "kind": "address",
+      "address": "0x880ffc"
+    },
+    {
+      "kind": "address",
+      "address": "0x88102c"
+    },
+    {
+      "kind": "address",
+      "address": "0x881043"
+    },
+    {
+      "kind": "address",
+      "address": "0x881074"
+    },
+    {
+      "kind": "address",
+      "address": "0x88108b"
+    },
+    {
+      "kind": "address",
+      "address": "0x8810bc"
+    },
+    {
+      "kind": "address",
+      "address": "0x8810f2"
+    },
+    {
+      "kind": "address",
+      "address": "0x8810fd"
+    }
+  ],
+  "evidence_links": []
+}

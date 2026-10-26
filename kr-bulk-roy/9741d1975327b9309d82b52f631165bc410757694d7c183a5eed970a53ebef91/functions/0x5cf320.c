@@ -1,0 +1,34 @@
+
+void FUN_005cf320(void)
+
+{
+  int in_ECX;
+  void *local_10;
+  undefined1 *puStack_c;
+  undefined4 local_8;
+  
+  local_8 = 0xffffffff;
+  puStack_c = &LAB_0090f79e;
+  local_10 = ExceptionList;
+  ExceptionList = &local_10;
+  (**(code **)(**(int **)(in_ECX + 0xf8) + 0x90))(1,DAT_00d61f20 ^ (uint)&stack0xfffffffc);
+  (**(code **)(**(int **)(in_ECX + 0xfc) + 0x90))(1);
+  (**(code **)(**(int **)(in_ECX + 0x100) + 0x90))(1);
+  if ((DAT_00fab100 & 1) == 0) {
+    DAT_00fab100 = DAT_00fab100 | 1;
+    local_8 = 0;
+    FUN_0049d6a0();
+    _atexit((_func_4879 *)&LAB_00bcce20);
+    local_8 = 0xffffffff;
+  }
+  (**(code **)(**(int **)(in_ECX + 0x104) + 0x90))
+            ((DAT_00fab104 & 0x20) != 0 || DAT_00fab128 != '\0');
+  (**(code **)(**(int **)(in_ECX + 0x108) + 0x90))(1);
+  (**(code **)(**(int **)(in_ECX + 0x338) + 0x90))(1);
+  (**(code **)(**(int **)(in_ECX + 0x33c) + 0x90))(1);
+  (**(code **)(**(int **)(in_ECX + 0x340) + 0x90))(1);
+  (**(code **)(**(int **)(in_ECX + 0x344) + 0x90))(1);
+  ExceptionList = local_10;
+  return;
+}
+

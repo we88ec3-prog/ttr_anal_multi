@@ -1,0 +1,350 @@
+{
+  "evidence_id": "ev_ec93ac18334968c47b4e118658e0a148d8bf80e7a09429e3594ab23f27d351c2",
+  "subject": {
+    "name": "Tartaros.bin",
+    "digest": {
+      "sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91"
+    },
+    "local_path": "E:\\Tartaros\\workspace\\Tartaros.bin",
+    "format": "pe",
+    "architecture": "x86"
+  },
+  "provider": {
+    "id": "rea-workflow",
+    "name": "REA composed investigation workflow",
+    "version": "1"
+  },
+  "analysis_profile": {
+    "provider": {
+      "id": "rea-workflow",
+      "name": "REA composed investigation workflow",
+      "version": "1"
+    },
+    "parameters": {
+      "upstream_analysis_profile": {
+        "provider": {
+          "id": "ghidra",
+          "name": "Ghidra",
+          "version": "12.1.4"
+        },
+        "parameters": {
+          "target_kind": "executable",
+          "target_format": "pe",
+          "executable_role": "application",
+          "managed": false,
+          "native_aot_metadata": {
+            "contract_revision": "rtr-9.1-x64-pe-read-only-v3",
+            "source_bytes": 134217728,
+            "work_units": 67108864,
+            "working_memory_bytes": 67108864,
+            "report_bytes": 4194304
+          },
+          "architecture": "x86",
+          "available_architectures": [
+            "x86"
+          ],
+          "import_mode": "ephemeral-source-immutable",
+          "pdb_observations": "program-info-v1",
+          "annotation_policy": "atomic-function-entry-metadata-v1",
+          "load_image_observations": "source-mappings-entry-context-v2",
+          "function_body_evidence": "complete-inclusive-ranges-v1",
+          "function_references": "complete-body-and-entry-reference-manager-v2",
+          "call_relationship_coverage": "function-body-call-coverage-v5",
+          "function_dossier_coverage": "observed-facets-and-call-relationships-v1",
+          "string_inventory_evidence": "defined-data-coverage-v1",
+          "location_resolution": "explicit-address-exact-entry-symbol-first-v3",
+          "procedure_file_offset_resolution": "address-first-unique-target-source-mapping-v2",
+          "instruction_flow_evidence": "decoded-return-pcode-v1",
+          "instruction_references": "exact-address-incoming-v1",
+          "function_boundary_observations": "ghidra-function-boundary-limitations-v3",
+          "no_return_repair": "disabled-windows-p0",
+          "process_launch": "official-headless-script-v1",
+          "jump_table_evidence": "typed-case-default-blocks-v1",
+          "decompiler_jump_loads": true,
+          "loader": "auto-from-header",
+          "language_id": "auto-from-header",
+          "compiler_spec_id": "auto-default",
+          "analyzer_preset": "ghidra-default"
+        },
+        "digest": "3c06738e45e144d5f073edbd3244c6bff46222f389525fe659bc92dca2ccdece"
+      },
+      "workflow_revision": 2
+    },
+    "digest": "d4471786e332c0336f066a85a651a368051028dfaa0c1d7a5ac78db2f422f47e"
+  },
+  "predicate_type": "rea.analysis",
+  "operation": "batch_decompile",
+  "parameters": {
+    "addresses": [
+      "0x706240",
+      "0x706330",
+      "0x706400",
+      "0x7064d0",
+      "0x706540",
+      "0x706620",
+      "0x706740",
+      "0x7067c0",
+      "0x706870",
+      "0x7069d0",
+      "0x706ac0",
+      "0x706b70",
+      "0x706c70",
+      "0x706e60",
+      "0x707070",
+      "0x707110"
+    ]
+  },
+  "raw_result": null,
+  "normalized_result": {
+    "items": [
+      {
+        "address": "0x706240",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x706240",
+          "name": "FUN_00706240"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nbyte FUN_00706240(int param_1)\r\n\r\n{\r\n  undefined4 *puVar1;\r\n  double *pdVar2;\r\n  int iVar3;\r\n  char *pcVar4;\r\n  undefined4 *puVar5;\r\n  \r\n  iVar3 = FUN_006f6370(param_1,2);\r\n  puVar1 = *(undefined4 **)(param_1 + 0xc);\r\n  if (puVar1 < *(undefined4 **)(param_1 + 8)) {\r\n    if ((puVar1 != &DAT_00c0bfc8) && (puVar1[2] == 5)) goto LAB_007062af;\r\n    if ((*(undefined4 **)(param_1 + 8) <= puVar1) ||\r\n       ((puVar1 == &DAT_00c0bfc8 || (puVar1[2] == -1)))) goto LAB_00706281;\r\n    pcVar4 = (&PTR_DAT_00c0be1c)[puVar1[2]];\r\n  }\r\n  else {\r\nLAB_00706281:\r\n    pcVar4 = \"no value\";\r\n  }\r\n  FUN_006f5580(param_1,\"%s expected, got %s\",\"table\",pcVar4);\r\n  FUN_006f5da0(1);\r\nLAB_007062af:\r\n  pdVar2 = *(double **)(param_1 + 8);\r\n  *(undefined4 *)(pdVar2 + 1) = 3;\r\n  *pdVar2 = (double)(iVar3 + 1);\r\n  *(int *)(param_1 + 8) = *(int *)(param_1 + 8) + 0x10;\r\n  puVar1 = *(undefined4 **)(param_1 + 8);\r\n  puVar5 = (undefined4 *)FUN_006f9b70(iVar3 + 1);\r\n  *puVar1 = *puVar5;\r\n  puVar1[1] = puVar5[1];\r\n  puVar1[2] = puVar5[2];\r\n  *(int *)(param_1 + 8) = *(int *)(param_1 + 8) + 0x10;\r\n  if (*(undefined **)(param_1 + 8) == &DAT_00c0bfd8) {\r\n    return 2;\r\n  }\r\n  return -(*(int *)(*(undefined **)(param_1 + 8) + -8) != 0) & 2;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x706330",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x706330",
+          "name": "FUN_00706330"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nundefined4 FUN_00706330(int param_1)\r\n\r\n{\r\n  int iVar1;\r\n  undefined4 *puVar2;\r\n  undefined8 *puVar3;\r\n  char *pcVar4;\r\n  undefined4 *puVar5;\r\n  \r\n  puVar5 = *(undefined4 **)(param_1 + 0xc);\r\n  if (puVar5 < *(undefined4 **)(param_1 + 8)) {\r\n    if ((puVar5 != &DAT_00c0bfc8) && (puVar5[2] == 5)) goto LAB_0070638f;\r\n    if ((*(undefined4 **)(param_1 + 8) <= puVar5) ||\r\n       ((puVar5 == &DAT_00c0bfc8 || (puVar5[2] == -1)))) goto LAB_00706363;\r\n    pcVar4 = (&PTR_DAT_00c0be1c)[puVar5[2]];\r\n  }\r\n  else {\r\nLAB_00706363:\r\n    pcVar4 = \"no value\";\r\n  }\r\n  FUN_006f5580(param_1,\"%s expected, got %s\",\"table\",pcVar4);\r\n  FUN_006f5da0(1);\r\nLAB_0070638f:\r\n  iVar1 = **(int **)(*(int *)(param_1 + 0x14) + 4);\r\n  puVar5 = (undefined4 *)(iVar1 + 0x18);\r\n  if (*(char *)(iVar1 + 7) == '\\0') {\r\n    puVar5 = &DAT_00c0bfc8;\r\n  }\r\n  puVar2 = *(undefined4 **)(param_1 + 8);\r\n  *puVar2 = *puVar5;\r\n  puVar2[1] = puVar5[1];\r\n  puVar2[2] = puVar5[2];\r\n  puVar5 = *(undefined4 **)(param_1 + 0xc);\r\n  *(int *)(param_1 + 8) = *(int *)(param_1 + 8) + 0x10;\r\n  puVar2 = *(undefined4 **)(param_1 + 8);\r\n  if (puVar2 <= puVar5) {\r\n    puVar5 = &DAT_00c0bfc8;\r\n  }\r\n  *puVar2 = *puVar5;\r\n  puVar2[1] = puVar5[1];\r\n  puVar2[2] = puVar5[2];\r\n  *(int *)(param_1 + 8) = *(int *)(param_1 + 8) + 0x10;\r\n  puVar3 = *(undefined8 **)(param_1 + 8);\r\n  *puVar3 = 0;\r\n  *(undefined4 *)(puVar3 + 1) = 3;\r\n  *(int *)(param_1 + 8) = *(int *)(param_1 + 8) + 0x10;\r\n  return 3;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x706400",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x706400",
+          "name": "FUN_00706400"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nundefined4 FUN_00706400(int param_1)\r\n\r\n{\r\n  undefined4 *puVar1;\r\n  int iVar2;\r\n  int local_24 [2];\r\n  undefined4 local_1c;\r\n  undefined4 local_18;\r\n  code *local_14;\r\n  int *local_10;\r\n  int local_c;\r\n  \r\n  local_24[0] = FUN_006f6210(param_1);\r\n  puVar1 = (undefined4 *)(*(int *)(param_1 + 0xc) + 0x10);\r\n  if (((puVar1 < *(undefined4 **)(param_1 + 8)) && (puVar1 != &DAT_00c0bfc8)) &&\r\n     (0 < *(int *)(*(int *)(param_1 + 0xc) + 0x18))) {\r\n    FUN_006f6210(param_1);\r\n  }\r\n  local_10 = local_24;\r\n  local_c = param_1;\r\n  local_14 = FUN_006f70e0;\r\n  local_1c = 0;\r\n  local_18 = 0;\r\n  iVar2 = FUN_006fe990(param_1);\r\n  if (iVar2 == 0) {\r\n    return 1;\r\n  }\r\n  *(undefined4 *)(*(int *)(param_1 + 8) + 8) = 0;\r\n  *(int *)(param_1 + 8) = *(int *)(param_1 + 8) + 0x10;\r\n  FUN_006f52b0();\r\n  return 2;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x7064d0",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x7064d0",
+          "name": "FUN_007064d0"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nundefined4 FUN_007064d0(int param_1)\r\n\r\n{\r\n  undefined4 *puVar1;\r\n  int iVar2;\r\n  \r\n  puVar1 = *(undefined4 **)(param_1 + 0xc);\r\n  if (((puVar1 < *(undefined4 **)(param_1 + 8)) && (puVar1 != &DAT_00c0bfc8)) &&\r\n     (0 < (int)puVar1[2])) {\r\n    FUN_006f6210(param_1);\r\n  }\r\n  iVar2 = FUN_006f6e60();\r\n  if (iVar2 != 0) {\r\n    *(undefined4 *)(*(int *)(param_1 + 8) + 8) = 0;\r\n    *(int *)(param_1 + 8) = *(int *)(param_1 + 8) + 0x10;\r\n    FUN_006f52b0();\r\n    return 2;\r\n  }\r\n  return 1;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x706540",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x706540",
+          "name": "FUN_00706540"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nundefined4 FUN_00706540(int param_1,undefined4 param_2,undefined4 *param_3)\r\n\r\n{\r\n  undefined4 *puVar1;\r\n  int iVar2;\r\n  undefined4 uVar3;\r\n  undefined4 *puVar4;\r\n  undefined4 *puVar5;\r\n  \r\n  iVar2 = FUN_006f5170();\r\n  if (iVar2 == 0) {\r\n    FUN_006f5f30(param_1,\"stack overflow (%s)\",\"too many nested functions\");\r\n  }\r\n  puVar4 = *(undefined4 **)(param_1 + 0xc);\r\n  puVar1 = *(undefined4 **)(param_1 + 8);\r\n  if (puVar1 <= puVar4) {\r\n    puVar4 = &DAT_00c0bfc8;\r\n  }\r\n  *puVar1 = *puVar4;\r\n  puVar1[1] = puVar4[1];\r\n  puVar1[2] = puVar4[2];\r\n  *(int *)(param_1 + 8) = *(int *)(param_1 + 8) + 0x10;\r\n  FUN_006fe550(param_1,*(int *)(param_1 + 8) + -0x10,1);\r\n  puVar1 = *(undefined4 **)(param_1 + 8);\r\n  puVar4 = puVar1 + -4;\r\n  if (puVar4 != &DAT_00c0bfc8) {\r\n    if (puVar1[-2] == 0) {\r\n      *param_3 = 0;\r\n      return 0;\r\n    }\r\n    if ((puVar4 != &DAT_00c0bfc8) && ((puVar1[-2] == 4 || (puVar1[-2] == 3)))) {\r\n      puVar5 = (undefined4 *)(*(int *)(param_1 + 0xc) + 0x20);\r\n      if (puVar1 <= puVar5) {\r\n        puVar5 = &DAT_00c0bfc8;\r\n      }\r\n      *puVar5 = *puVar4;\r\n      puVar5[1] = puVar1[-3];\r\n      puVar5[2] = puVar1[-2];\r\n      *(int *)(param_1 + 8) = *(int *)(param_1 + 8) + -0x10;\r\n      uVar3 = FUN_006f53f0(3,param_3);\r\n      return uVar3;\r\n    }\r\n  }\r\n  FUN_006f5f30(param_1,\"reader function must return a string\");\r\n  return 0;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x706620",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x706620",
+          "name": "FUN_00706620"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nundefined4 FUN_00706620(int param_1)\r\n\r\n{\r\n  undefined4 *puVar1;\r\n  char *pcVar2;\r\n  int iVar3;\r\n  \r\n  puVar1 = (undefined4 *)(*(int *)(param_1 + 0xc) + 0x10);\r\n  if (((puVar1 < *(undefined4 **)(param_1 + 8)) && (puVar1 != &DAT_00c0bfc8)) &&\r\n     (0 < *(int *)(*(int *)(param_1 + 0xc) + 0x18))) {\r\n    FUN_006f6210(param_1);\r\n  }\r\n  puVar1 = *(undefined4 **)(param_1 + 0xc);\r\n  if (puVar1 < *(undefined4 **)(param_1 + 8)) {\r\n    if ((puVar1 != &DAT_00c0bfc8) && (puVar1[2] == 6)) goto LAB_007066b6;\r\n    if ((*(undefined4 **)(param_1 + 8) <= puVar1) ||\r\n       ((puVar1 == &DAT_00c0bfc8 || (puVar1[2] == -1)))) goto LAB_0070667f;\r\n    pcVar2 = (&PTR_DAT_00c0be1c)[puVar1[2]];\r\n  }\r\n  else {\r\nLAB_0070667f:\r\n    pcVar2 = \"no value\";\r\n  }\r\n  FUN_006f5580(param_1,\"%s expected, got %s\",\"function\",pcVar2);\r\n  FUN_006f5da0(1);\r\nLAB_007066b6:\r\n  if (*(uint *)(param_1 + 8) < *(int *)(param_1 + 0xc) + 0x30U) {\r\n    do {\r\n      *(undefined4 *)(*(int *)(param_1 + 8) + 8) = 0;\r\n      *(int *)(param_1 + 8) = *(int *)(param_1 + 8) + 0x10;\r\n    } while (*(uint *)(param_1 + 8) < *(int *)(param_1 + 0xc) + 0x30U);\r\n  }\r\n  *(int *)(param_1 + 8) = *(int *)(param_1 + 0xc) + 0x30;\r\n  iVar3 = FUN_006fe990(param_1);\r\n  if (iVar3 != 0) {\r\n    *(undefined4 *)(*(int *)(param_1 + 8) + 8) = 0;\r\n    *(int *)(param_1 + 8) = *(int *)(param_1 + 8) + 0x10;\r\n    FUN_006f52b0();\r\n    return 2;\r\n  }\r\n  return 1;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x706740",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x706740",
+          "name": "FUN_00706740"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nint FUN_00706740(int param_1)\r\n\r\n{\r\n  undefined4 *puVar1;\r\n  int iVar2;\r\n  int iVar3;\r\n  int iVar4;\r\n  \r\n  puVar1 = *(undefined4 **)(param_1 + 0xc);\r\n  if (((puVar1 < *(undefined4 **)(param_1 + 8)) && (puVar1 != &DAT_00c0bfc8)) &&\r\n     (0 < (int)puVar1[2])) {\r\n    FUN_006f6210(param_1);\r\n  }\r\n  iVar2 = *(int *)(param_1 + 8);\r\n  iVar3 = *(int *)(param_1 + 0xc);\r\n  iVar4 = FUN_006f6e60();\r\n  if (iVar4 != 0) {\r\n    FUN_006f8ad0();\r\n  }\r\n  FUN_006fe550(param_1,*(int *)(param_1 + 8) + -0x10,0xffffffff);\r\n  if (*(uint *)(*(int *)(param_1 + 0x14) + 8) <= *(uint *)(param_1 + 8)) {\r\n    *(uint *)(*(int *)(param_1 + 0x14) + 8) = *(uint *)(param_1 + 8);\r\n  }\r\n  return (*(int *)(param_1 + 8) - *(int *)(param_1 + 0xc) >> 4) - (iVar2 - iVar3 >> 4);\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x7067c0",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x7067c0",
+          "name": "FUN_007067c0"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nint FUN_007067c0(int param_1)\r\n\r\n{\r\n  undefined4 *puVar1;\r\n  int *piVar2;\r\n  int *piVar3;\r\n  int iVar4;\r\n  undefined4 uVar5;\r\n  int *piVar6;\r\n  \r\n  puVar1 = *(undefined4 **)(param_1 + 0xc);\r\n  if (((*(undefined4 **)(param_1 + 8) <= puVar1) || (puVar1 == &DAT_00c0bfc8)) || (puVar1[2] == -1))\r\n  {\r\n    FUN_006f5da0(1);\r\n  }\r\n  piVar2 = *(int **)(param_1 + 0xc);\r\n  piVar3 = *(int **)(param_1 + 8);\r\n  piVar6 = &DAT_00c0bfc8;\r\n  if (piVar2 < piVar3) {\r\n    piVar6 = piVar2;\r\n  }\r\n  if ((piVar6[2] != 0) && ((piVar6[2] != 1 || (*piVar6 != 0)))) {\r\n    return (int)piVar3 - (int)piVar2 >> 4;\r\n  }\r\n  if (((piVar2 + 4 < piVar3) && (piVar2 + 4 != &DAT_00c0bfc8)) && (0 < piVar2[6])) {\r\n    uVar5 = FUN_006f6210(param_1);\r\n    iVar4 = FUN_006f5f30(param_1,&DAT_00bfc638,uVar5);\r\n    return iVar4;\r\n  }\r\n  iVar4 = FUN_006f5f30(param_1,&DAT_00bfc638,\"assertion failed!\");\r\n  return iVar4;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x706870",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x706870",
+          "name": "FUN_00706870"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nint FUN_00706870(int param_1)\r\n\r\n{\r\n  char *pcVar1;\r\n  undefined4 *puVar2;\r\n  int iVar3;\r\n  int iVar4;\r\n  undefined4 *puVar5;\r\n  int iVar6;\r\n  int local_8;\r\n  \r\n  puVar2 = *(undefined4 **)(param_1 + 0xc);\r\n  if (puVar2 < *(undefined4 **)(param_1 + 8)) {\r\n    if ((puVar2 != &DAT_00c0bfc8) && (puVar2[2] == 5)) goto LAB_007068d4;\r\n    if ((*(undefined4 **)(param_1 + 8) <= puVar2) ||\r\n       ((puVar2 == &DAT_00c0bfc8 || (puVar2[2] == -1)))) goto LAB_007068a6;\r\n    pcVar1 = (&PTR_DAT_00c0be1c)[puVar2[2]];\r\n  }\r\n  else {\r\nLAB_007068a6:\r\n    pcVar1 = \"no value\";\r\n  }\r\n  FUN_006f5580(param_1,\"%s expected, got %s\",\"table\",pcVar1);\r\n  FUN_006f5da0(1);\r\nLAB_007068d4:\r\n  puVar2 = (undefined4 *)(*(int *)(param_1 + 0xc) + 0x10);\r\n  if (((puVar2 < *(undefined4 **)(param_1 + 8)) && (puVar2 != &DAT_00c0bfc8)) &&\r\n     (0 < *(int *)(*(int *)(param_1 + 0xc) + 0x18))) {\r\n    local_8 = FUN_006f6370(param_1,2);\r\n  }\r\n  else {\r\n    local_8 = 1;\r\n  }\r\n  puVar2 = (undefined4 *)(*(int *)(param_1 + 0xc) + 0x20);\r\n  if (((puVar2 < *(undefined4 **)(param_1 + 8)) && (puVar2 != &DAT_00c0bfc8)) &&\r\n     (0 < *(int *)(*(int *)(param_1 + 0xc) + 0x28))) {\r\n    iVar3 = FUN_006f6370(param_1,3);\r\n  }\r\n  else {\r\n    iVar3 = FUN_006f5460();\r\n  }\r\n  iVar6 = (iVar3 - local_8) + 1;\r\n  if (0 < iVar6) {\r\n    iVar4 = FUN_006f5170();\r\n    if (iVar4 == 0) {\r\n      FUN_006f5f30(param_1,\"stack overflow (%s)\",\"table too big to unpack\");\r\n    }\r\n    for (; local_8 <= iVar3; local_8 = local_8 + 1) {\r\n      puVar2 = *(undefined4 **)(param_1 + 8);\r\n      puVar5 = (undefined4 *)FUN_006f9b70(local_8);\r\n      *puVar2 = *puVar5;\r\n      puVar2[1] = puVar5[1];\r\n      puVar2[2] = puVar5[2];\r\n      *(int *)(param_1 + 8) = *(int *)(param_1 + 8) + 0x10;\r\n    }\r\n    return iVar6;\r\n  }\r\n  return 0;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x7069d0",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x7069d0",
+          "name": "FUN_007069d0"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nint FUN_007069d0(int param_1)\r\n\r\n{\r\n  int *piVar1;\r\n  double *pdVar2;\r\n  int *piVar3;\r\n  int iVar4;\r\n  char *pcVar5;\r\n  int iVar6;\r\n  \r\n  piVar1 = *(int **)(param_1 + 8);\r\n  piVar3 = *(int **)(param_1 + 0xc);\r\n  iVar6 = (int)piVar1 - (int)piVar3 >> 4;\r\n  if (((piVar1 <= piVar3) || (piVar3 == &DAT_00c0bfc8)) || (piVar3[2] != 4)) goto LAB_00706a6b;\r\n  if (piVar1 <= piVar3) {\r\n    piVar3 = &DAT_00c0bfc8;\r\n  }\r\n  if (piVar3[2] == 4) {\r\nLAB_00706a3e:\r\n    pcVar5 = (char *)(*piVar3 + 0x10);\r\n  }\r\n  else {\r\n    iVar4 = FUN_006fb5d0();\r\n    if (iVar4 != 0) {\r\n      if (*(uint *)(*(int *)(param_1 + 0x10) + 0x40) <= *(uint *)(*(int *)(param_1 + 0x10) + 0x44))\r\n      {\r\n        FUN_006fb3a0();\r\n      }\r\n      piVar3 = *(int **)(param_1 + 0xc);\r\n      if (*(int **)(param_1 + 8) <= piVar3) {\r\n        piVar3 = &DAT_00c0bfc8;\r\n      }\r\n      goto LAB_00706a3e;\r\n    }\r\n    pcVar5 = (char *)0x0;\r\n  }\r\n  if (*pcVar5 == '#') {\r\n    pdVar2 = *(double **)(param_1 + 8);\r\n    *(undefined4 *)(pdVar2 + 1) = 3;\r\n    *pdVar2 = (double)(iVar6 + -1);\r\n    *(int *)(param_1 + 8) = *(int *)(param_1 + 8) + 0x10;\r\n    return 1;\r\n  }\r\nLAB_00706a6b:\r\n  param_1 = FUN_006f6370(param_1,1);\r\n  if (param_1 < 0) {\r\n    param_1 = param_1 + iVar6;\r\n  }\r\n  else if (iVar6 < param_1) {\r\n    param_1 = iVar6;\r\n  }\r\n  if (param_1 < 1) {\r\n    FUN_006f5da0(1);\r\n  }\r\n  return iVar6 - param_1;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x706ac0",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x706ac0",
+          "name": "FUN_00706ac0"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nint FUN_00706ac0(int param_1)\r\n\r\n{\r\n  undefined4 *puVar1;\r\n  uint *puVar2;\r\n  int iVar3;\r\n  int local_10 [3];\r\n  \r\n  puVar1 = *(undefined4 **)(param_1 + 0xc);\r\n  if (((*(undefined4 **)(param_1 + 8) <= puVar1) || (puVar1 == &DAT_00c0bfc8)) || (puVar1[2] == -1))\r\n  {\r\n    FUN_006f5da0(1);\r\n  }\r\n  local_10[0] = *(int *)(param_1 + 8) -\r\n                (*(int *)(param_1 + 8) - *(int *)(param_1 + 0xc) & 0xfffffff0U);\r\n  local_10[1] = 0xffffffff;\r\n  iVar3 = FUN_006fe770(FUN_006f5a50,local_10,local_10[0] - *(int *)(param_1 + 0x20));\r\n  if (*(uint *)(*(int *)(param_1 + 0x14) + 8) <= *(uint *)(param_1 + 8)) {\r\n    *(uint *)(*(int *)(param_1 + 0x14) + 8) = *(uint *)(param_1 + 8);\r\n  }\r\n  puVar2 = *(uint **)(param_1 + 8);\r\n  puVar2[2] = 1;\r\n  *puVar2 = (uint)(iVar3 == 0);\r\n  *(int *)(param_1 + 8) = *(int *)(param_1 + 8) + 0x10;\r\n  FUN_006f52b0();\r\n  return *(int *)(param_1 + 8) - *(int *)(param_1 + 0xc) >> 4;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x706b70",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x706b70",
+          "name": "FUN_00706b70"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nint FUN_00706b70(int param_1)\r\n\r\n{\r\n  uint *puVar1;\r\n  undefined4 *puVar2;\r\n  int iVar3;\r\n  undefined4 *puVar4;\r\n  int local_10 [3];\r\n  \r\n  puVar2 = (undefined4 *)(*(int *)(param_1 + 0xc) + 0x10);\r\n  if (((*(undefined4 **)(param_1 + 8) <= puVar2) || (puVar2 == &DAT_00c0bfc8)) ||\r\n     (*(int *)(*(int *)(param_1 + 0xc) + 0x18) == -1)) {\r\n    FUN_006f5da0(2);\r\n  }\r\n  if (*(uint *)(param_1 + 8) < *(int *)(param_1 + 0xc) + 0x20U) {\r\n    do {\r\n      *(undefined4 *)(*(int *)(param_1 + 8) + 8) = 0;\r\n      *(int *)(param_1 + 8) = *(int *)(param_1 + 8) + 0x10;\r\n    } while (*(uint *)(param_1 + 8) < *(int *)(param_1 + 0xc) + 0x20U);\r\n  }\r\n  *(int *)(param_1 + 8) = *(int *)(param_1 + 0xc) + 0x20;\r\n  FUN_006f52b0();\r\n  local_10[0] = *(int *)(param_1 + 8) + -0x10;\r\n  local_10[1] = 0xffffffff;\r\n  iVar3 = FUN_006fe770(FUN_006f5a50,local_10,local_10[0] - *(int *)(param_1 + 0x20));\r\n  if (*(uint *)(*(int *)(param_1 + 0x14) + 8) <= *(uint *)(param_1 + 8)) {\r\n    *(uint *)(*(int *)(param_1 + 0x14) + 8) = *(uint *)(param_1 + 8);\r\n  }\r\n  puVar1 = *(uint **)(param_1 + 8);\r\n  puVar1[2] = 1;\r\n  *puVar1 = (uint)(iVar3 == 0);\r\n  *(int *)(param_1 + 8) = *(int *)(param_1 + 8) + 0x10;\r\n  puVar2 = *(undefined4 **)(param_1 + 8);\r\n  puVar4 = *(undefined4 **)(param_1 + 0xc);\r\n  if (puVar2 <= puVar4) {\r\n    puVar4 = &DAT_00c0bfc8;\r\n  }\r\n  *puVar4 = puVar2[-4];\r\n  puVar4[1] = puVar2[-3];\r\n  puVar4[2] = puVar2[-2];\r\n  *(int *)(param_1 + 8) = *(int *)(param_1 + 8) + -0x10;\r\n  return *(int *)(param_1 + 8) - *(int *)(param_1 + 0xc) >> 4;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x706c70",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x706c70",
+          "name": "FUN_00706c70"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nundefined4 FUN_00706c70(int param_1)\r\n\r\n{\r\n  undefined4 *puVar1;\r\n  int *piVar2;\r\n  int iVar3;\r\n  int *piVar4;\r\n  char *pcVar5;\r\n  int *piVar6;\r\n  \r\n  puVar1 = *(undefined4 **)(param_1 + 0xc);\r\n  if (((*(undefined4 **)(param_1 + 8) <= puVar1) || (puVar1 == &DAT_00c0bfc8)) || (puVar1[2] == -1))\r\n  {\r\n    FUN_006f5da0(1);\r\n  }\r\n  iVar3 = FUN_006f64f0();\r\n  if (iVar3 != 0) {\r\n    return 1;\r\n  }\r\n  piVar4 = *(int **)(param_1 + 0xc);\r\n  piVar2 = *(int **)(param_1 + 8);\r\n  if (piVar4 < piVar2) {\r\n    if (piVar4 != &DAT_00c0bfc8) {\r\n      switch(piVar4[2]) {\r\n      case 0:\r\n        FUN_006f54d0(&DAT_00c42c44,3);\r\n        return 1;\r\n      case 1:\r\n        iVar3 = FUN_006f53d0();\r\n        pcVar5 = \"true\";\r\n        if (iVar3 == 0) {\r\n          pcVar5 = \"false\";\r\n        }\r\n        FUN_006f5510(pcVar5);\r\n        return 1;\r\n      case 3:\r\n        if (piVar2 <= piVar4) {\r\n          piVar4 = &DAT_00c0bfc8;\r\n        }\r\n        if (piVar4[2] != 4) {\r\n          iVar3 = FUN_006fb5d0();\r\n          if (iVar3 == 0) {\r\n            FUN_006f5510(0);\r\n            return 1;\r\n          }\r\n          if (*(uint *)(*(int *)(param_1 + 0x10) + 0x40) <=\r\n              *(uint *)(*(int *)(param_1 + 0x10) + 0x44)) {\r\n            FUN_006fb3a0();\r\n          }\r\n          piVar4 = *(int **)(param_1 + 0xc);\r\n          if (*(int **)(param_1 + 8) <= piVar4) {\r\n            piVar4 = &DAT_00c0bfc8;\r\n          }\r\n        }\r\n        FUN_006f5510(*piVar4 + 0x10);\r\n        return 1;\r\n      case 4:\r\n        FUN_006f5300();\r\n        return 1;\r\n      }\r\n    }\r\n    piVar6 = piVar4;\r\n    if (piVar2 <= piVar4) goto LAB_00706da8;\r\n  }\r\n  else {\r\nLAB_00706da8:\r\n    piVar6 = &DAT_00c0bfc8;\r\n  }\r\n  switch(piVar6[2]) {\r\n  case 2:\r\n  case 7:\r\n    piVar6 = &DAT_00c0bfc8;\r\n    if (piVar4 < piVar2) {\r\n      piVar6 = piVar4;\r\n    }\r\n    if (piVar6[2] == 2) goto switchD_00706dbc_caseD_5;\r\n    if (piVar6[2] == 7) {\r\n      iVar3 = *piVar6 + 0x18;\r\n      break;\r\n    }\r\n  default:\r\n    iVar3 = 0;\r\n    break;\r\n  case 5:\r\n  case 6:\r\n  case 8:\r\nswitchD_00706dbc_caseD_5:\r\n    iVar3 = *piVar6;\r\n  }\r\n  if (((piVar4 < piVar2) && (piVar4 != &DAT_00c0bfc8)) && (piVar4[2] != -1)) {\r\n    pcVar5 = (&PTR_DAT_00c0be1c)[piVar4[2]];\r\n  }\r\n  else {\r\n    pcVar5 = \"no value\";\r\n  }\r\n  FUN_006f5580(param_1,\"%s: %p\",pcVar5,iVar3);\r\n  return 1;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x706e60",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x706e60",
+          "name": "FUN_00706e60"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nundefined4 FUN_00706e60(int param_1)\r\n\r\n{\r\n  byte bVar1;\r\n  undefined4 *puVar2;\r\n  bool bVar3;\r\n  undefined4 *puVar4;\r\n  undefined4 uVar5;\r\n  int iVar6;\r\n  int *piVar7;\r\n  undefined4 uVar8;\r\n  undefined4 extraout_ECX;\r\n  int *piVar9;\r\n  \r\n  if (*(uint *)(param_1 + 8) < *(int *)(param_1 + 0xc) + 0x10U) {\r\n    do {\r\n      *(undefined4 *)(*(int *)(param_1 + 8) + 8) = 0;\r\n      *(int *)(param_1 + 8) = *(int *)(param_1 + 8) + 0x10;\r\n    } while (*(uint *)(param_1 + 8) < *(int *)(param_1 + 0xc) + 0x10U);\r\n  }\r\n  *(int *)(param_1 + 8) = *(int *)(param_1 + 0xc) + 0x10;\r\n  if (*(uint *)(*(int *)(param_1 + 0x10) + 0x40) <= *(uint *)(*(int *)(param_1 + 0x10) + 0x44)) {\r\n    FUN_006fb3a0();\r\n  }\r\n  if (*(int *)(param_1 + 0x14) == *(int *)(param_1 + 0x28)) {\r\n    uVar5 = *(undefined4 *)(param_1 + 0x48);\r\n  }\r\n  else {\r\n    uVar5 = *(undefined4 *)(**(int **)(*(int *)(param_1 + 0x14) + 4) + 0xc);\r\n  }\r\n  iVar6 = *(int *)(param_1 + 0x10);\r\n  puVar4 = (undefined4 *)(**(code **)(iVar6 + 0xc))(*(undefined4 *)(iVar6 + 0x10),0,0,0x18);\r\n  uVar8 = 0;\r\n  if (puVar4 == (undefined4 *)0x0) {\r\n    puVar4 = (undefined4 *)FUN_006fdb40(param_1,4);\r\n    uVar8 = extraout_ECX;\r\n  }\r\n  *(int *)(iVar6 + 0x44) = *(int *)(iVar6 + 0x44) + 0x18;\r\n  bVar1 = *(byte *)(*(int *)(param_1 + 0x10) + 0x14);\r\n  puVar4[3] = uVar5;\r\n  puVar4[4] = uVar8;\r\n  puVar4[2] = uVar8;\r\n  *(byte *)((int)puVar4 + 5) = bVar1 & 3;\r\n  *(undefined1 *)(puVar4 + 1) = 7;\r\n  *puVar4 = **(undefined4 **)(*(int *)(param_1 + 0x10) + 0x70);\r\n  **(undefined4 **)(*(int *)(param_1 + 0x10) + 0x70) = puVar4;\r\n  puVar2 = *(undefined4 **)(param_1 + 8);\r\n  *puVar2 = puVar4;\r\n  puVar2[2] = 7;\r\n  piVar7 = *(int **)(param_1 + 0xc);\r\n  *(int *)(param_1 + 8) = *(int *)(param_1 + 8) + 0x10;\r\n  piVar9 = &DAT_00c0bfc8;\r\n  if (piVar7 < *(int **)(param_1 + 8)) {\r\n    piVar9 = piVar7;\r\n  }\r\n  if (piVar9[2] == 0) {\r\n    return 1;\r\n  }\r\n  if ((piVar9[2] == 1) && (*piVar9 == 0)) {\r\n    return 1;\r\n  }\r\n  if (((piVar7 < *(int **)(param_1 + 8)) && (piVar7 != &DAT_00c0bfc8)) && (piVar7[2] == 1)) {\r\n    if (*(uint *)(*(int *)(param_1 + 0x10) + 0x40) <= *(uint *)(*(int *)(param_1 + 0x10) + 0x44)) {\r\n      FUN_006fb3a0();\r\n    }\r\n    puVar4 = *(undefined4 **)(param_1 + 8);\r\n    uVar5 = FUN_006f99a0(param_1,0,0);\r\n    *puVar4 = uVar5;\r\n    puVar4[2] = 5;\r\n    *(int *)(param_1 + 8) = *(int *)(param_1 + 8) + 0x10;\r\n    puVar4 = *(undefined4 **)(param_1 + 8);\r\n    *puVar4 = puVar4[-4];\r\n    puVar4[1] = puVar4[-3];\r\n    puVar4[2] = puVar4[-2];\r\n    *(int *)(param_1 + 8) = *(int *)(param_1 + 8) + 0x10;\r\n    puVar4 = *(undefined4 **)(param_1 + 8);\r\n    *puVar4 = 1;\r\n    puVar4[2] = 1;\r\n    *(int *)(param_1 + 8) = *(int *)(param_1 + 8) + 0x10;\r\n    FUN_006f57f0(param_1);\r\n    goto LAB_00707057;\r\n  }\r\n  iVar6 = FUN_006f56e0();\r\n  if (iVar6 == 0) {\r\nLAB_0070703e:\r\n    FUN_006f5da0(1);\r\n  }\r\n  else {\r\n    puVar4 = (undefined4 *)FUN_006f9c50();\r\n    iVar6 = *(int *)(param_1 + 8);\r\n    *(undefined4 *)(iVar6 + -0x10) = *puVar4;\r\n    *(undefined4 *)(iVar6 + -0xc) = puVar4[1];\r\n    *(undefined4 *)(iVar6 + -8) = puVar4[2];\r\n    iVar6 = *(int *)(*(int *)(param_1 + 8) + -8);\r\n    piVar7 = (int *)(*(int *)(param_1 + 8) + -0x10);\r\n    if ((iVar6 == 0) || ((iVar6 == 1 && (*piVar7 == 0)))) {\r\n      bVar3 = false;\r\n    }\r\n    else {\r\n      bVar3 = true;\r\n    }\r\n    *(int **)(param_1 + 8) = piVar7;\r\n    if (!bVar3) goto LAB_0070703e;\r\n  }\r\n  FUN_006f56e0();\r\nLAB_00707057:\r\n  FUN_006f5910();\r\n  return 1;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x707070",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x707070",
+          "name": "FUN_00707070"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nundefined4 FUN_00707070(int param_1)\r\n\r\n{\r\n  int *piVar1;\r\n  int iVar2;\r\n  int iVar3;\r\n  \r\n  piVar1 = *(int **)(param_1 + 0xc);\r\n  if (*(int **)(param_1 + 8) <= piVar1) {\r\n    piVar1 = &DAT_00c0bfc8;\r\n  }\r\n  if (piVar1[2] == 8) {\r\n    iVar3 = *piVar1;\r\n    if (iVar3 != 0) goto LAB_007070a8;\r\n  }\r\n  else {\r\n    iVar3 = 0;\r\n  }\r\n  FUN_006f5da0(1);\r\nLAB_007070a8:\r\n  if (param_1 == iVar3) {\r\n    iVar3 = 0;\r\n  }\r\n  else if (*(char *)(iVar3 + 6) == '\\0') {\r\n    iVar2 = FUN_006f7dd0();\r\n    if (iVar2 < 1) {\r\n      iVar3 = (-(uint)((*(int *)(iVar3 + 8) - *(int *)(iVar3 + 0xc) & 0xfffffff0U) != 0) &\r\n              0xfffffffe) + 3;\r\n    }\r\n    else {\r\n      iVar3 = 2;\r\n    }\r\n  }\r\n  else if (*(char *)(iVar3 + 6) == '\\x01') {\r\n    iVar3 = 1;\r\n  }\r\n  else {\r\n    iVar3 = 3;\r\n  }\r\n  FUN_006f5510((&PTR_s_running_00c0bc58)[iVar3]);\r\n  return 1;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x707110",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x707110",
+          "name": "FUN_00707110"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nint FUN_00707110(int param_1,int param_2)\r\n\r\n{\r\n  int iVar1;\r\n  int iVar2;\r\n  int iVar3;\r\n  \r\n  if (param_1 == param_2) {\r\n    iVar3 = 0;\r\n  }\r\n  else if (*(char *)(param_2 + 6) == '\\0') {\r\n    iVar3 = FUN_006f7dd0();\r\n    if (iVar3 < 1) {\r\n      iVar3 = (-(uint)((*(int *)(param_2 + 8) - *(int *)(param_2 + 0xc) & 0xfffffff0U) != 0) &\r\n              0xfffffffe) + 3;\r\n    }\r\n    else {\r\n      iVar3 = 2;\r\n    }\r\n  }\r\n  else if (*(char *)(param_2 + 6) == '\\x01') {\r\n    iVar3 = 1;\r\n  }\r\n  else {\r\n    iVar3 = 3;\r\n  }\r\n  iVar1 = FUN_006f5170();\r\n  if (iVar1 == 0) {\r\n    FUN_006f5f30(param_1,\"too many arguments to resume\");\r\n  }\r\n  if (iVar3 != 1) {\r\n    FUN_006f5580(param_1,\"cannot resume %s coroutine\",(&PTR_s_running_00c0bc58)[iVar3]);\r\n    return -1;\r\n  }\r\n  FUN_006f51d0();\r\n  *(undefined2 *)(param_2 + 0x34) = *(undefined2 *)(param_1 + 0x34);\r\n  iVar3 = FUN_006fe6d0();\r\n  if ((iVar3 != 0) && (iVar3 != 1)) {\r\n    FUN_006f51d0();\r\n    return -1;\r\n  }\r\n  iVar3 = *(int *)(param_2 + 8);\r\n  iVar1 = *(int *)(param_2 + 0xc);\r\n  iVar2 = FUN_006f5170();\r\n  if (iVar2 == 0) {\r\n    FUN_006f5f30(param_1,\"too many results to resume\");\r\n  }\r\n  FUN_006f51d0();\r\n  return iVar3 - iVar1 >> 4;\r\n}\r\n\r\n"
+      }
+    ],
+    "total": 16,
+    "succeeded": 16,
+    "failed": 0
+  },
+  "confidence": "derived",
+  "authority": "shipped-artifact",
+  "environment": null,
+  "limitations": [
+    "Derived by an REA composed workflow.",
+    "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+    "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+    "External functions and functions without an analyzable body return null; other decompiler failures remain explicit.",
+    "External functions and local thunks are distinct; procedure metadata identifies both and preserves a thunk target when Ghidra resolves one.",
+    "Pseudocode is Ghidra decompiler output, not original source and not text-equivalent to Hopper output.",
+    "The Windows bridge uses authenticated IPv4 loopback because Node path-based IPC does not expose Java AF_UNIX sockets; the endpoint file contains no bearer token.",
+    "The imported Program and temporary project are ephemeral and deleted on close. Annotation operations edit session database metadata; original executable bytes are never written.",
+    "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+    "The target references PDB Tartaros.pdb (GUID 491a189d-6d27-43d1-a6b5-81ace6a1df8b, age (hex) 1, signature unknown, version RSDS); Ghidra reports load state unknown. Original names and types may be missing; an empty name search does not prove a procedure is absent. Use list_procedures and address-based analysis to inspect recovered functions. REA does not admit a caller-selected PDB companion.",
+    "Windows Ghidra P0 accepts native x86 and x86-64 PE applications and DLLs, and explicitly selected raw 6502 images; managed, hostile, sensitive, and mutable-path targets are unsupported.",
+    "Windows sessions require the matching packaged Windows x64 native addon, local NTFS targets and runtimes, and Windows 10 or later. Native handles enforce path admission, private DACLs, and Job Object ownership automatically."
+  ],
+  "relationship_coverage": null,
+  "locations": [
+    {
+      "kind": "address",
+      "address": "0x706240"
+    },
+    {
+      "kind": "address",
+      "address": "0x706330"
+    },
+    {
+      "kind": "address",
+      "address": "0x706400"
+    },
+    {
+      "kind": "address",
+      "address": "0x7064d0"
+    },
+    {
+      "kind": "address",
+      "address": "0x706540"
+    },
+    {
+      "kind": "address",
+      "address": "0x706620"
+    },
+    {
+      "kind": "address",
+      "address": "0x706740"
+    },
+    {
+      "kind": "address",
+      "address": "0x7067c0"
+    },
+    {
+      "kind": "address",
+      "address": "0x706870"
+    },
+    {
+      "kind": "address",
+      "address": "0x7069d0"
+    },
+    {
+      "kind": "address",
+      "address": "0x706ac0"
+    },
+    {
+      "kind": "address",
+      "address": "0x706b70"
+    },
+    {
+      "kind": "address",
+      "address": "0x706c70"
+    },
+    {
+      "kind": "address",
+      "address": "0x706e60"
+    },
+    {
+      "kind": "address",
+      "address": "0x707070"
+    },
+    {
+      "kind": "address",
+      "address": "0x707110"
+    }
+  ],
+  "evidence_links": []
+}

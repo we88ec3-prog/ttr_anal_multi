@@ -1,0 +1,12 @@
+
+void FUN_004a4080(void)
+
+{
+  undefined2 in_CX;
+  
+  if (DAT_00fba798 == 0) {
+    (**(code **)(*DAT_00fba854 + 0x10))(2,&stack0xfffffffa,2,CONCAT22(0xbd1,in_CX));
+  }
+  return;
+}
+

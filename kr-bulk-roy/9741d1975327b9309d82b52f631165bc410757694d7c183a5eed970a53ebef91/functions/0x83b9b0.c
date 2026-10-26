@@ -1,0 +1,15 @@
+
+undefined4 FUN_0083b9b0(undefined4 *param_1)
+
+{
+  int iVar1;
+  int in_ECX;
+  
+  iVar1 = FUN_0083ff20(in_ECX + 0x144,*param_1);
+  if (iVar1 != 0) {
+    FUN_0085a440(iVar1);
+    return 1;
+  }
+  return 0;
+}
+

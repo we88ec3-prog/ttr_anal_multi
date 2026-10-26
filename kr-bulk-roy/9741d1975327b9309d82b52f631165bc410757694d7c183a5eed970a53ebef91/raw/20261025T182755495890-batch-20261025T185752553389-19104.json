@@ -1,0 +1,350 @@
+{
+  "evidence_id": "ev_031ee839d5019221b48e9ed1861cb6f0acdd95c650fc7bb21c2d1550dca932cb",
+  "subject": {
+    "name": "Tartaros.bin",
+    "digest": {
+      "sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91"
+    },
+    "local_path": "E:\\Tartaros\\workspace\\Tartaros.bin",
+    "format": "pe",
+    "architecture": "x86"
+  },
+  "provider": {
+    "id": "rea-workflow",
+    "name": "REA composed investigation workflow",
+    "version": "1"
+  },
+  "analysis_profile": {
+    "provider": {
+      "id": "rea-workflow",
+      "name": "REA composed investigation workflow",
+      "version": "1"
+    },
+    "parameters": {
+      "upstream_analysis_profile": {
+        "provider": {
+          "id": "ghidra",
+          "name": "Ghidra",
+          "version": "12.1.4"
+        },
+        "parameters": {
+          "target_kind": "executable",
+          "target_format": "pe",
+          "executable_role": "application",
+          "managed": false,
+          "native_aot_metadata": {
+            "contract_revision": "rtr-9.1-x64-pe-read-only-v3",
+            "source_bytes": 134217728,
+            "work_units": 67108864,
+            "working_memory_bytes": 67108864,
+            "report_bytes": 4194304
+          },
+          "architecture": "x86",
+          "available_architectures": [
+            "x86"
+          ],
+          "import_mode": "ephemeral-source-immutable",
+          "pdb_observations": "program-info-v1",
+          "annotation_policy": "atomic-function-entry-metadata-v1",
+          "load_image_observations": "source-mappings-entry-context-v2",
+          "function_body_evidence": "complete-inclusive-ranges-v1",
+          "function_references": "complete-body-and-entry-reference-manager-v2",
+          "call_relationship_coverage": "function-body-call-coverage-v5",
+          "function_dossier_coverage": "observed-facets-and-call-relationships-v1",
+          "string_inventory_evidence": "defined-data-coverage-v1",
+          "location_resolution": "explicit-address-exact-entry-symbol-first-v3",
+          "procedure_file_offset_resolution": "address-first-unique-target-source-mapping-v2",
+          "instruction_flow_evidence": "decoded-return-pcode-v1",
+          "instruction_references": "exact-address-incoming-v1",
+          "function_boundary_observations": "ghidra-function-boundary-limitations-v3",
+          "no_return_repair": "disabled-windows-p0",
+          "process_launch": "official-headless-script-v1",
+          "jump_table_evidence": "typed-case-default-blocks-v1",
+          "decompiler_jump_loads": true,
+          "loader": "auto-from-header",
+          "language_id": "auto-from-header",
+          "compiler_spec_id": "auto-default",
+          "analyzer_preset": "ghidra-default"
+        },
+        "digest": "3c06738e45e144d5f073edbd3244c6bff46222f389525fe659bc92dca2ccdece"
+      },
+      "workflow_revision": 2
+    },
+    "digest": "d4471786e332c0336f066a85a651a368051028dfaa0c1d7a5ac78db2f422f47e"
+  },
+  "predicate_type": "rea.analysis",
+  "operation": "batch_decompile",
+  "parameters": {
+    "addresses": [
+      "0x892be0",
+      "0x892c8d",
+      "0x892ce0",
+      "0x892d30",
+      "0x892e4d",
+      "0x892eb0",
+      "0x892ed7",
+      "0x892f3f",
+      "0x892f87",
+      "0x893029",
+      "0x893058",
+      "0x893061",
+      "0x8930aa",
+      "0x8930bd",
+      "0x893151",
+      "0x893164"
+    ]
+  },
+  "raw_result": null,
+  "normalized_result": {
+    "items": [
+      {
+        "address": "0x892be0",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x892be0",
+          "name": "_memchr"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Single Match\r\n    _memchr\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nvoid * __cdecl _memchr(void *_Buf,int _Val,size_t _MaxCount)\r\n\r\n{\r\n  uint uVar1;\r\n  uint uVar2;\r\n  int iVar3;\r\n  uint *puVar4;\r\n  char cVar5;\r\n  uint uVar6;\r\n  bool bVar7;\r\n  \r\n  if (_MaxCount == 0) {\r\n    return (void *)0x0;\r\n  }\r\n  uVar6 = _Val & 0xff;\r\n  while (((uint)_Buf & 3) != 0) {\r\n    uVar2 = *(uint *)_Buf;\r\n    _Buf = (void *)((int)_Buf + 1);\r\n    if ((char)uVar2 == (char)_Val) goto LAB_00892c76;\r\n    _MaxCount = _MaxCount - 1;\r\n    if (_MaxCount == 0) {\r\n      return (void *)0x0;\r\n    }\r\n  }\r\n  uVar2 = _MaxCount - 4;\r\n  if (3 < _MaxCount) {\r\n    uVar6 = uVar6 * 0x1010101;\r\n    puVar4 = _Buf;\r\n    do {\r\n      _Buf = puVar4 + 1;\r\n      if (((*puVar4 ^ uVar6 ^ 0xffffffff ^ (*puVar4 ^ uVar6) + 0x7efefeff) & 0x81010100) != 0) {\r\n        uVar1 = *puVar4;\r\n        cVar5 = (char)uVar6;\r\n        if ((char)uVar1 == cVar5) {\r\n          return puVar4;\r\n        }\r\n        if ((char)(uVar1 >> 8) == cVar5) {\r\n          return (char *)((int)puVar4 + 1);\r\n        }\r\n        if ((char)(uVar1 >> 0x10) == cVar5) {\r\n          return (char *)((int)puVar4 + 2);\r\n        }\r\n        if ((char)(uVar1 >> 0x18) == cVar5) goto LAB_00892c76;\r\n      }\r\n      bVar7 = 3 < uVar2;\r\n      uVar2 = uVar2 - 4;\r\n      puVar4 = _Buf;\r\n    } while (bVar7);\r\n  }\r\n  iVar3 = uVar2 + 4;\r\n  while( true ) {\r\n    if (iVar3 == 0) {\r\n      return (void *)0x0;\r\n    }\r\n    uVar2 = *(uint *)_Buf;\r\n    _Buf = (void *)((int)_Buf + 1);\r\n    if ((char)uVar2 == (char)uVar6) break;\r\n    iVar3 = iVar3 + -1;\r\n  }\r\nLAB_00892c76:\r\n  return (char *)((int)_Buf + -1);\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x892c8d",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x892c8d",
+          "name": "_memmove_s"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Single Match\r\n    _memmove_s\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nerrno_t __cdecl _memmove_s(void *_Dst,rsize_t _DstSize,void *_Src,rsize_t _MaxCount)\r\n\r\n{\r\n  int *piVar1;\r\n  errno_t eVar2;\r\n  \r\n  if (_MaxCount == 0) {\r\nLAB_00892cdb:\r\n    eVar2 = 0;\r\n  }\r\n  else {\r\n    if ((_Dst == (void *)0x0) || (_Src == (void *)0x0)) {\r\n      piVar1 = __errno();\r\n      eVar2 = 0x16;\r\n      *piVar1 = 0x16;\r\n    }\r\n    else {\r\n      if (_MaxCount <= _DstSize) {\r\n        FID_conflict__memcpy(_Dst,_Src,_MaxCount);\r\n        goto LAB_00892cdb;\r\n      }\r\n      piVar1 = __errno();\r\n      eVar2 = 0x22;\r\n      *piVar1 = 0x22;\r\n    }\r\n    FUN_00893343();\r\n  }\r\n  return eVar2;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x892ce0",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x892ce0",
+          "name": "_strcspn"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Single Match\r\n    _strcspn\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nsize_t __cdecl _strcspn(char *_Str,char *_Control)\r\n\r\n{\r\n  byte bVar1;\r\n  size_t sVar2;\r\n  byte abStack_28 [32];\r\n  \r\n  abStack_28[0x1c] = 0;\r\n  abStack_28[0x1d] = 0;\r\n  abStack_28[0x1e] = 0;\r\n  abStack_28[0x1f] = 0;\r\n  abStack_28[0x18] = 0;\r\n  abStack_28[0x19] = 0;\r\n  abStack_28[0x1a] = 0;\r\n  abStack_28[0x1b] = 0;\r\n  abStack_28[0x14] = 0;\r\n  abStack_28[0x15] = 0;\r\n  abStack_28[0x16] = 0;\r\n  abStack_28[0x17] = 0;\r\n  abStack_28[0x10] = 0;\r\n  abStack_28[0x11] = 0;\r\n  abStack_28[0x12] = 0;\r\n  abStack_28[0x13] = 0;\r\n  abStack_28[0xc] = 0;\r\n  abStack_28[0xd] = 0;\r\n  abStack_28[0xe] = 0;\r\n  abStack_28[0xf] = 0;\r\n  abStack_28[8] = 0;\r\n  abStack_28[9] = 0;\r\n  abStack_28[10] = 0;\r\n  abStack_28[0xb] = 0;\r\n  abStack_28[4] = 0;\r\n  abStack_28[5] = 0;\r\n  abStack_28[6] = 0;\r\n  abStack_28[7] = 0;\r\n  abStack_28[0] = 0;\r\n  abStack_28[1] = 0;\r\n  abStack_28[2] = 0;\r\n  abStack_28[3] = 0;\r\n  while( true ) {\r\n    bVar1 = *_Control;\r\n    if (bVar1 == 0) break;\r\n    _Control = _Control + 1;\r\n    abStack_28[(int)(uint)bVar1 >> 3] = abStack_28[(int)(uint)bVar1 >> 3] | '\\x01' << (bVar1 & 7);\r\n  }\r\n  sVar2 = 0xffffffff;\r\n  do {\r\n    sVar2 = sVar2 + 1;\r\n    bVar1 = *_Str;\r\n    if (bVar1 == 0) {\r\n      return sVar2;\r\n    }\r\n    _Str = _Str + 1;\r\n  } while ((abStack_28[(int)(uint)bVar1 >> 3] >> (bVar1 & 7) & 1) == 0);\r\n  return sVar2;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x892d30",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x892d30",
+          "name": "FUN_00892d30"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nfloat10 FUN_00892d30(double param_1)\r\n\r\n{\r\n  uint uVar1;\r\n  uint uVar2;\r\n  int iVar3;\r\n  ushort in_FPUControlWord;\r\n  float10 fVar4;\r\n  double dVar5;\r\n  ulonglong uVar6;\r\n  undefined4 uVar7;\r\n  \r\n  if ((DAT_00fe728c != 0) && ((MXCSR & 0x7f80) == 0x1f80 && (in_FPUControlWord & 0x7f) == 0x7f)) {\r\n    uVar2 = (uint)((ulonglong)param_1 >> 0x20);\r\n    uVar1 = uVar2 >> 0x14;\r\n    uVar6 = (ulonglong)(0x433 - (uVar2 >> 0x14 & 0x7ff));\r\n    if ((uVar1 & 0x800) == 0) {\r\n      dVar5 = (double)(((ulonglong)param_1 >> uVar6) << uVar6);\r\n      if (uVar1 < 0x3ff) {\r\n        return (float10)(double)(-(ulonglong)(0.0 < param_1) & 0x3ff0000000000000);\r\n      }\r\n      if (uVar1 < 0x433) {\r\n        return (float10)(dVar5 + (double)(-(ulonglong)(dVar5 < param_1) & 0x3ff0000000000000));\r\n      }\r\n    }\r\n    else {\r\n      if (uVar1 < 0xbff) {\r\n        return (float10)-0.0;\r\n      }\r\n      if (uVar1 < 0xc33) {\r\n        return (float10)(double)(((ulonglong)param_1 >> uVar6) << uVar6);\r\n      }\r\n    }\r\n    if (NAN(param_1)) {\r\n      ___libm_error_support(&param_1,&param_1,&param_1,0x3ec);\r\n    }\r\n    return (float10)param_1;\r\n  }\r\n  uVar2 = __ctrlfp(DAT_00d62884,0xffff);\r\n  if ((param_1._6_2_ & 0x7ff0) == 0x7ff0) {\r\n    iVar3 = __sptype();\r\n    if (0 < iVar3) {\r\n      if (iVar3 < 3) {\r\n        __ctrlfp(uVar2,0xffff);\r\n        return (float10)param_1;\r\n      }\r\n      if (iVar3 == 3) {\r\n        fVar4 = (float10)__handle_qnan1();\r\n        return fVar4;\r\n      }\r\n    }\r\n    dVar5 = param_1 + 1.0;\r\n    uVar7 = 8;\r\n  }\r\n  else {\r\n    fVar4 = (float10)__frnd(SUB84(param_1,0),(int)((ulonglong)param_1 >> 0x20));\r\n    dVar5 = (double)fVar4;\r\n    if ((param_1 == dVar5) || ((uVar2 & 0x20) != 0)) {\r\n      __ctrlfp(uVar2,0xffff);\r\n      return (float10)dVar5;\r\n    }\r\n    uVar7 = 0x10;\r\n  }\r\n  fVar4 = (float10)__except1(uVar7,0xc,param_1,dVar5,uVar2);\r\n  return fVar4;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x892e4d",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x892e4d",
+          "name": "_wcscpy_s"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Single Match\r\n    _wcscpy_s\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nerrno_t __cdecl _wcscpy_s(wchar_t *_Dst,rsize_t _SizeInWords,wchar_t *_Src)\r\n\r\n{\r\n  wchar_t wVar1;\r\n  int *piVar2;\r\n  int iVar3;\r\n  errno_t eStack_10;\r\n  \r\n  if ((_Dst != (wchar_t *)0x0) && (_SizeInWords != 0)) {\r\n    if (_Src != (wchar_t *)0x0) {\r\n      iVar3 = (int)_Dst - (int)_Src;\r\n      do {\r\n        wVar1 = *_Src;\r\n        *(wchar_t *)(iVar3 + (int)_Src) = wVar1;\r\n        _Src = _Src + 1;\r\n        if (wVar1 == L'\\0') break;\r\n        _SizeInWords = _SizeInWords - 1;\r\n      } while (_SizeInWords != 0);\r\n      if (_SizeInWords != 0) {\r\n        return 0;\r\n      }\r\n      *_Dst = L'\\0';\r\n      piVar2 = __errno();\r\n      eStack_10 = 0x22;\r\n      *piVar2 = 0x22;\r\n      goto LAB_00892e6c;\r\n    }\r\n    *_Dst = L'\\0';\r\n  }\r\n  piVar2 = __errno();\r\n  eStack_10 = 0x16;\r\n  *piVar2 = 0x16;\r\nLAB_00892e6c:\r\n  FUN_00893343();\r\n  return eStack_10;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x892eb0",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x892eb0",
+          "name": "_wcschr"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Single Match\r\n    _wcschr\r\n   \r\n   Libraries: Visual Studio 2010 Release, Visual Studio 2019 Release */\r\n\r\nwchar_t * __cdecl _wcschr(wchar_t *_Str,wchar_t _Ch)\r\n\r\n{\r\n  while( true ) {\r\n    if (*_Str == L'\\0') {\r\n      if (*_Str != _Ch) {\r\n        _Str = (wchar_t *)0x0;\r\n      }\r\n      return _Str;\r\n    }\r\n    if (*_Str == _Ch) break;\r\n    _Str = _Str + 1;\r\n  }\r\n  return _Str;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x892ed7",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x892ed7",
+          "name": "__flush"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Single Match\r\n    __flush\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nint __cdecl __flush(FILE *_File)\r\n\r\n{\r\n  int _FileHandle;\r\n  uint uVar1;\r\n  int iVar2;\r\n  uint uVar3;\r\n  char *_Buf;\r\n  \r\n  iVar2 = 0;\r\n  if ((((byte)_File->_flag & 3) == 2) && ((_File->_flag & 0x108U) != 0)) {\r\n    _Buf = _File->_base;\r\n    uVar3 = (int)_File->_ptr - (int)_Buf;\r\n    if (0 < (int)uVar3) {\r\n      uVar1 = uVar3;\r\n      _FileHandle = __fileno(_File);\r\n      uVar1 = __write(_FileHandle,_Buf,uVar1);\r\n      if (uVar1 == uVar3) {\r\n        if ((char)_File->_flag < '\\0') {\r\n          _File->_flag = _File->_flag & 0xfffffffd;\r\n        }\r\n      }\r\n      else {\r\n        _File->_flag = _File->_flag | 0x20;\r\n        iVar2 = -1;\r\n      }\r\n    }\r\n  }\r\n  _File->_cnt = 0;\r\n  _File->_ptr = _File->_base;\r\n  return iVar2;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x892f3f",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x892f3f",
+          "name": "__fflush_nolock"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* Library Function - Single Match\r\n    __fflush_nolock\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nint __cdecl __fflush_nolock(FILE *_File)\r\n\r\n{\r\n  int iVar1;\r\n  \r\n  if (_File == (FILE *)0x0) {\r\n    iVar1 = flsall(0);\r\n  }\r\n  else {\r\n    iVar1 = __flush(_File);\r\n    if (iVar1 == 0) {\r\n      if ((_File->_flag & 0x4000U) == 0) {\r\n        iVar1 = 0;\r\n      }\r\n      else {\r\n        iVar1 = __fileno(_File);\r\n        iVar1 = __commit(iVar1);\r\n        iVar1 = -(uint)(iVar1 != 0);\r\n      }\r\n    }\r\n    else {\r\n      iVar1 = -1;\r\n    }\r\n  }\r\n  return iVar1;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x892f87",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x892f87",
+          "name": "flsall"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* WARNING: Function: __SEH_prolog4 replaced with injection: SEH_prolog4 */\r\n/* WARNING: Function: __SEH_epilog4 replaced with injection: EH_epilog3 */\r\n/* Library Function - Single Match\r\n    _flsall\r\n   \r\n   Libraries: Visual Studio 2008 Release, Visual Studio 2010 Release */\r\n\r\nint __cdecl flsall(int param_1)\r\n\r\n{\r\n  int *piVar1;\r\n  void *_File;\r\n  FILE *_File_00;\r\n  int iVar2;\r\n  int _Index;\r\n  int local_28;\r\n  int local_20;\r\n  \r\n  local_20 = 0;\r\n  local_28 = 0;\r\n  __lock(1);\r\n  for (_Index = 0; _Index < DAT_00fe83c0; _Index = _Index + 1) {\r\n    piVar1 = (int *)(DAT_00fe73ac + _Index * 4);\r\n    if ((*piVar1 != 0) && (_File = (void *)*piVar1, (*(byte *)((int)_File + 0xc) & 0x83) != 0)) {\r\n      __lock_file2(_Index,_File);\r\n      _File_00 = *(FILE **)(DAT_00fe73ac + _Index * 4);\r\n      if ((_File_00->_flag & 0x83U) != 0) {\r\n        if (param_1 == 1) {\r\n          iVar2 = __fflush_nolock(_File_00);\r\n          if (iVar2 != -1) {\r\n            local_20 = local_20 + 1;\r\n          }\r\n        }\r\n        else if ((param_1 == 0) && ((_File_00->_flag & 2U) != 0)) {\r\n          iVar2 = __fflush_nolock(_File_00);\r\n          if (iVar2 == -1) {\r\n            local_28 = -1;\r\n          }\r\n        }\r\n      }\r\n      FUN_00893029();\r\n    }\r\n  }\r\n  FUN_00893058();\r\n  if (param_1 != 1) {\r\n    local_20 = local_28;\r\n  }\r\n  return local_20;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x893029",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x893029",
+          "name": "FUN_00893029"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_00893029(void)\r\n\r\n{\r\n  int unaff_ESI;\r\n  \r\n  __unlock_file2(unaff_ESI,*(void **)(DAT_00fe73ac + unaff_ESI * 4));\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x893058",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x893058",
+          "name": "FUN_00893058"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_00893058(void)\r\n\r\n{\r\n  FUN_008a717e(1);\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x893061",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x893061",
+          "name": "_fflush"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* WARNING: Function: __SEH_prolog4 replaced with injection: SEH_prolog4 */\r\n/* WARNING: Function: __SEH_epilog4 replaced with injection: EH_epilog3 */\r\n/* Library Function - Single Match\r\n    _fflush\r\n   \r\n   Libraries: Visual Studio 2008 Release, Visual Studio 2010 Release */\r\n\r\nint __cdecl _fflush(FILE *_File)\r\n\r\n{\r\n  int iVar1;\r\n  \r\n  if (_File == (FILE *)0x0) {\r\n    iVar1 = flsall(0);\r\n  }\r\n  else {\r\n    __lock_file(_File);\r\n    iVar1 = __fflush_nolock(_File);\r\n    FUN_008930aa();\r\n  }\r\n  return iVar1;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8930aa",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8930aa",
+          "name": "FUN_008930aa"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_008930aa(void)\r\n\r\n{\r\n  int unaff_EBP;\r\n  \r\n  __unlock_file(*(FILE **)(unaff_EBP + 8));\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x8930bd",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x8930bd",
+          "name": "FID_conflict:_wprintf"
+        },
+        "status": "ok",
+        "pseudocode": "\r\n/* WARNING: Function: __SEH_prolog4 replaced with injection: SEH_prolog4 */\r\n/* WARNING: Function: __SEH_epilog4 replaced with injection: EH_epilog3 */\r\n/* Library Function - Multiple Matches With Different Base Names\r\n    _printf\r\n    _wprintf\r\n   \r\n   Library: Visual Studio 2010 Release */\r\n\r\nint __cdecl FID_conflict__wprintf(char *_Format,...)\r\n\r\n{\r\n  int *piVar1;\r\n  int iVar2;\r\n  int iVar3;\r\n  int iVar4;\r\n  \r\n  if (_Format == (char *)0x0) {\r\n    piVar1 = __errno();\r\n    *piVar1 = 0x16;\r\n    FUN_00893343();\r\n    iVar2 = -1;\r\n  }\r\n  else {\r\n    iVar3 = FUN_00894fab();\r\n    __lock_file2(1,(void *)(iVar3 + 0x20));\r\n    iVar3 = FUN_00894fab();\r\n    iVar3 = __stbuf((FILE *)(iVar3 + 0x20));\r\n    iVar4 = FUN_00894fab(_Format,0,&stack0x00000008);\r\n    iVar2 = FUN_008a1f36(iVar4 + 0x20);\r\n    iVar4 = FUN_00894fab();\r\n    __ftbuf(iVar3,(FILE *)(iVar4 + 0x20));\r\n    FUN_00893151();\r\n  }\r\n  return iVar2;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x893151",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x893151",
+          "name": "FUN_00893151"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_00893151(void)\r\n\r\n{\r\n  int iVar1;\r\n  \r\n  iVar1 = FUN_00894fab();\r\n  __unlock_file2(1,(void *)(iVar1 + 0x20));\r\n  return;\r\n}\r\n\r\n"
+      },
+      {
+        "address": "0x893164",
+        "procedure": {
+          "status": "resolved",
+          "address": "0x893164",
+          "name": "FUN_00893164"
+        },
+        "status": "ok",
+        "pseudocode": "\r\nvoid FUN_00893164(wchar_t *param_1)\r\n\r\n{\r\n  FID_conflict___vwprintf_s_l(param_1,(_locale_t)0x0,&stack0x00000008);\r\n  return;\r\n}\r\n\r\n"
+      }
+    ],
+    "total": 16,
+    "succeeded": 16,
+    "failed": 0
+  },
+  "confidence": "derived",
+  "authority": "shipped-artifact",
+  "environment": null,
+  "limitations": [
+    "Derived by an REA composed workflow.",
+    "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+    "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+    "External functions and functions without an analyzable body return null; other decompiler failures remain explicit.",
+    "External functions and local thunks are distinct; procedure metadata identifies both and preserves a thunk target when Ghidra resolves one.",
+    "Pseudocode is Ghidra decompiler output, not original source and not text-equivalent to Hopper output.",
+    "The Windows bridge uses authenticated IPv4 loopback because Node path-based IPC does not expose Java AF_UNIX sockets; the endpoint file contains no bearer token.",
+    "The imported Program and temporary project are ephemeral and deleted on close. Annotation operations edit session database metadata; original executable bytes are never written.",
+    "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+    "The target references PDB Tartaros.pdb (GUID 491a189d-6d27-43d1-a6b5-81ace6a1df8b, age (hex) 1, signature unknown, version RSDS); Ghidra reports load state unknown. Original names and types may be missing; an empty name search does not prove a procedure is absent. Use list_procedures and address-based analysis to inspect recovered functions. REA does not admit a caller-selected PDB companion.",
+    "Windows Ghidra P0 accepts native x86 and x86-64 PE applications and DLLs, and explicitly selected raw 6502 images; managed, hostile, sensitive, and mutable-path targets are unsupported.",
+    "Windows sessions require the matching packaged Windows x64 native addon, local NTFS targets and runtimes, and Windows 10 or later. Native handles enforce path admission, private DACLs, and Job Object ownership automatically."
+  ],
+  "relationship_coverage": null,
+  "locations": [
+    {
+      "kind": "address",
+      "address": "0x892be0"
+    },
+    {
+      "kind": "address",
+      "address": "0x892c8d"
+    },
+    {
+      "kind": "address",
+      "address": "0x892ce0"
+    },
+    {
+      "kind": "address",
+      "address": "0x892d30"
+    },
+    {
+      "kind": "address",
+      "address": "0x892e4d"
+    },
+    {
+      "kind": "address",
+      "address": "0x892eb0"
+    },
+    {
+      "kind": "address",
+      "address": "0x892ed7"
+    },
+    {
+      "kind": "address",
+      "address": "0x892f3f"
+    },
+    {
+      "kind": "address",
+      "address": "0x892f87"
+    },
+    {
+      "kind": "address",
+      "address": "0x893029"
+    },
+    {
+      "kind": "address",
+      "address": "0x893058"
+    },
+    {
+      "kind": "address",
+      "address": "0x893061"
+    },
+    {
+      "kind": "address",
+      "address": "0x8930aa"
+    },
+    {
+      "kind": "address",
+      "address": "0x8930bd"
+    },
+    {
+      "kind": "address",
+      "address": "0x893151"
+    },
+    {
+      "kind": "address",
+      "address": "0x893164"
+    }
+  ],
+  "evidence_links": []
+}
