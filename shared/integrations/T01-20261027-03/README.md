@@ -16,4 +16,4 @@
 
 驗證結果見 [validation.json](validation.json)。閱讀與SHA驗證不需原anal；外部引用是未閉合的來源線索。必要查詢見 [NEXT-QUERIES.md](NEXT-QUERIES.md)。
 
-接續基準為本地分支 `codex/t01-integration-20261027-03` 引入本檔的commit；使用 `git log --diff-filter=A -- shared/integrations/T01-20261027-03/README.md` 取得確切SHA。本輪只commit，尚未推送；不要假設origin/main已包含本批。實際commit收據留在本地outputs。其他任務先以清單SHA去重，再補限定缺口；未列明的來源內容與新變更不標完成。交接僅透過文件，未向執行中的其他對話發訊息。
+接續基準為本地分支 `codex/t01-integration-20261027-03` 引入本檔的commit；使用 `git log --diff-filter=A -- shared/integrations/T01-20261027-03/README.md` 取得確切SHA。本批已正常推送至 origin/main：[整合commit](https://github.com/we88ec3-prog/ttr_anal_multi/commit/d370a01645218615ad42595071c5328077e643a7)。遠端已確認 `d370a01645218615ad42595071c5328077e643a7`，見 [推送收據](push-receipt.json)。其他任務可從此commit或包含它的較新main接續。其他任務先以清單SHA去重，再補限定缺口；未列明的來源內容與新變更不標完成。交接僅透過文件，未向執行中的其他對話發訊息。
