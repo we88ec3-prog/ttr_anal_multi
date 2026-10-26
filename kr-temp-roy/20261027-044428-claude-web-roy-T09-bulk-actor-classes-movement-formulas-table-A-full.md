@@ -21,8 +21,8 @@
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | CBasicObject | C076AC | 4CA890 | 4CAB80 | 4CABE0 | 4C8C30 | 4C6FE0 | 4CAD40 | 4CC0D0 | — | 4CA730 |
 | CCharacter | C07B44 | 4CDD40 | 4C8B90 | 4CABE0 | 4C8C30 | 4C8C40 | 4CAD40 | 4C8DA0 | 0x444 | 4CD6F0 |
-| CMonster | C0C9DC | 4D1AE0 | 4C8B90 | 4CABE0 | 4C8C30 | 4C8C40 | 4CAD40 | 4C8DA0 | 0x42C | 4D1710 |
-| CNPC | C0CA9C | 4D2890 | 4C8B90 | 4CABE0 | 4C8C30 | 4C8C40 | 4CAD40 | 4C8DA0 | 0x42C（見 `4D2120`；【bulk】） | 4D2120 |
+| CMonster | C0C9DC | 4D1AE0 | 4C8B90 | 4CABE0 | 4C8C30 | 4C8C40 | 4CAD40 | 4C8DA0 | 0x434 | 4D1710 |
+| CNPC | C0CA9C | 4D2890 | 4C8B90 | 4CABE0 | 4C8C30 | 4C8C40 | 4CAD40 | 4C8DA0 | 0x42C | 4D2120 |
 | CEventObject | C0C8C4 | 4D1680 | 4C8B90 | 4CABE0 | 4C8C30 | 4C8C40 | 4CAD40 | 4C8DA0 | 0x428 | 4D1060 |
 | CDropItem | C07C0C | 4D0340 | 4CAB80 | 4CABE0 | 4D0890 | 4D0930 | 4CAD40 | — | 0x140 | 4CFD10 |
 | CBullet | C079FC | 4CC150 | 4CAB80 | 4CABE0 | 4CB070 | 4CB130 | 4CAD40 | — | 0x138 | 4CBFF0 |
@@ -46,7 +46,7 @@
 | --- | --- | --- |
 | 0x00 | 4AFAF0 | 參數更新：6 B/筆 `{id, param, value}` → `vtbl+0x2C` |
 | 0x01、0x16 | 4AFB80 | （舊記錄）位置設定。**0x16 確認同為 4AFB80**（`4ADD50` 中 `in_EAX[0x2D]=4AFB80`） |
-| 0x07 | 4AE4D0 | **角色／怪物／NPC／事件物件生成**：26 B/筆；`byte(rec[+0])` 為類型 0=CCharacter(0x444)、1=CMonster、6=CNPC、7=CEventObject；位置為 **float** `vtbl+0x44(data+8,1)`；朝向 `vtbl+0x58`；`vtbl+0x5C(dword @data+16)`；`[actor+0x4]=id` |
+| 0x07 | 4AE4D0 | **角色／怪物／NPC／事件物件生成**：26 B/筆；`byte(rec[+0])` 為類型 0=CCharacter(0x444)、1=CMonster(0x434)、6=CNPC(0x42C)、7=CEventObject(0x428)（配置大小取自 `4AE4D0` 偽碼各 case 的 `FUN_00891268(size)`；【bulk】）；位置為 **float** `vtbl+0x44(data+8,1)`；朝向 `vtbl+0x58`；`vtbl+0x5C(dword @data+16)`；`[actor+0x4]=id` |
 | 0x0A | 4AF920 | 群組／成員清單（上一份筆記） |
 | 0x0B | 4AFE60 | 移動狀態（舊） |
 | 0x0C | 4B0130 | 動作更新：3 B/筆 `{word id, sbyte motion}` → `[actor+0xF0]` 物件 `vtbl+8(motion)`；找不到記 "Motion Update: Cannot Found In CharList" |
