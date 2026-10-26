@@ -4,7 +4,7 @@
 
 遠端來源基準：`789784c9fa256d849d06eed417603d5ec208cb0b` 的完整 SHA 見 [checkpoint.json](checkpoint.json) 的 `remote_base`。本地來源基準：`08a08599c4dac2febab869523780cabf39806b69`，工作分支 `codex/kr-t06-roy`。未在來源工作區 pull、切分支或清理；原 anal 保持唯讀。
 
-本批次接續基準是**引入本目錄的提交**；以 `git log --diff-filter=A --format=%H -- shared/integrations/T01-20261026-01/README.md` 取得完整提交 SHA，確認 `origin/main` 包含它後再接續。實際推送收據另保存於本輪操作者輸出；文件不以自我引用方式預填尚未產生的 commit SHA。
+整合成果已推送至 `origin/main`：[`0c9df05918456a5780a81f2aba9b5fd32df0b233`](https://github.com/we88ec3-prog/ttr_anal_multi/commit/0c9df05918456a5780a81f2aba9b5fd32df0b233)。其他任務應從此 commit 或包含它的較新 `origin/main` 接續，先比對 local-items.json 的精確 SHA 避免重複提交。推送成功與遠端查詢結果見 [push-receipt.json](push-receipt.json)。其後的收據文件提交不改動本批接受範圍。
 
 ## 本輪結果
 
