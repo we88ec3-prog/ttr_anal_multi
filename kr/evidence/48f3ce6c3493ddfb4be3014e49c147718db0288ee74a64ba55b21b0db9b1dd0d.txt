@@ -1,0 +1,16 @@
+# 教學生命週期 CHECKPOINT
+
+roy；2026-10-26，待整合。已完成分配/交接/政策/catalog核對、T07範圍登記與原BIN SHA核對。原城鎮成果不重做。
+
+已觀察：006E/type1→4B9260建新CTutorial→4B7D50→init4C4B10→kind4 CTutorialController→4A8A60重新載入TutorialMain並呼叫Tutorial_EntryPoint。TUTO vtable+14=4C4D60明確呼叫t_removeAllCoroutines與4A9DB0清理；+18=4C4DF0逐幀4A8B90→t_doCoTask。故5F/type2退出TUTO已摧毀原等待鏈，6E1不是保證續接。
+
+本批cache與bytes均立即存evidence；原raw來源REA6.5.0/Ghidra12.1.4，原件bytes以Python/Capstone5.0.7交叉核對。尚未宣稱Lua腳本原始KR未改版；當前Event.stp歷史可能中文化，必須保存其獨立SHA與限制。
+
+下一步：唯讀解析現有Coroutine/TutorialBase/Main bytecode，核對scheduler與等待條件；追0038/type2 loading路徑和controller能力，區分同TUTO戰鬥候選與尚缺動態驗收。T14旗標語意只引用，Server不修改/發包/重啟。
+## 2026-10-26T15:04+08:00 批次更新
+
+已完成唯讀完整Lua5.1結構解析：Coroutine 13、TutorialBase 6、TutorialMain 11 prototypes；獨立carrier/member SHA存evidence，當前資源不宣稱未修改原KR。t_removeAllCoroutines→tco.coroutineList={}；TUTO tick→t_doCoTask→MoCo resume，Main root.5 PC20..29為IsScenarioEnded(14)==FALSE的yield迴圈，通過後PC30 SetUIPage、PC34..40 SetCheckPointStatus、yield、Scene1000/10及12，招募是更後步驟。
+
+原生TUTO controller+2C=548CB0檢查+4、+DC；+0C玩家槽缺失會提前返回。548D10尾跳546100。TutorialMain root.7 PC10..14只在起始設SetControlStatus(10,TRUE)；native4A9F90寫controller+B4+index*4，index10對應DC。新建548B90會清DC；同物件reset544F50不直接清DC。此為保留控制器重要條件，不等於已完成攻擊/技能相容驗收。
+
+0038尾端FAB090 virtual+18為音樂介面，沿用既有MAP-ENTRY-FADE-AND-MUSIC更正，不把參數4/2命名loading state。38本體不直接安裝scene/controller；helper transitive或runtime例外未作完整閉合。後續形成狀態表／T14-Server交接與離線有界驗收，不修改Server。

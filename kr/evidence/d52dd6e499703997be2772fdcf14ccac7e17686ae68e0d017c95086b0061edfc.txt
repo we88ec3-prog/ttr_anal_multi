@@ -1,0 +1,76 @@
+exec(open(r'C:\Users\we88e\Documents\Codex\2026-10-26\new-chat-2\work\t14_helpers.py',encoding='utf-8').read())
+import sqlite3,subprocess
+work=pathlib.Path(r'C:\Users\we88e\Documents\Codex\2026-10-26\new-chat-2\work')
+shutil.copyfile(work/'T14-SCENARIO14-CONTRACT.md',P/'T14-SCENARIO14-CONTRACT.md')
+for src in work.glob('t14_*.py'):shutil.copyfile(src,P/src.name)
+refs=[]
+for rel in ['TUTORIAL-LIFECYCLE-INTERFACE.md','CHECKPOINT.md','progress.json','EVIDENCE-INDEX.md','evidence/lifecycle-validation.json']:
+ src=T07/rel;dst=P/'evidence/t07-final-reference'/rel;dst.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(src,dst);refs.append({'source':str(src),'copy':dst.relative_to(P).as_posix(),'sha256':sha(src)})
+put(P/'evidence/t07-final-interface-reference.json',{'at':now(),'status':'foreign-task reference, pending integration; not redefined','files':refs})
+records={}
+for name in ['native-cache-v1.json','native-cache-v2.json','native-cache-v3.json']:
+ d=json.loads((P/'evidence'/name).read_text(encoding='utf-8'))
+ for rr in d['records']:
+  r=rr.get('index',rr)
+  if r.get('status')=='not-saved':continue
+  if 'address' not in r:continue
+  records[r['address']]=r
+checks=[]
+def ck(name,x):checks.append({'name':name,'ok':bool(x)});assert x,name
+provenance=[]
+for addr,r in sorted(records.items()):
+ rawp=P/'evidence'/pathlib.Path(r['batch_path']).name;pp=P/'evidence'/pathlib.Path(r['pseudocode_path']).name
+ ck(addr+' raw hash',sha(rawp)==r['batch_sha256']);ck(addr+' pseudo hash',sha(pp)==r['pseudocode_sha256'])
+ raw=json.loads(rawp.read_text(encoding='utf-8'));ck(addr+' raw target SHA',raw['subject']['digest']['sha256']==S)
+ item=next(i for i in raw['normalized_result']['items'] if i.get('address')==addr and i.get('status')=='ok')
+ ck(addr+' derived pseudo equals raw after CR normalization',item['pseudocode'].replace('\r','')==pp.read_bytes().decode('utf-8').replace('\r',''))
+ provenance.append({'address':addr,'source_sha256':S,'module':'Tartaros.bin','raw_evidence_id':raw['evidence_id'],'raw_path':rawp.relative_to(P).as_posix(),'raw_sha256':sha(rawp),'pseudocode_path':pp.relative_to(P).as_posix(),'pseudocode_sha256':sha(pp),'analysis_profile':raw['analysis_profile'],'limitations':raw['limitations']})
+put(P/'evidence/provenance-index.json',{'status':'cached tool results verified, semantic claims pending integration','source_sha256':S,'records':provenance,'tool_state':{'REA':'6.5.0','skill':'42','binary_session':'open=false, analysis_activity not_observed; no native target opened by T14'},'search_audit':[{'query':'rg -l -i fe1804|fc0f84|fc0f88|fc0f8c|fc0f90 in cached functions','exit_code':0,'results':['0x47aeb0','0x47b010','0x47b6b0','0x47c980','0x4aa5a0','0x4acbf0','0x4acd90','0x4acf90','0x4c1930','0x4c2050','0x4c4df0','0x4c4d60'],'limit':'textual cache search only; references in assembly or unnamed symbols may be omitted'},{'query':'rg -l -F quoted FALSE','exit_code':1,'result':'no exact quoted hit; not proof FALSE absent; boot independently parsed'},{'query':'rg -l -i s_FALSE_|FUN_004a88e0','exit_code':0,'results':['0x48c6e0','0x4a88e0']},{'query':'rg path containing literal0x6f*.c','exit_code':1,'result':'invalid glob path; no evidence inferred'}]})
+data=(W/'Tartaros.bin').read_bytes();ck('original target still expected SHA',hashlib.sha256(data).hexdigest()==S)
+for name in ['flag-native-bytes-v1.json','receiver-and-reset-bytes-v1.json']:
+ d=json.loads((P/'evidence'/name).read_text(encoding='utf-8'))
+ for s in d['spans']:
+  off=int(s['file_offset'],16);b=data[off:off+s['size']];ck(name+' '+s['va']+' bytes',b.hex()==s['bytes_hex'] and hashlib.sha256(b).hexdigest()==s['sha256'])
+d=json.loads((P/'evidence/flag-native-bytes-v1.json').read_text(encoding='utf-8'));sp={x['va']:x for x in d['spans']}
+ck('writer unsigned WORD load', '0fb74802' in sp['0x4c4f20']['bytes_hex'])
+ck('writer explicit map address FC0F88','b8880ffc00' in sp['0x4c4f20']['bytes_hex'])
+ck('writer unconditional successful assignment1 after accessor','e8f7d8ffffc70001000000' in sp['0x4c4f20']['bytes_hex'])
+ck('reader this+4 and dereference','8d41048d5508' in sp['0x4aa510']['bytes_hex'] and '8b005dc20400' in sp['0x4aa510']['bytes_hex'])
+ck('missing map value initialized0','c745fc00000000' in sp['0x4c2880']['bytes_hex'])
+ck('Lua return tag3 numeric','c7410803000000' in sp['0x4acf90']['bytes_hex'])
+put(P/'evidence/native-validation-v1.json',{'at':now(),'source_sha256':S,'checks':checks,'limitations':['Integrity and specific local instruction invariants only; not gameplay acceptance','No counts used as semantic completion','No current memory/packets/target execution observed']})
+append({'id':'T14-roy-005','type':'inference','conclusion':'T14 notification contract connects to preserved T07 TUTO/thread state. Repeated same-ID assignment is value-idempotent only while map intact; wrong-ID16 does not complete14; init clears map and exit removes old coroutine. Official success/reward/exactly-once and full same-TUTO packet sequence remain missing.','addresses':['0x4c4f20','0x4aa510','0x4c2880','0x4a8a60 via T07','TutorialMain root.5 PC20..64'],'evidence':['T14-SCENARIO14-CONTRACT.md','evidence/provenance-index.json','evidence/native-validation-v1.json','evidence/t07-final-interface-reference.json'],'conditions':'Valid current binding, same unexited TUTO and original runnable coroutine, no intervening map clear; current Lua snapshot','limitations':['No official objective predicate','No runtime/playability acceptance','No client/server code changes or packet transmission']})
+(P/'unknowns.md').write_text('''# T14 roy 未知與後續（待整合）
+
+| 缺口 | 遊玩影響 | 後續查證／歸屬 |
+|---|---|---|
+| 官方scenario14達成、失敗、獎勵條件 | 不知合法何時提交004C；不能用HP0+.75秒替代 | T12提供個體死亡/目標達成介面；Server補有來源業務資料，T14再核對 |
+| 同TUTO戰鬥與返回的完整合法時序 | 已查必要owner條件，尚未證實角色/鏡頭/互動可用 | 引用T07最終介面；T02整理有向序列，Server新副本，使用者手動驗收 |
+| reset後同一controller的玩家重綁 | Lua可續接仍可能不能操作 | T08；沿用T07 kind4/+4/+DC/+0C限制 |
+| 過場1000/10、12資源完整性與實際結束 | 通過flag等待不等於下一過場播放成功 | T06/資源主責引用；後續手動觀察StartCutScene/IsCutSceneRunning，禁止本輪執行 |
+| 當前boot/Event.stp與原始KR來源鏈 | 具體劇情步驟不能稱未修改官方原腳本 | 已保存獨立SHA；需取得可核對原始資源baseline |
+| 全體完成項寫入/清除caller未窮盡 | 只能保證已查局部路徑，不能宣稱全域唯一writer | 本階段後若需要，依具體caller補REA證據；不重做全量 |
+| 跨交易重複通知、持久化/重登入恢復 | 舊包可能完成新交易，原thread丟失不能靠重送恢復 | Server/T15設計epoch與去重/保存規格；設計不冒充原生 |
+| 正式kr語意整合 | 個人階段結論可引用但未正式接受 | 檢查來源/證據/依賴/衝突後增量整合；本輪只同步任務metadata與導覽 |
+
+獎勵、整段教學結束與scenario14等待通過分開；未修改client繞過或預寫旗標。依使用者指示，本階段完成後暫停，不自動展開以上工作。
+''',encoding='utf-8')
+status={'task':'T14','analyst':'roy','updated_at':now(),'status':'stage-complete-paused-by-user','integration_status':'待整合','source_sha256':S,'stage':'scenario14 completion and tutorial Lua continuation','completed':['required reading and scope registration','original BIN identity','same receiver/map read-write chain','missing-key0 and numeric Lua return','init clears flags; request sender has no direct reset','boot FALSE0 and complete independent Lua structural check','post-wait UI/checkpoint/cutscene gates','T07 final lifecycle interface referenced by SHA','bounded evidence integrity and instruction validation'],'pending':['official scenario objective/reward predicate','full same-TUTO packet sequence and actor binding','pristine KR Lua resource identity','runtime/gameplay acceptance','formal semantic integration'],'pause_requested':True,'tools_running':False,'next':'Wait for explicit user resume; then integration review or Server/T02/T08/T12 dependent work using this contract, not replay broad decompilation.'}
+put(P/'progress.json',status)
+# Metadata only: preserve all unrelated tasks/entities/claims and existing semantic state.
+tp=A/'kr/tasks/T14/task.json';t=json.loads(tp.read_text(encoding='utf-8'));assert t['owner']=='roy'
+metadata={'owner':'roy','state':'pending-integration','roy_work_scope':t['roy_work_scope'],'roy_checkpoint':'kr-temp-roy/T14/CHECKPOINT.md','roy_stage_status':'stage-complete-paused-by-user','roy_stage_contract':'kr-temp-roy/T14/T14-SCENARIO14-CONTRACT.md','roy_stage_limits':'Bounded static contract; current Lua resource provenance limited; no runtime or official reward acceptance; new semantics pending integration'}
+t.update(metadata);put(tp,t)
+cp=A/'shared/catalog.json';old=sha(cp);c=json.loads(cp.read_text(encoding='utf-8'));ct=next(x for x in c['tasks'] if x['version']=='kr' and x['id']=='T14');ct.update(metadata);assert sha(cp)==old;put(cp,c)
+db=A/'shared/catalog.sqlite';con=sqlite3.connect(db);row=con.execute("select rowid,record from tasks where id=? and version=?",('T14','kr')).fetchall();assert len(row)==1
+dt=json.loads(row[0][1]);dt.update(metadata);con.execute('update tasks set record=? where rowid=?',(json.dumps(dt,ensure_ascii=False),row[0][0]));con.commit();assert con.execute('pragma integrity_check').fetchone()[0]=='ok';con.close()
+readme=A/'kr/tasks/T14/README.md';s=readme.read_text(encoding='utf-8');s=s.replace('狀態：bounded-review-handoff；負責人未認領。','狀態：bounded-review-handoff；負責人 roy；scenario14 階段查證已保存並依使用者要求暫停，新語意待整合。')
+if 'T14-SCENARIO14-CONTRACT.md' not in s:s+='\n## roy 階段接續（2026-10-26）\n\n[scenario14完成與Lua接續契約](../../../kr-temp-roy/T14/T14-SCENARIO14-CONTRACT.md)、[檢查點](../../../kr-temp-roy/T14/CHECKPOINT.md)。僅同步認領／階段狀態；新語意仍在個人區待整合，不代表整項T14或可玩驗收完成。\n'
+readme.write_text(s,encoding='utf-8')
+put(P/'changes.json',{'status':'new semantic findings pending integration','metadata_integrated':['kr/tasks/T14/task.json owner roy, stage state and contract pointer','kr/tasks/T14/README.md owner/status/navigation','shared/catalog.json KR T14 metadata only','shared/catalog.sqlite KR T14 metadata only'],'semantic_integrated':[],'pending_findings':['T14-roy-001','T14-roy-002','T14-roy-003','T14-roy-004','T14-roy-005'],'conflicts':['No conflicting T14 method entity found for new scoped addresses; foreign T07 lifecycle only referenced','Current resource snapshot cannot authenticate pristine KR Lua','Shared checkout branch codex/kr-t07-roy left unchanged; no checkout/commit/cleanup; all analysis artifacts isolated in kr-temp-roy/T14'],'prior_conclusions_retained':['C02 original005F6 isDUEF','C04 patched runtime not original acceptance','.75sec and preflags are fixtures'],'validation':'evidence/native-validation-v1.json; lua-gates-validation-v1.json; package-verify.json'})
+# Existing release manifest is historical and not rebuilt; verifier uses live catalog/artifact integrity.
+v=subprocess.run([sys.executable,'-X','utf8','-B',str(A/'shared/handoff.py'),'verify'],capture_output=True,text=True,encoding='utf-8');assert v.returncode==0;vr=json.loads(v.stdout);put(P/'evidence/package-verify.json',vr);assert vr['ok']
+q=subprocess.run([sys.executable,'-X','utf8','-B',str(A/'shared/handoff.py'),'query','--version','kr','--task','T14'],capture_output=True,text=True,encoding='utf-8');assert q.returncode==0;(P/'evidence/task-query.json').write_text(q.stdout,encoding='utf-8')
+checkpoint('階段性查證完成，依使用者明確要求暫停。交付 T14-SCENARIO14-CONTRACT.md；原生raw/evidence_id/hash見provenance-index，獨立bytes與Lua gate校驗通過，package-verify通過但歷史引用仍未閉合。最後查詢：handoff verify / query KR T14，完整結果已存 evidence/package-verify.json / task-query.json。沒有本分析留下的REA/Ghidra或shell執行中工作。\n\n已整合僅任務owner/階段metadata與導覽（task.json/README/catalog JSON+SQLite）；所有新語意 findings001..005仍待整合。T14整項原生目標/獎勵與可玩驗收未完成。下一次須先取得使用者恢復指示；再從本契約做語意整合審核或依T07/T02/T08/T12/Server介面補合法交易，不重跑全量反編譯、不預寫完成、不恢復client hook。')
+files=[{'path':p.relative_to(P).as_posix(),'bytes':p.stat().st_size,'sha256':sha(p)} for p in P.rglob('*') if p.is_file() and p.name!='manifest.json'];put(P/'evidence/manifest.json',{'at':now(),'status':'pending integration','files':files})
+print(json.dumps({'stage':status['status'],'checkpoint':str(P/'CHECKPOINT.md'),'native_checks_ok':all(x['ok'] for x in checks),'package_verify':vr,'semantic_integrated':False},ensure_ascii=False))

@@ -1,0 +1,89 @@
+# 教學正常完成至同次登入廣場：T07／roy 介面與更正
+
+2026-10-26，**待整合，尚未遊玩驗收**。本批沿用 reverse-engineer-anything v42、既有 REA6.5.0／Ghidra12.1.4 bulk；沒有重新全量反編譯、啟動／附加遊戲、執行 Lua、發包或修改 client／Server。跨 T02／T08／T14 的直接分析已獲使用者授權；原主責不變。
+
+本次目標是「教學關卡正常完成 → 必要劇情續接 → 同次登入返回廣場，角色可操作且沒有殘留視窗」。以下是可實作介面與尚未閉合的條件，不能當成完整官方封包錄製或已修復版本。
+
+## 本批改變修復方向的三項發現
+
+1. **編隊殘留有原生 UI 轉換入口。** S2C0005/type1 在目前 TUTO 進入教學戰鬥 UI 頁16；此直接鏈不銷毀 TUTO、不重建 controller、不清教學 coroutine。單獨0038/type2不能代替這條頁面轉換。
+2. **切換角色會誤刪賽希莉亞的靜態因果鏈成立。** 現 Server 切換先送0010；原版0010刪除物件類別低BYTE=0的整類actor，包含 Lua InsertIsilia 建立的 F000。這與使用者切換後消失一致，仍欠該次事件的完整逐包追蹤。
+3. **scene1000/14 後固定0.5秒轉廣場不是正常完成條件。** 現 v3 Server 有此計時器；Lua 在該 scene 後仍發 TUTORIAL_STARTSCENARIO 提示。不能把它當整段教學已完成，也不能把第一戰14完成當全部教學結束。
+
+## 證據來源與可追溯性
+
+原版 BIN：`9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`，12472320 bytes。原版與現存在地化資源／Server fixture 分層。
+
+- `evidence/native-evidence-index.json`：本批函式、原始 REA batch 路徑／SHA、偽碼路徑／SHA；完整 raw batch 同存 evidence。原證據的 Evidence ID 保留在 raw JSON。
+- `evidence/packet-registration.json`、`native-0005-candidate.json`、`ui-factory.json`、`rtti-vtables.json`、`isilia-ui-route.json`：原檔VA／file offset／bytes／SHA；Python3.10.6／Capstone5.0.7。線性視窗可能含相鄰函式，不把整個視窗宣稱單函式。
+- `evidence/character-reset.json`、`reset-core.json`、`leader-check.json`：0010、物件清理、隊長條件原版範圍。
+- `evidence/source-readset.json`：現存 Server/source/reference 全檔SHA與限定行摘錄；僅證明本機實作，非官方規則。帳號／存檔未讀取。
+- `evidence/Event_TutorialMain*`：現存 Lua 快照 SHA `662f8416ac7f865b94b15d6ea3145e9a59fbbbaaa8e3be6521c4cff636344809`，完整結構解析、不執行 Lua；carrier Event.stp SHA `2e68e0202565530e574e0810ad7f758a2fc8d6826a0de0975ccaff12c2d4718b`。
+- `evidence/validation.json`：雜湊、原檔bytes、RTTI與選定靜態前提驗證；通過不代表可玩驗收。
+
+## 原生封包與頁面介面
+
+以下 offset 自解框後 body 的 opcode WORD 起算，little endian；接收讀取下限不等於官方完整合法長度。F43xx 是 client 內部 UI event，不是可直接發送的網路 opcode。
+
+| 方向／入口 | 最小已證欄位與條件 | 原生作用／副作用 | 成功觀察與限制 |
+|---|---|---|---|
+| C2S0040，4AA4D0 | WORD opcode，WORD scenario；Lua此處要求14 | 請求開始 scenario；不是完成或勝利 | 後端業務回覆關係不能僅靠 sender 推定 |
+| S2C004E，4B3570 | WORD+2 scenario，下限4 bytes | 寫場景選擇資料後發內部F43DA；TutorialPage 5C3370→5C3610 開編隊窗 | 5C3610還呼叫另一Lua wrapper FDF3C8 的 OnYesTriggered；不可與教學主wrapper FC0F84混同 |
+| 編隊確認→C2S0028，6BBFD0 | body13 bytes；WORD opcode、WORD scenario、8個角色byte槽及尾byte；至少一選角 | 發F4356，再送0028；本函式沒有直接關窗／換頁 | 必須依實際receiver owner檢查F4356，不能借別頁5B7BE0的處理宣稱TUTO已關窗 |
+| **S2C0005，4B9630** | BYTE+2=1；目前global scene=TUTO；與F9392C roomtype比對；直接讀取下限3 bytes | 4C4EB0→4A9260：選 UI頁16／已同頁則發重新初始化事件；另送F43FD(10,0) | manager4B7E8F將handler寫FD2D24；table base FD2CF8、stride8、+4得command5。類別與005F、0069的type命名域不同 |
+| 0005產生的 **C2S0009** | FBA798==0時，WORD opcode，body2 bytes | 在0005 handler較前段送出，然後才走TUTO頁切換 | 是此來源路徑的輸出，未證通用ready／map ack；現Server沒有對應command9分支，不可因它另猜一組後續回覆 |
+| S2C0038/type2，4B1BF0 | 原有地圖／scenario欄位引用既有路由交付 | 預載／fade／狀態變更；未直接建立戰鬥scene或controller | 不宣稱自動送B0；尾virtual18是music介面，不是通用loading ack |
+| S2C0012，4B24F0 | DWORD+2 map selector，下限6 bytes | checkpoint容器清理→controller544F50清槽→map4DF510 | 即使相同map selector可能跳資源重載，前段reset仍發生；完成新綁定後不可無條件重播 |
+| S2C0014，4C5930 | opcode WORD，body2 bytes | 目前scene virtual+2C→4B2570把目前controller+4設1 | 不產生角色，不恢復所有控制旗標，不是完成通知 |
+| S2C004C，TUTO4C4F20 | WORD+2 scenario，下限4 bytes；TUTO callback有效 | FC0F88對應scenario值寫1，Lua IsScenarioEnded讀取 | 引用T14契約；沒有直接resume、獎勵或HP條件；必須保留原等待的coroutine才會續接 |
+| S2C0010，4B1A30 | opcode即可觸發全類別清理 | 4DFD40(0)刪除 BYTE actor+4==0 全物件並reset controller | 不適合作為「只刪本機0100」的等價指令；包含F000 |
+
+### 0005 的 UI 生命週期已追至實際清窗
+
+工廠5877F0：頁15為 `FUI::CTutorialPage`，vtable C1F5F4；頁16為 `FUI::CTutorialFieldPage`，vtable C1D7DC。RTTI由原檔COL核對，不能只信歷史scene7註解。
+
+4A9260寫 pending page16。UI更新58A250在pending有效時：舊頁virtual174→virtual10C→virtual17C，接著新頁virtual170→virtual108→virtual178等，最後 current=pending、pending=-1。這是延後至UI更新的切換，不保證網路handler返回瞬間已清窗。
+
+頁15 virtual10C=5C3210→599590→5A3CC0→5960B0→596C90；後者遍歷三組登記視窗，visible bit100存在時呼叫window virtualD4，然後清除登記節點。745930實作遞迴隱藏可見child並清自身visible bit100。頁15的init5C3040把編隊窗page+22C經596D70登記；因此有具體的舊頁清理路徑，不能只從畫面或內部F4358名稱推斷。
+
+頁16 virtual108=5AFFE0；其初始化發F43FD(6,0)，0005尾另發F43FD(10,0)。兩者實際投遞／畫面完成需UI frame處理，仍需後續手動驗收。0005不安裝戰鬥Formation controller；原TUTO仍是kind4 CTutorialController，ready、DC控制旗標與玩家綁定條件引用既有生命週期交付。
+
+### 場景與 coroutine 的必要偏序
+
+TUTO安裝→TutorialMain建立原等待thread；戰鬥介面轉頁與map/reset不得退出TUTO；最後有效reset後完成角色／controller綁定；scenario14真實達標後通知004C/14；原thread在TUTO tick重新讀IsScenarioEnded並繼續。這些是必要依賴，**不構成完整官方收發排序**，0005／0038／0012與資料的完整官方順序仍缺。
+
+005F/type2建立SCEF並清教學thread；005F/type6建立DUEF；006E/type1重新初始化TUTO與TutorialMain。三者都不能當原教學thread的resume。TUTO exit4C4D60會t_removeAllCoroutines再清wrapper；FC0FB8僅剩餘排程狀態，不是教學通關旗標。
+
+## 第一戰之後必須保留的 Lua 續接
+
+| 階段 | 現資源結構觀察 | 需要的介面／不能省略的條件 |
+|---|---|---|
+| 鏡頭→找到賽希莉亞→切隊長 | root.4 PC107..118 InsertIsilia與IsIsiliaFound等待；124..127 scene1000/6；128..161 CheckLeader等待；167..170 scene1000/7 | F000與controller當前角色是兩個狀態。CheckLeader原生4AA4A0要求目前角色WORD+88==3 |
+| 第一戰14完成 | root.5 PC16..29 RequestStartScenario14並yield等IsScenarioEnded14 | 勝利條件由T14／T12補齊，不能HP60/.75秒fixture即稱官方 |
+| 返回教學UI | PC30..32 SetUIPage→4A9AE0選頁15；PC33..42關NPC10016檢查點並yield | TUTO與原thread仍須存在；由UI頁生命週期清頁16 |
+| 後續劇情／第一招募 | PC43..64 等scene1000/10、/12，HideUI、EmployChar4及g_TutoEmployCharQuery | 不能只擁有角色資料就省略UI回覆／劇情等待 |
+| 前往房屋與第二招募 | PC67..109 checkpoint4與GetControlStatus4、scene1000/13；PC110..138清飛行物、等IsCharacterAvailable2、EmployChar2及query | 本機Server以scene13回報解鎖2是策略，官方後端條件尚未證實 |
+| 最後教學提示 | PC139..156開NPC10016，scene1000/14後發TUTORIAL_STARTSCENARIO提示，再return | /14回報不是直接進廣場的原生證明；Main未直接要求scenario16，後續入口需追NPC／event資料 |
+| 離教學→廣場 | 教學外的合法業務完成條件尚缺；廣場安裝重用T07城鎮既有契約 | 正式完成條件成立後才退出TUTO；新scene/init/reset清槽後建立玩家綁定再驗ready／操作，無殘留窗 |
+
+## 賽希莉亞消失的更正
+
+詳見 `ISILIA-VISIBILITY-FINDINGS.md`。4AB620→4AA070建立F000場景actor；其低BYTE=0。v3 Server switch_character→既有character_switch.responses→character-reset→S2C0010→4B1A30→4DFD40(0)，會刪到此actor。Lua沒有在每次leader切換後重新InsertIsilia；所以用全類別reset替代單角色變更會破壞流程。
+
+可修復方向是重新設計Server的單角色切換／綁定，保留教學場景actor；單entity刪除／更新、既存物件替換衝突處理與多槽綁定的完整最小包尚未交付，不提供猜測bytes。4AF920是S2C000A的隊伍／控制綁定資料，不能因它碰到角色就誤標單entity刪除。不建議直接呼叫InsertIsilia、重送006E或client hook。
+
+## 影片對照的地位與觀察
+
+使用者提供舊版[劇情1-1影片](https://www.youtube.com/watch?v=A3-XRUsrcTM)，已用瀏覽器查看，沒有下載影片。約5:25仍在鏡頭找人提示，5:45開角色選擇窗、5:55是選角後劇情，6:15為loading提示圖，6:58為賽希莉亞相關對話，8:18房屋外NPC，11:04已有後段野外戰鬥HUD／傳送點，12:27為四人後續劇情。這些是抽樣畫面，不是逐幀完整事件表。
+
+影片人物譯名呈現伊希莉亞；程式使用InsertIsilia／角色4，使用者稱賽希莉亞。本交付以程式ID與流程位置對照，不單靠譯名推定另一個NPC。影片未提供封包或client SHA，不能推出該版scenarioID、mapID、出生點或本KR應有的物件可見時機。使用者回報「前後相反」保留為待解釋差異；現Lua在切換前InsertIsilia明確存在，不能直接把生成延到切換後。
+
+## Server／T14 後續開發與驗收門檻
+
+1. 分開修正：全類別0010造成教學actor消失、缺0005頁面切換造成視窗殘留、scene14後計時器過早離教學。三者不能互相用重登或重開TUTO掩蓋。
+2. Server候選以原生0005/type1頁轉換納入設計，但先核對roomtype及C2S09無相應分支的影響；不把它寫成官方唯一順序。先離線對比方向／欄位／必要偏序，再另開服務版本驗收。
+3. T08延伸需閉合單角色切換資料與綁定；T14/T12需交真實scenario14達標、後續教學／NPC離開條件。map／bounds／初值仍引用T06/T09/T04，不從影片猜。
+4. /14後0.5秒切廣場的捷徑須在Server新版本中停用或改為經證實的完成事件；本次僅交分析，未改程式。帳號完成狀態只能在完整教學完成且廣場安裝／玩家初始化成功後提交，避免寫plaza再重登跳過。
+5. 手動驗收需同次登入涵蓋：切換前後F000可見性／互動符合階段、編隊確認後舊窗清理、第一戰可操作且完成後續Lua、兩次招募與必要劇情、合法離教學入口、廣場角色可移動互動且無編隊／教學／招募／劇情遮罩殘留。不得只以sendall、4C寫1、畫面出廣場或重登成功判通過。
+
+目前已交付可引用的scene/controller/coroutine、UI15↔16與004C等待介面及0010破壞條件；完整官方序列、後續NPC事件至合法離教學、單角色替代封包組及實際可玩驗收仍缺。維持待整合，保留前版更正追溯。

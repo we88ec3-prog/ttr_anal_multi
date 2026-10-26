@@ -1,0 +1,15 @@
+# 使用者影片順序補充：15/1→第二段→自由編隊→副本
+
+使用者於本輪明確補充：第一段劇情結束立刻接第二段；第二段結束接隊伍選擇，此時沒有預設角色，可自由放角色，再進副本。影片版本較舊，流程是必要對照而非直接當原版KR協定。影片網址https://youtu.be/A3-XRUsrcTM。
+
+此補充修正v8「15/1接取同步後等待手動進入副本」的不完整候選。0040同步進行中狀態的原生語意仍保留，但不能宣稱它已完成正常的後續教學流程；不把v8當下一個完整流程驗收版本，先閉合第二段／編隊順序。沒有修改或啟動任何現用Server/client。
+
+本輪資源觀察：Event/SceneList.xml（euc-kr，唯讀cp949解碼）列quest15 scene1=Square_Tutorial01、scene2=scenario_tuto1_1、scene3=pindos_talkevent、scene4=scenario_tuto2_1，均endBehavior0。Event.stp現用carrier SHA2e68e0202565530e574e0810ad7f758a2fc8d6826a0de0975ccaff12c2d4718b。已保存quest15-second-scene-locations.json及quest15-second-scene-readset.json，後者含兩個seq的member SHA。
+
+第二段scenario_tuto1_1.seq有1087bytes，SHAa4a308265b97fa9e048ebf4a30abb40f5fe8a7a3dc934ab911dd47fc3a7341f8；明示Quest15/Scene2，載Square03D、建立NPC10338與1478..1481四角色，依序OpenTalkScene(3,15)、(3,16)、(3,17)、(3,25)，結尾DeleteAllObject/RestoreMap/RevPhase1。它本身未直接呼叫RequestStartScenario或建立編隊，所以仍須找原生／後端的下一入口，不把檔案存在當完整銜接已證。
+
+4B3570（S2C004E）讀WORD+2存選中scenario並排F43DA。5082B0依manager+0E mask建立可用角色；5083A0先複製manager+14向量，再依+10 mask補選中角色。這支持需要分開查「可用集合」與「預選／強制集合」，不是只把第一戰leader4改成其他角色。不能在未核對接收端及UI初始化前直接宣稱空mask足以得到自由編隊。
+
+後續必要查證：第一段成功回報後啟動15/2的合法介面、15/2清理完再開編隊的偏序、Server0050資料接收器與manager+0E/+10/+14的對應、空預選但保留可用角色與容量的條件、玩家確認0028後才開始Field19/Case103。不要以第一戰唯一Isilia、固定容量1或預設leader套用。副本開始後191/192與馮德斯村另依T07/T14實際規則閉合。
+
+證據層級：影片步驟來自使用者本次說明；seq為現用資源觀察，不宣稱pristine；原生函式沿用REA6.5.0/Ghidra12.1.4 bulk且原BIN SHA9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91。T07/T14/T08/T05/T02跨範圍只在roy記錄，不改owner、不發訊、不執行Lua／遊戲或附加。

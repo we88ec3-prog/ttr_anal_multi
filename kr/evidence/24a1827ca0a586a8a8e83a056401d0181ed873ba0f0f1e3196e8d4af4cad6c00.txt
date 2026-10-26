@@ -1,0 +1,28 @@
+# 賽希莉亞可見性差異：第一批原生證據
+
+roy / T07，2026-10-26，待整合。跨 T08 玩家重建、T14 劇情條件延伸；不變更他人主責。
+
+## 來源層級
+
+1. 使用者觀察：目前切換角色前可見、切換後不可見；為外部回報，非本次 live trace。
+2. 舊版影片：https://www.youtube.com/watch?v=A3-XRUsrcTM 。影片標題「星空幻想 Tartaros 劇情 1-1.mpg」，13:50；舊版對照，不當 KR 官方封包證據。已實際以瀏覽器觀察部分時間點，尚未逐幀閉合切換。
+3. 原版 KR BIN SHA256：9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91。REA6.5.0/Ghidra12.1.4 既有 bulk；位元組由 Python3.10.6/Capstone5.0.7 離線核對。
+4. 現存 TutorialMain 資源 SHA662f8416ac7f865b94b15d6ea3145e9a59fbbbaaa8e3be6521c4cff636344809；與原版 BIN 分開記載，資源不保證原版未在地化。
+
+## 工具觀察
+
+- TutorialMain root.4 PC107..109 在鏡頭教學後呼叫 InsertIsilia，PC110..118 等 IsIsiliaFound；PC124..127 scene1000/6；PC128..161 隊長切換提示與 CheckLeader 等待。root.7 隨 Part1 結束只呼叫 DeleteObject(240)，不能將 240 當此角色的 F000。
+- 4AB620 把 InsertIsilia 綁到4AA070。4AA070 建 CActor(4C7070)，WORD object+4=F000、virtual+3C(4)設定角色、註冊到物件管理器4DFF30。
+- 4AB6C0 把 IsIsiliaFound 綁4AA240；查 F000 物件且需幾何／鏡頭投影條件，並非角色切換結果旗標。
+- 4AB760／4AC900 綁 CheckLeader 至4AA4A0：原版位元組檢查目前 controller virtual+20 回傳物件的 WORD+88==3，才回1。與場景中 F000 物件不同。
+- Server 現存 v3 overlay new_expedition.switch_character 仍經 character_switch.responses；anal/character_switch.py 的 responses 首項 character-reset；v3 overlay/live_packet_controls.py 此項明確回 S2C0010。未執行這些模組。
+- 原版4B1A30（0010）push0→4DFD40：遍歷全域物件，對 BYTE object+4==0 的物件呼叫退出／刪除／移除節點，再 reset controller。這是類別篩選，不限定本機 entity0100。
+- F000 的低位 BYTE 恰為0，所以已註冊的 InsertIsilia 場景 actor 符合0010刪除條件。附有 character-reset.json、reset-core.json、leader-check.json 原版bytes；4DFD40、4AA070、4AA240、4C7070 等 bulk 原始證據與索引在 evidence/。
+
+## 分析者推論與限制
+
+目前切換實作包含足以刪除 F000 的原生路徑，與使用者「切換後消失」一致；這是強靜態因果候選，尚未宣稱該次實際事件已完整追蹤。切換前看見角色符合現存 Lua 明文順序，不能只因影片畫面差異就反向延後生成。
+
+修正應檢討 Server 把全類別0010當單角色替換的假設，優先查單 entity 更新／刪除重建介面並保留教學 actor 與 coroutine。不得以直接重跑InsertIsilia、重開006E/1或修改client來掩蓋。需核對實際C2S角色選擇、Server回覆、目標刪除與綁定介面後才提供可實作序列。
+
+未修改client/Server，未啟動附加、未發包或執行Lua；帳號及存檔未讀取／變更。

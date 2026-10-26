@@ -1,0 +1,57 @@
+exec(open(r'C:\Users\we88e\Documents\Codex\2026-10-26\new-chat-2\work\t14_helpers.py',encoding='utf-8').read())
+class Lua:
+ def __init__(self,b):
+  self.b=b;self.i=12;self.protos=[];assert b[:12]==bytes.fromhex('1b4c75615100010404040800')
+ def take(self,n):r=self.b[self.i:self.i+n];assert len(r)==n;self.i+=n;return r
+ def u(self):return struct.unpack('<I',self.take(4))[0]
+ def string(self):
+  n=self.u()
+  if not n:return None
+  r=self.take(n);assert r[-1]==0;return r[:-1].decode('utf-8','replace')
+ def proto(self,path):
+  src=self.string();first=self.u();last=self.u();meta=list(self.take(4));words=[self.u() for _ in range(self.u())];const=[]
+  for _ in range(self.u()):
+   tag=self.take(1)[0]
+   if tag==0:v=None
+   elif tag==1:v=bool(self.take(1)[0])
+   elif tag==3:v=struct.unpack('<d',self.take(8))[0]
+   elif tag==4:v=self.string()
+   else:raise ValueError(tag)
+   const.append(v)
+  p={'path':path,'source':src,'first_line':first,'last_line':last,'meta':meta,'constants':const,'words':[hex(w) for w in words],'instructions':[]};self.protos.append(p)
+  for pc,w in enumerate(words):
+   row={'pc':pc,'opcode':w&63,'a':(w>>6)&255,'b':(w>>23)&511,'c':(w>>14)&511,'bx':w>>14};p['instructions'].append(row)
+  for j in range(self.u()):self.proto(path+'.'+str(j))
+  self.take(4*self.u())
+  for _ in range(self.u()):self.string();self.u();self.u()
+  for _ in range(self.u()):self.string()
+  return p
+ def parse(self):self.proto('root');assert self.i==len(self.b);return self.protos
+checks=[];parsed={}
+for label,src in [('boot',W/'boot.lua'),('Main',P/'evidence/t07-reference/evidence/Event_TutorialMain.luac'),('Base',P/'evidence/t07-reference/evidence/Event_TutorialBase.luac'),('Coroutine',P/'evidence/t07-reference/evidence/Coroutine.luac')]:
+ b=src.read_bytes();r=Lua(b).parse();parsed[label]=r
+ put(P/('evidence/lua-'+label+'-independent.json'),{'source':str(src),'sha256':sha(src),'bytes':len(b),'tool':'T14 independent Python Lua5.1 structural parser; no execution','complete_parse':True,'prototypes':r})
+ if label=='boot':shutil.copyfile(src,P/'evidence/boot.luac')
+ else:
+  prior=json.loads((P/('evidence/t07-reference/evidence/'+{'Main':'Event_TutorialMain','Base':'Event_TutorialBase','Coroutine':'Coroutine'}[label]+'-parsed.json')).read_text(encoding='utf-8'))
+  assert prior['snapshot_sha256']==sha(src)
+  assert len(prior['prototypes'])==len(r)
+  for a,c in zip(r,prior['prototypes']):
+   assert a['path']==c['path'] and a['constants']==c['constants']
+   assert a['words']==[x['word'] for x in c['instructions']]
+  checks.append({'name':label+' independent full parse matches saved T07 constants and instruction words','ok':True})
+boot=parsed['boot'][0];k=boot['constants'];ins=boot['instructions'];assign=[]
+for a,b in zip(ins,ins[1:]):
+ if a['opcode']==1 and b['opcode']==7 and a['a']==b['a']:assign.append({'global':k[b['bx']],'value':k[a['bx']],'pc':[a['pc'],b['pc']]})
+assert {'global':'FALSE','value':0.0,'pc':[2,3]} in assign
+main={p['path']:p for p in parsed['Main']};p=main['root.5'];w=p['instructions'];c=p['constants']
+def ck(name,ok):assert ok,name;checks.append({'name':name,'ok':bool(ok)})
+ck('scenario14 reader uses argument14 and equality to FALSE',c[w[21]['c']-256]=='IsScenarioEnded' and c[w[22]['bx']]==14 and w[23]['opcode']==28 and w[25]['opcode']==23 and w[25]['a']==0)
+ck('false branch yields and loops20; other branch jumps30',w[26]['bx']-131071+27==30 and w[29]['bx']-131071+30==20 and c[w[27]['bx']]=='yield')
+ck('after wait UI checkpoint10016 close then 1000/10 and1000/12 before employ4',c[w[31]['c']-256]=='SetUIPage' and c[w[35]['bx']]==10016 and c[w[39]['c']-256]=='ST_CLOSE' and c[w[44]['bx']]==1000 and c[w[45]['bx']]==10 and c[w[49]['bx']]==12 and c[w[55]['c']-256]=='PostUIMessage_EmployChar' and c[w[56]['bx']]==4)
+q=main['root.0'];ck('PlayAndWaitForScene uses StartCutScene and waits until IsCutSceneRunning==FALSE then yields',q['constants']==['Tutorial','StartCutScene','IsCutSceneRunning','FALSE','yield'] and q['instructions'][9]['opcode']==23 and q['instructions'][9]['a']==1)
+carrier=json.loads((P/'evidence/t07-reference/evidence/Event_TutorialMain-parsed.json').read_text(encoding='utf-8'))['carrier'];ck('current Event.stp hash matches referenced snapshot carrier',sha(W/'Event.stp')==carrier['sha256'])
+put(P/'evidence/lua-gates-validation-v1.json',{'tools':'independent Python3.10 Lua5.1 structural parser','authority':'current-resource-snapshot; not pristine KR or observed execution','boot_assignments':assign,'checks':checks,'carrier':carrier,'limitations':['No Lua execution','No pristine KR resource baseline','T07 member extraction referenced; independent parse verifies extracted bytes, not archive extraction anew']})
+append({'id':'T14-roy-003','type':'observation','conclusion':'Current boot bytecode sets numeric FALSE=0. Independently parsed Main root.5 PC20..29 loops while IsScenarioEnded(14)==FALSE; after resume UI/checkpoint10016 then cutscene1000/10 and1000/12, then employ4. PlayAndWaitForScene itself waits for IsCutSceneRunning==FALSE.','addresses':['TutorialMain root.5 PC16..64','TutorialMain root.0 PC0..16','boot root PC0..3'],'resource_identity':{'boot_sha256':sha(W/'boot.lua'),'Main_sha256':sha(P/'evidence/t07-reference/evidence/Event_TutorialMain.luac'),'Event_stp_sha256':carrier['sha256']},'evidence':['evidence/lua-gates-validation-v1.json','evidence/lua-Main-independent.json','evidence/lua-boot-independent.json'],'conditions':'Current resource bytes; FALSE must remain numeric0 and original coroutine must resume','limitations':['Cannot authenticate pristine KR script','No reward predicate or live continuation established']})
+checkpoint('Lua獨立解析及gate核對完成，完整指令字/常數與T07快照一致；boot FALSE=數值0。證據 lua-gates-validation-v1.json。下一步完成同一singleton橋接、flag reset時點與單次契約；不擴張獎勵或Server實作。')
+print(json.dumps({'checks':checks,'boot_assignments':assign},ensure_ascii=False))

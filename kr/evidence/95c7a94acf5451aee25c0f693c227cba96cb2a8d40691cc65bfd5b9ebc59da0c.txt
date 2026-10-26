@@ -1,0 +1,27 @@
+exec(open(r'C:\Users\we88e\Documents\Codex\2026-10-26\new-chat-2\work\t14_helpers.py',encoding='utf-8').read())
+sys.dont_write_bytecode=True;sys.path.insert(0,str(W/'anal/python_deps'));import capstone
+data=(W/'Tartaros.bin').read_bytes();assert hashlib.sha256(data).hexdigest()==S
+pe=struct.unpack_from('<I',data,60)[0];n=struct.unpack_from('<H',data,pe+6)[0];opt=pe+24;base=struct.unpack_from('<I',data,opt+28)[0];sec=opt+struct.unpack_from('<H',data,pe+20)[0]
+sections=[struct.unpack_from('<8sIIII',data,sec+i*40) for i in range(n)]
+def read(va,size):
+ for name,vs,sv,rs,off in sections:
+  if sv<=va-base and va-base+size<=sv+rs:return data[off+va-base-sv:off+va-base-sv+size],off+va-base-sv
+ raise ValueError(hex(va))
+spans=[];md=capstone.Cs(capstone.CS_ARCH_X86,capstone.CS_MODE_32)
+for va,size in [(0x4c4f20,0x82),(0x4aa510,0x14),(0x4c2880,0x90),(0x4acf90,0xd0),(0x4aa4d0,0x40),(0x4ab940,0xa0),(0x4a8a60,0x40),(0x4ac9e0,0x60)]:
+ raw,off=read(va,size);row={'va':hex(va),'size':size,'file_offset':hex(off),'bytes_hex':raw.hex(),'sha256':hashlib.sha256(raw).hexdigest(),'instructions':[f'{i.address:08x} {i.bytes.hex():20} {i.mnemonic} {i.op_str}' for i in md.disasm(raw,va)]};spans.append(row)
+ print('\n'.join(row['instructions']))
+put(P/'evidence/flag-native-bytes-v1.json',{'source_sha256':S,'tools':{'python':sys.version,'capstone':capstone.__version__},'limitations':['Static file bytes; linear windows not asserted Ghidra bodies','No runtime or target API'],'spans':spans})
+extra={'0x4acf90','0x4aa4d0','0x4ac9e0'};records=[]
+for line in (B/'index.jsonl').open(encoding='utf-8'):
+ r=json.loads(line)
+ if r.get('address') not in extra or r.get('status')!='ok':continue
+ assert r['source_sha256']==S
+ for pk,hk in [('pseudocode_path','pseudocode_sha256'),('batch_path','batch_sha256')]:
+  src=B/r[pk];assert sha(src)==r[hk];dst=P/'evidence'/src.name
+  if not dst.exists():shutil.copyfile(src,dst)
+  assert sha(dst)==r[hk]
+ records.append(r)
+put(P/'evidence/native-cache-v2.json',{'source_sha256':S,'records':records})
+append({'id':'T14-roy-002','type':'observation','conclusion':'004C writer reads unsigned WORD ID at packet+2 and writes DWORD1 via map accessor; reader returns map value; Lua wrapper returns numeric tag3 rather than Lua boolean. RequestStartScenario direct sender has C2S0040 payload and no direct flag reset.','addresses':['0x4c4f20..0x4c4fa1','0x4aa510..0x4aa523','0x4acf90','0x4aa4d0'],'evidence':['evidence/flag-native-bytes-v1.json','evidence/native-cache-v1.json','evidence/native-cache-v2.json'],'conditions':'Only local code paths inspected; singleton bridge identity still being checked','limitations':['No official success/award predicate in these paths','Packet read lower bound4 is not framing validation']})
+checkpoint('已保存 flag-native-bytes-v1.json 與 native-cache-v2.json：writer 讀 u16 ID 後寫 DWORD1，adapter 返回數值型；RequestStartScenario 直接 sender 無旗標 reset。下一步核對 getter 實際 this、FALSE 常數及 Lua PC gate，列重複/錯ID/退出邊界。')

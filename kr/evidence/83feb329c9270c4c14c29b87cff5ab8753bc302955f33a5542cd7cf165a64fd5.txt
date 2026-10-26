@@ -1,0 +1,43 @@
+"""Bounded delivery/identity checks, not dynamic or gameplay acceptance."""
+import hashlib,json,pathlib,re,struct,datetime
+BASE=pathlib.Path(__file__).resolve().parent;ROOT=BASE.parents[2];WS=ROOT.parent
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+def read(p):return json.loads(p.read_text(encoding='utf-8-sig'))
+d=read(BASE/'evidence/route-source-review.json')
+for r in d['inputs']:assert sha(WS/r['path'])==r['sha256'],r['path']
+assert all(s['ok'] for s in d['reference_span_checks'])
+assert not d['client_overrides']['selected_rows']
+# Bind T14's unintegrated original raw and derived files without changing them.
+t14=ROOT/'kr-temp-roy/T14';prov=read(t14/'evidence/provenance-index.json');checked={}
+for r in prov['records']:
+    for pathkey,shakey in [('raw_path','raw_sha256'),('pseudocode_path','pseudocode_sha256')]:
+        p=t14/r[pathkey]
+        if str(p) not in checked:checked[str(p)]=sha(p)
+        assert checked[str(p)]==r[shakey],str(p)
+events=read(WS/'SERVER/evidence/tutorial-completion-v1/runtime-and-source-observations.json')
+entry=next(e for e in events['selected_events'] if e['event']=='tutorial-battle-entry')
+a,b=map(bytes.fromhex,entry['response']);assert struct.unpack('<HB',a)==(0x5f,2)
+assert struct.unpack('<HBHHH',b)==(0x38,2,190,0,14)
+seq=read(WS/'SERVER/evidence/tutorial-completion-v1/completion-source-sequence.json')
+assert seq['pure_method_prefix']=='5f0006' and seq['pure_method_suffix']=='4c000e00'
+cmds=seq['full_runtime_commands'];assert cmds[0]==0x5f and cmds[-1]==0x4c
+assert cmds.index(0x12)<cmds.index(0x14)<len(cmds)-1
+assert [struct.calcsize(f) for f in ['<HH','<HBHHH','<HB','<HI','<H']]==[4,9,3,6,2]
+# Check manager/default-scene table addresses in saved authoritative raw strings.
+native={r['address']:r for r in d['native']}
+m=native['0x4b7dc0']['pseudocode'].lower()
+assert '_dat_00fd2ff4 = fun_004b99c0' in m
+for op in [0x38,0x12,0x14,0x4c]:assert f'_dat_{0xfd2cf8+op*8+4:08x} =' not in m
+base=native['0x4add50']['pseudocode'].lower()
+for literal in ['in_eax[0x25] = fun_004b24f0','in_eax[0x29] = &lab_004c5930','in_eax[0x71] = fun_004b1bf0']:assert literal in base
+assert 'unaff_esi[0x1843] = fun_004c4f20' in native['0x4c4ac0']['pseudocode'].lower()
+report=WS/'SERVER/TUTORIAL-PACKET-ROUTING-REVIEW.md'
+links=[]
+for link in re.findall(r'\]\(([^)]+)\)',report.read_text(encoding='utf-8')):
+    if not link.startswith(('http:','https:','#')):assert (report.parent/link).resolve().exists(),link;links.append(link)
+out=dict(ok=True,at_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),report_path=str(report),report_sha256=sha(report),
+         source_review_sha256=sha(BASE/'evidence/route-source-review.json'),reference_spans=len(d['reference_span_checks']),
+         t14_files_verified=len(checked),links_verified=len(links),trace_packet_widths=dict(entry_5f=len(a),entry_38=len(b),completion_4c=4),
+         limitations=['Identity/selected byte spans/table consistency/sample widths and links only','No official total order or gameplay acceptance','No new packet/client/server execution'])
+(BASE/'evidence/delivery-validation.json').write_text(json.dumps(out,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+print(json.dumps({k:v for k,v in out.items() if k in ['ok','reference_spans','t14_files_verified','links_verified','trace_packet_widths']}))

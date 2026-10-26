@@ -1,0 +1,26 @@
+import pathlib,json,hashlib,datetime,subprocess
+W=pathlib.Path(r'E:\Tartaros\workspace'); A=W/'anal-multi'; P=A/'kr-temp-roy/T14'; S='9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91'
+def sha(p): return hashlib.sha256(p.read_bytes()).hexdigest()
+def put(p,x): p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+assert sha(W/'Tartaros.bin')==S
+assert not (P/'CHECKPOINT.md').exists(), 'Existing checkpoint appeared; read before continuing'
+P.mkdir(parents=True,exist_ok=True); (P/'evidence').mkdir(exist_ok=True)
+now=datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=8))).isoformat()
+paths=['AGENTS.md','anal-multi/README.md','anal-multi/AGENTS.md','anal-multi/HANDOFF.md','anal-multi/shared/CLIENT-MODIFICATION-POLICY.md','anal-multi/shared/targets.json','anal-multi/kr/tasks/T14/README.md','anal-multi/kr/tasks/T14/task.json','SERVER/TUTORIAL-TASK-ALLOCATION.md','SERVER/TUTORIAL-COMPLETION-HANDOFF.md','anal-multi/kr-temp-roy/T07/tutorial-lifecycle/CHECKPOINT.md','anal-multi/kr-temp-roy/T07/tutorial-lifecycle/SCOPE.md']
+put(P/'evidence/baseline-v1.json',{'at':now,'target':{'path':str(W/'Tartaros.bin'),'sha256':S,'bytes':(W/'Tartaros.bin').stat().st_size},'prior_checkpoint':'absent at initial read','source_files':[{'path':x,'sha256':sha(W/x)} for x in paths]})
+taskpath=A/'kr/tasks/T14/task.json'; t=json.loads(taskpath.read_text(encoding='utf-8'));put(P/'evidence/task-before-claim.json',t)
+assert t['owner'] in (None,'roy'); t.update(owner='roy',state='in-progress',roy_work_scope='Stage: scenario14 completion flag and IsScenarioEnded Lua continuation; T07 scene/controller cores referenced only',roy_checkpoint='kr-temp-roy/T14/CHECKPOINT.md');put(taskpath,t)
+(P/'SCOPE.md').write_text('''# T14 roy 階段範圍（待整合）
+
+2026-10-26：使用者指定 scenario14 完成與教學 Lua 接續。已讀指定 SERVER 分配／交接與 workspace/anal-multi 規則。原 BIN SHA 已核對。
+
+事前登記 T14 新候選：0x4C4F20 完成通知 writer、0x4C2880 共用 map lookup/insert、0x4AA510 讀取、0x4AB940 IsScenarioEnded 綁定及直接 Lua adapter。catalog 尚無上述獨立 entity；先於本個人範圍登記，正式整合時保留衝突檢查。T07 SCOPE 已將其旗標語意交 T14。
+T07 的 scene 建構/dispatch/reset/tick/coroutine 生命周期只引用，不改寫主責。T02 framing、T12 真正達標、T15 持久化均為依賴。
+不預寫旗標、不以 .75 秒或清怪 fixture 當原生達成；不修改 client/server、不執行／附加遊戲、不發包。資源證據保留獨立 SHA，不能自動稱為原 KR 資源。
+本階段交付讀寫條件、單次 004C payload/前置狀態/重複邊界、下一段 Lua 與 T07 介面；完成保存後依使用者要求暫停。
+''',encoding='utf-8')
+put(P/'progress.json',{'task':'T14','analyst':'roy','updated_at':now,'status':'in-progress','integration_status':'待整合','source_sha256':S,'completed':['required reading','checkpoint absence verified','target hash verified','stage scope registered','T07 lifecycle checkpoint read'],'pending':['flag read/write/default/reset conditions','Lua adapter argument and return','next scene/dialogue gates','T07 interface and bounded validation'],'stop_after_stage':True})
+put(P/'changes.json',{'status':'待整合','ownership_recorded':['kr/tasks/T14/task.json owner roy and stage scope'],'integrated_findings':[],'pending':['stage semantic review'],'conflicts':[]})
+(P/'unknowns.md').write_text('# 未知（待整合）\n\n原生 scenario14 達標／獎勵規則未取得；.75 秒為 fixture。T07 合法 scene/controller 仍以其專項成果為依據。當前 Lua carrier 原始 KR 身分未證實。尚無執行中驗收。\n',encoding='utf-8')
+(P/'CHECKPOINT.md').write_text('# T14 roy CHECKPOINT（待整合）\n\n'+now+'\n\n首次讀取指定路徑不存在；不捏造既有進度。已核對原 BIN SHA '+S+'、共用更正與 SERVER 分工，已登記本階段範圍。證據：evidence/baseline-v1.json。\n\n下一步：以既存 REA/Ghidra raw 核對 4C4F20 / 4AA510 / 4C2880 / 4AB940 及 Lua adapter，再核對當前 TutorialMain root.5 PC20..29 與 T07 介面。尚無語意整合；無本分析啟動的長工具。使用者要求本階段完成後暫停。\n',encoding='utf-8')
+print(json.dumps({'checkpoint':str(P/'CHECKPOINT.md'),'target_sha256':S,'task_owner':t['owner']},ensure_ascii=False))

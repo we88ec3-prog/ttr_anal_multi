@@ -1,0 +1,67 @@
+"""Read saved REA evidence and independently bind reference byte spans; offline only."""
+import datetime,hashlib,json,pathlib,struct
+BASE=pathlib.Path(__file__).resolve().parent
+ROOT=BASE.parents[2];WS=ROOT.parent
+SHA='9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91'
+BULK=ROOT/'kr-bulk-roy'/SHA
+EV=BASE/'evidence';EV.mkdir(exist_ok=True)
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+def read(p):return json.loads(p.read_text(encoding='utf-8-sig'))
+raw=(WS/'Tartaros.bin').read_bytes();assert hashlib.sha256(raw).hexdigest()==SHA
+pe=struct.unpack_from('<I',raw,0x3c)[0];n=struct.unpack_from('<H',raw,pe+6)[0];opt=struct.unpack_from('<H',raw,pe+20)[0]
+imagebase=struct.unpack_from('<I',raw,pe+52)[0]
+secs=[struct.unpack_from('<IIII',raw,pe+24+opt+i*40+8) for i in range(n)]
+def at(va,size):
+    rva=va-imagebase;offs=[off+rva-r for vs,r,rs,off in secs if r<=rva and rva+size<=r+rs];assert len(offs)==1
+    return raw[offs[0]:offs[0]+size]
+addresses={hex(int(v,16)) for v in ['4930e0','48aad0','494360','4b7dc0','4b7ec0','4fda30','4c4670','4add50','4b1bf0','4b24f0','4c5930','4b2570','4aa4d0','4c4f20','4c4ac0','4b99c0']}
+selected={}
+with (BULK/'index.jsonl').open(encoding='utf-8') as f:
+    for line in f:
+        r=json.loads(line)
+        if r.get('address') in addresses and r.get('status')=='ok':selected[r['address']]=r
+missing_saved=sorted(addresses-set(selected))
+assert missing_saved==['0x4c5930'],missing_saved # shared tail-entry bytes remain available in T07 checks
+cache={};native=[]
+for addr,r in sorted(selected.items()):
+    assert r['source_sha256']==SHA
+    pp=BULK/r['pseudocode_path'];assert sha(pp)==r['pseudocode_sha256']
+    rp=BULK/r['batch_path'] if 'batch_path' in r else ROOT/r['seed_evidence']
+    expected=r.get('batch_sha256',r.get('seed_evidence_sha256'))
+    if str(rp) not in cache:
+        assert sha(rp)==expected;cache[str(rp)]=read(rp)
+    d=cache[str(rp)];nr=d['normalized_result']
+    items=nr.get('items',[]) if isinstance(nr,dict) else []
+    item=next((x for x in items if x.get('address')==addr),None)
+    pseudo=item['pseudocode'] if item else nr.get('pseudocode')
+    assert pseudo is not None
+    native.append(dict(address=addr,raw_path=str(rp),raw_sha256=expected,evidence_id=d['evidence_id'],
+                       provider=d['provider'],analysis_profile=d['analysis_profile'],subject=d['subject'],
+                       limitations=d['limitations'],pseudocode=pseudo.replace('\r\n','\n')))
+paths=['SERVER/TUTORIAL-TASK-ALLOCATION.md','SERVER/TUTORIAL-COMPLETION-HANDOFF.md','SERVER/TUTORIAL-SCENE-LIFECYCLE-INTERFACE.md',
+ 'SERVER/evidence/tutorial-completion-v1/runtime-and-source-observations.json','SERVER/evidence/tutorial-completion-v1/completion-source-sequence.json',
+ 'anal-multi/shared/CLIENT-MODIFICATION-POLICY.md','anal-multi/kr-temp-roy/T07/tutorial-lifecycle/TUTORIAL-LIFECYCLE-INTERFACE.md',
+ 'anal-multi/kr-temp-roy/T07/tutorial-lifecycle/EVIDENCE-INDEX.md','anal-multi/kr-temp-roy/T14/T14-SCENARIO14-CONTRACT.md',
+ 'anal-multi/kr-temp-roy/T14/evidence/provenance-index.json','anal-multi/kr-temp-roy/T14/evidence/lua-gates-validation-v1.json',
+ 'anal-multi/kr/evidence/0bab714e82d96b0f6a4165471fc52531ba4b250f63878e2721bdd706fb8bab37.txt',
+ 'anal-multi/kr/evidence/4a64b51809c87fe6c8bab24f033fb4c94964a8e403e861be22e8210d3f639b8e.txt',
+ 'anal-multi/kr/evidence/5f83768f68f251d3b39da666438a0803bd011142b8cb2b28216c7363ff424534.txt']
+inputs=[dict(path=p,sha256=sha(WS/p),bytes=(WS/p).stat().st_size) for p in paths]
+checks=[]
+for rel in ['kr-temp-roy/T07/tutorial-lifecycle/evidence/routing-and-guards.json','kr-temp-roy/T07/tutorial-lifecycle/evidence/scene-handlers-and-init.json','kr-temp-roy/T07/tutorial-lifecycle/evidence/tutorial-ctor.json','kr-temp-roy/T14/evidence/flag-native-bytes-v1.json','kr-temp-roy/T14/evidence/receiver-and-reset-bytes-v1.json']:
+    p=ROOT/rel;d=read(p);assert d['source_sha256']==SHA
+    for s in d['spans']:
+        va=int(s['va'],16);expected=bytes.fromhex(s['bytes_hex']);actual=at(va,len(expected));assert actual==expected
+        checks.append(dict(source=rel,source_sha256=sha(p),va=s['va'],bytes=len(expected),sha256=hashlib.sha256(actual).hexdigest(),ok=True))
+overrides=ROOT/'unclassified/evidence/e874221a59968898d4e9656de7d88f7d1a2cb176dd54bce9f238494df9fe7224.txt'
+assert sha(overrides)==overrides.stem
+rows=[r for r in read(overrides) if r['command'] in [0x38,0x5f,0x4c,0x12,0x14]]
+assert not rows
+tail=at(0x4c5930,5);assert tail.hex()=='8b01ff602c'
+checks.append(dict(source='current original BIN; shared tail-entry interface from T07/formal report',va='0x4c5930',bytes=5,hex=tail.hex(),ok=True))
+out=dict(status='待整合：T02協作引用，不提升T07/T14新語意',at_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),
+         source_sha256=SHA,tool_versions={'REA':'6.5.0','Ghidra':'12.1.4','independent_check':'Python standard-library PE mapping'},
+         native=native,missing_saved=missing_saved,inputs=inputs,reference_span_checks=checks,client_overrides=dict(path=str(overrides),sha256=sha(overrides),selected_rows=rows),
+         limitations=['Saved native tool results, not new execution','Cross-task semantics referenced with pending-integration status','No packet emission, service restart, Lua or target execution','Historical logs are not full wire/handler trace'])
+(EV/'route-source-review.json').write_text(json.dumps(out,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+print(json.dumps({'native_records':len(native),'span_checks':len(checks),'selected_client_overrides':rows}))

@@ -1,0 +1,96 @@
+# KR T07 → T06：場景、安裝、reset、ready 介面
+
+狀態：**待整合／有界靜態查證完成，待正式語意整合驗收**。分析者 roy；2026-10-26（Asia/Taipei）；分支 `codex/kr-t07-roy`。這是供伺服器恢復流程引用的局部契約，沒有發送封包、修改主程式或進行遊玩驗收。
+
+原始 `Tartaros.bin` SHA256：`9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`，12,472,320 bytes，PE32 / image base `00400000`。本輪重新計算符合。既有 raw 來自 REA 6.5.0／Ghidra 12.1.4；Python 3.10.6／Capstone 5.0.7 僅做唯讀 PE 映射、bytes 和控制流程交叉核對。
+
+## T06 可直接引用的結論
+
+| 介面 | 原生工具觀察 | 條件與限制 |
+|---|---|---|
+| S2C `0069` | `4B9090` 讀 signed BYTE `message+2`。7、23、24 建立 `Scene::CSquare`；21 建立 `CDuelSquare`。 | 這些是訊息自己的 type 域。沒有證明 7/23/24 各代表哪個官方模式或村；不把 7 當一般場景編號。 |
+| 場景安裝 | `4B7D50`：舊場景 virtual+14 → 舊場景 virtual+0(1) → manager+5EAC 清零 → 寫新場景 → 新場景 virtual+10。 | 新場景指標必須非空；空指標走錯誤函式。舊 callback 可能改變指標，程式於呼叫後再檢查。 |
+| CSquare 初始化 | `C06FB0+10 → 4BBC10`。現控制器 kind=2 時重置並重用；其他種類清理／解構後經 `548540` 建立 `CSingleController`、呼叫 virtual+24。 | `FBA7A4` 的控制器必須在初始化前可用：`4BBCB0..4BBCBB` 已先做無 null guard 的 virtual+14。不是從全空狀態可獨立執行的入口。 |
+| S2C `0012` reset | `4B24F0`：`5449A0(FB79F0)` → `544F50(FBA7A4)` → DWORD `message+2` → `40F060` → T06 `4DF510`，return `100h`。 | map selector 保留 DWORD 整數位元。此 handler 沒有 controller null guard。return 值不是已證實的網路 ACK。 |
+| S2C `0014` ready | CSquare：`4C5930` tail jump scene virtual+2C；vtable 明確指向 `4B2570`，於 `4B259D` 寫目前 controller+4=1，return 0。 | CSquare 路徑直接成立，無須借用 Scenario 結論。此函式沒有讀額外 payload，也沒有直接 sender；不是地圖／資源／玩家綁定成功證明。 |
+
+以上 offset 都相對於含 command WORD 的 handler message 起點，不含外部連線 framing。`0069` 至少讀到 +4，`0012` 至少讀到 +5，`0014` 未讀額外 payload；**這是本入口存取下限，並非官方完整長度或外層 frame 格式**。
+
+## 0069 的路由、類別與精確順序
+
+工具觀察：`4B7E0F` 寫 `FD3044=4B9090`，符合 `FD2CF8+69h*8+4`。switch 使用 `4B9238` 五項跳表與 `4B924C` 18-byte 壓縮表；表區域是資料，不能當函式指令。
+
+| type（十進位／hex） | 分支入口 | 建立與安裝 | 安裝返回後 |
+|---|---|---|---|
+| 7 / 07 | `4B90DF` | 分配 BD54 → `4BBB70` → `4B7D50` | `404BA0()` 的 +69A8=7 |
+| 21 / 15 | `4B9116` | 基底 `4ADD50` → vtable C06F7C（原件 RTTI CDuelSquare）→ `4BB4A0` → `4B7D50` | 本分支沒有上述 +69A8 寫入；非本次 town 主路線 |
+| 23 / 17 | `4B915B` | 分配 BD54 → `4BBB70` → `4B7D50` | +69A8=23 |
+| 24 / 18 | `4B918F` | 分配 BD54 → `4BBB70` → `4B7D50` | +69A8=24 |
+| 其他 | `4B922C` | `Invalid GameMode %d` 錯誤路徑 | 不視為合法恢復選項 |
+
+`4BBB70..4BBB90` 呼叫基底 `4ADD50`，於 `4BBB78` 寫 vtable `C06FB0`、`4BBB7E` 寫 `D6A674=53515552h`（日誌字元 SQUR），再呼叫 `4BBBA0`。原始 RTTI：vtable[-4] → COL `C699E4` → type descriptor `F7E01C` → `.?AVCSquare@Scene@@`。因此類別判定來自原件 RTTI 與 constructor bytes，而非歷史 scene7 註解。
+
+每個正常分支完成同步安裝／初始化後，才執行 `4B91C1..4B9212`：必要時初始化全域狀態；更新 `F9392C=sign_extend(message[2])`；把 `message[3]` 和 `[4]` 分別 zero-extend 存到 `[FE1A88]+18/+1C`。**尾兩 byte 的語意與合法值未證；不能沿用 fixture 的 1/1，也不能當成 Map182/183 或 Town1/2。** `FE1A88` 與下述送出路徑使用的 `FE1AA0` 是不同全域指標。
+
+對照 `005F/4B99C0`：type7 進其 default 不安裝路徑；type6 原版為 CDuelField。不能將 `0069 type7` 改寫成 `005F type7`，也不能使用舊 Tutorial patch 的可玩紀錄推論原版規則。
+
+## CSquare 初始化與玩家資料保留邊界
+
+原生 vtable：+4=`4C4670`（訊息分派），+10=`4BBC10`（初始化），+14=`4BBF10`（退出），+2C=`4B2570`（ready）。
+
+`4BBBA0` 將 scene+5EAC 的第二層 handler table 清零，只覆寫 command 1F/25/68/6A/6B；沒有覆寫 12/14。`4C4670` 在第二層槽為零時走 `4FDA30` 的基底表，基底 constructor `4ADD50` 在 +94/+A4 分別登記 `4B24F0/4C5930`（`4ADE41/4ADE51`）。所以本次 reset／ready 確實可由 CSquare 基底接收，不能只引用另一場景的相同函式。
+
+初始化局部行為（`4BBC10..4BBF08`）：先做 UI helper、目前 controller virtual+14；`4D...` manager 的清理 `4DFE90(FAB130)` 會遍歷其 +C 樹內 value 物件，virtual+14、virtual+0(1)，清樹後再呼叫 controller virtual+14；之後 `FAB228=0`、`4E1070(FAB148)` 釋放另一樹內值。僅描述已追到的容器，不宣稱覆蓋全部 actor／玩家初值。
+
+控制器重用條件在 `4BBD36..4BBDA8`：當 `FBA7A4 != 0 && FBA7AC==2` 時呼叫 `544F50` 並跳過 constructor；不同種類則 virtual+28、可用時 virtual+0(1)，分配 C0 bytes、呼叫 `548540`、安裝 FBA7A4 並 virtual+24。`548577` 寫 C0FAC4，RTTI 為 `CSingleController`，`5485D6` 寫 kind=2。這裡 kind 是控制器種類，非房主／玩家號碼。
+
+| 範圍 | 明確清理／保留 | 限制 |
+|---|---|---|
+| CSquare 開始初始化時的現 controller virtual+14 | 已知 Single 指向 `545210`：清三槽指標與旗標、額外 +30/+34 向量收空 | 其他種類 virtual 實作未重做；只以當前動態類型分派。 |
+| 重用 kind2 | 控制器物件本身不解構，`544F50` 重設狀態與三槽 | 不保證所有附屬狀態皆重建。 |
+| 換種類 | 舊物件 virtual+28／解構；新 Single 基底 constructor 於 `544C73` 寫 +4=0 | 補充 constructor 局部證據，不接管 T08 玩家綁定核心。 |
+| 單獨0012 | CCheckPointMgr 內向量清理＋三槽reset；未呼叫 CSquare init | 不能等同重新安裝場景或清除所有 actor；T08 仍需逐項定義重綁。 |
+| ready +4 | 0014 將 +4=1；`544F50` 直接指令沒有清 +4 | 不推論所有間接 helper 都不影響它，也不把0014視為唯一寫入者或必要充分就緒條件。 |
+
+T08 的玩家描述與控制權綁定、T04 初值、T09 bounds 只引用；本次不建立 actor 生成封包、UID、出生座標或復用政策。
+
+## 0012 reset 的更正與 Map 介面
+
+舊 [SCENE-ENTRY-RESET-AND-READY 保存報告](../../kr/evidence/0bab714e82d96b0f6a4165471fc52531ba4b250f63878e2721bdd706fb8bab37.txt) 將 FB79F0 稱為 actor manager，並推論先前 managed actors 被清除。本輪查原始 `4B250D` 寫 vtable C0F868，COL C6C534 → type descriptor F7F514 → `.?AVCCheckPointMgr@@`。`5449A0..5449FE` 只證明遍歷該容器 +4/+8，對每筆 virtual+14／virtual+0(1)，最後 end=begin。**此處更正的是泛化名稱與「全部 actor」推論範圍；不推翻清理迴圈本身，也不反向保證 actor 存活。** 保留舊證據，正式報告未覆寫。
+
+`544F50..545039`：清 controller+5C/+60/+40/+44、+64=timeGetTime、FBAB48=1；對三槽 virtual+1C(i) 做資源解除，再清 +0C/+10、+18/+1C、+24/+28，將 +14/+20/+2C 的 byte 旗標設為1。保留物件本體／vtable，不在此直接重建控制器。
+
+完成上述清理後，`4B254D` 才讀 message DWORD+2，傳至 T06 的 `4DF510`。T06 已證 MapList182/183 資源與相同 selector 跳過顯式模型／BOUND載入的分支；此處只引用其 [封包契約](../T06/PACKET-RESTORATION-CONTRACT.md) 與 [map-repeat 證據](../T06/evidence/map-repeat-branch-v1.json)。即使 selector 相同，0012 前段 reset 仍先執行；故重送0012可能清掉控制槽而未顯式重載，不能當成無害重試或完整reload。
+
+## ready 與初始化0043的區別
+
+CSquare ready `0014 → 4C5930 → [scene.vtable+2C]=4B2570`；`4B2593..4B259D` 直接取得 FBA7A4、寫 +4=1。接著是 UI/global flag 分支，FB73E8==0 時清 FB8830 bit0，return0。沒有 controller null guard；沒有檢查 Map182/183、模型／BOUND載入成功、玩家已生成或綁定。有限函式內無直接 sender，不宣稱所有 helper／未來 tick 均不發包。
+
+另外，CSquare **初始化**在 `4BBE59..4BBEAF` 取得 `[FE1AA0]+18` 的低 byte，建立本體 `43 00 xx 0A`，若 FBA798==0 就呼叫 `[FBA854].virtual+10(0, buffer, 4)`。這是原生 outbound callsite；不在本輪重做 T03 framing，也不將 channel參數0命名成後端業務語意。
+
+該0043路徑發生於0069處理器的同步安裝期間，**早於這一份0069更新 F9392C 與 `[FE1A88]+18/+1C`**。沒有證據支持它就是0014的ack、地圖已載入回覆，或一定形成 `0042 → 0043/0069` 的官方 request/reply 關係。
+
+## 順序約束與後續開發
+
+工具觀察給出同步局部順序：0069分支建構 → install（退出舊場景→安裝新場景→CSquare init→可能0043）→分支mode欄位→0069尾欄位；0012內則 checkpoint容器清理→controller reset→map selector處理。0014操作當前場景／控制器，而非預先指定的目標城鎮。
+
+分析者推論：要讓新玩家綁定保留下來，後端重建流程應避免在完成綁定後又進入上述會清槽的場景初始化／0012；綁定應對應最後有效的場景與reset世代。此為由清理副作用導出的開發約束，**不是官方完整發包序列**。也不能推出「先0012後0014」是唯一官方排序；尤其0012沒有直接清+4。
+
+待補資訊與主責：
+
+1. 0069 type7/23/24的官方模式含義、尾byte合法值、兩村正常進入時是否都使用CSquare：T07仍缺伺服器／原生其他使用點的直接映射證據；本輪不指定其中一值為兩村通用值。
+2. Town1/2 context 與 Map182/183 正常配對：沿用T06候選與限制；不能將0069尾byte或0043低byte自動作此對照。
+3. 玩家綁定與重置後重新送資料：T08/T04介面仍需補齊；T09提供合法spawn/bounds。場景／controller型別這一項依賴已可引用，不代表所有切城阻塞解除。
+4. 後端需明確設計切城交易、舊世代訊息處理、相同selector重試、失敗回復、party／return政策；屬重建開發項，不冒充原版規則。沒有部署或改服務。
+5. 本次靜態資料不能驗收實際資源載入、玩家操作或完整官方時序；既有禁止執行／附加限制維持。
+
+## 證據與驗收入口
+
+- [SCOPE.md](SCOPE.md)：事前登記與方法範圍。[CHECKPOINT.md](CHECKPOINT.md)、[progress.json](progress.json)：接續狀態。
+- `evidence/cache-*.json`：每批來源地址、raw/pseudo路徑與SHA；本地保留原raw與pseudo複本。raw的Evidence ID、source SHA、upstream analysis profile（REA6.5.0/Ghidra12.1.4）均保留。
+- [scene-entry-v1.json](evidence/scene-entry-v1.json)、[square-lifecycle-v1.json](evidence/square-lifecycle-v1.json)、[scene-routing-v1.json](evidence/scene-routing-v1.json)、[cleanup-helper-v1.json](evidence/cleanup-helper-v1.json)、[controller-lifecycle-v1.json](evidence/controller-lifecycle-v1.json)：原件file offset、原始bytes、雜湊、Capstone指令。
+- [rtti-vtables-v2.json](evidence/rtti-vtables-v2.json)：原始 RTTI chain與有效prefix；v1保留，當時固定16 DWORD視窗中的尾端相鄰字不應作vtable項。v2限縮該標示，未改原始bytes。
+- [validation-v1.json](evidence/validation-v1.json)：21項有界檢查通過；7個局部指令範圍完整解碼／內部分支落點、0069兩表與registration、base12/14、CSquare init/ready slot、005F type7不同域。線性可解碼範圍不等於Ghidra function AddressSet；間接callback與例外路徑未作全域完備宣稱。
+- [CORRECTIONS.md](CORRECTIONS.md)：歷史報告與本次輸出限縮，保留追溯。`evidence/manifest.json` 核對已保存證據，`evidence/package-verify.json` 保存既有shared/handoff.py verify結果。
+
+既有套件verify通過僅證明完整性，仍有569條歷史引用未閉合；不代表新語意或遊玩已驗收。本成果保留個人待整合區，正式kr原生結論尚未增量整合；整合時需逐項審查此契約與更正，而非重跑舊builder或以最新時間戳覆蓋。

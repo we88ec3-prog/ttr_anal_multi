@@ -1,0 +1,73 @@
+# T14 roy：scenario14 完成與教學 Lua 接續
+
+2026-10-26，Asia/Taipei。**階段性靜態查證完成／待整合；依使用者要求保存後暫停。尚未遊玩驗收。**
+
+來源：KR Tartaros.bin，SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`，12,472,320 bytes。本輪重新核對。原生工具來源為既存 REA6.5.0／Ghidra12.1.4 raw；Python3.10／Capstone5.0.7獨立核對檔案 bytes。沿用 reverse-engineer-anything v42。沒有執行／附加遊戲、呼叫目標API、發包、執行Lua或修改client/server程式。
+
+## 結果與分級
+
+| 分級 | 已查範圍與結果 | 限制 |
+|---|---|---|
+| 原生已確認／局部 | TUTO `004C → 4C4F20` 讀 unsigned WORD `message+2`，在完成項 map 中將該ID的 DWORD 寫1；讀取器4AA510取得同map項。 | 通知handler沒有原生清怪／傷害／獎勵判定；接收合法性仍受T07 owner/路由約束。 |
+| 原生已確認／局部 | getter缺項時插入值0；Lua adapter回傳**number**而非boolean；教學初始化會清空完成項map。 | 沒有窮盡所有caller/writer或持久化來源；不能說每次RequestStartScenario都清0。 |
+| 當前資源觀察 | boot定義數值FALSE=0；Tutorial_Part2等待IsScenarioEnded(14)==FALSE，通過後UI→checkpoint10016→yield→過場1000/10→1000/12。 | carrier/member各自有SHA；不宣稱未修改原KR資源或已觀察執行。 |
+| 分析者推論／條件式介面 | 同一TUTO世代、原等待thread、有效wrapper/tco及後續update俱在時，通知可使等待條件由0變1，讓下次輪詢進入後續步驟。 | 必要條件對接，不是官方完整封包序列或已通過動態驗收。 |
+| AI替代／fixture | HP0後0.75秒通知、預標scenario14/16、舊TUTO controller hook。 | 均不採作原生達標、計時、重試或獎勵規則。 |
+| 缺失／待補開發 | 官方scenario14達成輸入、完整同TUTO戰鬥與返回時序、reset後玩家綁定、重複交易及獎勵／持久化。 | 分別交T12/T07/T02/T08/T15/Server，不在本階段猜值。 |
+
+## 旗標讀寫鏈及條件
+
+1. **接收owner**：引用T07 `TUTORIAL-LIFECYCLE-INTERFACE.md`，CTutorial建構4C4AC0將004C callback登記在scene+610C；extension表base+5EAC、stride8，差值/8=4C。這是scene自身表，不是scene manager同名offset。
+2. **writer**：4C4F72取message，4C4F75零延伸WORD+2；4C4F7C令EAX=FC0F88；4C4F84呼叫4C2880；4C4F89寫DWORD1；4C4F8F回0。初始化guard FC0F80/47AEB0只建立singleton，不是業務達標檢查。已讀欄位下限4 bytes；handler自身沒有長度、活躍scenario匹配、僅ID14、怪物數、timer或reward guard。外層framing/route驗證歸T02，不能推定不存在。
+3. **容器**：4C2880以輸入整數key查樹，存在回node+10；缺項在4C28C8建立value0，經57EF20/4AB9E0插入後回其value。故**讀取也可能插入0**，不是預先由Server寫完成。該helper為共用map accessor，不能對所有caller統一命名為scenario完成函式。
+4. **reader與同一性**：4AB940以IsScenarioEnded註冊4ACA40 adapter，native function pointer為4AA510。4ACF90取FE1804為ECX，讀Lua最後參數（正常number或可轉數字字串），呼叫native reader，再把返回值推為tag3 number。4AA510令map=ECX+4。48D7D9把FC0F84作為4A88E0的EAX；4AA5AB存到FE1804，故此binding下ECX+4=FC0F88，與writer一致。不能只憑相同helper名稱判定同容器。
+5. **初始化／清除**：引用T07 init callsite4C4D3A（ESI=FC0F84）→4A8A60；4A8A87取ESI+4、4A8A94呼叫823850，後者重設樹頭及count=0。之後載入TutorialMain並重跑entry。故初始化之前寫入的1會被清除；重建TUTO不保留原Lua PC。T07 exit直接移除coroutine，不等於本階段已證其直接清同一完成map；兩種破壞條件應分開。
+6. **開始要求**：Main.root.5 PC16..19呼叫RequestStartScenario(14)；4AB8A0綁定4AA4D0，後者在FBA798==0時送4-byte C2S0040+WORD scenario。該直接sender沒有寫完成map。這不建立官方0040→004C唯一回覆／時序，也不新增ack。
+
+原生writer/reader位址與bytes見 `evidence/flag-native-bytes-v1.json`；receiver/reset見 `evidence/receiver-and-reset-bytes-v1.json`。raw來源、Evidence ID和hash見 `evidence/provenance-index.json`。
+
+## 單次 scenario14 完成通知契約
+
+這是**已查接收介面與必要狀態契約**。官方何時算勝利仍缺失，不能因此啟用HP0/.75秒作原生策略。
+
+| 項目 | 契約／界線 |
+|---|---|
+| 方向與本體 | S2C，command WORD004C + unsigned WORD scenario14；本體bytes `4c 00 0e 00`，4 bytes。不含外層frame。 |
+| 前置owner | T07確認的同一代TUTO，callback+610C有效，完成通知實際到4C4F20；保持原等待coroutine而非新建同類scene。 |
+| 前置Lua | FE1804仍綁FC0F84，Tutorial API／tco有效，Tutorial_Part2 thread尚登記且可resume；其等待的是14；FALSE仍是number0。 |
+| 時機限制 | 必須避免在通知後再次清完成map、移除thread或重跑entry。Server真正達標來源待T12/業務資料補充；不是固定等待0.75秒。 |
+| 直接效果 | map[14]=1、handler return0。沒有直接resume Lua、顯式回包、領獎或整段教學結束。 |
+| 後續執行 | 等TUTO update→4A8B90→t_doCoTask resume原thread，重新讀取14；不再等於FALSE才離開等待。 |
+| 控制可用 | 另依T07/T08檢查同kind4 controller、+4、master+DC及最後reset後玩家槽+0C；不能把這些全部當Lua scheduler的直接guard。 |
+| 重複同ID | 在同map未清除的條件下，writer再次寫1，對該值是冪等；沒有sequence/去重guard。不能因此宣稱交易／獎勵exactly-once，亦不能把重送視為失去thread的恢復方法。 |
+| 錯ID／未完成 | 收到16只寫16，不能讓14等待通過；缺14讀值0，仍yield。通知提前到、但map之後未清時，局部程式也可能讓後來的等待直接通過，故絕不能預送或預寫來跳教學。 |
+| reset或換代 | map清空後14重回缺項0；thread移除後即使flag1也不能續接原PC。新交易重送舊完成包有風險，世代/防重政策屬待開發Server設計。 |
+
+## 下一段劇情的精確條件
+
+本段是當前資源快照，非直接宣稱原版官方劇情規格：
+
+- `boot.lua` root PC0..3：TRUE=number1、FALSE=number0。Lua中number0本來是真值，但這裡用**等值比較**，不能以truthiness解讀。
+- `TutorialMain` root.5（Tutorial_Part2）PC20..29：Tutorial.IsScenarioEnded(14)，與FALSE比較；相等就yield並跳回PC20，不相等跳PC30。正常已查寫入值為0/1；沒有證據把其他任意值定義為官方成功枚舉。
+- PC30..32 SetUIPage；PC33..40 SetCheckPointStatus(10016,CHECKPOINT_CATEGORY.NPC,CHECKPOINT_STATUS.ST_CLOSE)；PC41..42 yield。
+- PC43..46 PlayAndWaitForScene(1000,10)；PC47..50再(1000,12)。此處Scene是腳本過場參數，不能當網路scene manager已切換的證據。
+- root.0（PlayAndWaitForScene）先StartCutScene，再輪詢IsCutSceneRunning，**等於FALSE才結束該等待**，最後仍yield。故10段沒結束時不能宣稱12段／招募已觸發。
+- PC51..57 HideUI／PostUIMessage_EmployChar(4)，再等待g_TutoEmployCharQuery。它是更後面的獨立條件；scenario14完成不代表招募成功、教學全結束或獎勵已提交。
+
+本輪獨立結構解析boot、Main/Base/Coroutine；Main/Base/Coroutine指令字與常數和T07快照逐項一致，沒有執行Lua。Main SHA `662f8416ac7f865b94b15d6ea3145e9a59fbbbaaa8e3be6521c4cff636344809`，Event.stp carrier SHA `2e68e0202565530e574e0810ad7f758a2fc8d6826a0de0975ccaff12c2d4718b`。boot及其他member hash見lua-gates-validation與provenance；它們的原始KR來源鏈尚缺。
+
+## 與 T07 的對接／尚待開發
+
+已讀取並保存T07正式個人交付的 `TUTORIAL-LIFECYCLE-INTERFACE.md`，以其SHA綁定。T07確認原版005F/2就會退出TUTO並清原thread；005F/6進DUEF；006E/1建新TUTO並清map重跑entry。因此不能只移除戰後5F6、補6E1或再送4C就稱恢復原等待。
+
+對接輸入為：T07保持同一TUTO／有效callback和scheduler，T14提供004C/ID14的局部完成契約。T07的同TUTO＋0038/type2候選仍需T02合法封包與T08 reset後綁定及未修改client的操作驗收；本輪不把候選升格為已可玩。
+
+Server後續可在新工作副本中建立一次scenario交易及scene/controller世代追蹤、達標輸入與重複提交政策；這是待補充的重建設計。不能拿本報告直接補猜封包、預標完成或回填獎勵。不修改client繞過，不重啟／發包驗收。
+
+最低手動驗收仍需：正確handler且無Invalid0x4c；原thread通過等待並開始下一個預期過場；角色／鏡頭／互動可用。flag1、sendall成功或靜態檢查通過均不足以單獨通過。
+
+## 保存與暫停
+
+所有新語意保持**待整合**。正式kr只同步owner／階段狀態與接續入口，不把新語意自動列為正式結論。舊更正C02/C04及fixture限制保留。T14整項獎勵／完成規則仍未完成。
+
+證據入口：`evidence/provenance-index.json`、`evidence/native-validation-v1.json`、`evidence/lua-gates-validation-v1.json`、`findings.jsonl`。未知與遊玩影響見 `unknowns.md`。最後狀態見 `CHECKPOINT.md`／`progress.json`／`changes.json`。本階段保存校驗後暫停；沒有本分析留下的REA/Ghidra／shell工作需要接管。

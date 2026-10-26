@@ -1,0 +1,71 @@
+{
+  "at": "2026-10-26T13:58:40.330303+00:00",
+  "source_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+  "authority": "User now authorizes roy to analyze regardless of T05/T08 responsibility; both Z and mouse were tried",
+  "scope": [
+    "T08 NPC and checkpoint generation/ID",
+    "T05 input and dialogue entrance",
+    "T02 S2C27 mapping",
+    "T14 quest15 availability only as needed"
+  ],
+  "tool": "Retained REA6.5.0/Ghidra12.1.4 and Capstone5.0.7 anchored bytes",
+  "methods": [
+    {
+      "address": "0x4b2af0",
+      "evidence": "E:\\Tartaros\\workspace\\anal-multi\\kr-temp-roy\\T07\\completion-closure\\evidence\\0x4b2af0.c",
+      "sha256": "48e9951ece8ab796fb3d2f6f6143b8d05888eb4209f6f615dfd33ef37546f16b"
+    },
+    {
+      "address": "0x543700",
+      "evidence": "E:\\Tartaros\\workspace\\anal-multi\\kr-temp-roy\\T07\\completion-closure\\evidence\\0x543700.c",
+      "sha256": "d19027eb33e350fc7cd07f868b4c4cfa665447388af56cd5ce5c5a19e9439788"
+    },
+    {
+      "address": "0x544730",
+      "evidence": "E:\\Tartaros\\workspace\\anal-multi\\kr-temp-roy\\T07\\completion-closure\\evidence\\0x544730.c",
+      "sha256": "f44e9b1459b25166aa754becf67569719ac68d21f14e7895a8a8c8ca9ad141bf"
+    },
+    {
+      "address": "0x544a00",
+      "evidence": "E:\\Tartaros\\workspace\\anal-multi\\kr-temp-roy\\T07\\completion-closure\\evidence\\0x544a00.c",
+      "sha256": "48b2f3ded973e9fc2c8d02e7221a0f8cd5e9c433a56f0666504b8cc734eeadf2"
+    },
+    {
+      "address": "0x544bc0",
+      "evidence": "E:\\Tartaros\\workspace\\anal-multi\\kr-temp-roy\\T07\\completion-closure\\evidence\\0x544bc0.c",
+      "sha256": "3a376d329045c9697bd449dfb5e3bffe9cb330143a76f78c0f540032ffb04868"
+    },
+    {
+      "address": "0x544070",
+      "evidence": "E:\\Tartaros\\workspace\\anal-multi\\kr-temp-roy\\T07\\completion-closure\\evidence\\0x544070.c",
+      "sha256": "43eae4cf52a5275fadd54ffd72e52761858cbbd28ce3a173872e449d157d75af"
+    },
+    {
+      "address": "0x548a90",
+      "evidence": "E:\\Tartaros\\workspace\\anal-multi\\kr-temp-roy\\T07\\completion-closure\\evidence\\0x548a90.c",
+      "sha256": "924bd8f2c4be6aab4d43090f1cfe2f097495489c33bfb45ce8a556f05a6d96cf"
+    },
+    {
+      "address": "0x4e06d0",
+      "evidence": "E:\\Tartaros\\workspace\\anal-multi\\kr-temp-roy\\T07\\completion-closure\\evidence\\0x4e06d0.c",
+      "sha256": "7b8d11f450f8b7a51b0e51d18e0ecec7484bc81b33a09eb103d9d6d4ad8e3e7a"
+    }
+  ],
+  "observed": [
+    "27/18byte rows type3 enabled1 radius2.0 manual0 visual0",
+    "4B2AF0 passes packet+14 float into543700 checkpoint+FC;544730 compares strict distance squared < FC squared",
+    "544BC0 mouse pick uses FC*.5;4E06D0 separately checks distance<FC",
+    "544A00 selects nearest eligible checkpoint and rejects F942C0 blocker;548A90 town input invokes it",
+    "Checkpoint list separate from07 entity map; need both records",
+    "69 tail writes location object+18/+1C; not the Town5/FAB1BC context directly"
+  ],
+  "inferences": [
+    "Current 2.0 range very small; cannot establish unique runtime root cause without comparing actual client states",
+    "Do not infer NPC ID must equal entity ID: checkpoint uses NPC model/table ID"
+  ],
+  "limits": [
+    "No target execution, attachment or memory inspection",
+    "Previous npc-interaction-field-map disassembly starts at arbitrary interior offsets and is not instruction-boundary proof; use npc-interaction-anchored-fields instead",
+    "Historical patched runtime/AI reports are context only, not native authority"
+  ]
+}

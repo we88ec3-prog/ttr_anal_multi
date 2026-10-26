@@ -1,0 +1,41 @@
+# v7驗收 → v8任務15接取同步（roy，待整合）
+
+## 使用者與工具觀察
+
+使用者確認v7的Z、右鍵均可對話，對話結束可正常移動；半徑30太大，任務對話可反覆播放而無法完成。本次Server記錄三次3F15/1/1，回覆皆[]，accepted=true、completed=false。每次劇情前均有6bytes C2S001C，但authenticated模式不保存該body，不能把推導欄位冒充實測。來源與SHA見v7-manual-observations.json。
+
+這已確認NPC入口與廣場實際移動；單獨的停止／全部殘窗狀態未逐項明確回報，不宣稱整套官方流程或Quest15完成。
+
+## 001C更正：直接入口與延後確認要分開
+
+原先更正「544070 category3不是直接544020/001C sender」仍成立；若讀成整條NPC流程都沒有001C則錯誤。5B9340處理F43D9確認結果0x6A7，先5008B0取選中scenario，再561760(scenario,1)啟動本機劇情，接著發6bytes001C(type,NPC ID)。這是延後UI確認的另一個sender，不靠Server回45才開始開場。v7確實看到1C/6bytes→3F15/1/1，與這條局部順序相容，但舊trace的1C body不能恢復。本輪v8會記allowlist1C body供核對。
+
+## 原生接取狀態介面
+
+5020B0／4FDA30已證S2C0040分派至502270。有效result DWORD+4=0時，以WORD+2 quest ID透過500110加入manager+5ED0的20格進行中ID，發F438B並500240重算候選。已進行中的ID在候選重算被排除，故不能只在Python物件accepted=True、未同步client。
+
+502270還可能按任務定義的AcceptAction觸發劇情／UI，不能任意對所有任務假設接取不播劇情。這次對原始Table.original-kr.stp的Quest15核對：type2、town5、field19、giver/finisher10338、Demand16，只有Demands/RewardsEtc，無AcceptAction。504740載入器以C0DBD0常數AcceptAction讀可選欄位；4FF920先將相應record+3C/+40初始化0，缺元素維持0；502270僅其node+4C（record+3C）為2/3才啟動接取action。因此對此確定資源的0040/15/result0不應重播15/1，亦不代表完成或獎勵。
+
+原件與快取：source BIN SHA9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91，REA6.5.0/Ghidra12.1.4 bulk；原bytes／常數見evidence/quest15-definition-parser-anchored.json、quest15-accept-element-names.json。中間視窗quest15-accept-and-deferred-confirm.json僅作raw bytes參照，不把任意起點線性反組譯當完整邊界證明。
+
+## v8具體變更與限制
+
+獨立SERVER/tutorial-plaza-v8，未啟動。NPC10338範圍30→6，其餘仍2；6是需要走近的相容性試用值，不是官方值。原v7/client/anal/資源/DB不改。
+
+- 本機開場成功3F15/1/1後，補一次0040/15/0同步client的進行中狀態；不發45重播、0064完成或把15寫入006F完成bitmap。
+- 若原先已accepted未completed，進廣場時同步0040一次，避免重新登入又當可開始候選。保持舊存檔schema，client_accept_sent僅本連線旗標。
+- 精確001C/type3/NPC10338只記intro_requested，不在此強行再發45或完成；普通3C接取路線保留，對話後不重覆ack。
+- 廣場0036任務確認請求只記錄，不以它作未完成副本的勝利依據。
+- 廣場0040/0028副本請求明確記plaza-instance-request-unimplemented，不再誤落第一戰14的硬編碼路徑。
+
+121項離線檢查通過，包含真原始Quest15與無AcceptAction、真NPC/四角色廣場組裝、一次接取／重複／恢復／普通接取差異、實際001C與3F／0036路由、副本未實作不假進教學14。audit禁止socket/DB/process/ctypes；未建runtime、未執行Server／client。不是實際不重播驗收，也不是完整副本實作。
+
+## 下一步開發，不可跳過
+
+任務15是「前往馮德斯村」，有Field19依賴；既存資源Case103/Stage19→CHART_S_pathofpindus_01.xml/CLUST_S_pathofpindus_01.xml，maps191/192引用T06既有結果。這不是只講完15/1就能標完成的官方依據。當前Server沒有該一般副本起始／地圖節點／達成結算／村落回程處理，故本版仍不能完成整個15。
+
+可獨立繼續查的介面：一般scenario15選擇與隊伍確認（0040/0028），Scenario scene建立與controller切換（勿沿用第一戰保TUTO規則），Field19／Case103的reset/角色綁定/ready與切map條件，原資源的事件/怪物波次和勝利通知，以及村落最後選擇/出生點。未閉合前不猜完整官方收發順序、不把Chart節點座標當出生點、不把舊AI傷害清怪當官方達成。
+
+手動v8驗收：使用者停止v7後啟動v8，首次從v7/runtime唯讀備份到本版副本。v7已accepted的帳號在廣場會直接補0040，不應要求再播開場；新進度則播一次後同步。靠近NPC測6的範圍與重複對話／進行中顯示，並測副本按鈕觀察新請求。預期仍不能完成整個任務15，這是尚缺實作，不用強制完成規避。
+
+跨Task：T05/T08範圍／NPC生成介面、T02延後001C及接取0040、T14任務狀態／完成、T15既有schema恢復、T07一般副本與村落scene生命週期。僅在roy範圍保存，不改其他owner、不傳訊；原限制全數維持。

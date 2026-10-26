@@ -1,0 +1,16 @@
+# 接續更正與使用者釐清
+
+2026-10-26T20:19:52.699853+08:00，roy／T07，待整合。
+
+1. 使用者釐清：先完成14／16後回廣場（可能為教學專用／假廣場）並可正常移動；任務15是在廣場NPC接取、再經副本系統前往馮德斯村的下一階段。14→16→15依賴不表示回廣場前必須完成15。前批將計時器返廣場與略過15直接相連的推論限縮／撤回；0.5秒不是原生同步依據的限制保留。
+2. 原生DeleteObject綁定4AB580→4A9FE0，參數byte左移8位。因此Lua root.7 DeleteObject(240)實際刪F000；前批說不能當F000的文字錯誤，明確撤回。0010在切角時提早刪F000仍是問題；Part1正式完成後由Lua刪F000是正常步驟，不能為了保留NPC而永遠禁止刪除。
+3. Town5資源名稱廣場1，原NPC清單包含10338；但現Server plaza_npcs.py使用人工暫定座標並用0007/0027建立NPC，不是已證Map511自帶放置。不能因看到NPC就將Town5→Map511配對升格原生已確認。使用者條件假說另記，不當工具觀察。
+4. completion-closure/evidence/rtti-prefix-overread-v1.json過長視窗的offset50以上是相鄰資料，不是CTutorialController槽；現rtti-vtables.json已收斂20槽0..4C。保留v1作更正追溯。
+5. actor-identities.json從4C6FC0起的線性視窗位於前函式尾端，不是setter入口；正確邏輯ID setter4C6FB0寫+88和+8C，外觀override4C6FD0只寫+8C。cutscene-boundary及delete-object-prefix.json有實際原檔核對。
+
+來源：原BIN SHA9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91；既有REA6.5.0/Ghidra12.1.4及原bytes。使用者允許跨Task直接分析，T08/T14/T06/T02原主責保留。未改client/Server程式、未執行遊戲或Lua、未發包。
+
+6. QuestMgr 5020B0將5030C0寫至FAB5C4，4FDA30按opcode*8+4分派；相對QuestMgr基址FAB2A0，正確opcode為0064，不是現anal/plaza_npcs.py註解／候選封包的004C。用0040、006F兩槽交叉核對，原件bytes另存。此更正不自動驗證15/1的任務完成時機。
+7. 新增直接證據：1000/14劇情腳本自己載Square03D並CreateObject10338，結尾DeleteAllObject／RestoreMap；看到該NPC也可能仍屬劇情。Town5包含NPC不能單獨證明Map511正確。
+
+8. 2026-10-26T21:06:00.893192+08:00：撤回NPC category3→C2S001C的接續假設；544070原件category3走本機F4388/F43D9，544020的001C在其他category分支。詳NPC-ROUTE-CORRECTION.md。原始Table備份QuestInfo等相同，未把10027改成10016。

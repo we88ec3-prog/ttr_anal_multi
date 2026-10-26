@@ -1,0 +1,29 @@
+# 教學第一戰卡關：Task分配提案（roy）
+
+建議由T07與T14共同主責，T02協作驗證並交SERVER整合。T08/T04/T09只處理返回後的具體資料缺口；T12/T15不是目前Invalid0x4c的第一阻塞。這是分工提案，未更改owner或任務狀態、未建立對話、未傳訊。
+
+| Task | 本次應查清的資訊 | 必須交付的介面 |
+|---|---|---|
+| **T07 關卡進入與退出（第一優先）** | 原版TUTO→戰鬥→教學續接的scene/controller生命週期；如何保持或合法恢復Lua coroutine；哪些scene安裝會清除教學callback；38與5F在此流程的適用條件 | 列出各步current scene、controller類型、保留/清除物件、map reset與ready先後、原生允許的切換入口。明確回答如何避免進DUEF，不能只說刪5F6 |
+| **T14 關卡目標、完成與獎勵（第一優先）** | IsScenarioEnded(14)旗標的原生讀寫鏈、server4C的有效接收scene/欄位/觸發時機；Lua下一步/對話的必要條件；完成與領獎/整段教學結束分開 | 單次scenario14完成通知契約：前置狀態、payload、完成旗標、可觀察的後續Lua事件，以及重複通知/未完成時的邊界。清怪後.75秒仍標本機fixture，不當正式原生達標條件 |
+| **T02 共用通訊與封包框架（協作）** | 38/5F/4C/12/14的路由域、依當前scene分派與方向；把實際trace對照T07/T14契約 | 有向訊息時序表：C2S/S2C、opcode、payload寬度、接收owner、預期回覆/可無回覆；不可自己定義業務結算或場景政策 |
+| **T08 實體生成與移除（條件性）** | T07確認reset/返回後，actor與local-player binding是否必須重送，送往哪一代scene/controller | 返回後entity建立/登記/移除/控制綁定的最小集合；只查資料介面，不決定劇情完成時機 |
+| **T12 命中、傷害與死亡（後續原生化）** | 本機HP0/清怪fixture是否對應原生死亡/目標事件，何種資料可作T14達成輸入 | 區分個體死亡、清場與任務完成的事件契約；不把這次AI傷害與HP60當官方規則 |
+| **T15 遊玩資料保存與恢復（後續）** | scenario14、招募/下一段教學哪些狀態需跨登入保存，何時提交 | 經T14確認後的持久化欄位與恢復順序；不以預寫完成旗標跳過教學 |
+
+**條件性支援**：T04提供返回後角色初值；T09只在具體證據顯示返回後位置/碰撞/輸入異常時補合法狀態。T06現有地圖188/190、資源與same-selector限制直接引用，不重做全量解包。T10/T11目前可完成測試戰鬥，沒有新證據前不因戰後卡住而擴張攻擊/技能分析。獎勵不需要與「恢復下一句對話」綁成同一大任務。
+
+## 先後與驗收
+
+1. T07和T14先讀SERVER/TUTORIAL-COMPLETION-HANDOFF.md及evidence/tutorial-completion-v1；依地址選讀kr-bulk-roy原BIN SHA目錄，raw Evidence優先。原版5F6→DUEF與4C被拒已查，不重做全量反編譯。
+2. T07交「能承接完成通知的合法scene/controller狀態」，T14交「在該狀態下如何使scenario14等待完成」。兩份介面必須能接起來；不要求重建整套獎勵。
+3. T02把二者合成可核對的封包序列；若reset清綁定，再取T08/T04必要資料；由SERVER對話製作新工作副本、比較封包序列，最後依使用者手動重現驗收。
+4. 驗收至少為：完成通知送達正確handler、沒有Invalid0x4c、Lua執行預期下一步、角色/控制可用。發包成功或完成旗標某一筆寫1，均不能單獨代替流程成功。
+
+## 方法主責與現有進度
+
+catalog明列0x4B99C0、0x4B7D50、0x4B24F0、0x4C5930主責T07。0x4C4AC0、0x4C4F20、0x4C2880在這次選定catalog查詢沒有獨立entity條目：後續新核心分析先登記；建議T07負責scene建構/註冊條件，T14負責完成旗標/讀取語意，跨方只引用介面，這不是已完成的方法認領。
+
+目前task.json：T07 owner roy/state pending-integration，T02 owner roy/state in-progress；T14/T08/T12/T15未認領。T07已有城鎮CSquare介面成果，但不自動涵蓋本次TUTO教學；追加教學專項即可，不要求重做其城鎮核心。部分README仍寫未認領，不能用舊README覆蓋最新task.json。
+
+每項交付附原BIN SHA、位址、raw Evidence ID/SHA、工具版本、條件與限制，分觀察/推論/本機策略。Server實作保存workspace/SERVER；原client/anal/資源/帳號/存檔唯讀，不恢復教學controller hook，不自行啟動/附加遊戲或跨對話傳訊。

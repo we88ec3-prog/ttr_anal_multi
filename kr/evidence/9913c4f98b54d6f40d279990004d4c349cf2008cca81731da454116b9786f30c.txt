@@ -1,0 +1,123 @@
+# T07／roy：第一戰與教學續接生命週期介面
+
+狀態：**待整合；有界靜態介面已查證，尚未實際遊玩驗收**。2026-10-26，Asia/Taipei。主責 T07：scene／controller／Lua owner 生命週期；T14：scenario 完成旗標與達成條件；Server：後續工作副本與時序實作。本輪未修改 client 或 Server 程式，未啟動、附加、發包或執行 Lua。
+
+先讀來源：[任務分配](../../../../SERVER/TUTORIAL-TASK-ALLOCATION.md)、[完成卡關交接](../../../../SERVER/TUTORIAL-COMPLETION-HANDOFF.md)。本文件補足 T07，不能代替 T14 的結算、獎勵或 T08 的玩家綁定契約。
+
+## 可供 T14／Server 使用的判定
+
+**要續接原本等待 scenario14 的 coroutine，不能在進戰或戰後退出那一代 TUTO，也不能重跑教學 entry。** 原版 `005F/2` 本身就會退出 TUTO、清 coroutine 並改建 Scenario；`005F/6` 進 DuelField，沒有返回 TUTO。補送 `006E/1` 雖可建立新的 TUTO／004C handler，卻會重新執行 Tutorial_EntryPoint，並非恢復舊 PC／Lua stack。
+
+原生有可保留 owner 的場景內介面：保持 `CTutorial` + kind4 `CTutorialController`，透過其基底 `0038/type2` 處理戰鬥地圖／scenario 資料，於最後一次 reset 後完成必要玩家重綁和 ready，在同一 TUTO 收到 T14 核定的完成通知，等待下一次 TUTO update 恢復 Lua。這是**有原生介面依據的後端重建候選與先決條件**；不是已擷取的官方完整序列，也不是「只刪兩包005F便保證可玩」。
+
+## 身分與證據層級
+
+原始 KR `Tartaros.bin`：SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`，本輪重新計算符合；PE32 image base 00400000。以已保存 REA6.5.0／Ghidra12.1.4 bulk raw 為原生工具來源，逐批核對 SHA；Python3.10.6／Capstone5.0.7 唯讀核對 bytes、分支、RTTI。沒有啟動新全量反編譯，也沒有把歷史 patch code 當原版。
+
+Lua 資源另有身分：唯讀解析當前 `Coroutine.lua`、`Event.stp` 內 TutorialBase/Main，共30個 Lua5.1 prototypes，完整消耗所有 bytes；carrier／member SHA 存個別 parsed JSON。Event.stp 歷史可能中文化，故腳本行為標為**當前資源快照**，不宣稱未修改的原始 KR 資源。Binary 的生命週期結論與該資源的具體劇情步驟分開。
+
+| 狀態分類 | 本輪內容 |
+|---|---|
+| 原生已確認／局部 | 006E/1建立新TUTO；005F/2建立Scenario、005F/6建立DuelField；install先退出舊scene；TUTO退出清coroutine、TUTO update呼叫scheduler；controller重用／新建與輸入閘門。 |
+| 當前資源已觀察 | Coroutine scheduler／TutorialBase橋接、TutorialMain對scenario14的yield等待及後續過場；附獨立資源SHA。 |
+| 分析者推論／重建候選 | 同TUTO＋0038/type2＋有效綁定／flags／完成通知可避免已確認的owner破壞路徑；仍須Server整合與手動驗收。 |
+| AI替代／歷史fixture | 舊controller hook、5F切換攔截、怪物HP／傷害、清怪後0.75秒完成等；不採為原生結算或相容性證明。 |
+| 缺失／待開發 | 官方完整序列、合法切城式返回封包完整欄位、T14達成與重複通知政策、T08 reset後綁定、未修改client的同TUTO戰鬥操作驗收。 |
+
+## 各步 scene／controller／保留物件
+
+| 步驟或入口 | current scene | controller | 保留／清除與語意 |
+|---|---|---|---|
+| 首次 `S2C006E/1` | 新 `Scene::CTutorial`，TUTO；vtable C073E8 | init `4C4B10`：kind4可重用，否則新建 `548B90`，C0FB1C／kind4 | 一律安裝新scene；若舊scene是TUTO，先退出舊TUTO並清coroutines。初始化最後重跑TutorialMain／entry。適用教學初始化，不作戰後resume。 |
+| 教學正常執行 | 同一TUTO | kind4，master flags由Lua設定 | scene+610C保留004C handler；FC0F84持有Lua wrapper；tco保留活coroutine；scene update呼叫t_doCoTask。 |
+| `0038/type2`，目前仍TUTO | 接收端仍由TUTO基底處理 | 直接路徑沒有新建／替換controller | 預載、fade、battle資料更新；沒有直接call install／TUTO退出／Tutorial entry。需保留callback、tco和controller flags；不把未閉合helper副作用當全域保留證明。 |
+| `0012` map reset | 同TUTO，handler table不直接重建 | 同物件經544F50清三槽等 | 清CCheckPointMgr容器及controller槽位；保留物件／vtable；玩家綁定不得沿用已被清掉的指標。Lua全域不是這個handler的直接清理目標。 |
+| `0014` ready | 同TUTO，virtual+2C=4B2570 | 寫現controller+4=1 | 不重建controller，不設定master+DC，不補玩家+0C，不恢復Lua coroutine；不是綁定／地圖載入成功的充分條件。 |
+| T14核定完成通知004C | 必須能到達TUTO的 `4C4F20` | 同kind4有效控制器供後續操作 | 本handler的接收owner與場景條件成立後，完成旗標介面見下節。coroutine於後續TUTO update重新輪詢，並非004C本身執行下一句。 |
+| 後續教學 | 同TUTO | 同kind4／必要狀態有效 | 當前Lua從原等待位置繼續UI／checkpoint／過場。資源與玩家資料可用性仍須驗收。 |
+| 反例：`005F/2` | 新CScenarioField，SCEF；C073B4 | kind3 CFormationController，547390 | install先呼叫舊TUTO virtual+14清coroutines，再刪舊scene；新scene無TUTO004C callback，正常update不走TUTO scheduler。 |
+| 反例：`005F/6` | 新CDuelField，DUEF；C0710C | 該scene自己的init `4BDC10`，本輪不展開其遊玩核心 | 不是TUTO返回。TUTO callback不存在；將004C送給這一狀態不構成教學完成。 |
+
+「同一TUTO」指相同生命週期世代／沒有經退出清理；不能只用畫面、D6A674字樣或新物件同類型判定。scene manager+5EAC與scene自身+5EAC extension table屬不同物件，不可混為同一欄位。
+
+## 原生入口及 callback 生命週期
+
+1. `4B7E1F` 寫 `FD306C=4B9260`，符合 `FD2CF8+6Eh*8+4`。`4B9260` 僅接受 BYTE+2=1，分配BD54，經 `4C4AC0` 建CTutorial、`4B7D50`安裝。其後才更新全域mode；其他type走Invalid GameMode。
+2. `4C4AC0..4C4B03`：基底 `4ADD50`，寫 C073E8和TUTO，清scene第二層handler表，再在+610C登記 `4C4F20`；`(610C-5EAC)/8=4Ch`。原件COL C69E04 → type descriptor F7E1E0 → `.?AVCTutorial@Scene@@`。
+3. `4B7D50..4B7DBF`：舊scene virtual+14，舊scene仍存在則virtual+0(1)，清manager+5EAC，安裝新scene並virtual+10。舊TUTO virtual+14明確為 `4C4D60`。所以換場景不是僅換controller或暫停更新。
+4. TUTO `4C4D60..4C4DE1`：取得FC0F84 wrapper，`4AD0A0(wrapper,0,"t_removeAllCoroutines")`，再 `4A9DB0` 清理教學實例+18容器等。當前TutorialBase的同名函式呼叫tco:removeAllCoroutines；Coroutine.root.10以新空table取代coroutineList。Lua VM可能仍存在，不代表先前coroutine可再找到或續接。
+5. TUTO `4C4DF0..4C4EA1`：基底scene更新與53FF50之後，呼叫 `4A8B90(&FC0F84)`。後者 `4AD0A0([FC0F84],1,"t_doCoTask")`，把數字／可轉數字回傳的非零狀態寫FC0FB8。FC0FB8是scheduler回報的局部狀態，不能當scenario14完成旗標。
+
+dispatcher介面沿用本輪保存的 `4C4670 → 4FDA30`，TUTO第二層004C直接命中；Scenario和DuelField的constructor／預設handler沒有這個TUTO callback。base預設轉virtual+0C、`4227F0` Invalid message路徑，與舊卡關交接一致。詳routing bytes及既有SERVER/evidence/tutorial-completion-v1；不是重新取得live scene物件追蹤。
+
+## 為何重新建立 TUTO 不等於恢復
+
+TUTO init `4C4B10..4C4D58` 先處理舊controller／FAB130、FAB148等清理，kind4重用時544F50，其他kind先virtual+28／解構，再建立138-byte CTutorialController。最後 `4C4D3A` 明確 `ESI=FC0F84`，`4C4D3F` 呼叫 `4A8A60`。
+
+初始化前段已無null guard呼叫目前controller virtual+14，因此既有有效controller也是入口前置；不能把006E1當可從全空狀態獨立執行的初始化封包。
+
+`4A8A60..4A8B8C` 清理實例+4與+14容器（前者為T14完成項容器所在結構）、設定UI，條件式送出6-byte `000C + DWORD1`，載入 `Event/TutorialMain.lua` 並呼叫 `Tutorial_EntryPoint`。這是初始化／重跑入口，不是保存舊PC的反序列化介面。具體清理與旗標重置語意由T14結合其讀寫鏈驗收；本次不指定後端跳過進度值。
+
+當前TutorialMain.root.8透過t_executeCoFunction(TutorialMain)建立並登記新coroutine；root.7起始設定SetControlStatus(10,TRUE)，執行Part1，再呼叫Part2。Part2的scenario14要求在PC16..19，完成等待PC20..29。故006E1可能走新流程／依其他初值跳部分步驟，但不能宣稱回到舊等待PC，亦可能重送scenario14要求。已進SCEF／DUEF的舊世代，**本次查到的入口沒有提供重新掛回原等待thread並恢復其stack的方法**；其安全重啟／重登入恢復屬Server+T14/T15後續政策，不把006E1當即時補救。removeAll的直接效果是丟棄scheduler的list，不等同已證明Lua VM立即釋放所有thread記憶體或不存在其他引用。
+
+## coroutine 保留／恢復條件
+
+| 條件 | 原生或當前資源依據 | 效果與界限 |
+|---|---|---|
+| wrapper及TutorialBase橋接有效 | FC0F84 → 4AD0A0；4A88E0註冊Tutorial API並載入TutorialBase | t_doCoTask／t_removeAllCoroutines必須為可呼叫函式。缺失時bridge報non-function；沒有證據表明發ready可以重新建立它們。 |
+| 原等待coroutine仍登記於同tco.list且為可resume狀態 | TutorialBase.root.0 create+register；Coroutine.root.5/root.6 | coroutine.yield保留當前Lua執行狀態；scheduler每次resume該thread，不是從函式開頭重跑。函式已結束、錯誤或被remove後不能以完成包恢復舊stack。 |
+| 沒有owner退出／removeAll／重新載入Base重建tco | 原生TUTO退出＋TutorialBase.root與root.2＋Coroutine.root.10 | 同Lua VM、同類型的新TUTO均不足以證明原thread保留。 |
+| TUTO update仍會執行 | 4C4DF0 → 4A8B90 → t_doCoTask | 004C不是resume呼叫；要到後續update才輪詢。上層主迴圈暫停／載入／例外未作全域閉合，不保證每個牆鐘frame都執行。 |
+| T14完成讀值不再等於Lua FALSE | Main.root.5 PC20..29；IsScenarioEnded(14) | false時yield並跳回PC20；通過後走PC30後。BOOL／數字邊界沿用T14，不能用Lua的0 truthiness錯誤解讀native數字FALSE。 |
+| 後續玩家／過場資源可用 | 新流程仍呼叫Tutorial API／cutscene | coroutine可resume不代表角色可以操作、過場可以載入或整段教學完成。 |
+
+當前Coroutine的runCoroutine使用coroutine.resume，失敗會print並回0；executeCoroutines在該值0時移除list項，doCoTask回傳剩餘數量。正常完成的thread可在後續resume失敗後移除。沒有原生證據支持伺服器另送一個通用「resume Lua ack」；不新增此類猜測封包。
+
+## 控制器保留與 reset／ready 約束
+
+`548B90` 寫 C0FB1C／kind4，清+B4..+130（包含+DC），基底初始化+4=0。TutorialMain.root.7 PC10..14設定control index10；native setter `4A9F90` 寫 `[FBA7A4]+B4+index*4`，故index10對應+DC。`548CB0`（TutorialController virtual+2C）先檢查+4及+DC，通過後執行共用5452C0；+0C玩家槽仍空也會提前返回。`548D10`（virtual+48）尾跳共用546100，存在正常primary-input實作；不能把kind4一概當無法戰鬥，也不能據此單獨驗收攻擊／技能。
+
+**可保留的局部狀態**：同controller經544F50不直接清+B4..+130或+4，但三槽與部分狀態會被清；新建kind4則flags全部歸零，若沒有重新執行合法Lua設定路徑，單送0014無法補+DC。不得拿舊patch「硬寫master=1」當Server解法。
+
+reset與ready沒有查到固定官方全序。可引用的必要／局部限制為：
+
+- 0012先清CCheckPointMgr和controller三槽，最後把DWORD+2交給T06地圖變更；這不是scene安裝或Lua續接。
+- 最後一次會清槽的reset之後，T08須把玩家綁定到**同一現行controller世代**。ready不能補空槽。
+- 0014只寫當前controller+4=1；它不驗證master、綁定或map，reset也沒有直接清+4，所以不能宣稱唯一官方順序必為0012→0014。
+- TUTO scheduler的直接更新路徑沒有以controller+4/+DC作閘門；Lua完成與玩家操作須分別驗收。
+- 0038/type2從WORD+7做540980預載、552FC0 fade，WORD+3寫目標欄位等；完整直接call清單無scene install／TUTO entry／exit。其尾端FAB090 virtual+18參數4屬音樂介面，沿用舊報告更正，**不是loading-state或ready**。
+- 地圖188/190與same-selector跳過顯式模型／BOUND載入限制引用T06，不在此指定官方返回配對、出生點或重試政策。
+
+## 交給 T14 的最小介面
+
+T07提供的前置狀態：現行scene是未退出的TUTO，extension table+610C仍為4C4F20，FC0F84 wrapper／tco與等待thread仍有效，後續TUTO update可執行。玩家控制的前提另外檢查kind4、+4、+DC和T08綁定。
+
+引用既有T14候選介面：`4C4F20` 讀message WORD+2，查FC0F88完成項容器後寫DWORD1，return0；原生bytes見t14-interface-reference和routing-and-guards。`4AA510` 讀同lookup結果；`4AB940`以IsScenarioEnded名稱註冊讀取函式。scenario14本體候選為 `4C 00 0E 00`，不含外層frame；此欄位是引用已存介面，達成條件、合法範圍、重複通知、回傳轉換與領獎仍歸T14，不從本次生命週期自行定義。
+
+可觀察的後續（當前TutorialMain資源，不冒充原始完整官方腳本）：PC30..32 SetUIPage → PC33..40 關閉NPC10016 checkpoint → PC41..42 yield → PC43..46 PlayAndWaitForScene(1000,10) → 再(1000,12) → 更後面HideUI／招募。不是收到完成後立刻整段教學結束或立即領獎。
+
+T14應交付的完成點不應只檢查「flag=1」：需完成包命中有效TUTO handler，等待thread尚活，後續update通過PC20..29並開始預期下一事件。首次／重複通知政策與清怪0.75秒是否僅fixture分開。
+
+## 交給 Server 的開發／驗收介面
+
+建議以單次教學scenario交易保存scene/controller世代與階段（這是後端重建設計，不是原版記憶體欄位）：
+
+1. **進戰前置**：TUTO原等待鏈有效、kind4主flag與玩家資料合理；T14確認scenario14開始條件。拒絕沿用「005F2切SCEF仍保留TUTO」假設。
+2. **進戰資料**：保留TUTO，使用已驗收欄位的0038/type2與T06地圖資料；如需要0012，將T08重綁放在最後reset之後。不得臆造缺失欄位或將B0一概當地圖ready。
+3. **完成前準備**：若需返回教學地圖／角色，先完成本地重建交易的必要資源與綁定準備，再提交T14完成通知；這是避免Lua立即開始下段時資料尚未可用的Server策略，並非已證官方排序。
+4. **完成提交**：保持同TUTO；不送005F6當返回，不以006E1重啟假裝續接。送T14核定的單次通知，預期下個TUTO update輪詢通過。
+5. **驗收分開**：無Invalid0x4c／正確handler；原thread進入下一事件；角色控制、鏡頭與互動可用。sendall成功、ready=1或flag=1都不能單獨通過。
+6. **已退出owner的session**：重送004C不會把舊thread掛回scheduler。由Server+T14/T15定義安全重啟／重新進教學及防重複scenario／獎勵政策；本輪不實作或執行。
+
+不能宣稱已驗收的部分：kind4在現有全部攻擊／技能封包下的實際操作；map188/190返回時的資源／actor狀態；上層tick是否暫停；全部間接helper副作用；未修改KR原始教學資源的來源鏈。由Server後續新副本和使用者手動重現驗收，不加回client hook。
+
+## 證據與重現
+
+- [SCOPE.md](SCOPE.md)、[CHECKPOINT.md](CHECKPOINT.md)、[progress.json](progress.json)：範圍及接續。
+- [EVIDENCE-INDEX.md](EVIDENCE-INDEX.md)、`evidence/cache-*.json`／原raw／pseudo複本：逐地址Evidence ID、raw SHA與工具版本。只沿用現有bulk，未重跑全部decompiler。
+- [rtti-vtables.json](evidence/rtti-vtables.json)：TUTO、Scenario、DuelField、TutorialController原件RTTI／vtable；其他bytes JSON與[lifecycle-validation.json](evidence/lifecycle-validation.json)保存file offset／hex與有界指令範圍。
+- [Coroutine解析](evidence/Coroutine-parsed.json)、[TutorialBase解析](evidence/Event_TutorialBase-parsed.json)、[TutorialMain解析](evidence/Event_TutorialMain-parsed.json)：carrier/member SHA、完整prototypes與PC；同名disassembly.md方便選讀。僅結構解析，不執行。
+- [驗收結果](evidence/lifecycle-validation.json)：83項有界檢查通過，13個原生局部範圍完整解碼／內部分支落點與30個Lua prototypes結構核對；不以檢查數量替代語意或可玩驗收。
+- [manifest](evidence/manifest.json)及package-verify.json：保存完整性／共用驗證。跨任務資料只引用。
+
+完整性驗證不能證明官方完整時序或動態成功。本文件先在roy個人區保存；SERVER對應頁為Markdown交接入口，不代表已部署Server修正或正式kr語意整合。

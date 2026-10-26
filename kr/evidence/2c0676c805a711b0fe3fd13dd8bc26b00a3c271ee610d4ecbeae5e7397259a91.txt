@@ -1,0 +1,106 @@
+{
+  "captured_at": "2026-10-26T17:12:54.204479+08:00",
+  "authority": "readonly current source/reference snapshots; server code is not native protocol evidence",
+  "files": [
+    {
+      "path": "E:\\Tartaros\\workspace\\anal\\character_switch.py",
+      "sha256": "c7145f9334ab400ba5ede9b37f935a2ad105d2fe9debe4a2077fec879d1e43f8",
+      "bytes": 5503,
+      "excerpts": [
+        {
+          "first": 113,
+          "last": 124,
+          "text": "    requests=[{'operation':'character-reset'}, {'operation':'player-metadata'},\n      {'operation':'character-create','character':character,'x':x,'y':y,'direction':position.get('direction',0)},\n      {'action':'character-values','character':character,\n       'values':{key:default for key,label,offset,kind,default in FIELDS}},\n      {'values':{'1':int(position.get('parameter1',300)),\n                 '5':int(position.get('percent',100)),\n                 '6':int(position.get('speed',30))}},\n      {'operation':'character-bind'}]\n    # Validate the entire sequence before any reset can reach the client.\n    packets=tuple(build_numeric(dict(action='entity-parameters',**r))\n                  if 'action' not in r else build_numeric(r) for r in requests)\n    return packets+(packets[3],)"
+        }
+      ]
+    },
+    {
+      "path": "E:\\Tartaros\\workspace\\SERVER\\tutorial-entry-v3\\overlay\\live_packet_controls.py",
+      "sha256": "666dafdd91c94245550898255c02d279fc0be874cb8040d44eec0d5fd1510213",
+      "bytes": 5633,
+      "excerpts": [
+        {
+          "first": 35,
+          "last": 57,
+          "text": "        from inventory_equipment import seed_response\n        return seed_response()\n    if request.get('operation')=='character-reset':\n        # 4B1A30 clears type-0 entities and local controller; map stays loaded.\n        # Basic slot +84, base4/stride8 => command10 (hex), not11.\n        return struct.pack('<H',0x10)\n    if request.get('operation')=='player-metadata':\n        from login_protocol import plaza_player_metadata_response\n        return plaza_player_metadata_response()\n    if request.get('operation')=='character-create':\n        from login_protocol import plaza_player_response\n        payload=bytearray(plaza_player_response())\n        struct.pack_into('<H',payload,6,integer(request['character'],1,9))\n        x,y=float(request['x']),float(request['y'])\n        if not all(math.isfinite(v) and abs(v)<=100000 for v in (x,y)):\n            raise ValueError('Invalid character coordinates')\n        # KR 4AEB5B -> virtual5C/4C8C40 reads payload+0x10 as scale, not Z.\n        # Normal actor multiplier1.0 is scaled by the client base (~.09).\n        struct.pack_into('<ff',payload,8,x,y)\n        struct.pack_into('<f',payload,0x10,1.0)\n        payload[24]=integer(request.get('direction',0),0,255)\n        return bytes(payload)\n    if request.get('operation')=='character-bind':"
+        }
+      ]
+    },
+    {
+      "path": "E:\\Tartaros\\workspace\\SERVER\\tutorial-entry-v3\\overlay\\new_expedition.py",
+      "sha256": "7fb23770eed3355bd1c7c6216b56325433ed57e0da42a8a0a3824bc00053cd9e",
+      "bytes": 12096,
+      "excerpts": [
+        {
+          "first": 165,
+          "last": 201,
+          "text": "        # Candidate: retain the existing kind4 controller and preload in TUTO.\n        return (struct.pack('<HBHHH',0x38,2,BATTLE_MAP,0,14),)\n\n    def battle_completion(self,position):\n        # Keep the SAME TUTO: 5F/6 creates DUEF; 6E/1 would restart Lua.\n        # Server candidate: final map reset, rebind, ready, then T14 flag14.\n        # Existing HP/delay trigger remains a fixture, not native victory rules.\n        if position is None:raise ValueError('Missing pre-battle tutorial position')\n        return ((struct.pack('<HI',0x12,188),)+self.switch_character(ISILIA,position)\n                +(struct.pack('<H',0x14),struct.pack('<HH',0x4c,14)))\n\n    def unlock_pinko_after_scene(self,payload):\n        # Lua Part2 scene1000/13 follows the recruitment explanation, then\n        # waits for IsCharacterAvailable(2). Complete the native ownership\n        # update here, not at login or first-battle formation.\n        if payload!=struct.pack('<4H',0x3f,1000,13,1) or ISILIA not in self.data['characters']:return ()\n        from login_protocol import channel_response,combined_character_data_response\n        with self.lock:\n            if 2 in self.data['characters']:return ()\n            updated=dict(self.data,characters=[1,3,ISILIA,2],stage='pinko-unlocked')\n            self._persist(updated);self.data=updated\n        record=bytearray(channel_response(True,character_ids=(2,))[65:])\n        stats=bytearray(combined_character_data_response());stats[2:4]=bytes([2,1])\n        return (struct.pack('<H',0x2b)+record,bytes(stats))\n\n    def battle_player(self,position):\n        # 38 changes the loading page;12/4B24F0 actually loads map resources.\n        # Use a known clear scenario collision cell, pending formal spawn data.\n        return (struct.pack('<HI',0x12,BATTLE_MAP),)+self.switch_character(ISILIA,BATTLE_SPAWN)+(struct.pack('<H',0x14),)\n\n    def switch_character(self,character,position):\n        if character not in self.data['characters']:\n            raise ValueError('Character is not in the initial roster')\n        from character_switch import responses\n        from login_protocol import plaza_movement_timing_responses\n        return self._with_skills(self._levels(responses(character,position)),character)+plaza_movement_timing_responses()\n"
+        }
+      ]
+    },
+    {
+      "path": "E:\\Tartaros\\workspace\\SERVER\\tutorial-entry-v3\\overlay\\login_test_server.py",
+      "sha256": "e9eea47355549b7d8df42540c11de4fb37a672cdc6aa1fbc213c34c227e6d232",
+      "bytes": 56480,
+      "excerpts": [
+        {
+          "first": 150,
+          "last": 165,
+          "text": "            with conn, path.open('wb') as raw:\n                while not stop.is_set():\n                    if store and session_owner and time.monotonic()-last_lease>=10:\n                        store.heartbeat(account_id,session_owner)\n                        last_lease=time.monotonic()\n                    if expedition:\n                        if tutorial_plaza_at is not None and time.monotonic()>=tutorial_plaza_at:\n                            conn.sendall(b''.join(encode(p) for p in (plaza_npcs.context(),)+plaza_entry_responses()))\n                            tutorial_plaza_at=None\n                            tutorial_plaza_pending=True\n                            record('tutorial-plaza-entry',connection=connection)\n                        finished=skill_cast.finish()\n                        if finished:\n                            conn.sendall(b''.join(encode(p) for p in finished))\n                            if skill_cast.is_casting():\n                                tutorial_battle.cast(finished[0],position_tracker.x,position_tracker.y)"
+        },
+        {
+          "first": 300,
+          "last": 325,
+          "text": "                                            packets=(purchase_result(lines),balance_packet(balance))+inventory.snapshots(tutorial_character)\n                                        conn.sendall(b''.join(encode(p) for p in packets))\n                                        record('shop-purchased',connection=connection,account_id=account_id,order_id=order,\n                                               items=lines,replayed=replayed)\n                                    except ShopError as error:\n                                        conn.sendall(encode(purchase_result()))\n                                        record('shop-rejected',connection=connection,account_id=account_id,error=str(error))\n                                elif expedition and command==0x0c and len(payload)==6:\n                                    selected_character=struct.unpack_from('<I',payload,2)[0]\n                                    if selected_character not in expedition.data['characters']:\n                                        record('tutorial-character-rejected',connection=connection,character=selected_character)\n                                    elif plaza_player_sent:\n                                        tutorial_character=selected_character\n                                        skill_cast.reset()\n                                        position=position_tracker.stop_for_switch()\n                                        packets=expedition.switch_character(tutorial_character,position)\n                                        conn.sendall(b''.join(encode(p) for p in packets))\n                                        input_state=None\n                                        simulated_positions[0x100]=(position['x'],position['y'],None)\n                                        record('tutorial-character-switch',connection=connection,character=tutorial_character,position=position)\n                                elif expedition and command==0x28:\n                                    try:\n                                        response=expedition.battle_entry(payload)\n                                        if not plaza_player_sent:\n                                            raise ValueError('Tutorial player initialization not completed')\n                                        if tutorial_battle_started:"
+        },
+        {
+          "first": 429,
+          "last": 459,
+          "text": "                                elif expedition and command==0x40 and len(payload)==4:\n                                    try:\n                                        response=expedition.scenario_selection(payload)\n                                        unlocked=expedition.unlock_isilia(payload)\n                                        conn.sendall(b''.join(encode(p) for p in unlocked))\n                                        record('tutorial-isilia-unlocked',connection=connection,level=2,trigger='formation-request')\n                                        conn.sendall(encode(expedition.formation())+encode(response))\n                                        record('tutorial-scenario-selection',connection=connection,scenario=14,response=response.hex())\n                                    except ValueError as error:\n                                        record('tutorial-scenario-rejected',connection=connection,error=str(error))\n                                elif expedition and command==0x3f and plaza_player_sent:\n                                    if payload==struct.pack('<4H',0x3f,1000,14,1) and not tutorial_plaza_sent and not tutorial_plaza_pending:\n                                        # Allow the final scene's RestoreMap / Lua return to\n                                        # finish before replacing TUTO with the town module.\n                                        tutorial_plaza_at=time.monotonic()+.5\n                                    recruited=expedition.unlock_pinko_after_scene(payload)\n                                    if recruited:\n                                        conn.sendall(b''.join(encode(p) for p in recruited))\n                                        record('tutorial-pinko-unlocked',connection=connection,character=2,trigger=payload.hex())\n                                    if tutorial_scene_complete:continue\n                                    packets=expedition.after_tutorial_scene(payload)\n                                    if packets:\n                                        conn.sendall(b''.join(encode(p) for p in packets))\n                                        input_state=None\n                                        tutorial_scene_complete=True\n                                        position_tracker.x,position_tracker.y=275.,144.\n                                        position_tracker.direction=64\n                                        position_tracker.moving=False\n                                        position_tracker.tick=position_tracker.received=None\n                                        simulated_positions[0x100]=(275.,144.,None)\n                                        record('tutorial-scene-control-restored',connection=connection,request=payload.hex())"
+        }
+      ]
+    },
+    {
+      "path": "E:\\Tartaros\\workspace\\anal\\kr-01_Tutorial.xml",
+      "sha256": "d7bd4198dc7828646a7469d3654f30c7dd79ffb3f19a4386296af3ac379af280",
+      "bytes": 18444,
+      "excerpts": [
+        {
+          "first": 18,
+          "last": 40,
+          "text": "  <Talk id=\"618\">그럼 카메라 조작에 대해서 알아보도록 하자.&lt;br&gt;카메라 역시 키보드와 마우스 중 하나를 선택해서 조작할 수 있지.</Talk>\n  <Talk id=\"619\">만약 카메라를 조작하는 키가 기억이 나지 않는다면 조금 뒤에 보여주는 이미지를 참고 하면 도움이 될 거야.</Talk>\n  <Talk id=\"620\">마우스를 사용하려면, 마우스의 오른쪽 버튼을 누른 상태로 마우스를 움직여 쉽게 카메라를 조작할 수 있어.&lt;br&gt;그리고, 휠 버튼을 이용하면 화면을 확대하거나 축소할 수 있지.</Talk>\n  <Talk id=\"621\" face=\"1\">자, 그러면 어디 카메라를 움직여 볼까?&lt;br&gt;카메라를 조작해서 이실리아 씨를 찾아보자!&lt;br&gt;왼쪽으로 화면을 돌려보면 쉽게 찾을 수 있을 거야.</Talk>\n  <Talk id=\"622\">앗!! 이실리아 씨가 저기 계시군요. 어서 저쪽으로 가봐요.</Talk>\n  <Talk id=\"623\">잠깐!! 가기 전에 한 가지 더 배워 보는 건 어떨까?</Talk>\n  <Talk id=\"624\">예? 뭐죠? 배워 볼 거란 게.</Talk>\n  <Talk id=\"625\">캐릭터 선택에 대해서 배워 볼 거야.&lt;br&gt;타르타로스 온라인에서는 언제든지 움직이고 싶은 캐릭터로 변경할 수 있지.&lt;br&gt;이 기능을 이용하면 원하는 캐릭터를 손쉽게 바꿀 수 있다.</Talk>\n  <Talk id=\"626\" face=\"2\">사실은 이실리아 씨에게 직접 다가가고 싶어서 그러시는 거 아니에요?</Talk>\n  <Talk id=\"627\" face=\"5\">그런 거 아니다!!&lt;br&gt;게임의 기능을 소개하는 신성한 자리에 사적인 감정을 개입해서는 안 되지!!</Talk>\n  <Talk id=\"628\">설명을 계속하겠어. 하단의 버튼 중 캐릭터 선택 버튼을 누르면 캐릭터 선택 창이 나타나지.&lt;br&gt;그 창에서 바꾸고 싶은 캐릭터 얼굴을 눌러 그 캐릭터로 바꿀 수 있어.</Talk>\n  <Talk id=\"629\">그럼 캐릭터 선택을 해보도록 할까?&lt;br&gt;선택 버튼을 누른 후 \"슈발만\" 캐릭터를 선택해보자.</Talk>\n  <Talk id=\"630\" face=\"1\">좋았어! 이런 방식으로 언제든지 자신이 사용할 캐릭터를 선택하는 거다.</Talk>\n  <Talk id=\"631\">잘 알겠습니다!&lt;br&gt;이제 선택 방법에 대해서 알았으니 이실리아 씨에게 가 봐요.</Talk>\n  <Talk id=\"632\" face=\"3\">음... 가서 뭐라고 이야기를 해야 하지.</Talk>\n  <Talk id=\"633\" face=\"4\">응? 슈발만 씨. 이실리아 씨 주변에 있는 저 자들은 누구죠?</Talk>\n  <Talk id=\"634\">아무 것도 안 보이는데? 잘못 본 거 아냐?</Talk>\n  <Talk id=\"635\" face=\"4\">일단 이실리아 씨 쪽으로 가보죠.&lt;br&gt;왠지 느낌이 이상해요.</Talk>\n  <Talk id=\"636\">...</Talk>\n  <Talk id=\"637\">훗... 여기 있었군.</Talk>\n  <Talk id=\"638\">누구?</Talk>\n  <Talk id=\"639\">아무 것도 기억하지 못한다는 말이 사실인 것 같군. &lt;br&gt;어쩔 수 없지. 너를 거둬 그분께 데려가는 게 우리의 사명.&lt;br&gt;각오해라!</Talk>\n  <Talk id=\"640\">......</Talk>"
+        }
+      ]
+    },
+    {
+      "path": "E:\\Tartaros\\workspace\\anal-multi\\shared\\catalog.json",
+      "sha256": "50c55358bf65c8bdb9c54b91f5e437be0780859aa2e44a015a6f9bfb1ff51da7",
+      "bytes": 3117402,
+      "excerpts": []
+    },
+    {
+      "path": "E:\\Tartaros\\workspace\\SERVER\\T07-TUTORIAL-TO-PLAZA-REVIEW.md",
+      "sha256": "15bad00257fe5d708b5217a20edb833f7343e74ad05e64f67acf958e79957666",
+      "bytes": 5816,
+      "excerpts": []
+    },
+    {
+      "path": "E:\\Tartaros\\workspace\\anal-multi\\kr-temp-roy\\T14\\T14-SCENARIO14-CONTRACT.md",
+      "sha256": "1d78642bfec7b5005988a1c2121404a3daadd2f62ba1e0068f8918b314b1ae99",
+      "bytes": 9432,
+      "excerpts": []
+    },
+    {
+      "path": "E:\\Tartaros\\workspace\\anal-multi\\kr-temp-roy\\T07\\T07-T06-INTERFACE.md",
+      "sha256": "7fc19ca663e853cd6e5271366267e9fe89d6cffbd53822534b58e4803573fc8c",
+      "bytes": 12514,
+      "excerpts": []
+    },
+    {
+      "path": "E:\\Tartaros\\workspace\\anal-multi\\kr-temp-roy\\T07\\tutorial-lifecycle\\TUTORIAL-LIFECYCLE-INTERFACE.md",
+      "sha256": "9913c4f98b54d6f40d279990004d4c349cf2008cca81731da454116b9786f30c",
+      "bytes": 17099,
+      "excerpts": []
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+# NPC10016路線更正與原始Table覆核
+
+2026-10-26T21:06:00.893192+08:00，roy，待整合／進行中。來源原BIN SHA9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91；既存REA6.5.0/Ghidra12.1.4 raw及原件bytes，未執行／附加遊戲、Lua或目標API。
+
+## 必要更正
+
+前一DEVELOPMENT-HANDOFF／CHECKPOINT把NPC10016列成可追C2S001C(category3,10016)，這個分支關聯不成立，**撤回NPC category3會走001C的假設**；544020本身確是C2S001C六bytes sender的結論保留。
+
+原件544070：category3入口在5440A5比較3，處理NPC可用任務／NPC表後，非scenario分支於5441DD呼叫753F80，建FXUIEventD2事件F4388，event+14為Town context、+18為NPC ID；之後5441E2跳5444F5送本機UI事件並返回。scenario分支建立F43D9。通用544020 sender在54470E，位於其他category分支，不是category3的fallthrough。原bytes：evidence/npc-activation-route.json、npc-category3-join.json；753F80及544070原raw/pseudo來源索引已保存。
+
+正常頁面5B7F80的F4388→5B6B70→636520，本機開NPC對話UI；F43D9→5B9340是另一路。TUTO頁5C3370→59BD80/5A4310的所查直接處理沒有F4388，也沒有讓提示8安裝廣場的路線。本次沒有證明TUTO結尾需要一個1C Server回覆；**不能為了離教學猜001D或其他回覆**。仍不宣稱窮盡全部UI manager分派。
+
+## 未修改Table來源比較
+
+唯讀原始備份anal/backups/Table.original-kr.stp SHA09e2cc48be98ad491afe394f966feb5812983fbf35da9037a8fa477d9848a442，與T06已核對的unsigned Integrity.xml長度／MD5符合，不只是檔名。新解碼保存四member及SHA，見evidence/tutorial-original-table-readset.json。
+
+- QuestInfo、TutCheckPointList、SceneList與現用解碼bytes完全相同。因此14→16→15依賴、Quest16沒有field、Town0 giver10027不是本次翻譯造成的新增值。
+- npctable不同；所選10016與10338差異為NAME翻譯，TYPE、GUILD與TALK內容相同；10027在兩份選定表均無該row。不能把Quest16的giver10027改成10016當修正。
+- Event/SceneList中quest14／16沒有直接SCENE row；教學演出用quest1000。1000/15..18指Synopsis_Tartaros系列，不等於quest16；Quest15另有四個場景。沒有因此證明任務16不存在或不需要後端提交。
+
+資料：evidence/original-tutorial-resource-comparison.json，含選中NPC完整原文、差異SHA及Event映射。這縮小資源修改疑慮，但仍不能從client資源推出官方後端Quest16結算／教學出口封包。
+
+## 開發收斂
+
+已證正常最後1000/14清UI／RestoreMap／EnableInput與C2S3F局部順序；Main其後僅有額外yield及最後提示8。若Server重建採用「本次第一戰已結束＋後續10/12/13/14順序完成＋角色4/2已招募」作返廣場條件，必須標**後端相容策略**，不得稱找到了官方Quest16提交／Main完全結束ACK。還需處理3F載入失敗亦可回報、重播／缺漏、.5秒出口、廣場43、過早持久完成與15/1錯誤完成等已知缺口。
+
+下一步把上述已知介面接成完整離線Server流程候選：以每登入狀態檢查替代無條件.5秒；廣場資料送出與實際操作驗收分開，不自動保存完成。先完成可審閱候選與離線回歸，原服務／client／帳號仍不動；實際可玩仍需使用者手動觀察，不能用模型或靜態格代替。

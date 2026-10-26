@@ -1,0 +1,21 @@
+# T07 教學生命週期 CHECKPOINT
+
+roy；2026-10-26，Asia/Taipei。分支codex/kr-t07-roy。狀態：有界介面交付／待整合，非可玩驗收。上一批紀錄保留CHECKPOINT-batches.md。
+
+入口：[TUTORIAL-LIFECYCLE-INTERFACE.md](TUTORIAL-LIFECYCLE-INTERFACE.md)。Server入口：workspace/SERVER/TUTORIAL-SCENE-LIFECYCLE-INTERFACE.md。沒有改Server/client程式或傳訊其他對話。
+
+已完成：先讀SERVER分配/完成交接、共用政策與catalog、更正與既有T07checkpoint；追加教學範圍與task owner roy。原始BIN SHA256重新核對符合9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91。沿用bulk raw與其REA6.5.0/Ghidra12.1.4身份，逐批核SHA保存，沒有啟動全量或重新查城鎮核心。
+
+原生觀察：006E1建新TUTO→install→4C4B10→kind4→4A8A60重跑entry；005F2建SCEF/kind3；005F6是DUEF。install先退出舊scene；TUTO退出4C4D60呼叫t_removeAllCoroutines並清教學容器，原004C callback隨舊scene刪除。TUTO update4C4DF0→4A8B90→t_doCoTask，004C本身不是resume。38/type2直接函式沒有install或重跑entry，但helper間接作用和runtime全域未閉合。
+
+控制器觀察：548B90清flags含+DC；548CB0檢查+4及master+DC，玩家槽+0C空會提前返回。548D10尾跳546100，不能把kind4等同無primary input，也不據此驗收攻擊技能。reset544F50直接清三槽但不清DC/+4；0014只寫+4，不能補master或綁定。T14完成語意、T08綁定、T06 maps188/190與T04/T09資料仍只引用。
+
+當前資源快照：Coroutine.lua SHA c3feac03a40d24a54adf7615781cab175aa4876a2bdad8763987e413d0c2a808；TutorialBase SHA26e5fe047b3489b5198023571d1cd3123e0dce712af2c81f57aa767d42ca7744；TutorialMain SHA662f8416ac7f865b94b15d6ea3145e9a59fbbbaaa8e3be6521c4cff636344809。共30 prototypes完整結構解析、沒有執行Lua。Event.stp歷史可能中文化，carrier SHA在parsed JSON；不宣稱未修改原KR資源。
+
+資源觀察：TutorialBase建立tco；removeAll替換coroutineList為空table，scheduler resume活thread。TutorialMain.root.5 PC20..29輪詢IsScenarioEnded14==FALSE並yield；通過後SetUIPage／NPC checkpoint／yield／Scene1000:10及12，再更後面招募。這是當前腳本序列，不是整段教學／獎勵已完成。
+
+分析者推論：必須保留同一TUTO世代、tco/thread與kind4 flags，才可在同一owner收完成通知並由後續update續接。保留TUTO的38type2方案是Server候選，不能簡化為只刪5F6；進戰5F2也退出owner。已退出owner、原thread從scheduler list移除的session，本輪找到的入口不能掛回原thread／恢復原PC；6E1是新entry重跑。沒有斷言所有thread記憶體立即回收或不存在其他引用。安全replay/relogin政策由Server+T14/T15後續定義。
+
+驗證：lifecycle-validation.json內83項靜態檢查通過（13個原生有界範圍、30 Lua prototypes、vtable/registration/flags）；原raw/pseudo雜湊與manifest核對；套件verify與Markdown連結檢查結果另存。完整解碼範圍不宣稱等於Ghidra AddressSet；沒有全域runtime／官方全序／所有helper完備證明。
+
+接續：T14把完成契約接到此TUTO前置；Server新工作副本比較同TUTO進戰/結算/返回的實際封包時序與T08重綁，最後由使用者手動重現，驗收無Invalid0x4c、原thread下一事件、玩家/鏡頭/互動可用。本輪不做服務修改、重啟、發包或client hook。

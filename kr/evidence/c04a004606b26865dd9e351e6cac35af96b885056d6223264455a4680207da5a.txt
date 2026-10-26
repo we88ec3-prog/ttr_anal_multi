@@ -1,0 +1,33 @@
+# NPC10338互動介面查證與v7（roy，待整合）
+
+使用者已再次授權不拘T05／T08職責先代分析，並確認Z與滑鼠兩種都試過。跨T08為NPC與互動物件生成，跨T05為廣場輸入入口，T02為封包格式，T14為NPC任務路由引用；沒有改他人owner、client、原anal、資源或原帳號，也沒有啟動／附加遊戲或發訊其他對話。
+
+## 原生已確認
+
+原BIN SHA9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91，沿用REA6.5.0/Ghidra12.1.4 bulk與原件bytes，Capstone5.0.7核對。證據batch-01-native-mapping.json與evidence/npc-interaction-anchored-fields.json。先前npc-interaction-field-map.json的部分視窗從指令中間開始，僅raw bytes有效，不用其線性反組譯作指令證據。
+
+S2C0027→4B2AF0，清checkpoint manager後按18bytes row建立543700 CCheckPoint，並非0007 NPC entity本身。Type3資料格式（row offset，不含兩byte opcode）：WORD0 NPC表ID→F6；signed BYTE2種類→F4；BYTE3 enabled→105；FLOAT4/8位置XY→A0/A4；FLOAT12範圍→FC；BYTE16→100（本輪manual0）；BYTE17→F8。不同種類有分支，不能移植type0的半徑比例到type3。
+
+544730先拒絕enabled0。manual0時需按鍵參數非零且distance²嚴格小於FC²；等於邊界也不接受。104是進入／重複觸發鎖存，需區分範圍外重置與範圍內留存。544A00選最近可啟動物件，F942C0阻擋時不呼叫v64。Town Single控制器548A90→434250→544A00使用本機互動鍵狀態，不必先靠Server回覆Z。
+
+滑鼠544BC0讀FC乘0.5，將該值傳入7CC520→7CB600幾何拾取鏈；CCheckPoint v4C=4C8F90僅回傳actor+A0位置指標，並非改寫範圍。原bytes見npc-mouse-pick-anchored.json與npc-checkpoint-vtable-slots.json。4E06D0取得候選後也有distance²<FC²檢查。因此Server範圍2.0時，此拾取路徑收到1.0，仍另受玩家距離限制；不是改大mesh就一定能對話。
+
+v64=544070：type3以NPC表ID開本機F4388或scenario F43D9路由；不能把沒有C2S001C視為失敗。NPC的0007實體ID0106與checkpoint NPC表ID10338用途不同，不要求相等。69 tail資料寫location object+18/+1C，不能直接當Town5/FAB1BC。CSquare init替換為kind2控制器，既有本次資料不應再強制回Tutorial kind4。
+
+## 工具觀察與未證部分
+
+batch-02-client-and-range.json核對原件與現用Tartaros.ip-zh-tw-only-v2.exe的六段互動bytes全部相同；這些範圍不存在以前行為補丁差異，不代表整個EXE完全相同。先前曾修改主程式的使用者記憶／舊可玩紀錄不當原生規則。
+
+兩個已存square001/Square03D的靜態BND在所採900/900、918..922/900格子均clear；不證完整體積、高度、動態阻擋、實際client座標或正確Town5 selector。Server player900/900與任務NPC920/900距20，因此在原範圍2之下，剛進廣場不移動便必然不符合距離條件；這不能證明使用者靠近後失敗的唯一根因。沒有讀取當前client checkpoint註冊、UI blocker或位置，仍可能有其他門檻。
+
+## 可審閱Server實驗v7
+
+E:/Tartaros/workspace/SERVER/tutorial-plaza-v7/README.md。只把NPC10338在0027中的FC來源範圍由2改30，其他11NPC仍2，生成ID／enabled／manual／位置／模型、town／map、戰鬥／教學／任務狀態機完全保留。npc-interaction.json釘SHA，不悄悄熱改現用v6。30是明示相容性測試值，用來讓距20的NPC可從出生點測試，非官方半徑；不據舊AI fixture宣稱原生規則。
+
+107項離線檢查通過：真實Table與12NPC、四角色實際廣場分支、全部frame解碼、重複43不重送、所有非0027封包逐byte相同，0027只准第一個範圍float欄位變動、從900/900唯有10338符合新範圍、profile釘hash。封裝附可獨立重跑的verify_package.py與evidence/verify-v6-base.py，已實際重跑驗證可重現；audit禁止socket／DB／process／ctypes，未建runtime或啟動Server／client。這不是對話可用驗收。
+
+## 手動驗收與後續
+
+使用者停止v6後啟動v7，首次才從v6/runtime唯讀備份至v7自身副本；原DB／存檔不改。重走原教學回廣場，先在出現位置附近直接按一次Z，測任務NPC10338（其餘NPC至少距41且範圍仍2）；再滑鼠點該NPC。回報各入口是否打開對話／任務15開場，並確認廣場實際移動、停止與無殘窗。
+
+若仍無反應，不以更多放大半徑掩蓋；下一查真實checkpoint有無被後續reset、UI F942C0／本機頁面／NPC表任務路由。依原限制不能由Agent附加讀記憶體；需以現有原生證據、被動紀錄與使用者操作差異縮小。若對話可用，再依T14既有Quest15接取→Field19/maps191、192→馮德斯村規劃接續；本輪不把15/1開場當完成，也沒有擅送完成旗標／猜村落出生點。

@@ -1,0 +1,17 @@
+# T07 更正追溯（待整合）
+
+本檔限縮既有解讀，不覆寫原始證據。原檔 SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。
+
+| ID | 原解讀／來源 | 本輪有界更正 | 證據 |
+|---|---|---|---|
+| T07-C01 | 歷史 scene7／0069 fixture 註解 | 0069 type7/23/24 → 4BBB70 → RTTI Scene::CSquare；type不是跨訊息通用場景號。不同type與村別含義仍未證。 | scene-entry-v1、rtti-vtables-v2、validation-v1、原bulk raw |
+| T07-C02 | 舊0bab714e報告及T06契約稱0012清除actor manager／managed actors | 直接容器為CCheckPointMgr（FB79F0/C0F868）；迴圈清該容器內指標；另有controller三槽清理。不能泛化所有actor，也不能反向保證存活。場景初始化另有FAB130樹清理，須分開。 | 4B250D、5449A0、rtti-vtables-v2、square-lifecycle-v1 |
+| T07-C03 | Scenario ready不能直接套用town | 本輪直接核對CSquare vtable+2C=4B2570、12/14無overlay覆寫、基底handler註冊，故CSquare ready寫controller+4=1已獨立成立；不是所有town模式均驗收。 | scene-routing-v1、rtti-vtables-v2、validation-v1 |
+| T07-C04 | 把0043視為0014回覆或地圖載入完成 | 本輪僅觀察CSquare init內條件式sender(0,4-byte body)，早於0069尾欄位更新；未建立官方request/reply。 | 4BBE59..4BBEAF；4B91C1..4B9212 |
+| T07-OUTPUT-C01 | rtti-vtables-v1固定16 DWORD視窗標作slots | 原始bytes有效，CSquare+30後／CCheckPointMgr+0C後屬相鄰內容，不能當已證vtable項；v2限縮有效prefix，保留v1供追溯。CSingle只列所需prefix，未聲稱完整長度。 | rtti-vtables-v1與v2、t07_evidence.py |
+
+補充：scene-entry-v1涵蓋0069 switch資料區，Capstone線性顯示中的該段不具指令語意；validation-v1另以struct讀表，程式區只驗4B9090..4B9236。其他輸出亦含padding／相鄰視窗，正文只引用指定位址，不把視窗大小當function body。Ghidra function AddressSet沒有在本輪重新取得。
+
+沿用共用更正C02/C04：005F type6是CDuelField；舊行為修補／runtime成功不當原版驗收。T06整數selector更正維持，不將4DF510 recovered float簽名作封包float編碼。
+
+本輪REA fresh procedure_assembly(4BBB70)遇MCP 300秒timeout；retained summary=0筆，session health未觀察到analysis_activity，已close。沒有將timeout當新原生證據，也沒有重試同一查詢／重跑全量；語意依據為已驗SHA的既存REA/Ghidra raw，加本輪原檔bytes。故不宣稱本輪新增REA assembly成功或全域Ghidra重新驗收。

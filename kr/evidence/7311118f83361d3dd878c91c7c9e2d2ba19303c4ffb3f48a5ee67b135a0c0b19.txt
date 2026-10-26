@@ -1,0 +1,10 @@
+import pathlib,json,hashlib,datetime,shutil,struct,sys
+W=pathlib.Path(r'E:\Tartaros\workspace');A=W/'anal-multi';P=A/'kr-temp-roy/T14';T07=A/'kr-temp-roy/T07/tutorial-lifecycle';S='9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91';B=A/'kr-bulk-roy'/S
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+def now():return datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=8))).isoformat()
+def put(p,x):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+def append(x):
+ x={'at':now(),'source_sha256':S,'module':'Tartaros.bin','tools':'REA6.5.0/Ghidra12.1.4 cached raw; Python3.10 independent checks','integration_status':'待整合',**x}
+ with (P/'findings.jsonl').open('a',encoding='utf-8') as f:f.write(json.dumps(x,ensure_ascii=False)+'\n')
+def checkpoint(s):
+ with (P/'CHECKPOINT.md').open('a',encoding='utf-8') as f:f.write('\n## '+now()+'\n\n'+s+'\n\n本批查詢已保存；無本分析啟動的執行中工具。所有新語意待整合。\n')

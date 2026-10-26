@@ -1,0 +1,29 @@
+# T07 CHECKPOINT
+
+更新：2026-10-26（Asia/Taipei）。分析者roy，分支codex/kr-t07-roy。狀態：待整合／有界介面查證完成。
+
+從此處接續，不重跑全量反編譯。主要交付：[T07-T06-INTERFACE.md](T07-T06-INTERFACE.md)，更正：[CORRECTIONS.md](CORRECTIONS.md)，範圍：[SCOPE.md](SCOPE.md)。
+
+已完成必要先讀、共用catalog歸屬與更正核對、T07 owner登記、原始BIN SHA256重新計算符合9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91。起初無既有T07進度。只建立分析分支與個人證據，工作區原本大量變更保留，未提交或清理。
+
+工具觀察：0069註冊FD3044=4B9090；type7/23/24建CSquare（原始RTTI），+10=4BBC10，kind2重用／建立CSingleController；+2C=4B2570；0012/14走基底註冊，第二層不覆寫。安裝同步init先於0069尾欄位寫入；init內條件式0043送出不等同ready回覆。reset先清CCheckPointMgr容器再controller三槽，最後DWORD map selector。0014寫controller+4=1，未證明載入或綁定完成。
+
+分析者推論：最後有效scene/reset後的綁定須避免被後續清槽；相同map selector重試仍會做前段reset但可能跳過顯式模型/BOUND載入（引用T06）。不猜官方完整序列、出生點、尾byte、後端規則或各type村別含義。
+
+證據已逐批存evidence/cache-*.json與原raw/pseudo複本；各批來源SHA驗證通過。原始bytes/file offset/線性Capstone證據與RTTI v2已保存。rtti-v1尾端相鄰字標示的限縮見CORRECTIONS。21項局部檢查通過（validation-v1.json）；shared/handoff.py verify通過，但569歷史引用仍未閉合，並非語意／可玩驗收。
+
+REA6.5.0/Ghidra12.1.4 fresh 4BBB70 assembly查詢遇MCP300秒timeout，retained=0；已檢查session並close。不重試相同producer；沒有宣稱新REA結果成功。既存raw仍為有效本輪依據。
+
+後續：整合者審閱新CSquare介面與CCheckPointMgr更正後才增量整合正式kr；T07尚缺0069模式及尾欄位合法值／兩村正常場景直接配對；T06保留Map182/183與Town1/2候選限制；T04/T08/T09分別補初值、重綁、合法spawn/bounds。沒有傳訊其他對話，無執行／附加遊戲、目標API呼叫、發包或主程式修改。
+
+## 教學第一戰生命週期專項
+
+2026-10-26：roy依使用者指示追加[專項介面](tutorial-lifecycle/TUTORIAL-LIFECYCLE-INTERFACE.md)與[檢查點](tutorial-lifecycle/CHECKPOINT.md)。教學成果有界查證完成／待整合；原城鎮成果與更正保持原狀。
+
+## 教學正常完成至同登入廣場專項
+
+2026-10-26T17:14:09.185676+08:00：新增[完整介面](tutorial-to-plaza/TUTORIAL-TO-PLAZA-INTERFACE.md)及[檢查點](tutorial-to-plaza/CHECKPOINT.md)。0005/type1原生UI16轉換、0010誤刪F000與/14後0.5秒捷徑已查；舊版影片只作對照。72函式／146檔案雜湊／14原版bytes範圍通過完整性核對；合法離教學與單角色替代介面仍缺，未宣稱可玩，待整合。
+
+## 教學完成／廣場操作接續更正
+
+2026-10-26T20:30:02.397428+08:00：以[最新介面](completion-closure/TUTORIAL-PLAZA-CLOSURE-INTERFACE.md)與[最新檢查點](completion-closure/CHECKPOINT.md)接續；原先未解的001A單目標替代已補，完整Main退出／實際移動仍待驗收。原資料與v1保留，勿將舊DeleteObject240與15先完成推論當現結論。

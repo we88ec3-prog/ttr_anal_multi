@@ -1,0 +1,36 @@
+# 追加查證：提示8與廣場靜態移動走廊
+
+2026-10-26T20:49:57.373658+08:00，roy，待整合／目標仍進行中。上輪為progress：原件路由、資源、跨Task更正與交接均已保存。本輪沒有執行遊戲／Lua、附加、呼叫目標API或發包；未修改client／Server程式，原anal、資源、帳號及存檔唯讀。
+
+## 最後提示不是已證出口
+
+原件5C3370在F43FD時以`[page+228]`作ECX呼叫6C0170（`tutorial-final-ui-route.json`）。5C3040由5B0300→5B0460建立該視窗，後者RTTI／建構式明示`FUI::UICachingData<285,FUI::CTutoMsgDummy>`，實體constructor6BFB40。本次有原件bytes，不依Ghidra省略的隱含this／回傳值推factory對應。
+
+6C0170在參數2=0/4/6/10、進度<10時更新提示文字、顯示／隱藏子視窗及圖示；進度8選constructor的1123文字鍵，選擇圖示索引為-1。本次函式及59BD80／5A4310的F43FD接收路線沒有直接場景安裝或sender，**不是找到原生教學出口**。6BFE90本次所見是提示關閉／控制切換等按鈕，沒有進度8自動回廣場邏輯；不把陰性定向查詢擴張成全程無其他路徑。
+
+目前UI/StringTable.stp的Korean及Chinese(Taiwan).FCS均未找到Code1123（完整XML結構解析，見tutorial-final-text-key-audit.json）；其他663等教學鍵可讀。這只是目前選定member的缺字，不能推論所有版本或記憶體override，更不能補猜最後提示內容。Table/Messages/UIText並非這個數字鍵表。已保存兩個原始FCS與carrier/member SHA；未改文字資源。
+
+TutorialMain在最末提示前打開NPC10016 checkpoint；NPC通用544020可送C2S001C `<3H 0x1C,category,id>`。因此後續可查此互動／Quest16與Server回應；現有Server v3未見001C專支，**目前不能證該NPC互動就是教學完成出口**，不能直接製造一個完成回覆。
+
+## T09延伸：候選900/900的源碰撞格
+
+原BND carrier SHA `07d8f3a20aa4a396312c60927431a53a89dce6370ef8bb8192bd8d8eca1dd6b8`。
+
+|檔案|member SHA|原始格／世界寬高|900/900 cell|
+|---|---|---|---|
+|BoundMap/square001.bnd（Map511的BOUND）|97a87b26f7d3f5c80ea4039a4cf7ca9dce664c78004aaa6e03e17bad77af24a3|768×768／1536×1536，scale0.5|450,450，layer0/1皆0|
+|BoundMap/Square03D.bnd（劇情候選）|e23a113c4ccc720ee362a70e7500b378088d114b7a2c8ce997e15cd784149434|1536×1536／1536×1536，scale1|900,900，layer0/1皆0|
+
+工具觀察／原生鏈：4DF1A0拼Map/BoundMap/{BOUND}.bnd；830040讀header+20版本，非3走82F660（header234h，32個descriptor、stride16），3走82F850（header534h、stride40）。這兩個資源版本分別0和2，均走82F660。每descriptor對應offset／compressed bytes／raw bytes／cell count；zlib解壓長度與count*4精確相符，所有非空layer順序消耗到檔尾，沒有餘尾。每檔只有layer0/1非空，各層完整raw另存u32及SHA。
+
+82FA80將來源格轉成分塊資料，82FF10建立查詢物件；82CBC0原件將grid width/height除以world float width/height存scale（Ghidra部分型別不準，bytes已核對）。82CDF0 clamp座標後乘scale再轉整數，查layer1及layer0，兩者皆零才回true；若兩層指標都空直接false，故「未載入BND」不能當無障礙。832DA0含動態override及分塊位元查詢，本次僅核對原始source格，未宣稱runtime物件或override狀態成立。
+
+連續測試路徑：`(900,900)→(884,900)→(884,884)→(900,884)→(900,900)`，world每1單位取樣，另外檢查每點四周±16 world的方形測試走廊。square001共625個不同cell、Square03D共2401個不同cell；**兩層皆零、blocked=0**。見plaza-bound-test-corridors.json。±16是選定測試餘裕，不是已證原生角色半徑；不靠舊hook或AI fixture得出格值。
+
+分析者推論：現有900/900候選及上述短走廊有靜態碰撞來源支持，可以作後續工作副本的受控測試點。先前完全未驗證walkable的範圍因此縮小；仍**不是官方spawn、完整角色體積／高度／動態碰撞或實際移動驗收**。兩圖均clear不能分辨Town5應配哪個selector。劇情NPC10338在869/1052：square001 layer0=1，Square03D兩層0，這是地圖幾何差異的實例，不能把劇情NPC座標直接移植到Map511。
+
+## 下一步與交付限制
+
+先查NPC10016的本機互動、最後進度8與Quest16狀態是否有原生完成／出口訊息；Server可先在獨立副本實作已證0005 UI、001A切角、CSquare43／最後reset後重綁及輸入credit記錄，保留未證完整出口閘門。Map511可用上述靜態clear走廊做操作測試候選，不能因資料已送便寫持久tutorial_completed。
+
+需有原生／Server事件與使用者實際同登入移動、停止及無殘窗觀察，才可完成目標。現階段仍未達可玩驗收；任務15後續副本191→192與抵村流程另規劃，15/1不得提早完成。

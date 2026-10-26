@@ -1,0 +1,26 @@
+exec(open(r'C:\Users\we88e\Documents\Codex\2026-10-26\new-chat-2\work\t14_helpers.py',encoding='utf-8').read())
+addresses=set(['0x4c4f20','0x4c2880','0x4aa510','0x4ab940','0x4aca40','0x47aeb0','0x57ef20','0x4ab9e0','0x4a88e0','0x4a9db0','0x4ab8a0'])
+idx={}
+for line in (B/'index.jsonl').open(encoding='utf-8'):
+ r=json.loads(line)
+ if r.get('address') in addresses and r.get('status')=='ok':idx[r['address']]=r
+rows=[]
+for addr in sorted(addresses):
+ if addr not in idx: rows.append({'address':addr,'status':'not-saved'});continue
+ r=idx[addr];assert r['source_sha256']==S
+ pp=B/r['pseudocode_path'];assert sha(pp)==r['pseudocode_sha256']
+ source=B/r['batch_path'] if 'batch_path' in r else A/r['seed_evidence'];expected=r.get('batch_sha256',r.get('seed_evidence_sha256'));assert sha(source)==expected
+ dst=P/'evidence'/source.name
+ if not dst.exists():shutil.copyfile(source,dst)
+ assert sha(dst)==expected
+ out=P/'evidence'/pp.name
+ if not out.exists():shutil.copyfile(pp,out)
+ row={'address':addr,'index':r,'raw_copy':'evidence/'+dst.name,'raw_sha256':expected,'pseudo_copy':'evidence/'+out.name,'pseudo_sha256':sha(out)};rows.append(row)
+ raw=json.loads(source.read_text(encoding='utf-8'))
+ print(json.dumps({'address':addr,'raw_top_keys':list(raw),'index':r},ensure_ascii=False))
+put(P/'evidence/native-cache-v1.json',{'source_sha256':S,'status':'observed cached REA results, pending semantic review','records':rows})
+for rel in ['CHECKPOINT.md','SCOPE.md','progress.json','evidence/t14-interface-reference.json','evidence/Event_TutorialMain-parsed.json','evidence/Event_TutorialMain.luac','evidence/Event_TutorialBase-parsed.json','evidence/Event_TutorialBase.luac','evidence/Coroutine-parsed.json','evidence/Coroutine.luac']:
+ src=T07/rel;dst=P/'evidence/t07-reference'/rel;dst.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(src,dst)
+put(P/'evidence/t07-references-v1.json',{'reference_only':True,'files':[{'source':str(T07/rel),'copy':'evidence/t07-reference/'+rel,'sha256':sha(T07/rel)} for rel in ['CHECKPOINT.md','SCOPE.md','progress.json','evidence/t14-interface-reference.json','evidence/Event_TutorialMain-parsed.json','evidence/Event_TutorialMain.luac','evidence/Event_TutorialBase-parsed.json','evidence/Event_TutorialBase.luac','evidence/Coroutine-parsed.json','evidence/Coroutine.luac']]})
+append({'id':'T14-roy-001','type':'observation','conclusion':'Target hash verified; no prior T14 checkpoint; scoped claim registered. Cached REA raw/pseudocode hashes verified and preserved; T07 reference files copied with hashes.','addresses':sorted(addresses),'evidence':['evidence/baseline-v1.json','evidence/native-cache-v1.json','evidence/t07-references-v1.json'],'conditions':'Evidence describes this KR BIN only; resource identity independent','limitations':['Cache acquisition is not semantic acceptance','T07 lifecycle remains foreign ownership']})
+checkpoint('已保存本批 cached REA raw 與 T07 Lua/介面參考。下一步：解析 flags 容器預設值、Lua adapter 與下一段 gate；見 evidence/native-cache-v1.json、t07-references-v1.json。')

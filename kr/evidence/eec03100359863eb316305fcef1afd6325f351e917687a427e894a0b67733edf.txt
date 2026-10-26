@@ -1,0 +1,87 @@
+# 教學完成 → 廣場可操作：T07／roy 接續介面
+
+狀態：**待整合；靜態介面已補充，尚未通過同次登入可玩驗收**。更新：2026-10-26T20:30:02.397428+08:00。
+目標先完成教學14／16與必要劇情，返回可操作廣場（保留教學專用廣場可能性）；之後在廣場接任務15，經副本前往馮德斯村。任務15不是本階段返回廣場前置。
+
+原BIN SHA256：`9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。沿用 reverse-engineer-anything v42、已保存 REA6.5.0／Ghidra12.1.4 raw；Python3.10.6、Capstone5.0.7只做唯讀整理及bytes核對。以下區分工具觀察、推論及重建策略。沒有執行遊戲／Lua、附加、目標API、發包、改client或Server程式；原anal、資源及帳號唯讀。
+
+## 先回答廣場與任務NPC
+
+|證據|工具觀察|能支持／不能支持的判斷|
+|---|---|---|
+|`Table/_TownList.xml`、`_TownTypeList.xml`|Town5名為廣場1／廣場－工匠街，NPC清單含10338；Quest15的town=5、giver/finisher=10338、Demand16|10338確實屬廣場相關NPC清單；清單不含物理地圖selector及放置座標，不能直接證Town5=Map511。|
+|`Event/Sequences/talkevent10_1.seq`，1000/14|`LoadMap("Square03D.fld")`、`CreateObject(0,10338,869,1052,...)`，也建立10049；尾段`Q.DeleteAllObject(); RestoreMap(); RevPhase1()`|最後教學劇情本身便會出現這位NPC與廣場外觀。看到NPC可以是劇情臨時物件，不足以證明已退出劇情。其座標不能當玩家出生點。|
+|Quest15 scene1 `Square_Tutorial01.seq`|同樣載入Square03D並建立10338，再清除／RestoreMap|接任務開場也可能呈現相同NPC；不是任務15已完成證據。|
+|MapList511|MAP=Square001D、TRIGGER=square001.mef、BOUND=square001|是獨立物理資源配對；本輪未證其與Town5、劇情Square03D或官方教學出口必然相同。Town archive有Square03D資源，不能稱其不存在。|
+|目前`anal/plaza_npcs.py`|讀Town5清單後，以暫定座標用S2C0007建立NPC，用0027建立互動點|目前Server出現NPC是額外送出物件，不是已查證Map511自行放置。模組名「Native plaza NPCs」不能代替原生放置證據。|
+
+使用者的條件「若是廣場自帶NPC，便較能支持廣場正確」合理；目前只確認NPC名單關聯，**尚未確認其畫面物件來源及Town→Map配對**。可操作驗收應同時確認劇情清理完成、CSquare／Single控制器、最後reset後綁定與實際移動，不只看NPC。
+
+## 教學14／16／15的界線（跨T14）
+
+Quest14為伊希莉亞教學，type3/town0/field18；Quest16為Pinko/Papa教學，type2/town0/Demand14；Quest15「前往馮德斯村」為type2/town5/field19/Demand16。field18/19不能當物理Map18/19。
+
+TutorialMain第一戰14等待結束後，回UI15，接1000/10、12，招募4，等待control checkpoint4，再1000/13，等待角色2可用及招募確認，最後1000/14，然後內部`PostUIMessage_TutoMsg(8,0)`。招募查詢flag由本機UI callback `6BFAE0`更新；不能只靠Server送擁有角色便假設Lua已完成。Lua `PlayAndWaitForScene`於IsCutSceneRunning變false後仍額外yield一次，最後3F不等於Main尾端已執行完。
+
+資源Case103/STAGE19引用pathofpindus流程，chart明示191→192；Quest15 scene3 `pindos_talkevent.seq`載town001D.map並有抵村劇情。這些支持後續任務路線分開規劃，尚非完整官方進副本／結算／抵村封包序列，也不是已證出生點。
+
+目前Server在C2S3F(15,1,1)立刻完成15，是把開場劇情當任務完成；應保留已接取／開場完畢狀態，不能此時寫completed15。任務16的正式提交／獎勵時機仍缺，不能因劇情1000/14結束便宣稱已證官方quest16結算。
+
+## 第一戰前後必須保留的生命週期
+
+1. TUTO承接Lua coroutine；S2C0005/type1走`4B9630→4C4EB0→4A9260`切戰鬥UI16，可保留TUTO場景／控制器。C2S0009是該0005路徑的條件式輸出，不是通用map-ready。當前v3有效0028分支送38等資料但未送0005，需補此UI轉換介面。0005其餘欄位應沿用已核對契約，不在此猜完整官方body。
+2. 不用005F/type2替換TUTO，不用005F/type6（原版DuelField），也不以006E重新啟動TutorialMain代替續接。S2C0038不會自行切controller或保證B0。
+3. 角色切換不可先用0010全清class0；它會提早移除F000。可用原生**001A/4B28D0**只刪指定entity，再0007建立具有正確邏輯角色ID的玩家，再000A綁定。013E只改外觀+8C，不改CheckLeader依賴+88，不能代替切角。
+4. 001A讀body+4起WORD清單，數量floor((len-4)/2)；body+2的WORD在本handler不讀，其語意未證。單目標候選body `1a 00 00 00 00 01`只含0100；第二WORD=0是後端候選值，非已證官方欄位值。此handler先在被刪者為控制槽成員時virtual14清槽，再刪指定key。重建後必須重綁。
+5. **更正：Lua DeleteObject(240)確實刪F000**。4AB580→4A9FE0取byte後左移8；Main Part1正常完成後呼叫它是原生步驟。保留F000只為避免切角過早刪除，不能永久保留。前批相反文字撤回，見CORRECTIONS.md與保留v1。
+
+## 結尾劇情與輸入清理的同步
+
+qbase.lua SHA `d6e01d85194f452d56961252d797a0e671d7e34a11fe07e96155220f27ee4cc3`，76原型結構完整讀取，沒有執行Lua。
+
+工具觀察：RevPhase1結束相機覆寫／sepia／slow motion、隱藏ScenarioTalkTable、showOtherUI、恢復原物件render後yield；下一步Q.EnableInput，再Q.EndCutScene。EnableInput註冊5661A0→562980清`FB8830 &~=2`。正常scene1000/14前面已DeleteAllObject／RestoreMap。EndCutScene註冊565FC0→561DB0，在active且非+89特殊分支、CheckConfirmMessage回1時，經4A39A0送C2S003F body8：`<4H 0x3F,quest,scene,1>`；送出後仍會清劇情coroutine與恢復UI縮放等。
+
+限制：561760場景載入失敗路徑也能經4A39A0回報；任意3F不是正常播放完畢證書。3F回報也早於TutorialMain額外yield及PostUIMessage(8,0)。目前未找到一個可直接當「整段教學Lua已完全退出」的Server ACK；4A9950只轉內部UI事件，4C4DF0只tick scheduler，不能推導thread數0就會自動離TUTO。
+
+重建策略：用本次登入／教學世代與已驗證第一戰、必要場景順序、角色擁有與招募回覆記錄檢查1000/14/1；拒絕孤立、重播或載入錯誤回報。正常3F可作劇情清理進度訊號，**不能聲稱已證官方完整出口**。0.5秒可留作診斷等待，不能作語意完成條件；目前Server只等固定時間仍有同步缺口。
+
+## 廣場安裝、reset與控制介面（引用城鎮核心，補移動條件）
+
+|介面／條件|原生觀察|Server開發要求及限制|
+|---|---|---|
+|0069 type7/23/24|4B9090→4BBB70，真實類別CSquare；4B7D50退出／解構舊scene再init新scene|可以引用類別入口；三種type業務意義及尾byte合法值仍缺。不可混用005F type值。|
+|CSquare init4BBC10|清actor容器／帳號metadata，替換TUTO kind4為Single kind2，UI頁2；條件式送C2S0043 `43 00 xx 0A`|之前生成／綁定會失效。0043可標示init已到此處，發生在0069尾欄位寫入前，不是地圖載入完成或0014的ACK。xx來源[FE1AA0]+18，語意未證。|
+|0012 /4B24F0|先清checkpoint容器，再reset控制槽，最後讀DWORD selector交T06 map loader|最後reset後重建／綁定；相同selector仍清槽，不能無害重播。|
+|玩家0007／metadata0008／初值|沿用已核對T08/T04資料介面；新entity不能只覆寫既有同key|先確定actor所屬新scene世代，保留正確邏輯角色ID與本機帳號關聯。數值仍需T04合法資料，fixture不是原生。|
+|S2C000A /4AF920|本機account匹配，清槽再545040加入玩家；545040同時controller+4=1|候選已知pair型body `<HIbHH 0xA,account,1,source,target>` 共11bytes；帳號／entity依目前世代，不硬猜官方固定ID。|
+|0014 /4C5930→4B2570|controller+4=1；若FB73E8==0則清FB8830 bit0|不是唯一ready寫入者，也不檢查玩家／地圖完整。init也只清bit0；**不替代EnableInput清bit1(mask2)**。|
+|輸入／移動|6D4A30於FB8830非0時清key buffers；5452C0需綁定slot、時間條件及FBA7B0>0，送input後credit減1|ready或NPC存在都不能證可移動。00DA/4959F0加5、bootstrap4B7F00設30；六包DA補30與每input回DA是既有Server策略，非官方補充節奏。|
+
+目前v3只在C2S00B0才發廣場map／玩家／綁定，缺乏CSquare init保證送B0的證據。因此「已安裝CSquare但永等B0」是具體Server阻塞候選。候選可在**本次plaza-pending狀態**識別上述C2S43作init進度，僅執行一次最後reset→metadata／actor／綁定／ready；晚到B0不得重reset。這是後端重建策略，需工作副本驗收，不把43升格官方ready。
+
+Map511、Town5及900/900目前是現有Server選擇；900/900沒有在本輪升格官方出生點或已驗證walkable。合法位置、BOUND可走範圍／碰撞及Server位移一致性須另有證據；不能先寫tutorial_completed再以sendall成功當實際移動驗收。
+
+## 可審閱的後續開發清單
+
+|優先|工作|可檢查結果|
+|---|---|---|
+|P0 T08／Server|在獨立副本以001A單目標取代教學切角0010，重建邏輯ID正確的玩家並綁定|切角期間F000保留；Part1正常DeleteObject240仍生效；不靠013E假切角。|
+|P0 T07／Server|第一戰使用0005的原生UI16入口、保留TUTO，結束通知回T14契約|沒有殘留組隊／戰鬥開始視窗；Lua繼續後續劇情。|
+|P0 T14／Server|補14／16教學狀態及招募、最後劇情清理同步，記錄正常／錯誤3F來源|重播3F不可重完成／重裝場景；任務15未被強制提前完成。整段Main退出事件仍需補證。|
+|P0 T07／T02／Server|廣場entry分代，識別CSquare43進度，最後reset後資料與綁定只執行一次|不依唯一B0；晚到B0／重複43不清掉有效綁定。|
+|P0 T09／Server|核對實際選用廣場的合法起點及至少兩個連續可走位置，input mask／credit／速度一致|同次登入可開始／持續／停止移動，無回彈、卡死、殘留視窗。沒有此觀察不標完成。|
+|P1 T14／Server|修正15/1只為開場，接副本、191→192目標與抵村劇情分開|結算／獎勵／前往Town1的提交時機有證據後才完成15；不猜完整官方序列。|
+
+新發現的路由更正：QuestMgr vtable C0DB08+4→4FDA30；分派索引`object[opcode*2+1]`。5020B0於FAB5C4註冊5030C0，故opcode=(FAB5C4−FAB2A0−4)/8=**0064**，不是004C。FAB4A4→502270為0040，FAB61C→502170為006F可交叉核對。原件bytes見quest-manager-registration／dispatch／vtable.json。現anal/plaza_npcs.py將5030C0寫成004C是錯誤註解及發包候選；**不得只把4C改64便宣稱任務15結算正確**，因15/1根本不是副本完成。TUTO短004C與QuestMgr0064 status DWORD+4分屬不同域。
+
+## 證據與接續
+
+`evidence/cache-*.json`記每批原raw／pseudo路徑及SHA，本目錄保留複本；`resource-readset*.json`記Table/Event/Field carrier與member SHA；qbase parsed/disassembly是唯讀衍生資料；各bytes.json附原VA/file offset/SHA，線性視窗不等於Ghidra函式界線。`CORRECTIONS.md`保留DeleteObject等修正，未覆蓋正式kr。
+
+參照上一層`T07-T06-INTERFACE.md`、`tutorial-lifecycle/TUTORIAL-LIFECYCLE-INTERFACE.md`及已加更正通知的`tutorial-to-plaza/TUTORIAL-TO-PLAZA-INTERFACE.md`。本交付沒有解除原先執行限制。下一階段需Server製作獨立工作副本並依上述介面完成可觀察驗收；本輪分析不冒稱已成功回廣場。
+
+## 接續增補
+
+2026-10-26T20:49:57.373658+08:00：見[FOLLOWUP-UI-AND-BOUNDS.md](FOLLOWUP-UI-AND-BOUNDS.md)。900/900附近短走廊在兩候選BND源層皆clear，已補靜態位置證據，仍非官方spawn或實際移動；提示8路線只更新CTutoMsgDummy，未證教學出口。
+
+2026-10-26T20:57:58.797379+08:00：新增[開發交接](DEVELOPMENT-HANDOFF.md)及[離線候選](server-candidate/README.md)，001A／0005／廣場43三項未套用修改61項離線檢查通過；完整出口與同登入實際移動仍缺。

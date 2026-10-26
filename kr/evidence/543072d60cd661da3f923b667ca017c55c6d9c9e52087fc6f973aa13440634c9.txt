@@ -1,0 +1,30 @@
+# 賽希莉亞第一戰後卡住：完成通知與場景不相容（roy）
+
+結論：這次不是Server還沒送戰鬥完成通知。現行Server沿用為舊教學client修補設計的流程，與只改IP/翻譯的v2不相容。出生倍率修正本身沒有改動這段流程。
+
+## 本次紀錄（Asia/Taipei，2026-10-26）
+
+- 10:50:37 Server tutorial-battle-entry：scenario14/leader4，回覆5f0002、380002be0000000e00；client同時記Next Scene:SCEF。
+- 10:50:53.724 Server tutorial-battle-update：HP0、completed=true。
+- 10:50:54.471 Server tutorial-scenario-complete：已完成sendall並記錄scenario14序列，首包opcode0x005f，尾包opcode0x004c。
+- 同秒client切Next Scene:DUEF，接著Invalid message76與Failed at76；76是十進位0x4c。
+
+事件來自SERVER/spawn-scale-v1/runtime/captures/8416/20261026-104913-519507/events.jsonl；已保存所需欄位摘要、讀取時SHA與長度，不複製帳號/憑證內容。client來源是workspace/log.txt。本輪以核准讀取取得非空的events與stdout；不能沿用先前受限讀取顯示0bytes來推論沒有事件。connection-0001.bin仍為0bytes，sendall事件及client同秒紀錄不是完整封包級執行追蹤。
+
+## 已有原生介面證據
+
+現有new_expedition.battle_completion開頭是server0x005F/type6（5f0006），結尾server0x004C/scenario14（4c000e00）。原版0x4B99C0的type6明確建立Scene::CDuelField並設DUEF，沒有返回TUTO。v2該段bytes與原BIN相同。
+
+教學TUTO建構0x4C4AC0設TUTO並在自身callback+0x610c註冊0x4C4F20。按該延伸callback表base0x5eac、stride8，(0x610c-0x5eac)/8=0x4c；其handler取得對應劇情完成項並寫1，供既有教學完成等待條件使用。這是TUTO介面條件，不能把同一完成包送到其他scene就當成功。
+
+舊make_tutorial_transition_probe.py正是攔0x4B99C0：遇type2時保留TUTO、只補combat controller/UI；遇type6時重建教學controller而不走原版DuelField。現行Server的battle_entry/battle_completion仍保留對該舊修補的依賴；乾淨v2刻意不包含它。既有CLIENT-PATCH-DEPENDENCIES.md與歷史48-tutorial-battle-fixture.md已記錄這個邊界，不能把舊可玩紀錄當原版通過。
+
+因此「Server已認定完成，但完成通知落在錯的場景、Lua原等待鏈沒有正常接續」是本次強證據原因。精確到每個執行中scene物件/handler的路徑仍未做live trace；不能把log單獨視為所有分支證明。
+
+## 正確修復範圍與尚缺條件
+
+應由Server恢復與原版TUTO生命週期相容的進戰、結算及返回順序；不是猜一個額外ack、重送4c14、把5f6當返回教學、或將client加回舊controller hook。也不要盲送6e1：既有證據表示它重新執行教學初始化，不保證保留目前Lua/進度。
+
+歷史v22曾嘗試去掉5F切scene、只用38/type2保留TUTO，但文件明列combat controller相容性尚待驗證。故目前不能直接宣稱刪兩包5F就是正確完成方案；還需引用場景主責既有成果，確認原版如何讓戰鬥controller、TUTO coroutine及結算旗標同時有效，再做Server新版本與離線時序驗證。T07城鎮核心不在本輪重做，也未跨對話傳訊。
+
+本輪沒有修改Server/client程式、重啟服務、發送封包或附加遊戲。保留原件、帳號與存檔唯讀。怪物HP/傷害屬既有Server測試fixture，不當原生戰鬥規則或正式任務結算。報告與raw Evidence ID/SHA、位元組核對保存SERVER/evidence/tutorial-completion-v1。
