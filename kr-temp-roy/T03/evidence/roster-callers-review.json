@@ -1,0 +1,93 @@
+{
+  "status": "待整合—native list consumers observed",
+  "source_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+  "module": "Tartaros.bin",
+  "tool_version": "REA6.5.0/Ghidra12.1.4",
+  "evidence": [
+    {
+      "path": "evidence/rea-roster-list-caller-4b7f00.json",
+      "sha256": "895a05c13f26c93ce3c5b71ee65959cc8c82510b751a5e633d1c173190818ffd",
+      "evidence_id": "ev_86ce3364af96a0352bcc724fdd33e3ef64139d3c44909825fa7b0a0f129ad2bc",
+      "body": {
+        "available": true,
+        "provenance": "ghidra-function-body-address-set",
+        "ranges": [
+          {
+            "start": "0x4b7f00",
+            "end": "0x4b8283"
+          },
+          {
+            "start": "0x4b8289",
+            "end": "0x4b8399"
+          },
+          {
+            "start": "0x4b839f",
+            "end": "0x4b83bc"
+          },
+          {
+            "start": "0x4b83c0",
+            "end": "0x4b84b4"
+          },
+          {
+            "start": "0x4b84ba",
+            "end": "0x4b85ca"
+          },
+          {
+            "start": "0x4b85d0",
+            "end": "0x4b86e4"
+          },
+          {
+            "start": "0x4b86ea",
+            "end": "0x4b8866"
+          },
+          {
+            "start": "0x4b886c",
+            "end": "0x4b8dbc"
+          }
+        ],
+        "total_bytes": 3740,
+        "span_bytes": 3773,
+        "non_contiguous": true,
+        "contains_entry": true
+      }
+    },
+    {
+      "path": "evidence/rea-roster-record-selector-4e2730.json",
+      "sha256": "f3f8b23d56000e4a7f1346ecacd31c0daa66a5fa428338f4cad52022656cc4fd",
+      "evidence_id": "ev_d8c1f422f3d68f7a4571d4291b441438d1f3ad3997f42b9f2bde8ed8d442fc7c",
+      "body": {
+        "available": true,
+        "provenance": "ghidra-function-body-address-set",
+        "ranges": [
+          {
+            "start": "0x4e2730",
+            "end": "0x4e27a1"
+          }
+        ],
+        "total_bytes": 114,
+        "span_bytes": 114,
+        "non_contiguous": false,
+        "contains_entry": true
+      }
+    }
+  ],
+  "observations": [
+    "4B7F00 computes zero records if length<41, otherwise floor((length-41)/35); source cursor is packet+41, ID fromsource+2E, cursor increments35.",
+    "4B7F00 accepts byte ID<=9 for receiver selection F94304+ID*210, then EDX=record/ESI=receiver calls4D4150. Lower bound1 and uniqueness are not checked in this loop.",
+    "4B7F00 still constructs command26+ID and updates a16-bit shift mask for each input record even when ID fails the leaf selection guard; FBA798 gate controls sends. After loop it stores maskF94240 and calls4E5FB0.",
+    "4E2730 similarly uses floor((length-2)/35), first record packet+2, ID<=9, receiver=client+6924 base+ID*210, calls4D4150 and then4E5FB0. Its numeric command binding not yet verified.",
+    "4B7F00 consumes header fields before its record-count length check; the zero-record branch does not prove a short packet is safe.",
+    "Both loops use integer division; incomplete trailing record bytes do not produce another iteration. This is a consumer observation, not a recommendation to send malformed packets."
+  ],
+  "analyst_inference": "4B7F00 record address and F94304 receiver select exactly the same210-stride record family consumed by672F00 UI+5C gate. Valid input can set that UI availability flag via4D4150. The actual notification/control refresh contract remains to inspect.",
+  "conditions": [
+    "Valid complete header/record memory and NUL-terminated source name",
+    "Proper table/command dispatch and initialized global/receiver state; not yet complete timing proof"
+  ],
+  "limits": [
+    "Do not infer official valid character ID0 or default/owned roster policy from a client bound check.",
+    "Do not label copied world fields or synthetic values as official initial stats.",
+    "Do not equate record copy/flag with full selection/scene/network success.",
+    "Numeric packet binding and post-update notification are pending."
+  ]
+}

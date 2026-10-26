@@ -1,6 +1,6 @@
 # T02 共用通訊與封包框架
 
-狀態：bounded-review-handoff；負責人未認領。
+狀態：bounded-review-handoff；負責人 roy；定向離線審核進行中。
 
 ## 範圍
 
@@ -79,3 +79,20 @@
 - [native-index/scene-manager-current-handoff.txt](../../../unclassified/evidence/fb45bc0938a4f022f2a7fc4f9180a5cb75f8d3ff2217cca37c99df6b5724909b.txt)
 
 舊報告與腳本只供審核，不直接執行；未打包歷史引用見task.json。部分原生證據不等於功能可玩驗收。
+
+## roy 局部來源與位元組驗收（2026-10-25）
+
+只整合指定位置的身分與常數核對；完整framing、mode時序與可玩流程仍未驗收，舊結論及限制保留。
+
+- [範圍、成立條件、未知與遊玩影響](../../evidence/35f025f3a711d756e48bb202912b1812af05becd1247ebc095f8e649cf9f7b0c.txt)
+- [獨立位元組核對](../../evidence/b40cbeb43f60c922f6eca823c9d04d7dc061b18e8bbec01b1d9bff3f412a5959.txt)
+
+## roy framing局部契約（2026-10-25）
+
+新同SHA靜態證據支持sender/receiver不同長度門檻與非零mode的fallback；舊helper缺口依本報告縮小，完整通訊與可玩流程仍未驗收。
+
+- [原生觀察、AI差異、成立條件與開發缺口](../../evidence/f398779b1e129b0150f009451dc72b51b1cb9b88e9f2aa5c43b4eeeac02e0e94.txt)
+- [五份Evidence定位、body範圍與獨立byte核對](../../evidence/60c0199eb136e9f2c948b5bc80ec384187663f437d53295402e8cfcbf847ce7e.txt)
+
+
+2026-10-26 T01 整合交接：[T01-20261026-01](../../../shared/integrations/T01-20261026-01/README.md)。僅列明 SHA 的凍結成果已整合；其他暫存／新修改仍待下一輪。各任務未整體完成，接續前以此批次所在 origin/main commit 為基準。

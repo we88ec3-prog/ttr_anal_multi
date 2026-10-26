@@ -83,3 +83,6 @@
 - [audit_monster_spawn_control.py](../../../kr/evidence/fe843f6e9d6a23bad7405d0daf0e4eddaa043b0571b1d8c3fcf82c8ce38df2ae.txt)
 
 舊報告與腳本只供審核，不直接執行；未打包歷史引用見task.json。部分原生證據不等於功能可玩驗收。
+
+
+2026-10-26 T01 整合交接：[T01-20261026-01](../../../shared/integrations/T01-20261026-01/README.md)。僅列明 SHA 的凍結成果已整合；其他暫存／新修改仍待下一輪。各任務未整體完成，接續前以此批次所在 origin/main commit 為基準。

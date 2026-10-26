@@ -1,0 +1,42 @@
+{
+  "status": "待整合",
+  "at_utc": "2026-10-25T15:00:36.944218+00:00",
+  "source_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+  "module": "Tartaros.bin",
+  "address_range": {
+    "available": true,
+    "provenance": "ghidra-function-body-address-set",
+    "ranges": [
+      {
+        "start": "0x54f850",
+        "end": "0x55022c"
+      }
+    ],
+    "total_bytes": 2525,
+    "span_bytes": 2525,
+    "non_contiguous": false,
+    "contains_entry": true
+  },
+  "tool_version": "REA6.5.0 / Ghidra12.1.4; Capstone independent byte verification",
+  "evidence": {
+    "path": "evidence/map-source-producer-54f850.json",
+    "sha256": "4ee1bc9642c047c567af30a1193f2dab3436a554d0e2ee902ad2c2cd668c1cf9",
+    "evidence_id": "ev_1841b149d8e259bf2f8318f0b4c7f0567128a154116f56bd6c594cad23e8e740",
+    "byte_check": "evidence/map-source-constructor-byte-verification.json"
+  },
+  "observed": [
+    "54F878 XOR EBX,EBX followed by54F8B1 MOV [FB906C],EBX; observed direct write initializes zero.",
+    "Recovered constructor labels CTartarosConfig and ConfigFixedNode<int>; references Tartaros.cfg and fopen/read helper6EE2D0."
+  ],
+  "inference": "4C32E0 route takes configuration-backed value. This direct initializer is not a fixed Town1/2 destination producer.",
+  "conditions": [
+    "Exact target SHA and whole body instruction addresses checked."
+  ],
+  "limits": [
+    "Recovered type labels do not establish full config schema.",
+    "Indirect config parsing may write through object pointers; reference count cannot prove absence of other writers.",
+    "No config modification or parser expansion; full config subsystem is not T06 scope.",
+    "Town1/2 physical Map IDs and safe playable transition remain unverified."
+  ],
+  "next": "Resolve DATA ref4A1708 to4A0AC0 wrapper; check containing method ownership before narrow registration/query."
+}

@@ -1,0 +1,80 @@
+{
+  "status": "待整合",
+  "source_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+  "module": "Tartaros.bin",
+  "tool_version": {
+    "python": "3.10.6 (tags/v3.10.6:9c7b4bd, Aug  1 2022, 21:53:49) [MSC v.1932 64 bit (AMD64)]",
+    "capstone": "5.0.7",
+    "script_version": 1
+  },
+  "native_evidence_ids": [
+    "ev_8a11cf4b6a1bdfecfc68892834ffa3fb2c59f46b0c84e864d3fd8143bc08ef1a",
+    "ev_4772f73242f28bac8666e8a23df9c88b78f00f1ee381f30659710cbc15647821"
+  ],
+  "observed_instructions": [
+    {
+      "va": "0x4df538",
+      "file_offset": 911672,
+      "bytes": "8b750c",
+      "instruction": "mov esi, dword ptr [ebp + 0xc]"
+    },
+    {
+      "va": "0x4df53e",
+      "file_offset": 911678,
+      "bytes": "397048",
+      "instruction": "cmp dword ptr [eax + 0x48], esi"
+    },
+    {
+      "va": "0x4df54e",
+      "file_offset": 911694,
+      "bytes": "897048",
+      "instruction": "mov dword ptr [eax + 0x48], esi"
+    },
+    {
+      "va": "0x4df58a",
+      "file_offset": 911754,
+      "bytes": "8975f0",
+      "instruction": "mov dword ptr [ebp - 0x10], esi"
+    },
+    {
+      "va": "0x4df627",
+      "file_offset": 911911,
+      "bytes": "8975ec",
+      "instruction": "mov dword ptr [ebp - 0x14], esi"
+    },
+    {
+      "va": "0x4f7e38",
+      "file_offset": 1012280,
+      "bytes": "8b0a",
+      "instruction": "mov ecx, dword ptr [edx]"
+    },
+    {
+      "va": "0x4f7e40",
+      "file_offset": 1012288,
+      "bytes": "39480c",
+      "instruction": "cmp dword ptr [eax + 0xc], ecx"
+    }
+  ],
+  "observed": "Selector argument bits loaded fromstackDWORD, compared/stored asDWORD, passed as32-bit tree key; recovered float prototype is not serialization evidence",
+  "inference": "Compatibility code should preserve numeric Map ID bits for this selector path rather than convert toIEEE754 float bits",
+  "examples": [
+    {
+      "map_id": 182,
+      "integer_dword_le_hex": "b6000000",
+      "ieee754_float_le_hex_for_comparison_only": "00003643",
+      "destination_status": "known MapList row; Town1/2 association remains candidate"
+    },
+    {
+      "map_id": 183,
+      "integer_dword_le_hex": "b7000000",
+      "ieee754_float_le_hex_for_comparison_only": "00003743",
+      "destination_status": "known MapList row; Town1/2 association remains candidate"
+    }
+  ],
+  "limits": [
+    "No full original C++ signature recovery",
+    "Not all caller argument construction covered",
+    "Examples are scalar encoding comparisons, not emitted packets",
+    "No official Town/Map association, spawn or playable flow acceptance"
+  ]
+}

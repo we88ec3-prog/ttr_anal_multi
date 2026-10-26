@@ -1,0 +1,296 @@
+{
+  "status": "待整合",
+  "source_path": "anal/login_test_server.py",
+  "source_sha256": "7385c9a5c1be5b0715ae56b189f6a584677dc657ca892377b545d233206ef35e",
+  "historical_expected_sha256": "7385c9a5c1be5b0715ae56b189f6a584677dc657ca892377b545d233206ef35e",
+  "historical_reference": "T03 task unresolved_dependencies from 2b1f41d3...",
+  "module": "local AI replacement server, not native executable",
+  "tool": "Python 3.10.6 ast/text/hashlib",
+  "source_copy": "evidence/local-server-7385c9a5c1be5b0715ae56b189f6a584677dc657ca892377b545d233206ef35e.py.txt",
+  "bytes": 55777,
+  "command_guards": [
+    {
+      "line": 286,
+      "test": "store and args.reply=='channel-bootstrap' and command==1"
+    },
+    {
+      "line": 289,
+      "test": "shop and account_id is not None and command==0xa8 and len(payload)==2"
+    },
+    {
+      "line": 292,
+      "test": "shop and account_id is not None and command==0xac"
+    },
+    {
+      "line": 307,
+      "test": "expedition and command==0x0c and len(payload)==6"
+    },
+    {
+      "line": 320,
+      "test": "expedition and command==0x28"
+    },
+    {
+      "line": 331,
+      "test": "expedition and command==0xb0 and len(payload)==2 and tutorial_plaza_pending"
+    },
+    {
+      "line": 351,
+      "test": "expedition and tutorial_plaza_sent and command in (0x3c,0x3f)"
+    },
+    {
+      "line": 356,
+      "test": "expedition and command==0xb0 and len(payload)==2 and tutorial_battle_pending"
+    },
+    {
+      "line": 371,
+      "test": "expedition and command==0xb0 and len(payload)==2 and not plaza_player_sent"
+    },
+    {
+      "line": 380,
+      "test": "args.experimental_character_switch and plaza_player_sent and command==0x0c and len(payload)==6"
+    },
+    {
+      "line": 396,
+      "test": "(args.experimental_inventory or account_id is not None) and command in (0x23,0x29) and len(payload) in (4,6)"
+    },
+    {
+      "line": 404,
+      "test": "(args.experimental_inventory or account_id is not None) and command==0x26 and len(payload)==3 and 1<=payload[2]<=9"
+    },
+    {
+      "line": 407,
+      "test": "args.reply in ['login-reject','login-success'] and command == 0xE8 and len(payload) == 112"
+    },
+    {
+      "line": 424,
+      "test": "expedition and command==0x40 and len(payload)==4"
+    },
+    {
+      "line": 434,
+      "test": "expedition and command==0x3f and plaza_player_sent"
+    },
+    {
+      "line": 455,
+      "test": "expedition and command==0x3e"
+    },
+    {
+      "line": 467,
+      "test": "args.reply == 'channel-bootstrap' and command == 1 and len(payload) == 0x39"
+    },
+    {
+      "line": 482,
+      "test": "args.experimental_plaza_player and args.reply == 'channel-bootstrap' and command == 0xB0 and len(payload) == 2 and not plaza_player_sent"
+    },
+    {
+      "line": 537,
+      "test": "(args.experimental_plaza_player or expedition) and plaza_player_sent and command == 0x0A and len(payload) >= 11 and (len(payload) - 6) % 5 == 0"
+    },
+    {
+      "line": 591,
+      "test": "(args.experimental_plaza_entry or expedition) and args.reply == 'channel-bootstrap' and command == 0x10 and len(payload) == 2"
+    },
+    {
+      "line": 601,
+      "test": "args.experimental_plaza_entry and args.reply == 'channel-bootstrap' and command == 0x42 and len(payload) == 4 and payload[3] == 0"
+    },
+    {
+      "line": 609,
+      "test": "args.experimental_character_list and args.reply == 'channel-bootstrap' and command == 0xA0 and len(payload) == 2 and not character_fixture_sent"
+    }
+  ],
+  "credentials_calls": [
+    411
+  ],
+  "excerpts": [
+    {
+      "range": [
+        18,
+        24
+      ],
+      "lines": [
+        {
+          "line": 18,
+          "text": "def main():"
+        },
+        {
+          "line": 19,
+          "text": "    parser = argparse.ArgumentParser(description=__doc__)"
+        },
+        {
+          "line": 20,
+          "text": "    parser.add_argument('--port', type=int, default=8415)"
+        },
+        {
+          "line": 21,
+          "text": "    parser.add_argument('--account-db',type=Path,help='Require SQLite account authentication and isolated saves')"
+        },
+        {
+          "line": 22,
+          "text": "    parser.add_argument('--stop-file',type=Path,help='Exit cleanly when this file is created by the local service manager')"
+        },
+        {
+          "line": 23,
+          "text": "    parser.add_argument('--all-characters', action='store_true', help='Experimental owned/display records for character IDs1..9')"
+        },
+        {
+          "line": 24,
+          "text": "    parser.add_argument('--new-expedition-state',type=Path,help='Isolated naming probe with initial characters1/3; native tutorial entry probe; no account authentication')"
+        }
+      ]
+    },
+    {
+      "range": [
+        50,
+        56
+      ],
+      "lines": [
+        {
+          "line": 50,
+          "text": "    parser.add_argument('--output', type=Path,"
+        },
+        {
+          "line": 51,
+          "text": "                        default=Path(__file__).resolve().parent/'login-captures')"
+        },
+        {
+          "line": 52,
+          "text": "    args = parser.parse_args()"
+        },
+        {
+          "line": 53,
+          "text": "    from account_store import AccountStore,credentials,login_ticket_response,channel_identity"
+        },
+        {
+          "line": 54,
+          "text": "    store=AccountStore(args.account_db) if args.account_db else None"
+        },
+        {
+          "line": 55,
+          "text": "    from cash_shop import CashShop,ShopError,balance_packet,purchase_lines,purchase_result"
+        },
+        {
+          "line": 56,
+          "text": "    shop=CashShop(args.account_db) if store and args.reply=='channel-bootstrap' else None"
+        }
+      ]
+    },
+    {
+      "range": [
+        400,
+        425
+      ],
+      "lines": [
+        {
+          "line": 400,
+          "text": "                                        conn.sendall(b''.join(encode(p) for p in packets))"
+        },
+        {
+          "line": 401,
+          "text": "                                        record('inventory-change',connection=connection,character=target,request=payload.hex())"
+        },
+        {
+          "line": 402,
+          "text": "                                    except ValueError as error:"
+        },
+        {
+          "line": 403,
+          "text": "                                        record('inventory-rejected',connection=connection,error=str(error),request=payload.hex())"
+        },
+        {
+          "line": 404,
+          "text": "                                elif (args.experimental_inventory or account_id is not None) and command==0x26 and len(payload)==3 and 1<=payload[2]<=9:"
+        },
+        {
+          "line": 405,
+          "text": "                                    if expedition and payload[2] not in expedition.data['characters']:continue"
+        },
+        {
+          "line": 406,
+          "text": "                                    conn.sendall(b''.join(encode(p) for p in inventory.snapshots(payload[2])))"
+        },
+        {
+          "line": 407,
+          "text": "                                elif args.reply in ['login-reject','login-success'] and command == 0xE8 and len(payload) == 112:"
+        },
+        {
+          "line": 408,
+          "text": "                                    success = args.reply == 'login-success'"
+        },
+        {
+          "line": 409,
+          "text": "                                    if store:"
+        },
+        {
+          "line": 410,
+          "text": "                                        try:"
+        },
+        {
+          "line": 411,
+          "text": "                                            name,digest=credentials(payload)"
+        },
+        {
+          "line": 412,
+          "text": "                                            result=store.authenticate(name,digest,peer[0])"
+        },
+        {
+          "line": 413,
+          "text": "                                        except (ValueError,UnicodeError):result=None"
+        },
+        {
+          "line": 414,
+          "text": "                                        success=result is not None"
+        },
+        {
+          "line": 415,
+          "text": "                                        response=login_ticket_response(result)"
+        },
+        {
+          "line": 416,
+          "text": "                                        record('login-validation',connection=connection,success=success)"
+        },
+        {
+          "line": 417,
+          "text": "                                    else:response = login_response(success)"
+        },
+        {
+          "line": 418,
+          "text": "                                    wire = encode(response)"
+        },
+        {
+          "line": 419,
+          "text": "                                    conn.sendall(wire)"
+        },
+        {
+          "line": 420,
+          "text": "                                    if not store:(run/f'connection-{connection:04d}.reply-{frame_index:04d}.bin').write_bytes(wire)"
+        },
+        {
+          "line": 421,
+          "text": "                                    record('reply-sent', connection=connection, command=0x13,"
+        },
+        {
+          "line": 422,
+          "text": "                                           status=response[0x16], wire_bytes=len(wire), experimental=True,"
+        },
+        {
+          "line": 423,
+          "text": "                                           groups=1 if success else 0)"
+        },
+        {
+          "line": 424,
+          "text": "                                elif expedition and command==0x40 and len(payload)==4:"
+        },
+        {
+          "line": 425,
+          "text": "                                    try:"
+        }
+      ]
+    }
+  ],
+  "observed": "The credentials call at line411 is in an explicit reply-mode + command E8 + length112 guard at line407.",
+  "limitations": [
+    "Source-only observation; server was not executed.",
+    "Does not establish which server is currently deployed/running or that other programs reject 000F.",
+    "AST command guards are indexing aids, not semantic completion coverage."
+  ]
+}

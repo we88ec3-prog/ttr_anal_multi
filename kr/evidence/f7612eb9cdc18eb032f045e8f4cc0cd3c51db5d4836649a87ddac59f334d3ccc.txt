@@ -1,0 +1,41 @@
+-- TTEX Talk Scene File: DO NOT EDIT BY HAND
+-- Quest #0 / Scene #83 - Function H_Phindous
+function H_Phindous()
+	SetTransitionType(2)
+	SetFinalMusic("")
+	HideOriginalObjs(1)
+	Phase1()
+
+	LoadMap("town001D.fld")
+	MoveCamera(0.00, 0.00, 0.00)
+	RotCamera(0.00, 1.57, 100.00)
+
+	CreateObject(0, 10001, 740.00, 730.00, 192, 0, FALSE, 0, 0)
+	CreateObject(1, 10003, 730.00, 730.00, 64, 0, FALSE, 0, 0)
+
+	Phase2()
+	Phase3()
+	Phase4()
+
+	PlayCameraNoWait("H_Phindous_01.cam", 0, 0.00, 0.00, 0.00)
+	wait(4000)
+	OpenTalkScene(69, 11)
+	PlayCameraNoWait("H_Phindous_02.cam", 0, 0.00, 0.00, 0.00)
+	WalkObject(0, 800.000000, 760.000000, 0.000000, 1, 4, 2)
+	wait(3500)
+	OpenTalkScene(69, 12)
+	PlayCameraNoWait("H_Phindous_03.cam", 0, 0.00, 0.00, 0.00)
+	RotateObject(1, 0, 1)
+	OpenTalkScene(69, 13)
+
+	RevPhase4()
+	RevPhase3()
+	RevPhase2()
+
+	Q.DeleteAllObject()
+	RestoreMap()
+
+	RevPhase1()
+end
+
+Register(H_Phindous)

@@ -72,3 +72,10 @@
 - [audit_scene_controllers.py](../../../kr/evidence/fd26185a16f71126adee2347d1bb9a14152c42669955dc8ad46556d460f3f7c1.txt)
 
 舊報告與腳本只供審核，不直接執行；未打包歷史引用見task.json。部分原生證據不等於功能可玩驗收。
+
+## 兩村切城接續需求（行政交接，非新原生結論）
+
+使用者已指定由其他對話接續T07；roy/T06保持只引用。請讀[具體問題、已存raw/pseudo與驗收邊界](../../../shared/T07-TOWN-ENTRY-DEPENDENCY-HANDOFF.md)，先認領再分析；未變更本任務owner/state。
+
+
+2026-10-26 T01 整合交接：[T01-20261026-01](../../../shared/integrations/T01-20261026-01/README.md)。僅列明 SHA 的凍結成果已整合；其他暫存／新修改仍待下一輪。各任務未整體完成，接續前以此批次所在 origin/main commit 為基準。

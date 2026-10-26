@@ -1,0 +1,92 @@
+{
+  "status": "待整合—native entry/body/switch/byte/ownership review prepared",
+  "topic": "選角UI更新入口與F4247局部消費者",
+  "source_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+  "analysis_profile_digest": "3c06738e45e144d5f073edbd3244c6bff46222f389525fe659bc92dca2ccdece",
+  "checked_native_records": [
+    {
+      "file": "evidence/rea-roster-ui-update-caller-5a67d0.json",
+      "sha256": "7b7de540d1c8776140b284b047d36867c1a81b39f4f02c697dd968124e88ccf0",
+      "evidence_id": "ev_4c3cb63dbf87932b7de00f55ec74da6d760fe6218a7da275c15f1ca075730aa7",
+      "operation": "analyze_function",
+      "body": {
+        "available": true,
+        "provenance": "ghidra-function-body-address-set",
+        "ranges": [
+          {
+            "start": "0x5a67d0",
+            "end": "0x5a6986"
+          }
+        ],
+        "total_bytes": 439,
+        "span_bytes": 439,
+        "non_contiguous": false,
+        "contains_entry": true
+      },
+      "value_flow_limits": {
+        "truncated": false
+      }
+    }
+  ],
+  "supporting_files": [
+    "ROSTER-UI-UPDATE-REVIEW.md",
+    "evidence/roster-ui-update-byte-verification.json"
+  ],
+  "report_file": "ROSTER-UI-UPDATE-REVIEW.md",
+  "claims": [
+    {
+      "id": "kr-T03-roy-roster-ui-update-entry",
+      "status": "原生已確認",
+      "statement": "5A67D0的F4246分支以40AFC0返回物件+14作ECX，dialog(receiver+138)作stack argument呼叫672F00；F4278僅在該+14為0時以ECX=0呼叫，沿用dialog+D8。switch對應與關鍵參數指令經原檔位元組核對，不宣稱command2直接觸發刷新。",
+      "authority": "native event/update call interface plus independent switch/source-byte verification",
+      "scope": "5a67d0 F4246/F4278 branches and prior672f00 input contract",
+      "sources": [
+        "rea-roster-ui-update-caller-5a67d0"
+      ],
+      "existing_evidence_ids": [
+        "6f18ad5d09f7b4817eccfb578ac189976b5546c874b2ae96f936a75cdc9108e7"
+      ],
+      "version": "kr",
+      "task": "T03"
+    },
+    {
+      "id": "kr-T03-roy-f4247-local-consumer",
+      "status": "部分確認",
+      "statement": "673DA0的event387產生F4247；5A67D0的F4247分支呼叫receiver+138 dialog的virtual+D4。已定位局部producer/consumer，未驗證訂閱／投遞或virtual人類UI名稱。F42EF未由此switch處理，不代表全程式無消費者。",
+      "authority": "same-SHA native event producer/consumer, bounded delivery interpretation",
+      "scope": "673da0 event387 and5a67d0 F4247 branch only",
+      "sources": [
+        "rea-roster-ui-update-caller-5a67d0"
+      ],
+      "existing_evidence_ids": [
+        "6f18ad5d09f7b4817eccfb578ac189976b5546c874b2ae96f936a75cdc9108e7",
+        "f3788966a818122c8475b28604f905f7765db64f2a5942b0ad3d549aa59b7a45"
+      ],
+      "version": "kr",
+      "task": "T03"
+    }
+  ],
+  "dependencies": [
+    "T02",
+    "T04",
+    "T05",
+    "T06"
+  ],
+  "dependency_reasons": {
+    "T02": "network dispatch/delivery/timing reference only",
+    "T04": "actual roster/world data authority and initial values",
+    "T05": "actual scene transition and preconditions",
+    "T06": "resource/control identity, dialog subscription and display provenance"
+  },
+  "resolved_gap_scopes": [
+    {
+      "prior_claim": "kr-T03-roy-character-resource-handoff-gap",
+      "resolved_portion": "F4247 local consumer5A67D0 branch; UI refresh entry parameters",
+      "still_open": "delivery/subscription,F42EF route,event producers,actual resources and scene timing"
+    }
+  ],
+  "limits": [
+    "No source code/runtime behavior recovered from switch decode alone.",
+    "No official policy/world values or full-playability acceptance."
+  ]
+}

@@ -1,5 +1,9 @@
 # 分工接續規則
 
+## 使用者全任務政策（2026-10-26）
+
+所有 KR／TC 任務先讀 [客戶端修改與封包恢復政策](shared/CLIENT-MODIFICATION-POLICY.md)。遊玩流程優先以封包／伺服器資料恢復；主程式調整以 IP、Windows 相容性、翻譯為主，其他修改須先提出具體方案並獲使用者確認。原始證據唯讀與既有不執行／附加等限制維持。本政策適用所有任務，不只 T06。
+
 使用者指定「KR T08」時，先讀 README.md、HANDOFF.md、kr/tasks/T08/README.md與task.json，再查shared/catalog.json。TC同理。
 
 - 主要目標：恢復可遊玩流程；本庫保存分析依據，不是原版伺服器實作。

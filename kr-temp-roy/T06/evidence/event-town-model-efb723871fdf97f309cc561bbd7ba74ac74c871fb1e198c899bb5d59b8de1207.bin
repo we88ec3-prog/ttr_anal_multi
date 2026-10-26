@@ -1,0 +1,62 @@
+-- TTEX Talk Scene File: DO NOT EDIT BY HAND
+-- Quest #124 / Scene #7 - Function Phindous_NightofRitual_After
+function Phindous_NightofRitual_After()
+	SetTransitionType(2)
+	SetFinalMusic("")
+	HideOriginalObjs(1)
+	Phase1()
+
+	LoadMap("town001D.fld")
+	MoveCamera(0.00, 0.00, 0.00)
+	RotCamera(0.00, 1.57, 100.00)
+
+	CreateObject(0, 10002, 734.00, 742.00, 0, 0, FALSE, 0, 0)
+	CreateObject(1, 1478, 727.00, 724.00, 128, 0, FALSE, 1, 1)
+	CreateObject(2, 1479, 735.00, 725.00, 128, 0, FALSE, 1, 10)
+	CreateObject(3, 1480, 735.00, 731.00, 128, 0, FALSE, 1, 19)
+	CreateObject(4, 1481, 743.00, 725.00, 128, 0, FALSE, 1, 28)
+	CreateObject(5, 10048, 738.00, 744.00, 0, 0, FALSE, 0, 0)
+	CreateObject(6, 10008, 720.00, 736.00, 32, 0, FALSE, 0, 0)
+	CreateObject(7, 10001, 751.00, 741.00, 228, 0, FALSE, 0, 0)
+	CreateObject(8, 10003, 722.00, 742.00, 32, 0, FALSE, 0, 0)
+
+	Phase2()
+	Phase3()
+	Phase4()
+
+	PlayMusic("BGM038.ogg")
+	PlayCamera("Phin_NightofRitual_After_01.cam", 0, 0.00, 0.00, 0.00)
+	wait(500)
+	OpenTalkScene(15, 16)
+	RotateObject(2, 160, 1)
+	OpenTalkScene(15, 17)
+	RotateObject(1, 160, 1)
+	OpenTalkScene(15, 18)
+	RotateObject(3, 120, 1)
+	RotateObject(1, 96, 1)
+	RotateObject(2, 116, 1)
+	OpenTalkScene(15, 19)
+	PlayCameraNoWait("Phin_NightofRitual_After_02.cam", 0, 0.00, 0.00, 0.00)
+	wait(500)
+	OpenTalkScene(15, 20)
+	StopMusic()
+	AniObject(5, 51, 1)
+	PlayMusic("BGM007.ogg")
+	wait(4000)
+	AniObject(5, 51, 1)
+	PlayCamera("Phin_NightofRitual_After_03.cam", 0, 0.00, 0.00, 0.00)
+	wait(500)
+	OpenTalkScene(15, 21)
+	DelFlyingObject()
+
+	RevPhase4()
+	RevPhase3()
+	RevPhase2()
+
+	Q.DeleteAllObject()
+	RestoreMap()
+
+	RevPhase1()
+end
+
+Register(Phindous_NightofRitual_After)

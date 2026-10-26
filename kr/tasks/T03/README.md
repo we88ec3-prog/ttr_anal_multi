@@ -1,6 +1,6 @@
 # T03 登入與角色選擇
 
-狀態：bounded-review-handoff；負責人未認領。
+狀態：bounded-review-handoff；負責人 roy；定向離線審核進行中。
 
 ## 範圍
 
@@ -18,7 +18,7 @@
 
 ## 依賴、接續與驗收
 
-依賴：T02。先核對SHA及更正，再認領具體方法；其他主責任務只引用。
+目前依賴：T02、T04、T05、T06（初版僅列T02，後續依角色資料、場景與資源界面增列）。先核對SHA及更正，再向整合者登記具體方法；其他主責任務只引用。
 
 - 先查來源與更正，再選一個具體阻塞；認領主要函式後開工。
 - 僅對缺口做後續定向核對；缺少後端規則需標記待補充開發。
@@ -51,3 +51,87 @@
 - [kr-unified-ledger-20261023/catalog.json](../../../kr/evidence/eaa97822197f2d699c3234ff07947f90a04ee71bf03f9c5fc188e49b15a77cf4.txt)
 
 舊報告與腳本只供審核，不直接執行；未打包歷史引用見task.json。部分原生證據不等於功能可玩驗收。
+
+## roy 增量審核（2026-10-24）
+
+已整合身分／指定位置位元組核對與本機替代覆蓋審核；原有結論保留。完整登入、選服、選角及官方後端仍未驗收。
+
+- [輸入SHA與本機實作摘錄](../../evidence/4a5bd1ed63444e64184b9f89c117fd656ea0d25d2821a32af900dc01550fa70f.txt)
+- [獨立原生位元組核對](../../evidence/c6adc7cdb2322c3308942c916400b9a4a033ed422fdfbd483a307bbdccb5ce92.txt)
+- [有限審核與遊玩缺口](../../evidence/e0b62afa81cceeb79f321bb4f99078d3d7c30df8f9f221d5262f49b5eca6179b.txt)
+
+### 本機登入入口補證
+
+已補得與歷史SHA相符的本機 server 來源。E8/112是該登入回應分支的條件；未證實目前部署或其他入口行為。
+
+- [入口補證與成立條件](../../evidence/3ff02585ce5c57b656f523c3900b16ada0fec3e6a17da0f8dd62904ec607d4ab.txt)
+
+- [單一parser清單與原檔獨立核對；非語意完成驗收](../../evidence/943f31d6340a9c587217c714379145e890c9351db7fb3d14eb1feed3620e7054.txt)
+
+### 新原生parser證據與範圍更正
+
+REA6.5.0/Ghidra12.1.4已對同SHA原檔取得新證據，確認上述mode40/52/54分支與共同旗標寫入；完整helper、認證封包欄位、官方驗證和端到端流程仍未完成。舊827-byte範圍是位元組外包區間，Ghidra body為兩段inclusive範圍，中間3-byte間隔保留在舊清單但不屬此次body。
+
+參照字串中的vector<T> too long及第三marker的中段不是實際比較起點；應查核0xbf2375/0xbfafd8原始位元組，避免引用Ghidra typed-string片段誤認marker。
+
+- [完整REA原始Evidence](../../evidence/f49a85150d89c0a56a97db39a65f7ccb0a6c54b7f95656b783545c74531a5eaf.txt)
+- [分支、body範圍、literal起點與限制](../../evidence/a15c2bfd5f748825455fe394fa5e891052be8afe416a7312f9af50d01dfdfe9b.txt)
+
+## roy 認證／結果／選服資料增量
+
+已核對同SHA原生E8/000F的不同字串寬度、轉碼與MD5文字鏈、0x13結果消費者、group/channel格式及register參數。split空token與marker來源亦有新依據。官方驗證、實際切線、完整選角/轉場與世界初值仍未驗收；本機固定值與後端政策保持AI替代標記。
+
+- [原生資料流、欄位與AI／缺失界線](../../evidence/602d11a657a2e8a3dc53cff4664f837d579cd6cb187311b2c4c7070e994887d9.txt)
+- [逐項驗收、原始Evidence SHA與限制](../../evidence/21a4fdb1221faa5cda5234257637a36e3e7024897a56ccb4f5eca585d2bc7e15.txt)
+
+## roy 增量：選角UI界面與依賴
+
+依同SHA原生證據整合有限結果；原結論保留，完整登入/選角/切線/世界流程仍未驗收。
+
+- [觀察、成立條件、未知與遊玩影響](../../evidence/fb492350630034ed67084cebd4c046a9701c844905bb8a1049eb79608963f33c.txt)
+- [逐項驗收與Evidence定位](../../evidence/f6fa5c69ab356015dedaf4f65b2d40d506400a3095e2e2d4d36c4cdc8854e916.txt)
+
+接口依賴（只引用主責成果）：T02 slot0 connection/send timing; reference only；T04 availability record+5C writer/initial data; reference only；T05 actual plaza/scene transition and response preconditions; reference only；T06 same-version UI resource/control identity and provenance; reference only。
+
+## roy 增量：選服查詢與切線呼叫介面
+
+依同SHA原生證據整合有限結果；原結論保留，完整登入/選角/切線/世界流程仍未驗收。
+
+- [觀察、成立條件、未知與遊玩影響](../../evidence/f395aec4f8fcf3fec73ef57df8cf77182791582b85113eedf56d23441b5aa031.txt)
+- [逐項驗收與Evidence定位](../../evidence/9883c777bcdaeee5c106f5c5d1d8980811c552c9991dd451f6de73b3ef4328a1.txt)
+
+接口依賴（只引用主責成果）：T02 selected row+C interface, connection/framing/timing reference only；T04 availability record/initial data provenance reference only；T05 scene transition and response preconditions reference only；T06 same-version UI resource/control identity reference only。
+
+### 目前接續位置
+
+parser/auth、角色UI與選服呼叫介面的有限審核已整合；較早段落的「helper仍未完成」是當時進度，現況以上述增量審核與task.json為準。仍需角色清單到UI業務橋接、F42EF/F4247消費者定位，以及T02/T04/T05/T06依賴回補。完整原生語意與可玩流程仍未驗收。整合者已確認既有roy登記及本輪四項選服方法；確認不等於語意驗收。
+
+## roy 增量：角色清單到UI可用旗標的資料橋接
+
+依同SHA原生證據整合有限結果；原結論保留，完整登入/選角/切線/世界流程仍未驗收。
+
+- [觀察、成立條件、未知與遊玩影響](../../evidence/7a594f0ba64354a1c22fa2a6fe22f45e3a29699fb2bf5f73c2023e8113b9cac7.txt)
+- [逐項驗收與Evidence定位](../../evidence/eae13472309c2ee5bbe4b9c3f2f3a1be0692dff54b099cc19ef685843177ab19.txt)
+
+接口依賴（只引用主責成果）：T02 Shared dispatch/table/connection reference only;4B7DC0 corrected toT02 ownership；T04 Actual roster/world initial values and authority; no synthetic value promotion；T05 Scene/command60 and post-selection transition preconditions；T06 Same-version resource presence/control identity; pre-roster lookup prerequisites。
+
+## roy 增量：選角UI更新入口與F4247局部消費者
+
+依同SHA原生證據整合有限結果；原結論保留，完整登入/選角/切線/世界流程仍未驗收。
+
+- [觀察、成立條件、未知與遊玩影響](../../evidence/aa769d397c649ca9d59931b53b074ab0ac2fd599d53082884743e2bd73a4b5a0.txt)
+- [逐項驗收與Evidence定位](../../evidence/e02e4e01183dfdb49c00558a66c2f0234a2ca946a12ca2c6ba9ae25cf95f2bb9.txt)
+
+接口依賴（只引用主責成果）：T02 network dispatch/delivery/timing reference only；T04 actual roster/world data authority and initial values；T05 actual scene transition and preconditions；T06 resource/control identity, dialog subscription and display provenance。
+
+## roy 增量：角色清單補證後的全T03缺口與開發交接
+
+依同SHA原生證據整合有限結果；原結論保留，完整登入/選角/切線/世界流程仍未驗收。
+
+- [觀察、成立條件、未知與遊玩影響](../../evidence/2bc7c2d0630718f3610e1e9f1644a5dca853c0cc1f8b969b7dded9c0c0e65915.txt)
+- [逐項驗收與Evidence定位](../../evidence/301a256b5796eba01034f3f69b2d75ccc8cfe6b6252467445a1e3a1c89055d37.txt)
+
+接口依賴（只引用主責成果）：T02 network dispatch/delivery/timing reference only；T04 actual roster/world data authority and initial values；T05 actual scene transition and preconditions；T06 resource/control identity, dialog subscription and display provenance。
+
+
+2026-10-26 T01 整合交接：[T01-20261026-01](../../../shared/integrations/T01-20261026-01/README.md)。僅列明 SHA 的凍結成果已整合；其他暫存／新修改仍待下一輪。各任務未整體完成，接續前以此批次所在 origin/main commit 為基準。

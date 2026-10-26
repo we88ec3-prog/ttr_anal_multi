@@ -1,0 +1,53 @@
+-- TTEX Talk Scene File: DO NOT EDIT BY HAND
+-- Quest #120 / Scene #1 - Function Phindous_Senerep_TalkEvent
+function Phindous_Senerep_TalkEvent()
+	SetTransitionType(2)
+	SetFinalMusic("")
+	HideOriginalObjs(1)
+	Phase1()
+
+	LoadMap("town001D.fld")
+	MoveCamera(0.00, 0.00, 0.00)
+	RotCamera(0.00, 1.57, 100.00)
+
+	CreateObject(0, 10008, 663.00, 755.00, 54, 2, FALSE, 0, 0)
+	CreateObject(1, 1478, 681.00, 751.00, 182, 0, FALSE, 1, 1)
+	CreateObject(2, 1479, 677.00, 759.00, 182, 0, FALSE, 1, 10)
+	CreateObject(3, 1480, 672.00, 753.00, 182, 0, FALSE, 1, 19)
+	CreateObject(4, 1481, 672.00, 744.00, 182, 0, FALSE, 1, 28)
+	CreateObject(5, 10002, 737.00, 733.00, 182, 0, FALSE, 0, 0)
+
+	Phase2()
+	Phase3()
+	Phase4()
+
+	PlayMusic("BGM037.ogg")
+	PlayCameraNoWait("Phin_Senerep_Talk_01.cam", 0, 0.00, 0.00, 0.00)
+	wait(2000)
+	OpenTalkScene(13, 1)
+	AniObject(0, 1, 1)
+	PlayCameraNoWait("Phin_Senerep_Talk_02.cam", 0, 0.00, 0.00, 0.00)
+	wait(1500)
+	OpenTalkScene(13, 2)
+	PlayMusic("BGM038.ogg")
+	WalkObject(0, 693.000000, 885.000000, 76.339996, 1, 51, 1)
+	WalkObject(5, 690.000000, 744.000000, 76.339996, 1, 51, 0)
+	RotateObject(1, 54, 1)
+	RotateObject(2, 54, 1)
+	RotateObject(3, 54, 1)
+	RotateObject(4, 54, 1)
+	wait(2000)
+	AniObject(5, 1, 1)
+	OpenTalkScene(13, 3)
+
+	RevPhase4()
+	RevPhase3()
+	RevPhase2()
+
+	Q.DeleteAllObject()
+	RestoreMap()
+
+	RevPhase1()
+end
+
+Register(Phindous_Senerep_TalkEvent)

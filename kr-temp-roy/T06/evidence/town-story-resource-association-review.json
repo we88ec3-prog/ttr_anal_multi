@@ -1,0 +1,122 @@
+{
+  "status": "待整合",
+  "source_sha256": "2e68e0202565530e574e0810ad7f758a2fc8d6826a0de0975ccaff12c2d4718b",
+  "module": "Event.stp + original Table.stp",
+  "address_range": "Scene117/1 and138/1 + exact function-body source spans",
+  "tool_version": "Python stdlib byte/regex independent source cross-check v1",
+  "evidence": [
+    "evidence/town-scene-quest-join.json",
+    "evidence/event-town-model-references.json",
+    "evidence/event-manifest-consistency.json"
+  ],
+  "observed": [
+    {
+      "sequence_member": "Event/Sequences/Phindous_LittleTrouble.seq",
+      "sequence_sha256": "d6aa8b3ab5b4b90ec5f3788679ee73d0e128d0563ae524895550ad027aa27f98",
+      "sequence_evidence": "evidence/event-town-model-d6aa8b3ab5b4b90ec5f3788679ee73d0e128d0563ae524895550ad027aa27f98.bin",
+      "byte_offset": 239,
+      "literal_model": "town001d",
+      "function_declaration": "Phindous_LittleTrouble",
+      "scene_row": {
+        "questIdx": "117",
+        "sceneIdx": "1",
+        "funcName": "Phindous_LittleTrouble",
+        "endBehavior": "0"
+      },
+      "quest_row": {
+        "id": "117",
+        "type": "2",
+        "town": "1",
+        "level": "1",
+        "giver": "10002",
+        "finisher": "10002",
+        "subtype": "1",
+        "subject": "사소한 소동"
+      },
+      "verified_literal_loadmap": "LoadMap(\"town001D.fld\")",
+      "function_span": [
+        106,
+        3227
+      ],
+      "restoremap_literal_present": true
+    },
+    {
+      "sequence_member": "Event/Sequences/Alsmeer_Barley_Boss_After.seq",
+      "sequence_sha256": "8bb988f1e2fe2002c9e54431ebf7339d9eb3405866120016d03786558fcf8bad",
+      "sequence_evidence": "evidence/event-town-model-8bb988f1e2fe2002c9e54431ebf7339d9eb3405866120016d03786558fcf8bad.bin",
+      "byte_offset": 245,
+      "literal_model": "town002d",
+      "function_declaration": "Alsmeer_Barley_Boss_After",
+      "scene_row": {
+        "questIdx": "138",
+        "sceneIdx": "6",
+        "funcName": "Alsmeer_Barley_Boss_After",
+        "endBehavior": "0"
+      },
+      "quest_row": {
+        "id": "138",
+        "type": "2",
+        "town": "2",
+        "field": "30",
+        "level": "13",
+        "giver": "10005",
+        "finisher": "10005",
+        "subtype": "1",
+        "subject": "보리 창고 탈환 (전투)"
+      },
+      "verified_literal_loadmap": "LoadMap(\"town002D.fld\")",
+      "function_span": [
+        109,
+        3027
+      ],
+      "restoremap_literal_present": true
+    }
+  ],
+  "counterexamples": [
+    {
+      "scene": {
+        "questIdx": "1622",
+        "sceneIdx": "3",
+        "funcName": "Calibur_Fifth_Talkevent3",
+        "endBehavior": "0"
+      },
+      "quest_town": "15",
+      "model": "town002d",
+      "sequence_member": "Event/Sequences/Calibur_Fifth_Talkevent3.seq"
+    },
+    {
+      "scene": {
+        "questIdx": "132",
+        "sceneIdx": "5",
+        "funcName": "Phindous_pathofAlsmeer_Boss_After",
+        "endBehavior": "0"
+      },
+      "quest_town": "1",
+      "model": "town002d",
+      "sequence_member": "Event/Sequences/Phindous_pathofAlsmeer_Boss_After.seq"
+    },
+    {
+      "scene": {
+        "questIdx": "15",
+        "sceneIdx": "3",
+        "funcName": "pindos_talkevent",
+        "endBehavior": "0"
+      },
+      "quest_town": "5",
+      "model": "town001d",
+      "sequence_member": "Event/Sequences/pindos_talkevent.seq"
+    }
+  ],
+  "inference": "Exact shipped story-resource associations support candidate town001D/Phindous and town002D/Alsmeer. They do not establish universal town-ID mapping.",
+  "conditions": [
+    "Event length/MD5 equals same unsigned manifest; SHA separately measured.",
+    "Exact Scene funcName/questIdx and original QuestInfo row equality; matching LoadMap inside function declaration span."
+  ],
+  "limits": [
+    "Function span extraction is structural, not Lua execution/callgraph proof.",
+    "Quest town is category; cross-town cinematic usage is observed.",
+    "Cinematic object positions and RestoreMap are not accepted normal spawn/return policy.",
+    "Map182/183 link to these model names is accepted MapList data, but normal town-entry server destination binding remains unproven.",
+    "Native SceneList/LoadMap consumer and quest lifecycle remain owning-task dependencies."
+  ]
+}

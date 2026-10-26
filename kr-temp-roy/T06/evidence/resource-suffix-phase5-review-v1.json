@@ -1,0 +1,55 @@
+{
+  "status": "待整合",
+  "at_utc": "2026-10-25T20:02:45.777098+00:00",
+  "source_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+  "module": "Tartaros.bin",
+  "address_range": [
+    "0x7f5500",
+    "0xc50cb4",
+    "0x7f54d0",
+    "0x7f5540..0x7f5901"
+  ],
+  "tool_version": "REA6.5/Ghidra12.1.4 cached constructor/slot pseudocode primary; Capstone and raw MSVC RTTI/vtable subset checks",
+  "evidence": [
+    {
+      "path": "evidence\\bulk-selected-0x7f54d0-suffix-v2.json",
+      "sha256": "2e1791b6adb3162376ac3022b9ab3ba37b40509414f90f5dd533e4104208d69c"
+    },
+    {
+      "path": "evidence\\bulk-selected-0x7f5540-suffix-v2.json",
+      "sha256": "3c885f2c0d6ff82098e4d96cae37d4728bac3be51779ece0d38fad8ab0a5a421"
+    },
+    {
+      "path": "evidence\\bulk-selected-0x7f5500-suffix-v2.json",
+      "sha256": "b9480c54aa5f0deaceb1b4101433fecbb5257c0e27960ac5e8bf229e96d07d41"
+    },
+    {
+      "path": "evidence\\field-cache-simple-vtable-review-v1.json",
+      "sha256": "52459ff6862e7a248efc8d9d1b5e2e9f3fc184290ee67d96b24c51460a7e5c00"
+    },
+    {
+      "path": "evidence\\field-cache-simple-vtable-review-v2.json",
+      "sha256": "1d0ceab64ed8f28d183b42e61c3a7fc267697f6b5b91358aed4b25328a798e34"
+    },
+    {
+      "path": "evidence\\field-cache-activation-filename-byte-review-v1.json",
+      "sha256": "38c56aca1875d032f4c5b4ff4fe773d4cdc7839e48fef5b9c0aaab71b747d7cb"
+    }
+  ],
+  "observed": [
+    "Original7F552A writesC50CB4; rawCOL C80974 -> typedescF8AD24 identifies.?AVCFieldObjectCacheSimple@IS3D@@.",
+    "Raw vtable+8=7F54D0, +0C=7F5540.7F54D0 tool item copies supplied filename string via402A70; no archive read visible in this small item.",
+    "7F5540 early tool result splits first path into directory/basename. Original7F5820 PUSH C40F60(.gb3),7F5834 CALL401FC0;7F5884 ECX=C4F28C(MAP_OBJ),7F588E CALL716740.",
+    "7F5893/5895/5897 tests lookupEAX and branches; success does not follow from candidate index presence."
+  ],
+  "analyst_inference": "Within this statically bound class resource path, the cache stores input name then constructs a basename.gb3 MAP_OBJ query. This is a closer native model-resource interface, but exact gb3->emf archive resolution still needs716740 and registered resource resolver evidence.",
+  "conditions": [
+    "Source SHA, primary parent batches, constructor write, RTTI and vtable targets independently bound.",
+    "Selected original-byte early-path checks only; no full21k-character activation-function semantic acceptance."
+  ],
+  "limitations": [
+    "Runtime receiver/reachability for two-town FLD not fully established.",
+    "Path/register arguments and complete ABI remain incomplete.",
+    "No resource successful load, full transitive materials, spawn/controller or normalTown/Map pairing."
+  ]
+}

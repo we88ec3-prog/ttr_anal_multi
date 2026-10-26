@@ -1,0 +1,38 @@
+{
+  "status": "待整合—followup and rejected interpretation",
+  "source_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+  "module": "Tartaros.bin",
+  "tool_version": "REA6.5.0/Ghidra12.1.4",
+  "evidence": [
+    {
+      "path": "evidence/rea-roster-module-init-4b7dc0.json",
+      "sha256": "5664fd398906ca4f42ab467dbaf68749373c6dad86da5c488e087331a206da49",
+      "evidence_id": "ev_49208a0a8ddab9e7680beeaf0299eb620e761f0343006bd34ed2a66b2a8da647"
+    },
+    {
+      "path": "evidence/rea-roster-ui-notification-4e5fb0.json",
+      "sha256": "5d2ee9ce243012696c5a49d552dcd59583b2dc7e46e171d84f9a90cbddd53d44",
+      "evidence_id": "ev_b67b4d2493c332d6543dba694740e5a39ae125b03c9a25f1260c59a4fcfab11e"
+    },
+    {
+      "path": "evidence/rea-roster-alternate-binding-ref-4e1e3f.json",
+      "sha256": "975dcdf4f1139fedb91dfe245a5cb626af690172a2ae0ab0a5b2a7c7f01b0762",
+      "evidence_id": "ev_ac837ef4ab3f2acc9949906b5e63ae73cbc3d060b046c989bb6bff96ce6b2e17"
+    }
+  ],
+  "observations": [
+    "4B7DC0 initializes an8-byte-stride shared scene handler table beginningFD2CFC and writes4B7F00 toFD2D0C; table slot arithmetic yields index2, pending exact T02 dispatch-interface checks.",
+    "4E5FB0 updates receiver+68D0/+68CC using a rank table and conditionally creates an effect referencing TeamRankIcon_64.dds; no generic roster refresh notification observed in this body.",
+    "4E1E3F writes4E2730 atreceiver+15C; this single instruction does not establish numeric command binding."
+  ],
+  "rejected_inference": "Post-roster call4E5FB0 must not be described as a generic roster/UI refresh notifier. Its TeamRank-related observation does not establish official progression policy.",
+  "conditions": [
+    "Same-SHA native instructions and provider bodies",
+    "Table binding still needs receiver/index interface evidence; no runtime invocation assumed"
+  ],
+  "limitations": [
+    "No world initial values/rank formula analysis or resource expansion.",
+    "No whole UI-update route absence claim from one helper.",
+    "Shared scene dispatch isT02; T03 only references the roster slot."
+  ]
+}

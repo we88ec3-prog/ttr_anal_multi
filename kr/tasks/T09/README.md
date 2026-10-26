@@ -86,3 +86,6 @@
 - [native-index/register-WalkObject.txt](../../../kr/evidence/ff586e55c10c11129382754abdcc7e6fd56fb6db8e4a918d35beecd8834cfad5.txt)
 
 舊報告與腳本只供審核，不直接執行；未打包歷史引用見task.json。部分原生證據不等於功能可玩驗收。
+
+
+2026-10-26 T01 整合交接：[T01-20261026-01](../../../shared/integrations/T01-20261026-01/README.md)。僅列明 SHA 的凍結成果已整合；其他暫存／新修改仍待下一輪。各任務未整體完成，接續前以此批次所在 origin/main commit 為基準。

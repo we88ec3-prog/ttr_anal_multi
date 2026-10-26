@@ -1,0 +1,81 @@
+{
+  "status": "待整合—native leaf observed, caller contract pending",
+  "source_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+  "module": "Tartaros.bin",
+  "provider": {
+    "id": "ghidra",
+    "name": "Ghidra",
+    "version": "12.1.4"
+  },
+  "analysis_profile_digest": "3c06738e45e144d5f073edbd3244c6bff46222f389525fe659bc92dca2ccdece",
+  "evidence_id": "ev_e268546ad43ee1840fac09eac3157f085c4b6be99cb7706645b5c36da4fc9e98",
+  "evidence_path": "evidence/rea-roster-consumer-4d4150.json",
+  "evidence_sha256": "32bfbc2ce9b765004ef73af98c8a5917e2a60c9b6fa1519338ed956c9218aa54",
+  "body": {
+    "available": true,
+    "provenance": "ghidra-function-body-address-set",
+    "ranges": [
+      {
+        "start": "0x4d4150",
+        "end": "0x4d419c"
+      }
+    ],
+    "total_bytes": 77,
+    "span_bytes": 77,
+    "non_contiguous": false,
+    "contains_entry": true
+  },
+  "observations": {
+    "receiver": "ESI",
+    "source": "EDX",
+    "availability_write": "receiver+5C=1 before copy",
+    "fields": [
+      {
+        "source": "NUL-terminatedUTF16 atEDX",
+        "destination": "ESI+C",
+        "instruction": "4D4160..4D416D",
+        "limit": "No explicit bound or source-length check in this leaf"
+      },
+      {
+        "source": "byte+2E",
+        "destination": "uint32+4",
+        "instruction": "4D416F..4D4173"
+      },
+      {
+        "source": "byte+2F",
+        "destination": "uint32+D4",
+        "instruction": "4D4176..4D417A"
+      },
+      {
+        "source": "byte+30",
+        "destination": "uint32+DC",
+        "instruction": "4D4180..4D4184"
+      },
+      {
+        "source": "uint32+31",
+        "destination": "uint32+50",
+        "instruction": "4D418A..4D418D"
+      },
+      {
+        "source": "uint32+2A",
+        "destination": "uint32+8",
+        "instruction": "4D4190..4D4193"
+      }
+    ],
+    "return": "EAX=1",
+    "callers": [
+      "0x4b7f00",
+      "0x4e2730"
+    ]
+  },
+  "analyst_inference": "Fixed field reads extend through source+34, matching53-byte fixture envelope as a candidate. Leaf alone does not establish record stride, packet count/header, ID-to-receiver selection or official authorization.",
+  "conditions": [
+    "Valid receiver and readable source fields",
+    "UTF16 source must terminate within valid source/destination storage for intended copy behavior; upstream contract not yet observed"
+  ],
+  "limits": [
+    "No source length/ID range/bounded-name check observed in this leaf; does not prove absence elsewhere.",
+    "Field widths/copies do not establish human labels, server policies or valid world initial values.",
+    "No target execution or API calls."
+  ]
+}

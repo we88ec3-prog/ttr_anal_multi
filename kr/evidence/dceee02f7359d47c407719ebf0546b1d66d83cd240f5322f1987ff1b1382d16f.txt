@@ -1,0 +1,43 @@
+{
+  "status": "待整合",
+  "at_utc": "2026-10-25T18:01:55.387092+00:00",
+  "source_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+  "module": "Tartaros.bin",
+  "address_range": "4DF582-4DF5B9, conditional path4DF592→4DF5B9",
+  "tool_version": "REA6.5.0/Ghidra12.1.4 retained complete native Evidence; local bounded extraction v1",
+  "evidence": {
+    "path": "evidence/native-4df510.json",
+    "sha256": "70b410d22b5d1a8cffe114fbcce4fc6cfd5244f7fa77b6aff15a8c99f80c9cd7",
+    "evidence_id": "ev_8a11cf4b6a1bdfecfc68892834ffa3fb2c59f46b0c84e864d3fd8143bc08ef1a",
+    "previous_original_byte_verification": "Existing accepted map selector byte binding; no new disassembler query"
+  },
+  "observed": {
+    "assembly": [
+      "0x4df582: LEA EDX, [EBP + -0x10]",
+      "0x4df585: MOV ECX, 0xfb74c0",
+      "0x4df58a: MOV dword ptr [EBP + -0x10], ESI",
+      "0x4df58d: CALL 0x004f7df0",
+      "0x4df592: TEST byte ptr [0x00fb75b0], 0x1",
+      "0x4df599: JNZ 0x004df5b9",
+      "0x4df59b: OR dword ptr [0x00fb75b0], EDI",
+      "0x4df5a1: MOV dword ptr [EBP + -0x4], EDI",
+      "0x4df5a4: CALL 0x004f3d80",
+      "0x4df5a9: PUSH 0xbcd1e0",
+      "0x4df5ae: CALL 0x0089231a",
+      "0x4df5b3: ADD ESP, 0x4",
+      "0x4df5b6: MOV dword ptr [EBP + -0x4], EBX",
+      "0x4df5b9: LEA EAX, [EBP + -0x10]"
+    ],
+    "exact_path": "4DF585 ECX=FB74C0;4DF58A local key=ESI;4DF58D calls4F7DF0. If4DF599 JNZ taken,4DF5B9 overwrites EAX with local-key address before a subsequent explicit use of returned EAX."
+  },
+  "inference": "This trigger-table lookup and its returned reference alone are not evidence of a MEF execution/load path.",
+  "conditions": [
+    "Only the specified JNZ-taken path; static observation, not runtime branch proof.",
+    "4F7DF0 return-reference interpretation relies on already accepted lookup Evidence."
+  ],
+  "limits": [
+    "No conclusion about other branches, computed calls, helper side effects or whole-client MEF absence.",
+    "Initializer branch includes calls and is not treated as the same EAX-liveness proof.",
+    "No Town1/2 physical-map or normal spawn conclusion."
+  ]
+}

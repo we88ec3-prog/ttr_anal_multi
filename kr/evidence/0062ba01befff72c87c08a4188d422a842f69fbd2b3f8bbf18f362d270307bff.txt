@@ -1,0 +1,28 @@
+{
+  "status": "待整合",
+  "source_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+  "module": "Tartaros.bin",
+  "address_range": "4A23E0-4A2452",
+  "tool_version": "REA6.5.0/Ghidra12.1.4; Capstone original-byte verification",
+  "evidence": {
+    "path": "evidence/map-argument-bridge-4a23e0.json",
+    "sha256": "0b63ff141cbcbeb2d5ba9a332e2d6a0cbbc01b976ffd6db6b6da625048c3678f",
+    "evidence_id": "ev_d0cbafcc4f769d0f841319040be07ea7d23b53e53572d3fa4fbef887a145a75b",
+    "byte_check": "evidence/map-argument-bridge-byte-verification.json"
+  },
+  "observed": [
+    "Tag3 path loads double and FISTP converts to DWORD at4A2431; PUSH EAX4A2437 then indirect callback4A243A.",
+    "Tag4 passes through6F7760; conversion succeeds into same numeric path.",
+    "Other/failure path pushes zero at4A2446 before callback4A2449."
+  ],
+  "inference": "ChangeMap scripting adapter converts numeric input to integer selector before passthrough4A0AC0→4DF510.",
+  "conditions": [
+    "Callback slot connection uses4A16F0/4A1F50 saved evidence; original body bytes and instruction-address sets match."
+  ],
+  "limits": [
+    "FISTP rounding depends on x87 control word; do not substitute host-language round for all inputs.",
+    "No full scripting runtime ABI claim or runtime reachability proof.",
+    "No Town1/2 physical Map binding; no script execution.",
+    "Finite archive literal search found no ChangeMap bytes in UI/LUA,Event,Synopsis,Field; does not cover whole-client usage."
+  ]
+}

@@ -1,0 +1,69 @@
+{
+  "status": "待整合",
+  "at_utc": "2026-10-25T19:17:26.299879+00:00",
+  "source_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+  "module": "Tartaros.bin",
+  "address_range": [
+    "7C1E00 resource helper selected path7C1FE4-7C2062",
+    "4DF785-4DF78B",
+    "563D3F-563D49",
+    "56435A-564360",
+    "4DF9A6-4DF9CB"
+  ],
+  "tool_version": "REA6.5.0/Ghidra12.1.4 batch pseudocode and prior complete native4DF510; independent original byte verification",
+  "evidence": {
+    "byte_review": "evidence/map-load-flag-byte-review-v1.json",
+    "byte_review_sha256": "97e626b8f57e9d6033a1639f74a5e179f581e025af751204a0e686f3424f4c6f",
+    "selected_helper": "evidence/bulk-selected-0x7c1e00-v1.json",
+    "selected_helper_sha256": "ad21ab2907d214d642128714be11219d8714d4c764a96f56238686531a3e6417",
+    "parent_batch_path": "kr-bulk-roy/9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91/raw/20261025T182755495890-batch-20261025T185443814815-15616.json",
+    "parent_batch_sha256": "519401d282dd6fa951352a813f0f77bde7bb9d3c0b191bf319981e826c639603",
+    "normal_map_native": "evidence/native-4df510.json",
+    "normal_map_native_sha256": "70b410d22b5d1a8cffe114fbcce4fc6cfd5244f7fa77b6aff15a8c99f80c9cd7"
+  },
+  "observed_tool_results": {
+    "literal_arguments": {
+      "normal4DF510_reached_callsite": 1,
+      "Q_LoadMap": 0,
+      "Q_RestoreMap": 0
+    },
+    "branch": "After filename comparison: different name JNE7C200F reaches virtual+4 call7C2016; same name compares stackarg+8 with zero-valuedEBX. Nonzero prints force-loading and reaches7C2016. Zero jumps7C2055, prints cancel-loading and jumps7C2018, bypassing7C2016.",
+    "raw_logs": {
+      "0xc4fd34": ".fld",
+      "0xc4fd5c": "맵 파일을 찾을 수 없습니다.\n",
+      "0xc4fd7c": "원래 있던 맵과 이름이 같습니다.",
+      "0xc4fd9c": "강제로 로딩합니다.\n",
+      "0xc4fdb0": "로딩을 취소합니다.\n"
+    },
+    "normal_bound_path_assembly": [
+      "0x4df9a6: MOV ESI, dword ptr [EBP + 0xc]",
+      "0x4df9a9: LEA EDX, [EBP + 0xc]",
+      "0x4df9ac: MOV ECX, 0xfb74d0",
+      "0x4df9b1: MOV dword ptr [EBP + 0xc], ESI",
+      "0x4df9b4: CALL 0x004f7df0",
+      "0x4df9b9: CMP dword ptr [EAX + 0x14], 0x10",
+      "0x4df9bd: JC 0x004df9c1",
+      "0x4df9bf: MOV EAX, dword ptr [EAX]",
+      "0x4df9c1: MOV ECX, dword ptr [EBP + 0x8]",
+      "0x4df9c4: PUSH ECX",
+      "0x4df9c5: MOV ECX, EAX",
+      "0x4df9c7: CALL 0x004df1a0"
+    ]
+  },
+  "analyst_interpretation": {
+    "proposed_parameter_name": "reload_when_same_filename (analyst name, not recovered original C++ type/name)",
+    "meaning": "The0/nonzero argument controls the same-filename FLD load decision on this reached path. Zero does not prohibit loading a different filename. It is not evidence of town/mission/plaza/party classification.",
+    "restore_impact": "A Q filename load cannot by itself be accepted as the complete normal map/bounds/controller transition. Normal4DF510 has separately observedFB74D0→4F7DF0→4DF1A0 bound-name route."
+  },
+  "conditions": [
+    "Resource existence/temporary loader object success and name-comparison branch must be reached; no runtime invocation performed.",
+    "Exact original bytes and decoded Korean diagnostic strings agree with primary Ghidra pseudocode.",
+    "NormalMap byte binding and FB74D0 meaning rely on already acceptedT06 resource evidence."
+  ],
+  "limits": [
+    "No full virtual loader implementation or full calling ABI/body/CFG acceptance.",
+    "No claim Q never loads collision through any unresolved helper; only normalBOUND path is positively established.",
+    "No normal Town1/2 server mapping, legal spawn or gameplay proof.",
+    "Diagnostic Chinese interpretation is analyst translation; Korean/bytes are native evidence."
+  ]
+}

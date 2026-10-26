@@ -1,5 +1,5 @@
 """Portable query, integrity validation and task export. Python 3.10+, stdlib only."""
-import argparse, hashlib, json, pathlib, shutil, sqlite3, zipfile
+import argparse, hashlib, json, pathlib, shutil, sqlite3, zipfile, re
 def digest(p):
     h=hashlib.sha256()
     with p.open('rb') as f:
@@ -88,6 +88,27 @@ def export(root,version,task,out):
         content=(root/p/'README.md').read_text(encoding='utf-8')
         if x['id']!=task:content='> 此任務僅提供介面背景，並非整項任務的完整交接。未展開依賴見 task.json。\n\n'+content
         (out/p/'README.md').write_text(content,encoding='utf-8')
+    # Task handoff links must remain readable in an isolated task export.
+    batches={x.get('integration_handoff',{}).get('batch') for x in ts}
+    for batch in sorted(b for b in batches if b):
+        rel=pathlib.Path('shared/integrations')/batch
+        source=safe(root,rel.as_posix())
+        if not source.is_dir():raise ValueError('Missing integration handoff: '+str(rel))
+        shutil.copytree(source,safe(out,rel.as_posix()))
+    # Close supplemental Markdown handoff links without copying entire staging trees.
+    queue=list(out.rglob('*.md'));seen=set()
+    for page in queue:
+        if page in seen:continue
+        seen.add(page)
+        for href in re.findall(r'\]\(([^)]+)\)',page.read_text(encoding='utf-8')):
+            if '://' in href or href.startswith('#'):continue
+            target=(page.parent/href.split('#')[0]).resolve()
+            if not target.is_relative_to(out.resolve()):raise ValueError('Handoff link outside export: '+href)
+            if not target.exists():
+                source=safe(root,target.relative_to(out.resolve()).as_posix())
+                if not source.is_file():raise ValueError('Missing handoff dependency: '+str(source))
+                target.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(source,target)
+            if target.suffix.lower()=='.md':queue.append(target)
     write(out/'shared/targets.json',part['targets'])
     (out/'README.md').write_text(f'# {version.upper()} {task} 獨立交接包\n\n入口：[{t["title"]}]({version}/tasks/{task}/README.md)。\n\n狀態：{t["handoff_status"]}。只讀審核現有證據；不代表功能完成。\n\n```powershell\npython shared/handoff.py verify\npython shared/handoff.py query --version {version} --task {task}\n```\n\n原始程式另行供應並核對 shared/targets.json 的SHA。閱讀與校驗不需要原anal目錄。Python 3.10+，標準函式庫即可；繼續原生分析才需要REA/Ghidra。\n\n證據檔為原始內容的惰性.txt副本；其舊絕對路徑只作出處。直接依賴任務帶入介面資料，不表示其所有外部需求均已解決。不可執行打包的舊腳本。\n',encoding='utf-8')
     rows=[{'path':p.relative_to(out).as_posix(),'sha256':digest(p),'bytes':p.stat().st_size} for p in sorted(out.rglob('*')) if p.is_file()]

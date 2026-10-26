@@ -1,0 +1,694 @@
+"""Loopback-only TCP recorder. Does not implement the game login protocol."""
+import argparse
+import datetime as dt
+import json
+from pathlib import Path
+import socket
+import threading
+import time
+import struct
+from login_protocol import StreamDecoder, encode, login_response, channel_response, character_scene_response, plaza_entry_responses, plaza_player_response, plaza_player_metadata_response, plaza_player_control_response, plaza_map_response
+from login_protocol import plaza_movement_timing_responses
+from initialization_experiment import Experiment
+from login_protocol import plaza_appearance_response
+from login_protocol import combined_character_data_response, combined_entity_parameters_response
+from login_protocol import plaza_speed_response
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--port', type=int, default=8415)
+    parser.add_argument('--account-db',type=Path,help='Require SQLite account authentication and isolated saves')
+    parser.add_argument('--stop-file',type=Path,help='Exit cleanly when this file is created by the local service manager')
+    parser.add_argument('--all-characters', action='store_true', help='Experimental owned/display records for character IDs1..9')
+    parser.add_argument('--new-expedition-state',type=Path,help='Isolated naming probe with initial characters1/3; native tutorial entry probe; no account authentication')
+    parser.add_argument('--experimental-character-switch',action='store_true',help='Rebuild and bind the selected character on client0C')
+    parser.add_argument('--experimental-inventory',action='store_true',help='Persist six fixture items and per-character equipment')
+    parser.add_argument('--client-pid',type=int,help='Legacy diagnostic argument; packet-based switching does not attach to the client')
+    parser.add_argument('--experimental-speed', action='store_true', help='Initialize displacement parameters5/6 to100/50')
+    parser.add_argument('--appearance-profile', type=Path, help='JSON ids list; re-read at plaza entry for appearance preview')
+    parser.add_argument('--live-controls', type=Path, help='Directory for local GUI packet requests and receipts')
+    parser.add_argument('--experimental-appearance', action='store_true',
+                        help='Apply catalog-backed appearance ID4 in display and world lists')
+    parser.add_argument('--experimental-combined', action='store_true',
+                        help='Combined character data, entity parameter and appearance experiment')
+    parser.add_argument('--initialization-experiment', type=Path,
+                        help='JSON profile changing one allowlisted bootstrap field')
+    parser.add_argument('--experimental-character-list', action='store_true',
+                        help='Enable unvalidated empty character transition; known to crash client')
+    parser.add_argument('--experimental-owned-character', action='store_true',
+                        help='Include one synthetic level-1 character in bootstrap and scene records')
+    parser.add_argument('--experimental-plaza-entry', action='store_true',
+                        help='Reply to confirmed plaza button request with acknowledgement and scene-7 transition')
+    parser.add_argument('--experimental-plaza-player', action='store_true',
+                        help='Send a synthetic local-player entity after the observed plaza-load request')
+    parser.add_argument('--reply', choices=['none', 'login-reject', 'login-success', 'channel-bootstrap'], default='none',
+                        help='Experimental login response; success includes a loopback channel')
+    parser.add_argument('--duration', type=float, default=0,
+                        help='Stop after this many seconds; 0 runs until Ctrl+C')
+    parser.add_argument('--idle-timeout', type=float, default=120)
+    parser.add_argument('--output', type=Path,
+                        default=Path(__file__).resolve().parent/'login-captures')
+    args = parser.parse_args()
+    from account_store import AccountStore,credentials,login_ticket_response,channel_identity
+    store=AccountStore(args.account_db) if args.account_db else None
+    from cash_shop import CashShop,ShopError,balance_packet,purchase_lines,purchase_result
+    shop=CashShop(args.account_db) if store and args.reply=='channel-bootstrap' else None
+    expedition=None
+    if args.new_expedition_state:
+        if args.reply!='channel-bootstrap' or args.all_characters or args.experimental_inventory or args.experimental_character_switch or args.experimental_plaza_entry or args.experimental_plaza_player:
+            parser.error('New expedition probe requires channel-bootstrap and must not enable all-character/inventory/plaza fixtures')
+        from new_expedition import NewExpedition
+        expedition=NewExpedition(args.new_expedition_state)
+        args.experimental_owned_character=True
+        args.experimental_character_list=True
+    if args.experimental_inventory:
+        from inventory_equipment import Inventory
+        inventory=Inventory(Path(__file__).with_name('inventory-state.json'))
+    expedition_template=expedition
+    inventory_template=inventory if args.experimental_inventory else None
+    if args.experimental_character_switch and not args.all_characters:
+        parser.error('Character switching requires --all-characters')
+    try:
+        experiment = Experiment(args.initialization_experiment) if args.initialization_experiment else None
+    except (ValueError, KeyError, OSError) as error:
+        parser.error(str(error))
+    if experiment and not (args.reply == 'channel-bootstrap' and args.experimental_owned_character):
+        parser.error('Initialization experiment requires channel-bootstrap and owned-character')
+    if not 1 <= args.port <= 65535 or args.duration < 0 or args.idle_timeout <= 0:
+        parser.error('Invalid port or timeout')
+    run = args.output/(dt.datetime.now().strftime('%Y%m%d-%H%M%S-%f'))
+    run.mkdir(parents=True)
+    stop = threading.Event()
+    lock = threading.Lock()
+    slots = threading.BoundedSemaphore(8)
+    workers = []
+    events = (run/'events.jsonl').open('a', encoding='utf-8')
+    if args.live_controls:
+        args.live_controls.mkdir(parents=True, exist_ok=True)
+
+    def record(event, **fields):
+        data = dict(time=dt.datetime.now(dt.timezone.utc).isoformat(), event=event, **fields)
+        with lock:
+            events.write(json.dumps(data)+'\n')
+            events.flush()
+            print(json.dumps(data), flush=True)
+
+    def client(conn, peer, connection):
+        expedition=expedition_template if not store else None
+        inventory=inventory_template
+        account_id=None
+        session_owner=None
+        saved_position=None
+        last_save=time.monotonic()
+        last_lease=time.monotonic()
+        total = 0
+        decoder = StreamDecoder()
+        frame_index = 0
+        decode_failed = False
+        character_fixture_sent = False
+        plaza_player_sent = False
+        tutorial_character = 1
+        tutorial_scene_complete = False
+        tutorial_battle_pending = False
+        tutorial_battle_position = None
+        tutorial_plaza_at=None
+        tutorial_plaza_pending=False
+        tutorial_plaza_sent=False
+        from plaza_npcs import PlazaNPCs
+        plaza_npcs=PlazaNPCs()
+        movement_requests = 0
+        simulated_positions={0x100:(900.,900.,None)}
+        input_state=None
+        from tutorial_skill_cast import SkillCast
+        skill_cast=SkillCast()
+        from tutorial_battle import TutorialBattle
+        tutorial_battle=TutorialBattle()
+        from movement_position import Position
+        position_tracker=Position()
+        last_moving_input=0.0
+        def movement_response_mode():
+            if args.live_controls:
+                try:
+                    mode=json.loads((args.live_controls/'movement-response.json').read_text(encoding='utf-8'))['mode']
+                    if mode in ('echo','prediction'):return mode
+                except (OSError,ValueError,KeyError):pass
+            return 'echo'
+        def movement_idle_timeout():
+            if args.live_controls:
+                try:
+                    value=float(json.loads((args.live_controls/'movement-response.json').read_text(encoding='utf-8')).get('idle_stop_seconds',0.8))
+                    if 0<=value<=120:return value
+                except (OSError,ValueError,TypeError):pass
+            return 0.8
+        path = run/f'connection-{connection:04d}.bin'
+        record('accepted', connection=connection, peer=list(peer), file=str(path))
+        try:
+            conn.setsockopt(socket.IPPROTO_TCP,socket.TCP_NODELAY,1)
+            conn.settimeout(0.5)
+            last = time.monotonic()
+            with conn, path.open('wb') as raw:
+                while not stop.is_set():
+                    if store and session_owner and time.monotonic()-last_lease>=10:
+                        store.heartbeat(account_id,session_owner)
+                        last_lease=time.monotonic()
+                    if expedition:
+                        if tutorial_plaza_at is not None and time.monotonic()>=tutorial_plaza_at:
+                            conn.sendall(b''.join(encode(p) for p in (plaza_npcs.context(),)+plaza_entry_responses()))
+                            tutorial_plaza_at=None
+                            tutorial_plaza_pending=True
+                            record('tutorial-plaza-entry',connection=connection)
+                        finished=skill_cast.finish()
+                        if finished:
+                            conn.sendall(b''.join(encode(p) for p in finished))
+                            if skill_cast.is_casting():
+                                tutorial_battle.cast(finished[0],position_tracker.x,position_tracker.y)
+                            if not skill_cast.is_casting():
+                                input_state=(0x100,skill_cast.moving,skill_cast.direction)
+                                position_tracker.moving=bool(skill_cast.moving)
+                                position_tracker.direction=skill_cast.direction
+                                position_tracker.received=time.monotonic()
+                                position_tracker.tick=None
+                            record('tutorial-skill-chain' if skill_cast.is_casting() else 'tutorial-skill-finished',connection=connection,moving=skill_cast.moving,direction=skill_cast.direction)
+                        combat=tutorial_battle.update(player=(position_tracker.x,position_tracker.y))
+                        if combat:
+                            conn.sendall(b''.join(encode(p) for p in combat))
+                            record('tutorial-battle-update',connection=connection,hp=tutorial_battle.hp,completed=tutorial_battle.completed,
+                                   ai_state=tutorial_battle.ai.state,monster_position=tutorial_battle.target)
+                        if tutorial_battle.take_completion():
+                            packets=expedition.battle_completion(tutorial_battle_position)
+                            conn.sendall(b''.join(encode(p) for p in packets))
+                            skill_cast.reset()
+                            position_tracker.x,position_tracker.y=tutorial_battle_position['x'],tutorial_battle_position['y']
+                            position_tracker.direction=tutorial_battle_position['direction']
+                            position_tracker.speed=tutorial_battle_position['speed']
+                            position_tracker.percent=tutorial_battle_position['percent']
+                            position_tracker.moving=False
+                            position_tracker.tick=position_tracker.received=None
+                            simulated_positions[0x100]=(position_tracker.x,position_tracker.y,None)
+                            input_state=None
+                            record('tutorial-scenario-complete',connection=connection,scenario=14,position=tutorial_battle_position,commands=[struct.unpack_from('<H',p)[0] for p in packets])
+                        conn.settimeout(.01 if skill_cast.is_casting() else .05 if tutorial_battle.pending or tutorial_battle.active else .5)
+                    idle_stop=movement_idle_timeout()
+                    if not skill_cast.is_casting() and movement_response_mode()=='echo' and idle_stop>0 and input_state and input_state[1] and time.monotonic()-last_moving_input>idle_stop:
+                        entity,moving,direction=input_state
+                        conn.sendall(encode(struct.pack('<HHBBHH',0x0b,entity,direction,0,0,0)))
+                        conn.sendall(encode(struct.pack('<HHb',0x0c,entity,1)))
+                        input_state=(entity,0,direction)
+                        record('movement-state-timeout',connection=connection)
+                    if args.live_controls and plaza_player_sent:
+                        for request_path in sorted(args.live_controls.glob('*.request.json')):
+                            claimed=request_path.with_suffix('.processing')
+                            try:
+                                request_path.rename(claimed)
+                            except FileNotFoundError:
+                                continue
+                            try:
+                                request=json.loads(claimed.read_text(encoding='utf-8'))
+                                responses=None
+                                if request['action']=='inventory-page':
+                                    if not args.experimental_inventory:raise ValueError('Inventory mode is disabled')
+                                    responses=inventory.fill(request['character'],request['item_ids'])
+                                    response=responses[0]
+                                elif request['action']=='appearance':
+                                    ids=request['ids']
+                                    catalog=json.loads(Path(__file__).with_name('appearance-catalog.json').read_text(encoding='utf-8'))['rows']
+                                    allowed={r['id'] for r in catalog if r['character']==1 and r['variant']==0 and r['flag']==0}
+                                    if not isinstance(ids,list) or not 1<=len(ids)<=16 or any(type(i)!=int or i not in allowed for i in ids):
+                                        raise ValueError('Unsupported appearance IDs')
+                                    response=plaza_appearance_response(ids=ids)
+                                elif request['action']=='speed':
+                                    response=plaza_speed_response()
+                                elif request['action'] in ('character-values','entity-parameters'):
+                                    # Reload the builder so future field mapping changes do not
+                                    # require another service restart.
+                                    import importlib, live_packet_controls
+                                    response=importlib.reload(live_packet_controls).build_numeric(request)
+                                else:
+                                    raise ValueError('Unsupported control action')
+                                conn.sendall(b''.join(encode(p) for p in (responses or (response,))))
+                                if request.get('operation')=='movement-state':
+                                    conn.sendall(encode(struct.pack('<HHb',0x0c,0x100,2 if request['moving'] else 1)))
+                                if request.get('operation')=='position':
+                                    simulated_positions[0x100]=(float(request['x']),float(request['y']),None)
+                                    position_tracker.x=float(request['x'])
+                                    position_tracker.y=float(request['y'])
+                                    position_tracker.tick=position_tracker.received=None
+                                receipt={'sent':True,'connection':connection,'action':request['action'],'note':'Packet sent; visual application requires client observation'}
+                                record('live-control', connection=connection, request=request)
+                            except (ValueError, KeyError, OSError, AttributeError, ImportError, TypeError) as error:
+                                receipt={'sent':False,'error':str(error)}
+                            claimed.with_suffix('.receipt.json').write_text(json.dumps(receipt),encoding='utf-8')
+                            claimed.unlink()
+                    try:
+                        chunk = conn.recv(min(65536, 4*1024*1024-total))
+                    except socket.timeout:
+                        if time.monotonic()-last >= args.idle_timeout:
+                            record('idle-timeout', connection=connection)
+                            break
+                        continue
+                    if not chunk:
+                        record('peer-closed', connection=connection)
+                        break
+                    if not store:raw.write(chunk)
+                    raw.flush()
+                    record('received', connection=connection, offset=total, length=len(chunk))
+                    total += len(chunk)
+                    if not decode_failed:
+                        try:
+                            for payload in decoder.feed(chunk):
+                                frame_index += 1
+                                decoded = run/f'connection-{connection:04d}.payload-{frame_index:04d}.bin'
+                                if not store:decoded.write_bytes(payload)
+                                command = struct.unpack_from('<H', payload)[0] if len(payload)>=2 else None
+                                record('decoded', connection=connection, command=command,
+                                       payload_bytes=len(payload), checksum_valid=True, file=str(decoded))
+                                if store and args.reply=='channel-bootstrap' and account_id is None:
+                                    try:
+                                        ident,name,token=channel_identity(payload)
+                                        session_owner=store.claim(ident,name,token,peer[0])
+                                        if not session_owner:raise ValueError('Unauthenticated channel')
+                                        account_id=ident
+                                        from inventory_equipment import Inventory
+                                        from new_expedition import NewExpedition
+                                        inventory=Inventory(None,data=store.load(ident,'inventory'),
+                                            persist=lambda data:store.save(ident,'inventory',data))
+                                        expedition=NewExpedition(None,data=store.load(ident,'expedition'),
+                                            persist=lambda data:store.save(ident,'expedition',data),inventory=inventory)
+                                        plaza_npcs=PlazaNPCs(store.load(ident,'quests'),
+                                            persist=lambda data:store.save(ident,'quests',data))
+                                        saved_position=store.load(ident,'position')
+                                        tutorial_character=saved_position['character'] if saved_position['character'] in expedition.data['characters'] else 1
+                                        record('account-authenticated',connection=connection,account_id=ident)
+                                    except (ValueError,UnicodeError):
+                                        record('authentication-rejected',connection=connection)
+                                        return
+                                elif store and args.reply=='channel-bootstrap' and command==1:
+                                    record('duplicate-channel-login',connection=connection)
+                                    return
+                                if shop and account_id is not None and command==0xa8 and len(payload)==2:
+                                    conn.sendall(encode(balance_packet(shop.balance(account_id))))
+                                    record('shop-open',connection=connection,account_id=account_id)
+                                elif shop and account_id is not None and command==0xac:
+                                    try:
+                                        if not expedition or not expedition.tutorial_completed or not plaza_player_sent:
+                                            raise ShopError('商城需在廣場使用')
+                                        lines=purchase_lines(payload)
+                                        with inventory.lock:
+                                            order,balance,replayed=shop.purchase(account_id,lines,f'{session_owner}:{frame_index}')
+                                            inventory.data=store.load(account_id,'inventory')
+                                            packets=(purchase_result(lines),balance_packet(balance))+inventory.snapshots(tutorial_character)
+                                        conn.sendall(b''.join(encode(p) for p in packets))
+                                        record('shop-purchased',connection=connection,account_id=account_id,order_id=order,
+                                               items=lines,replayed=replayed)
+                                    except ShopError as error:
+                                        conn.sendall(encode(purchase_result()))
+                                        record('shop-rejected',connection=connection,account_id=account_id,error=str(error))
+                                elif expedition and command==0x0c and len(payload)==6:
+                                    selected_character=struct.unpack_from('<I',payload,2)[0]
+                                    if selected_character not in expedition.data['characters']:
+                                        record('tutorial-character-rejected',connection=connection,character=selected_character)
+                                    elif plaza_player_sent:
+                                        tutorial_character=selected_character
+                                        skill_cast.reset()
+                                        position=position_tracker.stop_for_switch()
+                                        packets=expedition.switch_character(tutorial_character,position)
+                                        conn.sendall(b''.join(encode(p) for p in packets))
+                                        input_state=None
+                                        simulated_positions[0x100]=(position['x'],position['y'],None)
+                                        record('tutorial-character-switch',connection=connection,character=tutorial_character,position=position)
+                                elif expedition and command==0x28:
+                                    try:
+                                        response=expedition.battle_entry(payload)
+                                        if not tutorial_battle_pending:
+                                            tutorial_battle_position=position_tracker.stop_for_switch()
+                                            conn.sendall(b''.join(encode(p) for p in response))
+                                            tutorial_battle_pending=True
+                                            input_state=None
+                                            record('tutorial-battle-entry',connection=connection,leader=4,scenario=14,response=[p.hex() for p in response])
+                                    except ValueError as error:
+                                        record('tutorial-battle-rejected',connection=connection,error=str(error),request=payload.hex())
+                                elif expedition and command==0xb0 and len(payload)==2 and tutorial_plaza_pending:
+                                    position={'x':900.,'y':900.,'direction':64,'speed':30,'percent':100}
+                                    if saved_position and expedition.tutorial_completed:
+                                        position=dict(saved_position)
+                                    packets=(plaza_map_response(),)+expedition.switch_character(tutorial_character,position)+(struct.pack('<H',0x14),)+plaza_npcs.enter()
+                                    conn.sendall(b''.join(encode(p) for p in packets))
+                                    skill_cast.reset()
+                                    position_tracker.x,position_tracker.y=position['x'],position['y']
+                                    position_tracker.direction=position['direction']
+                                    position_tracker.speed=position['speed']
+                                    position_tracker.moving=False
+                                    position_tracker.tick=position_tracker.received=None
+                                    input_state=None
+                                    tutorial_plaza_pending=False
+                                    tutorial_plaza_sent=True
+                                    # Fresh plaza login has not passed the tutorial B0
+                                    # path that normally enables movement handling.
+                                    plaza_player_sent=True
+                                    expedition.complete_tutorial()
+                                    record('tutorial-plaza-player-ready',connection=connection,map=511)
+                                elif expedition and tutorial_plaza_sent and command in (0x3c,0x3f):
+                                    packets=plaza_npcs.request(payload)
+                                    if packets:
+                                        conn.sendall(b''.join(encode(p) for p in packets))
+                                    record('plaza-npc-quest-request',connection=connection,request=payload.hex(),responses=[p.hex() for p in packets],accepted=plaza_npcs.accepted,completed=plaza_npcs.completed)
+                                elif expedition and command==0xb0 and len(payload)==2 and tutorial_battle_pending:
+                                    skill_cast.reset()
+                                    from new_expedition import BATTLE_SPAWN
+                                    packets=expedition.battle_player(tutorial_battle_position)
+                                    tutorial_battle=TutorialBattle()
+                                    packets+=tutorial_battle.spawn()
+                                    conn.sendall(b''.join(encode(p) for p in packets))
+                                    tutorial_character=4
+                                    tutorial_battle_pending=False
+                                    position_tracker.x,position_tracker.y=BATTLE_SPAWN['x'],BATTLE_SPAWN['y']
+                                    position_tracker.speed,position_tracker.percent=30,100
+                                    position_tracker.moving=False
+                                    position_tracker.tick=position_tracker.received=None
+                                    simulated_positions[0x100]=(BATTLE_SPAWN['x'],BATTLE_SPAWN['y'],None)
+                                    record('tutorial-battle-player-ready',connection=connection,leader=4,position=BATTLE_SPAWN)
+                                elif expedition and command==0xb0 and len(payload)==2 and not plaza_player_sent:
+                                    packets=expedition.player_initialization(tutorial_character)
+                                    conn.sendall(b''.join(encode(p) for p in packets))
+                                    plaza_player_sent=True
+                                    position_tracker.x,position_tracker.y=275.,144.
+                                    position_tracker.direction=64
+                                    position_tracker.speed=30
+                                    position_tracker.percent=100
+                                    record('tutorial-player-initialized',connection=connection,character=tutorial_character,commands=[struct.unpack_from('<H',p)[0] for p in packets])
+                                elif args.experimental_character_switch and plaza_player_sent and command==0x0c and len(payload)==6:
+                                    target=struct.unpack_from('<I',payload,2)[0]
+                                    try:
+                                        if not 1<=target<=9:raise ValueError('Character must be 1..9')
+                                        import importlib,character_switch
+                                        module=importlib.reload(character_switch)
+                                        position=position_tracker.stop_for_switch()
+                                        packets=module.responses(target,position)
+                                        conn.sendall(b''.join(encode(p) for p in packets))
+                                        input_state=None
+                                        simulated_positions[0x100]=(position['x'],position['y'],None)
+                                        record('character-switch',connection=connection,character=target,position=position,commands=[struct.unpack_from('<H',p)[0] for p in packets])
+                                        if args.experimental_inventory:
+                                            conn.sendall(b''.join(encode(p) for p in inventory.snapshots(target)))
+                                    except Exception as error:
+                                        record('character-switch-error',connection=connection,character=target,error=str(error))
+                                elif (args.experimental_inventory or account_id is not None) and command in (0x23,0x29) and len(payload) in (4,6):
+                                    try:
+                                        if expedition and payload[2] not in expedition.data['characters']:raise ValueError('Character is not owned')
+                                        target,packets=inventory.change(payload)
+                                        conn.sendall(b''.join(encode(p) for p in packets))
+                                        record('inventory-change',connection=connection,character=target,request=payload.hex())
+                                    except ValueError as error:
+                                        record('inventory-rejected',connection=connection,error=str(error),request=payload.hex())
+                                elif (args.experimental_inventory or account_id is not None) and command==0x26 and len(payload)==3 and 1<=payload[2]<=9:
+                                    if expedition and payload[2] not in expedition.data['characters']:continue
+                                    conn.sendall(b''.join(encode(p) for p in inventory.snapshots(payload[2])))
+                                elif args.reply in ['login-reject','login-success'] and command == 0xE8 and len(payload) == 112:
+                                    success = args.reply == 'login-success'
+                                    if store:
+                                        try:
+                                            name,digest=credentials(payload)
+                                            result=store.authenticate(name,digest,peer[0])
+                                        except (ValueError,UnicodeError):result=None
+                                        success=result is not None
+                                        response=login_ticket_response(result)
+                                        record('login-validation',connection=connection,success=success)
+                                    else:response = login_response(success)
+                                    wire = encode(response)
+                                    conn.sendall(wire)
+                                    if not store:(run/f'connection-{connection:04d}.reply-{frame_index:04d}.bin').write_bytes(wire)
+                                    record('reply-sent', connection=connection, command=0x13,
+                                           status=response[0x16], wire_bytes=len(wire), experimental=True,
+                                           groups=1 if success else 0)
+                                elif expedition and command==0x40 and len(payload)==4:
+                                    try:
+                                        response=expedition.scenario_selection(payload)
+                                        unlocked=expedition.unlock_isilia(payload)
+                                        conn.sendall(b''.join(encode(p) for p in unlocked))
+                                        record('tutorial-isilia-unlocked',connection=connection,level=2,trigger='formation-request')
+                                        conn.sendall(encode(expedition.formation())+encode(response))
+                                        record('tutorial-scenario-selection',connection=connection,scenario=14,response=response.hex())
+                                    except ValueError as error:
+                                        record('tutorial-scenario-rejected',connection=connection,error=str(error))
+                                elif expedition and command==0x3f and plaza_player_sent:
+                                    if payload==struct.pack('<4H',0x3f,1000,14,1) and not tutorial_plaza_sent and not tutorial_plaza_pending:
+                                        # Allow the final scene's RestoreMap / Lua return to
+                                        # finish before replacing TUTO with the town module.
+                                        tutorial_plaza_at=time.monotonic()+.5
+                                    recruited=expedition.unlock_pinko_after_scene(payload)
+                                    if recruited:
+                                        conn.sendall(b''.join(encode(p) for p in recruited))
+                                        record('tutorial-pinko-unlocked',connection=connection,character=2,trigger=payload.hex())
+                                    if tutorial_scene_complete:continue
+                                    packets=expedition.after_tutorial_scene(payload)
+                                    if packets:
+                                        conn.sendall(b''.join(encode(p) for p in packets))
+                                        input_state=None
+                                        tutorial_scene_complete=True
+                                        position_tracker.x,position_tracker.y=275.,144.
+                                        position_tracker.direction=64
+                                        position_tracker.moving=False
+                                        position_tracker.tick=position_tracker.received=None
+                                        simulated_positions[0x100]=(275.,144.,None)
+                                        record('tutorial-scene-control-restored',connection=connection,request=payload.hex())
+                                elif expedition and command==0x3e:
+                                    try:
+                                        response=expedition.create(payload)
+                                    except (ValueError,UnicodeError):
+                                        response=struct.pack('<Hh',0x4a,-1)
+                                    conn.sendall(encode(response))
+                                    record('expedition-name-result',connection=connection,status=struct.unpack_from('<h',response,2)[0])
+                                    if struct.unpack_from('<h',response,2)[0]==1:
+                                        tutorial=encode(expedition.tutorial_entry())
+                                        conn.sendall(tutorial)
+                                        record('tutorial-entry-sent',connection=connection,command=0x6e)
+
+                                elif args.reply == 'channel-bootstrap' and command == 1 and len(payload) == 0x39:
+                                    if expedition and not store:expedition.relock_isilia()
+                                    options={'character_ids':expedition.data['characters'],'expedition_name':expedition.data['expedition_name']} if expedition else {}
+                                    response = channel_response(args.experimental_owned_character,args.all_characters,**options)
+                                    if expedition:response=expedition.bootstrap(response)
+                                    # Keep the confirmed local world UID1 codec;
+                                    # authenticated account ownership is session-side.
+                                    if experiment:
+                                        response, change = experiment.apply(response)
+                                        record('initialization-experiment', connection=connection, **change)
+                                    wire = encode(response)
+                                    conn.sendall(wire)
+                                    (run/f'connection-{connection:04d}.reply-{frame_index:04d}.bin').write_bytes(wire)
+                                    record('reply-sent', connection=connection, command=2,
+                                           wire_bytes=len(wire), experimental=True, characters=int(args.experimental_owned_character))
+                                elif args.experimental_plaza_player and args.reply == 'channel-bootstrap' and command == 0xB0 and len(payload) == 2 and not plaza_player_sent:
+                                    map_wire = encode(plaza_map_response())
+                                    conn.sendall(map_wire)
+                                    (run/f'connection-{connection:04d}.reply-{frame_index:04d}-0012.bin').write_bytes(map_wire)
+                                    record('reply-sent', connection=connection, command=18,
+                                           wire_bytes=len(map_wire), experimental=True, map_id=511)
+                                    metadata_wire = encode(plaza_player_metadata_response())
+                                    conn.sendall(metadata_wire)
+                                    (run/f'connection-{connection:04d}.reply-{frame_index:04d}-0008.bin').write_bytes(metadata_wire)
+                                    record('reply-sent', connection=connection, command=8,
+                                           wire_bytes=len(metadata_wire), experimental=True, assumed_trigger=0xB0)
+                                    if args.experimental_appearance or args.experimental_combined:
+                                        appearance_ids = None
+                                        if args.appearance_profile:
+                                            appearance_ids = json.loads(args.appearance_profile.read_text(encoding='utf-8'))['ids']
+                                            catalog = json.loads(Path(__file__).with_name('appearance-catalog.json').read_text(encoding='utf-8'))['rows']
+                                            allowed = {r['id'] for r in catalog if r['character']==1 and r['variant']==0 and r['flag']==0}
+                                            if not isinstance(appearance_ids,list) or not 1<=len(appearance_ids)<=16 or any(type(i)!=int or i not in allowed for i in appearance_ids):
+                                                raise ValueError('Appearance profile contains unsupported IDs')
+                                        appearance_wire = encode(plaza_appearance_response(args.experimental_combined, appearance_ids))
+                                        conn.sendall(appearance_wire)
+                                        (run/f'connection-{connection:04d}.reply-{frame_index:04d}-00fa.bin').write_bytes(appearance_wire)
+                                        record('reply-sent', connection=connection, command=0xFA,
+                                               appearance_id=4, variant=0, wire_bytes=len(appearance_wire), experimental=True)
+                                    wire = encode(plaza_player_response())
+                                    conn.sendall(wire)
+                                    plaza_player_sent = True
+                                    if args.experimental_inventory:
+                                        for character in range(1,10):
+                                            conn.sendall(b''.join(encode(p) for p in inventory.snapshots(character)))
+                                    (run/f'connection-{connection:04d}.reply-{frame_index:04d}-0007.bin').write_bytes(wire)
+                                    record('reply-sent', connection=connection, command=7,
+                                           wire_bytes=len(wire), experimental=True, assumed_trigger=0xB0)
+                                    if args.experimental_combined:
+                                        for response in (combined_character_data_response(), combined_entity_parameters_response()):
+                                            reply_command=struct.unpack_from('<H', response)[0]
+                                            fixture_wire=encode(response)
+                                            conn.sendall(fixture_wire)
+                                            (run/f'connection-{connection:04d}.reply-{frame_index:04d}-{reply_command:04x}.bin').write_bytes(fixture_wire)
+                                            record('combined-experiment', connection=connection, command=reply_command,
+                                                   wire_bytes=len(fixture_wire), entity_parameter_1=300, appearance_ids=[4,5,6])
+                                    if args.experimental_speed:
+                                        speed_wire=encode(plaza_speed_response())
+                                        conn.sendall(speed_wire)
+                                        record('speed-experiment', connection=connection, base_speed=50, multiplier_percent=100)
+                                    control_wire = encode(plaza_player_control_response())
+                                    conn.sendall(control_wire)
+                                    (run/f'connection-{connection:04d}.reply-{frame_index:04d}-000a.bin').write_bytes(control_wire)
+                                    record('reply-sent', connection=connection, command=10,
+                                           wire_bytes=len(control_wire), experimental=True, assumed_trigger=0xB0)
+                                    timing_wire = b''.join(encode(p) for p in plaza_movement_timing_responses())
+                                    conn.sendall(timing_wire)
+                                    (run/f'connection-{connection:04d}.reply-{frame_index:04d}-00da.bin').write_bytes(timing_wire)
+                                    record('reply-sent', connection=connection, command=218,
+                                           wire_bytes=len(timing_wire), experimental=True, count=6)
+                                elif (args.experimental_plaza_player or expedition) and plaza_player_sent and command == 0x0A and len(payload) >= 11 and (len(payload) - 6) % 5 == 0:
+                                    for input_offset in range(6,len(payload),5):
+                                        entity,flags,direction=struct.unpack_from('<HHB',payload,input_offset)
+                                        if entity!=0x100:continue
+                                        casts=skill_cast.input(tutorial_character,entity,flags,direction) if expedition and not tutorial_plaza_sent else ()
+                                        moving=int(bool(flags&0x8000))
+                                        position_tracker.input(struct.unpack_from('<I',payload,2)[0],0 if skill_cast.is_casting() else moving,direction)
+                                        if store and tutorial_plaza_sent and (not moving or time.monotonic()-last_save>=2):
+                                            store.save(account_id,'position',{'map':511,'character':tutorial_character,
+                                                'x':position_tracker.x,'y':position_tracker.y,'direction':direction,'speed':30,'percent':100})
+                                            last_save=time.monotonic()
+                                        if moving:last_moving_input=time.monotonic()
+                                        state=(entity,moving,direction)
+                                        if state!=input_state and not skill_cast.is_casting():
+                                            # Local input already predicts flags/direction. Late
+                                            # direction echoes can overwrite a newer turn.
+                                            mode=movement_response_mode()
+                                            replies=[]
+                                            if mode=='echo':
+                                                replies.append(struct.pack('<HHBBHH',0x0b,entity,direction,moving,0,0))
+                                            if input_state is None or input_state[1]!=moving:
+                                                replies.append(struct.pack('<HHb',0x0c,entity,2 if moving else 1))
+                                            if replies:conn.sendall(b''.join(encode(p) for p in replies))
+                                            input_state=state
+                                            record('movement-state-echo',connection=connection,moving=moving,direction=direction,response_mode=mode)
+                                        if expedition:
+                                            if casts:
+                                                conn.sendall(b''.join(encode(p) for p in casts))
+                                                tutorial_battle.cast(casts[0],position_tracker.x,position_tracker.y)
+                                                for cast in casts:
+                                                    (run/f'connection-{connection:04d}.reply-{frame_index:04d}-000d.bin').write_bytes(encode(cast))
+                                                    record('tutorial-skill-cast',connection=connection,character=tutorial_character,
+                                                           flags=flags,direction=direction,action=struct.unpack_from('<H',cast,5)[0])
+                                    if args.live_controls:
+                                        mode_path=args.live_controls/'movement-mode.json'
+                                        if mode_path.exists():
+                                            try:
+                                                import importlib, movement_simulation
+                                                settings=json.loads(mode_path.read_text(encoding='utf-8'))
+                                                updates=importlib.reload(movement_simulation).advance(payload,simulated_positions,settings.get('mode','off'),float(settings.get('step',1)))
+                                                for response in updates:
+                                                    conn.sendall(encode(response))
+                                                    record('simulated-movement',connection=connection,position=list(simulated_positions[0x100][:2]),mode=settings['mode'])
+                                            except (ValueError,OSError) as error:
+                                                record('simulation-error',error=str(error))
+                                    # 545b4f consumes one timing credit per input packet.
+                                    # 4959f0 restores five credits, so replenish after five
+                                    # valid packets. This is an experimental flow-control ack.
+                                    movement_requests += 1
+                                    if movement_requests % 5 == 0:
+                                        ack_wire = encode(struct.pack('<H', 0xDA))
+                                        conn.sendall(ack_wire)
+                                        record('reply-sent', connection=connection, command=218,
+                                               wire_bytes=len(ack_wire), experimental=True, movement_requests=movement_requests)
+                                elif (args.experimental_plaza_entry or expedition) and args.reply == 'channel-bootstrap' and command == 0x10 and len(payload) == 2:
+                                    # 4931a3: callback table starts at +208 with 16-byte slots;
+                                    # +398 => command 19, handler 494780 reads uint32 time at +2
+                                    # and decrements f93934 (outstanding connection probes).
+                                    server_tick = int(time.monotonic()*1000) & 0xFFFFFFFF
+                                    wire = encode(struct.pack('<HI', 0x19, server_tick))
+                                    conn.sendall(wire)
+                                    (run/f'connection-{connection:04d}.reply-{frame_index:04d}-0019.bin').write_bytes(wire)
+                                    record('reply-sent', connection=connection, command=0x19,
+                                           wire_bytes=len(wire), experimental=True, assumed_trigger=0x10)
+                                elif args.experimental_plaza_entry and args.reply == 'channel-bootstrap' and command == 0x42 and len(payload) == 4 and payload[3] == 0:
+                                    for response in plaza_entry_responses():
+                                        wire = encode(response)
+                                        conn.sendall(wire)
+                                        reply_command = struct.unpack_from('<H', response)[0]
+                                        (run/f'connection-{connection:04d}.reply-{frame_index:04d}-{reply_command:04x}.bin').write_bytes(wire)
+                                        record('reply-sent', connection=connection, command=reply_command,
+                                               wire_bytes=len(wire), experimental=True, assumed_trigger=0x42)
+                                elif args.experimental_character_list and args.reply == 'channel-bootstrap' and command == 0xA0 and len(payload) == 2 and not character_fixture_sent:
+                                    if args.experimental_combined:
+                                        stat_wire=encode(combined_character_data_response())
+                                        conn.sendall(stat_wire)
+                                        (run/f'connection-{connection:04d}.reply-{frame_index:04d}-005c.bin').write_bytes(stat_wire)
+                                        record('combined-experiment', connection=connection, command=0x5C, wire_bytes=len(stat_wire))
+                                    # Known receive command 0x60 switches to the character scene.
+                                    # Request/response association is an explicit test assumption.
+                                    options={'character_ids':expedition.data['characters']} if expedition else {}
+                                    wire = encode(character_scene_response(args.experimental_owned_character, args.experimental_appearance or args.experimental_combined,args.all_characters,**options))
+                                    conn.sendall(wire)
+                                    character_fixture_sent = True
+                                    (run/f'connection-{connection:04d}.reply-{frame_index:04d}.bin').write_bytes(wire)
+                                    record('reply-sent', connection=connection, command=0x60,
+                                           wire_bytes=len(wire), experimental=True, characters=int(args.experimental_owned_character),
+                                           assumed_trigger=0xA0)
+                                    if expedition and expedition.data['expedition_name']:
+                                        if expedition.tutorial_completed:
+                                            conn.sendall(b''.join(encode(p) for p in (plaza_npcs.context(),)+plaza_entry_responses()))
+                                            tutorial_plaza_pending=True
+                                            record('plaza-resume-sent',connection=connection)
+                                        else:
+                                            conn.sendall(encode(expedition.tutorial_entry()))
+                                            record('tutorial-entry-sent',connection=connection,command=0x6e,resume=True)
+                        except ValueError as error:
+                            decode_failed = True
+                            record('decode-error', connection=connection, error=str(error))
+                    last = time.monotonic()
+                    if total >= 4*1024*1024:
+                        record('capture-limit', connection=connection)
+                        break
+        except OSError as error:
+            record('connection-error', connection=connection, error=str(error))
+        finally:
+            if store and session_owner:
+                try:
+                    if tutorial_plaza_sent:
+                        position=position_tracker.stop_for_switch()
+                        store.save(account_id,'position',dict(position,map=511,character=tutorial_character))
+                finally:store.release(account_id,session_owner)
+            record('closed', connection=connection, bytes=total)
+            slots.release()
+
+    try:
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as listener:
+            # Prevent another listener from sharing the port on Windows.
+            if hasattr(socket, 'SO_EXCLUSIVEADDRUSE'):
+                listener.setsockopt(socket.SOL_SOCKET, socket.SO_EXCLUSIVEADDRUSE, 1)
+            listener.bind(('127.0.0.1', args.port))
+            listener.listen(8)
+            listener.settimeout(0.5)
+            record('listening', host='127.0.0.1', port=args.port, directory=str(run), reply=args.reply)
+            started = time.monotonic()
+            connection = 0
+            while not args.duration or time.monotonic()-started < args.duration:
+                if args.stop_file and args.stop_file.exists():
+                    record('stop-requested',source='local-service-manager')
+                    break
+                try:
+                    conn, peer = listener.accept()
+                except socket.timeout:
+                    continue
+                if not slots.acquire(blocking=False):
+                    conn.close()
+                    record('connection-limit', peer=list(peer))
+                    continue
+                connection += 1
+                worker = threading.Thread(target=client, args=(conn, peer, connection))
+                workers = [w for w in workers if w.is_alive()]
+                workers.append(worker)
+                worker.start()
+    except KeyboardInterrupt:
+        pass
+    except OSError as error:
+        record('server-error', error=str(error))
+        raise
+    finally:
+        stop.set()
+        for worker in workers:
+            worker.join()
+        record('stopped')
+        events.close()
+
+
+if __name__ == '__main__':
+    main()

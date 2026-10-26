@@ -1,0 +1,116 @@
+{
+  "status": "待整合",
+  "source_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+  "module": "Tartaros.bin",
+  "tool": "REA6.5.0 / Ghidra12.1.4; Python3.10.6 independent PE/literal verification",
+  "evidence_id": "ev_4d8031e26457cacf831a35ceb1ade3bf1367039333fb5f4beb437c928361be2a",
+  "analysis_profile_digest": "3c06738e45e144d5f073edbd3244c6bff46222f389525fe659bc92dca2ccdece",
+  "raw_evidence_file": "evidence/rea-cli-parser-long-440280.json",
+  "raw_evidence_sha256": "f49a85150d89c0a56a97db39a65f7ccb0a6c54b7f95656b783545c74531a5eaf",
+  "observed_body": {
+    "available": true,
+    "provenance": "ghidra-function-body-address-set",
+    "ranges": [
+      {
+        "start": "0x440280",
+        "end": "0x44031c"
+      },
+      {
+        "start": "0x440320",
+        "end": "0x4405ba"
+      }
+    ],
+    "total_bytes": 824,
+    "span_bytes": 827,
+    "non_contiguous": true,
+    "contains_entry": true
+  },
+  "excluded_gap": {
+    "start": "0x44031d",
+    "end_inclusive": "0x44031f",
+    "hex": "8d4900",
+    "scope": "Excluded by Ghidra FunctionManager; not absence of bytes"
+  },
+  "literal_start_checks": [
+    {
+      "va": "0xbf2375",
+      "file_offset": 8325493,
+      "label": "empty-marker start",
+      "window_hex": "000000766563746f723c543e20746f6f206c6f6e67000000000000a836c600507f400020f7720020197300a07f4000a07f4000f0c28d00f0c28d00f0c28d00f0",
+      "cstring_hex": "",
+      "cstring_ascii": "",
+      "terminated": true
+    },
+    {
+      "va": "0xbfafd0",
+      "file_offset": 8361424,
+      "label": "mode40 marker start",
+      "window_hex": "526c79656800000038314639313439364346433334384138394635414638334342434443454145380000000073657276657269702e696e690000000049500000",
+      "cstring_hex": "526c796568",
+      "cstring_ascii": "Rlyeh",
+      "terminated": true
+    },
+    {
+      "va": "0xbfafd8",
+      "file_offset": 8361432,
+      "label": "mode54 marker start",
+      "window_hex": "38314639313439364346433334384138394635414638334342434443454145380000000073657276657269702e696e6900000000495000004c6f67696e000000",
+      "cstring_hex": "3831463931343936434643333438413839463541463833434243444345414538",
+      "cstring_ascii": "81F91496CFC348A89F5AF83CBCDCEAE8",
+      "terminated": true
+    },
+    {
+      "va": "0xbfafc0",
+      "file_offset": 8361408,
+      "label": "file-attribute query argument",
+      "window_hex": "73657276657249702e696e6900000000526c79656800000038314639313439364346433334384138394635414638334342434443454145380000000073657276",
+      "cstring_hex": "73657276657249702e696e69",
+      "cstring_ascii": "serverIp.ini",
+      "terminated": true
+    }
+  ],
+  "reported_referenced_strings": [
+    {
+      "address": "0xbf2378",
+      "value": "vector<T> too long",
+      "source_address": "0x4404bf"
+    },
+    {
+      "address": "0xbfafc0",
+      "value": "serverIp.ini",
+      "source_address": "0x440441"
+    },
+    {
+      "address": "0xbfafdb",
+      "value": "91496CFC348A89F5AF83CBCDCEAE8",
+      "source_address": "0x44050d"
+    }
+  ],
+  "static_branch_review": [
+    {
+      "mode": "0x40",
+      "condition": "GetFileAttributesA(serverIp.ini) != 0xffffffff and inline comparison to bytes at0xbfafd0 equals zero",
+      "write_va": "0x440494"
+    },
+    {
+      "mode": "0x52",
+      "condition": "fallback inline comparison to bytes at0xbf2375 equals zero",
+      "write_va": "0x4404df"
+    },
+    {
+      "mode": "0x54",
+      "condition": "fallback inline comparison to bytes at0xbfafd8 equals zero",
+      "write_va": "0x44052d"
+    }
+  ],
+  "common_flag_write": "0x440534 receiver+0x28=1 after a selected mode",
+  "analyst_inference": "Mode selection branches agree with prior bounded report; no claim about exact split/transform/token syntax or server acceptance. GetFileAttributes success means non-invalid attributes, not a validated configuration file content.",
+  "limitations": [
+    "Function body is provider-specific, two inclusive ranges, not the full827-byte envelope.",
+    "Ghidra recovered signature/local variables are decompiler artifacts; not original source.",
+    "Referenced strings at0xbf2378 and0xbfafdb are interior/adjacent typed data; do not replace the actual comparison starts0xbf2375/0xbfafd8.",
+    "Empty callers or unresolved_calls arrays do not establish absence of dynamic/vtable invocations.",
+    "Def-use is intraprocedural and may omit memory aliasing/call effects even though native_value_flow.truncated is false.",
+    "No helper semantics, whole login sequence, official authentication, runtime/game behavior or monster authority is established."
+  ]
+}

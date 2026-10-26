@@ -1,0 +1,147 @@
+{
+  "status": "待整合",
+  "tool": "build_review.py v1 / Python 3.10.6",
+  "sources": [
+    {
+      "path": "anal/login_protocol.py",
+      "sha256": "2df1658bde172c672d7a3d45fe0534fc766bbe952bb53ecf49bc4ebff6b4094e",
+      "ranges": [
+        {
+          "start": 107,
+          "end": 114,
+          "lines": [
+            "def plaza_entry_responses():",
+            "    \"\"\"Experimental acknowledgement and square scene transition, not world initialization.",
+            "",
+            "    0x43 -> 4b1a90 removes type-6 pending objects. 0x69 -> 4b9090",
+            "    reads a signed scene byte and two unsigned location bytes; scene 7",
+            "    constructs the town module. The association with 0x42 is a test assumption.",
+            "    \"\"\"",
+            "    return (struct.pack('<H', 0x43), struct.pack('<HBBB', 0x69, 7, 1, 1))"
+          ]
+        },
+        {
+          "start": 128,
+          "end": 149,
+          "lines": [
+            "def plaza_map_response():",
+            "    \"\"\"Map table read from the client maps 511 to square001D.",
+            "",
+            "    The previous scene still had select18 loaded and no movement bounds.",
+            "    Must precede entity creation/control binding because 4b24f0 resets control.",
+            "    \"\"\"",
+            "    return struct.pack('<HI', 0x12, 511)",
+            "",
+            "def plaza_player_response():",
+            "    \"\"\"Experimental 26-byte entity-create record parsed by 4ae4d0.",
+            "",
+            "    Coordinates and flags are synthetic; this does not supply player statistics.",
+            "    \"\"\"",
+            "    record = bytearray(26)",
+            "    struct.pack_into('<H', record, 0, 0x0100)  # entity type 0, local index 1",
+            "    record[2] = 1  # instance byte used in composite key",
+            "    struct.pack_into('<H', record, 4, 1)  # Soma",
+            "    # Nonzero synthetic planar position also forces 4cab80 to query terrain",
+            "    # height; (0,0) equals constructor defaults and skips this update.",
+            "    # User-selected initial spawn (900,900), retaining terrain-derived Z.",
+            "    # Minimap visibility does not establish walkability or a valid spawn.",
+            "    struct.pack_into('<fff', record, 6, 900.0, 900.0, 0.0)"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "anal/plaza_npcs.py",
+      "sha256": "9a9e396000323e0b7359afeb933922ce3ff40b50a4dedd982ed752b2fe228e49",
+      "ranges": [
+        {
+          "start": 1,
+          "end": 5,
+          "lines": [
+            "\"\"\"Native plaza NPCs and the first resource-defined post-tutorial scenario.",
+            "",
+            "Town5 membership/models/quest are shipped data. Positions are provisional",
+            "near the established900/900 plaza spawn; client MEF placements are unavailable.",
+            "07 class is the LOW BYTE OF ENTITY ID, not the PRE byte that follows it."
+          ]
+        },
+        {
+          "start": 17,
+          "end": 25,
+          "lines": [
+            "    archive=Archive(ROOT/'Table.stp')",
+            "    def xml(name):",
+            "        path=next(p for p in archive.files if p.rsplit('/',1)[-1]==name)",
+            "        return ET.fromstring(archive.read(path))",
+            "    town=xml('_TownList.xml').find(\"./TOWN[@ID='5']\")",
+            "    ids=[int(n.attrib['ID']) for n in town.findall('./NPCLIST/NPC')]",
+            "    actors=xml('_ActorList.xml')",
+            "    npc=xml('npctable.xml')",
+            "    quest=xml('QuestInfo.xml').find(\".//Quest[@id='15']\")"
+          ]
+        },
+        {
+          "start": 31,
+          "end": 38,
+          "lines": [
+            "    for index,model in enumerate(ids):",
+            "        actor=actors.find(f\".//ACTOR[@ID='{model}'][@PRE='1']\")",
+            "        info=npc.find(f\"./NPC[@ID='{model}']\")",
+            "        if actor is None or info is None:raise ValueError(f'Missing NPC resource {model}')",
+            "        x,y=(920.,900.) if index==0 else (850.+(index-1)%6*20,940.+(index-1)//6*25)",
+            "        result.append(dict(entity=((index+1)<<8)|6,model=model,x=x,y=y,",
+            "                           name=info.attrib['NAME'],file=actor.attrib['FILE']))",
+            "    return tuple(result)"
+          ]
+        },
+        {
+          "start": 67,
+          "end": 71,
+          "lines": [
+            "    @staticmethod",
+            "    def context():",
+            "        # Native38/type0 is town context.4B208D stores town5 in FAB1BC;",
+            "        # without it500240 would filter out the town5 scenario quest15.",
+            "        return struct.pack('<HBHHH',0x38,0,5,0,0)"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "anal/login_test_server.py",
+      "sha256": "7385c9a5c1be5b0715ae56b189f6a584677dc657ca892377b545d233206ef35e",
+      "ranges": [
+        {
+          "start": 479,
+          "end": 488,
+          "lines": [
+            "                                    (run/f'connection-{connection:04d}.reply-{frame_index:04d}.bin').write_bytes(wire)",
+            "                                    record('reply-sent', connection=connection, command=2,",
+            "                                           wire_bytes=len(wire), experimental=True, characters=int(args.experimental_owned_character))",
+            "                                elif args.experimental_plaza_player and args.reply == 'channel-bootstrap' and command == 0xB0 and len(payload) == 2 and not plaza_player_sent:",
+            "                                    map_wire = encode(plaza_map_response())",
+            "                                    conn.sendall(map_wire)",
+            "                                    (run/f'connection-{connection:04d}.reply-{frame_index:04d}-0012.bin').write_bytes(map_wire)",
+            "                                    record('reply-sent', connection=connection, command=18,",
+            "                                           wire_bytes=len(map_wire), experimental=True, map_id=511)",
+            "                                    metadata_wire = encode(plaza_player_metadata_response())"
+          ]
+        }
+      ]
+    }
+  ],
+  "observed": [
+    "plaza_map_response emits S2C 0x12 with constant map ID 511",
+    "plaza_entry_responses emits scene 7 with location bytes 1,1, marked experimental",
+    "PlazaNPCs.context emits 0x38/type0/town5",
+    "NPC and player XY coordinates are synthesized by the local implementation"
+  ],
+  "inference": [
+    "Existing local server is not a generic all-town switching implementation"
+  ],
+  "limits": [
+    "Source inspection only; no packets sent",
+    "Native claims in comments are not independently accepted here",
+    "T05 scene handoff / T07 controller reset / T04 actor fields are dependencies"
+  ]
+}
