@@ -16,4 +16,4 @@ T08同SHA報告129以PE `.text` VA401000→raw400，141/152卻使用平鋪VA-401
 
 [凍結後變更](post-freeze-changes.json)與之後新增的遠端提交不列本批已審核；推送前若需合併較新main，另記來源差異。每項是否已整合以來源SHA與claim範圍判斷，不以原暫存仍存在判斷。驗證見[validation.json](validation.json)，接續問題見[NEXT-QUERIES.md](NEXT-QUERIES.md)。
 
-本指令授權正常推送main，最終接續SHA見本目錄 `push-receipt.json` 與本地outputs收據；在推送前只存在獨立分支 `codex/t01-integration-20261027-04`。不發訊息到其他對話；受影響任務README／task.json及共用通知索引已留檔案入口。
+本批已正常推送 `origin/main`：[整合commit](https://github.com/we88ec3-prog/ttr_anal_multi/commit/3ee8df80feb347f1863805ac909cb3431cbd5d29)，SHA `3ee8df80feb347f1863805ac909cb3431cbd5d29`。實際遠端確認見[推送收據](push-receipt.json)，其他任務從此commit或包含它的較新main接續。本輪獨立分支為 `codex/t01-integration-20261027-04`。不發訊息到其他對話；受影響任務README／task.json及共用通知索引已留檔案入口。
