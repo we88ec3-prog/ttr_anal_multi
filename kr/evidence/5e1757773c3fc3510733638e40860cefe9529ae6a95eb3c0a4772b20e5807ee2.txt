@@ -1,0 +1,220 @@
+[
+  {
+    "id": "C-T01-20261027-03-checkpoint-container",
+    "version": "kr",
+    "tasks": [
+      "T07",
+      "T06"
+    ],
+    "statement": "0012/5449A0 清除 checkpoint 容器，不推成清除全部 actors；相同 map selector 仍先走 reset，不能推重載成功。",
+    "evidence_ids": [
+      "7fc19ca663e853cd6e5271366267e9fe89d6cffbd53822534b58e4803573fc8c",
+      "176de508115d3db11030d916115b21646f11015e2ff3fbd87b419a84dfa1e6c9",
+      "9e6571c9268d5eea8dd86f295898af2719df04d545e07fff6a6f7207ea0ab0bb",
+      "b95a1cc5f36b0215673b29487af50f7dcf77e8cf608c741cb233fbf9b7a69703",
+      "b32a7b30e64e3e770a55856db88b207d6d7144bb739d909fb173b10cc031f10e",
+      "7ce6221dbdc85ef76658ed1f83f6244eae1c766db0002eff4b3a5cb733604825",
+      "270285e2aad709c5cf3103580a7bcf4493a7e94883a530f603a2eb220db29905",
+      "1010d463711709f0221b59df73d68506ff6c9dbca2823c089db5df9235ff0b37",
+      "ff0fac89f03cb861dfeb60ac1dadf2211f366a09a0a9013a5ec631dbe3698cef"
+    ],
+    "status": "bounded-source-reconciliation",
+    "integration_batch": "T01-20261027-03",
+    "basis_claim": "kr-T07-T01-20261027-checkpoint-reset"
+  },
+  {
+    "id": "C-T01-20261027-03-init-not-ready",
+    "version": "kr",
+    "tasks": [
+      "T07"
+    ],
+    "statement": "CSquare 0014 設 controller+4，不證明資源或玩家 ready；init 內0043早於0069尾欄位，不是0014 ACK。",
+    "evidence_ids": [
+      "7fc19ca663e853cd6e5271366267e9fe89d6cffbd53822534b58e4803573fc8c",
+      "29072154ab322d905234379c452e8928afb21bf3f2ff5d9cdd6543844822575a",
+      "3317e69cf4cc6352b966660fac375cc87432f60f6863bd36a999fdec5044f31e",
+      "a2b07bbba36b499244c8ee6d546c1eee0680fac5a04605afaf857cadde0945e7",
+      "01290063a1d656c7a962c57fed16b94491a966bae921230a73d7ac3d72da5ea1",
+      "790b04debdcb935e9f771738c882ae921a86ee78769f7cdfc441a07b7a958c6f",
+      "4a75922c73e019dddfb5218b9570e5b5f6face23b19490cb26fbb10b1f8c7788",
+      "125698c3ae6367b3feffd74d2c85d8dd19726e91d066beb51f5a6c3b0dbd7262",
+      "3dd5a76bcd4ac687639ba63c899d20516e5a1de78ac6618eb9276359b0363778",
+      "48fcc87e6554b4547c49e8d2c7ba35fc5ac534c86ab0159b31c5673186bc419e",
+      "109467e60cf2ad3acd8d1f1ea4ca2c6ff3b3506b6cb2c43d6c26ab7832403fb5"
+    ],
+    "status": "bounded-source-reconciliation",
+    "integration_batch": "T01-20261027-03",
+    "basis_claim": "kr-T07-T01-20261027-ready-vs-init-43"
+  },
+  {
+    "id": "C-T01-20261027-03-delete-id",
+    "version": "kr",
+    "tasks": [
+      "T07"
+    ],
+    "statement": "DeleteObject(240) byte ID 左移8為F000；撤回早期相反解讀，保留原文作歷史。",
+    "evidence_ids": [
+      "eec03100359863eb316305fcef1afd6325f351e917687a427e894a0b67733edf",
+      "0f1ccad230e2ccbe84b44df35718f693aba70c2c14c1693aacf1849d3f64e5c3",
+      "8451e491de3f88b0beb2da2be7c2c3b9669d5e986da8c2bb997bdf5ff4116286",
+      "e16ac0a09564cf80bcc66947f4d34611d468c40602a14bd84f934988f30118b9",
+      "4a75922c73e019dddfb5218b9570e5b5f6face23b19490cb26fbb10b1f8c7788",
+      "79d620add76b63193e965af7891ab7ca4734a5a24b58967fb467ce1255fea23c",
+      "031ddc5f1e6cc0191b59b943491ce72cfac547d05f5fe85109e08a8c0ec92d45",
+      "27b489f3637541eff64e23a2091d58080a2f4339756b3a6687c7a60f46df195d",
+      "300cc237f4f7ce9fdcdc56c850bee35845430175501a967fc8c2b55bd8965a0d",
+      "49bb3f91d72af7f23070e1465d234fd8f3248c671f963d1198c5ea186579f41c",
+      "a2dbb36b0cbc46c39790a14fe61485c861f2bd84d9252590f02f34b0e4a24828",
+      "8fbfa9d3d6f03af9b52b9aae4b01cd4b8afbf152bf7bc93a9426264835498aa5"
+    ],
+    "status": "bounded-source-reconciliation",
+    "integration_batch": "T01-20261027-03",
+    "basis_claim": "kr-T07-T01-20261027-single-target-delete"
+  },
+  {
+    "id": "C-T01-20261027-03-npc-deferred",
+    "version": "kr",
+    "tasks": [
+      "T07"
+    ],
+    "statement": "NPC 直接入口走本機UI，但5B9340延後確認可啟動561760(scenario,1)並送6-byte001C；不能概括為永不送001C。",
+    "evidence_ids": [
+      "82e89ed6fd5d0d8d72104ff0c50ef3729092f4e1b2202d997d3565f407195404",
+      "a0d195d67eeeb5adaacf2300795a5a9c14f0fb3d9b202573d9ee3a9cf6b427c7",
+      "43eae4cf52a5275fadd54ffd72e52761858cbbd28ce3a173872e449d157d75af",
+      "eafd35ba1f01b7739cee6238efa1b80f5a581037a84f910a62356c599c508458",
+      "3e171d9ebf54672950e82d458c12bb8902dfa92235aa5e406b89fd8cd34754af",
+      "367a7c6e89a8f9013bed3794e5b245a7cb9ad7e3d07ed9a70808f8c8546611f7",
+      "d68181b35393ac8cd12eb229dcc755ff2e762fcd299e45738e6c28c16d3a8a93",
+      "ac9f0289161abfd668cdd1a38a95bd680f6f9519bb207f0c2146450454859606",
+      "007d8557d4452acbf91816772e001cf5bb88009113634d3363fd8f838d101b6d"
+    ],
+    "status": "bounded-source-reconciliation",
+    "integration_batch": "T01-20261027-03",
+    "basis_claim": "kr-T07-T01-20261027-npc-deferred-1c"
+  },
+  {
+    "id": "C-T01-20261027-03-quest-opcode",
+    "version": "kr",
+    "tasks": [
+      "T14",
+      "T07"
+    ],
+    "statement": "QuestMgr handler5030C0為0064；(FAB5C4-FAB2A0-4)/8=0x64，與教學004C不同域，15/1 intro不等於完成。",
+    "evidence_ids": [
+      "0f1ccad230e2ccbe84b44df35718f693aba70c2c14c1693aacf1849d3f64e5c3",
+      "eec03100359863eb316305fcef1afd6325f351e917687a427e894a0b67733edf",
+      "63715aa954b837a6937f560f5a9ccf2f490c173b591b2148497040a61ae8004d",
+      "3f36ac98b7a444414992bbf332920f164d77fd54ead1e0b020dc84f3b5fdbd44",
+      "3954f7e3379aa4ce1f212c464a3897bb5c464f6cf01cf919d5cc9fa98d6969cc",
+      "98e9e9b33904669c80bc3eceec431c6d6476155d1514010067b8a2ffd65a6419",
+      "44ae4491b32cddda76d21f313b8d60579b65ad2003c34ed2aa11f275fbd25101",
+      "7da3f62b2a82ba4c63e945bc7c062ce4bf112dc23415ecafb4274716a1d63816",
+      "48fcc87e6554b4547c49e8d2c7ba35fc5ac534c86ab0159b31c5673186bc419e",
+      "109467e60cf2ad3acd8d1f1ea4ca2c6ff3b3506b6cb2c43d6c26ab7832403fb5"
+    ],
+    "status": "bounded-source-reconciliation",
+    "integration_batch": "T01-20261027-03",
+    "basis_claim": "kr-T14-T01-20261027-quest-opcode-domains"
+  },
+  {
+    "id": "C-T01-20261027-03-table-field-origin",
+    "version": "kr",
+    "tasks": [
+      "T08"
+    ],
+    "statement": "線上報告表容量3029正確，但(FD8BA8-FD2CFC)/8=3029.5；迴圈欄位起點FD2D00才得到3029=0xBD5。",
+    "evidence_ids": [
+      "a9be68489b56d60391801477ed17ed7db2dafb3b63877111687ff08b5b8f11c2",
+      "755d241b321c1c8bd1cb89873a845c46e67697b6843d1eb2c18e6c7835d226c1",
+      "7ce6221dbdc85ef76658ed1f83f6244eae1c766db0002eff4b3a5cb733604825",
+      "0e28f14a805bc5427ff8e6ef28e466df6774d166e79bed9736a10e2793f998c7",
+      "ff70ce95dcd7c30ad53ca5d8f80898d05eeac32043ed0e4521aad1fc81fa1fbd",
+      "34ab5213a10b4e0f89fcb7926cae6c8abf8be74df0ba1b7a08d059e4d22a77bc",
+      "31e3365899a5e328f3adad4f736b1c8ac2914b362c07f50ca7d6c3c17c411d0a",
+      "125698c3ae6367b3feffd74d2c85d8dd19726e91d066beb51f5a6c3b0dbd7262",
+      "3dd5a76bcd4ac687639ba63c899d20516e5a1de78ac6618eb9276359b0363778",
+      "48fcc87e6554b4547c49e8d2c7ba35fc5ac534c86ab0159b31c5673186bc419e",
+      "109467e60cf2ad3acd8d1f1ea4ca2c6ff3b3506b6cb2c43d6c26ab7832403fb5",
+      "0601c5f9add217052b3d17337643e399038c56f3dd697062fd9b20f1c2e8f6c1"
+    ],
+    "status": "bounded-source-reconciliation",
+    "integration_batch": "T01-20261027-03",
+    "basis_claim": "kr-T08-T01-20261027-dispatch-and-composite-id"
+  },
+  {
+    "id": "C-T01-20261027-03-event8-context",
+    "version": "kr",
+    "tasks": [
+      "T08"
+    ],
+    "statement": "Type1 event8不是HP0/death判定；4CB2C0同時受owner+15C與+370 guard控制resource+11C，須保留上下文。",
+    "evidence_ids": [
+      "fe0b615c5d07994924e4fe26102ecba78ffe5d5aba0cd651d658a127eb7e3dc2",
+      "3bbb85de14051a310a8613bff147822dab59cd240011dbed5f13b99872fe472c",
+      "8cc047b84da22c4e36d13e89f986261a5879fb6623d3f6657b783a218ddcbc4f",
+      "c0f702eee965554fa56fbe5077764932556bd7a7274912930cb3d7a5dbec891b",
+      "a5d7bbe12448f66ec7f448496d913c3df2d81f7b5a945b4c09a6a617580086e1",
+      "01e4b0806a2a96af7d261601a149c1363ed046f273867c72cb46a82e5865a302",
+      "fffcf24fd261fee50229152977c7f29ecdf5d8f17aa07fad030986db4cd926ab",
+      "6fcfb0ccdd9ac505dc80220c8ebb445edcfeaf7ff4712414f302779048e5994e"
+    ],
+    "status": "bounded-source-reconciliation",
+    "integration_batch": "T01-20261027-03",
+    "basis_claim": "kr-T08-T01-20261027-type1-event8-predicate"
+  },
+  {
+    "id": "C-T01-20261027-03-old-network-limits",
+    "version": "kr",
+    "tasks": [
+      "T02",
+      "T09"
+    ],
+    "statement": "保留既有807830非零A02C失敗fallback807A70，以及checksum失敗skip-copy後共用record限制；線上摘要不覆蓋舊證據。",
+    "evidence_ids": [
+      "00a31840b1a618f5fb5bf0388351253b7091bd86a418447b275f24ea3b472015",
+      "7190a22c8d9c344f32e0b37a4b9f94709f45c839e2869fc25ff9c957dbe73a9c",
+      "c788a538db80000560b8e7efbf026fd39fca7aab1df54dbd60ac7b587adb6ce6",
+      "57f3736a42f6680e6403557b805b088d2c975072c103cd4f65fd38bc55e34d8d",
+      "4894912f758056e304319c6a8f3aafaa3de2165f6653a48001102787bea76c05",
+      "e8eed986d1da0e240dcbb0af3fd4effa8781cb141dd5389a3144b4488e7cfb03",
+      "0e28f14a805bc5427ff8e6ef28e466df6774d166e79bed9736a10e2793f998c7",
+      "ff70ce95dcd7c30ad53ca5d8f80898d05eeac32043ed0e4521aad1fc81fa1fbd",
+      "34ab5213a10b4e0f89fcb7926cae6c8abf8be74df0ba1b7a08d059e4d22a77bc",
+      "31e3365899a5e328f3adad4f736b1c8ac2914b362c07f50ca7d6c3c17c411d0a",
+      "125698c3ae6367b3feffd74d2c85d8dd19726e91d066beb51f5a6c3b0dbd7262",
+      "3dd5a76bcd4ac687639ba63c899d20516e5a1de78ac6618eb9276359b0363778",
+      "48fcc87e6554b4547c49e8d2c7ba35fc5ac534c86ab0159b31c5673186bc419e",
+      "109467e60cf2ad3acd8d1f1ea4ca2c6ff3b3506b6cb2c43d6c26ab7832403fb5",
+      "f398779b1e129b0150f009451dc72b51b1cb9b88e9f2aa5c43b4eeeac02e0e94",
+      "0472e4daf7911681debbe63706ed61455448fe77fab61497e2746da7f319695c",
+      "60c0199eb136e9f2c948b5bc80ec384187663f437d53295402e8cfcbf847ce7e",
+      "6c03ee0e209ddfea31ef31cf49a1ac90c4a438be73a9bead622ab25fb0156c2b",
+      "cf711b54975dfe82a38f9bf7cbc0089258d55833fcddb073447ef6f48e4698ef",
+      "719d20fbeb9e75c420f43bd717eec38f59ebcf12571d53f5aee1f4e776fd9b52",
+      "60bee00eb37a27bf45c86750d866a771a2ff1676c72f53f499515c3337c5d111",
+      "c4075c22e41f16e58379f38f95f8051089c24a082344fd776912a1b8522ea9e6",
+      "2df1658bde172c672d7a3d45fe0534fc766bbe952bb53ecf49bc4ebff6b4094e"
+    ],
+    "status": "bounded-source-reconciliation",
+    "integration_batch": "T01-20261027-03",
+    "basis_claim": "kr-T02-T01-20261027-scene-dispatch-chain",
+    "prior_basis_claim": "kr-T02-roy-framing-contract"
+  },
+  {
+    "id": "C-T01-20261027-03-manual-compatibility",
+    "version": "kr",
+    "tasks": [
+      "T07",
+      "T14"
+    ],
+    "statement": "v7手動回報僅是相容流程觀察；窗口、Quest15及後續scene未完整驗收，AI fixture與官方原生分開。",
+    "evidence_ids": [
+      "d18c885a02092b75a6c137b18fce4399a7f58207c894f15764df73cfd47c35f7",
+      "bb37a8cd7e87be198a25d29bf9b89dbee37a8720668f0f00edad15e987e50d34"
+    ],
+    "status": "bounded-source-reconciliation",
+    "integration_batch": "T01-20261027-03",
+    "basis_claim": "kr-T07-T01-20261027-compatibility-milestones"
+  }
+]

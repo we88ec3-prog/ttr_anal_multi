@@ -1,0 +1,27 @@
+# 廣場分流與checkpoint旅行候選路由
+
+roy／T07（必要T02/T05/T08/T14跨查），待整合。原BIN SHA9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91；沿REA6.5.0/Ghidra12.1.4現成bulk。原檔唯讀、未執行或附加遊戲。方法與來源見travel-checkpoint-query-evidence.json。
+
+## 不把廣場分流欄位當村ID
+
+5084C0的原生vtable名為CSquareChannelState，singleton全域FE1A88。508B10的原生singleton類別名為CSquareUserData，FE1AA0。這是沿既有0069/0043證據新增的語意限定，不改寫已確認的欄位offset。
+
+S2C0068/4BC050填FE1A88+18（BYTE+2）和其+8/+C向量，每個線上兩byte展成兩DWORD，尾端排F424A。6704B0在mode7/21/23/24的UI分支後，拿FE1A88+18對窗口的選擇向量選中項。由類別與consumer判定這是分流選擇資料路線，並不構成Town1/2或Map182/183映射證明。0069尾兩byte仍只確認存FE1A88+18/+1C，尚未逐欄閉合語意與合法值；不能直接把它們填村ID。
+
+S2C006A/4BBFA0屬FE1AA0的使用者資料，66F750按10筆頁面讀列表並填入UI，頁碼在+18，頁數在+1C；66FED0上一頁/下一頁叫508970。既有CSquare初始化C2S0043 body中的來源是**這個FE1AA0+18低byte**，不是FE1A88的分流欄位。至此可進一步限縮0043來源，但尚未把它宣稱為所有方向上的固定業務訊息。無論如何不作地圖ready ACK，也不把兩個全域物件合併。
+
+## 非NPC checkpoint的001C入口
+
+既有0027/4B2AF0收18bytes紀錄、清checkpoint清單並543700建CCheckPoint：F4=type、F6=id、A0/A4=XY、FC=radius、105=enabled、100=manual/auto等欄位沿前批。544730的enabled/距離/latch gate仍適用；本批不重新定義原半徑或位置。
+
+544070：type3走NPC/任務本地UI路線（其後可能5B9340延遲送001C）；type4只在controller kind4設定指定教學controlflag；type5有場景mode3與manager+F8等額外條件，會走不同要求函式；type2為另一UI/隊伍路徑，不直接套用通用送出。其他type（含0、1）的可達一般分支，經mode23/24隊伍條件檢查／必要確認後，呼叫544020。544020組6bytes：WORD001C、WORD object+F4、WORD object+F6，FBA798==0時sender。
+
+因此Server可收到(type,id)作其已安裝checkpoint的動作要求；這是原生可達介面，不必借用NPC3/10338的對話完成去做所有轉場。但**尚未由此證明type0/1各自就是出口、任務勝利或TownID**，id也不是直接map selector。兩個值的目的地／主線解鎖與成功條件由後端資料決定；目前沒有官方trace，不能自行把id=1等同馮德斯村。
+
+543700對type0建立type8或type11的呈現資料並對radius做縮放；其他type有不同視覺／教學旗標作用。這只是有可見checkpoint呈現的證據，未驗收遊戲內入口模型、導航位置或碰撞；不以劇情演員座標、圖表x/y、舊AI出生點補造合法portal／spawn。
+
+## 排除與接續
+
+S2C0042/4B2190、0041/4B2310、007F/4B23C0選讀顯示為可變record/manager資料處理，本批沒有找到直接CSquare安裝或可證的旅行結果；不要沿用歷史fixture將0042固定命名為「回廣場」。這只限定已查函式直接行為，不排除後續UI/helper的間接作用。
+
+後續兩條路線：第一是Field19最後節點的checkpoint／正式完成要求與村15/3銜接；第二是正常旅行選擇的要求與目的地資料。兩者須共享最後有效install/reset後重綁／ready條件，但任務15完成與其後重複自由往返要分開。尚未發包、建立新可玩Server或要求測試。

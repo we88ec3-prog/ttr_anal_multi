@@ -1,0 +1,6147 @@
+[
+  {
+    "path": "kr-temp-roy/20261027-032040-chatgpt-web-roy-T08-state-tree-resource-lifetime.md",
+    "sha256": "fa9e35311e8e8fb5c5eac37f716c80d5f85faf3c771ee56e85e15e834f8327b5",
+    "bytes": 2332,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08 第七十八段：命令 151 狀態樹與資源槽位的生命週期不同步"
+      },
+      {
+        "line": 9,
+        "text": "## 結論一：命令 151 會清空狀態樹，不會在該迴圈同步清空 +0x164 資源槽位"
+      },
+      {
+        "line": 15,
+        "text": "## 結論二：0x004C9840 以 stateId 索引資源槽位並按需建立"
+      },
+      {
+        "line": 35,
+        "text": "## 結論三：所核對的直接索引前沒有明確的 <128 比較"
+      },
+      {
+        "line": 39,
+        "text": "## 待驗證問題"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/fa9e35311e8e8fb5c5eac37f716c80d5f85faf3c771ee56e85e15e834f8327b5.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [
+      "kr-T08-T01-20261027-04-state-resource-lifetimes"
+    ],
+    "decision": "bounded-source-observation-or-gap-integrated",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-044428-claude-web-roy-T09-bulk-actor-classes-movement-formulas-table-A-full.md",
+    "sha256": "40c473bd1c44de4da9fd7b664f3ac3756f2c90a03c7942d9cc2819c9c41e5560",
+    "bytes": 16019,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# KR T09 — 以全程式 Ghidra 反編譯（kr-bulk-roy）對照：Actor 類別樹、移動公式、表 A 完整 101 項、表 B（各 Scene）"
+      },
+      {
+        "line": 11,
+        "text": "## 狀態標記"
+      },
+      {
+        "line": 14,
+        "text": "## 一、修正舊記錄（證據）"
+      },
+      {
+        "line": 19,
+        "text": "## 二、Actor 類別樹與 vtable（【確認】vtable 內容；類別名稱來自偽碼 RTTI）"
+      },
+      {
+        "line": 32,
+        "text": "## 三、位置 API 與每幀移動（【確認】機器碼）"
+      },
+      {
+        "line": 44,
+        "text": "## 四、表 A 處理的重新分類（【bulk】封包長度皆由偽碼 `(len−2)/N`、機器碼未逐一核對）"
+      },
+      {
+        "line": 59,
+        "text": "## 五、各 Scene 表 B（偽碼解析；索引＝(dword 偏移−基底)/2 或 (byte 偏移−0x5EAC)/8）"
+      },
+      {
+        "line": 89,
+        "text": "## 六、附錄：表 A 全 101 項（`4ADD50` 偽碼逐項解析；索引→處理位址；未標 `FUN_` 的 `LAB_` 為無函式界定的位址）"
+      },
+      {
+        "line": 195,
+        "text": "## 差異（對先前記錄）"
+      },
+      {
+        "line": 200,
+        "text": "## 尚未確認"
+      },
+      {
+        "line": 208,
+        "text": "## 建議"
+      }
+    ],
+    "task": "T09",
+    "analyst": "claude-web roy",
+    "formal_path": "kr/evidence/40c473bd1c44de4da9fd7b664f3ac3756f2c90a03c7942d9cc2819c9c41e5560.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [
+      "kr-T09-T01-20261027-04-server-echo-boundary"
+    ],
+    "decision": "bounded-source-observation-or-gap-integrated",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-084935-claude-web-roy-T09-send-throttle-header-and-server-authoritative-movement.md",
+    "sha256": "9a2df7cf68759d1c5f6f65d427ae6943c634d4b0c7ccc3680c2b5d4e6879ac6a",
+    "bytes": 9649,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# KR T09 — C→S 移動封包 5452C0 的標頭／節流／credit，與「英雄移動旗標只由伺服器封包寫入」的全檔掃描"
+      },
+      {
+        "line": 11,
+        "text": "## 狀態標記"
+      },
+      {
+        "line": 14,
+        "text": "## 一、5452C0 的封包組裝（【確認】機器碼＋【bulk】偽碼）"
+      },
+      {
+        "line": 27,
+        "text": "## 二、credit 計數器 `[0xFBA7B0]`（【確認】寫入者）"
+      },
+      {
+        "line": 32,
+        "text": "## 三、英雄移動只由伺服器封包驅動（全檔掃描，【確認】）"
+      },
+      {
+        "line": 48,
+        "text": "## 四、CClient 層指令表（`493170` 建立；【bulk】偽碼＋機器碼 `48C027..48C02A`）"
+      },
+      {
+        "line": 59,
+        "text": "## 五、索引 0x15（`4B2620`）：停止全部角色（【確認】機器碼；【bulk】流程）"
+      },
+      {
+        "line": 63,
+        "text": "## 六、輔助：轉向平滑（`4C89A0`、`4C90C0`，【bulk】）"
+      },
+      {
+        "line": 66,
+        "text": "## 差異（對 GitHub 與先前筆記）"
+      },
+      {
+        "line": 71,
+        "text": "## 尚未確認"
+      },
+      {
+        "line": 78,
+        "text": "## 建議"
+      }
+    ],
+    "task": "T09",
+    "analyst": "claude-web roy",
+    "formal_path": "kr/evidence/9a2df7cf68759d1c5f6f65d427ae6943c634d4b0c7ccc3680c2b5d4e6879ac6a.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [
+      "kr-T09-T01-20261027-04-header-source",
+      "kr-T09-T01-20261027-04-server-echo-boundary"
+    ],
+    "decision": "bounded-source-observation-or-gap-integrated",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-093000-chatgpt-web-roy-T08-079-state-reconcile.md",
+    "sha256": "5388fa9b8af92a530087e5195250b337f0fe114a1f80976dfe1eb523d9e75e8f",
+    "bytes": 713,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-079 狀態資源回收（由對話紀錄重建）"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/5388fa9b8af92a530087e5195250b337f0fe114a1f80976dfe1eb523d9e75e8f.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "summary/reconstructed/secondary",
+    "claim_ids": [
+      "kr-T08-T01-20261027-04-state-resource-lifetimes",
+      "kr-T08-T01-20261027-04-summary-source-gap"
+    ],
+    "decision": "bounded-source-observation-or-gap-integrated",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-093001-chatgpt-web-roy-T08-080-object-update.md",
+    "sha256": "87ebc6cc864388e96cd4e41ece516275cf2cfde0c28a447651932852f805d857",
+    "bytes": 792,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-080 共用更新與資源解除（由對話紀錄重建）"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/87ebc6cc864388e96cd4e41ece516275cf2cfde0c28a447651932852f805d857.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "summary/reconstructed/secondary",
+    "claim_ids": [
+      "kr-T08-T01-20261027-04-state-resource-lifetimes",
+      "kr-T08-T01-20261027-04-summary-source-gap"
+    ],
+    "decision": "bounded-source-observation-or-gap-integrated",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-093002-chatgpt-web-roy-T08-081-shared-cleanup.md",
+    "sha256": "56e63e4454ff29aac8790e537098380d169efee8d6f129eeedf5f805d8c69bee",
+    "bytes": 708,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-081 更新 vtable 和共享資源清理（由對話紀錄重建）"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/56e63e4454ff29aac8790e537098380d169efee8d6f129eeedf5f805d8c69bee.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "summary/reconstructed/secondary",
+    "claim_ids": [
+      "kr-T08-T01-20261027-04-state-resource-lifetimes",
+      "kr-T08-T01-20261027-04-reuse-pool",
+      "kr-T08-T01-20261027-04-summary-source-gap"
+    ],
+    "decision": "bounded-source-observation-or-gap-integrated",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-093003-chatgpt-web-roy-T08-082-pool-consumer.md",
+    "sha256": "283ebde77476d492b0e7929bb7c33be1b36922e1c548e7be4cafe18c48556666",
+    "bytes": 630,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-082 共享資源池消費端（完整本機原筆記另存，本檔為整合摘要）"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/283ebde77476d492b0e7929bb7c33be1b36922e1c548e7be4cafe18c48556666.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "summary/reconstructed/secondary",
+    "claim_ids": [
+      "kr-T08-T01-20261027-04-reuse-pool",
+      "kr-T08-T01-20261027-04-summary-source-gap"
+    ],
+    "decision": "bounded-source-observation-or-gap-integrated",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-093004-chatgpt-web-roy-T08-083-reuse-pool.md",
+    "sha256": "2ef7a33a0a723778787c42d2a03f569a0dcf887b50abc54189e9e9c1f02613a4",
+    "bytes": 752,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-083 復用池與管理器生命週期（完整本機原筆記另存，本檔為整合摘要）"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/2ef7a33a0a723778787c42d2a03f569a0dcf887b50abc54189e9e9c1f02613a4.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "summary/reconstructed/secondary",
+    "claim_ids": [
+      "kr-T08-T01-20261027-04-reuse-pool",
+      "kr-T08-T01-20261027-04-summary-source-gap"
+    ],
+    "decision": "bounded-source-observation-or-gap-integrated",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-093005-chatgpt-web-roy-T08-084-resource-templates.md",
+    "sha256": "670c183efdc2ba51f0b717cd34ef945b010e94b851b51c635cf0f430cccbd84d",
+    "bytes": 812,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-084 模板建立和關聯（完整本機原筆記另存，本檔為整合摘要）"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/670c183efdc2ba51f0b717cd34ef945b010e94b851b51c635cf0f430cccbd84d.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "summary/reconstructed/secondary",
+    "claim_ids": [
+      "kr-T08-T01-20261027-04-reuse-pool",
+      "kr-T08-T01-20261027-04-summary-source-gap"
+    ],
+    "decision": "bounded-source-observation-or-gap-integrated",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-093006-chatgpt-web-roy-T08-085-template-binding.md",
+    "sha256": "33c8c6f59f0fcfd5093e4314b90d77eb0a72e6196d3cba57db09ee92f7b52c4a",
+    "bytes": 2409,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-085 資源模板名稱綁定與數值初始化"
+      },
+      {
+        "line": 5,
+        "text": "## 已確認的新路徑"
+      },
+      {
+        "line": 27,
+        "text": "### 0x007BE150 證據"
+      },
+      {
+        "line": 40,
+        "text": "### 0x007DC510 移除路徑驗證"
+      },
+      {
+        "line": 53,
+        "text": "### 行為偽碼"
+      },
+      {
+        "line": 65,
+        "text": "## 與前段的關係"
+      },
+      {
+        "line": 68,
+        "text": "## 下一段"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/33c8c6f59f0fcfd5093e4314b90d77eb0a72e6196d3cba57db09ee92f7b52c4a.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-093843-chatgpt-web-roy-T08-086-registry-transform.md",
+    "sha256": "26e10c5fed4b33c282e14839052b99eece18605fb1eca7d6041f87f7b6c1a266",
+    "bytes": 713,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08 086 — Registry and transform (GitHub evidence summary)"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/26e10c5fed4b33c282e14839052b99eece18605fb1eca7d6041f87f7b6c1a266.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "summary/reconstructed/secondary",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-095424-chatgpt-web-roy-T08-087-registry-transform-binding.md",
+    "sha256": "c81987576644f2e9cc484e9d07bb9da8b33d586baeba51027238b30b545548a5",
+    "bytes": 844,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08 087 — Name registry and transform bindings (GitHub evidence summary)"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/c81987576644f2e9cc484e9d07bb9da8b33d586baeba51027238b30b545548a5.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "summary/reconstructed/secondary",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-095711-chatgpt-web-roy-T08-088-transform-quaternion-aggregate.md",
+    "sha256": "bf7a45f19f24b7fd2107ccd8e00e826af7cc4fad654aa5439cd25774fd91da25",
+    "bytes": 950,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08 088 — Quaternion transform and max aggregate (GitHub evidence summary)"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/bf7a45f19f24b7fd2107ccd8e00e826af7cc4fad654aa5439cd25774fd91da25.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "summary/reconstructed/secondary",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-095900-chatgpt-web-roy-T08-089-aggregate-reader-audit.md",
+    "sha256": "ed569ff3ed20b4619b6958990b5755472eb769e31d6b01d4786f24bf2217a364",
+    "bytes": 1315,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08 089 — Resource aggregate reader audit"
+      },
+      {
+        "line": 4,
+        "text": "## Writer confirmed"
+      },
+      {
+        "line": 14,
+        "text": "## Important false positive separation"
+      },
+      {
+        "line": 28,
+        "text": "## Positive trace anchor"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/ed569ff3ed20b4619b6958990b5755472eb769e31d6b01d4786f24bf2217a364.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-102339-chatgpt-web-roy-T08-091-wrapper-vtable-resource.md",
+    "sha256": "74bc415d32b5fb333f7910bfa6edadd10cfd508be05e4a85a8938d74446cb30a",
+    "bytes": 1314,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-091: wrapper virtual methods and pooled resource"
+      },
+      {
+        "line": 8,
+        "text": "## Ownership"
+      },
+      {
+        "line": 16,
+        "text": "## Resource setters"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/74bc415d32b5fb333f7910bfa6edadd10cfd508be05e4a85a8938d74446cb30a.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-103853-chatgpt-web-roy-T08-093-resource-update-completion-dispatch.md",
+    "sha256": "b17ae2afdc89e34836bee26df963ef8c7d0a155a5e4fdfb145d9cd59e6c2a597",
+    "bytes": 45649,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-093 — 底層資源進度、子項變換更新、完成旗標與回收鏈"
+      },
+      {
+        "line": 10,
+        "text": "## 1. 本段新增的完整功能鏈"
+      },
+      {
+        "line": 36,
+        "text": "## 2. `0x007BD8D0`：更新函式逐段證據與意義"
+      },
+      {
+        "line": 38,
+        "text": "### 2.1 時間相位或累積參數"
+      },
+      {
+        "line": 49,
+        "text": "### 2.2 兩組變換建立及融合"
+      },
+      {
+        "line": 53,
+        "text": "### 2.3 子項遍歷及虛擬方法"
+      },
+      {
+        "line": 70,
+        "text": "### 2.4 子項 transform output"
+      },
+      {
+        "line": 86,
+        "text": "### 2.5 循環/分段與子項 tick"
+      },
+      {
+        "line": 106,
+        "text": "### 2.6 完成條件及狀態"
+      },
+      {
+        "line": 120,
+        "text": "## 3. 其他函式與新資料流"
+      },
+      {
+        "line": 135,
+        "text": "### 3.1 首次確認 `0x007A86B0` 的完成資源移除路徑"
+      },
+      {
+        "line": 154,
+        "text": "### 3.2 全部直接 call reference（以 E8 rel32 解碼後確認）"
+      },
+      {
+        "line": 161,
+        "text": "## 4. 暫定 C++ 高階偽程式碼"
+      },
+      {
+        "line": 194,
+        "text": "## 5. 待釐清、限制及下一段任務"
+      },
+      {
+        "line": 205,
+        "text": "## 6. GitHub 狀態"
+      },
+      {
+        "line": 209,
+        "text": "## 附錄 A：`0x007BD8D0` 至 `0x007BDF40` BIN 反組譯節錄（含完整 0x7BD8D0 函式）"
+      },
+      {
+        "line": 685,
+        "text": "## 附錄 B：`0x007A86B0` active-list 資源生命週期反組譯"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/b17ae2afdc89e34836bee26df963ef8c7d0a155a5e4fdfb145d9cd59e6c2a597.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-104000-chatgpt-web-roy-T08-092-resource-update-dispatch.md",
+    "sha256": "842c91190ae5ebac49d90e19fd3eb696a85a11266eef2f6df8a64aa469d09ee9",
+    "bytes": 2065,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-092: wrapper update and resource-child virtual dispatch"
+      },
+      {
+        "line": 8,
+        "text": "## 0x007BDF40: conditional child dispatch"
+      },
+      {
+        "line": 25,
+        "text": "## Wrapper entry 0x007FF8E0"
+      },
+      {
+        "line": 34,
+        "text": "## 0x007BD8D0 resource update"
+      },
+      {
+        "line": 59,
+        "text": "## Unknowns"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/842c91190ae5ebac49d90e19fd3eb696a85a11266eef2f6df8a64aa469d09ee9.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-104242-chatgpt-web-roy-T08-094-manager-update-resource-ownership.md",
+    "sha256": "557fb5ee47a5e56683196898dbbecfd7597f4b2ba5dfe8b763816c8e3b7d2739",
+    "bytes": 54958,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-094 — 上層資源調度、完成狀態消費與持有權轉移"
+      },
+      {
+        "line": 8,
+        "text": "## 一、最大的新證據：兩階段上層調度"
+      },
+      {
+        "line": 27,
+        "text": "### 直接 E8 呼叫來源（BIN 逐 bytes 檢查）"
+      },
+      {
+        "line": 38,
+        "text": "## 二、`0x007A87D0` 詳細流程和新物件欄位"
+      },
+      {
+        "line": 40,
+        "text": "### 2.1 關聯物件 gate 與初次啟動"
+      },
+      {
+        "line": 60,
+        "text": "### 2.2 控制外部 +AC 關聯更新及 +108 resource"
+      },
+      {
+        "line": 87,
+        "text": "### 2.3 完成狀態被更高層**實際消費**：三條處理路徑"
+      },
+      {
+        "line": 113,
+        "text": "### 2.4 累進的浮點狀態與 gate"
+      },
+      {
+        "line": 120,
+        "text": "## 三、`0x007A6830` 新確認的 phase 歸零/重設路徑"
+      },
+      {
+        "line": 139,
+        "text": "## 四、目前仍未確認的 binding vtable 實作"
+      },
+      {
+        "line": 145,
+        "text": "## 五、資料結構增量（暫定偏移表）"
+      },
+      {
+        "line": 163,
+        "text": "## 六、偽程式碼（非原始符號，簡化分支）"
+      },
+      {
+        "line": 199,
+        "text": "## 七、重要未知及 T08-095 建議"
+      },
+      {
+        "line": 208,
+        "text": "## 八、Commit 狀態"
+      },
+      {
+        "line": 212,
+        "text": "## 附錄：上層呼叫點及近旁調度 (`0x007A5D70..0x007A5E30`)"
+      },
+      {
+        "line": 276,
+        "text": "## 附錄：活躍更新的第二階段 (`0x007A87D0..0x007A8E06`)"
+      },
+      {
+        "line": 740,
+        "text": "## 附錄：重設與 phase 寫入 (`0x007A6830..0x007A6960`)"
+      },
+      {
+        "line": 846,
+        "text": "## 附錄：資源子項派送 (`0x007BDF00..0x007BDF90`)"
+      },
+      {
+        "line": 924,
+        "text": "## 附錄：延後清單 push helper (`0x0075A6F0..0x0075A730`)"
+      },
+      {
+        "line": 964,
+        "text": "## 附錄：資源完成釋放端 (`0x007A86B0..0x007A87D0`)"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/557fb5ee47a5e56683196898dbbecfd7597f4b2ba5dfe8b763816c8e3b7d2739.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-105107-chatgpt-web-roy-T08-095-binding-name-resolution-lifecycle.md",
+    "sha256": "4639219d7bb12909702cb8a5b0cde719bb33c8b0a7281d1285cc9ad22ef3fab4",
+    "bytes": 24787,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-095 — binding 名稱解析、子項虛擬調度與解除綁定閉環"
+      },
+      {
+        "line": 9,
+        "text": "## 1. 本段與 T08-093/094 的新增連結"
+      },
+      {
+        "line": 35,
+        "text": "## 2. 核心新發現（已由機器碼確證）"
+      },
+      {
+        "line": 46,
+        "text": "## 3. 關鍵 Assembly"
+      },
+      {
+        "line": 82,
+        "text": "## 4. 指標與物件型別分離"
+      },
+      {
+        "line": 95,
+        "text": "## 5. 可供後續辨識 vtable 的目標"
+      },
+      {
+        "line": 103,
+        "text": "## 6. 待驗證／風險邊界"
+      },
+      {
+        "line": 112,
+        "text": "## 7. E8 rel32 掃描：直接呼叫者（BIN 全 `.text`，需依連續反組譯逐個確認）"
+      },
+      {
+        "line": 126,
+        "text": "## 8. BIN 原始反組譯附錄（機器碼列印，原樣供複核）"
+      },
+      {
+        "line": 128,
+        "text": "### A. binding 解析與綁定：`0x007BDF90`"
+      },
+      {
+        "line": 248,
+        "text": "### B. binding 解綁：`0x007BE0F0`"
+      },
+      {
+        "line": 297,
+        "text": "### C. binding 更新 slot+0x18/0x20"
+      },
+      {
+        "line": 375,
+        "text": "### D. 來源 `0x007DCFB0` 末段與選擇性初始化"
+      },
+      {
+        "line": 417,
+        "text": "### E. 直接釋放分支與共享回收模式"
+      },
+      {
+        "line": 458,
+        "text": "### F. 單一資源 item 與子項初始結構的製作片段"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/4639219d7bb12909702cb8a5b0cde719bb33c8b0a7281d1285cc9ad22ef3fab4.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-110027-chatgpt-web-roy-T08-096-provider-registration-refcount.md",
+    "sha256": "12d3c3897caa847b71fa0cacaab07b199848282e426e1e957fed2c0f74cbac4d",
+    "bytes": 52059,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-096 — 名稱管理器的註冊/查找/釋放、0x8C 物件初始化與 provider 間接生命週期"
+      },
+      {
+        "line": 9,
+        "text": "## 研究結論與新的函式"
+      },
+      {
+        "line": 20,
+        "text": "## 部分關鍵 BIN 指令"
+      },
+      {
+        "line": 47,
+        "text": "## 暫定 C++ 偽程式碼"
+      },
+      {
+        "line": 93,
+        "text": "## 分支 / 指標來源待驗證"
+      },
+      {
+        "line": 102,
+        "text": "## 與前段連結"
+      },
+      {
+        "line": 106,
+        "text": "## 原始機器碼附錄（objdump -d -Mintel /mnt/data/Tartaros.bin）"
+      },
+      {
+        "line": 108,
+        "text": "### 0x007B82D0 — 登記入口與名稱唯一性"
+      },
+      {
+        "line": 213,
+        "text": "### 0x007B84xx — provider 建立與重用分支"
+      },
+      {
+        "line": 530,
+        "text": "### 0x007DC510 — 名稱移除與多型清理"
+      },
+      {
+        "line": 703,
+        "text": "### 0x007DCEE0 — 0x8C bytes 管理物件初始化"
+      },
+      {
+        "line": 793,
+        "text": "### 0x007DD2A0 — 資料載入/解析協助程式"
+      },
+      {
+        "line": 936,
+        "text": "### 0x007B8680 — tree erase、0x007B86F0 tree lookup"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/12d3c3897caa847b71fa0cacaab07b199848282e426e1e957fed2c0f74cbac4d.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-111050-chatgpt-web-roy-T08-097-tree-node-provider-link.md",
+    "sha256": "1730cfc143ecc508a1d04a4b7f4c845ea3a09c9c3de55d9f19403250db2d5d85",
+    "bytes": 35965,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-097 — 名稱樹節點 +0x24 實際寫入、Provider 指標來源與 binding 間接調度"
+      },
+      {
+        "line": 8,
+        "text": "## 摘要與本段實質突破"
+      },
+      {
+        "line": 12,
+        "text": "### 已確認的新增證據"
+      },
+      {
+        "line": 21,
+        "text": "## 暫定結構與指標身分"
+      },
+      {
+        "line": 49,
+        "text": "### 暫定 C++ 偽程式碼（按 BIN 呼叫/資料流重建）"
+      },
+      {
+        "line": 72,
+        "text": "## 調用者 / 被調用者與研究鏈"
+      },
+      {
+        "line": 79,
+        "text": "## 限制與後續未解決清單"
+      },
+      {
+        "line": 87,
+        "text": "## 原始 BIN 機器碼附錄（objdump -d -Mintel）"
+      },
+      {
+        "line": 89,
+        "text": "### 名稱登記/節點插入 — 007B82D0–007B8474"
+      },
+      {
+        "line": 239,
+        "text": "### 節點配置與值建構 — 00719B90–00719C60"
+      },
+      {
+        "line": 327,
+        "text": "### 上層查找/建立/傳入引數 — 007B84E0–007B8674"
+      },
+      {
+        "line": 484,
+        "text": "### 依名稱解析binding — 007BDF90–007BE0F0"
+      },
+      {
+        "line": 607,
+        "text": "### binding零參數調度 — 007BDF40–007BDF90"
+      },
+      {
+        "line": 654,
+        "text": "### binding有參數調度 — 007BDF00–007BDF40"
+      },
+      {
+        "line": 696,
+        "text": "### 管理器資源建立 — 007DCEE0–007DCF40"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/1730cfc143ecc508a1d04a4b7f4c845ea3a09c9c3de55d9f19403250db2d5d85.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-114418-chatgpt-web-roy-T08-098-name-registry-provider-type-separation.md",
+    "sha256": "eb498b9134e670c526150dc9886edd0d810eb2d6e838ab27295b882cfa8e28d8",
+    "bytes": 59528,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-098 — 全域名稱索引與 0x8C 管理器的型別分離、0x68 登記載體來源"
+      },
+      {
+        "line": 9,
+        "text": "## 本段核心新發現（嚴格分開已確認與推測）"
+      },
+      {
+        "line": 11,
+        "text": "### 已確認 A：前段存在必須修正的 C++ 型別等價推論"
+      },
+      {
+        "line": 17,
+        "text": "### 已確認 B：找出另一個向同一名稱索引登記的具體入口"
+      },
+      {
+        "line": 24,
+        "text": "### 已確認 C：全域名稱索引與局部名稱容器的區別"
+      },
+      {
+        "line": 30,
+        "text": "### 已確認 D：名稱解析綁定具體機器碼"
+      },
+      {
+        "line": 44,
+        "text": "## 資料流與暫定偽程式碼"
+      },
+      {
+        "line": 72,
+        "text": "## 直接 E8 rel32 呼叫參照（僅直接呼叫，不含虛擬或 jump）"
+      },
+      {
+        "line": 80,
+        "text": "## 待追查（T08-099）"
+      },
+      {
+        "line": 88,
+        "text": "## BIN 反組譯證據附錄"
+      },
+      {
+        "line": 92,
+        "text": "### global registry initialization: `0x007B7DA0～0x007B7E60`"
+      },
+      {
+        "line": 163,
+        "text": "### registry constructor: `0x007DC3D0～0x007DC450`"
+      },
+      {
+        "line": 224,
+        "text": "### name manager registration: `0x007B8480～0x007B8674`"
+      },
+      {
+        "line": 417,
+        "text": "### node insertion: `0x007B82D0～0x007B8474`"
+      },
+      {
+        "line": 568,
+        "text": "### node copy constructor: `0x00719B90～0x00719C40`"
+      },
+      {
+        "line": 649,
+        "text": "### global registry registration caller: `0x007D6F40～0x007D71EA`"
+      },
+      {
+        "line": 858,
+        "text": "### 0x68 descriptor initializer: `0x007D6790～0x007D67F0`"
+      },
+      {
+        "line": 910,
+        "text": "### 0x8c manager initializer: `0x007DCEE0～0x007DCF40`"
+      },
+      {
+        "line": 957,
+        "text": "### binding lookup: `0x007BDF90～0x007BE0ED`"
+      },
+      {
+        "line": 1078,
+        "text": "### name based deletion: `0x007DC510～0x007DC5CD`"
+      },
+      {
+        "line": 1162,
+        "text": "### binding update gate: `0x007BDF40～0x007BDF90`"
+      },
+      {
+        "line": 1210,
+        "text": "### another binding dispatcher: `0x007BDF00～0x007BDF40`"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/eb498b9134e670c526150dc9886edd0d810eb2d6e838ab27295b882cfa8e28d8.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [
+      "kr-T08-T01-20261027-04-name-container-split"
+    ],
+    "decision": "bounded-source-observation-or-gap-integrated",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-115552-chatgpt-web-roy-T08-099-dual-global-name-container-disambiguation.md",
+    "sha256": "707cd8530b39e00a50da81e5d2ba6006ad28752f6307f68b2228cb8f29cbb0d0",
+    "bytes": 31488,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-099 — 釐清 `0x00FE173C` 雙重全域名稱容器與 Provider 型別衝突"
+      },
+      {
+        "line": 10,
+        "text": "## 重要結論：前段「同一名稱容器中混入非多型物件」的衝突可由兩個相鄰容器消解"
+      },
+      {
+        "line": 22,
+        "text": "## 記憶體視圖（機器碼驗證）"
+      },
+      {
+        "line": 35,
+        "text": "### register / calling convention 防混淆"
+      },
+      {
+        "line": 43,
+        "text": "## 本段新確認 / 重新分類函式"
+      },
+      {
+        "line": 56,
+        "text": "## 偽程式碼（暫命名）"
+      },
+      {
+        "line": 86,
+        "text": "## 對先前段落的修正與研究界線"
+      },
+      {
+        "line": 94,
+        "text": "## 下一段 T08-100 建議"
+      },
+      {
+        "line": 98,
+        "text": "## 原始機器碼附錄（BIN / objdump -Mintel）"
+      },
+      {
+        "line": 102,
+        "text": "### 全域兩套容器初始化 (0x007b7da0–0x007b7e68)"
+      },
+      {
+        "line": 173,
+        "text": "### 名稱樹登記入口與參數來源 (0x007d70ca–0x007d7146)"
+      },
+      {
+        "line": 214,
+        "text": "### 0x8C 管理器配置與初始化 (0x007d6f48–0x007d6f8b)"
+      },
+      {
+        "line": 244,
+        "text": "### 樹容器插入與哨兵 (0x007b8307–0x007b8454)"
+      },
+      {
+        "line": 362,
+        "text": "### Binding 解析的全域指標解參照 (0x007bdfcf–0x007be094)"
+      },
+      {
+        "line": 429,
+        "text": "### 名稱樹條件刪除 (0x007dc570–0x007dc5be)"
+      },
+      {
+        "line": 467,
+        "text": "### 0x8C 物件 ID 初始化 (0x007dcee0–0x007dcf3e)"
+      },
+      {
+        "line": 510,
+        "text": "### 0x28 節點配置/複製 (0x00719b90–0x00719c18)"
+      },
+      {
+        "line": 573,
+        "text": "### 名稱樹查找使用的 container+4 (0x007b86f0–0x007b873d)"
+      },
+      {
+        "line": 617,
+        "text": "### 資源建立路徑前段 (0x007d6f16–0x007d6f65)"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/707cd8530b39e00a50da81e5d2ba6006ad28752f6307f68b2228cb8f29cbb0d0.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [
+      "kr-T08-T01-20261027-04-name-container-split"
+    ],
+    "decision": "bounded-source-observation-or-gap-integrated",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-134325-chatgpt-web-roy-T08-100-heap-provider-vtable-binding-clone.md",
+    "sha256": "e2911b1fe56920b9ba969468f56afce85867333f287ad14a63751635957126c1",
+    "bytes": 38932,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-100 — heap 名稱索引的 Provider 建構、vtable+0x10 與 Binding 複製路徑"
+      },
+      {
+        "line": 8,
+        "text": "## 一、主要發現（直接可證）"
+      },
+      {
+        "line": 17,
+        "text": "## 二、vtable 原始 DWORD 映射（從 `.rdata` 取得）"
+      },
+      {
+        "line": 33,
+        "text": "## 三、生命週期／資料流"
+      },
+      {
+        "line": 59,
+        "text": "## 四、尚未解決與下一段"
+      },
+      {
+        "line": 66,
+        "text": "## 五、原始 BIN 反組譯附錄（完整選定函式範圍）"
+      },
+      {
+        "line": 86,
+        "text": "### heap 索引插入 `0x007DC660–0x007DC7F6`"
+      },
+      {
+        "line": 235,
+        "text": "### 第一與第二登記呼叫點 `0x007D6E80–0x007D6F9A`"
+      },
+      {
+        "line": 327,
+        "text": "### Provider 建構 A `0x007F15B0–0x007F161E`"
+      },
+      {
+        "line": 367,
+        "text": "### Provider 建構 B `0x007F1650–0x007F16C7`"
+      },
+      {
+        "line": 409,
+        "text": "### Provider vtable+0x10 `0x007F21A0–0x007F2320`"
+      },
+      {
+        "line": 538,
+        "text": "### binding 虛擬呼叫 `0x007BDF40–0x007BE095`"
+      },
+      {
+        "line": 665,
+        "text": "### Provider vtable+0x0c `0x007F20E0–0x007F2104`"
+      },
+      {
+        "line": 693,
+        "text": "### Provider cleanup `0x007F16D0–0x007F1769`"
+      },
+      {
+        "line": 751,
+        "text": "### Heap 索引初始化 `0x007DC3D0–0x007DC475`"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/e2911b1fe56920b9ba969468f56afce85867333f287ad14a63751635957126c1.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [
+      "kr-T08-T01-20261027-04-name-container-split"
+    ],
+    "decision": "bounded-source-observation-or-gap-integrated",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-140236-chatgpt-web-roy-T08-101-binding-state-virtual-dispatch.md",
+    "sha256": "8bd262afa192936cee07358b7bc59d1d21349c5d786b6da63b24a2f8e881ff3c",
+    "bytes": 35039,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-101 — Binding `+0x80` 寫入者、雙 vtable 與子項調度條件"
+      },
+      {
+        "line": 9,
+        "text": "## 1. 已確認的新證據與修正"
+      },
+      {
+        "line": 20,
+        "text": "## 2. 已知 vtable（BIN rdata DWORD）"
+      },
+      {
+        "line": 26,
+        "text": "## 3. 暫定結構與 C++ 偽碼"
+      },
+      {
+        "line": 61,
+        "text": "## 4. 指標來源與生命週期的已證界線"
+      },
+      {
+        "line": 68,
+        "text": "## 5. 待確認問題 / T08-102"
+      },
+      {
+        "line": 76,
+        "text": "## 6. 原始 BIN 反組譯證據（選定函式全範圍）"
+      },
+      {
+        "line": 78,
+        "text": "### Provider 初始化與雙 vptr (`0x007F15B0–0x007F16C5`)"
+      },
+      {
+        "line": 176,
+        "text": "### Provider 複製與關聯物件複製 (`0x007F21A0–0x007F2320`)"
+      },
+      {
+        "line": 303,
+        "text": "### 更新/條件觸發 (`0x007F2320–0x007F23B0`)"
+      },
+      {
+        "line": 371,
+        "text": "### Binding 觸發、旗標與計算比較 (`0x007F23B0–0x007F2510`)"
+      },
+      {
+        "line": 495,
+        "text": "### +0x80 寫入者與 secondary thunk (`0x007F2520–0x007F2610`)"
+      },
+      {
+        "line": 588,
+        "text": "### 資源對 binding 的調用閘 (`0x007BDF40–0x007BDF90`)"
+      },
+      {
+        "line": 634,
+        "text": "### 次級子物件析構鏈 (`0x007F2730–0x007F27CF`)"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/8bd262afa192936cee07358b7bc59d1d21349c5d786b6da63b24a2f8e881ff3c.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-140627-chatgpt-web-roy-T08-102-plane-test-binding-initialization-global-buckets.md",
+    "sha256": "04f2c9b844600f2a182bb7e4993c10e4660cbfe1b6cf30827fc1301dd90e54d0",
+    "bytes": 28031,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-102 — 六組平面係數比較、Binding 基底初始化與全域派送分桶生命週期"
+      },
+      {
+        "line": 9,
+        "text": "## 1. 新確認事項"
+      },
+      {
+        "line": 11,
+        "text": "### A. `0x00838860` 是固定 6 次的四浮點數點積與比較判斷"
+      },
+      {
+        "line": 18,
+        "text": "### B. `0x007E9BF0` 明確初始化兩個獨立布林狀態"
+      },
+      {
+        "line": 22,
+        "text": "### C. `0x00FB7740` 是 22 組、每組 0x2004 bytes 的指標分桶"
+      },
+      {
+        "line": 30,
+        "text": "## 2. 重要地址與角色"
+      },
+      {
+        "line": 41,
+        "text": "## 3. 可驗證資料流與暫定偽程式碼"
+      },
+      {
+        "line": 64,
+        "text": "## 4. 已確認 / 未確認界線"
+      },
+      {
+        "line": 70,
+        "text": "## 5. 下一段建議 T08-103"
+      },
+      {
+        "line": 76,
+        "text": "## 6. 原始 BIN 反組譯（完整函式及相關區域）"
+      },
+      {
+        "line": 78,
+        "text": "### 6-plane numerical test (`0x00838860`–`0x008388C6`)"
+      },
+      {
+        "line": 134,
+        "text": "### base binding constructor (`0x007E9BF0`–`0x007E9CD0`)"
+      },
+      {
+        "line": 223,
+        "text": "### binding gate update (`0x007F2520`–`0x007F25F0`)"
+      },
+      {
+        "line": 304,
+        "text": "### global setup and buckets allocation (`0x00798E60`–`0x00799005`)"
+      },
+      {
+        "line": 427,
+        "text": "### dispatch producer (`0x007F23B0`–`0x007F24F0`)"
+      },
+      {
+        "line": 538,
+        "text": "### bucket cleanup (`0x00799598`–`0x007995C0`)"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/04f2c9b844600f2a182bb7e4993c10e4660cbfe1b6cf30827fc1301dd90e54d0.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-141126-chatgpt-web-roy-T08-103-plane-buffer-bucket-producers.md",
+    "sha256": "26f40f77a254c2b5ffd08040515be95860f0faa741a5c5bb4983895ced9332ec",
+    "bytes": 16269,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-103 — 六平面係數緩衝、分桶生產者與交叉參照"
+      },
+      {
+        "line": 8,
+        "text": "## 一、本段核心成果"
+      },
+      {
+        "line": 16,
+        "text": "## 二、暫定結構（由長度/跨度驗證，語義名稱非原始符號）"
+      },
+      {
+        "line": 26,
+        "text": "## 三、全域參照索引（字面地址，非完整 pointer-alias 分析）"
+      },
+      {
+        "line": 28,
+        "text": "### 0xfb76b0 — 16 個直接指令參照"
+      },
+      {
+        "line": 49,
+        "text": "### 0xfb7740 — 15 個直接指令參照"
+      },
+      {
+        "line": 69,
+        "text": "### 0xfb76e4 — 13 個直接指令參照"
+      },
+      {
+        "line": 87,
+        "text": "## 四、原始 BIN 逐段反組譯（所列位址為指令內地址，不全是函式入口）"
+      },
+      {
+        "line": 89,
+        "text": "### 係數緩衝初始化 — `0x00798E3A–0x00798EA8`"
+      },
+      {
+        "line": 137,
+        "text": "### 係數緩衝釋放 — `0x0079963F–0x00799657`"
+      },
+      {
+        "line": 155,
+        "text": "### 分桶配置 — `0x00798F26–0x00798F7D`"
+      },
+      {
+        "line": 187,
+        "text": "### 通用分桶 append A — `0x0079CDA3–0x0079CDD2`"
+      },
+      {
+        "line": 210,
+        "text": "### 通用分桶 append B — `0x007BED56–0x007BED85`"
+      },
+      {
+        "line": 233,
+        "text": "### 通用分桶 append C — `0x007CD7C1–0x007CD7F3`"
+      },
+      {
+        "line": 257,
+        "text": "### 條件式 append — `0x007D34E8–0x007D351E`"
+      },
+      {
+        "line": 283,
+        "text": "### 第10桶固定偏移 append — `0x007FECE9–0x007FED0A`"
+      },
+      {
+        "line": 300,
+        "text": "### 另一個六平面測試使用者 — `0x007F7545–0x007F7584`"
+      },
+      {
+        "line": 330,
+        "text": "### 分桶清理 — `0x007995A6–0x007995BF`"
+      },
+      {
+        "line": 352,
+        "text": "## 五、完成/推測/未解決"
+      },
+      {
+        "line": 360,
+        "text": "## 六、T08-104 建議"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/26f40f77a254c2b5ffd08040515be95860f0faa741a5c5bb4983895ced9332ec.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-141326-claude-web-roy-T09-bulk-tick-rate-hero-driven-by-server-echo-and-actor-id-type.md",
+    "sha256": "2c2744366a94577e454d2502dd3aff51fa8e48cfd474caccc8dfd873764ee53f",
+    "bytes": 7562,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# KR T09 — 固定 30 tick、英雄移動由伺服器 0x0B 回送驅動、actor id 低位元組＝類型、0x15 全體停止、0x13E／0x34"
+      },
+      {
+        "line": 11,
+        "text": "## 狀態標記"
+      },
+      {
+        "line": 14,
+        "text": "## 一、tick 率（【確認】稽核）"
+      },
+      {
+        "line": 19,
+        "text": "## 二、英雄移動由伺服器回送驅動（【bulk】＋機器碼片段）"
+      },
+      {
+        "line": 26,
+        "text": "## 三、actor id 與類型（【確認】機器碼 `4B2653..4B265D`）"
+      },
+      {
+        "line": 31,
+        "text": "## 四、索引 0x15（`4B2620`）＝全體停止（【確認】機器碼）"
+      },
+      {
+        "line": 35,
+        "text": "## 五、索引 0x13E（`4AEDB0`）（【bulk】）"
+      },
+      {
+        "line": 38,
+        "text": "## 六、`4CE7F0`（`CCharacter vtbl+0x2C`）其他 param（機器碼 jump 表 `4CEB88/4CEB5C`；內容【bulk】）"
+      },
+      {
+        "line": 53,
+        "text": "## 差異（對先前記錄）"
+      },
+      {
+        "line": 57,
+        "text": "## 尚未確認"
+      },
+      {
+        "line": 63,
+        "text": "## 建議"
+      }
+    ],
+    "task": "T09",
+    "analyst": "claude-web roy",
+    "formal_path": "kr/evidence/2c2744366a94577e454d2502dd3aff51fa8e48cfd474caccc8dfd873764ee53f.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [
+      "kr-T09-T01-20261027-04-tick-order",
+      "kr-T09-T01-20261027-04-server-echo-boundary"
+    ],
+    "decision": "bounded-source-observation-or-gap-integrated",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-141645-chatgpt-web-roy-T08-104-dispatch-consumer-ownership.md",
+    "sha256": "22450653be502fd6347054433fde087c900dc164ef3c439ba72675ecb63897ce",
+    "bytes": 17521,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-104 — 分桶消費迴圈、內嵌與全域陣列所有權辨識"
+      },
+      {
+        "line": 10,
+        "text": "## 一、核心成果與重要更正"
+      },
+      {
+        "line": 18,
+        "text": "## 二、內嵌分桶：已驗證消費與清零"
+      },
+      {
+        "line": 70,
+        "text": "## 三、同一函式的其他分段隊列"
+      },
+      {
+        "line": 158,
+        "text": "## 四、通用桶追加器：`0x0079A3C0`"
+      },
+      {
+        "line": 182,
+        "text": "## 五、與前段真正全域桶生產者區分"
+      },
+      {
+        "line": 192,
+        "text": "## 六、下一步追查"
+      },
+      {
+        "line": 200,
+        "text": "## 七、證據附錄與相關路徑"
+      },
+      {
+        "line": 202,
+        "text": "### 主要消費者所在函式前段"
+      },
+      {
+        "line": 270,
+        "text": "### 消費、清理末尾"
+      },
+      {
+        "line": 300,
+        "text": "### 全域桶生產者實例，對照所有權"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/22450653be502fd6347054433fde087c900dc164ef3c439ba72675ecb63897ce.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-142007-claude-web-roy-T09-per-tick-frame-order-490FE0-4E0060-actor-update-loop.md",
+    "sha256": "e292276b1e706e406ca54431f1f87da957c90a6953bb547596968099ad3a2dbe",
+    "bytes": 7977,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# KR T09 — 每 tick 順序：490FE0 → 封包泵 804740 → 4E0060（先送輸入幀 5452C0、再逐一 actor Update）"
+      },
+      {
+        "line": 11,
+        "text": "## 狀態標記"
+      },
+      {
+        "line": 14,
+        "text": "## 一、`4E0060`（holder::UpdateAll，ECX＝holder `0xFAB130`）（【確認】機器碼 `4E0060..4E00C6`）"
+      },
+      {
+        "line": 21,
+        "text": "## 二、`490FE0`（CClient vtbl+0x30）單次呼叫順序（【bulk】偽碼；關鍵片段機器碼核對）"
+      },
+      {
+        "line": 36,
+        "text": "## 三、整體時序（【確認】順序；頻率【推測】）"
+      },
+      {
+        "line": 52,
+        "text": "## 四、`vtbl+0x98`（`4CAF10`）（【確認】全程式掃描）"
+      },
+      {
+        "line": 56,
+        "text": "## 五、側記（非 T09；可歸 T02/網路）"
+      },
+      {
+        "line": 60,
+        "text": "## 差異（對先前記錄）"
+      },
+      {
+        "line": 64,
+        "text": "## 尚未確認"
+      },
+      {
+        "line": 70,
+        "text": "## 建議"
+      }
+    ],
+    "task": "T09",
+    "analyst": "claude-web roy",
+    "formal_path": "kr/evidence/e292276b1e706e406ca54431f1f87da957c90a6953bb547596968099ad3a2dbe.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [
+      "kr-T09-T01-20261027-04-header-source",
+      "kr-T09-T01-20261027-04-tick-order"
+    ],
+    "decision": "bounded-source-observation-or-gap-integrated",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-155733-chatgpt-web-roy-T08-105-global-buckets-plane-writers.md",
+    "sha256": "a4975f5ddd2bf1337b088255541b1e8feb7a0c52b8c61092b7313f997a61d734",
+    "bytes": 4074,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-105 — 全域桶與六係數的靜態直接引用盤點（部分完成）"
+      },
+      {
+        "line": 5,
+        "text": "## 本次新增直接引用證據"
+      },
+      {
+        "line": 14,
+        "text": "## 已直接反組譯驗證"
+      },
+      {
+        "line": 16,
+        "text": "### `0x007F2520`：六係數讀取者，而非寫入者"
+      },
+      {
+        "line": 31,
+        "text": "### `0x007D170B`：管理器內嵌桶消費（不是全域桶的已證 consumer）"
+      },
+      {
+        "line": 48,
+        "text": "### 全域桶與係數引用的邊界"
+      },
+      {
+        "line": 52,
+        "text": "## 待完成（T08-105 延伸或 T08-106）"
+      },
+      {
+        "line": 59,
+        "text": "## 偽碼（僅已確認的內嵌桶片段）"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/a4975f5ddd2bf1337b088255541b1e8feb7a0c52b8c61092b7313f997a61d734.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-160157-chatgpt-web-roy-T08-105-extended-six-plane-readers-and-bucket-ownership.md",
+    "sha256": "87a8aaa5ddc823df68949a6513a1e5163a8bd365f454f5a489638fd1da77968a",
+    "bytes": 8651,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-105 延伸 — 六平面測試兩種入口、全域桶生產者及內嵌桶持有者（BIN 驗證）"
+      },
+      {
+        "line": 8,
+        "text": "## 1. 六平面緩衝的初始化及所有權"
+      },
+      {
+        "line": 28,
+        "text": "## 2. 新確認：兩種六平面比較函式的精確差異"
+      },
+      {
+        "line": 30,
+        "text": "### 2.1 `0x00838800`：三 float 點測試"
+      },
+      {
+        "line": 59,
+        "text": "### 2.2 `0x00838860`：四 float 測試（第四量用作比較閾值）"
+      },
+      {
+        "line": 88,
+        "text": "## 3. 全域 `[0x00FB7740]` 的配置與可證生產者"
+      },
+      {
+        "line": 127,
+        "text": "## 4. 管理器內嵌桶：新追到更廣泛的 consumer 輪次"
+      },
+      {
+        "line": 137,
+        "text": "## 5. 新判定：係數直接引用的資料角色"
+      },
+      {
+        "line": 143,
+        "text": "## 6. 待解及下一段 T08-106 建議"
+      },
+      {
+        "line": 150,
+        "text": "### 證據分級"
+      },
+      {
+        "line": 156,
+        "text": "## 7. Git 及來源界線"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/87a8aaa5ddc823df68949a6513a1e5163a8bd365f454f5a489638fd1da77968a.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-160704-chatgpt-web-roy-T08-106-global-bucket-provenance-and-plane-alias-audit.md",
+    "sha256": "9b08b69330d6f82542ce029b782e07c510f4b2116199b4547ecbd95c20050d5d",
+    "bytes": 16660,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-106 — 全域分桶來源稽核、內嵌容器區隔與六係數別名追蹤"
+      },
+      {
+        "line": 10,
+        "text": "## 1. 本輪方法與限制"
+      },
+      {
+        "line": 14,
+        "text": "## 2. 新增確認 A：`0x0079A3C0` 的桶基址來自 `manager+0x98`"
+      },
+      {
+        "line": 51,
+        "text": "## 3. 新增確認 B：`0x007D3470` 全域桶兩條插入路徑的增量確定為1"
+      },
+      {
+        "line": 136,
+        "text": "## 4. 新增確認 C：全域桶直接引用為註冊/插入與生命週期操作"
+      },
+      {
+        "line": 148,
+        "text": "## 5. 原本被誤認 consumer 的內嵌桶：物件基址來自 EBX，不是全域"
+      },
+      {
+        "line": 198,
+        "text": "## 6. 六個四浮點係數：重新驗證初始化與直接引用角色"
+      },
+      {
+        "line": 249,
+        "text": "## 7. 訊息協作與暫定模型"
+      },
+      {
+        "line": 259,
+        "text": "### 已確認"
+      },
+      {
+        "line": 268,
+        "text": "### 合理推測但未驗證"
+      },
+      {
+        "line": 273,
+        "text": "### 尚待驗證 / T08-107 建議"
+      },
+      {
+        "line": 280,
+        "text": "## 8. GitHub 狀態"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/9b08b69330d6f82542ce029b782e07c510f4b2116199b4547ecbd95c20050d5d.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-161100-chatgpt-web-roy-T08-107-global-bucket-alias-and-count-reader.md",
+    "sha256": "8741e0e2c98f8b4bcc3a445a0f49cee032908fae7248275c5dd5579f01da0e44",
+    "bytes": 6423,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-107 — Global bucket alias proof and count-reader chain"
+      },
+      {
+        "line": 5,
+        "text": "## 來源與驗證"
+      },
+      {
+        "line": 11,
+        "text": "## 主要新發現 A：`0x0079A3C0` 這條路徑確實插入全域桶"
+      },
+      {
+        "line": 30,
+        "text": "## 主要新發現 B：全域桶 count 的真實讀取者"
+      },
+      {
+        "line": 67,
+        "text": "## 與內嵌 consumer 的區分，仍成立"
+      },
+      {
+        "line": 81,
+        "text": "## 六係數寫入者：狀態及限制"
+      },
+      {
+        "line": 85,
+        "text": "## C++ 暫定偽碼（只對已確認呼叫脈絡）"
+      },
+      {
+        "line": 111,
+        "text": "## 已確認 / 推測 / 待驗證"
+      },
+      {
+        "line": 119,
+        "text": "## 下一段 T08-108"
+      },
+      {
+        "line": 125,
+        "text": "## Git 狀態"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/8741e0e2c98f8b4bcc3a445a0f49cee032908fae7248275c5dd5579f01da0e44.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-161320-chatgpt-web-roy-T08-108-manager-dispatch-and-global-bucket-boundary.md",
+    "sha256": "a806cd6d190f854a776ed1c081b4447a76297a4d979f2c754c1e1919039ad98d",
+    "bytes": 7041,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-108 — 管理器調度、幾何測試與全域桶的證據界線"
+      },
+      {
+        "line": 5,
+        "text": "## 證據來源及方法"
+      },
+      {
+        "line": 11,
+        "text": "## 發現一：`0x007D1310` 並非直接接受全域桶指標"
+      },
+      {
+        "line": 38,
+        "text": "## 發現二：`0x0079B520` 幾何閘門與調度，不是全域桶逐項 consumer 的直接證據"
+      },
+      {
+        "line": 74,
+        "text": "## 發現三：直接全域桶存取仍以插入者為主"
+      },
+      {
+        "line": 104,
+        "text": "## 暫定偽碼與型別界線"
+      },
+      {
+        "line": 128,
+        "text": "## 與 T08-105～107 的關係及狀態"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/a806cd6d190f854a776ed1c081b4447a76297a4d979f2c754c1e1919039ad98d.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-163603-chatgpt-web-roy-T08-109-callback-vtable-registration.md",
+    "sha256": "50c5f355f87a05c8d581c48a08231a2bd29d44702e0571fb46f82238483f6f07",
+    "bytes": 1635,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-109：Callback vtable 註冊及上游"
+      },
+      {
+        "line": 5,
+        "text": "## 新證據"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/50c5f355f87a05c8d581c48a08231a2bd29d44702e0571fb46f82238483f6f07.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-163604-chatgpt-web-roy-T08-110-dispatch-interface-acquisition.md",
+    "sha256": "a310261291d3eb60c2dd28c0208dccc3944a9761b13e8df5beab0fbc79bf985c",
+    "bytes": 1713,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-110：0x0079A5F0 多型介面取得"
+      },
+      {
+        "line": 5,
+        "text": "## 新證據：介面從 manager+0xEC 取得"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/a310261291d3eb60c2dd28c0208dccc3944a9761b13e8df5beab0fbc79bf985c.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-163605-chatgpt-web-roy-T08-111-bucket-consumer-layout-and-provenance.md",
+    "sha256": "187490f2ff95178068fda75eec6888fef80ae22c184ad5a3d7b3fa56cd94edfa",
+    "bytes": 1765,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-111：內嵌分桶逐筆 consumer 與指標來源"
+      },
+      {
+        "line": 5,
+        "text": "## 確認的桶資料流"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/187490f2ff95178068fda75eec6888fef80ae22c184ad5a3d7b3fa56cd94edfa.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-163606-chatgpt-web-roy-T08-112-geometry-plane-lifecycle-and-boundary.md",
+    "sha256": "b54471780622bf7652dce06828b53dbd93c1c5f63c3b82802c5a1b41580a6b84",
+    "bytes": 2249,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-112：六係數緩衝生命週期與交接界線"
+      },
+      {
+        "line": 5,
+        "text": "## 0x00798DE0：建立而不是動態更新"
+      },
+      {
+        "line": 33,
+        "text": "## 本輪 109~112 綜合"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/b54471780622bf7652dce06828b53dbd93c1c5f63c3b82802c5a1b41580a6b84.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-171313-chatgpt-web-roy-T08-113-callback-slot-dispatch-boundary.md",
+    "sha256": "2dbf1bdc8756f3fd1d36adb1f3bcca20582a103219323b4544fef697e40fa5df",
+    "bytes": 2386,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-113 — callback 槽位與真正派送入口的區隔"
+      },
+      {
+        "line": 6,
+        "text": "## 新發現：0x007998A0 調用 callback +0x04 而非 +0x0C"
+      },
+      {
+        "line": 24,
+        "text": "## vtable 原始位元組映射"
+      },
+      {
+        "line": 44,
+        "text": "## 初步資料流、指標來源與偽碼"
+      },
+      {
+        "line": 58,
+        "text": "## 尚待驗證"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/2dbf1bdc8756f3fd1d36adb1f3bcca20582a103219323b4544fef697e40fa5df.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-171314-chatgpt-web-roy-T08-114-manager-construction-field-boundary.md",
+    "sha256": "f631e1d2f0884fd9b528e6c608c061d0ae10c5ba363fef388176f737c50dacc3",
+    "bytes": 2759,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-114 — 0x470-byte manager 內核物件建構與不同 vptr"
+      },
+      {
+        "line": 6,
+        "text": "## 上游分配與建構鏈"
+      },
+      {
+        "line": 22,
+        "text": "## 0x00839940 的具體建構證據"
+      },
+      {
+        "line": 58,
+        "text": "## vtable 不可混淆"
+      },
+      {
+        "line": 76,
+        "text": "## 已確認／待驗"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/f631e1d2f0884fd9b528e6c608c061d0ae10c5ba363fef388176f737c50dacc3.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-171315-chatgpt-web-roy-T08-115-bucket-owner-callback-invocation-audit.md",
+    "sha256": "3519e456e5f9b0ae9923e3fea6a448bbb06a087d2d3abcbff0974df4d89488c8",
+    "bytes": 2938,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-115 — bucket callback 參數與 count 清零的責任界線"
+      },
+      {
+        "line": 6,
+        "text": "## 0x007D1310 本體的指標來源"
+      },
+      {
+        "line": 30,
+        "text": "## 已驗證其他分桶的階段"
+      },
+      {
+        "line": 57,
+        "text": "## callback+4 實例檢查"
+      },
+      {
+        "line": 75,
+        "text": "## 尚待驗證"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/3519e456e5f9b0ae9923e3fea6a448bbb06a087d2d3abcbff0974df4d89488c8.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-171316-chatgpt-web-roy-T08-116-plane-buffer-alias-and-writer-boundary.md",
+    "sha256": "a94e437ae13c9bb2da64d3eeb780d222f9079671c819ae9ede40e9878dde4d2f",
+    "bytes": 3020,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-116 — 六平面係數別名、讀取者與寫入者證據邊界"
+      },
+      {
+        "line": 6,
+        "text": "## 全域緩衝生命週期"
+      },
+      {
+        "line": 25,
+        "text": "## 兩條消費讀取鏈"
+      },
+      {
+        "line": 46,
+        "text": "## 另一個不同陣列的來源邊界"
+      },
+      {
+        "line": 60,
+        "text": "## 結論與 T08-117"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/a94e437ae13c9bb2da64d3eeb780d222f9079671c819ae9ede40e9878dde4d2f.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-173506-chatgpt-web-roy-T08-117-callback-dispatch-boundary.md",
+    "sha256": "e7f0ce81c5958f800332915581839fe4ff60f3c462c89a41332f2b408f2300a2",
+    "bytes": 1999,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-117 — Callback dispatch and pointer identity boundary"
+      },
+      {
+        "line": 6,
+        "text": "## 新分析"
+      },
+      {
+        "line": 29,
+        "text": "## 新的獨立調度路徑"
+      },
+      {
+        "line": 40,
+        "text": "### 保守偽碼"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/e7f0ce81c5958f800332915581839fe4ff60f3c462c89a41332f2b408f2300a2.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-173506-chatgpt-web-roy-T08-118-six-plane-buffer-live-writer.md",
+    "sha256": "f17ae3214d50d6c4d0191ff2232310adc897e9288482d550b009aa53c0f20fd2",
+    "bytes": 2553,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-118 — Verified runtime six-plane writer 0x00838430"
+      },
+      {
+        "line": 6,
+        "text": "## 重大新確認"
+      },
+      {
+        "line": 9,
+        "text": "### 直接 caller 及指標身分"
+      },
+      {
+        "line": 37,
+        "text": "### 24 個 float 的 store 位址證據"
+      },
+      {
+        "line": 65,
+        "text": "### 概念資料流"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/f17ae3214d50d6c4d0191ff2232310adc897e9288482d550b009aa53c0f20fd2.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [
+      "kr-T08-T01-20261027-04-geometry-writer"
+    ],
+    "decision": "bounded-source-observation-or-gap-integrated",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-173506-chatgpt-web-roy-T08-119-plane-generation-math.md",
+    "sha256": "dd49968ee72c897541c9f71be6fba6522df48051ae9786064766a77be1a8650a",
+    "bytes": 2564,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-119 — Six half-space plane construction and math"
+      },
+      {
+        "line": 6,
+        "text": "## 前置矩陣組合"
+      },
+      {
+        "line": 22,
+        "text": "## 三點生成平面 0x00862C00"
+      },
+      {
+        "line": 59,
+        "text": "### 保守偽碼"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/dd49968ee72c897541c9f71be6fba6522df48051ae9786064766a77be1a8650a.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [
+      "kr-T08-T01-20261027-04-geometry-writer"
+    ],
+    "decision": "bounded-source-observation-or-gap-integrated",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-173506-chatgpt-web-roy-T08-120-update-schedule-and-open-questions.md",
+    "sha256": "a2bc9cb8fe4129cef8cfecac725fc4e47a9b11055413b9831cc42cb8aef2543b",
+    "bytes": 2675,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-120 — Two upstream update entry points and outstanding consumers"
+      },
+      {
+        "line": 6,
+        "text": "## 兩個入口與初始化保護"
+      },
+      {
+        "line": 22,
+        "text": "## 不只幾何更新：其他副作用"
+      },
+      {
+        "line": 42,
+        "text": "## 已確認的新資料流總結"
+      },
+      {
+        "line": 58,
+        "text": "## 修訂與後續"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/a2bc9cb8fe4129cef8cfecac725fc4e47a9b11055413b9831cc42cb8aef2543b.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [
+      "kr-T08-T01-20261027-04-geometry-writer"
+    ],
+    "decision": "bounded-source-observation-or-gap-integrated",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-175109-chatgpt-web-roy-T08-121-callback-invocation-boundary.md",
+    "sha256": "609d6dea26b4668516b9fb9e293133ff7c611bdeb04da612ac280fc7fa57d45c",
+    "bytes": 2645,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-121 — Callback method slot provenance and negative dispatcher proof"
+      },
+      {
+        "line": 9,
+        "text": "## 1. 關鍵問題"
+      },
+      {
+        "line": 12,
+        "text": "## 2. 原始 ASM"
+      },
+      {
+        "line": 47,
+        "text": "## 3. 概念偽碼（部分）"
+      },
+      {
+        "line": 61,
+        "text": "## 4. 待查/後續"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/609d6dea26b4668516b9fb9e293133ff7c611bdeb04da612ac280fc7fa57d45c.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-175110-chatgpt-web-roy-T08-122-global-bucket-lifetime-and-writer-classification.md",
+    "sha256": "99e0a431f41f551b4005d3991e61bdf089a2b3723ac97bfdc4f7fbc744e81a29",
+    "bytes": 3336,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-122 — Global 22-bucket allocation, lifecycle, and producer boundary"
+      },
+      {
+        "line": 9,
+        "text": "## 1. 新的直接生命週期複驗"
+      },
+      {
+        "line": 36,
+        "text": "## 2. 多個實際 producer 具有一致的入桶條件"
+      },
+      {
+        "line": 73,
+        "text": "## 3. 指標別名"
+      },
+      {
+        "line": 76,
+        "text": "## 4. 概念偽碼"
+      },
+      {
+        "line": 87,
+        "text": "## 5. 邊界"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/99e0a431f41f551b4005d3991e61bdf089a2b3723ac97bfdc4f7fbc744e81a29.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-175111-chatgpt-web-roy-T08-123-first-plane-updater-entry-and-neighbor-stages.md",
+    "sha256": "480237828b2a48b166680377232d1350c9084842f712010e857f6ee1cccb6522",
+    "bytes": 2545,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-123 — First geometry update caller at 0x00492567 and neighboring subsystems"
+      },
+      {
+        "line": 9,
+        "text": "## 1. 研究問題"
+      },
+      {
+        "line": 12,
+        "text": "## 2. 上游同函式多階段實證"
+      },
+      {
+        "line": 42,
+        "text": "## 3. 為何不能硬命名"
+      },
+      {
+        "line": 45,
+        "text": "## 4. 保守偽碼"
+      },
+      {
+        "line": 60,
+        "text": "## 5. 下一段"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/480237828b2a48b166680377232d1350c9084842f712010e857f6ee1cccb6522.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-175112-chatgpt-web-roy-T08-124-second-entry-and-T08-125-priorities.md",
+    "sha256": "ee8dcdbf29b5b30e9f81aa6c6e1dbdf8165f269ec77a52e1b2e0b66baf2893ad",
+    "bytes": 3556,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-124 — Second geometry updater entry, resource iteration, unresolved global consumer"
+      },
+      {
+        "line": 9,
+        "text": "## 1. 第二個外層呼叫鏈不同於第一個"
+      },
+      {
+        "line": 47,
+        "text": "## 2. 與參與者回呼的區別"
+      },
+      {
+        "line": 50,
+        "text": "## 3. 本輪 121～124 結論、偽碼與尚待解決"
+      },
+      {
+        "line": 68,
+        "text": "## T08-125 最優先方向"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/ee8dcdbf29b5b30e9f81aa6c6e1dbdf8165f269ec77a52e1b2e0b66baf2893ad.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-181200-chatgpt-web-roy-T08-125-callback-null-virtual-and-owner-boundary.md",
+    "sha256": "79161bc2c32354fdd32474941a67f714f7092b5d15bf890f9b49a28dc0ee4411",
+    "bytes": 2869,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-125 — Callback +04 空方法與 +0C owner 實參分離"
+      },
+      {
+        "line": 7,
+        "text": "## 目標與結果"
+      },
+      {
+        "line": 10,
+        "text": "## 第一手 ASM"
+      },
+      {
+        "line": 39,
+        "text": "## 語意與對照"
+      },
+      {
+        "line": 53,
+        "text": "## 已確認／推測／未知"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/79161bc2c32354fdd32474941a67f714f7092b5d15bf890f9b49a28dc0ee4411.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-181201-chatgpt-web-roy-T08-126-global-bucket-direct-xref-census.md",
+    "sha256": "ade579ffa7e2eecf2b9498021c8b5658bf4b47a8295b693432f62a3f62ad4a23",
+    "bytes": 3553,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-126 — 全域桶15個 direct xref 完整分類與固定桶10證據"
+      },
+      {
+        "line": 7,
+        "text": "## 搜尋方法、範圍"
+      },
+      {
+        "line": 28,
+        "text": "## BIN 核心摘錄"
+      },
+      {
+        "line": 54,
+        "text": "## 固定第10桶的算式"
+      },
+      {
+        "line": 57,
+        "text": "## 偽碼與資料流"
+      },
+      {
+        "line": 66,
+        "text": "## 證據限制"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/ade579ffa7e2eecf2b9498021c8b5658bf4b47a8295b693432f62a3f62ad4a23.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-181202-chatgpt-web-roy-T08-127-consumer-late-stages-and-global-zeroing-boundary.md",
+    "sha256": "8e038306412f3302f4985d4f720cf007e790da4c118c49f8fa9745e9c0b6d437",
+    "bytes": 3185,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-127 — 0x007D1310 後段新增12/18/19–21桶及22桶清零證據"
+      },
+      {
+        "line": 7,
+        "text": "## 研究目標"
+      },
+      {
+        "line": 10,
+        "text": "## 原始 BIN 佐證"
+      },
+      {
+        "line": 49,
+        "text": "## 偏移/桶索引核算"
+      },
+      {
+        "line": 63,
+        "text": "## 仍需驗證"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/8e038306412f3302f4985d4f720cf007e790da4c118c49f8fa9745e9c0b6d437.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-181203-chatgpt-web-roy-T08-128-owner-alias-closure-and-next-probes.md",
+    "sha256": "090c4b7c354561a5a364dac343914b2cb47a96b97bbcf2aed52d68a235adbea3",
+    "bytes": 4194,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-128 — owner 身分驗證邊界、靜態證據總結與下一段方案"
+      },
+      {
+        "line": 7,
+        "text": "## 本輪關鍵鏈與尚未閉合處"
+      },
+      {
+        "line": 14,
+        "text": "## 已知 call/alias 結構"
+      },
+      {
+        "line": 34,
+        "text": "## 虛擬呼叫與 ABI 仍待推進"
+      },
+      {
+        "line": 49,
+        "text": "## 可執行的 T08-129 探測計畫"
+      },
+      {
+        "line": 55,
+        "text": "## 結論與狀態"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/090c4b7c354561a5a364dac343914b2cb47a96b97bbcf2aed52d68a235adbea3.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [
+      "kr-T08-T01-20261027-04-global-bucket-owner"
+    ],
+    "decision": "bounded-source-observation-or-gap-integrated",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-182848-chatgpt-web-roy-T08-129-callback-dispatcher-static-audit.md",
+    "sha256": "ebb53bb69ee8e0f4d6b9c96ddcd1025394817cea121e335be98c63d106e84779",
+    "bytes": 4127,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-129 — Callback dispatcher 與 bucket owner 靜態追查（階段性原稿）"
+      },
+      {
+        "line": 5,
+        "text": "## 原始來源"
+      },
+      {
+        "line": 10,
+        "text": "## 本輪直接機器碼證據"
+      },
+      {
+        "line": 12,
+        "text": "### 0x00799840 callback 配置與非 dispatcher 路徑"
+      },
+      {
+        "line": 30,
+        "text": "### 0x007997A0 與 0x00839940 的建構鏈"
+      },
+      {
+        "line": 43,
+        "text": "### 0x007D1310 讀取 owner 的實際機器碼"
+      },
+      {
+        "line": 56,
+        "text": "### vtable 檔案證據"
+      },
+      {
+        "line": 66,
+        "text": "## 靜態反查結果與限制"
+      },
+      {
+        "line": 71,
+        "text": "## 資料流（目前可證）"
+      },
+      {
+        "line": 74,
+        "text": "## 暫定偽碼"
+      },
+      {
+        "line": 89,
+        "text": "## 後續優先方向"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/ebb53bb69ee8e0f4d6b9c96ddcd1025394817cea121e335be98c63d106e84779.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [
+      "kr-T08-T01-20261027-04-global-bucket-owner"
+    ],
+    "decision": "bounded-source-observation-or-gap-integrated",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-184334-chatgpt-web-roy-T08-129-global-22-bucket-dispatcher-resolved.md",
+    "sha256": "b5853154b8deb42ea37709d94cc7dd82d26b740f52ec5957548283551cc7a324",
+    "bytes": 8981,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-129 — 已解決：全域 22 桶 callback dispatcher、owner 指標身分鏈"
+      },
+      {
+        "line": 5,
+        "text": "## 1. 來源、方法與結論分級"
+      },
+      {
+        "line": 13,
+        "text": "## 2. 上游 caller：兩條獨立路徑設定相同 manager handle"
+      },
+      {
+        "line": 27,
+        "text": "## 3. 真正的 dispatcher：`0x0079A320` 的 callback `+0x0C`"
+      },
+      {
+        "line": 51,
+        "text": "### Callback vtable 識別"
+      },
+      {
+        "line": 64,
+        "text": "## 4. Owner 的完整位址／值身分鏈（核心新證據）"
+      },
+      {
+        "line": 82,
+        "text": "## 5. Consumer 對 owner 的實際使用及清零"
+      },
+      {
+        "line": 107,
+        "text": "## 6. C++ 型別化示意（名字暫定，語義以 ASM 為準）"
+      },
+      {
+        "line": 135,
+        "text": "## 7. 與先前段落的關係與修正"
+      },
+      {
+        "line": 143,
+        "text": "## 8. 尚待驗證（不影響本段核心結論）"
+      },
+      {
+        "line": 150,
+        "text": "### 如需動態二次驗證（本輪**未執行**）"
+      },
+      {
+        "line": 154,
+        "text": "## 9. T08-129 結案結論"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/b5853154b8deb42ea37709d94cc7dd82d26b740f52ec5957548283551cc7a324.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [
+      "kr-T08-T01-20261027-04-global-bucket-owner"
+    ],
+    "decision": "bounded-source-observation-or-gap-integrated",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-185041-chatgpt-web-roy-T08-130-dispatcher-phase-and-queue-lifecycle.md",
+    "sha256": "6edbab44eb64e39f1c51dc9317eb5563cb801e755d223daa501d44e446b6971b",
+    "bytes": 12157,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-130 — 全域 22 桶 dispatcher 的前後調度、暫存佇列及 caller 邊界"
+      },
+      {
+        "line": 5,
+        "text": "## 1. 原始依據與查證方式"
+      },
+      {
+        "line": 12,
+        "text": "## 2. T08-130 新增調度順序"
+      },
+      {
+        "line": 42,
+        "text": "## 3. `0x007BB640` 的指標容器與操作鏈"
+      },
+      {
+        "line": 103,
+        "text": "## 4. `0x0079B460` 的資料依賴"
+      },
+      {
+        "line": 119,
+        "text": "## 5. Dispatcher 後半的附加路徑（新生命週期線索）"
+      },
+      {
+        "line": 168,
+        "text": "## 6. 兩個上游 caller：初始化 guard 與必經派送的差異"
+      },
+      {
+        "line": 170,
+        "text": "### Caller A：`0x004931FD`"
+      },
+      {
+        "line": 186,
+        "text": "### Caller B：`0x006DD3EB`"
+      },
+      {
+        "line": 204,
+        "text": "## 7. 與分桶 producer 的重要區分"
+      },
+      {
+        "line": 220,
+        "text": "## 8. C++ 行為示意（類別名皆為研究暫名）"
+      },
+      {
+        "line": 249,
+        "text": "## 9. 完成項與未解邊界"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/6edbab44eb64e39f1c51dc9317eb5563cb801e755d223daa501d44e446b6971b.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-185400-chatgpt-web-roy-T08-131-queue-sort-constructor-and-comparator.md",
+    "sha256": "a6264b2dbd0b939b5ed82d3789206a1199e9c8a4175663a62c2477d470fd9727",
+    "bytes": 12256,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-131 — `0x00FBA838` 全域物件、候選佇列、部分排序比較器與生命週期"
+      },
+      {
+        "line": 5,
+        "text": "## 1. 證據與限制"
+      },
+      {
+        "line": 12,
+        "text": "## 2. 本輪新增：全域 `0x00FBA838` 的建構與釋放"
+      },
+      {
+        "line": 42,
+        "text": "## 3. `0x007B8E50` 建構兩組獨立陣列及預設限制"
+      },
+      {
+        "line": 64,
+        "text": "## 4. `0x007BB640`：全範圍與受限前段的明確差別"
+      },
+      {
+        "line": 96,
+        "text": "## 5. `0x007BB7B0` 的排序算法及元素的比較介面"
+      },
+      {
+        "line": 138,
+        "text": "## 6. 輔助比較／分割方法 `0x007BBC70`"
+      },
+      {
+        "line": 166,
+        "text": "## 7. 消費階段與清空語義"
+      },
+      {
+        "line": 196,
+        "text": "## 8. 析構側佐證：三組陣列獨立配置"
+      },
+      {
+        "line": 223,
+        "text": "## 9. 精簡偽碼（暫名，非真實簽名）"
+      },
+      {
+        "line": 254,
+        "text": "## 10. 與 T08-129／130 的功能鏈及目前缺口"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/a6264b2dbd0b939b5ed82d3789206a1199e9c8a4175663a62c2477d470fd9727.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-190000-chatgpt-web-roy-T08-132-second-queue-caller-and-producer-boundary.md",
+    "sha256": "f51573aa23825e6d4785c979da55c1758509c3dcfa569e15fee289d68db27438",
+    "bytes": 8191,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-132 — 優先佇列第二 caller、A4 前置資料路徑與 B4 producer 證據邊界"
+      },
+      {
+        "line": 5,
+        "text": "## 1. 來源與方法"
+      },
+      {
+        "line": 12,
+        "text": "## 2. 新發現：`0x007BB640` 至少有兩個直接 caller"
+      },
+      {
+        "line": 23,
+        "text": "## 3. 第二 caller 的 A 陣列處理"
+      },
+      {
+        "line": 57,
+        "text": "## 4. 第二 caller 的物件子陣列與呼叫排序佇列"
+      },
+      {
+        "line": 85,
+        "text": "## 5. 更新 `0x007BB550` 的非 producer 排除證據"
+      },
+      {
+        "line": 113,
+        "text": "## 6. `+B4/+B8` writer 目前的具體證據邊界"
+      },
+      {
+        "line": 126,
+        "text": "## 7. 可交付之保守偽碼"
+      },
+      {
+        "line": 147,
+        "text": "## 8. 修正／未解／下段"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/f51573aa23825e6d4785c979da55c1758509c3dcfa569e15fee289d68db27438.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-191613-chatgpt-web-roy-T08-133-record-registry-7E8640.md",
+    "sha256": "5b6e115eb417d49e9083561ee1bba14f9fc7e900a6edaccc580b2168afdf004a",
+    "bytes": 9048,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-133 — `0x007E8640` 記錄查找、計數與實際 append 對象"
+      },
+      {
+        "line": 3,
+        "text": "## 第一手來源"
+      },
+      {
+        "line": 9,
+        "text": "## 新確認：實參和欄位"
+      },
+      {
+        "line": 97,
+        "text": "## 兩個 caller 的身分限制"
+      },
+      {
+        "line": 150,
+        "text": "## 可交付偽碼（抽象）"
+      },
+      {
+        "line": 162,
+        "text": "## 結論與未解"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/5b6e115eb417d49e9083561ee1bba14f9fc7e900a6edaccc580b2168afdf004a.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-191613-chatgpt-web-roy-T08-134-two-caller-record-name-routing.md",
+    "sha256": "56390d32bb5e68b36d0bb7a3f168328712df1a0a852bd82730b34e4328f14194",
+    "bytes": 8983,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-134 — 名稱記錄查找子容器與兩條登記上游"
+      },
+      {
+        "line": 3,
+        "text": "## 第一手來源"
+      },
+      {
+        "line": 9,
+        "text": "## `0x007E8AE0` 的記錄鍵搜尋"
+      },
+      {
+        "line": 79,
+        "text": "## 新的上游分流證據"
+      },
+      {
+        "line": 149,
+        "text": "## 重要語義邊界"
+      },
+      {
+        "line": 154,
+        "text": "## 資料流"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/56390d32bb5e68b36d0bb7a3f168328712df1a0a852bd82730b34e4328f14194.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-191613-chatgpt-web-roy-T08-135-vector-append-owner-isolation.md",
+    "sha256": "941ebeb55dd4594238fd9428c4e62bac2b8057cf0ba6a39ec05bd197a64013c7",
+    "bytes": 8811,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-135 — 通用 pointer-vector append helper 與 B queue 寫入者篩選"
+      },
+      {
+        "line": 3,
+        "text": "## 第一手來源"
+      },
+      {
+        "line": 9,
+        "text": "## `0x007BB750` 真實操作約定"
+      },
+      {
+        "line": 95,
+        "text": "## 三條已確認 append 路徑的容器身分"
+      },
+      {
+        "line": 153,
+        "text": "## 限制：負面掃描不是 producer 不存在的證明"
+      },
+      {
+        "line": 156,
+        "text": "## 已確認 / 待證"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/941ebeb55dd4594238fd9428c4e62bac2b8057cf0ba6a39ec05bd197a64013c7.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-191613-chatgpt-web-roy-T08-136-priority-queue-consumer-reset-boundary.md",
+    "sha256": "409a919a0b47243becca3f79e13b9d814c19a3bd730f8b3e38d56f4c323d307f",
+    "bytes": 11786,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-136 — B queue consumer 結尾重置、可觀測性與全域22桶關係界限"
+      },
+      {
+        "line": 3,
+        "text": "## 第一手來源"
+      },
+      {
+        "line": 9,
+        "text": "## consumer 的上游與 top-N 路徑"
+      },
+      {
+        "line": 95,
+        "text": "## 新增核實：清除範圍的機器碼細節"
+      },
+      {
+        "line": 191,
+        "text": "## 與全域22桶 consumer 的對照"
+      },
+      {
+        "line": 194,
+        "text": "## 待進行的動態／靜態驗證方案（未執行）"
+      },
+      {
+        "line": 200,
+        "text": "## 段落判定"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/409a919a0b47243becca3f79e13b9d814c19a3bd730f8b3e38d56f4c323d307f.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-200622-chatgpt-web-roy-T08-137-B-writer-xref-audit.md",
+    "sha256": "743d440522984fd858696417bf637ab9de47786e888c376f2df54476e8e63360",
+    "bytes": 4700,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-137 — B 佇列直接寫入交叉參照與區域性封閉"
+      },
+      {
+        "line": 3,
+        "text": "## 來源、方法、證據界限"
+      },
+      {
+        "line": 10,
+        "text": "## 研究問題與新結果"
+      },
+      {
+        "line": 16,
+        "text": "## 直接欄位使用的完整命中"
+      },
+      {
+        "line": 44,
+        "text": "## 兩條可核對的生存期路徑"
+      },
+      {
+        "line": 63,
+        "text": "## 偽碼與適用範圍"
+      },
+      {
+        "line": 79,
+        "text": "## 下一段"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/743d440522984fd858696417bf637ab9de47786e888c376f2df54476e8e63360.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-200622-chatgpt-web-roy-T08-138-manager-vtable-and-entry-type-boundary.md",
+    "sha256": "198e399a99ab642013057452ce739d5d455d5b3dbb299c819cfdfb228298ca29",
+    "bytes": 4311,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-138 — 全域 manager 虛表實體與間接方法歧義"
+      },
+      {
+        "line": 3,
+        "text": "## 來源、方法、證據界限"
+      },
+      {
+        "line": 10,
+        "text": "## 新核驗：`0x00C4FC8C` 虛表不是 T08-129 callback 虛表"
+      },
+      {
+        "line": 62,
+        "text": "## 關鍵的型別排除"
+      },
+      {
+        "line": 68,
+        "text": "## 暫定資料模型"
+      },
+      {
+        "line": 86,
+        "text": "## 下一段"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/198e399a99ab642013057452ce739d5d455d5b3dbb299c819cfdfb228298ca29.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-200622-chatgpt-web-roy-T08-139-B-comparator-ABI-and-two-callers.md",
+    "sha256": "7589bfcce37cad641da1b1021f52f2099ab93d4045afd6c6113fac7476eb1766",
+    "bytes": 8669,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-139 — 排序比較 context、entry ABI 與雙 caller 隔離"
+      },
+      {
+        "line": 3,
+        "text": "## 來源、方法、證據界限"
+      },
+      {
+        "line": 10,
+        "text": "## 真正比較 ABI 的靜態閉合"
+      },
+      {
+        "line": 62,
+        "text": "### 比較器內部再次核驗"
+      },
+      {
+        "line": 100,
+        "text": "## 全部已知直接呼叫 consumer 的位置"
+      },
+      {
+        "line": 144,
+        "text": "## 偽碼"
+      },
+      {
+        "line": 159,
+        "text": "## 下一段"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/7589bfcce37cad641da1b1021f52f2099ab93d4045afd6c6113fac7476eb1766.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-200622-chatgpt-web-roy-T08-140-B-queue-to-global-bucket-evidence-boundary.md",
+    "sha256": "f26b853cd5ae343739f07838333c3f30ba9acfe21848ecf639bb328535d9654d",
+    "bytes": 5665,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-140 — B queue 與全域22桶因果界限、可執行驗證計畫"
+      },
+      {
+        "line": 3,
+        "text": "## 來源、方法、證據界限"
+      },
+      {
+        "line": 10,
+        "text": "## 核心研究問題與結論"
+      },
+      {
+        "line": 14,
+        "text": "### 已確認的控制鏈"
+      },
+      {
+        "line": 31,
+        "text": "### 精確控制指令摘錄"
+      },
+      {
+        "line": 71,
+        "text": "## 驗證矩陣"
+      },
+      {
+        "line": 84,
+        "text": "## 建議的動態驗證（未執行，不冒稱結果）"
+      },
+      {
+        "line": 92,
+        "text": "## 未來段落方向（T08-141）"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/f26b853cd5ae343739f07838333c3f30ba9acfe21848ecf639bb328535d9654d.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-210935-chatgpt-web-roy-T08-141-B-vector-producer-confirmed.md",
+    "sha256": "f80cf7bd99182543955b99ebc11df6f30116f3b7bba53a5ceb68604bd073ac03",
+    "bytes": 5042,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-141 — B vector producer confirmed"
+      },
+      {
+        "line": 9,
+        "text": "## 新成果：全域 B queue 的真正寫入者已定位"
+      },
+      {
+        "line": 15,
+        "text": "### 主要 ASM 與分支（完整關鍵窗口）"
+      },
+      {
+        "line": 65,
+        "text": "### 物件身分鏈"
+      },
+      {
+        "line": 74,
+        "text": "### 暫定偽碼（保留自插入 alias 特例）"
+      },
+      {
+        "line": 89,
+        "text": "## 證據界限與下一步"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/f80cf7bd99182543955b99ebc11df6f30116f3b7bba53a5ceb68604bd073ac03.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [
+      "kr-T08-T01-20261027-04-b-queue-type-gap"
+    ],
+    "decision": "bounded-source-observation-or-gap-integrated",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-210935-chatgpt-web-roy-T08-142-B-producer-control-gates.md",
+    "sha256": "7d292c2fa62e47b3d1fdea431c291491aa605370451f83922a3dab8c1fa84875",
+    "bytes": 11263,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-142 — B producer control gates"
+      },
+      {
+        "line": 9,
+        "text": "## 本段主題：producer 何時被允許執行"
+      },
+      {
+        "line": 13,
+        "text": "### 入口與早退 ASM"
+      },
+      {
+        "line": 87,
+        "text": "### 分歧流程 ASM"
+      },
+      {
+        "line": 153,
+        "text": "### 迭代與最後 append 門檻"
+      },
+      {
+        "line": 207,
+        "text": "### 兩條宏觀路徑（暫定）"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/7d292c2fa62e47b3d1fdea431c291491aa605370451f83922a3dab8c1fa84875.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-210935-chatgpt-web-roy-T08-143-B-vector-growth-and-alias-safety.md",
+    "sha256": "0f4ccd229c80d70be28cd0422e29d63ae27ace825cf80a6606890ce9d0c19ba6",
+    "bytes": 5749,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-143 — B vector growth and alias safety"
+      },
+      {
+        "line": 9,
+        "text": "## 本段主題：兩條 append 路徑、vector alias 保護與容量擴張"
+      },
+      {
+        "line": 13,
+        "text": "### B append ASM"
+      },
+      {
+        "line": 54,
+        "text": "### 泛用 grow helper `0x00797D30`"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/0f4ccd229c80d70be28cd0422e29d63ae27ace825cf80a6606890ce9d0c19ba6.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-210935-chatgpt-web-roy-T08-144-B-producer-consumer-link-and-vtable-limit.md",
+    "sha256": "fb859db1033cd807a4ff43c2ce776505a50d54e7406b9b4c50b1e380807645ba",
+    "bytes": 5392,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-144 — B producer consumer link and vtable limit"
+      },
+      {
+        "line": 9,
+        "text": "## 本段主題：已閉合的 B producer→vector→consumer，及仍未閉合的虛擬方法因果鏈"
+      },
+      {
+        "line": 13,
+        "text": "### 三段閉合證據"
+      },
+      {
+        "line": 80,
+        "text": "### 靜態關係圖"
+      },
+      {
+        "line": 99,
+        "text": "### 技術判定與後續必要觀測"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/fb859db1033cd807a4ff43c2ce776505a50d54e7406b9b4c50b1e380807645ba.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [
+      "kr-T08-T01-20261027-04-b-queue-type-gap"
+    ],
+    "decision": "bounded-source-observation-or-gap-integrated",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-221100-chatgpt-web-roy-T08-145-embedded-vptr-construction-candidate.md",
+    "sha256": "f91d72b3726b1b8a7e9dc87bf5fc1679a6e2e8010da196a7312d7a4ffa14881b",
+    "bytes": 4582,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-145 — `Host+0x0C` vfptr 建構候選與型別邊界"
+      },
+      {
+        "line": 9,
+        "text": "## 1. 新定位到的 vfptr stores"
+      },
+      {
+        "line": 57,
+        "text": "## 2. 兩次 vfptr 設定不是兩個獨立物件"
+      },
+      {
+        "line": 61,
+        "text": "## 3. 與 producer 的必要身分比對"
+      },
+      {
+        "line": 65,
+        "text": "## 4. 偽碼（候選）"
+      },
+      {
+        "line": 77,
+        "text": "## 5. T08-146"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/f91d72b3726b1b8a7e9dc87bf5fc1679a6e2e8010da196a7312d7a4ffa14881b.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [
+      "kr-T08-T01-20261027-04-b-queue-type-gap"
+    ],
+    "decision": "bounded-source-observation-or-gap-integrated",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-221100-chatgpt-web-roy-T08-146-vtable-slots-and-rdata-section-mapping.md",
+    "sha256": "be5f18390b669a16b02d056e1e9dc5805c8fc29d2abce7b0abf34cc0b991d16e",
+    "bytes": 5049,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-146 — `0x00C4F66C/0x00C4F6C0` 正確虛表映射與候選 slots"
+      },
+      {
+        "line": 9,
+        "text": "## 1. 映射方式的重要稽核"
+      },
+      {
+        "line": 20,
+        "text": "## 2. 初始 vfptr `0x00C4F66C`"
+      },
+      {
+        "line": 33,
+        "text": "## 3. 改寫後 vfptr `0x00C4F6C0`"
+      },
+      {
+        "line": 48,
+        "text": "## 4. 指令窗口：候選執行目標"
+      },
+      {
+        "line": 96,
+        "text": "## 5. 偽碼（未知方法語義）"
+      },
+      {
+        "line": 105,
+        "text": "## 6. T08-147"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/be5f18390b669a16b02d056e1e9dc5805c8fc29d2abce7b0abf34cc0b991d16e.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [
+      "kr-T08-T01-20261027-04-b-queue-type-gap"
+    ],
+    "decision": "bounded-source-observation-or-gap-integrated",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-221100-chatgpt-web-roy-T08-147-subobject-vptr-destruction-lifetime-boundary.md",
+    "sha256": "c7cbb0e28060c28ffadb6823aaad86f35835a8d7253c459d2d73417335d973e9",
+    "bytes": 4692,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-147 — Secondary vfptr 析構回寫、生命週期及 B queue 借用指標風險"
+      },
+      {
+        "line": 9,
+        "text": "## 1. 新確認的析構階段回寫"
+      },
+      {
+        "line": 44,
+        "text": "## 2. Producer / consumer 不是 ownership 證明"
+      },
+      {
+        "line": 66,
+        "text": "## 3. 安全性約束與未知"
+      },
+      {
+        "line": 72,
+        "text": "## 4. 偽碼"
+      },
+      {
+        "line": 81,
+        "text": "## 5. T08-148"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/c7cbb0e28060c28ffadb6823aaad86f35835a8d7253c459d2d73417335d973e9.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-221100-chatgpt-web-roy-T08-148-priority-entry-dynamic-identification-plan.md",
+    "sha256": "9ff6e0b8476a0ecd5949b2963356095ef2d6585c0d51ad984fac9118b2aa98fd",
+    "bytes": 3078,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-148 — B entry 實際型別識別與 22 桶因果鏈的最小閉合方案"
+      },
+      {
+        "line": 9,
+        "text": "## 1. 已確認主幹（接續 T08-129、141、144）"
+      },
+      {
+        "line": 25,
+        "text": "## 2. 本輪新增但尚未閉合的 Host 候選"
+      },
+      {
+        "line": 29,
+        "text": "## 3. 缺失的必要因果邊"
+      },
+      {
+        "line": 35,
+        "text": "## 4. 動態驗證最小方案（未執行）"
+      },
+      {
+        "line": 43,
+        "text": "## 5. 建議下一段 T08-149"
+      },
+      {
+        "line": 47,
+        "text": "## 6. 原始 bytes 支持索引"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/9ff6e0b8476a0ecd5949b2963356095ef2d6585c0d51ad984fac9118b2aa98fd.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-222934-chatgpt-web-roy-T08-149-ctor-callers-and-b-entry-vtable-abi.md",
+    "sha256": "1a71276cdc2d168345dca1957b2cc0a4a453ad1b3da581a974158065308d5367",
+    "bytes": 9847,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-149 — 候選 Host constructor caller 與 B entry vtable ABI 反證檢查"
+      },
+      {
+        "line": 10,
+        "text": "## 一、這一段新取得的直接證據"
+      },
+      {
+        "line": 12,
+        "text": "### 1. `0x007A5050` 的上游：三個直接 CALL，且各有 `0x170` bytes 配置"
+      },
+      {
+        "line": 41,
+        "text": "### 2. `0x007A67C0` 對應 Host 的條件與 B entry pointer 本身"
+      },
+      {
+        "line": 65,
+        "text": "### 3. `0x00C4F6C0` vtable 內容有實際 ABI 不一致"
+      },
+      {
+        "line": 93,
+        "text": "### 4. consumer 的實際 ABI 用法（供下一段與真正 vptr 對位）"
+      },
+      {
+        "line": 105,
+        "text": "## 二、暫定資料流與偽碼"
+      },
+      {
+        "line": 134,
+        "text": "## 三、與前段關係及結論分級"
+      },
+      {
+        "line": 151,
+        "text": "## 四、下一步精準路線（T08-150）"
+      },
+      {
+        "line": 158,
+        "text": "## 五、研究環境及掃描限制"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/1a71276cdc2d168345dca1957b2cc0a4a453ad1b3da581a974158065308d5367.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [
+      "kr-T08-T01-20261027-04-b-queue-type-gap"
+    ],
+    "decision": "bounded-source-observation-or-gap-integrated",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-223858-chatgpt-web-roy-T08-150-shared-control-block-construction-and-owner-transfer.md",
+    "sha256": "6b3a1b92ef9698a9bb4051c9a5c168a382a43642c71e4dbe91fcdfb588b62ef1",
+    "bytes": 12052,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-150 — 0x170 Host 建構後的 0x10 控制區塊、指標移交及 B producer 身分鏈邊界"
+      },
+      {
+        "line": 10,
+        "text": "## 一、研究命題與結論"
+      },
+      {
+        "line": 18,
+        "text": "## 二、三個建立站點與持有欄位"
+      },
+      {
+        "line": 20,
+        "text": "### A. `0x004C821C` 起：第一條建立及寫入"
+      },
+      {
+        "line": 49,
+        "text": "### B. `0x004C84DD` 起：第二條建立及移交"
+      },
+      {
+        "line": 74,
+        "text": "### C. `0x006DC3C0` 起：第三條建立及移交"
+      },
+      {
+        "line": 98,
+        "text": "## 三、控制區塊 `0x004CA860` 的逐欄證據"
+      },
+      {
+        "line": 123,
+        "text": "### 指標對替換：`0x007A35C0`"
+      },
+      {
+        "line": 144,
+        "text": "## 四、指標對的搬移：`0x004E1360`"
+      },
+      {
+        "line": 169,
+        "text": "## 五、constructor 內部的側證：`0x007A5050`"
+      },
+      {
+        "line": 187,
+        "text": "## 六、B producer 可達性、vtable 與 ABI：保留反證邊界"
+      },
+      {
+        "line": 195,
+        "text": "## 七、暫定 C++ 偽碼（結構名未有符號證明）"
+      },
+      {
+        "line": 218,
+        "text": "## 八、證據分級與下段目標"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/6b3a1b92ef9698a9bb4051c9a5c168a382a43642c71e4dbe91fcdfb588b62ef1.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [
+      "kr-T08-T01-20261027-04-b-queue-type-gap"
+    ],
+    "decision": "bounded-source-observation-or-gap-integrated",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-224426-chatgpt-web-roy-T08-151-control-block-two-stage-release-and-host-dispatch-boundaries.md",
+    "sha256": "19b2d083511ae8cd297ef86cc237a2ba64885af794b83c0638484f8ccadf9b99",
+    "bytes": 14556,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-151 — 控制區塊雙階段釋放、Host +0x14 弱引用解除及 owner 更新分派邊界"
+      },
+      {
+        "line": 11,
+        "text": "## 1. 本段判定與主要新結論"
+      },
+      {
+        "line": 19,
+        "text": "## 2. 核心結構（欄位的機器碼使用方式）"
+      },
+      {
+        "line": 41,
+        "text": "## 3. `0x004E1360`: 替換 holder，兩階段引用釋放"
+      },
+      {
+        "line": 80,
+        "text": "## 4. `0x007A35C0`: 第二條獨立的對照路徑"
+      },
+      {
+        "line": 111,
+        "text": "## 5. `0x004CA860` 新增弱引用與 Host destructor 對稱性"
+      },
+      {
+        "line": 171,
+        "text": "## 6. `owner+0x15C` 實際使用（第一條 owner）"
+      },
+      {
+        "line": 200,
+        "text": "## 7. vtable / ABI 仍未閉合：兩組同型疑點需共同檢查"
+      },
+      {
+        "line": 213,
+        "text": "## 8. 暫定 C++ 偽碼（精確路徑簡化表示）"
+      },
+      {
+        "line": 248,
+        "text": "## 9. 三級證據分類"
+      },
+      {
+        "line": 266,
+        "text": "## 10. 建議 T08-152 後續工作"
+      },
+      {
+        "line": 273,
+        "text": "## 11. 版本管理"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/19b2d083511ae8cd297ef86cc237a2ba64885af794b83c0638484f8ccadf9b99.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [
+      "kr-T08-T01-20261027-04-b-queue-type-gap"
+    ],
+    "decision": "bounded-source-observation-or-gap-integrated",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-225400-chatgpt-web-roy-T08-152-vtable-entry-boundary-negative-xrefs.md",
+    "sha256": "c45b741cedea059422e5f2ba09da316d1fdb19b359e75df00d3cbd92d0eb8584",
+    "bytes": 8734,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-152 — B entry / control-block vtable 槽位入口邊界、交叉參照與身分鏈負證據"
+      },
+      {
+        "line": 10,
+        "text": "## 1. 新增結論與明確限制"
+      },
+      {
+        "line": 18,
+        "text": "## 2. `.rdata` DWORD 實際表格（逐項用 `struct.unpack_from('<I', BIN, offset)`）"
+      },
+      {
+        "line": 42,
+        "text": "## 3. BIN 指令邊界實證"
+      },
+      {
+        "line": 70,
+        "text": "## 4. 與既有 B Queue 操作的控制／資料流對照"
+      },
+      {
+        "line": 92,
+        "text": "## 5. C++ 層級偽碼：已知與未知分開"
+      },
+      {
+        "line": 111,
+        "text": "## 6. 反證與不能跳過的限制"
+      },
+      {
+        "line": 118,
+        "text": "## 7. 下一段 T08-153 可驗證的工作"
+      },
+      {
+        "line": 126,
+        "text": "## 8. GitHub 狀態"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/c45b741cedea059422e5f2ba09da316d1fdb19b359e75df00d3cbd92d0eb8584.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [
+      "kr-T08-T01-20261027-04-b-queue-type-gap"
+    ],
+    "decision": "bounded-source-observation-or-gap-integrated",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/20261027-T08-090-pool-pointer-provenance.md",
+    "sha256": "c002e415a89a9ad65dbcddd167fce3b0633ecf31d6d23dc9d1dfb4a4c109de03",
+    "bytes": 1139,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08-090: pooled resource pointer provenance (technical consolidation)"
+      },
+      {
+        "line": 6,
+        "text": "## Two acquisition paths"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/c002e415a89a9ad65dbcddd167fce3b0633ecf31d6d23dc9d1dfb4a4c109de03.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/T08-KNOWLEDGE-BASE.md",
+    "sha256": "4b7d8821a43359e8953cbead34bd17e69bdb09ebac15e6fcbb01bd430acc313a",
+    "bytes": 11821,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T08 長期研究交付文件（Canonical Knowledge Base）"
+      },
+      {
+        "line": 7,
+        "text": "## 範圍與來源"
+      },
+      {
+        "line": 16,
+        "text": "## 研究原則與證據分級"
+      },
+      {
+        "line": 26,
+        "text": "## 重要系統和地址（摘要）"
+      },
+      {
+        "line": 28,
+        "text": "### 場景物件、狀態與事件"
+      },
+      {
+        "line": 44,
+        "text": "### 狀態資源更新／回收"
+      },
+      {
+        "line": 54,
+        "text": "### 名稱索引、Provider 與 Binding：重要歷史修正"
+      },
+      {
+        "line": 68,
+        "text": "### 變換、幾何測試與分桶"
+      },
+      {
+        "line": 78,
+        "text": "### 六平面正常寫入及更新鏈（T08-118～120，穩定結論）"
+      },
+      {
+        "line": 84,
+        "text": "### 全域22桶與 callback 生命週期的穩定補充（T08-107、109～115、122、125～128）"
+      },
+      {
+        "line": 91,
+        "text": "## 長期未解決問題（按優先度）"
+      },
+      {
+        "line": 99,
+        "text": "## Git 與交接交付守則"
+      }
+    ],
+    "task": "T08",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/4b7d8821a43359e8953cbead34bd17e69bdb09ebac15e6fcbb01bd430acc313a.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "summary/reconstructed/secondary",
+    "claim_ids": [
+      "kr-T08-T01-20261027-04-global-bucket-owner",
+      "kr-T08-T01-20261027-04-summary-source-gap"
+    ],
+    "decision": "bounded-source-observation-or-gap-integrated",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/T10/20261027-181746-chatgpt-web-T10-task-audit.md",
+    "sha256": "c867bbf9551f9ec3847659357b79c0d59e1af40760111d9d2fb72a523b65fecc",
+    "bytes": 2544,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# KR T10 任務盤點與第一手交叉驗證（非正式分析段號）"
+      },
+      {
+        "line": 3,
+        "text": "## 正式範圍與狀態"
+      },
+      {
+        "line": 6,
+        "text": "## 現有證據與缺口"
+      },
+      {
+        "line": 9,
+        "text": "## 第一手檔案與機器碼核對"
+      },
+      {
+        "line": 12,
+        "text": "## 待辦與邊界"
+      },
+      {
+        "line": 18,
+        "text": "## GitHub"
+      }
+    ],
+    "task": "T10",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/c867bbf9551f9ec3847659357b79c0d59e1af40760111d9d2fb72a523b65fecc.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/T10/20261027-182049-chatgpt-web-T10-input-state-machine.md",
+    "sha256": "13560baeb09433d0a74a80a28e7ef8f6d4dcb0a7208d061a5017bfa9cfa4cd5e",
+    "bytes": 7288,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# KR T10：按鍵時間狀態機與戰鬥輸入合流（候選路徑，尚未證實 Z 映射）"
+      },
+      {
+        "line": 3,
+        "text": "## 0. 工作邊界"
+      },
+      {
+        "line": 10,
+        "text": "## 1. 關鍵新證據：0x547240 的按鍵時間狀態機"
+      },
+      {
+        "line": 34,
+        "text": "## 2. 0x546780 收集／合併狀態機結果"
+      },
+      {
+        "line": 53,
+        "text": "## 3. 上游控制器與輸出 gate"
+      },
+      {
+        "line": 72,
+        "text": "## 4. 候選呼叫鏈與暫定 C++ 偽碼"
+      },
+      {
+        "line": 93,
+        "text": "## 5. Z 連按 vs Z 長按：暫定驗證矩陣"
+      },
+      {
+        "line": 101,
+        "text": "## 6. 結論/未解事項"
+      },
+      {
+        "line": 108,
+        "text": "## 7. 協作與 Git 狀態"
+      }
+    ],
+    "task": "T10",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/13560baeb09433d0a74a80a28e7ef8f6d4dcb0a7208d061a5017bfa9cfa4cd5e.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/T10/20261027-182600-chatgpt-web-T10-input-gate-followup.md",
+    "sha256": "6a3d5b08979992f0c8fd4814b1e34f71070fe3813e79a4e94a1c37d34a741e42",
+    "bytes": 9229,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# KR T10 — 普攻候選輸入狀態機、輸入旗標與動作允許表（下一段原始研究）"
+      },
+      {
+        "line": 5,
+        "text": "## 1. 第一手資料與限制"
+      },
+      {
+        "line": 12,
+        "text": "## 2. 新確認：timer 的匯入符號是 timeGetTime"
+      },
+      {
+        "line": 32,
+        "text": "## 3. 完整按鍵狀態機可辨識分支表"
+      },
+      {
+        "line": 50,
+        "text": "## 4. 狀態返回碼轉成候選輸入位元"
+      },
+      {
+        "line": 78,
+        "text": "## 5. 新追查：`0x54F270` 的「輸入 byte → 分類碼 → 條件表」路徑"
+      },
+      {
+        "line": 123,
+        "text": "## 6. 新追查：輸入全域的初始化／清除路徑"
+      },
+      {
+        "line": 144,
+        "text": "## 7. 原生使用者操作假設與驗證矩陣"
+      },
+      {
+        "line": 154,
+        "text": "## 8. 後續完整鏈閉合順序"
+      },
+      {
+        "line": 161,
+        "text": "## 9. 證據級別與更新"
+      }
+    ],
+    "task": "T10",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/6a3d5b08979992f0c8fd4814b1e34f71070fe3813e79a4e94a1c37d34a741e42.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/T10/20261027-184022-chatgpt-web-T10-2-tree-mutation-and-bank-writer.md",
+    "sha256": "f4853229a5966b162d9169506bdcf6c7b863891b00a97d7330e5a1f5e3f76d40",
+    "bytes": 7666,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# KR T10-2 — 條件樹插入副作用與輸入 Bank 寫入路徑"
+      },
+      {
+        "line": 5,
+        "text": "## 0. 研究邊界和來源"
+      },
+      {
+        "line": 11,
+        "text": "## 1. `0x54F4E0–0x54F56B`：條件樹查找後可插入"
+      },
+      {
+        "line": 35,
+        "text": "## 2. `0x54F7D0–0x54F849`：新節點配置與值複製"
+      },
+      {
+        "line": 59,
+        "text": "## 3. `0x54F6A0–0x54F7BE` 與 `0x597E80`：實際樹連接"
+      },
+      {
+        "line": 96,
+        "text": "### 修正 T10-1 的敘述"
+      },
+      {
+        "line": 100,
+        "text": "## 4. Bank 資料：`0x6D0B00` 是較大函式的內部區塊，確有 DWORD 追加"
+      },
+      {
+        "line": 129,
+        "text": "## 5. 與 Z 連按／Z 長按關係：嚴格證據界線"
+      },
+      {
+        "line": 138,
+        "text": "## 6. 後續 T10-3 指向"
+      },
+      {
+        "line": 145,
+        "text": "## 7. GitHub/安全"
+      }
+    ],
+    "task": "T10",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/f4853229a5966b162d9169506bdcf6c7b863891b00a97d7330e5a1f5e3f76d40.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [
+      "kr-T10-T01-20261027-04-keymap-banks"
+    ],
+    "decision": "bounded-source-observation-or-gap-integrated",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/T10/20261027-184414-chatgpt-web-T10-3-keymapping-loader-and-default-bank.md",
+    "sha256": "4524ebcbde90076b2fd0a280e8adbbf0d5724189c450a0d7cda57bd68dde0655",
+    "bytes": 7609,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T10-3 — KeyMapping.xml 載入、內建預設映射與三 Bank 初始化（BIN-first）"
+      },
+      {
+        "line": 8,
+        "text": "## 1. 新的關鍵結論"
+      },
+      {
+        "line": 16,
+        "text": "## 2. XML 語法線索：直接從 .rdata 解出"
+      },
+      {
+        "line": 57,
+        "text": "## 3. Bank 佈局、欄位編碼與 T10-2 的修正"
+      },
+      {
+        "line": 77,
+        "text": "## 4. 成功載入、失敗 fallback 與啟動呼叫者"
+      },
+      {
+        "line": 120,
+        "text": "## 5. 預設按鍵表：有實際 hardcoded key 值，但不能硬套 Z"
+      },
+      {
+        "line": 140,
+        "text": "## 6. 與 Z 連按／Z 長按之關係、下一步"
+      },
+      {
+        "line": 154,
+        "text": "## 7. Source/Git 狀態"
+      }
+    ],
+    "task": "T10",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/4524ebcbde90076b2fd0a280e8adbbf0d5724189c450a0d7cda57bd68dde0655.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [
+      "kr-T10-T01-20261027-04-keymap-banks"
+    ],
+    "decision": "bounded-source-observation-or-gap-integrated",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/T10/20261027-185315-chatgpt-web-T10-4-keymap-vector-and-lookup.md",
+    "sha256": "00b7a187e7bc9fd8bf1acc3fc5545bea3fd2cc0affac3d13181f04a012ee5df1",
+    "bytes": 5956,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# KR T10-4 — KeyMapping vector append、映射來源分流（BIN-first）"
+      },
+      {
+        "line": 8,
+        "text": "## 1. 已確認：`0x4A8680..0x4A86DB` 是 DWORD vector 的 append-copy helper"
+      },
+      {
+        "line": 48,
+        "text": "## 2. 已確認：`0x6D4DC0` 至少包含兩條映射查取分支"
+      },
+      {
+        "line": 83,
+        "text": "## 3. 與 T10-1～T10-3 的接續、證據分級"
+      },
+      {
+        "line": 97,
+        "text": "## 4. 下一段 T10-5 建議"
+      },
+      {
+        "line": 104,
+        "text": "## 5. GitHub／協作界線"
+      }
+    ],
+    "task": "T10",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/00b7a187e7bc9fd8bf1acc3fc5545bea3fd2cc0affac3d13181f04a012ee5df1.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [
+      "kr-T10-T01-20261027-04-keymap-banks"
+    ],
+    "decision": "bounded-source-observation-or-gap-integrated",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/T10/20261027-191139-chatgpt-web-roy-T10-5-mapping-callers.md",
+    "sha256": "a359ed08415df1e845842c4bbab4027e13f288613b913a3f74f0c9de7d33cb6d",
+    "bytes": 10318,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# KR T10-5 — 映射查詢呼叫者與使用情境"
+      },
+      {
+        "line": 5,
+        "text": "## 0. 來源與限制"
+      },
+      {
+        "line": 11,
+        "text": "## 1. 分析與證據"
+      },
+      {
+        "line": 43,
+        "text": "## 2. 原始 BIN 組語摘錄（逐址重新反組譯）"
+      },
+      {
+        "line": 44,
+        "text": "### 映射結果消費者 A (VA `0x00594664`)"
+      },
+      {
+        "line": 99,
+        "text": "### 映射結果消費者 B (VA `0x005CD67A`)"
+      },
+      {
+        "line": 142,
+        "text": "### 特殊編號呼叫者 (VA `0x00650E86`)"
+      }
+    ],
+    "task": "T10",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/a359ed08415df1e845842c4bbab4027e13f288613b913a3f74f0c9de7d33cb6d.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/T10/20261027-191139-chatgpt-web-roy-T10-6-tree-and-initializer.md",
+    "sha256": "539ff0a81310e9e9cf5366f9c466f769ca7a2fb6fecf90df9dd0ce2d5f4f7d79",
+    "bytes": 9701,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# KR T10-6 — 映射樹資料取得與靜態初始化邊界"
+      },
+      {
+        "line": 5,
+        "text": "## 0. 來源與限制"
+      },
+      {
+        "line": 11,
+        "text": "## 1. 分析與證據"
+      },
+      {
+        "line": 34,
+        "text": "## 2. 原始 BIN 組語摘錄（逐址重新反組譯）"
+      },
+      {
+        "line": 35,
+        "text": "### 0x6D43F0 的樹查找與可能插入 (VA `0x006D4418`)"
+      },
+      {
+        "line": 95,
+        "text": "### 0x6D1DA0 建構輸入映射容器 (VA `0x006D1DC8`)"
+      },
+      {
+        "line": 140,
+        "text": "### 映射查詢時的 call-site (VA `0x006D4E27`)"
+      }
+    ],
+    "task": "T10",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/539ff0a81310e9e9cf5366f9c466f769ca7a2fb6fecf90df9dd0ce2d5f4f7d79.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/T10/20261027-191139-chatgpt-web-roy-T10-7-runtime-input-merge.md",
+    "sha256": "7c28ce9bbca0d2081a534c51d14231d323dc1263be00d7f307d48cb4e677e3a4",
+    "bytes": 13895,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# KR T10-7 — 即時控制器輸入三路合流與輸出位元"
+      },
+      {
+        "line": 5,
+        "text": "## 0. 來源與限制"
+      },
+      {
+        "line": 11,
+        "text": "## 1. 分析與證據"
+      },
+      {
+        "line": 43,
+        "text": "## 2. 原始 BIN 組語摘錄（逐址重新反組譯）"
+      },
+      {
+        "line": 44,
+        "text": "### 即時輸入 gather (VA `0x0054678A`)"
+      },
+      {
+        "line": 143,
+        "text": "### 三個返回路徑及 byte 優先 (VA `0x005467C8`)"
+      },
+      {
+        "line": 221,
+        "text": "### 控制器調用與更新 (VA `0x00546254`)"
+      }
+    ],
+    "task": "T10",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/7c28ce9bbca0d2081a534c51d14231d323dc1263be00d7f307d48cb4e677e3a4.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/T10/20261027-191139-chatgpt-web-roy-T10-8-action-gate-and-boundaries.md",
+    "sha256": "53e6085eaf5ab541572e7bca1862c5410443d138aba974dbd476c753499d84a2",
+    "bytes": 10807,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# KR T10-8 — 控制器 Gate 與 Z 連段證據邊界整合"
+      },
+      {
+        "line": 5,
+        "text": "## 0. 來源與限制"
+      },
+      {
+        "line": 11,
+        "text": "## 1. 分析與證據"
+      },
+      {
+        "line": 42,
+        "text": "## 2. 原始 BIN 組語摘錄（逐址重新反組譯）"
+      },
+      {
+        "line": 43,
+        "text": "### actor/input gate (VA `0x0054627A`)"
+      },
+      {
+        "line": 102,
+        "text": "### actor 狀態後續 gate (VA `0x00546338`)"
+      },
+      {
+        "line": 145,
+        "text": "### 狀態機 500ms 分支 (VA `0x005472F6`)"
+      }
+    ],
+    "task": "T10",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/53e6085eaf5ab541572e7bca1862c5410443d138aba974dbd476c753499d84a2.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/T10/20261027-205931-chatgpt-web-roy-T10-25-controller-flags-priority.md",
+    "sha256": "400cdeee2ea671ae251b14328a6b004baf238d781d0921107df742af3364bcd6",
+    "bytes": 7383,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# KR T10-25 — 控制器輸入與技能旗標的優先級及抑制分支"
+      },
+      {
+        "line": 9,
+        "text": "## 研究目標與本次範圍"
+      },
+      {
+        "line": 13,
+        "text": "## 第一手組語摘錄"
+      },
+      {
+        "line": 88,
+        "text": "## 逐層分析與新結論"
+      },
+      {
+        "line": 108,
+        "text": "## 證據分級及限制"
+      },
+      {
+        "line": 115,
+        "text": "## 後續定向追查"
+      }
+    ],
+    "task": "T10",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/400cdeee2ea671ae251b14328a6b004baf238d781d0921107df742af3364bcd6.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/T10/20261027-205931-chatgpt-web-roy-T10-26-subai-cast-state-machine.md",
+    "sha256": "8bbf8f35d131d8274a7f49a1d26dac551b60e8f072a0df274de780d19a4ada2f",
+    "bytes": 10055,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# KR T10-26 — SubAI 技能候選狀態 1／2／3／4 與環境判定"
+      },
+      {
+        "line": 9,
+        "text": "## 研究目標與本次範圍"
+      },
+      {
+        "line": 13,
+        "text": "## 第一手組語摘錄"
+      },
+      {
+        "line": 135,
+        "text": "## 逐層分析與新結論"
+      },
+      {
+        "line": 158,
+        "text": "## 證據分級及限制"
+      },
+      {
+        "line": 165,
+        "text": "## 後續定向追查"
+      }
+    ],
+    "task": "T10",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/8bbf8f35d131d8274a7f49a1d26dac551b60e8f072a0df274de780d19a4ada2f.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/T10/20261027-205931-chatgpt-web-roy-T10-27-skill-matrix-combos-and-tier.md",
+    "sha256": "0685ed3ec450754b407f542f49e3ba2a05daec3dc9372fac7dbc874991d172a0",
+    "bytes": 8848,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# KR T10-27 — 三按鍵組合旗標、四層技能矩陣與 V 蓄氣假說邊界"
+      },
+      {
+        "line": 9,
+        "text": "## 研究目標與本次範圍"
+      },
+      {
+        "line": 13,
+        "text": "## 第一手組語摘錄"
+      },
+      {
+        "line": 120,
+        "text": "## 逐層分析與新結論"
+      },
+      {
+        "line": 144,
+        "text": "## 證據分級及限制"
+      },
+      {
+        "line": 151,
+        "text": "## 後續定向追查"
+      }
+    ],
+    "task": "T10",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/0685ed3ec450754b407f542f49e3ba2a05daec3dc9372fac7dbc874991d172a0.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/T10/20261027-205931-chatgpt-web-roy-T10-28-charge-cast-transition-evidence.md",
+    "sha256": "40f086d6699df7891672e476018015b602bfbe887d79e14d41c43b3836642ccd",
+    "bytes": 11912,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# KR T10-28 — T10／T11 交界：蓄氣改招及普攻／技能互接的證據矩陣"
+      },
+      {
+        "line": 9,
+        "text": "## 研究目標與本次範圍"
+      },
+      {
+        "line": 13,
+        "text": "## 第一手組語摘錄"
+      },
+      {
+        "line": 164,
+        "text": "## 逐層分析與新結論"
+      },
+      {
+        "line": 183,
+        "text": "## 證據分級及限制"
+      },
+      {
+        "line": 190,
+        "text": "## 後續定向追查"
+      }
+    ],
+    "task": "T10",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/40f086d6699df7891672e476018015b602bfbe887d79e14d41c43b3836642ccd.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/T10/20261027-211146-chatgpt-web-roy-T10-29-actor-skill-tier-check-consumers.md",
+    "sha256": "611986e4eaa9ed8c97d100a4212546679f72bede0696d9a2d89a715ba9623f11",
+    "bytes": 7688,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T10-29 — Actor +0x3E8 的共用技能狀態來源、條件物件比對與控制器邊界"
+      },
+      {
+        "line": 3,
+        "text": "## 本段目標"
+      },
+      {
+        "line": 6,
+        "text": "## 新增原生驗證"
+      },
+      {
+        "line": 11,
+        "text": "## 可復現 BIN 指令：精確函式窗口"
+      },
+      {
+        "line": 15,
+        "text": "### VA 0x0054ADC0–0x0054ADE0"
+      },
+      {
+        "line": 34,
+        "text": "### VA 0x00546254–0x00546309"
+      },
+      {
+        "line": 93,
+        "text": "### VA 0x0054824C–0x00548290"
+      },
+      {
+        "line": 119,
+        "text": "## 暫定 C++ 語意草圖"
+      },
+      {
+        "line": 130,
+        "text": "## 與使用者遊戲行為的關係"
+      },
+      {
+        "line": 133,
+        "text": "## 證據級別／待查"
+      }
+    ],
+    "task": "T10",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/611986e4eaa9ed8c97d100a4212546679f72bede0696d9a2d89a715ba9623f11.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/T10/20261027-211146-chatgpt-web-roy-T10-30-subai-actor-state-counter-and-branches.md",
+    "sha256": "d7fc27214687c4aab7967187a4d75463c82de1e77e907bb81f6044416603ac85",
+    "bytes": 9863,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T10-30 — SubAI 對 actor+0x3E8=1/2 的逐 slot 計數與兩個候選技能鍵"
+      },
+      {
+        "line": 3,
+        "text": "## 研究目標與新資料流"
+      },
+      {
+        "line": 11,
+        "text": "## BIN 指令原文"
+      },
+      {
+        "line": 15,
+        "text": "### VA 0x00548FF0–0x00549050"
+      },
+      {
+        "line": 57,
+        "text": "### VA 0x00549050–0x00549171"
+      },
+      {
+        "line": 158,
+        "text": "## 資料流／偽碼"
+      },
+      {
+        "line": 173,
+        "text": "## 與 T11／V 的分界"
+      }
+    ],
+    "task": "T10",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/d7fc27214687c4aab7967187a4d75463c82de1e77e907bb81f6044416603ac85.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/T10/20261027-211146-chatgpt-web-roy-T10-31-skill-candidate-fallback-and-matrix-stage.md",
+    "sha256": "8ca30d0116c62095027395520cf85b4c6e037f7a32e6427aed805b64a1f3f41f",
+    "bytes": 13962,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T10-31 — 0x549C60 技能候選 7/9 的參數傳遞、actor fallback 與矩陣界線"
+      },
+      {
+        "line": 3,
+        "text": "## 本段動機"
+      },
+      {
+        "line": 6,
+        "text": "## 第一手發現"
+      },
+      {
+        "line": 12,
+        "text": "## 逐址原始組語"
+      },
+      {
+        "line": 16,
+        "text": "### VA 0x00549C60–0x00549D29"
+      },
+      {
+        "line": 74,
+        "text": "### VA 0x00549D29–0x00549E05"
+      },
+      {
+        "line": 143,
+        "text": "### VA 0x0054F270–0x0054F330"
+      },
+      {
+        "line": 233,
+        "text": "### VA 0x0081A8E0–0x0081A909"
+      },
+      {
+        "line": 255,
+        "text": "## 矩陣與組合交叉確認"
+      },
+      {
+        "line": 258,
+        "text": "## 偽碼與未解"
+      }
+    ],
+    "task": "T10",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/8ca30d0116c62095027395520cf85b4c6e037f7a32e6427aed805b64a1f3f41f.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/T10/20261027-211146-chatgpt-web-roy-T10-32-charge-and-skill-crossflow-proof-boundary.md",
+    "sha256": "a4213b2009b6be758932f97cf736f885ed2c71408778dcb70291746fab213252",
+    "bytes": 9713,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T10-32 — 蓄氣、技能矩陣、普攻互接的已證實資料鏈與缺口歸檔"
+      },
+      {
+        "line": 3,
+        "text": "## 本段目標"
+      },
+      {
+        "line": 6,
+        "text": "## 新的技術整理（BIN 原生證據）"
+      },
+      {
+        "line": 13,
+        "text": "## 典型第一手交叉指令"
+      },
+      {
+        "line": 17,
+        "text": "### VA 0x0054ADC0–0x0054ADE0"
+      },
+      {
+        "line": 36,
+        "text": "### VA 0x005490FB–0x00549145"
+      },
+      {
+        "line": 66,
+        "text": "### VA 0x00549D29–0x00549D89"
+      },
+      {
+        "line": 100,
+        "text": "### VA 0x005462B0–0x00546307"
+      },
+      {
+        "line": 131,
+        "text": "### VA 0x0081A8E0–0x0081A909"
+      },
+      {
+        "line": 153,
+        "text": "## 按鍵／施放四個核心假說的驗證矩陣"
+      },
+      {
+        "line": 161,
+        "text": "## 下一段 T10-33 / T11 關聯任務"
+      },
+      {
+        "line": 167,
+        "text": "## 限制／協作"
+      }
+    ],
+    "task": "T10",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/a4213b2009b6be758932f97cf736f885ed2c71408778dcb70291746fab213252.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [
+      "kr-T10-T01-20261027-04-input-and-action-gap"
+    ],
+    "decision": "bounded-source-observation-or-gap-integrated",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/T10/20261027-221624-chatgpt-web-roy-T10-33-final-conclusion.md",
+    "sha256": "9c5270250092e6e9f1f339f1f5b93d6f39ca06fabe9d672166f154fbdb293620",
+    "bytes": 27267,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T10-33 — actor +0x3E8 Writer 候選與玩家控制器輸入後段（BIN-first）"
+      },
+      {
+        "line": 9,
+        "text": "## 1. 原生觀察與對象同一性"
+      },
+      {
+        "line": 11,
+        "text": "### 1.1 `0x546100` 控制器的 actor 來源（已確認）"
+      },
+      {
+        "line": 14,
+        "text": "### 1.2 技能候選 gate 實際呼叫（已確認）"
+      },
+      {
+        "line": 17,
+        "text": "### 1.3 與輸入/方向後段相連之新控制器分支（已確認）"
+      },
+      {
+        "line": 20,
+        "text": "### 1.4 新找到之 writer 候選，保留型別邊界（已確認寫入；actor 身分未確認）"
+      },
+      {
+        "line": 26,
+        "text": "### 1.5 全 `.text` 中直接基底+0x3E8 operand 掃描（已確認字面參照；非完整 alias analysis）"
+      },
+      {
+        "line": 50,
+        "text": "## 2. 核心控制器原生指令"
+      },
+      {
+        "line": 52,
+        "text": "### 2.1 角色選擇、輸入整合與 predicate"
+      },
+      {
+        "line": 121,
+        "text": "### 2.2 `0xFB9009` 狀態 gate 及後段 dispatch"
+      },
+      {
+        "line": 230,
+        "text": "### 2.3 writer 候選分離"
+      },
+      {
+        "line": 280,
+        "text": "## 3. 形式化部分資料流／偽碼"
+      },
+      {
+        "line": 301,
+        "text": "## 4. 證據與推測邊界"
+      },
+      {
+        "line": 315,
+        "text": "## 5. 後續追查順序（不為段號拆分析）"
+      },
+      {
+        "line": 321,
+        "text": "## 6. 此段沒有得出的結論"
+      },
+      {
+        "line": 329,
+        "text": "# T10-33 補充深查（2026-10-27 22:09 Asia/Taipei）"
+      },
+      {
+        "line": 333,
+        "text": "## 7. 重要新突破：actor-like `+0x3E8` 並非孤立的未知 writer"
+      },
+      {
+        "line": 335,
+        "text": "### 7.1 `0x4CE7F0` 是分派 30 種 selector 的原生函式"
+      },
+      {
+        "line": 378,
+        "text": "### 7.2 這條 setter 的宿主具有與玩家控制器 actor 相同的鄰接 layout（增強、但未嚴格完成身分證明）"
+      },
+      {
+        "line": 393,
+        "text": "### 7.3 setter 透過虛擬函式表掛載（新原生 xref）"
+      },
+      {
+        "line": 410,
+        "text": "## 8. 按鍵狀態與 setter selector 5 的反例"
+      },
+      {
+        "line": 421,
+        "text": "## 9. 實質結果與缺口管理"
+      },
+      {
+        "line": 432,
+        "text": "### 接續精確追查"
+      },
+      {
+        "line": 441,
+        "text": "## 10. T10-33 正式分析結論／結案判定"
+      }
+    ],
+    "task": "T10",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/9c5270250092e6e9f1f339f1f5b93d6f39ca06fabe9d672166f154fbdb293620.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/T10/20261027-221624-chatgpt-web-roy-T10-34-derived-vtable-selector-deep-analysis.md",
+    "sha256": "3f68ed295cc9cecd6ed08d168d6bfc254c57ceaabc2280be4aa40d13db85d475",
+    "bytes": 9504,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T10-34 — actor-derived vtable ownership、selector setter 與玩家 gate 的類型邊界（BIN-first）"
+      },
+      {
+        "line": 8,
+        "text": "## A. 此段實質新證據與區別於 T10-33 的結果"
+      },
+      {
+        "line": 10,
+        "text": "### A1. **確定** 0xC07B44 vtable 的建構期安裝，不再只是孤立的 `.rdata` 函式指標"
+      },
+      {
+        "line": 18,
+        "text": "### A2. 分派器的 selector 與值不同維度（獨立可驗證）"
+      },
+      {
+        "line": 22,
+        "text": "### A3. 玩家 gate 的關聯性與反證"
+      },
+      {
+        "line": 26,
+        "text": "## B. 選取的第一手 x86 指令"
+      },
+      {
+        "line": 88,
+        "text": "## C. vtable 局部清單（從 BIN little-endian 讀 `.rdata`）"
+      },
+      {
+        "line": 103,
+        "text": "## D. 類型／資料流關係（只畫已獲得的邊）"
+      },
+      {
+        "line": 123,
+        "text": "## E. 偽碼（部分已確認，型別暫名）"
+      },
+      {
+        "line": 143,
+        "text": "## F. 對 T10 全面課題的貢獻與仍缺的環節"
+      },
+      {
+        "line": 149,
+        "text": "### 建議後續定向分析（T10-35 起）"
+      },
+      {
+        "line": 156,
+        "text": "## G. 完成判定"
+      }
+    ],
+    "task": "T10",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/3f68ed295cc9cecd6ed08d168d6bfc254c57ceaabc2280be4aa40d13db85d475.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/T10/20261027-221846-chatgpt-web-roy-T10-35-construction-sources-and-state-lifecycle.md",
+    "sha256": "46913e7ee767c7b4c6bc45e137dc649ee0a65b130ee18c17b8346d79af9b7b91",
+    "bytes": 8902,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T10-35 — 衍生 actor 物件的雙路建構來源、selector 5 後處理與控制器證據界線（BIN-first）"
+      },
+      {
+        "line": 8,
+        "text": "## 一、這次新增的可核證結論"
+      },
+      {
+        "line": 10,
+        "text": "### A. `0x4CD6F0` 有兩個直接 callsite，且所屬上游並不相同"
+      },
+      {
+        "line": 64,
+        "text": "### B. `0x4CD6F0` 所建構物件大小與附屬資源生命週期"
+      },
+      {
+        "line": 81,
+        "text": "### C. vptr 清理階段回填與附屬物件釋放"
+      },
+      {
+        "line": 106,
+        "text": "### D. selector=5 不只改一個欄位，還可能重新生成從屬物件"
+      },
+      {
+        "line": 132,
+        "text": "## 二、現階段類型證據與作用圖"
+      },
+      {
+        "line": 156,
+        "text": "### 不應混為同一索引空間的數字"
+      },
+      {
+        "line": 165,
+        "text": "## 三、局部偽碼：分派來源（推導摘要，符號未證）"
+      },
+      {
+        "line": 193,
+        "text": "## 四、明確缺口、反證與後續焦點"
+      },
+      {
+        "line": 209,
+        "text": "## 五、結案標準"
+      }
+    ],
+    "task": "T10",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/46913e7ee767c7b4c6bc45e137dc649ee0a65b130ee18c17b8346d79af9b7b91.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/T10/20261027-222750-chatgpt-web-roy-T10-36-indirect-dispatch-receiver-boundaries.md",
+    "sha256": "0d555ce0a93ee10ccd11bd9113022f9c1dc9bd1fe4b2d964b56fda70589ca6dc",
+    "bytes": 21118,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T10-36 — selector setter 間接呼叫候選與 receiver 型別追溯（BIN-first）"
+      },
+      {
+        "line": 8,
+        "text": "## 一、新驗證：直接建構點與間接呼叫檢索的可證明範圍"
+      },
+      {
+        "line": 17,
+        "text": "## 二、按鏈條標示觀察與未證明缺口"
+      },
+      {
+        "line": 33,
+        "text": "## 三、第一手機器碼摘錄（入口周邊，上下游對照）"
+      },
+      {
+        "line": 35,
+        "text": "### 0x4A0FD8"
+      },
+      {
+        "line": 75,
+        "text": "### 0x4AE609"
+      },
+      {
+        "line": 115,
+        "text": "### 0x4CD6F0"
+      },
+      {
+        "line": 155,
+        "text": "### 0x4CE7F0"
+      },
+      {
+        "line": 195,
+        "text": "### 0x4CE90A"
+      },
+      {
+        "line": 235,
+        "text": "### 0x5462B4"
+      },
+      {
+        "line": 275,
+        "text": "### 0x546338"
+      },
+      {
+        "line": 315,
+        "text": "### 0x48B7D8"
+      },
+      {
+        "line": 355,
+        "text": "### 0x492A04"
+      },
+      {
+        "line": 396,
+        "text": "## 四、對可能誤判的具體否定"
+      },
+      {
+        "line": 404,
+        "text": "## 五、可檢驗的下一輪研究（T10-37）"
+      },
+      {
+        "line": 411,
+        "text": "## 六、結論與交付"
+      }
+    ],
+    "task": "T10",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/0d555ce0a93ee10ccd11bd9113022f9c1dc9bd1fe4b2d964b56fda70589ca6dc.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/T10/20261027-223615-chatgpt-web-roy-T10-37-typed-factory-instance-initialization.md",
+    "sha256": "0eb143f48d6c298c9d4cdf9ff616a18d140267b7f6849903a39a6b6c0542a881",
+    "bytes": 12328,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T10-37 — 型別驅動工廠與新物件初始化、註冊邊界（BIN-first）"
+      },
+      {
+        "line": 9,
+        "text": "## 新確認的證據與具體資料流"
+      },
+      {
+        "line": 16,
+        "text": "## 局部偽碼（按目前已追出的分支）"
+      },
+      {
+        "line": 37,
+        "text": "## 排除與待查"
+      },
+      {
+        "line": 41,
+        "text": "## 原始 x86 證據附錄（區間按函式入口或前文已知分支起點擷取）"
+      },
+      {
+        "line": 43,
+        "text": "### VA 0x4ae5d0–0x4ae66d"
+      },
+      {
+        "line": 89,
+        "text": "### VA 0x4ae917–0x4aea10"
+      },
+      {
+        "line": 153,
+        "text": "### VA 0x4aeaa0–0x4aeb80"
+      }
+    ],
+    "task": "T10",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/0eb143f48d6c298c9d4cdf9ff616a18d140267b7f6849903a39a6b6c0542a881.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/T10/20261027-223615-chatgpt-web-roy-T10-38-player-controller-state-byte-gates.md",
+    "sha256": "da9de99fa51453423d9a5fbd2bfcd8093c9b39f68b478168b5250306d4684899",
+    "bytes": 9324,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T10-38 — 控制器 index-5 輸入閘門與狀態更新（BIN-first）"
+      },
+      {
+        "line": 9,
+        "text": "## 新確認的精確分支"
+      },
+      {
+        "line": 16,
+        "text": "## 條件表"
+      },
+      {
+        "line": 24,
+        "text": "## 邊界"
+      },
+      {
+        "line": 29,
+        "text": "## 原始 x86 證據附錄（區間按函式入口或前文已知分支起點擷取）"
+      },
+      {
+        "line": 31,
+        "text": "### VA 0x5462dd–0x546374"
+      },
+      {
+        "line": 73,
+        "text": "### VA 0x546374–0x54647a"
+      }
+    ],
+    "task": "T10",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/da9de99fa51453423d9a5fbd2bfcd8093c9b39f68b478168b5250306d4684899.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/T10/20261027-223615-chatgpt-web-roy-T10-39-directional-search-helper-and-bit-state.md",
+    "sha256": "4a9d504c0872a26727f139b7b7b8b81a919bcd7099646394b5116f859cf97d4a",
+    "bytes": 15155,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T10-39 — 方向探索 helper、256 候選迭代與狀態位的誤判排除（BIN-first）"
+      },
+      {
+        "line": 9,
+        "text": "## 深度分析"
+      },
+      {
+        "line": 16,
+        "text": "## 偽碼（只表示已確認的條件，不補猜角度規則）"
+      },
+      {
+        "line": 35,
+        "text": "## 重要限制"
+      },
+      {
+        "line": 39,
+        "text": "## 原始 x86 證據附錄（區間按函式入口或前文已知分支起點擷取）"
+      },
+      {
+        "line": 41,
+        "text": "### VA 0x545f88–0x54607f"
+      },
+      {
+        "line": 117,
+        "text": "### VA 0x5464c0–0x5465a0"
+      },
+      {
+        "line": 179,
+        "text": "### VA 0x5466f8–0x546774"
+      },
+      {
+        "line": 234,
+        "text": "### VA 0x4c90c0–0x4c913a"
+      }
+    ],
+    "task": "T10",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/4a9d504c0872a26727f139b7b7b8b81a919bcd7099646394b5116f859cf97d4a.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/T10/20261027-223615-chatgpt-web-roy-T10-40-actor-init-versus-input-chain-evidence-matrix.md",
+    "sha256": "f7e71e02b9c918bfc4ab7614adf8bfd3a04cde90b29c6d2029e8e1edc0c84492",
+    "bytes": 13388,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T10-40 — actor 初始化與控制器輸入的雙鏈界線、後續可驗證橋接點（BIN-first）"
+      },
+      {
+        "line": 9,
+        "text": "## 新核對：同名/同偏移不能自動合併"
+      },
+      {
+        "line": 15,
+        "text": "## 可測試狀態轉移（靜態條件）"
+      },
+      {
+        "line": 23,
+        "text": "## 後續工作清單（精確阻塞點）"
+      },
+      {
+        "line": 28,
+        "text": "## 批次總結／交付界線"
+      },
+      {
+        "line": 31,
+        "text": "## 原始 x86 證據附錄（區間按函式入口或前文已知分支起點擷取）"
+      },
+      {
+        "line": 33,
+        "text": "### VA 0x4ae5dd–0x4ae614"
+      },
+      {
+        "line": 54,
+        "text": "### VA 0x4aeb0a–0x4aeb80"
+      },
+      {
+        "line": 102,
+        "text": "### VA 0x4ce90a–0x4ce9a3"
+      },
+      {
+        "line": 147,
+        "text": "### VA 0x5462dd–0x546374"
+      },
+      {
+        "line": 189,
+        "text": "### VA 0x4c90c0–0x4c913a"
+      }
+    ],
+    "task": "T10",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/f7e71e02b9c918bfc4ab7614adf8bfd3a04cde90b29c6d2029e8e1edc0c84492.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [
+      "kr-T10-T01-20261027-04-input-and-action-gap"
+    ],
+    "decision": "bounded-source-observation-or-gap-integrated",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/T10/20261027-224803-chatgpt-web-roy-T10-41-instance-registration-keyed-tree.md",
+    "sha256": "3ae10c30b5bd373e92900999327c5c615dc56981711b5d02e5c26c0eaa2b01dc",
+    "bytes": 7081,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T10-41 — 工廠物件註冊：WORD key 與樹節點插入／重複鍵分流（BIN-first 大型研究）"
+      },
+      {
+        "line": 8,
+        "text": "## 深度分析結果與可驗證結論"
+      },
+      {
+        "line": 14,
+        "text": "## 呼叫與欄位證據"
+      },
+      {
+        "line": 17,
+        "text": "## 技術邊界／反證"
+      },
+      {
+        "line": 22,
+        "text": "## 下一步可核對路徑"
+      },
+      {
+        "line": 27,
+        "text": "## 原始反組譯摘錄（各區間含上下游）"
+      },
+      {
+        "line": 29,
+        "text": "### VA 0x4aeb78–0x4aec18"
+      },
+      {
+        "line": 75,
+        "text": "### VA 0x4dff30–0x4dffaa"
+      }
+    ],
+    "task": "T10",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/3ae10c30b5bd373e92900999327c5c615dc56981711b5d02e5c26c0eaa2b01dc.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/T10/20261027-224804-chatgpt-web-roy-T10-42-secondary-index-registration.md",
+    "sha256": "41e48158adc7d8f53a6f532a83a166f8c86cfe4b567a137cf68ca9a17d53e689",
+    "bytes": 10613,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T10-42 — 第二容器的索引與 controller actor slot 來源之辨別（BIN-first 大型研究）"
+      },
+      {
+        "line": 8,
+        "text": "## 深度分析結果與可驗證結論"
+      },
+      {
+        "line": 14,
+        "text": "## 呼叫與欄位證據"
+      },
+      {
+        "line": 17,
+        "text": "## 技術邊界／反證"
+      },
+      {
+        "line": 22,
+        "text": "## 下一步可核對路徑"
+      },
+      {
+        "line": 27,
+        "text": "## 原始反組譯摘錄（各區間含上下游）"
+      },
+      {
+        "line": 29,
+        "text": "### VA 0x4aec00–0x4aec90"
+      },
+      {
+        "line": 71,
+        "text": "### VA 0x4dffb0–0x4e0060"
+      },
+      {
+        "line": 133,
+        "text": "### VA 0x546100–0x5461c0"
+      }
+    ],
+    "task": "T10",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/41e48158adc7d8f53a6f532a83a166f8c86cfe4b567a137cf68ca9a17d53e689.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/T10/20261027-224804-chatgpt-web-roy-T10-43-controller-input-gate-bitmask.md",
+    "sha256": "8a608cfd3fbdd085d01c166df37d9bd23e357efbbe8376d2594092cfee6c13cb",
+    "bytes": 9012,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T10-43 — 玩家控制器 input producer → bitmask → actor +0x3E8 允許分支（BIN-first 大型研究）"
+      },
+      {
+        "line": 8,
+        "text": "## 深度分析結果與可驗證結論"
+      },
+      {
+        "line": 14,
+        "text": "## 呼叫與欄位證據"
+      },
+      {
+        "line": 17,
+        "text": "## 技術邊界／反證"
+      },
+      {
+        "line": 22,
+        "text": "## 下一步可核對路徑"
+      },
+      {
+        "line": 27,
+        "text": "## 原始反組譯摘錄（各區間含上下游）"
+      },
+      {
+        "line": 29,
+        "text": "### VA 0x546230–0x546310"
+      },
+      {
+        "line": 98,
+        "text": "### VA 0x546338–0x546375"
+      },
+      {
+        "line": 119,
+        "text": "### VA 0x54f270–0x54f2d2"
+      }
+    ],
+    "task": "T10",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/8a608cfd3fbdd085d01c166df37d9bd23e357efbbe8376d2594092cfee6c13cb.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [
+      "kr-T10-T01-20261027-04-matrix-predicate"
+    ],
+    "decision": "bounded-source-observation-or-gap-integrated",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/T10/20261027-224804-chatgpt-web-roy-T10-44-skill-matrix-gate-bridge.md",
+    "sha256": "ed8570455c35dc772c126929becd667f0b7db881cd6da0f2dcd869c43ae72ba2",
+    "bytes": 9911,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# T10-44 — 玩家 input bitmask 至技能 matrix predicate 與動作輸出的證據界線（BIN-first 大型研究）"
+      },
+      {
+        "line": 8,
+        "text": "## 深度分析結果與可驗證結論"
+      },
+      {
+        "line": 14,
+        "text": "## 呼叫與欄位證據"
+      },
+      {
+        "line": 17,
+        "text": "## 技術邊界／反證"
+      },
+      {
+        "line": 22,
+        "text": "## 下一步可核對路徑"
+      },
+      {
+        "line": 27,
+        "text": "## 原始反組譯摘錄（各區間含上下游）"
+      },
+      {
+        "line": 29,
+        "text": "### VA 0x546254–0x546309"
+      },
+      {
+        "line": 88,
+        "text": "### VA 0x54f270–0x54f330"
+      },
+      {
+        "line": 178,
+        "text": "### VA 0x4aebfc–0x4aec18"
+      }
+    ],
+    "task": "T10",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/ed8570455c35dc772c126929becd667f0b7db881cd6da0f2dcd869c43ae72ba2.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [
+      "kr-T10-T01-20261027-04-matrix-predicate",
+      "kr-T10-T01-20261027-04-input-and-action-gap"
+    ],
+    "decision": "bounded-source-observation-or-gap-integrated",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/T10/20261027-T10-matrix-and-input-bank-analysis.md",
+    "sha256": "ede81f3071a98522e44645b322b82a274a919998584c54196f02dab2dfcb8d6c",
+    "bytes": 9443,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# KR T10 — 分段研究：動作條件二層查詢與輸入資料塊布局"
+      },
+      {
+        "line": 5,
+        "text": "## 1. 範圍與完整性"
+      },
+      {
+        "line": 12,
+        "text": "## 2. 新確認：`0x81A8E0` 是嚴格上限的 4×11 WORD 矩陣查詢"
+      },
+      {
+        "line": 34,
+        "text": "## 3. 新確認：`0x54F270` 的 gate 實際有三層條件"
+      },
+      {
+        "line": 78,
+        "text": "## 4. 新確認：`0x54F4E0` 的樹尋找過程"
+      },
+      {
+        "line": 104,
+        "text": "## 5. 新確認：`0xFB902C` 選擇 3 個 0x280-byte 輸入資料塊"
+      },
+      {
+        "line": 143,
+        "text": "## 6. 新確認：資料塊中有 16-byte 元件的向量狀結構"
+      },
+      {
+        "line": 163,
+        "text": "## 7. 綜合流程與偽碼"
+      },
+      {
+        "line": 190,
+        "text": "## 8. Z 連按／Z 按住的證據分級"
+      },
+      {
+        "line": 200,
+        "text": "## 9. 下一段優先"
+      },
+      {
+        "line": 207,
+        "text": "## 10. Git / 紀錄"
+      }
+    ],
+    "task": "T10",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/ede81f3071a98522e44645b322b82a274a919998584c54196f02dab2dfcb8d6c.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [
+      "kr-T10-T01-20261027-04-keymap-banks",
+      "kr-T10-T01-20261027-04-matrix-predicate",
+      "kr-T10-T01-20261027-04-input-and-action-gap"
+    ],
+    "decision": "bounded-source-observation-or-gap-integrated",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/T10/20261027-chatgpt-web-roy-T10-10-direction-byte-synthesis.md",
+    "sha256": "38324c0ae02e5b45e944a44158665b5f32cb1db711976586bf2c9049f825eeb6",
+    "bytes": 8501,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# KR T10-10 — 0x546850 四個輸入位元組與方向／角度合成"
+      },
+      {
+        "line": 5,
+        "text": "## 範圍"
+      },
+      {
+        "line": 8,
+        "text": "## 關鍵原生證據"
+      },
+      {
+        "line": 13,
+        "text": "### 原始 BIN：四向來源"
+      },
+      {
+        "line": 88,
+        "text": "### 原始 BIN：離散角度與輸出"
+      },
+      {
+        "line": 151,
+        "text": "## 結論"
+      }
+    ],
+    "task": "T10",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/38324c0ae02e5b45e944a44158665b5f32cb1db711976586bf2c9049f825eeb6.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/T10/20261027-chatgpt-web-roy-T10-11-secondary-pointer-gates.md",
+    "sha256": "e66e22be3fe88d4a743fee15d827c04256722207bf8f4929ab2bc13e4592c53d",
+    "bytes": 9204,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# KR T10-11 — 0x546B50 裝置狀態、邊沿旗標與方向產生"
+      },
+      {
+        "line": 5,
+        "text": "## 問題"
+      },
+      {
+        "line": 8,
+        "text": "## 新證據"
+      },
+      {
+        "line": 15,
+        "text": "### 原始 BIN 節錄：一次性狀態與 gate"
+      },
+      {
+        "line": 99,
+        "text": "### 原始 BIN 節錄：指標座標角度"
+      },
+      {
+        "line": 157,
+        "text": "## 結論與否定"
+      }
+    ],
+    "task": "T10",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/e66e22be3fe88d4a743fee15d827c04256722207bf8f4929ab2bc13e4592c53d.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/T10/20261027-chatgpt-web-roy-T10-12-third-input-gate-boundaries.md",
+    "sha256": "1896db31bd77a7050ad2ed4fabdbbc1e24034fb3ef8c611c7576c4d4e2c836d9",
+    "bytes": 8157,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# KR T10-12 — 0x546D50 第三路裝置取向與 Z 連段證據邊界"
+      },
+      {
+        "line": 5,
+        "text": "## 範圍"
+      },
+      {
+        "line": 8,
+        "text": "## 原始觀察"
+      },
+      {
+        "line": 14,
+        "text": "### 原始 BIN：前置 gate"
+      },
+      {
+        "line": 35,
+        "text": "### 原始 BIN：座標閾值與角度計算"
+      },
+      {
+        "line": 97,
+        "text": "### 原始 BIN：返回邊界"
+      },
+      {
+        "line": 120,
+        "text": "## T10-9～T10-12 合併後的可驗證資料流"
+      },
+      {
+        "line": 134,
+        "text": "## 嚴格區分"
+      },
+      {
+        "line": 137,
+        "text": "## T10-13 後續追查"
+      }
+    ],
+    "task": "T10",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/1896db31bd77a7050ad2ed4fabdbbc1e24034fb3ef8c611c7576c4d4e2c836d9.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/T10/20261027-chatgpt-web-roy-T10-13-indexed-input-write-and-read.md",
+    "sha256": "67f1ca16babbaa1623d0ffe9bf7087ddf8b53d2b0f26cddaa7edd65138d89014",
+    "bytes": 7793,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# KR T10-13 — 間接索引輸入狀態寫入與讀取"
+      },
+      {
+        "line": 5,
+        "text": "## 主要新證據"
+      },
+      {
+        "line": 8,
+        "text": "## 暫定偽碼"
+      },
+      {
+        "line": 17,
+        "text": "## 證據分級"
+      },
+      {
+        "line": 20,
+        "text": "## 第一手原始組語摘錄"
+      },
+      {
+        "line": 21,
+        "text": "### 原始 BIN：0x6d4c20"
+      },
+      {
+        "line": 73,
+        "text": "### 原始 BIN：0x6d4ce0"
+      },
+      {
+        "line": 140,
+        "text": "## Git 與來源完整性"
+      }
+    ],
+    "task": "T10",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/67f1ca16babbaa1623d0ffe9bf7087ddf8b53d2b0f26cddaa7edd65138d89014.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/T10/20261027-chatgpt-web-roy-T10-14-input-state-consumer-callers.md",
+    "sha256": "5f0a0ab07c074b1cc7a3e77a85d0ebb824381586af074cce9a29baba7f138027",
+    "bytes": 6581,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# KR T10-14 — 即時狀態 getter 的呼叫者與事件階段分派"
+      },
+      {
+        "line": 5,
+        "text": "## 函式交叉參照"
+      },
+      {
+        "line": 8,
+        "text": "## 偽碼控制框架"
+      },
+      {
+        "line": 14,
+        "text": "## 限制"
+      },
+      {
+        "line": 17,
+        "text": "## 第一手原始組語摘錄"
+      },
+      {
+        "line": 18,
+        "text": "### 原始 BIN：0x59623b"
+      },
+      {
+        "line": 81,
+        "text": "### 原始 BIN：0x59643d"
+      },
+      {
+        "line": 118,
+        "text": "## Git 與來源完整性"
+      }
+    ],
+    "task": "T10",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/5f0a0ab07c074b1cc7a3e77a85d0ebb824381586af074cce9a29baba7f138027.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/T10/20261027-chatgpt-web-roy-T10-15-input-state-secondary-consumer.md",
+    "sha256": "7aeedacf2e803bd0e6d2f1c8089e7a7b16170f08dc9433205bd6e206f141f362",
+    "bytes": 7685,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# KR T10-15 — 狀態位元組的另一組消費者及命令派發"
+      },
+      {
+        "line": 5,
+        "text": "## 主要新增結果"
+      },
+      {
+        "line": 9,
+        "text": "## 重要界線"
+      },
+      {
+        "line": 12,
+        "text": "## 第一手原始組語摘錄"
+      },
+      {
+        "line": 13,
+        "text": "### 原始 BIN：0x54883a"
+      },
+      {
+        "line": 50,
+        "text": "### 原始 BIN：0x50c640"
+      },
+      {
+        "line": 121,
+        "text": "### 原始 BIN：0x50cac0"
+      },
+      {
+        "line": 138,
+        "text": "## Git 與來源完整性"
+      }
+    ],
+    "task": "T10",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/7aeedacf2e803bd0e6d2f1c8089e7a7b16170f08dc9433205bd6e206f141f362.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/T10/20261027-chatgpt-web-roy-T10-16-candidate-exclusion-and-next-evidence.md",
+    "sha256": "6458e7eb233af687c8cbd8b5ca51e77244616eb2a20cc43d1a664dc9a461bd45",
+    "bytes": 8771,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# KR T10-16 — 現有輸入鏈整合、候選排除與普攻續段缺口"
+      },
+      {
+        "line": 5,
+        "text": "## 本批新整合結論"
+      },
+      {
+        "line": 11,
+        "text": "## 排除與反例"
+      },
+      {
+        "line": 13,
+        "text": "## 下一段 T10-17 的精確工作"
+      },
+      {
+        "line": 16,
+        "text": "## 第一手原始組語摘錄"
+      },
+      {
+        "line": 17,
+        "text": "### 原始 BIN：0x6d4d70"
+      },
+      {
+        "line": 44,
+        "text": "### 原始 BIN：0x54883a"
+      },
+      {
+        "line": 75,
+        "text": "### 原始 BIN：0x50c640"
+      },
+      {
+        "line": 146,
+        "text": "### 原始 BIN：0x50cac0"
+      },
+      {
+        "line": 163,
+        "text": "## Git 與來源完整性"
+      }
+    ],
+    "task": "T10",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/6458e7eb233af687c8cbd8b5ca51e77244616eb2a20cc43d1a664dc9a461bd45.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [
+      "kr-T10-T01-20261027-04-input-and-action-gap"
+    ],
+    "decision": "bounded-source-observation-or-gap-integrated",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/T10/20261027-chatgpt-web-roy-T10-17-state-writer-reference-audit.md",
+    "sha256": "d7d1f2fdfb1562cc7ee2b30344aab6aed3943bed24ccba48959368145805d467",
+    "bytes": 8597,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# KR T10-17 — 精確地址 xref 核對與缺失的非零 writer"
+      },
+      {
+        "line": 5,
+        "text": "## 本段技術結論"
+      },
+      {
+        "line": 9,
+        "text": "## 原始反組譯節錄（擴充留存；按 CFG 辨識指令界線）"
+      },
+      {
+        "line": 11,
+        "text": "### 片段起點 0x6D4A40"
+      },
+      {
+        "line": 83,
+        "text": "### 片段起點 0x6D4B20"
+      },
+      {
+        "line": 152,
+        "text": "## 證據分級與後續"
+      }
+    ],
+    "task": "T10",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/d7d1f2fdfb1562cc7ee2b30344aab6aed3943bed24ccba48959368145805d467.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/T10/20261027-chatgpt-web-roy-T10-18-input-dispatcher-phase-routing.md",
+    "sha256": "fa5f1731ac70d8760a257a55b670fde37867efdea9fea9737a64168af5037d04",
+    "bytes": 26766,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# KR T10-18 — 5961C0 正常鍵與擴展鍵的事件分派"
+      },
+      {
+        "line": 5,
+        "text": "## 本段技術結論"
+      },
+      {
+        "line": 9,
+        "text": "## 原始反組譯節錄（擴充留存；按 CFG 辨識指令界線）"
+      },
+      {
+        "line": 11,
+        "text": "### 片段起點 0x596140"
+      },
+      {
+        "line": 236,
+        "text": "### 片段起點 0x596330"
+      },
+      {
+        "line": 374,
+        "text": "### 片段起點 0x5964C0"
+      },
+      {
+        "line": 509,
+        "text": "## 證據分級與後續"
+      }
+    ],
+    "task": "T10",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/fa5f1731ac70d8760a257a55b670fde37867efdea9fea9737a64168af5037d04.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/T10/20261027-chatgpt-web-roy-T10-19-indexed-state-command68.md",
+    "sha256": "8e55ac60bb3fe5910b81164726b8d998bf5b67accda83e99ee49886552d9c8ff",
+    "bytes": 8018,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# KR T10-19 — 548918 索引 28～37 的命令送出"
+      },
+      {
+        "line": 5,
+        "text": "## 本段技術結論"
+      },
+      {
+        "line": 9,
+        "text": "## 原始反組譯節錄（擴充留存；按 CFG 辨識指令界線）"
+      },
+      {
+        "line": 11,
+        "text": "### 片段起點 0x5488E0"
+      },
+      {
+        "line": 143,
+        "text": "## 證據分級與後續"
+      }
+    ],
+    "task": "T10",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/8e55ac60bb3fe5910b81164726b8d998bf5b67accda83e99ee49886552d9c8ff.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/T10/20261027-chatgpt-web-roy-T10-20-combo-evidence-boundary.md",
+    "sha256": "d8b5d06a033ca2e55ea894fa63be847532a6a69368e743bfbe8c06d1e173ff8e",
+    "bytes": 19559,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# KR T10-20 — 三條輸入資料流與 Z 續段的證據邊界"
+      },
+      {
+        "line": 5,
+        "text": "## 本段技術結論"
+      },
+      {
+        "line": 9,
+        "text": "## 原始反組譯節錄（擴充留存；按 CFG 辨識指令界線）"
+      },
+      {
+        "line": 11,
+        "text": "### 片段起點 0x596140"
+      },
+      {
+        "line": 236,
+        "text": "### 片段起點 0x5488E0"
+      },
+      {
+        "line": 368,
+        "text": "## 證據分級與後續"
+      }
+    ],
+    "task": "T10",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/d8b5d06a033ca2e55ea894fa63be847532a6a69368e743bfbe8c06d1e173ff8e.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [
+      "kr-T10-T01-20261027-04-input-and-action-gap"
+    ],
+    "decision": "bounded-source-observation-or-gap-integrated",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/T10/20261027-chatgpt-web-roy-T10-21-input-to-skill-gate.md",
+    "sha256": "acd516a21ee9453b9006a7203c0b89b9b39654a2362376476bd1e1c85aa972f2",
+    "bytes": 5751,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# KR T10/T11 交界研究 — T10-21 輸入處理進入技能可用性檢查"
+      },
+      {
+        "line": 9,
+        "text": "## 核心結論"
+      },
+      {
+        "line": 14,
+        "text": "## 證據與精確限制"
+      },
+      {
+        "line": 17,
+        "text": "## 暫定 C++ 控制流"
+      },
+      {
+        "line": 28,
+        "text": "## 下一段"
+      },
+      {
+        "line": 31,
+        "text": "## 附錄：原始 BIN 位址範圍反組譯摘錄"
+      },
+      {
+        "line": 33,
+        "text": "### VA 00546230..00546320"
+      }
+    ],
+    "task": "T10",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/acd516a21ee9453b9006a7203c0b89b9b39654a2362376476bd1e1c85aa972f2.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/T10/20261027-chatgpt-web-roy-T10-22-skill-availability-predicate.md",
+    "sha256": "0d9ccd190aaffdfe0a0c903c5a924fcb67e65160cd341d711fd97ac7799b4cb2",
+    "bytes": 6372,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# KR T10/T11 交界研究 — T10-22 T11 技能矩陣與剩餘計時 gate"
+      },
+      {
+        "line": 9,
+        "text": "## 核心結論"
+      },
+      {
+        "line": 14,
+        "text": "## T11 候選標記"
+      },
+      {
+        "line": 19,
+        "text": "## 偽碼"
+      },
+      {
+        "line": 35,
+        "text": "## 下一段"
+      },
+      {
+        "line": 38,
+        "text": "## 附錄：原始 BIN 位址範圍反組譯摘錄"
+      },
+      {
+        "line": 40,
+        "text": "### VA 0054F270..0054F330"
+      }
+    ],
+    "task": "T10",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/0d9ccd190aaffdfe0a0c903c5a924fcb67e65160cd341d711fd97ac7799b4cb2.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/T10/20261027-chatgpt-web-roy-T10-23-four-caller-compare.md",
+    "sha256": "f642b62573eeb5c63972d57b03fb7932b8840676ccdcf9d93b570fdfb274f9c7",
+    "bytes": 7174,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# KR T10/T11 交界研究 — T10-23 四個技能 availability 呼叫者比較"
+      },
+      {
+        "line": 9,
+        "text": "## 交叉參照"
+      },
+      {
+        "line": 17,
+        "text": "## 更正與分工"
+      },
+      {
+        "line": 20,
+        "text": "## 下一段"
+      },
+      {
+        "line": 23,
+        "text": "## 附錄：原始 BIN 位址範圍反組譯摘錄"
+      },
+      {
+        "line": 25,
+        "text": "### VA 0054823D..00548293"
+      },
+      {
+        "line": 57,
+        "text": "### VA 00549BD8..00549C39"
+      },
+      {
+        "line": 92,
+        "text": "### VA 00549D29..00549D90"
+      }
+    ],
+    "task": "T10",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/f642b62573eeb5c63972d57b03fb7932b8840676ccdcf9d93b570fdfb274f9c7.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/T10/20261027-chatgpt-web-roy-T10-24-attack-skill-transition-boundaries.md",
+    "sha256": "a291b03d5cb7384da3afa66005f2947424dbb7f1441e5e35d4e35320938559a6",
+    "bytes": 7758,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# KR T10/T11 交界研究 — T10-24 普攻→技能／技能→普攻交界：已證實資料流與缺口"
+      },
+      {
+        "line": 9,
+        "text": "## 研究命題"
+      },
+      {
+        "line": 12,
+        "text": "## 已由第一手機器碼支持的關係"
+      },
+      {
+        "line": 18,
+        "text": "## 尚未證實的四種 transition"
+      },
+      {
+        "line": 26,
+        "text": "## T11 標記表"
+      },
+      {
+        "line": 32,
+        "text": "## 下一批 T10-25～28 / T11"
+      },
+      {
+        "line": 39,
+        "text": "## 範圍限制"
+      },
+      {
+        "line": 42,
+        "text": "## 附錄：原始 BIN 位址範圍反組譯摘錄"
+      },
+      {
+        "line": 44,
+        "text": "### VA 00546250..00546310"
+      },
+      {
+        "line": 105,
+        "text": "### VA 00549D45..00549D95"
+      }
+    ],
+    "task": "T10",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/a291b03d5cb7384da3afa66005f2947424dbb7f1441e5e35d4e35320938559a6.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [],
+    "decision": "source-preserved-in-task-index; detailed-native-semantic-review-pending",
+    "whole_report_review": "not-complete"
+  },
+  {
+    "path": "kr-temp-roy/T10/20261027-chatgpt-web-roy-T10-9-global-state-provenance.md",
+    "sha256": "4eaf7a5035a216fa65a772a75761d5f9a8f3a820d1aa0eaeae4d0d80cbf330a9",
+    "bytes": 4338,
+    "headings": [
+      {
+        "line": 1,
+        "text": "# KR T10-9 — FB9014 來源邊界與正常事件 writer 缺口"
+      },
+      {
+        "line": 5,
+        "text": "## 研究問題與方法"
+      },
+      {
+        "line": 8,
+        "text": "## 新證據"
+      },
+      {
+        "line": 13,
+        "text": "### 原始 BIN 節錄：多欄位批次清零"
+      },
+      {
+        "line": 29,
+        "text": "### 原始 BIN 節錄：第二個批次清零"
+      },
+      {
+        "line": 44,
+        "text": "### 原始 BIN 節錄：相位機取樣"
+      },
+      {
+        "line": 53,
+        "text": "## 可確認之資料流"
+      },
+      {
+        "line": 56,
+        "text": "## 暫定 C++ 草圖"
+      },
+      {
+        "line": 67,
+        "text": "## 未解 / 下一段"
+      }
+    ],
+    "task": "T10",
+    "analyst": "chatgpt-web roy",
+    "formal_path": "kr/evidence/4eaf7a5035a216fa65a772a75761d5f9a8f3a820d1aa0eaeae4d0d80cbf330a9.txt",
+    "declared_target_sha_present": true,
+    "source_completeness": "saved-report-only-not-independent-machine-code-replay",
+    "claim_ids": [
+      "kr-T10-T01-20261027-04-input-and-action-gap"
+    ],
+    "decision": "bounded-source-observation-or-gap-integrated",
+    "whole_report_review": "not-complete"
+  }
+]

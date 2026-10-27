@@ -60,3 +60,6 @@
 - [audit_general_monsters.py](../../../unclassified/evidence/fb5dabe6d0d600496e532de1cc710f5e165293b2aacff98fd92c604c099a7dc3.txt)
 
 舊報告與腳本只供審核，不直接執行；未打包歷史引用見task.json。部分原生證據不等於功能可玩驗收。
+
+
+2026-10-27 新批次整合：[T01-20261027-04](../../../shared/integrations/T01-20261027-04/README.md)。比對來源SHA、限定結論及待核對映射；本批未把整份報告／函式或整項任務標完成。實際遠端接續基準見批次push-receipt.json。

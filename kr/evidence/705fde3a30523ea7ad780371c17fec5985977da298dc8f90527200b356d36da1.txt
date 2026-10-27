@@ -1,0 +1,24 @@
+# T07／roy：T01-20261027-03之後的新增交接
+
+待整合。使用者已恢復並授權必要跨Task分析，後續不再等待舊的T14/T08/T02詢問。原client、anal、資源、帳號與存檔唯讀；未啟動/附加遊戲、未呼叫目標API、未啟停服務。沒有建立新的可玩Server版本。
+
+整合基準讀取與SHA見[baseline.json](baseline.json)；T01凍結／接受範圍不被本批追溯改寫。
+
+- [第二段與自由編隊](STORY-AND-FREE-PARTY-INTERFACE.md)：新查明S2C0047可指定quest/scene，正常EndCutScene→C2S003F條件，0050可用/預選/容量/尾向量，004E正常Square UI與0028非空確認13bytes。7項局部原件核對通過。
+- [Field19／Case103索引](FIELD19-CASE103-ID-CONTRACT.md)：新查明0038/type2或6的WORD+7是CASE ID預載key；Case103屬STAGE19，mapchart為191→192。8項局部核對通過。不能以Quest15／STAGE19填該預載欄位。
+- [最後查詢限制](last-query-limits.json)：Tutorial入場bridge只補強既有TUTO路線；一般004E/0028的ID政策仍不能由此宣稱官方映射。無關UI候選與有限文字搜尋不作新結論。
+
+仍需完成一般入場ID、0038其餘欄位與玩家隊伍重綁、正式副本達成／結果、村莊劇情與實體到達、廣場和村落的雙向旅行。圖表x/y、過場角色位置、cluster計數均不代替官方出生／波次／勝利條件。15項check只驗證限定靜態事實，不能當作進村或往返可玩驗收；現階段使用者不方便測試，不要求立即操作。
+
+v8未完整銜接，3C分支的45/15/1尚有待改，請勿把它當可進村候選。新實作須另開隔離版本，引用以上明確接口，不覆蓋現用Server。正式kr整合仍待逐項接受，勿把所有新cache或原raw parent batch整體標完成。
+
+
+## 本次續查新增：一般結果與返回
+
+- [一般Scenario結果／返回](SCENARIO-RESULT-AND-RETURN-INTERFACE.md)：S2C0022/type0→CScenarioDecision/SCED、UI8、結果payload局部讀取與EmptyController；C2S0033返回。0038+3另有結果背景／PositionList索引consumer，不能填實體Map191當成同義欄位。7項局部原件核對。
+- [角色說明分支](RESULT-CHARACTER-WINDOW-ADDENDUM.md)：結果BYTE+9非0時先走角色說明；非mode1確認仍送0033。更正先前review暫稱，4項局部原件核對。不強制略過此原生視窗。
+- [分流／checkpoint路線](TRAVEL-CHECKPOINT-ROUTE-NOTES.md)：FE1A88為CSquareChannelState、FE1AA0為CSquareUserData；非NPC checkpoint一般分支送001C(type,id)，尚無官方目的地映射。分流不可當村ID。
+
+本次有限查Map/Map/01_Phindous、Scenario、Town三包的特定成員，Scenario有兩個道路fld/mre、Town有town001D fld/mre；選定清單沒找到mef，不推成整個client不存在或沒有合法spawn資料。入口／出生位置仍不能拿結果_PositionList、camera或graph x/y替代。索引證據另存evidence下各inventory JSON及carrier SHA。
+
+完整進村與自由往返仍未完成：正式Field19達成／獎勵、結果後目的地、村資料／合法spawn／玩家重綁、雙向旅行要求與解鎖條件仍需續查。新增加的11項有限原件核對只證明本批局部事實，未發包、未建立完整可玩候選、未請使用者立即測試。

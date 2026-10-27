@@ -1,0 +1,11 @@
+# 結果非零角色說明分支：仍經0033返回
+
+roy，待整合，補充SCENARIO-RESULT-AND-RETURN-INTERFACE.md。原BIN SHA9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91，REA6.5.0/Ghidra12.1.4 bulk與原件Capstone5.0.7；來源與4項局部bytes核對見result-character-branch-evidence.json。
+
+先前用「review」作未定案分支暫稱，本批補正：5AAE80在F431F參數非0時，原件5AAECE把event+14載入ECX，將結果頁+168視窗指標作參數，呼叫6BF310。6BF310用此索引查角色1..9資料與g_CharExplain.GetExplain，填角色名稱／技能／說明等欄。故這是**角色說明資料路線**，不能直接叫成CScenarioReviewWnd，也不能認為只要有此BYTE就表示獎勵／角色已被Server正式解鎖。有效顯示還需角色資料存在；>=10或沒有對應角色資料不會正常填內容。
+
+6BF2A0是此視窗的確認按鈕路線：click0x578且目標widget相符；主物件mode1時另行Lua/關窗等處理，**其他mode**呼叫414680再4A38D0。4A38D0原件4A38DB明示WORD0033、sender length2；偽碼的stack指標／多參數顯示有誤型，因此以原bytes確定組包。一般Scenario結果不是mode1，不以教學特例替換它。
+
+兩種正常結果離開路線因此都可到同一C2S0033：payload+9=0時結果按鈕直接送；非0有效角色索引時先開說明，使用者確認後才送。恢復流程應支援這個原生分支，不必為了無殘窗一律把+9壓0。尚未推定Quest15本次官方應填哪個值／是否招募新角色，亦不因說明被確認而自動發獎。
+
+服務端應在自身結果階段去重0033，之後啟動已決定的合法目的地安裝／資料／必要劇情；0033本身沒有目的地或QuestID。角色說明與普通結果的關窗／UI page退出仍由原生生命週期及合法新場景接續，不直接改client或寫UI記憶體。沒有遊戲測試或新增可玩候選。

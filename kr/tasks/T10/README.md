@@ -54,3 +54,6 @@
 - [native-index/battle-input-connection-queue.txt](../../../unclassified/evidence/f7402fb5881f2eff0a3a56b4fe54072ce4b3635c213a8cd17ac47b018f7e4163.txt)
 
 舊報告與腳本只供審核，不直接執行；未打包歷史引用見task.json。部分原生證據不等於功能可玩驗收。
+
+
+2026-10-27 新批次整合：[T01-20261027-04](../../../shared/integrations/T01-20261027-04/README.md)。比對來源SHA、限定結論及待核對映射；本批未把整份報告／函式或整項任務標完成。實際遠端接續基準見批次push-receipt.json。
