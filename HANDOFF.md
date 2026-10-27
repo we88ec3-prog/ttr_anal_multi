@@ -34,3 +34,5 @@ T01-20261027-05 已推送 main：[f15b2c0f7c7669afe408de14bb9a61f0e57e4268](http
 
 
 [T01-20261028-06](shared/integrations/T01-20261028-06/README.md)：T07旅行／編隊更正、T16 KR/TC資源及新線上報告整合；T16正式登記但未認領，不改T04/T14/T15等主責。實際main接續SHA見批次收據，僅檔案交接。
+
+T01-20261028-06 已推送 main：[b8c95431063436d24ca473876b937e4a9152210d](https://github.com/we88ec3-prog/ttr_anal_multi/commit/b8c95431063436d24ca473876b937e4a9152210d)。後續收據提交不擴大接受範圍；其他任務從此commit或包含它的較新main接續，先按來源SHA去重。

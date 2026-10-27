@@ -16,4 +16,4 @@ T16「任務與劇情流程」已分KR/TC登記至catalog／SQLite，總32任務
 
 [未完成](pending.json)仍包括官方server勝利／獎勵、教學尾端到Quest16完成／Quest15可接、精確重登與角色scope、世界地圖同步、村spawn／往返，以及T10 phase到動作queue/cancel。候選Server helper／v9只保留明示AI重建，不部署、不把離線check當可玩驗收。工具原稿以.txt惰性保存，不執行歷史腳本。
 
-驗證見[validation.json](validation.json)，下一步見[NEXT-QUERIES.md](NEXT-QUERIES.md)，[凍結後變更](post-freeze-changes.json)另批處理。實際main推送與接續SHA見本目錄 `push-receipt.json`。原E:及anal保持未覆蓋／未清理／唯讀，無遊戲啟動／附加、目標API、client或資源／帳號／存檔修改。其他任務依批次SHA去重；只透過檔案交接，未向其他對話發訊息。
+驗證見[validation.json](validation.json)，下一步見[NEXT-QUERIES.md](NEXT-QUERIES.md)，[凍結後變更](post-freeze-changes.json)另批處理。本批已正常推送 origin/main：[整合commit](https://github.com/we88ec3-prog/ttr_anal_multi/commit/b8c95431063436d24ca473876b937e4a9152210d)，SHA `b8c95431063436d24ca473876b937e4a9152210d`；遠端確認與接續基準見[推送收據](push-receipt.json)。原E:及anal保持未覆蓋／未清理／唯讀，無遊戲啟動／附加、目標API、client或資源／帳號／存檔修改。其他任務依批次SHA去重；只透過檔案交接，未向其他對話發訊息。
