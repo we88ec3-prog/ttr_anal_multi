@@ -1,0 +1,7 @@
+# 接續缺口
+
+- T08：先統一PE/flat來源映射、原始byte與入口邊界；補摘要完整原稿。B queue實例／vptr／比較與執行ABI、全域桶實際排程與生命週期仍待來源證明。
+- T08：資源+20只能稱有序有限float聚合及所列consumer，不命名動畫長度／半徑；虛槽receiver及+7C/+80分開。
+- T10/T11：鍵位自訂資料、非零phase writer、動畫開始／完成、next-action queue/cancel與實際tier。500ms timer不是原生連段窗口；SubAI>60不換秒或套玩家V。
+- T09：輸入合流與方向／空間探測只引用本批有限介面，維持既有同步／Server語義缺口，不改主責。
+- T01：依shared/source-review-status.json續接更早source-only項目；本批完整語意尚未閉合的部分不因來源審核完成而消失。不為關閉清單擴大新原生分析。

@@ -116,3 +116,6 @@ Q LoadMap/RestoreMap工具偽碼分別綁563C40/563FA0；LoadMap偽碼呈現檔�
 
 
 2026-10-27 整合更正入口：[T01-20261027-04](../../../shared/integrations/T01-20261027-04/README.md)。Case／STAGE／Map與結果背景不互換，PositionList不當spawn；原方法主責與任務狀態保留。實際遠端接續基準見批次收據。
+
+
+2026-10-27 接續來源更正：[T01-20261027-05](../../../shared/integrations/T01-20261027-05/README.md)，含早期網路／map／碰撞筆記的去重與限定，實際接續SHA見收據。

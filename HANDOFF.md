@@ -26,3 +26,6 @@
 新整合批次：[T01-20261027-04](shared/integrations/T01-20261027-04/README.md)。接續須讀來源SHA與12項更正，尤其T08位址映射衝突及T07 Case／STAGE／Map ID域；未逐項審核報告明列pending，不改原方法主責。最終推送基準見批次收據，僅檔案交接。
 
 T01-20261027-04 已推送 main：[3ee8df80feb347f1863805ac909cb3431cbd5d29](https://github.com/we88ec3-prog/ttr_anal_multi/commit/3ee8df80feb347f1863805ac909cb3431cbd5d29)，接續基準與來源範圍見批次推送收據。收據後續提交不擴大原生接受範圍。
+
+
+[T01-20261027-05](shared/integrations/T01-20261027-05/README.md)：接續審核先前105份source-only報告（上一批89＋更早16），來源SHA與1703項內嵌相對目標自洽核對完成；25筆限定觀察／缺口與13筆更正不等完整native語意通過。最新逐SHA來源狀態 `shared/source-review-status.json`，方法歸屬與T14狀態保留。
