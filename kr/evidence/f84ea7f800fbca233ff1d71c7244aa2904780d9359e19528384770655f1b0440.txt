@@ -1,0 +1,37 @@
+# 編隊token：限定回送契約與離線Server接合
+
+roy／T07，必要跨T02/T08/T14，待整合。原BIN SHA9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91，REA6.5.0/Ghidra12.1.4 bulk及Capstone5.0.7原件bytes。沒有改client／活動Server、啟動服務或附加遊戲。
+
+## 可直接實作的有限契約
+
+506AD0將FE18F8指向CScenarioDescData。004E/4B3570明確把WORD+2 zero-extend存該物件+8，排F43DA→5B96E0開編隊；0050提供角色資料但沒有取代004E的token設定／開窗功能。6BBFD0確認時取同一FE18F8+8，截低WORD放C2S0028+2，後面是9個角色BYTE，總長13。
+
+在此已查要求路徑中，token沒有作Case/STAGE/Map資源查詢或與其ID比較。6BC850中iVar6呼叫5082B0後已指向**回傳的臨時角色集合**；其中+8交換是集合size，不是把CScenarioDescData+8 token清掉。不要僅看相同變數名／offset而誤解成token被重設。
+
+因此「尚未證明token等於Field19或Case103」不應阻止定義它的**原樣回送介面**；但也不能把這個局部結論升成所有alias使用或官方後端ID域均已證。Server可保有明確的pending offer，以token配對後端另存的Quest15/Field19/Case103；不以client原樣回送行為猜官方完整序列。
+
+## 離線接合程式（未部署）
+
+candidate_helpers/formation_contract.py提供FormationOffer(token,available_roles,capacity)：
+
+- token由呼叫者供給，不自行配置、不從Quest/Case/Map偷換數字，也不直接決定關卡。
+- 產生0050空預選與004E開窗欄位；資料先於開窗是本機重建交付順序，非官方錄包。
+- 解析0028的13byte要求，驗token相符、角色非空且唯一、容量及可用角色。這些拒絕策略是明示Server防護，不冒稱原版後端規則。
+- 沒有任何socket、資料庫、目標API或進村／勝利shortcut。也不會修改既有Server或帳號。
+
+check_formation_contract.py的獨立欄位樣本故意使用token0x1234，以免與Quest15／STAGE19／Case103混淆；核對0050/004E黃金bytes及13byte回送樣本，另驗7種無效要求（錯token、空選、重複、不可用、超量、錯opcode、錯長度）會拒絕。已在交付目錄重跑通過，沒有runtime／可玩驗收含義。
+
+本接合允許後續獨立Server候選先維持pending formation交易；只有取得對應關卡資料與成功條件後才接下一段，不能據此繞過Field19直接進村。
+
+## 整合基準刷新
+
+本輪唯讀確認T01最新HEAD及04/05批次，詳integration-refresh-04-05.json。04已部分接受較早Scenario／0047／空預選／Case103／結果資料；以每份來源SHA與claim接受範圍去重，不能再將全部舊增量籠統叫完全未整合。原03 baseline保留；新003D/7E/80/MissionLobby等仍不得自行標已整合。
+
+04/05仍明列：官方勝利／發獎、0038+5、村落合法spawn與反覆旅行未完成。其T08 PE/flat400差異不由本輪猜補；本T07局部bytes使用原PE section headers映射及SHA核對，不能把其他來源的flat offsets直接套入。整合checkout和方法歸屬未改。
+
+下一需要：0038+5實際consumer、正常Town1場景/map/spawn回覆與Field19終端事件；以新來源或已保存原生consumer繼續，不把編隊token鍵域疑問當成必須猜Case103的理由。
+
+
+## 0038+5續查限制
+
+4DEC90配置FAB134 0x40 bytes；53DA80先清保存header+34/+38/+3C，4B1BF0再拷9bytes。56CD10／56F130讀+36 type0/5作城鎮小地圖分支。message+5雖可定位保存於+39，但本批仍未閉合其consumer，不把global文字搜尋未命中當成unused，不填0冒充已證。詳entry-header-query-limits.json。

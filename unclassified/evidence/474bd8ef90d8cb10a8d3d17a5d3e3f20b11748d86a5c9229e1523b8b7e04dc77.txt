@@ -1,0 +1,50 @@
+from pathlib import Path
+import json,hashlib,sys,xml.etree.ElementTree as ET,re,struct
+from lua51_static import Chunk,walk,OPS
+sys.stdout.reconfigure(encoding='utf-8')
+r=Path(__file__).resolve().parents[1];e=r/'evidence';checks=[];errors=[]
+def sha(b):return hashlib.sha256(b).hexdigest()
+manifest=json.loads((e/'resource-manifest.json').read_text(encoding='utf-8'))
+for x in manifest:
+ p=e/'resources'/x['version']/x['resource_path'];b=p.read_bytes()
+ if sha(b)!=x['sha256'] or len(b)!=x['size']:errors.append('resource digest '+str(p))
+checks.append({'check':'all extracted resources SHA/size','count':len(manifest)})
+for x in json.loads((e/'external-source-manifest.json').read_text(encoding='utf-8')):
+ if sha(Path(x['path']).read_bytes())!=x['sha256']:errors.append('original source changed '+x['path'])
+checks.append({'check':'original BIN/Event/Table/boot/Coroutine/Logic digests retained','count':12})
+proto_count=0;instruction_count=0
+for p in (e/'resources').rglob('*.lua'):
+ c=Chunk(p.read_bytes());f=c.func('root');assert c.p==len(c.b)
+ for f in walk(f):
+  proto_count+=1;k=f['constants'];n=len(f['code']);stack=f['stack']
+  for pc,x in enumerate(f['code'],1):
+   instruction_count+=1;op=x&63;a=(x>>6)&255;cc=(x>>14)&511;b=x>>23;bx=x>>14;sbx=bx-131071
+   assert op<len(OPS),(p,pc,op)
+   op=OPS[op]
+   assert op=='JMP' or a<stack,(p,pc,op,a,stack)
+   if op in ['LOADK','GETGLOBAL','SETGLOBAL']:assert bx<len(k),(p,pc,op,bx,len(k))
+   if op=='CLOSURE':assert bx<len(f['children'])
+   if op in ['JMP','FORLOOP','FORPREP']:assert 1<=pc+1+sbx<=n,(p,pc,op,pc+1+sbx,n)
+   if op in ['GETTABLE','SELF']:assert cc<256 or cc-256<len(k)
+   if op in ['SETTABLE','ADD','SUB','MUL','DIV','MOD','POW','EQ','LT','LE']:
+    for z in [b,cc]:assert z<256 or z-256<len(k)
+checks.append({'check':'Lua5.1 EOF/prototype/opcode/constant/jump bounds (static only)','prototypes':proto_count,'instructions':instruction_count})
+for v in ['kr','tc']:
+ for n,tag in [('Table/QuestInfo.xml','QuestInfo'),('Table/QuestTalk.xml','QuestTalk'),('Table/ScenarioBookContents.xml','ScenarioBook'),('Table/ScenarioTalkTable.xml','ScenarioTalkTable'),('Event/SceneList.xml','SCENESET'),('Table/TutCheckPointList.xml','TutCheckPointList')]:
+  x=ET.fromstring((e/'text'/v/(n+'.txt')).read_text(encoding='utf-8'));assert x.tag==tag
+  checks.append({'check':'parsed XML root','version':v,'path':n,'root':tag,'children':len(x)})
+for x in json.loads((e/'native/manifest.json').read_text(encoding='utf-8')):
+ assert sha((r/x['pseudocode_path']).read_bytes())==x['pseudocode_sha256'];assert sha((r/x['raw_path']).read_bytes())==x['raw_sha256']
+for x in json.loads((e/'baseline/receipt.json').read_text(encoding='utf-8'))['files']:
+ assert sha((e/'baseline'/x['path']).read_bytes())==x['sha256']
+checks.append({'check':'baseline54 and native83 retained SHA verified','status':'pass'})
+reports=list(r.glob('*.md'))+list((r/'findings').glob('*.md'))
+for p in reports:
+ s=p.read_text(encoding='utf-8');assert len(s)>200
+ assert sum(1 for l in s.splitlines() if l.startswith('```'))%2==0,p
+ if 'LNone' in s:errors.append('unresolved source line '+str(p))
+checks.append({'check':'Markdown nonempty and fences paired','count':len(reports)})
+# Report source line lookup gaps explicitly; do not silently fabricate positions.
+validation={'status':'pass' if not errors else 'needs-correction','checks':checks,'errors':errors,'limits':['No target execution or gameplay test','Static parser structural checks do not independently certify every recovered semantic','No authoritative server or database evidence acquired','REA fresh analyze_function timed out at 300s; no fresh function dossier was accepted; session closed']}
+(e/'validation.json').write_text(json.dumps(validation,ensure_ascii=False,indent=2),encoding='utf-8')
+print(json.dumps(validation,ensure_ascii=False,indent=2))

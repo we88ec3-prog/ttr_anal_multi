@@ -1,0 +1,38 @@
+# T16-local-20261028：本機原版教學與早期主線補證
+
+日期：2026-10-28（Asia/Taipei）。Git 基準：`origin/main b8e97085c08833f66fbd06ee4ef3bf7d32276409`。KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。原件唯讀、未執行或附加遊戲／Lua、未 Commit/Push、未改 owner/catalog。
+
+## 本批結果
+
+1. P0四檔已從原版STP提取，Lua5.1 bytecode完整靜態解碼；另取得ScenarioBook及教學依賴資源。
+2. 教學逐節點/等待/略過已具體列出；不再停留在檔名引用。KR領隊切換等待的是WORD角色類型3；script請求scenario14，後段有兩次UI雇用訊號、checkpoint4、角色2可用與scene1000/14。
+3. QuestInfo內容前置鏈14→16→15→117→118→119；Quest15真實對話走ScenarioTalkTable而非QuestTalk列。
+4. TutoQuest=Tip.xml提示資源；HasQuest等=ShoutTable NPC喊話分類，FE18DC不能命名任務進度庫。
+5. 006F bitset→本地歷史ID集合→client候選清單已有可追溯引用；官方DB writer、scope、精確重登及教學尾端→Quest16完成仍缺。
+6. TC原件SHA獨立確認；Part1缺KR的隊長視窗分支，獎勵數值也不同，不能只做語系替換。
+
+原生已確認＝原件 bytes／可重現解碼／表列值；部分確認＝客戶端鏈已支持但權威或執行語義未閉合；合理推測＝僅候選關聯；資訊缺失＝來源或功能邊缺失。AI/fixture 與待補開發另外標記，均不升格成原版。
+
+## 閱讀入口
+
+- [T16-local-source-inventory.md](T16-local-source-inventory.md)
+- [T16-tutorial-node-matrix.md](T16-tutorial-node-matrix.md)
+- [T16-tutorial-script-crossrefs.md](T16-tutorial-script-crossrefs.md)
+- [T16-early-mainline-flow.md](T16-early-mainline-flow.md)
+- [T16-cross-task-interfaces.md](T16-cross-task-interfaces.md)
+- [T16-KR-TC-diff.md](T16-KR-TC-diff.md)
+- [T16-acceptance-matrix.md](T16-acceptance-matrix.md)
+
+重大發現完整技術原稿在findings/F01～F07；原件副本、Lua逐instruction、XML全文、baseline與REA parent raw於evidence。函式數/資源數不是語義驗收數；全部可玩測試均未執行。
+
+## Git處理與待提交清單
+
+原目錄分支`codex/kr-t06-roy`及dirty狀態保留，沒有切換/覆寫。fetch後main為上述SHA，pull被本地修改擋下；使用者已選擇直接讀origin/main。僅新增本目錄，沒有Git Commit或Push；沒有修改owner/catalog、他人原稿、原始client或server。
+
+若日後授權提交，候選是本目錄的Markdown、tools、evidence manifests及必要證據；二進位/大批資源副本需由整合者按repo政策審閱，不預先stage。全部新增檔案SHA見deliverable-manifest.json；完整資源SHA見evidence/resource-manifest.json。
+
+## 原生完成界線
+
+本批已解除『無實體Lua/XML』阻塞，完成資源支持的第一批節點與早期主線依賴；未宣稱官方server還原完成。最關鍵未閉合邊：scenario14合法結算/返回TUTO；scene1000/14結束→Quest16server完成→廣場Quest15可接；任意中斷點保存/重登入口與作用域。
+
+新增F07補足本地UI與checkpoint writer：range輸入在category4下折半，cp1/2/3/4的predicate半徑分別15/15/50/10；精確輸入flag與官方server權威仍分開。

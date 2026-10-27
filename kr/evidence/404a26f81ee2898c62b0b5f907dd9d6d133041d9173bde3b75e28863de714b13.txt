@@ -1,0 +1,61 @@
+-- TTEX Talk Scene File: DO NOT EDIT BY HAND
+-- Quest #119 / Scene #4 - Function Phindous_YuriandRazed_BossClear
+function Phindous_YuriandRazed_BossClear()
+	SetTransitionType(2)
+	SetFinalMusic("")
+	HideOriginalObjs(1)
+	Phase1()
+
+	LoadMap("mushroom12D.fld")
+	MoveCamera(0.00, 0.00, 0.00)
+	RotCamera(0.00, 1.57, 100.00)
+
+	CreateObject(0, 10002, 1.00, 1.00, 1, 0, FALSE, 0, 0)
+	CreateObject(1, 1478, 376.00, 390.00, 160, 3, FALSE, 1, 1)
+	CreateObject(2, 1479, 376.00, 382.00, 128, 0, FALSE, 1, 10)
+	CreateObject(3, 1480, 384.00, 390.00, 96, 3, FALSE, 1, 19)
+	CreateObject(4, 1481, 386.00, 382.00, 128, 0, FALSE, 1, 28)
+	CreateObject(5, 1086, 382.00, 410.00, 0, 7, FALSE, 0, 0)
+	CreateObject(6, 1086, 393.00, 407.00, 0, 7, FALSE, 0, 0)
+	CreateObject(7, 1086, 373.00, 404.00, 0, 7, FALSE, 0, 0)
+
+	Phase2()
+	Phase3()
+	Phase4()
+
+	PlayMusic("BGM038.ogg")
+	PlayCameraNoWait("Phin_YuriandRazed_BossClear_01.cam", 0, 0.00, 0.00, 0.00)
+	wait(500)
+	OpenTalkScene(12, 12)
+	AniObject(3, 10, 1)
+	PlaySound("Sound/Scene/bodyfall.wav")
+	OpenTalkScene(12, 13)
+	AniObject(1, 10, 1)
+	PlaySound("Sound/Scene/bodyfall.wav")
+	OpenTalkScene(12, 14)
+	PlayCameraNoWait("Phin_YuriandRazed_BossClear_02.cam", 0, 0.00, 0.00, 0.00)
+	WarpObject(0, 384.000000, 348.000000, 33.340000, 128, 1, 2)
+	wait(500)
+	OpenTalkScene(12, 15)
+	RotateObject(2, 0, 0)
+	RotateObject(1, 0, 0)
+	RotateObject(4, 0, 0)
+	RotateObject(3, 0, 0)
+	AniObject(3, 1, 1)
+	AniObject(1, 1, 1)
+	PlayCameraNoWait("Phin_YuriandRazed_BossClear_03.cam", 0, 0.00, 0.00, 0.00)
+	WarpObject(0, 0.000000, 0.000000, 0.000000, 0, 1, 1)
+	wait(500)
+	OpenTalkScene(12, 16)
+
+	RevPhase4()
+	RevPhase3()
+	RevPhase2()
+
+	Q.DeleteAllObject()
+	RestoreMap()
+
+	RevPhase1()
+end
+
+Register(Phindous_YuriandRazed_BossClear)

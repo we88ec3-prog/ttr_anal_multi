@@ -1,0 +1,453 @@
+# F03：本地控制、scenario14請求與完成通知
+
+日期：2026-10-28（Asia/Taipei）。Git 基準：`origin/main b8e97085c08833f66fbd06ee4ef3bf7d32276409`。KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。原件唯讀、未執行或附加遊戲／Lua、未 Commit/Push、未改 owner/catalog。
+
+## 直接BIN bytes/assembly
+
+以下僅對明確短函式逐byte核對，VA以PE section映射raw；完整原始windows/sections/SHA見evidence/native/direct-byte-windows.json。沒有把任意窗口當完整函式。GetTutorialState與CheckLeader在bulk被標LAB，不能假裝Ghidra提供了獨立函式邊界。
+
+```asm
+; 004A9FD0 / raw 000A93D0 / 12 bytes incl ret
+A1 A4 A7 FB 00       mov eax,[00FBA7A4]
+8B 80 34 01 00 00    mov eax,[eax+134h]
+C3                   ret
+; 004AA4A0 / raw 000A98A0 / 36 bytes incl both returns
+8B 0D A4 A7 FB 00    mov ecx,[00FBA7A4]
+8B 01                mov eax,[ecx]
+8B 50 20             mov edx,[eax+20h]
+FF D2                call edx
+85 C0                test eax,eax
+74 10                jz 004AA4C1
+66 83 B8 88 00 00 00 03 cmp word ptr [eax+88h],3
+75 06                jne 004AA4C1
+B8 01 00 00 00       mov eax,1
+C3                   ret
+33 C0                xor eax,eax
+C3                   ret
+; 004AA4D0 / raw 000A98D0 / local payload setup and send
+55 8B EC 51          push ebp / mov ebp,esp / push ecx
+83 3D 98 A7 FB 00 00 cmp dword ptr [00FBA798],0
+66 8B 4D 08          mov cx,[ebp+8]
+B8 40 00 00 00       mov eax,40h
+66 89 45 FC          mov [ebp-4],ax
+66 89 4D FE          mov [ebp-2],cx
+75 15                jne 004AA504
+8B 0D 54 A8 FB 00    mov ecx,[00FBA854]
+8B 11                mov edx,[ecx]
+8B 52 10             mov edx,[edx+10h]
+6A 04 8D 45 FC 50 6A 00 FF D2 ; call(0,&local_payload,4)
+8B E5 5D C2 04 00   mov esp,ebp / pop ebp / ret 4
+```
+
+RequestStartScenario(14)因此形成小端 `40 00 0E 00`，這是客戶端提出請求，**不是server已接受**。FBA798的正式模式語義仍unknown，不能命名為教學完成。
+
+## writer/consumer分層
+
+Set/GetControlStatus的雙向欄位為controller+B4+index*4；constructor 548B90清零B4..130與134。GetTutorialState讀134，不是HasQuest／FE18DC。進度local及新controller初始化不證DB scope。
+
+4C4AC0建立Scene::CTutorial、設場景tag TUTO(5455544F)，自身callback+610C放4C4F20。基底延伸表起點+5EAC、stride8時 `(610C-5EAC)/8=4C`。4C4F20透過4C2880取完成項並寫1；4AA510同樣經4C2880讀值，被Lua IsScenarioEnded(14)等待。參數傳遞須保留原寄存器ABI，不把Ghidra恢復的void原型當無參數。原版server內容與完整場景dispatcher仍是跨Task缺口；尤其原版005F type6建立DuelField，歷史教學hook可玩不在本結論。
+
+6BFAE0將Lua global g_TutoEmployCharQuery寫成number1，兩次EmployChar等待再清成0。它是native→Lua訊號，6BF2A0的UI事件/場景分支可呼叫它；尚未證上游為官方雇用成功ACK；F431F/F43FD是本地UI事件，不是網路opcode。
+
+### 0x4a9f90：已保存 Ghidra 衍生偽碼
+
+Evidence `ev_1152b22e56819eddd28dd4bde7d6b0708d043e4e860e68bf9c579b14309c8ab3`；偽碼 SHA `069611fe254c23384c30569aa9c40b0be5c3176b36db9bad476fe30f517555ec`；parent raw SHA `3548aedfd3822439efe45df45c7d1c00480f502d0d0a365cffac0ede8c374e92`。本批已核對本機偽碼與 origin/main blob、index 及 raw SHA 一致。原始 raw 見 `evidence\native\raw\20261025T182755495890-batch-20261025T184311693694-3008.json`；此為靜態分析，不是執行觀測。
+
+```cpp
+void FUN_004a9f90(int param_1,undefined4 param_2)
+{
+  *(undefined4 *)(DAT_00fba7a4 + 0xb4 + param_1 * 4) = param_2;
+  return;
+}
+```
+
+### 0x4a9fb0：已保存 Ghidra 衍生偽碼
+
+Evidence `ev_0094723899370298e2793a118b599e45210681afdb1e064cf6c5d2f606349ad0`；偽碼 SHA `2c1685fe8ec55e47115270fdfd89318d3568fe76e08ac77176c369a1e71123fb`；parent raw SHA `300cc237f4f7ce9fdcdc56c850bee35845430175501a967fc8c2b55bd8965a0d`。本批已核對本機偽碼與 origin/main blob、index 及 raw SHA 一致。原始 raw 見 `evidence\native\raw\20261025T182755495890-batch-20261025T184312525523-3024.json`；此為靜態分析，不是執行觀測。
+
+```cpp
+undefined4 FUN_004a9fb0(int param_1)
+{
+  return *(undefined4 *)(DAT_00fba7a4 + 0xb4 + param_1 * 4);
+}
+```
+
+### 0x548b90：已保存 Ghidra 衍生偽碼
+
+Evidence `ev_86366bcde52847c3494875261041527c53ff1ae8ad00f434fcffc79bc1327005`；偽碼 SHA `4e8c252b6567f298df4d06cb581cf0269b8d638135058274da7013b951dbe551`；parent raw SHA `1010d463711709f0221b59df73d68506ff6c9dbca2823c089db5df9235ff0b37`。本批已核對本機偽碼與 origin/main blob、index 及 raw SHA 一致。原始 raw 見 `evidence\native\raw\20261025T182755495890-batch-20261025T184015311960-80.json`；此為靜態分析，不是執行觀測。
+
+```cpp
+void FUN_00548b90(void)
+{
+  undefined4 *unaff_ESI;
+  FUN_00544c40(unaff_ESI);
+  unaff_ESI[0x4d] = 0;
+  *unaff_ESI = CTutorialController::vftable;
+  unaff_ESI[0x2d] = 0;
+  unaff_ESI[0x2e] = 0;
+  unaff_ESI[0x2f] = 0;
+  unaff_ESI[0x30] = 0;
+  unaff_ESI[0x31] = 0;
+  unaff_ESI[0x32] = 0;
+  unaff_ESI[0x33] = 0;
+  unaff_ESI[0x34] = 0;
+  unaff_ESI[0x35] = 0;
+  unaff_ESI[0x36] = 0;
+  unaff_ESI[0x37] = 0;
+  unaff_ESI[0x38] = 0;
+  unaff_ESI[0x39] = 0;
+  unaff_ESI[0x3a] = 0;
+  unaff_ESI[0x3b] = 0;
+  unaff_ESI[0x3c] = 0;
+  unaff_ESI[0x3d] = 0;
+  unaff_ESI[0x3e] = 0;
+  unaff_ESI[0x3f] = 0;
+  unaff_ESI[0x40] = 0;
+  unaff_ESI[0x41] = 0;
+  unaff_ESI[0x42] = 0;
+  unaff_ESI[0x43] = 0;
+  unaff_ESI[0x44] = 0;
+  unaff_ESI[0x45] = 0;
+  unaff_ESI[0x46] = 0;
+  unaff_ESI[0x47] = 0;
+  unaff_ESI[0x48] = 0;
+  unaff_ESI[0x49] = 0;
+  unaff_ESI[0x4a] = 0;
+  unaff_ESI[0x4b] = 0;
+  unaff_ESI[0x4c] = 0;
+  DAT_00fba7ac = 4;
+  return;
+}
+```
+
+### 0x4ab440：已保存 Ghidra 衍生偽碼
+
+Evidence `ev_4cd820f265823f5acaa670610ff614e3dc1a016fe77be3f37560e5cb18a94dea`；偽碼 SHA `fee128c8fd358c4161808541b64f3f3ed1cd089f483330f9d8ade7c0f39c65df`；parent raw SHA `38d096df84253a12769d77f7e8b3a2794f75f23eb94b1f98db1108fe2236e5e1`。本批已核對本機偽碼與 origin/main blob、index 及 raw SHA 一致。原始 raw 見 `evidence\native\raw\20261025T182755495890-batch-20261025T184313482870-3040.json`；此為靜態分析，不是執行觀測。
+
+```cpp
+undefined4 * FUN_004ab440(undefined4 *param_1)
+{
+  int *piVar1;
+  undefined4 uVar2;
+  undefined *puVar3;
+  piVar1 = DAT_00fe1800;
+  uVar2 = *param_1;
+  DAT_00fe1860 = &LAB_004a9fd0;
+  FUN_006f5680();
+  puVar3 = *(undefined **)(*piVar1 + 8);
+  if ((puVar3 == &DAT_00c0bfd8) || (*(int *)(puVar3 + -8) != 5)) {
+    FID_conflict__wprintf("Error UseTable \'%s\'\n",uVar2);
+    piVar1 = (int *)(*piVar1 + 8);
+    *piVar1 = *piVar1 + -0x10;
+  }
+  piVar1 = DAT_00fe1800;
+  FUN_006f5510(s_GetTutorialState_00d6acf0);
+  FUN_006f55b0(FUN_004ac700,0);
+  FUN_006f57f0(*piVar1);
+  *(int *)(*DAT_00fe1800 + 8) = *(int *)(*DAT_00fe1800 + 8) + -0x10;
+  return param_1;
+}
+```
+
+### 0x4ab760：已保存 Ghidra 衍生偽碼
+
+Evidence `ev_7e8ed19bb2b62027a1084df0b166a2075b8246f2103efa2a2db881002f1b6aa5`；偽碼 SHA `7d16f2c299bdd15a0d338bf9a68016bce7709dd9c6168f0b911b899d9582c114`；parent raw SHA `031ddc5f1e6cc0191b59b943491ce72cfac547d05f5fe85109e08a8c0ec92d45`。本批已核對本機偽碼與 origin/main blob、index 及 raw SHA 一致。原始 raw 見 `evidence\native\raw\20261025T182755495890-batch-20261025T184314594164-3056.json`；此為靜態分析，不是執行觀測。
+
+```cpp
+undefined4 * FUN_004ab760(undefined4 *param_1)
+{
+  int *piVar1;
+  undefined4 uVar2;
+  undefined *puVar3;
+  piVar1 = DAT_00fe1800;
+  uVar2 = *param_1;
+  DAT_00fe1874 = &LAB_004aa4a0;
+  FUN_006f5680();
+  puVar3 = *(undefined **)(*piVar1 + 8);
+  if ((puVar3 == &DAT_00c0bfd8) || (*(int *)(puVar3 + -8) != 5)) {
+    FID_conflict__wprintf("Error UseTable \'%s\'\n",uVar2);
+    piVar1 = (int *)(*piVar1 + 8);
+    *piVar1 = *piVar1 + -0x10;
+  }
+  piVar1 = DAT_00fe1800;
+  FUN_006f5510(s_CheckLeader_00d6ad44);
+  FUN_006f55b0(FUN_004ac900,0);
+  FUN_006f57f0(*piVar1);
+  *(int *)(*DAT_00fe1800 + 8) = *(int *)(*DAT_00fe1800 + 8) + -0x10;
+  return param_1;
+}
+```
+
+### 0x4ab8a0：已保存 Ghidra 衍生偽碼
+
+Evidence `ev_7e8ed19bb2b62027a1084df0b166a2075b8246f2103efa2a2db881002f1b6aa5`；偽碼 SHA `2187c404ee7fd492bf3b9b2a1fea0deb93ee4f5ae4412863873bcca1fdf3671e`；parent raw SHA `031ddc5f1e6cc0191b59b943491ce72cfac547d05f5fe85109e08a8c0ec92d45`。本批已核對本機偽碼與 origin/main blob、index 及 raw SHA 一致。原始 raw 見 `evidence\native\raw\20261025T182755495890-batch-20261025T184314594164-3056.json`；此為靜態分析，不是執行觀測。
+
+```cpp
+undefined4 * FUN_004ab8a0(undefined4 *param_1)
+{
+  int *piVar1;
+  undefined4 uVar2;
+  undefined *puVar3;
+  piVar1 = DAT_00fe1800;
+  uVar2 = *param_1;
+  DAT_00fe187c = FUN_004aa4d0;
+  FUN_006f5680();
+  puVar3 = *(undefined **)(*piVar1 + 8);
+  if ((puVar3 == &DAT_00c0bfd8) || (*(int *)(puVar3 + -8) != 5)) {
+    FID_conflict__wprintf("Error UseTable \'%s\'\n",uVar2);
+    piVar1 = (int *)(*piVar1 + 8);
+    *piVar1 = *piVar1 + -0x10;
+  }
+  piVar1 = DAT_00fe1800;
+  FUN_006f5510(s_RequestStartScenario_00d6ad68);
+  FUN_006f55b0(FUN_004ac9e0,0);
+  FUN_006f57f0(*piVar1);
+  *(int *)(*DAT_00fe1800 + 8) = *(int *)(*DAT_00fe1800 + 8) + -0x10;
+  return param_1;
+}
+```
+
+### 0x4ab940：已保存 Ghidra 衍生偽碼
+
+Evidence `ev_7e8ed19bb2b62027a1084df0b166a2075b8246f2103efa2a2db881002f1b6aa5`；偽碼 SHA `d658d4cbce86dbf2271a9a886d123f18e227d22fa49f09e6e8335e3d91fbe267`；parent raw SHA `031ddc5f1e6cc0191b59b943491ce72cfac547d05f5fe85109e08a8c0ec92d45`。本批已核對本機偽碼與 origin/main blob、index 及 raw SHA 一致。原始 raw 見 `evidence\native\raw\20261025T182755495890-batch-20261025T184314594164-3056.json`；此為靜態分析，不是執行觀測。
+
+```cpp
+undefined4 * FUN_004ab940(undefined4 *param_1)
+{
+  int *piVar1;
+  undefined4 uVar2;
+  undefined *puVar3;
+  piVar1 = DAT_00fe1800;
+  uVar2 = *param_1;
+  DAT_00fe1880 = FUN_004aa510;
+  FUN_006f5680();
+  puVar3 = *(undefined **)(*piVar1 + 8);
+  if ((puVar3 == &DAT_00c0bfd8) || (*(int *)(puVar3 + -8) != 5)) {
+    FID_conflict__wprintf("Error UseTable \'%s\'\n",uVar2);
+    piVar1 = (int *)(*piVar1 + 8);
+    *piVar1 = *piVar1 + -0x10;
+  }
+  piVar1 = DAT_00fe1800;
+  FUN_006f5510(s_IsScenarioEnded_00d6ad80);
+  FUN_006f55b0(FUN_004aca40,0);
+  FUN_006f57f0(*piVar1);
+  *(int *)(*DAT_00fe1800 + 8) = *(int *)(*DAT_00fe1800 + 8) + -0x10;
+  return param_1;
+}
+```
+
+### 0x4aa510：已保存 Ghidra 衍生偽碼
+
+Evidence `ev_0094723899370298e2793a118b599e45210681afdb1e064cf6c5d2f606349ad0`；偽碼 SHA `0a7a52f1e544ba9d6306281e824b7802f2ffcd57c6e7002e517c792b1b56efa2`；parent raw SHA `300cc237f4f7ce9fdcdc56c850bee35845430175501a967fc8c2b55bd8965a0d`。本批已核對本機偽碼與 origin/main blob、index 及 raw SHA 一致。原始 raw 見 `evidence\native\raw\20261025T182755495890-batch-20261025T184312525523-3024.json`；此為靜態分析，不是執行觀測。
+
+```cpp
+undefined4 FUN_004aa510(void)
+{
+  undefined4 *puVar1;
+  puVar1 = (undefined4 *)FUN_004c2880();
+  return *puVar1;
+}
+```
+
+### 0x4c2880：已保存 Ghidra 衍生偽碼
+
+Evidence `ev_5bea8f931851b363f6f9e25974441bc31a1211de5502524e179d207ff81c7d20`；偽碼 SHA `d90ac353a510042107e07a93b4129af3b634da8088115b744d93cdd30e41f0c8`；parent raw SHA `d74e6b4fb722d559be777175da91ef20277609297042c8caa207fecd58d6ba46`。本批已核對本機偽碼與 origin/main blob、index 及 raw SHA 一致。原始 raw 見 `evidence\native\raw\20261025T182755495890-batch-20261025T184327916534-3296.json`；此為靜態分析，不是執行觀測。
+
+```cpp
+undefined4 * FUN_004c2880(void)
+{
+  int in_EAX;
+  undefined4 *puVar1;
+  undefined4 *puVar2;
+  int *in_EDX;
+  undefined4 *puVar3;
+  int local_8;
+  puVar3 = *(undefined4 **)(in_EAX + 4);
+  if (*(char *)((int)puVar3[1] + 0x15) == '\0') {
+    puVar1 = (undefined4 *)puVar3[1];
+    do {
+      if ((int)puVar1[3] < *in_EDX) {
+        puVar2 = (undefined4 *)puVar1[2];
+      }
+      else {
+        puVar2 = (undefined4 *)*puVar1;
+        puVar3 = puVar1;
+      }
+      puVar1 = puVar2;
+    } while (*(char *)((int)puVar2 + 0x15) == '\0');
+  }
+  if ((puVar3 != *(undefined4 **)(in_EAX + 4)) && ((int)puVar3[3] <= *in_EDX)) {
+    return puVar3 + 4;
+  }
+  local_8 = 0;
+  FUN_0057ef20();
+  FUN_004ab9e0(&local_8,puVar3);
+  return (undefined4 *)(local_8 + 0x10);
+}
+```
+
+### 0x4c4ac0：已保存 Ghidra 衍生偽碼
+
+Evidence `ev_93dc5b8312d51d372ad36c1663dd07c3e03529aefed5368a5a8f776cc984e22f`；偽碼 SHA `83a676ce1c5e82ea74a4bb4694d9836dd4c02bf5dbba122d130e88b2729920ed`；parent raw SHA `3dd5a76bcd4ac687639ba63c899d20516e5a1de78ac6618eb9276359b0363778`。本批已核對本機偽碼與 origin/main blob、index 及 raw SHA 一致。原始 raw 見 `evidence\native\raw\20261025T182755495890-batch-20261025T184329453875-3328.json`；此為靜態分析，不是執行觀測。
+
+```cpp
+void FUN_004c4ac0(void)
+{
+  undefined4 *unaff_ESI;
+  FUN_004add50();
+  *unaff_ESI = Scene::CTutorial::vftable;
+  DAT_00d6a674 = 0x5455544f;
+  _memset(unaff_ESI + 0x17ab,0,0x5ea8);
+  unaff_ESI[0x1843] = FUN_004c4f20;
+  unaff_ESI[0x1844] = &DAT_00bf2375;
+  return;
+}
+```
+
+### 0x4c4f20：已保存 Ghidra 衍生偽碼
+
+Evidence `ev_93dc5b8312d51d372ad36c1663dd07c3e03529aefed5368a5a8f776cc984e22f`；偽碼 SHA `f56a8dbb2b2db04265a88be7a5339063dd77508cc7f1aa3ab5633efd0dfd1ab9`；parent raw SHA `3dd5a76bcd4ac687639ba63c899d20516e5a1de78ac6618eb9276359b0363778`。本批已核對本機偽碼與 origin/main blob、index 及 raw SHA 一致。原始 raw 見 `evidence\native\raw\20261025T182755495890-batch-20261025T184329453875-3328.json`；此為靜態分析，不是執行觀測。
+
+```cpp
+undefined4 FUN_004c4f20(void)
+{
+  undefined4 *puVar1;
+  void *local_10;
+  undefined1 *puStack_c;
+  undefined4 local_8;
+  puStack_c = &LAB_0092769e;
+  local_10 = ExceptionList;
+  ExceptionList = &local_10;
+  if ((DAT_00fc0f80 & 1) == 0) {
+    DAT_00fc0f80 = DAT_00fc0f80 | 1;
+    local_8 = 0;
+    FUN_0047aeb0(DAT_00d61f20 ^ (uint)&stack0xfffffffc);
+    _atexit((_func_4879 *)&LAB_00bcdb70);
+  }
+  local_8 = 0xffffffff;
+  puVar1 = (undefined4 *)FUN_004c2880();
+  *puVar1 = 1;
+  ExceptionList = local_10;
+  return 0;
+}
+```
+
+### 0x6bfae0：已保存 Ghidra 衍生偽碼
+
+Evidence `ev_26c9b25ac781fd62767c699469b5fbde00c2c5244e37a03bdd34f7d8ceec8e2b`；偽碼 SHA `fe1a53c343f3822638978f1e894b35155c31ac0b9131066197a29164d21d13db`；parent raw SHA `3d959dc900b69ecdaefacd7af61fe267fe7ca105865109bbfbc7de5b3ae4503f`。本批已核對本機偽碼與 origin/main blob、index 及 raw SHA 一致。原始 raw 見 `evidence\native\raw\20261025T182755495890-batch-20261025T185026163279-10848.json`；此為靜態分析，不是執行觀測。
+
+```cpp
+void FUN_006bfae0(void)
+{
+  int *piVar1;
+  int iVar2;
+  undefined8 *puVar3;
+  int *in_EDX;
+  undefined4 local_18 [2];
+  undefined4 local_10;
+  iVar2 = *in_EDX;
+  puVar3 = *(undefined8 **)(iVar2 + 8);
+  *puVar3 = 0x3ff0000000000000;
+  *(undefined4 *)(puVar3 + 1) = 3;
+  piVar1 = (int *)(iVar2 + 8);
+  *piVar1 = *piVar1 + 0x10;
+  iVar2 = *in_EDX;
+  local_18[0] = FUN_006fec70(iVar2,"g_TutoEmployCharQuery",0x15);
+  local_10 = 4;
+  FUN_006fb9a0(iVar2,iVar2 + 0x48,local_18,*(int *)(iVar2 + 8) + -0x10);
+  *(int *)(iVar2 + 8) = *(int *)(iVar2 + 8) + -0x10;
+  return;
+}
+```
+
+### 0x4a98d0：已保存 Ghidra 衍生偽碼
+
+Evidence `ev_1152b22e56819eddd28dd4bde7d6b0708d043e4e860e68bf9c579b14309c8ab3`；偽碼 SHA `12585f84b44fb6991a77d02e7f2f46763a73e6e731e3378aaca5c30d73370323`；parent raw SHA `3548aedfd3822439efe45df45c7d1c00480f502d0d0a365cffac0ede8c374e92`。本批已核對本機偽碼與 origin/main blob、index 及 raw SHA 一致。原始 raw 見 `evidence\native\raw\20261025T182755495890-batch-20261025T184311693694-3008.json`；此為靜態分析，不是執行觀測。
+
+```cpp
+void FUN_004a98d0(undefined4 param_1)
+{
+  void *local_10;
+  undefined1 *puStack_c;
+  undefined4 local_8;
+  puStack_c = &LAB_0093276e;
+  local_10 = ExceptionList;
+  ExceptionList = &local_10;
+  if ((DAT_00faadd4 & 1) == 0) {
+    DAT_00faadd4 = DAT_00faadd4 | 1;
+    local_8 = 0;
+    FUN_00587480(DAT_00d61f20 ^ (uint)&stack0xfffffffc);
+    _atexit((_func_4879 *)&LAB_00bcccc0);
+  }
+  local_8 = 0xffffffff;
+  FUN_0058ab80(0xf431f,param_1);
+  ExceptionList = local_10;
+  return;
+}
+```
+
+### 0x4a9950：已保存 Ghidra 衍生偽碼
+
+Evidence `ev_1152b22e56819eddd28dd4bde7d6b0708d043e4e860e68bf9c579b14309c8ab3`；偽碼 SHA `9251b9a1baf96e8b011f9169b3fd5866f8697941ef33566130d00f4efdbac03a`；parent raw SHA `3548aedfd3822439efe45df45c7d1c00480f502d0d0a365cffac0ede8c374e92`。本批已核對本機偽碼與 origin/main blob、index 及 raw SHA 一致。原始 raw 見 `evidence\native\raw\20261025T182755495890-batch-20261025T184311693694-3008.json`；此為靜態分析，不是執行觀測。
+
+```cpp
+void FUN_004a9950(undefined4 param_1,undefined4 param_2)
+{
+  void *local_10;
+  undefined1 *puStack_c;
+  undefined4 local_8;
+  puStack_c = &LAB_00924d9e;
+  local_10 = ExceptionList;
+  ExceptionList = &local_10;
+  if ((DAT_00faadd4 & 1) == 0) {
+    DAT_00faadd4 = DAT_00faadd4 | 1;
+    local_8 = 0;
+    FUN_00587480(DAT_00d61f20 ^ (uint)&stack0xfffffffc);
+    _atexit((_func_4879 *)&LAB_00bcccc0);
+  }
+  local_8 = 0xffffffff;
+  FUN_0058ac30(0xf43fd,param_1,param_2);
+  ExceptionList = local_10;
+  return;
+}
+```
+
+### 0x4a8b90：已保存 Ghidra 衍生偽碼
+
+Evidence `ev_35e213575b03d4b5e18bfe5dba6a2efc77bc92dfaaf4615b601836696c622bd4`；偽碼 SHA `78150cd70304a47d805a1b6dac53a183a9400726999aae77e72d9fe8fcb94957`；parent raw SHA `b532afd21d9f016e7497224837b7d57b54e33b23b7d12b7b825afb9678707537`。本批已核對本機偽碼與 origin/main blob、index 及 raw SHA 一致。原始 raw 見 `evidence\native\raw\20261025T182755495890-batch-20261025T184310971677-2992.json`；此為靜態分析，不是執行觀測。
+
+```cpp
+void FUN_004a8b90(undefined4 *param_1)
+{
+  double *pdVar1;
+  int iVar2;
+  double local_18;
+  double local_10;
+  FUN_004ad0a0(*param_1,1,"t_doCoTask");
+  pdVar1 = (double *)FUN_006f50f0();
+  if (*(int *)(pdVar1 + 1) == 3) {
+LAB_004a8be5:
+    param_1[0xd] = (uint)((int)ROUND(*pdVar1) != 0);
+    return;
+  }
+  if (*(int *)(pdVar1 + 1) == 4) {
+    iVar2 = FUN_006f7760();
+    local_18 = local_10;
+    if (iVar2 != 0) {
+      local_10 = (double)CONCAT44(local_10._4_4_,3);
+      pdVar1 = &local_18;
+      goto LAB_004a8be5;
+    }
+  }
+  param_1[0xd] = 0;
+  return;
+}
+```
+
+## 反證與未解
+
+局部完成map不等於CQuestMgr歷史集合，不等於已保存的Quest14完成，更不等於Quest16完成。constructor清local旗標不能推論重登一定重播；T03/server仍可能選另一入口。鏡頭/移動/隊長判定不經server的程度不能僅靠Lua呼叫序列斷言，native下游仍有未閉合間接call。
+
+## 補核：scenario14完成項的參數與資料域
+
+直接原BIN4AA510（raw A9910，20bytes含ret4）為 `55 8B EC 8D 41 04 8D 55 08 E8 62 83 01 00 8B 00 5D C2 04 00`，即 `lea eax,[ecx+4]; lea edx,[ebp+8]; call4C2880; mov eax,[eax]`。4C4F20的payload讀取區以 `8B 45 08; 0F B7 48 02; 8D 55 08; B8 88 0F FC 00; 89 4D 08; E8 F7 D8 FF FF; C7 00 01 00 00 00` 讀取payload+2的u16、使用map FC0F88並寫1。這不是FE18DC喊話索引，也不是QuestMgr FAB2A0。完整131-byte窗口到ret0C已保留，不能把過去112bytes短窗口當完整函式。

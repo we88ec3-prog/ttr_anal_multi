@@ -1,0 +1,59 @@
+-- TTEX Talk Scene File: DO NOT EDIT BY HAND
+-- Quest #119 / Scene #3 - Function Phindous_YuriandRazed_Boss
+function Phindous_YuriandRazed_Boss()
+	SetTransitionType(2)
+	SetFinalMusic("")
+	HideOriginalObjs(1)
+	Phase1()
+
+	LoadMap("mushroom12D.fld")
+	MoveCamera(784.00, 740.00, 76.34)
+	RotCamera(6.24, 1.20, 20.00)
+
+	CreateObject(0, 1086, 367.00, 465.00, 50, 1, FALSE, 0, 0)
+	CreateObject(1, 1086, 377.00, 485.00, 2, 1, FALSE, 0, 0)
+	CreateObject(2, 1086, 387.00, 465.00, 206, 1, FALSE, 0, 0)
+
+	Phase2()
+	Phase3()
+	Phase4()
+
+	PlayMusic("BGM024.ogg")
+	PlayCamera("Phin_YuriandRazed_Boss_01.cam", 0, 0.00, 0.00, 0.00)
+	wait(500)
+	WalkObject(0, 373.000000, 465.000000, 20.000000, 1, 4, 3)
+	WalkObject(2, 381.000000, 465.000000, 240.000000, 1, 4, 3)
+	WaitForObjectsStop()
+	PlaySound("Sound/Monster/Stoncken/Stoncken_SKILL01.wav")
+	AniObject(0, 101, 1)
+	wait(300)
+	AniObject(2, 8, 1)
+	wait(300)
+	PlaySound("Sound/Monster/Stoncken/Stoncken_SKILL03.wav")
+	AniObject(2, 103, 1)
+	wait(300)
+	AniObject(0, 8, 1)
+	wait(1900)
+	WalkObject(1, 377.000000, 455.000000, 0.000000, 1, 4, 1)
+	wait(200)
+	PlaySound("Sound/Monster/Stoncken/Stoncken_DEAD.wav")
+	WalkObject(0, 362.000000, 465.000000, 20.000000, 0, 11, 1)
+	WalkObject(2, 392.000000, 465.000000, 240.000000, 0, 11, 1)
+	RotateObject(0, 50, 1)
+	RotateObject(2, 216, 1)
+	AniObject(2, 11, 1)
+	AniObject(0, 11, 1)
+	wait(700)
+	OpenTalkScene(12, 11)
+
+	RevPhase4()
+	RevPhase3()
+	RevPhase2()
+
+	Q.DeleteAllObject()
+	RestoreMap()
+
+	RevPhase1()
+end
+
+Register(Phindous_YuriandRazed_Boss)

@@ -1,0 +1,49 @@
+# 城鎮開放位元與旅行門檻
+
+roy／T07，必要跨T02/T05/T08，待整合。原BIN SHA9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91。來源沿REA6.5.0/Ghidra12.1.4 bulk及Capstone5.0.7；無目標執行／附加、無發包／服務變更。
+
+## 接收介面：S2C007E、0080
+
+CGlobalStatus的4E1DA0初始化callback slot0於EAX+4、stride8。定錨原件4E1F3F將4E35C0寫入EAX+3F4，opcode=(3F4-4)/8=**007E**；4E1F4F將4E3660寫入EAX+404，opcode=**0080**。0080不是前批曾查的0099/MissionRoom場景入口，方向與用途須分開。
+
+| S2C | 原生consumer | Payload及副作用 |
+|---|---|---|
+|007E|4E35C0|opcode後每DWORD一個位元區塊，count=floor((len-2)/4)，不足2視0。逐項**append**至GlobalStatus+68FC/+6900向量，函式內不清空舊向量。|
+|0080|4E3660|BYTE+2作城鎮開放號，必要時補零擴充向量，block=BYTE>>5，OR bit=((BYTE-1)&31)。不帶地圖或出生點。|
+
+Town1的單一bit樣本：007E body `7e 00 01 00 00 00`；增量0080 body `80 00 01`。這是依接收器建立的欄位樣本，**不是官方錄包、也不是證明應在Quest15哪一步送出**。007E重複發送會append，不能把它當任意時刻覆寫全表。0080的原生block計算與bit計算在32的倍數邊界並不採完全一致的1起算形式；本目標Town1/5不在邊界，不擅自修正client或泛化到所有Town。
+
+## 003D合法性檢查
+
+4E2E70掃上述向量，從TownID1開始對每個設bit查CTownInfoTable；只有資料存在、TYPE==1且ID等於候選目的地才可能return1，另受設定資料4/5的限制。Town1與2為TYPE1，Town5廣場TYPE2，不由此把廣場也強行塞進003D路線。
+
+003D的必要Server資料因此至少包含：已開放城鎮、要求目的地、隊伍狀態、合法旅行條件，以及成功後的Town/map/位置和可操作角色。0042候選返回廣場路線另查其mode gate。沒有證據讓003D直接完成Quest15或越過Field19；本文件不新增那種捷徑。
+
+## UI來源限縮
+
+5B52C0經5BC780/5C0A70可知UI owner+24C為CPartyMatchingDialog。68FED0處理0x641選擇事件時，從選中項+24C取得ID寫dialog+20C；5B6250讀這個欄位，經Town合法性／隊伍確認後送003D＋低BYTE。這閉合**配對視窗選定Town**的資料欄位路線。
+
+世界地圖648E60建立F4390 I1(inside+D8)；5B7F80同事件到5B6250，但該函式沒有直接讀I1，而讀配對視窗+20C。因此目前不能假設世界地圖I1已同步進+20C。保留這個缺口，不以事件名字相同跳過writer；也不能回退到已撤回的「003D是角色切換」說法。
+
+## MissionRoom操作依賴
+
+原件4BCE20確定CMissionRoomController vtable=C0FA6C，v2C=548350、v48=546100；548350在controller+4 ready後先走5452C0，再需要slot0非空才能進Z/NPC544A00。5452C0收集輸入並處理三組slot；546100在kind3外用slot0，依actor狀態產生移動／停止。reset/scene init的545210會清+C/+18/+24及各slot中介指標，故早於reset送綁定仍可能失效。這些是可操作的必要條件，不是0099即代表村落的充分證據。
+
+## 後續開發／未閉合
+
+1. Server將原003D教學切角的舊fixture語意和原生Town旅行分開處理；目前未修改活動v8。
+2. 找出Town1到Map182的正常場景安裝回覆及合法位置，不拿劇情座標或結果背景位置代替。
+3. Field19/Case103完成→15/3劇情→正式任務提交及初次Town1開放條件仍待閉合；不猜官方獎勵或完成觸發。
+4. 世界地圖選擇狀態同步、0042/0059官方應答與村／廣場雙向操作仍需查證。尚無新可玩版本或進村／往返runtime驗收。
+
+本批7項有限靜態核對及逐檔SHA見town-unlock-evidence.json；不等於完整封包流程驗收。
+
+
+## 本批資源路線限制
+
+原版_PortalList.xml只列效果ID／STATE／FILE（4F7730原生consumer），沒有目的地／出生點。ExpeditionPosition.xml為角色別x/y/scale/dir/weapon/sitdown；4C0EC0載入、4C2920 XPath選讀，但後者bulk有型別傳播及switch警告。本批不把此角色展示站位當一般村落合法spawn，也不宣稱其他資源沒有入口資料。另5452C0確有對非空且enabled slot呼叫controller v48，與kind1表中的546100輸入方法相接。來源SHA與限制見village-resource-query-limits.json。
+
+
+## Server歸因更正 2026-10-27T16:09:07.144747+00:00
+
+現讀v8實際角色切換為000C；未見003D handler，撤回本文件將003D歸因舊教學切角fixture的開發項敘述。原生Town003D證據仍有效。詳MISSION-LOBBY-AND-TOWN-PRELOAD-DEPENDENCIES.md。

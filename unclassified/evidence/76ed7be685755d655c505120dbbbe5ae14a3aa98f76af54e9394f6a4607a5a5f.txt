@@ -1,0 +1,37 @@
+# T16 驗收矩陣
+
+日期：2026-10-28（Asia/Taipei）。Git 基準：`origin/main b8e97085c08833f66fbd06ee4ef3bf7d32276409`。KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。原件唯讀、未執行或附加遊戲／Lua、未 Commit/Push、未改 owner/catalog。
+
+|項目|原生/分析驗收|可玩驗收|證據與剩餘缺口|
+|---|---|---|---|
+|最新main與T16原稿|已取得最新fetch；54份baseline快照含40篇原稿|不適用|dirty工作樹依使用者選擇保留|
+|KR/TC原件身份|BIN及Event/Table SHA直接核對|未測|不證官方發行時間|
+|P0四檔內容|全部取出、保留carrier/decoded SHA|未測|Lua是bytecode，XML可解析|
+|ScenarioBook/CameraWorks|前者已得；後者18封包索引未命中|未測|cam子資源可得但QuestCameraWorks表缺|
+|完整Lua控制流|兩份Main/Base與依賴完整靜態解碼，保留所有指令/常數|未測|predicate native上游及server條件部分缺|
+|每一教學等待及略過|已列21個分析節點列；Part1、Synopsis skip分開|未測|沒有逾時/拒絕分支，不補猜重試|
+|scenario14請求→本地完成等待|C2S0040 byte window、TUTO child004C writer、Lua consumer部分確認|未測|官方勝敗通知/scene返回時序未閉環|
+|Quest14/16/15/117/118資料|ID、Demand、NPC、scene、對話有資源證據|未測|官方接受/交付/歷史完成條件缺|
+|教學完成→主線閉環|部分確認|未測|Lua結束→Quest16server完成→廣場/15可接缺邊|
+|保存/重登|006F可重建本地歷史集合；local控制與coroutine非DB|未測|官方DB writer、帳號/角色scope、任意PC續接unknown|
+|TutoQuest/HasQuest定位|Tip.xml與ShoutTable.xml實體+native root互證|不適用|不是任務進度庫|
+|TC差異|各自解碼，Part1 UI分支與獎勵差異確認|未測|TC native保持未驗，不解殼|
+|原件/owner/catalog保護|未修改原件、task.json、catalog或他人原稿|不適用|只有新增本子目錄|
+
+## 待補原生證據（P0順序）
+
+1. T03/T04已存在角色之教學/略過入口權威欄位及來源。
+2. UI/control/checkpoint writer已補到；仍缺UI元件命名、輸入flag來源及官方server雇用應答順序。
+3. 官方scenario14進戰/回TUTO/child004C通知的合法序列；不採005F type6 Tutorial修補。
+4. scene1000/14結束後Quest16完成、006F快照及廣場可接15的官方連接。
+5. Quest15完整field19流程至117解鎖及server獎勵去重；field/map域透過T06/T07既有來源補證。
+6. 官方保存key及作用域、重登選入口、任務進度重放/去重規則。
+7. QuestCameraWorks.xml與未索引封包；TC native僅待合法原生證據，不擴展保護殼。
+
+## 待補開發與AI替代
+
+本批沒有新增可玩server、封包fixture、client patch、獎勵或存檔。任何日後server實作若填補上述unknown，必須標為待補開發/替代，不能回寫為已確認原版。歷史測試的到廣場、清怪成功或Python單元測試不在本批原生驗收範圍。
+
+## 補核：本地writer已定位
+
+設定UI→controller+134、略過回覆→control0、checkpoint類別4→control1..4與雇用UI→Lua global的精確條件、完整偽碼與raw來源見 [F07](findings/F07-UI-and-checkpoint-writers.md)。表列range是輸入值，category4實際predicate半徑為其一半；cp4另要求傳入啟動flag。官方step_id與server獎勵條件依舊unknown。

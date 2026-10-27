@@ -1,0 +1,38 @@
+from pathlib import Path
+import sys,json,hashlib,struct
+from stp_resources import Archive
+out=Path(sys.argv[1]); out.mkdir(parents=True,exist_ok=True)
+def sha(b): return hashlib.sha256(b).hexdigest()
+roots=[('kr',Path('E:/Tartaros/origin')),('tc',Path('E:/Tartaros/tc_workspace'))]
+records=[]; inventories={}; errors=[]
+for version,root in roots:
+ for rel in ['Event.stp','Table.stp','Synopsis.stp','Field.stp','Master.stp','Panel.stp','Locales.stp','UI/StringTable.stp','UI/LUA.stp']:
+  p=root/rel
+  if not p.exists(): errors.append({'path':str(p),'error':'absent'}); continue
+  try: a=Archive(p)
+  except Exception as e: errors.append({'path':str(p),'error':repr(e)}); continue
+  inventories[str(p)]=dict(sha256=sha(p.read_bytes()),size=p.stat().st_size,members=a.files)
+  for name,ident in a.files.items():
+   select=(rel=='Event.stp' and (name.endswith('.lua') or any(s in name.lower() for s in ['tutorial','synopsis']) or name.endswith('SceneList.xml')))
+   select|=(rel=='Table.stp' and (name.lower().endswith('.xml') and '/TalkTable/' not in name or name.endswith('/01_Tutorial.xml') or name.endswith('/02_Lenart.xml') or name.endswith('/04_Phindous.xml')))
+   select|=(rel=='Synopsis.stp')
+   select|=(rel=='Field.stp' and 'scenario_town000' in name)
+   select|=(rel.startswith('UI/') and ('tutorial' in name.lower() or 'quest' in name.lower()))
+   if not select:continue
+   try:
+    b=a.read(name); dst=out/'resources'/version/name;dst.parent.mkdir(parents=True,exist_ok=True);dst.write_bytes(b)
+    size,first,last=a.blocks[ident]; start=16+first*1024; carrier=a.data[start:start+size]
+    enc='binary'
+    for candidate in ['utf-8-sig','cp949','cp950']:
+     try:
+      t=b.decode(candidate)
+      if '\0' not in t:enc=candidate;break
+     except UnicodeError:pass
+    if enc!='binary':
+     textdst=out/'text'/version/(name+'.txt');textdst.parent.mkdir(parents=True,exist_ok=True);textdst.write_text(t,encoding='utf-8')
+    records.append(dict(version=version,resource_path=name,container=str(p),container_sha256=inventories[str(p)]['sha256'],id=ident,block_start=first,block_end=last,raw_offset=start,stored_size=size,stored_xor_decoded_sha256=sha(carrier),header=carrier[:16].hex(),size=len(b),sha256=sha(b),encoding=enc,output=str(dst)))
+   except Exception as e:errors.append({'path':str(p),'member':name,'error':repr(e)})
+(out/'resource-manifest.json').write_text(json.dumps(records,ensure_ascii=False,indent=2),encoding='utf-8')
+(out/'archive-inventories.json').write_text(json.dumps(inventories,ensure_ascii=False,indent=2),encoding='utf-8')
+(out/'extraction-errors.json').write_text(json.dumps(errors,ensure_ascii=False,indent=2),encoding='utf-8')
+print(json.dumps({'extracted':len(records),'containers':len(inventories),'errors':errors,'priority':[r for r in records if Path(r['resource_path']).name in ['TutorialMain.lua','TutorialBase.lua','QuestInfo.xml','QuestTalk.xml','ScenarioBookContents.xml','QuestCameraWorks.xml']]},ensure_ascii=False,indent=2))

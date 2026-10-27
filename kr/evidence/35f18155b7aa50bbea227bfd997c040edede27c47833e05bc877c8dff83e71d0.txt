@@ -1,0 +1,38 @@
+# 教學至馮德斯及重複旅行：功能閉合矩陣
+
+roy／T07，必要跨Task分析，待整合。這是已查client介面與尚缺資料的對照，不是官方完整序列或可玩驗收。原BIN SHA9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91；來源各接口JSON保留REA6.5.0/Ghidra12.1.4 bulk及原件SHA。
+
+|使用者要求|已有可引用原生介面／實際觀察|仍未閉合，不能用窄check代替|
+|---|---|---|
+|教學第一戰結束並回廣場可操作|v5怪物死亡、v6進廣場、v7雙操作NPC及對話後移動均有使用者回報；保留TUTO coroutine的既有契約|Quest16原版終端提交及無殘窗完整驗收仍未獨立證明；不因v7移動就假完成全部教學|
+|廣場NPC第一段後立即第二段|0040接取狀態同步，0047(Quest15,Scene2)顯式入口；3F(15,1,1)是有條件劇情成功報告|v8只有接取同步，未完整接第二段；3F本身先於EndCutScene全部清理完成，不是原版UI清理ACK|
+|第二段後自由編隊，沒有預選|0050 available/selected masks與容量／尾向量，004E開編隊入口，0028回傳token及9角色slot|available須合法已擁有角色；selected=0與cap3為影片相容重建候選；004E token對Field19合法來源仍未證，不填Case103冒充|
+|進入且完成馮德斯道路副本|005F/type2 Scenario、kind3；Case103/STAGE19；Map191/192；0012 reset、actor重綁、0014 ready；0022/type0結果、0033返回|一般副本敵人／事件、勝利／出口與結果獎勵政策、合法出生位置未取得；Chart/Cluster不是官方全觸發腳本|
+|完成後必要劇情並到馮德斯|Quest15/3腳本載town001D、0047顯式scene入口；Town1 TYPE1；0099/type3為具操作路徑的MissionRoom/UI4 Lobby候選|Town1正常scene/map/spawn回覆與15/3、0064完成提交的官方觸發條件仍未證；不直接傳村跳過副本|
+|之後自由往返廣場／村|003D+BYTE有Town開放TYPE1 gate；007E/0080可供開放資料；0042+兩BYTE、0059無參數的UI要求與mode/隊伍gate已查|世界地圖I1同步到選定狀態仍缺；旅行應答與目的地／回程政策缺；村、廣場各自合法綁定位置與同次登入往返仍需實測|
+
+## 正常進場所需資料必須分域
+
+- Town context：0038 type0/5之WORD+3，影響NPC預載與任務Town候選；Town1/5不直接等於Map或場景type。
+- Scenario context：Case103的STAGE19及0038 type2的WORD+7 Case103不可混成單一scenario常數。
+- 物理Map：0012 DWORD selector才是191/192/182或511等；Map reset會使早綁定失效。
+- Scene/controller：005F/type2→Scenario/kind3，0069/type7→Square/kind2，0099/type3→MissionRoom/kind1。最後一條正常村落歸屬尚待足夠證據；type值不可跨opcode混用。
+- 可操作：最後一次install/reset後產生有效actor／同世代slot綁定，controller ready，Lua／UI/input gate解除；單送0014不驗證上述條件。
+- Server policy：已接任務、已完成場景、編隊token/角色、當前Case/Map節點、結果狀態、已開放Town、來源地與目的地應各自保存；已知封包長度不能證明某個完成條件成立。
+
+## 本批查詢對缺口的限縮
+
+4F5640確實讀MapList的trigger/map/bound並分別保存字串，不能誤說「client完全忽略TRIGGER」。T06已確認4DF510從相應容器查值；本批只保留局部原件及重用bulk，尚未因此得到MEF事件腳本或官方勝利條件。536280的TRIGGER根是TRIGGERMSG，讀ID／文字／COLOR，不能混成關卡MEF執行器。
+
+已完成原BIN中F4390/F4391四byte常數的唯讀定位：F4390字面值命中648E60、68C790、68F9C0三個已查producer附近，F4391字面值三處在5B6250附近。這不涵蓋以減法索引的switch／動態事件路由，故只作定位覆蓋限制，不能宣稱所有接收器已不存在。未找到新的I1→Town狀態writer證據，缺口保留。
+
+## 可供T14／Server直接採用的更正
+
+1. 0045不消費額外scene WORD，不能當15/2入口；用已查0047介面，並保持必要gate。
+2. 一般副本預載Case key為103，不是Quest15、STAGE19或Map191。
+3. 005F type9是Raid，結果由0022 type0建立SCED，結果controller kind0不能直接行走。
+4. 003D的角色切換排除已撤回；v8實際角色切換是000C，沒有證據表明它已有003D旅行實作。
+5. 007E是append，不能當覆寫全量Town狀態；0080為單Town開放，但何時開放仍需後端條件。
+6. Town預載不提供Map或出生點；PortalList只供效果，不從劇情／展示／結果背景坐標猜正常出生位置。
+
+仍待原版後端資料／可靠成功進村紀錄或可驗收的明示重建規則，才能安全完成剩餘Server實作與全流程驗收。本文件不將「缺官方資料」推成所有client查證無法繼續；後續有新來源仍直接跨Task追查，不再等待Task歸屬批准。

@@ -1,0 +1,30 @@
+"""Offline interoperability checks against the saved native wire layout."""
+import json
+from formation_contract import FormationOffer
+
+# Deliberately distinguish the token (0x1234) from known Quest15/Stage19/Case103.
+offer = FormationOffer(0x1234, (1, 2, 3, 4), 3)
+mask, opened = offer.empty_selection_packets()
+assert mask.hex() == '50000f00000003'
+assert opened.hex() == '4e003412'
+# Native 6BBFD0 packs WORD28, echoed WORD, nine role BYTEs.
+assert offer.accept(bytes.fromhex('28003412030104000000000000')) == (3, 1, 4)
+rejected = {}
+for reason, raw in {
+    'stale token': '28003512030104000000000000',
+    'empty selection': '28003412000000000000000000',
+    'duplicate role': '28003412030300000000000000',
+    'unavailable role': '28003412050000000000000000',
+    'over capacity': '28003412010203040000000000',
+    'wrong opcode': '29003412030104000000000000',
+    'wrong length': '28003412030104',
+}.items():
+    try:
+        offer.accept(bytes.fromhex(raw))
+    except ValueError:
+        rejected[reason] = True
+    else:
+        raise AssertionError(reason)
+print(json.dumps({'status': 'offline adapter checks passed', 'layout_examples': 3,
+                  'rejected_counterexamples': rejected,
+                  'runtime_verified': False, 'official_backend_policy': False}))

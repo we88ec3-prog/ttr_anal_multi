@@ -1,0 +1,21 @@
+# T16 跨Task介面
+
+日期：2026-10-28（Asia/Taipei）。Git 基準：`origin/main b8e97085c08833f66fbd06ee4ef3bf7d32276409`。KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。原件唯讀、未執行或附加遊戲／Lua、未 Commit/Push、未改 owner/catalog。
+
+|邊界|本批可交付的資料/事件|權威與剩餘缺口|分工限制|
+|---|---|---|---|
+|T03/T04→T16|既存角色；Tutorial/Synopsis named entry|正式適用旗標、角色/帳號作用域、入口context unknown|不改角色初始化/出生點|
+|T16→T07|RequestStartScenario(14)的C2S0040 u16參數；cutscene1000/1..18；劇情15/1..4|場景保留、切關/返回、ready完整時序未證|不改T07 handler/scene流程|
+|T07/T14→T16|TUTO child004C完成項寫1，IsScenarioEnded14消費|只證接收後本地等待可解除；合法勝敗、掉落/獎勵、server重發規則unknown|不代做T14戰鬥/結算|
+|T08/T10→T16|checkpoint1..4；control1..4；鏡頭尋人；leader==3|checkpoint writer已定位544070；range半徑/2；精確輸入flag語義、尺度與角色切換ACK未封閉|只引用輸入/實體結果|
+|T02↔T16|區分C2S0040與S2C0040；S2C006F bitset；TUTO child004C|外框與頂層dispatcher主責仍T02；本批不重定義密碼/校驗|同號opcode不代表同方向語義|
+|T16→T15|QuestInfo Demand圖、歷史ID快照重建(+5EB0)、local coroutine/checkpoint狀態|006F接收不證明官方DB寫入；精確resume schema與key scope unknown|不讀寫帳號/存檔，不實作DB|
+|T05/T06→T16|Quest15 town5/NPC10338、117 town1/NPC10002；_MapList188/190/191/192/511|field18/19與map域不同；NPC10027未對齊|不改NPC互動距離/owner|
+
+建議恢復介面（待補開發，非原版規格）：將任務接受/拒絕、目標達成、劇情結束、場景返回、歷史進度快照分開處理，讓T16只消費已證實事件。任何新增server狀態機、存儲欄位及測試fixture須標替代；本批未實作、未啟動服務、未對其他Task發訊息。
+
+對T15的最低驗證案例：同一既有角色在Part1任意等待、戰鬥14前/中/完成後、雇用回呼前/後、scene1000/14後各斷線；確認重登由何種權威快照選入口。現有資料僅可形成測試需求，不能填入每步保存成功。
+
+## 補核：本地writer已定位
+
+設定UI→controller+134、略過回覆→control0、checkpoint類別4→control1..4與雇用UI→Lua global的精確條件、完整偽碼與raw來源見 [F07](findings/F07-UI-and-checkpoint-writers.md)。表列range是輸入值，category4實際predicate半徑為其一半；cp4另要求傳入啟動flag。官方step_id與server獎勵條件依舊unknown。

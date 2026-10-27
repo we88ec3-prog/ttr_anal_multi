@@ -1,0 +1,29 @@
+# 003D 城鎮旅行路線更正（進行中）
+
+roy／T07，必要跨T02/T05/T08分析，待整合。原BIN SHA9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91。REA6.5.0/Ghidra12.1.4保存bulk，原件Capstone5.0.7定向核對；沒有啟動／附加、改client或發包。
+
+## 更正前批排除
+
+WORLDMAP-TRAVEL-REQUEST-INTERFACE.md曾把4E2E70檢查誤判成角色資料，進而將C2S003D排除為角色切換。**此排除撤回**。4E2E70讀param1+68FC/+6900的DWORD位元向量，依bit所對應ID（從1起）查FE1D98指向的CTownInfoTable，且node+14的TYPE必須1、ID等於要求值才可通過，另受設定表4/5的限制。不是角色ID查詢。
+
+CTownInfoTable建構533200設FE1D98；533350解析TOWNLIST的ID與TYPE（原件BFB82C='ID'、BFB800='TYPE'）。原版_TownTypeList.xml明列Town1馮德斯TYPE1、Town2爾斯梅勒TYPE1、Town5廣場TYPE2。此TYPE只供Town分類，不直接當作005F/0069或0099的場景type。
+
+## 已閉合的世界地圖呼叫鏈
+
+4A7AE0解析TOWNWORLDLISTTABLE，把TOWN ID保存record+0、bindno保存+4。原TownWorldListTable有Town1/bindno100，Town2/200等，沒有Town5。bindno為UI綁定號，不能當MapID。UI/Data.stp的FUIWorldMapTown.xml是TownID對應標題圖的imageset，不是旅行封包表。
+
+648E60：0x57A選擇事件從被選widget+24C寫入inside+D8；F4391且event+14==6A7（Yes）時產生F4390，I1參數為inside+D8，並關上層視窗。5B7F80的F4390分派到5B6250；F4391的Yes也直接走4A3620。
+
+5B6250實際取UI owner+24C所指物件的+20C為候選ID，送入4E2E70檢查；無隊伍且合法會直接組WORD003D＋BYTE候選ID，共3bytes。有隊伍另受主從、成員數與Yes確認分支限制。4A3620為同樣3byte sender。**不能把648E60的I1直接視為此sender參數已無條件接通**：5B6250本體讀UI選擇狀態，不讀該event I1；該+20C欄位的寫入與同步仍續查。
+
+依原版TownID，此路線是馮德斯旅行的重要候選；尚未閉合的UI選擇狀態和Server應答不能省略。也不能沿用現有Server將003D當教學切角的重建分支來否定原生城鎮語意。
+
+## 0099 MissionRoom控制器補充
+
+4BCE20明確安裝vtable C0FA6C、kind1 CMissionRoomController。v2C=548350會在ready與slot0存在後走5452C0及Z/NPC互動544A00；v48=546100共享輸入／移動條件，kind3才改取多slot，kind1使用+C。此證明它具備操作及NPC路徑，還不足單憑類別名把它指定成馮德斯正常場景。仍需對齊實際Town context、地圖、角色綁定、UI4和旅行回覆。
+
+未確認資料候選C0B150曾保存為missionroom-controller-vtable.json，未採其語意；以原件安裝指令得到的C0FA6C資料為準，保留追溯。
+
+## 尚缺
+
+UI選定Town同步到+20C的writer；進村場景與0038/Town1、0012/Map182的合法偏序與出生資料；主線15/3及完成提交；003D/0042/0059之官方應答與雙向旅行條件。這些不是runtime或完整可玩驗收。來源見town-route-correction-evidence.json。

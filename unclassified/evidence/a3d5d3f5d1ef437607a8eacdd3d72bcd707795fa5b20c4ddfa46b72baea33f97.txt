@@ -1,0 +1,111 @@
+# F05：TutoQuest與HasQuest真實資源域
+
+日期：2026-10-28（Asia/Taipei）。Git 基準：`origin/main b8e97085c08833f66fbd06ee4ef3bf7d32276409`。KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。原件唯讀、未執行或附加遊戲／Lua、未 Commit/Push、未改 owner/catalog。
+
+## 新取得的實體對應
+
+`kr:Table/Tip.xml` SHA256 `928696947b5c1d4cfdc1e1fac9e9e0f9007087fd519d82444f6bd807a5ff9a45`，L74
+
+```xml
+<TutoQuest>
+    <TEXTURE W="512" H="512" TUTOID="4" HELPTYPE="2" HELPID="7" NAME="사냥터 선택" />
+    
+    <TEXTURE W="512" H="512" TUTOID="8" HELPTYPE="3" HELPID="4" NAME="기 충전 스킬" />
+    
+    <TEXTURE W="512" H="512" TUTOID="17" HELPTYPE="4" HELPID="2" NAME="무기 승급" />
+    
+    <TEXTURE W="512" H="512" TUTOID="19" />
+    <TEXTURE W="512" H="512" TUTOID="20" />
+    <TEXTURE W="512" H="512" TUTOID="21" />
+    <TEXTURE W="512" H="512" TUTOID="22" />
+    <TEXTURE W="512" H="512" TUTOID="29" />
+    <TEXTURE W="512" H="512" TUTOID="30" />
+    <TEXTURE W="512" H="512" TUTOID="31" />
+    <TEXTURE W="512" H="512" TUTOID="32" />
+  </TutoQuest>
+```
+
+TutoQuest子節點為TEXTURE W/H/TUTOID/HELPTYPE/HELPID，內容為教學提示貼圖/幫助導向資料；不是玩家完成狀態writer。531D00的root及TutoQuest讀取與原表互證。TUTOID4、8、17等不是Main.lua UI progress0..9的直接映射。
+
+`kr:Table/ShoutTable.xml` SHA256 `9411cdd6595da77d425959b025be984e20e764ebdab461bf4157f3ddbb7a6d9f`，L2
+
+```xml
+<NPC id="10001">
+    
+    <Normal>
+      <Shout talkidx="320" />
+      <Shout talkidx="321" />
+      <Shout talkidx="322" />
+      <Shout talkidx="323" />
+      <Shout talkidx="324" />
+      <Shout talkidx="325" />
+    </Normal>
+    <HasQuest>
+      
+      <Shout talkidx="320" />
+      <Shout talkidx="321" />
+      <Shout talkidx="322" />
+      <Shout talkidx="323" />
+      <Shout talkidx="324" />
+      <Shout talkidx="325" />
+    </HasQuest>
+    <HasCompletableQuest>
+      
+      <Shout talkidx="320" />
+      <Shout talkidx="321" />
+      <Shout talkidx="322" />
+      <Shout talkidx="323" />
+      <Shout talkidx="324" />
+      <Shout talkidx="325" />
+    </HasCompletableQuest>
+  </NPC>
+```
+
+53F970初始化→53FBB0解析ShoutTable，再將Normal/HasQuest/HasCompletableQuest/HasScenario的Shout talkidx值寫四組vector；FE18DC是此client靜態索引的共享資料結構。HasScenario在parser有分支，不表示原表每個NPC都具該節點。本批原表出現數：{'Normal': 89, 'HasQuest': 89, 'HasCompletableQuest': 89, 'HasScenario': 0}。此新證據解除T16-1～40對來源檔的unknown，並強化先前不可稱FE18DC為任務進度庫的限制。
+
+### 0x53f970：已保存 Ghidra 衍生偽碼
+
+Evidence `ev_9c53bc286f89824bf7c819cde1ae757f1752a933032a8039ae540300c51d40d8`；偽碼 SHA `4a13ecf30b52a771217d2a75fd00a57a7387c80a6f5be77b651ceef34675c549`；parent raw SHA `8cfa55f232f86f4e55a73b1f8e619c59363ba2d36503f045d50ecf3bff6d318e`。本批已核對本機偽碼與 origin/main blob、index 及 raw SHA 一致。原始 raw 見 `evidence\native\raw\20261025T182755495890-batch-20261025T184517083868-5248.json`；此為靜態分析，不是執行觀測。
+
+```cpp
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+undefined4 * FUN_0053f970(void)
+{
+  int iVar1;
+  undefined **local_24 [3];
+  undefined4 *local_18;
+  char *local_14;
+  void *local_10;
+  undefined1 *puStack_c;
+  undefined4 local_8;
+  puStack_c = &LAB_00923212;
+  local_10 = ExceptionList;
+  ExceptionList = &local_10;
+  local_18 = &DAT_00fe18cc;
+  DAT_00fe18cc = 0;
+  DAT_00fe18d0 = 0;
+  _DAT_00fe18d4 = 0;
+  local_8 = 0;
+  _DAT_00fe18e4 = 0;
+  iVar1 = FUN_00891268(0x18,DAT_00d61f20 ^ (uint)&stack0xfffffffc);
+  if (iVar1 != 0) {
+    DAT_00fe18e0 = iVar1;
+    *(int *)iVar1 = iVar1;
+    *(int *)(DAT_00fe18e0 + 4) = DAT_00fe18e0;
+    *(int *)(DAT_00fe18e0 + 8) = DAT_00fe18e0;
+    *(undefined1 *)(DAT_00fe18e0 + 0x14) = 1;
+    *(undefined1 *)(DAT_00fe18e0 + 0x15) = 1;
+    local_8 = CONCAT31(local_8._1_3_,1);
+    FUN_0053fbb0();
+    ExceptionList = local_10;
+    return &DAT_00fe18cc;
+  }
+  local_14 = (char *)0x0;
+  std::exception::exception((exception *)local_24,&local_14);
+  local_24[0] = std::bad_alloc::vftable;
+                    /* WARNING: Subroutine does not return */
+  __CxxThrowException_8(local_24,&DAT_00c857a8);
+}
+```
+
+53FBB0與531D00完整偽碼/parent raw已保存；原始序列、欄位及資料位置均見native manifest。本篇只核對資源來源與功能域，不重新分析樹配置/通用XML allocator，不改方法owner。

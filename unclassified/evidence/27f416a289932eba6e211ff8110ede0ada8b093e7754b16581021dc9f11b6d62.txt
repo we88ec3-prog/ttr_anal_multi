@@ -1,0 +1,316 @@
+# T16 腳本／BIN／表格交叉引用
+
+日期：2026-10-28（Asia/Taipei）。Git 基準：`origin/main b8e97085c08833f66fbd06ee4ef3bf7d32276409`。KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。原件唯讀、未執行或附加遊戲／Lua、未 Commit/Push、未改 owner/catalog。
+
+## 已確認腳本圖
+
+```text
+4A88E0: 註冊Tutorial API → load TutorialBase.lua
+  TutorialBase: enum tables + tco=MoCo.new() + coroutine wrappers
+4A89C0 → load TutorialMain.lua → Synopsis_EntryPoint
+  → t_executeCoFunction(PlaySynopsisMain) → PrepareSynopsis
+  → child SynopsisMain → scenes(1000,15..18)
+  → natural end / skip → EndSynopsis
+4A8A60 → load TutorialMain.lua → Tutorial_EntryPoint
+  → t_executeCoFunction(TutorialMain)
+  → Part1 child（可由control0移除）→ close cp1..3 / DeleteObject240
+  → Part2（scenario14等待、UI雇用、家前cp4、角色2可用、scene1000/14）
+  → UI8 → return
+4A8B90 每輪呼叫t_doCoTask，將回傳存manager+34
+  → TutorialBase.t_doCoTask → tco:doCoTask(Q.EndCutScene)
+```
+
+`manager+34` 為coroutine排程回傳消費，不是已證實的持久化完成旗標。Lua5.1 boolean false 與boot的數字FALSE=0不同；coroutine是否活著的TEST按Lua真假處理，predicate wait按EQ比較數字0。
+
+## Native API binding（明確鏈）
+
+|Lua名|註冊者|Lua wrapper|實作/資料|狀態|
+|---|---|---|---|---|
+|GetControlStatus|4AB3A0|4AC6A0|4A9FB0：controller+B4+index*4|直接BIN短函式核對|
+|SetControlStatus|4AB300|4AC640|4A9F90：同地址寫值|local，未證持久化|
+|GetTutorialState|4AB440|4AC700|LAB4A9FD0：controller+134；6BFE90 UI分支寫1|本地UI設定完成，非server任務完成|
+|InsertTutorialCheckPoint|4AA7C0|4ABF70|4A9430→4A90C0→543700(category4)|從TutCheckPointList取座標/半徑|
+|CheckLeader|4AB760|4AC900|LAB4AA4A0：vslot20→entity+88 WORD ==3|僅原版KR|
+|IsIsiliaFound|4AB6C0|4AC890|4AA240：物件、距離、投影/螢幕範圍門檻|callee契約部分確認|
+|IsCharacterAvailable|4AB260|4AC5E0|4A9F00：資料全域F94304+47C，對應+420基址分支|原生只支持此查詢|
+|RequestStartScenario|4AB8A0|4AC9E0|4AA4D0：[0040,u16 scenario]，長4|FBA798==0才送|
+|IsScenarioEnded|4AB940|4ACA40|4AA510→4C2880，與4C4F20共享局部完成項|TUTO場景生命週期前提|
+|PostUIMessage_EmployChar|4AAE00|4AC340|4A98D0→58AB80(F431F,param)|UI事件，不是封包opcode|
+|PostUIMessage_TutoMsg|4AAEA0|4AC3A0|4A9950→58AC30(F43FD,param1,param2)|UI事件，不是任務ID|
+
+完整已保存偽碼、parent REA Evidence ID/SHA 在 `evidence/native/manifest.json`；本批以既有結果作有界交叉引用，沒有將未登記方法擅自分派T16。
+
+## Event scene → seq → talk-domain 的完整早期交叉表
+
+此處 Event 的 `(questIdx,sceneIdx)` 與 `OpenTalkScene(id,scene)` 是不同命名空間；例如 `(1000,8)` 會呼叫對話 `(3,8)`，`(15,1)`會呼叫對話 `(3,22)`。
+
+|Event pair|函式/seq|seq SHA|Map字串|對話 pair|鏡頭引用|
+|---|---|---|---|---|---|
+|1000/1|`Event/Sequences/talkevent1_1.seq`|`18ca34c3b72a5fa020de0422239bec9254710238028dabb20d44f183a5eaa7b5`|town000D.map|[('3', '1'), ('3', '2')]|tutorial_01_1.cam|
+|1000/3|`Event/Sequences/talkevent2_1.seq`|`0acbd9ebdb8f9673b0c5e0aaf7de87d5cd60e68827bf4a3515b7dbd3125a8519`|town000D.map|[('3', '3')]||
+|1000/4|`Event/Sequences/talkevent3_1.seq`|`2623e797cbf4db0253a17a53066b3a98cf90cadae0c209da8faba3a2ae36e9c0`|town000D.map|[('3', '4'), ('3', '5')]|tutorial_01_4.cam|
+|1000/6|`Event/Sequences/talkevent4_1.seq`|`fab96281160503d350bf71a096e8585e238dfd761f9b25f68efbe2c913c2d0ea`|town000D.map|[('3', '6')]|tutorial_01_6.cam|
+|1000/7|`Event/Sequences/talkevent5_1.seq`|`2c411a01d6d7fe3c26ed22f4e7dcb0ff528ab67b3ebdda9873df1b638eba5114`|town000D.map|[('3', '7')]||
+|1000/8|`Event/Sequences/talkevent6_1.seq`|`c8ab3ce802fdfd628a8648585f08c525e6cf6fd2023334b41eccf38e9a155f24`|town000D.map|[('3', '8')]|tutorial_01_8.cam|
+|1000/9|`Event/Sequences/tutorial5_1.seq`|`b3ce7d2ab4a0a721c7d36f7e69755bd7c593d044b245b936b9001590af29ba24`|town000D.map|[('3', '9')]||
+|1000/10|`Event/Sequences/talkevent7_1.seq`|`930200a46d135f5489b30c8dfbebbd853c67c29ab4693f4ff1805a80566804dd`|town000D.map|[('3', '10'), ('3', '11')]|tutorial_01_10.cam, tutorial_01_11b.cam|
+|1000/12|`Event/Sequences/talkevent8_1.seq`|`66ac3c8b7b0f4c957a2ab24ff1eaffdd0f7c8859f727f1dd2958d74e9590e518`|town000D.map|[('3', '12')]|tutorial_01_12.cam|
+|1000/13|`Event/Sequences/talkevent9_1.seq`|`7d75e8dd6d7e8c6bbd20b2121f92c4a2e306930de2d0b498feb5ea97c2521af1`|town000D.map|[('3', '13')]||
+|1000/14|`Event/Sequences/talkevent10_1.seq`|`c2ed0f4f71e6bf82fefcf74a4bcffeabc253b426f7de05b89f95e6d5be5ceba0`|Square03D.fld|[('3', '14'), ('3', '19'), ('3', '23')]|talkevent10_1_01.cam, talkevent10_1_02.cam, talkevent10_1_03.cam|
+|1000/15|`Event/Sequences/Synopsis_Tartaros.seq`|`9e89e606e5a7e83c18e759468b1e4b6e8b95475bf3e36d25be7f3056bf70cad4`|synopsis01.fld|[]|Synopsis_Town1_01.cam|
+|1000/16|`Event/Sequences/Synopsis_Tartaros2.seq`|`dfd61e628b03feff2f80b5e910df559e5919b9110831b14548b874a022e62982`|town002D.fld|[]|Synopsis_Town2_01.cam|
+|1000/17|`Event/Sequences/Synopsis_Tartaros3.seq`|`a6ac5880947feccc55048b347ebb4ceadf02a9866528ed7478af5203dafdc823`|icecrystal13X.fld|[]|Synopsis_Town3_01.cam|
+|1000/18|`Event/Sequences/Synopsis_Tartaros4.seq`|`fed58e2243e1429e6d9e11eb3dd7a78efb06e3e3e87fee9091678379235e0e3b`|town000D.fld|[]|Synopsis_Town4_01.cam|
+|1001/1|`Event/Sequences/tutorial_start.seq`|`3c153182326a1c15f72f66dd29cfa6149e49bf87ddfc9693d5ddecb768664c89`|town000D.map|[]|tutorial_00_1.cam|
+|15/1|`Event/Sequences/Square_Tutorial01.seq`|`f5ef433ed019fa3e018b1643705400c4428a07504881bb1bc5d78ee177dfea1b`|Square03D.fld|[('3', '22')]|Square_Tutorial01_01.cam|
+|15/2|`Event/Sequences/scenario_tuto1_1.seq`|`a4a308265b97fa9e048ebf4a30abb40f5fe8a7a3dc934ab911dd47fc3a7341f8`|Square03D.fld|[('3', '15'), ('3', '16'), ('3', '17'), ('3', '25')]|scenario_tuto1_1.cam|
+|15/3|`Event/Sequences/pindos_talkevent.seq`|`347b3a4cbd41e3e4d74f3c39a4adf8fb814d8bc361890858e0f87c8576f051b7`|town001D.map|[('3', '18'), ('3', '24'), ('3', '20'), ('3', '21')]|tutorial_01_18.cam, tutorial_01_18b.cam, tutorial_01_19.cam, tutorial_01_20.cam, tutorial_01_22.cam, tutorial_01_21.cam|
+|15/4|`Event/Sequences/scenario_tuto2_1.seq`|`42b6205dd8b526db96f2339607a6235efdf360a08f30e0e4d1747ab7f8452bf8`||[]||
+|117/1|`Event/Sequences/Phindous_LittleTrouble.seq`|`d6aa8b3ab5b4b90ec5f3788679ee73d0e128d0563ae524895550ad027aa27f98`|town001D.fld|[('1', '1'), ('1', '2'), ('1', '3'), ('1', '4'), ('1', '5'), ('1', '6'), ('1', '7'), ('1', '8'), ('1', '9'), ('1', '10'), ('1', '11'), ('1', '12'), ('1', '13'), ('1', '14')]|Phin_Little_Trouble_01.cam, Phin_Little_Trouble_02.cam, Phin_Little_Trouble_03.cam, Phin_Little_Trouble_04.cam, Phin_Little_Trouble_05.cam, Phin_Little_Trouble_06.cam, Phin_Little_Trouble_06.cam, Phin_Little_Trouble_07.cam|
+|118/1|`Event/Sequences/Phindous_YuriandRazed.seq`|`cfaa7f795f5fd08b25fe0ebcb89549a1fef24777b1715ecf9e11785c2038e83c`|town001D.fld|[('12', '1'), ('12', '2'), ('12', '3'), ('12', '4'), ('12', '5'), ('12', '6'), ('12', '7'), ('12', '8'), ('12', '9'), ('12', '19')]|Phin_YuriandRazed_01.cam, Phin_YuriandRazed_02.cam, Phin_YuriandRazed_03.cam, Phin_YuriandRazed_04.cam, Phin_YuriandRazed_05.cam, Phin_YuriandRazed_06.cam|
+|119/1|`Event/Sequences/Phindous_YuriandRazed_Blank.seq`|`03f5c98c8608a52da30976881224703f1109d751e663257fe37614b58c058982`||[]||
+|119/2|`Event/Sequences/Phindous_YuriandRazed_Stage.seq`|`0e78d94b1fc469a8c26d8880250c8b123edefef6548f5c8ff3a19eae450e0741`|mushroom01D.fld|[('12', '10')]|Phin_YuriandRazed_Stage_01.cam|
+|119/3|`Event/Sequences/Phindous_YuriandRazed_Boss.seq`|`05abe5f9773c3b0b40d5a849f7d984b4f06f57d2e5a5fe8c931e83ec2d7b857a`|mushroom12D.fld|[('12', '11')]|Phin_YuriandRazed_Boss_01.cam|
+|119/4|`Event/Sequences/Phindous_YuriandRazed_BossClear.seq`|`404a26f81ee2898c62b0b5f907dd9d6d133041d9173bde3b75e28863de714b13`|mushroom12D.fld|[('12', '12'), ('12', '13'), ('12', '14'), ('12', '15'), ('12', '16')]|Phin_YuriandRazed_BossClear_01.cam, Phin_YuriandRazed_BossClear_02.cam, Phin_YuriandRazed_BossClear_03.cam|
+|119/5|`Event/Sequences/Phindous_YuriandRazed_After.seq`|`27263ab35a176bb0d78afded67ded6b0043ec62f4a9afb2eb63d6cfa8ac3f09e`|town001D.fld|[('12', '17'), ('12', '18')]|Phin_YuriandRazed_After_01.cam, Phin_YuriandRazed_After_02.cam|
+
+所有取得的seq為資源文字，僅靜態讀取。cam 即便存在仍只證明動畫資料可得；未播放、未以相機名稱推斷勝敗。
+
+## 完整對話 join 節錄
+
+
+### Talk-domain 3/1
+
+`kr:Table/ScenarioTalkTable.xml` SHA256 `f86baf72fd317d5d30e9aae931526a823b613db50545dc6074e3648eb984a1df`，L124
+
+- speaker `{'char': '3', 'talk': '604'}`；`Table/TalkTable/01_Tutorial.xml` L4：준비는 다 된 거야?
+- speaker `{'char': '1', 'talk': '605'}`；`Table/TalkTable/01_Tutorial.xml` L5：예. 필요한 물건들은 다 샀는데, "오볼루스"에 대한 정보는 아직 이렇다 할 게 없네요. 다들 쉬쉬하는 분위기예요.
+- speaker `{'char': '3', 'talk': '606'}`；`Table/TalkTable/01_Tutorial.xml` L6：타르타로스 결계진을 위협할 수도 있는 물건인데, 그렇게 달가운 질문은 아니겠지. 더군다나 지금 세상에서 지위가 더 높아진 장인들에게는 말이야.
+- speaker `{'char': '1', 'talk': '607'}`；`Table/TalkTable/01_Tutorial.xml` L7：전에 들었던 소문대로 영주성까지는 가봐야 할 것 같네요.<br>그런데 이실리아 씨는 어디 계신 거죠?<br>아까부터 안 보이시는데..
+- speaker `{'char': '3', 'talk': '608'}`；`Table/TalkTable/01_Tutorial.xml` L8：안 그래도 아까부터 계속 걱정하고 있었어.<br>어서 찾아보도록 하자.
+
+### Talk-domain 3/2
+
+`kr:Table/ScenarioTalkTable.xml` SHA256 `f86baf72fd317d5d30e9aae931526a823b613db50545dc6074e3648eb984a1df`，L133
+
+- speaker `{'char': '3', 'talk': '609'}`；`Table/TalkTable/01_Tutorial.xml` L9：이실리아 씨를 찾기 위해 먼저 간단한 이동부터 배워보도록 하자.<br>이동은 키보드나 마우스 중 선택하여 사용할 수 있어.
+- speaker `{'char': '3', 'talk': '610'}`；`Table/TalkTable/01_Tutorial.xml` L10：우선 키보드를 이용한 조작을 해볼 거야. 어렵지 않으니까 쉽게 따라할 수 있을 거라고 믿어.
+- speaker `{'char': '3', 'talk': '611'}`；`Table/TalkTable/01_Tutorial.xml` L11：어디 한번 캐릭터를 움직여 보자. 키보드를 이용해서 캐릭터를 앞의 텔포인트까지 이동시킬 수 있어.
+
+### Talk-domain 3/3
+
+`kr:Table/ScenarioTalkTable.xml` SHA256 `f86baf72fd317d5d30e9aae931526a823b613db50545dc6074e3648eb984a1df`，L140
+
+- speaker `{'char': '3', 'talk': '612'}`；`Table/TalkTable/01_Tutorial.xml` L12：좋아. 역시 이 정도는 쉽게 해낼 거라고 생각했어.
+- speaker `{'char': '3', 'talk': '613'}`；`Table/TalkTable/01_Tutorial.xml` L13：이번에는 마우스로 이동하는 법을 배워보자.<br>가고 싶은 방향으로 커서를 옮기고 마우스의 왼쪽 버튼을 누르고 있으면<br>그 방향으로 캐릭터가 움직이지. 캐릭터가 이동하는 중에 마우스 포인트를 옮기면 언제든지 방향을 바꿀 수 있어.
+- speaker `{'char': '3', 'talk': '614'}`；`Table/TalkTable/01_Tutorial.xml` L14：움직이다 멈추고 싶으면 마우스 버튼에서 손을 떼도록 해.<br>간단하지? 자~ 그럼 마우스로 캐릭터를 움직여 볼까?<br>캐릭터를 이동시켜서 앞의 텔포인트까지 가보도록 하자.
+
+### Talk-domain 3/4
+
+`kr:Table/ScenarioTalkTable.xml` SHA256 `f86baf72fd317d5d30e9aae931526a823b613db50545dc6074e3648eb984a1df`，L147
+
+- speaker `{'char': '3', 'talk': '615'}`；`Table/TalkTable/01_Tutorial.xml` L15：훌륭해. 여기까지 잘 와줬어.
+- speaker `{'char': '1', 'talk': '616'}`；`Table/TalkTable/01_Tutorial.xml` L16：칭찬을 듣는 건 기쁘지만<br>여기까지 왔는데도 이실리아 씨가 보이지 않네요.<br>더 멀리 나가봐야 할까요?
+- speaker `{'char': '3', 'talk': '617'}`；`Table/TalkTable/01_Tutorial.xml` L17：아니. 잠시 이 근처에 대기하는 편이 좋을 것 같다.<br>카메라를 돌려 주변을 둘러보면 이실리아 씨를 찾을 수 있을 거야.
+
+### Talk-domain 3/5
+
+`kr:Table/ScenarioTalkTable.xml` SHA256 `f86baf72fd317d5d30e9aae931526a823b613db50545dc6074e3648eb984a1df`，L154
+
+- speaker `{'char': '3', 'talk': '618'}`；`Table/TalkTable/01_Tutorial.xml` L18：그럼 카메라 조작에 대해서 알아보도록 하자.<br>카메라 역시 키보드와 마우스 중 하나를 선택해서 조작할 수 있지.
+- speaker `{'char': '3', 'talk': '619'}`；`Table/TalkTable/01_Tutorial.xml` L19：만약 카메라를 조작하는 키가 기억이 나지 않는다면 조금 뒤에 보여주는 이미지를 참고 하면 도움이 될 거야.
+- speaker `{'char': '3', 'talk': '620'}`；`Table/TalkTable/01_Tutorial.xml` L20：마우스를 사용하려면, 마우스의 오른쪽 버튼을 누른 상태로 마우스를 움직여 쉽게 카메라를 조작할 수 있어.<br>그리고, 휠 버튼을 이용하면 화면을 확대하거나 축소할 수 있지.
+- speaker `{'char': '3', 'talk': '621'}`；`Table/TalkTable/01_Tutorial.xml` L21：자, 그러면 어디 카메라를 움직여 볼까?<br>카메라를 조작해서 이실리아 씨를 찾아보자!<br>왼쪽으로 화면을 돌려보면 쉽게 찾을 수 있을 거야.
+
+### Talk-domain 3/6
+
+`kr:Table/ScenarioTalkTable.xml` SHA256 `f86baf72fd317d5d30e9aae931526a823b613db50545dc6074e3648eb984a1df`，L162
+
+- speaker `{'char': '1', 'talk': '622'}`；`Table/TalkTable/01_Tutorial.xml` L22：앗!! 이실리아 씨가 저기 계시군요. 어서 저쪽으로 가봐요.
+- speaker `{'char': '3', 'talk': '623'}`；`Table/TalkTable/01_Tutorial.xml` L23：잠깐!! 가기 전에 한 가지 더 배워 보는 건 어떨까?
+- speaker `{'char': '1', 'talk': '624'}`；`Table/TalkTable/01_Tutorial.xml` L24：예? 뭐죠? 배워 볼 거란 게.
+- speaker `{'char': '3', 'talk': '625'}`；`Table/TalkTable/01_Tutorial.xml` L25：캐릭터 선택에 대해서 배워 볼 거야.<br>타르타로스 온라인에서는 언제든지 움직이고 싶은 캐릭터로 변경할 수 있지.<br>이 기능을 이용하면 원하는 캐릭터를 손쉽게 바꿀 수 있다.
+- speaker `{'char': '1', 'talk': '626'}`；`Table/TalkTable/01_Tutorial.xml` L26：사실은 이실리아 씨에게 직접 다가가고 싶어서 그러시는 거 아니에요?
+- speaker `{'char': '3', 'talk': '627'}`；`Table/TalkTable/01_Tutorial.xml` L27：그런 거 아니다!!<br>게임의 기능을 소개하는 신성한 자리에 사적인 감정을 개입해서는 안 되지!!
+- speaker `{'char': '3', 'talk': '628'}`；`Table/TalkTable/01_Tutorial.xml` L28：설명을 계속하겠어. 하단의 버튼 중 캐릭터 선택 버튼을 누르면 캐릭터 선택 창이 나타나지.<br>그 창에서 바꾸고 싶은 캐릭터 얼굴을 눌러 그 캐릭터로 바꿀 수 있어.
+- speaker `{'char': '3', 'talk': '629'}`；`Table/TalkTable/01_Tutorial.xml` L29：그럼 캐릭터 선택을 해보도록 할까?<br>선택 버튼을 누른 후 "슈발만" 캐릭터를 선택해보자.
+
+### Talk-domain 3/7
+
+`kr:Table/ScenarioTalkTable.xml` SHA256 `f86baf72fd317d5d30e9aae931526a823b613db50545dc6074e3648eb984a1df`，L174
+
+- speaker `{'char': '3', 'talk': '630'}`；`Table/TalkTable/01_Tutorial.xml` L30：좋았어! 이런 방식으로 언제든지 자신이 사용할 캐릭터를 선택하는 거다.
+- speaker `{'char': '1', 'talk': '631'}`；`Table/TalkTable/01_Tutorial.xml` L31：잘 알겠습니다!<br>이제 선택 방법에 대해서 알았으니 이실리아 씨에게 가 봐요.
+- speaker `{'char': '3', 'talk': '632'}`；`Table/TalkTable/01_Tutorial.xml` L32：음... 가서 뭐라고 이야기를 해야 하지.
+- speaker `{'char': '1', 'talk': '633'}`；`Table/TalkTable/01_Tutorial.xml` L33：응? 슈발만 씨. 이실리아 씨 주변에 있는 저 자들은 누구죠?
+- speaker `{'char': '3', 'talk': '634'}`；`Table/TalkTable/01_Tutorial.xml` L34：아무 것도 안 보이는데? 잘못 본 거 아냐?
+- speaker `{'char': '1', 'talk': '635'}`；`Table/TalkTable/01_Tutorial.xml` L35：일단 이실리아 씨 쪽으로 가보죠.<br>왠지 느낌이 이상해요.
+
+### Talk-domain 3/8
+
+`kr:Table/ScenarioTalkTable.xml` SHA256 `f86baf72fd317d5d30e9aae931526a823b613db50545dc6074e3648eb984a1df`，L184
+
+- speaker `{'char': '1036', 'talk': '637'}`；`Table/TalkTable/01_Tutorial.xml` L37：훗... 여기 있었군.
+- speaker `{'char': '4', 'talk': '638'}`；`Table/TalkTable/01_Tutorial.xml` L38：누구?
+- speaker `{'char': '1036', 'talk': '639'}`；`Table/TalkTable/01_Tutorial.xml` L39：아무 것도 기억하지 못한다는 말이 사실인 것 같군. <br>어쩔 수 없지. 너를 거둬 그분께 데려가는 게 우리의 사명.<br>각오해라!
+
+### Talk-domain 3/9
+
+`kr:Table/ScenarioTalkTable.xml` SHA256 `f86baf72fd317d5d30e9aae931526a823b613db50545dc6074e3648eb984a1df`，L191
+
+- speaker `{'char': '10014', 'talk': '638'}`；`Table/TalkTable/01_Tutorial.xml` L38：누구?
+- speaker `{'char': '10014', 'talk': '639'}`；`Table/TalkTable/01_Tutorial.xml` L39：아무 것도 기억하지 못한다는 말이 사실인 것 같군. <br>어쩔 수 없지. 너를 거둬 그분께 데려가는 게 우리의 사명.<br>각오해라!
+
+### Talk-domain 3/10
+
+`kr:Table/ScenarioTalkTable.xml` SHA256 `f86baf72fd317d5d30e9aae931526a823b613db50545dc6074e3648eb984a1df`，L197
+
+- speaker `{'char': '4', 'talk': '640'}`；`Table/TalkTable/01_Tutorial.xml` L40：......
+- speaker `{'char': '1036', 'talk': '641'}`；`Table/TalkTable/01_Tutorial.xml` L41：과연 만만히 볼 상대가 아니군.<br>슬슬 마무리를 해보실까?
+- speaker `{'char': '3', 'talk': '642'}`；`Table/TalkTable/01_Tutorial.xml` L42：멈춰라! 이실리아 씨를 건드리면 이 슈발만 님이 용서치 않겠다!
+- speaker `{'char': '1', 'talk': '643'}`；`Table/TalkTable/01_Tutorial.xml` L43：이 사람들 이전에도 이실리아 씨를 습격했던 그 사람들이에요.
+- speaker `{'char': '1036', 'talk': '644'}`；`Table/TalkTable/01_Tutorial.xml` L44：이런... 내가 너무 시간을 끈 모양이군.<br>친구들, 오늘은 실례했네. 다음에 좀 더 세련된 모습으로 찾아오도록 하지.
+
+### Talk-domain 3/11
+
+`kr:Table/ScenarioTalkTable.xml` SHA256 `f86baf72fd317d5d30e9aae931526a823b613db50545dc6074e3648eb984a1df`，L206
+
+- speaker `{'char': '3', 'talk': '645'}`；`Table/TalkTable/01_Tutorial.xml` L45：정말 몸을 내빼는 데는 선수들이군.<br>이실리아 씨, 다친 데는 없으세요?
+- speaker `{'char': '4', 'talk': '646'}`；`Table/TalkTable/01_Tutorial.xml` L46：예... 전 괜찮아요.
+- speaker `{'char': '3', 'talk': '647'}`；`Table/TalkTable/01_Tutorial.xml` L47：근처에 그놈들이 아직 숨어있을지 모르니, 이제부터는 같이 행동하기로 해요.
+
+### Talk-domain 3/12
+
+`kr:Table/ScenarioTalkTable.xml` SHA256 `f86baf72fd317d5d30e9aae931526a823b613db50545dc6074e3648eb984a1df`，L213
+
+- speaker `{'char': '1', 'talk': '648'}`；`Table/TalkTable/01_Tutorial.xml` L48：이실리아 씨를 노리는 자들의 정체가 뭘까요? 도대체 무슨 이유로 이실리아 씨를 계속 공격하는 건지...
+- speaker `{'char': '3', 'talk': '649'}`；`Table/TalkTable/01_Tutorial.xml` L49：저놈들도 이실리아 씨가 가지고 있는 오볼루스를 노리는 모양이지. 이실리아 씨가 여자니까 약할 거라 생각해 습격한 걸 테고. <br>우선은 이 마을을 벗어나는 것부터 생각해야겠군. 핑코 일행은 아직인 건가?
+- speaker `{'char': '1', 'talk': '650'}`；`Table/TalkTable/01_Tutorial.xml` L50：잠시 집에 들러 중요한 물건만 챙겨서 온다고 했으니 오래 걸리진 않을 거예요.<br>집 위치가 마을 입구 근처니까, 저희가 그쪽으로 가보도록 해요.
+- speaker `{'char': '1', 'talk': '651'}`；`Table/TalkTable/01_Tutorial.xml` L51：입구의 텔포인트에서 [Z] 키를 누르면 다음 장소로 이동하거나, 상점을 이용하거나, NPC와 대화를 할 수 있어요. [Z] 키를 누르면 되니까 잊지 마세요.
+
+### Talk-domain 3/13
+
+`kr:Table/ScenarioTalkTable.xml` SHA256 `f86baf72fd317d5d30e9aae931526a823b613db50545dc6074e3648eb984a1df`，L221
+
+- speaker `{'char': '10017', 'talk': '652'}`；`Table/TalkTable/01_Tutorial.xml` L52：서둘러! 모두 밖에서 기다리고 있단 말이야.
+- speaker `{'char': '10018', 'talk': '653'}`；`Table/TalkTable/01_Tutorial.xml` L53：... 준비... 데려... 가...
+- speaker `{'char': '10017', 'talk': '654'}`；`Table/TalkTable/01_Tutorial.xml` L54：뭐 하는 거야? 바빠 죽겠는데.
+- speaker `{'char': '10018', 'talk': '655'}`；`Table/TalkTable/01_Tutorial.xml` L55：... 사진... 가져...
+- speaker `{'char': '10017', 'talk': '656'}`；`Table/TalkTable/01_Tutorial.xml` L56：이런... 엄마 사진을 두고 갈 뻔했구나!<br>헤헤, 핑코가 실수했네. 엄마랑 같이 가야지.
+- speaker `{'char': '10017', 'talk': '657'}`；`Table/TalkTable/01_Tutorial.xml` L57：이제 엄마도 챙겼으니 된 거지?<br>빨리 나가자. 늦었단 말이야.
+
+### Talk-domain 3/14
+
+`kr:Table/ScenarioTalkTable.xml` SHA256 `f86baf72fd317d5d30e9aae931526a823b613db50545dc6074e3648eb984a1df`，L231
+
+- speaker `{'char': '2', 'talk': '658'}`；`Table/TalkTable/01_Tutorial.xml` L58：야호! 소마 오빠! 다들 많이 기다렸죠?
+- speaker `{'char': '1', 'talk': '659'}`；`Table/TalkTable/01_Tutorial.xml` L59：아니야, 이쪽도 이제 막 준비가 끝났어.
+- speaker `{'char': '3', 'talk': '660'}`；`Table/TalkTable/01_Tutorial.xml` L60：이실리아 씨를 습격했던 놈들이 여기까지 따라왔어.<br>준비가 끝났으면 우선 여길 떠나야 할 거야.
+- speaker `{'char': '2', 'talk': '661'}`；`Table/TalkTable/01_Tutorial.xml` L61：언니가 또 공격을 당했다구? 히야~ 그나저나 발만 씨~ 이상하게 언니와 관련된 일이면 굉장히 적극적이란 말이야.
+- speaker `{'char': '3', 'talk': '662'}`；`Table/TalkTable/01_Tutorial.xml` L62：무... 무슨 소릴 하는 거냐!!<br>에잇!! 나 먼저 이동할 테니 따라오든 말든 알아서들 하라구.
+- speaker `{'char': '2', 'talk': '663'}`；`Table/TalkTable/01_Tutorial.xml` L63：발만 씨도 참, 나이에 안 어울리게 부끄러워하기는!<br>소마 오빠, 우리도 빨리 발만 씨 쫓아가요!
+- speaker `{'char': '1', 'talk': '664'}`；`Table/TalkTable/01_Tutorial.xml` L64：그래. 우리도 출발해야지. 마을 앞에 있는 테티스에게 말을 걸어서 마을 밖으로 나가자. 머리 위에 특별한 마크가 표시되어 있을 거야.
+
+### Talk-domain 3/15
+
+`kr:Table/ScenarioTalkTable.xml` SHA256 `f86baf72fd317d5d30e9aae931526a823b613db50545dc6074e3648eb984a1df`，L242
+
+- speaker `{'char': '2', 'talk': '668'}`；`Table/TalkTable/01_Tutorial.xml` L68：드디어 출발이구나~!! 그런데 우리 어디로 가는 거야?
+- speaker `{'char': '1', 'talk': '669'}`；`Table/TalkTable/01_Tutorial.xml` L69：핀더스, 알스메르 마을을 거쳐 로트루아 마을까지 이동할 거야. 로트루아 마을에 오볼루스가 있다는 소문이 있거든.
+- speaker `{'char': '3', 'talk': '670'}`；`Table/TalkTable/01_Tutorial.xml` L70：마을 사이엔 몬스터들이 소통을 방해하고 있어 쉽지 않은 여정이 될 거야. 모두 힘을 합쳐 헤쳐나가는 수밖에 없지.
+- speaker `{'char': '3', 'talk': '671'}`；`Table/TalkTable/01_Tutorial.xml` L71：모두, 지금부터 제 말을 들어 주세요. 여러 캐릭터를 동시에 움직이는 방법에 대해서 설명하겠습니다.
+- speaker `{'char': '3', 'talk': '672'}`；`Table/TalkTable/01_Tutorial.xml` L72：직접 조작할 캐릭터를 리더 캐릭터라고 부르고, A.I에 따라 자동으로 움직일 캐릭터를 서브 캐릭터라고 부릅니다.<br>리더 캐릭터를 다른 캐릭터로 변경하려면 SHIFT 키를 누르시면 됩니다.
+
+### Talk-domain 3/16
+
+`kr:Table/ScenarioTalkTable.xml` SHA256 `f86baf72fd317d5d30e9aae931526a823b613db50545dc6074e3648eb984a1df`，L251
+
+- speaker `{'char': '3', 'talk': '673'}`；`Table/TalkTable/01_Tutorial.xml` L73：다음은 진형 변경에 대해서 설명하겠습니다. 진형의 선택에 따라 "서브 캐릭터"들의 A.I 성향이 달라집니다.
+- speaker `{'char': '3', 'talk': '674'}`；`Table/TalkTable/01_Tutorial.xml` L74：진형은 스페이스 키를 눌러 변경할 수 있습니다.
+
+### Talk-domain 3/17
+
+`kr:Table/ScenarioTalkTable.xml` SHA256 `f86baf72fd317d5d30e9aae931526a823b613db50545dc6074e3648eb984a1df`，L257
+
+- speaker `{'char': '3', 'talk': '675'}`；`Table/TalkTable/01_Tutorial.xml` L75：마지막으로 Ctrl+TAB 키를 눌러 서브 캐릭터를 조작하는 방법입니다. Ctrl+TAB 키를 누르면 서브 캐릭터가 서로 위치를 바꿉니다.
+- speaker `{'char': '3', 'talk': '676'}`；`Table/TalkTable/01_Tutorial.xml` L76：자, 그럼 힘을 합쳐 적들과 싸워봅시다.
+
+### Talk-domain 3/18
+
+`kr:Table/ScenarioTalkTable.xml` SHA256 `f86baf72fd317d5d30e9aae931526a823b613db50545dc6074e3648eb984a1df`，L263
+
+- speaker `{'char': '2', 'talk': '678'}`；`Table/TalkTable/01_Tutorial.xml` L86：헥헥. 돌아가실 뻔 했네.<br>무슨 몬스터가 이렇게 많은 거야!
+- speaker `{'char': '3', 'talk': '679'}`；`Table/TalkTable/01_Tutorial.xml` L87：마을에 도착했으니, 이 마을에서 잠시 쉬어가도록 하지.
+- speaker `{'char': '3', 'talk': '680'}`；`Table/TalkTable/01_Tutorial.xml` L88：괜찮으세요?
+- speaker `{'char': '4', 'talk': '681'}`；`Table/TalkTable/01_Tutorial.xml` L89：아... 전 괜찮아요.
+- speaker `{'char': '2', 'talk': '682'}`；`Table/TalkTable/01_Tutorial.xml` L90：오... 발만 씨, 언니한테 작업 들어간다!!
+- speaker `{'char': '3', 'talk': '683'}`；`Table/TalkTable/01_Tutorial.xml` L91：자... 작업?
+- speaker `{'char': '3', 'talk': '684'}`；`Table/TalkTable/01_Tutorial.xml` L92：그게 11살짜리 꼬맹이가 입에 담을 말이냐!!<br>그리고 발만 씨가 아니라고 했지!<br>슈발만 님이시다! 슈발만!! 좀 제대로 불러!!
+- speaker `{'char': '1', 'talk': '685'}`；`Table/TalkTable/01_Tutorial.xml` L93：자자, 두 사람 다 그만하고 우선 마을부터 둘러봐요.
+
+### Talk-domain 3/19
+
+`kr:Table/ScenarioTalkTable.xml` SHA256 `f86baf72fd317d5d30e9aae931526a823b613db50545dc6074e3648eb984a1df`，L275
+
+- speaker `{'char': '2', 'talk': '665'}`；`Table/TalkTable/01_Tutorial.xml` L65：어? 그러고 보니 특이한 마크가 있네. 저 마크가 무슨 뜻이야?
+- speaker `{'char': '1', 'talk': '666'}`；`Table/TalkTable/01_Tutorial.xml` L66：시나리오 퀘스트를 포함하고 있다는 뜻이야. 퀘스트는 일반 퀘스트와 튜토리얼 퀘스트, 그리고 시나리오퀘스트가 있어. 아이콘 모양으로 어떤 퀘스트를 가지고 있는지 알려주는 거지.
+- speaker `{'char': '1', 'talk': '667'}`；`Table/TalkTable/01_Tutorial.xml` L67：시나리오 퀘스트를 수행하면 새로운 스토리를 얻게 되고, 원정대 내 모든 캐릭터의 경험치가 올라가. 그리고 피로도가 쌓이지 않으니까 알아두는 게 좋을 거야.
+
+### Talk-domain 3/20
+
+`kr:Table/ScenarioTalkTable.xml` SHA256 `f86baf72fd317d5d30e9aae931526a823b613db50545dc6074e3648eb984a1df`，L282
+
+- speaker `{'char': '2', 'talk': '688'}`；`Table/TalkTable/01_Tutorial.xml` L96：응?
+
+### Talk-domain 3/21
+
+`kr:Table/ScenarioTalkTable.xml` SHA256 `f86baf72fd317d5d30e9aae931526a823b613db50545dc6074e3648eb984a1df`，L287
+
+- speaker `{'char': '3', 'talk': '689'}`；`Table/TalkTable/01_Tutorial.xml` L97：왜 그래? 핑코.
+- speaker `{'char': '2', 'talk': '690'}`；`Table/TalkTable/01_Tutorial.xml` L98：웬 꼬마 애가 우릴 지켜보고 있었어.
+- speaker `{'char': '1', 'talk': '691'}`；`Table/TalkTable/01_Tutorial.xml` L99：아마 마을에 있던 아이일 거야.<br>처음 보는 사람들이 마을 밖에 있으니 신기했겠지.
+- speaker `{'char': '2', 'talk': '692'}`；`Table/TalkTable/01_Tutorial.xml` L100：흐응... 그런가?
+
+### Talk-domain 3/22
+
+`kr:Table/ScenarioTalkTable.xml` SHA256 `f86baf72fd317d5d30e9aae931526a823b613db50545dc6074e3648eb984a1df`，L295
+
+- speaker `{'char': '10338', 'talk': '2314'}`；`Table/TalkTable/02_Lenart.xml` L40：이 앞의 길은 핀더스 마을로 이어집니다만, 지금은 몬스터들이 자리를 잡고 있어 자유롭게 지나갈 수 없는 상태입니다.
+- speaker `{'char': '10338', 'talk': '2315'}`；`Table/TalkTable/02_Lenart.xml` L41：핀더스 마을 시나리오를 진행하기 위해선, 그 마을 주변을 지키고 있는 몬스터들을 퇴치하는 시나리오 퀘스트를 먼저 클리어해야 합니다.
+- speaker `{'char': '10338', 'talk': '2316'}`；`Table/TalkTable/02_Lenart.xml` L42：앞으로도 자주 이런 상황에 마주치게 될 것입니다.<br>다음 마을의 시나리오를 진행하기 위해선 그전 마을의 시나리오 퀘스트를 모두 클리어해야 한다는 사실을 잊지 마시기 바랍니다.
+- speaker `{'char': '10338', 'talk': '2317'}`；`Table/TalkTable/02_Lenart.xml` L43：시나리오를 시작하면 먼저 엔트리 설정을 하게 됩니다. <br>먼저 엔트리 설정을 통해 전투에 참여할 멤버 3명을 결정합니다. 나머지는 대기 멤버로 설정할 수 있습니다.
+- speaker `{'char': '10338', 'talk': '2318'}`；`Table/TalkTable/02_Lenart.xml` L44：해당 캐릭터의 슬롯 창을 더블 클릭하면 엔트리 멤버에 추가하거나 빼실 수 있습니다.
+- speaker `{'char': '10338', 'talk': '2319'}`；`Table/TalkTable/02_Lenart.xml` L45：제일 앞쪽의 캐릭터가 유저가 직접 조작하는 리더 캐릭터로 설정되며, 나머지 2명의 캐릭터는 리더 캐릭터를 도와 자동으로 싸우는 서브 캐릭터로 설정됩니다.
+
+### Talk-domain 3/23
+
+`kr:Table/ScenarioTalkTable.xml` SHA256 `f86baf72fd317d5d30e9aae931526a823b613db50545dc6074e3648eb984a1df`，L305
+
+- speaker `{'char': '1', 'talk': '1091'}`；`Table/TalkTable/01_Tutorial.xml` L78：저기 계시는 분은 수행 술법사로, 말을 걸면 우리에게 여행에 필요한 지식을 알려줄 거야.
+- speaker `{'char': '1', 'talk': '1092'}`；`Table/TalkTable/01_Tutorial.xml` L79：핀더스 마을로 출발하기 전에 기초적인 것들을 미리 알아두면 도움이 되겠지?
+
+### Talk-domain 3/24
+
+`kr:Table/ScenarioTalkTable.xml` SHA256 `f86baf72fd317d5d30e9aae931526a823b613db50545dc6074e3648eb984a1df`，L311
+
+- speaker `{'char': '3', 'talk': '686'}`；`Table/TalkTable/01_Tutorial.xml` L94：여기는 핀더스 마을로 세네레프 산에서 나는 나무와 약초로 생활하는 마을이지.
+- speaker `{'char': '3', 'talk': '687'}`；`Table/TalkTable/01_Tutorial.xml` L95：일단 마을에서 쉬면서 다음 여정을 위한 준비도 하자. 우선 마을의 촌장님부터 만나서 인사를 드려야겠지?
+
+### Talk-domain 3/25
+
+`kr:Table/ScenarioTalkTable.xml` SHA256 `f86baf72fd317d5d30e9aae931526a823b613db50545dc6074e3648eb984a1df`，L317
+
+- speaker `{'char': '2', 'talk': '7384'}`；`Table/TalkTable/01_Tutorial.xml` L80：어? 설마 그러면 앞으로도 쭉~ 세 명이 싸우는 거야? 왠지 정신없을 거 같은데...
+- speaker `{'char': '1', 'talk': '7385'}`；`Table/TalkTable/01_Tutorial.xml` L81：지금 세 명이 함께 전투에 들어가는 건, 시나리오 모드를 진행하는 거라서 그래.
+- speaker `{'char': '1', 'talk': '7386'}`；`Table/TalkTable/01_Tutorial.xml` L82：핀더스 마을에 도착하면 하나의 캐릭터를 조종해 혼자 플레이하거나 다른 사람과 파티를 맺어서 플레이할 수 있는 미션 모드가 준비되어 있지.
+- speaker `{'char': '1', 'talk': '7387'}`；`Table/TalkTable/01_Tutorial.xml` L83：그 외에도 대전 모드나 챌린지 미션 등 여러 가지 모드가 준비되어 있으니, 조금만 더 플레이해보면 다른 모드들을 만날 수 있을 거야.
+- speaker `{'char': '2', 'talk': '7388'}`；`Table/TalkTable/01_Tutorial.xml` L84：오, 다른 모드도 많이 있었구나. 난 또 계속 세 명으로 플레이하는 줄 알고 깜짝 놀랐잖아.
+- speaker `{'char': '2', 'talk': '7389'}`；`Table/TalkTable/01_Tutorial.xml` L85：좋아~ 그럼 일단 핀더스 마을까지 가 볼까~?
+
+## 未閉合的連接
+
+Part1 的文字候選2742..2745沒有出現在Lua常數；不能把UI progress0..4直接改成quest2742..2745。g_TutoEmployCharQuery 的native寫入者6BFAE0由6BF2A0的特定UI按鈕/場景分支呼叫；網路ACK未封閉。Part2尾端return不等於官方Quest16完成，server如何令15可接仍缺。
+
+## 補核：本地writer已定位
+
+設定UI→controller+134、略過回覆→control0、checkpoint類別4→control1..4與雇用UI→Lua global的精確條件、完整偽碼與raw來源見 [F07](findings/F07-UI-and-checkpoint-writers.md)。表列range是輸入值，category4實際predicate半徑為其一半；cp4另要求傳入啟動flag。官方step_id與server獎勵條件依舊unknown。

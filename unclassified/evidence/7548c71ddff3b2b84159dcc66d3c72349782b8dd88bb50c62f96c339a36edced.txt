@@ -1,0 +1,455 @@
+# F04：QuestInfo前置鏈、真實對話來源與006F快照
+
+日期：2026-10-28（Asia/Taipei）。Git 基準：`origin/main b8e97085c08833f66fbd06ee4ef3bf7d32276409`。KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。原件唯讀、未執行或附加遊戲／Lua、未 Commit/Push、未改 owner/catalog。
+
+# T16 教學到早期主線
+
+日期：2026-10-28（Asia/Taipei）。Git 基準：`origin/main b8e97085c08833f66fbd06ee4ef3bf7d32276409`。KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。原件唯讀、未執行或附加遊戲／Lua、未 Commit/Push、未改 owner/catalog。
+
+## 目前可成立的內容鏈
+
+```text
+Lua: RequestStartScenario(14) → IsScenarioEnded(14)等待 → 後段教學
+  → scene(1000,13) / 角色可用 → scene(1000,14) / UI8 → return
+             [缺：官方server如何寫Quest16完成、何時送主線/廣場狀態]
+QuestInfo: 14 → Demand14 的16 → Demand16 的15 → Demand15 的117
+  → Demand117 的118 → Demand118 的119
+Chapter/ScenarioBook: chapter1第一列15，之後117/118/119...
+```
+
+箭頭 `Demand` 代表客戶端資料的前置引用及候選清單用途；官方接受/交付的合法性與伺服器條件沒有因此完整證實。
+
+|quest|原文主題|type/town/field/level|giver/finisher|Demand|QuestTalk row|
+|---|---|---|---|---|---|
+|14|튜토리얼-이실리아|3/0/18/1|10027/10027|[]|無此row|
+|16|튜토리얼-핑코파파|2/0/unknown/1|10027/10027|['14']|無此row|
+|15|핀더스 마을로|2/5/19/1|10338/10338|['16']|無此row|
+|117|사소한 소동|2/1/unknown/1|10002/10002|['15']|無此row|
+|118|유리와 라제드|2/1/28/5|10047/10047|['117']|無此row|
+|119|유리와 라제드 (전투)|2/1/26/5|10047/10047|['118']|無此row|
+|1002|시놉시스|3/0/unknown/1|10027/10027|[]|無此row|
+|2742|튜토리얼-키보드입력|3/0/unknown/1|10027/10027|[]|無此row|
+|2743|튜토리얼-마우스입력|3/0/unknown/1|10027/10027|[]|無此row|
+|2744|튜토리얼-카메라|3/0/unknown/1|10027/10027|[]|無此row|
+|2745|튜토리얼-캐릭터선택|3/0/unknown/1|10027/10027|[]|無此row|
+|2746|튜토리얼-전투|3/0/unknown/1|10027/10027|[]|無此row|
+
+上述早期劇情/教學ID在QuestTalk均沒有row。這是已取得完整QuestTalk後的有界缺行觀察，不是QuestTalk提取失敗。實際劇情對話由Event seq→ScenarioTalkTable→TalkTable解析，完整join見script-crossrefs；普通QuestTalk `givertalk/givertotalk/finishertalk` 仍是另一種資料。
+
+## 主線15的原生內容
+
+Quest15 `town=5`；_TownList town5為廣場且包含NPC10338；npctable 10338是 `테티스`（TC：對應文本以原表為準），其TYPE10/GUILD指向劇情服務。Chapter1標題`의식의 밤`，首列quest15；ScenarioBook摘要說隊伍向廣場的テ티스學前往핀더스的方法。Event `(15,1)`對應Square_Tutorial01，展示地圖字串Square03D.fld，OpenTalkScene(3,22)，talk2314..2319存在02_Lenart.xml，內容解釋下一村劇情前需清掉路上怪物、隊伍3人與leader/sub角色。
+
+Event `(15,2)` scenario_tuto1_1 仍在廣場展示，使用talk(3,15/16/17/25)；`(15,3)` pindos_talkevent載入town001D.map；`(15,4)` scenario_tuto2_1。這些是劇情腳本及資源順序，不等於server接受/完成封包時序。QuestInfo field19不能直接當map19；_MapList map19實際是mushroom12D。另原版MapChart S_pathofpindus候選只可由T06/T07既有證據銜接，不能僅因同名把field19自動映射。
+
+## 主線117及118/119
+
+117 Demand15、town1、giver/finisher10002；npctable10002是라제드，_TownList town1=핀더스。118 Demand117、level5、field28、giver/finisher10047（유리）；119 Demand118、field26、level5。這能確定下一批內容依賴及NPC，不能宣稱當前角色必然可接。
+
+## 精確斷點
+
+1. 已存在角色→選Tutorial或Synopsis的正式角色/帳號條件未取得，不能重做T04初值。
+2. 教學scenario14的完成flag是TUTO場景local資料；官方server何時因勝敗送該通知、如何保留/返回TUTO仍缺T07/T14證據閉環。
+3. Lua末端無Quest16完成、Quest15接受或持久化API。`scene1000/14結束 → 官方server標記Quest16 → 006F歷史集合/廣場context → Quest15可接` 中間仍缺官方server規則與可信流量。
+4. Quest15的完整接取/交付/field19勝敗/完成117解鎖後端條件未取得；不能把歷史fixture在3F/15/1後立刻完成15當原版。
+5. NPC10027在本批KR npctable無對應列；Lua checkpoint10016當前表名為경비병 듀르텐，不能擅自重命名或修資源。這是內容/namespace風險，須追實際consumer，不能直接判官方版本壞檔。
+
+## 原表完整節錄
+
+`kr:Table/QuestInfo.xml` SHA256 `5d251415fdfdc453adefbff03114ded5a8ea41b696ce0aab86a23070e0fdca60`，L196
+
+```xml
+<Quest id="14" type="3" town="0" field="18" level="1" giver="10027" finisher="10027" subtype="1" subject="튜토리얼-이실리아">
+    <CompleteAction type="1" />
+    <AcceptAction type="1" />
+  </Quest>
+```
+
+`kr:Table/QuestInfo.xml` SHA256 `5d251415fdfdc453adefbff03114ded5a8ea41b696ce0aab86a23070e0fdca60`，L209
+
+```xml
+<Quest id="16" type="2" town="0" level="1" giver="10027" finisher="10027" subtype="1" subject="튜토리얼-핑코파파">
+    <Demands>
+      <Demand id="14" />
+    </Demands>
+    <RewardsEtc id="16">
+      <Reward type="2" value="50" />
+    </RewardsEtc>
+  </Quest>
+```
+
+`kr:Table/QuestInfo.xml` SHA256 `5d251415fdfdc453adefbff03114ded5a8ea41b696ce0aab86a23070e0fdca60`，L200
+
+```xml
+<Quest id="15" type="2" town="5" field="19" level="1" giver="10338" finisher="10338" subtype="1" subject="핀더스 마을로">
+    <Demands>
+      <Demand id="16" />
+    </Demands>
+    <RewardsEtc id="15">
+      <Reward type="2" value="2800" />
+      <Reward type="4" value="468" />
+    </RewardsEtc>
+  </Quest>
+```
+
+`kr:Table/QuestInfo.xml` SHA256 `5d251415fdfdc453adefbff03114ded5a8ea41b696ce0aab86a23070e0fdca60`，L1581
+
+```xml
+<Quest id="117" type="2" town="1" level="1" giver="10002" finisher="10002" subtype="1" subject="사소한 소동">
+    <Demands>
+      <Demand id="15" />
+    </Demands>
+    <RewardsEtc id="117">
+      <Reward type="2" value="710" />
+    </RewardsEtc>
+  </Quest>
+```
+
+`kr:Table/QuestInfo.xml` SHA256 `5d251415fdfdc453adefbff03114ded5a8ea41b696ce0aab86a23070e0fdca60`，L1589
+
+```xml
+<Quest id="118" type="2" town="1" field="28" level="5" giver="10047" finisher="10047" subtype="1" subject="유리와 라제드">
+    <Demands>
+      <Demand id="117" />
+    </Demands>
+  </Quest>
+```
+
+`kr:Table/QuestInfo.xml` SHA256 `5d251415fdfdc453adefbff03114ded5a8ea41b696ce0aab86a23070e0fdca60`，L1594
+
+```xml
+<Quest id="119" type="2" town="1" field="26" level="5" giver="10047" finisher="10047" subtype="1" subject="유리와 라제드 (전투)">
+    <Demands>
+      <Demand id="118" />
+    </Demands>
+    <RewardsEtc id="119">
+      <Reward type="2" value="5850" />
+      <Reward type="3" value="40" />
+      <Reward type="4" value="900" />
+    </RewardsEtc>
+  </Quest>
+```
+
+`kr:Table/QuestInfo.xml` SHA256 `5d251415fdfdc453adefbff03114ded5a8ea41b696ce0aab86a23070e0fdca60`，L12824
+
+```xml
+<Quest id="1002" type="3" town="0" level="1" giver="10027" finisher="10027" subtype="1" subject="시놉시스" />
+```
+
+`kr:Table/QuestInfo.xml` SHA256 `5d251415fdfdc453adefbff03114ded5a8ea41b696ce0aab86a23070e0fdca60`，L35972
+
+```xml
+<Quest id="2742" type="3" town="0" level="1" giver="10027" finisher="10027" subtype="1" subject="튜토리얼-키보드입력">
+    <RewardsEtc id="2742">
+      <Reward type="2" value="10" />
+    </RewardsEtc>
+  </Quest>
+```
+
+`kr:Table/QuestInfo.xml` SHA256 `5d251415fdfdc453adefbff03114ded5a8ea41b696ce0aab86a23070e0fdca60`，L35977
+
+```xml
+<Quest id="2743" type="3" town="0" level="1" giver="10027" finisher="10027" subtype="1" subject="튜토리얼-마우스입력">
+    <RewardsEtc id="2743">
+      <Reward type="2" value="20" />
+    </RewardsEtc>
+  </Quest>
+```
+
+`kr:Table/QuestInfo.xml` SHA256 `5d251415fdfdc453adefbff03114ded5a8ea41b696ce0aab86a23070e0fdca60`，L35982
+
+```xml
+<Quest id="2744" type="3" town="0" level="1" giver="10027" finisher="10027" subtype="1" subject="튜토리얼-카메라">
+    <RewardsEtc id="2744">
+      <Reward type="2" value="30" />
+    </RewardsEtc>
+  </Quest>
+```
+
+`kr:Table/QuestInfo.xml` SHA256 `5d251415fdfdc453adefbff03114ded5a8ea41b696ce0aab86a23070e0fdca60`，L35987
+
+```xml
+<Quest id="2745" type="3" town="0" level="1" giver="10027" finisher="10027" subtype="1" subject="튜토리얼-캐릭터선택">
+    <RewardsEtc id="2745">
+      <Reward type="2" value="40" />
+    </RewardsEtc>
+  </Quest>
+```
+
+`kr:Table/QuestInfo.xml` SHA256 `5d251415fdfdc453adefbff03114ded5a8ea41b696ce0aab86a23070e0fdca60`，L35992
+
+```xml
+<Quest id="2746" type="3" town="0" level="1" giver="10027" finisher="10027" subtype="1" subject="튜토리얼-전투">
+    <RewardsEtc id="2746">
+      <Reward type="2" value="50" />
+    </RewardsEtc>
+  </Quest>
+```
+
+`kr:Table/SceneList.xml` SHA256 `1b702eacdf536437605e846825e6a2384b6f2623d1b43a9010cafce5388cd037`，L3
+
+```xml
+<CHAPTER chapterIdx="0" townId="0" chapterName="시놉시스">
+    <SCENARIO questId="60001">
+      <SCENE sceneIdx="1" />
+    </SCENARIO>
+    <SCENARIO questId="1000">
+      <SCENE sceneIdx="1" />
+      <SCENE sceneIdx="3" />
+      <SCENE sceneIdx="4" />
+      <SCENE sceneIdx="6" />
+      <SCENE sceneIdx="7" />
+      <SCENE sceneIdx="8" />
+      <SCENE sceneIdx="9" />
+      <SCENE sceneIdx="10" />
+      <SCENE sceneIdx="12" />
+      <SCENE sceneIdx="13" />
+      <SCENE sceneIdx="14" />
+      <SCENE sceneIdx="15" />
+      <SCENE sceneIdx="16" />
+      <SCENE sceneIdx="17" />
+      <SCENE sceneIdx="18" />
+    </SCENARIO>
+    <SCENARIO questId="1001">
+      <SCENE sceneIdx="1" />
+    </SCENARIO>
+  </CHAPTER>
+```
+
+`kr:Table/SceneList.xml` SHA256 `1b702eacdf536437605e846825e6a2384b6f2623d1b43a9010cafce5388cd037`，L28
+
+```xml
+<CHAPTER chapterIdx="1" townId="1" chapterName="의식의 밤">
+    <SCENARIO questId="15">
+      <SCENE sceneIdx="1" />
+      <SCENE sceneIdx="2" />
+      <SCENE sceneIdx="3" />
+      <SCENE sceneIdx="4" />
+    </SCENARIO>
+    <SCENARIO questId="117">
+      <SCENE sceneIdx="1" />
+    </SCENARIO>
+    <SCENARIO questId="118">
+      <SCENE sceneIdx="1" />
+    </SCENARIO>
+    <SCENARIO questId="119">
+      <SCENE sceneIdx="1" />
+      <SCENE sceneIdx="2" />
+      <SCENE sceneIdx="3" />
+      <SCENE sceneIdx="4" />
+      <SCENE sceneIdx="5" />
+    </SCENARIO>
+    <SCENARIO questId="120">
+      <SCENE sceneIdx="1" />
+      <SCENE sceneIdx="2" />
+      <SCENE sceneIdx="3" />
+    </SCENARIO>
+    <SCENARIO questId="121">
+      <SCENE sceneIdx="1" />
+    </SCENARIO>
+    <SCENARIO questId="122">
+      <SCENE sceneIdx="1" />
+      <SCENE sceneIdx="2" />
+      <SCENE sceneIdx="3" />
+      <SCENE sceneIdx="4" />
+      <SCENE sceneIdx="5" />
+    </SCENARIO>
+    <SCENARIO questId="123">
+      <SCENE sceneIdx="1" />
+    </SCENARIO>
+    <SCENARIO questId="124">
+      <SCENE sceneIdx="1" />
+      <SCENE sceneIdx="2" />
+      <SCENE sceneIdx="3" />
+      <SCENE sceneIdx="4" />
+      <SCENE sceneIdx="5" />
+      <SCENE sceneIdx="6" />
+      <SCENE sceneIdx="7" />
+    </SCENARIO>
+  </CHAPTER>
+```
+
+`kr:Table/ScenarioBookContents.xml` SHA256 `15b67767af884ac2abe05319ca406c9bc5e705c5ea8311de8d6b45644f8210d1`，L3
+
+```xml
+<Quest idx="15">
+    <Summary>일행은 광장의 테티스에게 핀더스 마을로 가는 방법을 배운다.</Summary>
+  </Quest>
+```
+
+`kr:Table/ScenarioBookContents.xml` SHA256 `15b67767af884ac2abe05319ca406c9bc5e705c5ea8311de8d6b45644f8210d1`，L6
+
+```xml
+<Quest idx="117">
+    <Summary>원정대 일행은 핀더스 마을의 촌장인 라제드를 만난다.</Summary>
+  </Quest>
+```
+
+`kr:Table/ScenarioBookContents.xml` SHA256 `15b67767af884ac2abe05319ca406c9bc5e705c5ea8311de8d6b45644f8210d1`，L9
+
+```xml
+<Quest idx="118">
+    <Summary>몸이 병약한 소녀 유리가 일행에게 뭔가 부탁을 하고 싶어한다.</Summary>
+  </Quest>
+```
+
+`kr:Table/ScenarioBookContents.xml` SHA256 `15b67767af884ac2abe05319ca406c9bc5e705c5ea8311de8d6b45644f8210d1`，L12
+
+```xml
+<Quest idx="119">
+    <Summary>[권장 캐릭터 레벨 : 5] 몸이 병약한 소녀 유리가 일행에게 뭔가 부탁을 하고 싶어한다.</Summary>
+  </Quest>
+```
+
+## client狀態快照與前置consumer
+
+5020B0在QuestMgr表的專用slot FAB61C放502170，基底FAB2A0、stride8、+4函式欄位時 `(FAB61C-FAB2A0-4)/8=006F`。502170清manager+5EB0歷史集合；payload長度減2若為4倍數，44AB70複製DWORD；44AA10逐bit0..31展開 `(word_index*32+bit)&FFFF` 為WORD ID，再交給500240重算可接候選。這是可追溯的客戶端快照消費鏈；不能把6F稱為官方DB格式、不能證特定帳號持久保存，也不能用fixture預設C001位圖當14/16已合法完成。
+
+QuestInfo的Demands子節點由504740解析；500240會排除20槽中的當前ID與+5EB0已有ID，檢查前置ID集合，再建立+5EC0可接清單。因此14→16→15鏈可支持client候選條件，而非單憑XML標籤猜server規則。level/context另有條件，不宣稱只完成16就足以接15。
+
+### 0x502170：已保存 Ghidra 衍生偽碼
+
+Evidence `ev_953f4542d5c2e1179cb46db7e74d27514ffb64db15115fbe7290755a1403ceb7`；偽碼 SHA `95841d2c0fdb71da09acf11ef1e2c39558ba90e09ef93813293d1b262fc39643`；parent raw SHA `dd6ab8fb5d904450a538811cfb239063938055016cd698d87855c17ffb72f3fc`。本批已核對本機偽碼與 origin/main blob、index 及 raw SHA 一致。原始 raw 見 `evidence\native\raw\20261025T182755495890-batch-20261025T184419035741-4240.json`；此為靜態分析，不是執行觀測。
+
+```cpp
+undefined4 FUN_00502170(int param_1,int param_2)
+{
+  void *_Dst;
+  int iVar1;
+  uint uVar2;
+  int in_ECX;
+  int local_28 [5];
+  void *local_14;
+  undefined1 *puStack_10;
+  int local_c;
+  local_c = 0xffffffff;
+  puStack_10 = &LAB_009441e6;
+  local_14 = ExceptionList;
+  uVar2 = DAT_00d61f20 ^ (uint)&stack0xffffffc8;
+  ExceptionList = &local_14;
+  _Dst = *(void **)(in_ECX + 0x5eb0);
+  if (_Dst != *(void **)(in_ECX + 0x5eb4)) {
+    FID_conflict__memcpy(_Dst,*(void **)(in_ECX + 0x5eb4),0);
+    *(void **)(in_ECX + 0x5eb4) = _Dst;
+  }
+  local_28[0] = 0;
+  local_28[1] = 0;
+  local_28[2] = 0;
+  local_c = 0;
+  if ((param_2 - 2U & 3) == 0) {
+    FUN_0044ab70(param_1 + 2);
+  }
+  iVar1 = local_28[0];
+  FUN_0044aa10(local_28);
+  if ((DAT_00fab22c & 1) == 0) {
+    DAT_00fab22c = DAT_00fab22c | 1;
+    local_c._0_1_ = 1;
+    FUN_004dec90(uVar2);
+    _atexit((_func_4879 *)&LAB_00bcce30);
+    local_c = (uint)local_c._1_3_ << 8;
+  }
+  FUN_00500240(in_ECX,DAT_00fab1bc);
+  if (iVar1 != 0) {
+    FUN_0089120c(iVar1);
+  }
+  ExceptionList = local_14;
+  return 0;
+}
+```
+
+### 0x44aa10：已保存 Ghidra 衍生偽碼
+
+Evidence `ev_5973580c0c84ca64f4b06f16b0062102f37bd88bf9960d04c8774397e1a62bbe`；偽碼 SHA `8bc1d005c785de19bbd1b290a7324bfd626fb14c7e09340ea2baf207410610a4`；parent raw SHA `76ed1ff81ebc10e998065456f70cd01c8757a69cfe2aeefe83a0af4ea130f6f6`。本批已核對本機偽碼與 origin/main blob、index 及 raw SHA 一致。原始 raw 見 `evidence\native\raw\20261025T182755495890-batch-20261025T184129874499-1488.json`；此為靜態分析，不是執行觀測。
+
+```cpp
+void FUN_0044aa10(int *param_1)
+{
+  uint uVar1;
+  uint *puVar2;
+  uint *puVar3;
+  uint *in_EAX;
+  int iVar4;
+  uint uVar5;
+  uint uVar6;
+  uint uVar7;
+  uint local_10;
+  uint local_c;
+  uint local_8;
+  iVar4 = *param_1;
+  local_10 = 0;
+  if (param_1[1] - iVar4 >> 2 != 0) {
+    do {
+      uVar1 = *(uint *)(iVar4 + local_10 * 4);
+      local_c = 0;
+      do {
+        if ((uVar1 & 1 << ((byte)local_c & 0x1f)) != 0) {
+          uVar5 = local_10 * 0x20 + local_c;
+          local_8 = uVar5 & 0xffff;
+          puVar2 = (uint *)in_EAX[1];
+          if (&local_8 < puVar2) {
+            puVar3 = (uint *)*in_EAX;
+            if (&local_8 < puVar3) goto LAB_0044aada;
+            if (puVar2 == (uint *)in_EAX[2]) {
+              uVar5 = (int)puVar2 - (int)puVar3 >> 1;
+              if (0x7ffffffe < uVar5) goto LAB_0044ab5a;
+              uVar5 = uVar5 + 1;
+              uVar6 = (int)in_EAX[2] - (int)puVar3 >> 1;
+              if (uVar6 < uVar5) {
+                if (0x7fffffff - (uVar6 >> 1) < uVar6) {
+                  uVar6 = 0;
+                }
+                else {
+                  uVar6 = uVar6 + (uVar6 >> 1);
+                }
+                if (uVar6 < uVar5) {
+                  uVar6 = uVar5;
+                }
+                FUN_0044b6a0(uVar6);
+              }
+            }
+            if ((undefined2 *)in_EAX[1] != (undefined2 *)0x0) {
+              *(undefined2 *)in_EAX[1] =
+                   *(undefined2 *)(*in_EAX + ((int)&local_8 - (int)puVar3 >> 1) * 2);
+            }
+          }
+          else {
+LAB_0044aada:
+            if (puVar2 == (uint *)in_EAX[2]) {
+              uVar6 = (int)((int)puVar2 - *in_EAX) >> 1;
+              if (0x7ffffffe < uVar6) {
+LAB_0044ab5a:
+                    /* WARNING: Subroutine does not return */
+                FUN_0087db30("vector<T> too long");
+              }
+              uVar6 = uVar6 + 1;
+              uVar7 = (int)((int)in_EAX[2] - *in_EAX) >> 1;
+              if (uVar7 < uVar6) {
+                if (0x7fffffff - (uVar7 >> 1) < uVar7) {
+                  uVar7 = 0;
+                }
+                else {
+                  uVar7 = uVar7 + (uVar7 >> 1);
+                }
+                if (uVar7 < uVar6) {
+                  uVar7 = uVar6;
+                }
+                FUN_0044b6a0(uVar7);
+              }
+            }
+            if ((undefined2 *)in_EAX[1] != (undefined2 *)0x0) {
+              *(undefined2 *)in_EAX[1] = (short)uVar5;
+            }
+          }
+          in_EAX[1] = in_EAX[1] + 2;
+        }
+        local_c = local_c + 1;
+      } while (local_c < 0x20);
+      iVar4 = *param_1;
+      local_10 = local_10 + 1;
+    } while (local_10 < (uint)(param_1[1] - iVar4 >> 2));
+  }
+  return;
+}
+```
+
+完整504740/500240/5020B0/44AB70保留在evidence/native；generic vector配置細節不重複展開，僅引用前置/快照功能邊。頂層網路dispatcher→QuestMgr及server權威缺口仍留給T02/T16後續交叉驗證。

@@ -1,0 +1,61 @@
+"""Parse and disassemble Lua 5.1 chunks as data; never load a Lua VM."""
+from pathlib import Path
+import struct,json,sys,hashlib
+OPS='MOVE LOADK LOADBOOL LOADNIL GETUPVAL GETGLOBAL GETTABLE SETGLOBAL SETUPVAL SETTABLE NEWTABLE SELF ADD SUB MUL DIV MOD POW UNM NOT LEN CONCAT JMP EQ LT LE TEST TESTSET CALL TAILCALL RETURN FORLOOP FORPREP TFORLOOP SETLIST CLOSE CLOSURE VARARG'.split()
+class Chunk:
+ def __init__(self,b):
+  self.b=b;self.p=12
+  assert b[:12]==bytes.fromhex('1b4c75615100010404040800'),b[:12].hex()
+ def take(self,n):
+  r=self.b[self.p:self.p+n];assert len(r)==n;self.p+=n;return r
+ def uint(self):return struct.unpack('<I',self.take(4))[0]
+ def string(self):
+  n=self.uint()
+  if not n:return None
+  b=self.take(n);assert b[-1]==0
+  for enc in ['utf-8','cp949','cp950']:
+   try:return b[:-1].decode(enc)
+   except UnicodeError:pass
+  return 'hex:'+b[:-1].hex()
+ def func(self,name):
+  start=self.p;source=self.string();first=self.uint();last=self.uint();nup,param,vararg,stack=self.take(4)
+  code=[self.uint() for _ in range(self.uint())]; constants=[]
+  for _ in range(self.uint()):
+   t=self.take(1)[0]
+   if t==0:v=None
+   elif t==1:v=bool(self.take(1)[0])
+   elif t==3:v=struct.unpack('<d',self.take(8))[0]
+   elif t==4:v=self.string()
+   else:raise ValueError(t)
+   constants.append(v)
+  children=[self.func(name+'.'+str(i)) for i in range(self.uint())]
+  lines=[self.uint() for _ in range(self.uint())]
+  locals_=[dict(name=self.string(),start=self.uint(),end=self.uint()) for _ in range(self.uint())]
+  ups=[self.string() for _ in range(self.uint())]
+  return dict(name=name,offset=start,end=self.p,source=source,first=first,last=last,nup=nup,params=param,vararg=vararg,stack=stack,code=code,constants=constants,children=children,lines=lines,locals=locals_,upvalues=ups)
+def dis(f):
+ k=f['constants'];r=[]
+ def rk(x):return 'K'+str(x-256)+'='+repr(k[x-256]) if x>=256 else 'R'+str(x)
+ for pc,x in enumerate(f['code'],1):
+  o=x&63;a=(x>>6)&255;c=(x>>14)&511;b=x>>23;bx=x>>14;sbx=bx-131071;op=OPS[o];v=f'A={a} B={b} C={c}'
+  if op in ['LOADK','GETGLOBAL','SETGLOBAL']:v=f'R{a}, K{bx}={k[bx]!r}'
+  elif op=='CLOSURE':v=f'R{a}, prototype {f["name"]}.{bx}'
+  elif op in ['GETTABLE','SELF']:v=f'R{a}, R{b}, {rk(c)}'
+  elif op=='SETTABLE':v=f'R{a}, {rk(b)}, {rk(c)}'
+  elif op in ['ADD','SUB','MUL','DIV','MOD','POW','EQ','LT','LE']:v=f'A={a}, {rk(b)}, {rk(c)}'
+  elif op in ['JMP','FORLOOP','FORPREP']:v=f'A={a}, target={pc+1+sbx} (sBx={sbx})'
+  r.append(f'{pc:04d} {x:08x} {op:10s} {v}')
+ return r
+def walk(f):
+ yield f
+ for child in f['children']:yield from walk(child)
+if __name__=='__main__':
+ root=Path(sys.argv[1]); dst=root/'lua-static';dst.mkdir(exist_ok=True)
+ for p in (root/'resources').rglob('*.lua'):
+  ch=Chunk(p.read_bytes());f=ch.func('root');assert ch.p==len(ch.b)
+  name=p.relative_to(root/'resources').parts[0]+'-'+p.name
+  (dst/(name+'.json')).write_text(json.dumps(f,ensure_ascii=False,indent=2),encoding='utf-8')
+  md=f'# Static Lua 5.1 disassembly: {name}\n\nSHA256 `{hashlib.sha256(ch.b).hexdigest()}`. Complete parse consumed {ch.p} bytes. Source/debug names may be stripped. PC is one based; JMP target PC+1+sBx. No VM execution.\n'
+  for node in walk(f):md+=f'\n## {node["name"]} file offsets {node["offset"]}..{node["end"]} params={node["params"]} upvalues={node["nup"]} stack={node["stack"]}\n\nConstants: '+repr(node['constants'])+'\n\n```text\n'+'\n'.join(dis(node))+'\n```\n'
+  (dst/(name+'.md')).write_text(md,encoding='utf-8')
+ print('parsed bytecode chunks without execution')

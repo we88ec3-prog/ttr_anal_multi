@@ -122,3 +122,6 @@
 - [kr-persistence-20261023/mcp-evidence/08-owner-6dad61.json](../../../kr/evidence/f7703561d42d8944ae34927e830d845a5fe9eefc18157f04430349bdce6f267c.txt)
 
 舊報告與腳本只供審核，不直接執行；未打包歷史引用見task.json。部分原生證據不等於功能可玩驗收。
+
+
+2026-10-28 來源整合入口：[T01-20261028-06](../../../shared/integrations/T01-20261028-06/README.md)。限定證據、T16分工與更正已入catalog；不等完整原生／遊玩驗收，既有主責與狀態保留。實際接續SHA見批次收據。

@@ -1,0 +1,48 @@
+# v9暫定編隊重入、讀取畫面與小幫手缺口
+
+roy／T07，必要跨Task查證，待整合。原BIN SHA9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91。來源沿REA6.5.0/Ghidra12.1.4 bulk及原件bytes；詳細來源與影片觀察見v9-and-ui-gap-evidence.json。
+
+## 最新使用者規格（覆蓋歷史策略）
+
+第一段完成後**自動**續第二段，第二段完成後開自由編隊。編隊按返回後，再點NPC先顯示**「要進行劇情任務嗎」**，按OK才再次開編隊，**不重播第一／二段劇情**。
+
+這個返回後的行為是使用者明確指定的**暫時解法，須後續確認實際原版邏輯**；不拿影片當作已證取消／重入規則。先前「下一次NPC才接第二段」及「返回後重播第一段」均已被使用者後續更正，不能繼續採用。
+
+## 已建立的隔離v9（尚不可交付操作測試）
+
+SERVER/tutorial-plaza-v9從已pinned v8來源建立，原v8、anal、client、資源／帳號未改。沒有runtime/logs、沒有讀DB、啟動／停止服務或附加遊戲。已接0047(15,2)、以目前帳號已有角色產生0050空預選／容量3，再004E開窗；0028由pending offer token和可用角色驗證，成功只到field19-data-required，不落入教學第一戰14。
+
+正常003C接取不再送無scene語意的0045。52項離線檢查涵蓋來源SHA、真NPC資源、0027單欄差異、實際NPC／AST選取Server路由、token／角色／階段反例，以及最新返回策略的**後端bool確認hook**。**沒有驗證原生確認視窗或OK回傳**，manifest及README均標未實作；不能把52項通過說成最新UI已可用。
+
+為使已accepted的NPC互動仍能回報，v9原候選把NPC10338的0027 checkpoint type3改為type1（其他欄位／NPC保持）。原生544BC0幾何拾取不限定type3；544070一般type1分支到544020送001C(type,id)可作明確下一次互動。這個10338/type1配置是Server重建，非官方NPC類型；Z／右鍵、顯示與互動仍未runtime驗收。
+
+最新後端狀態：下一次1C(1,10338)在待編隊時作廢舊offer，停在await-reentry-confirm；只有尚未綁定原生封包的confirm_reentry(True,roles) hook才重新發0050/004E。不因沉默、計時或返回本地關窗就認為取消／成功；也不先直接開編隊再補一個假確認。
+
+## 原生返回的已知界線
+
+6BBFD0確認按鈕在有選擇時送13byte0028；返回按鈕只清本地UI並排F4356，該分支沒有成功0028或取消ACK。6BC7B0/6BC7F0是清單選擇調整，不是返回按鈕，不能誤認其函式名附近的邏輯為取消封包。
+
+所以必須再查可用的原生確認視窗／OK回報接口。舊NPC type3確認5B9340雖有Yes，但同時會本地561760(Quest,1)播第一段，不能直接當成「只問後開隊伍」而忽略副作用。沒有為趕流程改client、Lua或資源。
+
+## 影片與讀取畫面新證據
+
+直接以YouTube播放器暫停核對：8:22仍是Soma對話；8:27有Now Loading插圖及「連打功能」說明；8:31進廣場後有置中的小幫手，包含任務圖示、按Z與劇情任務編隊說明；8:32小幫手已關閉、廣場角色及NPC可見。影片舊版本只證可見偏序，不能推官方封包或固定等待秒數。
+
+原Table.original-kr.stp內_LoadDisplay.xml（member SHA49aba61c484fc27964e2c75ecd487e9a1e6a4fdcf9b52173cbed3088167ee265）列BackGround/Category Num1的Town順序：index1馮德斯Loading_Town_Phindous.dds，index2爾斯梅勒Loading_Town_Alsmeer.dds，index5廣場Loading_Square_01.dds。554FC0解析LoadDisplay/BackGround並交554B30；LoadDisplayTooltip另交554E70。這不是允許混用場景type與Category。
+
+552FC0在type0/2分支按+3索引FB74A0／FB7490容器，做小寫和.dds處理並建立FlyingObject::CFadeObject；原件C0FECC確為.dds。該路線與_LoadDisplay渲染的關係、顯示前是否讓renderer更新、以及現有回廣場哪一步漏掉仍未閉合，不宣稱已修復載入停畫面。CFadeObject不能僅憑名字就當音效或整套loading背景。
+
+## 小幫手查證界線
+
+已定位CHelpDlg（UI198，5A2570，59EC10快取）、CHelpInsideWnd等候選。59C2C0可toggle CChatablePage+1A0窗口；尚未以實際內容／文字確認它就是影片小幫手，也未閉合進廣場自動觸發。UI/Component.stp有限檔名查詢找到Help_Frame_Wnd.FTC、Help_Slash_Inside.FTC等；沒有因此推斷小幫手不存在。
+
+另查4B4380→F4306→5B9080→635730 UI路徑，目前只確認WORD payload與callback，尚未命名為確認框或小幫手，未發此包測試。
+
+## 接續
+
+1. 查_LoadDisplay背景選擇／顯示及render切換，處理目前進廣場無讀取畫面的停止感。
+2. 以CHelpDlg或其他候選實際資源匹配小幫手內容及原生自動觸發。
+3. 閉合「要進行劇情任務嗎」確認UI與OK／取消回報，再接暫定重入hook；不交付繞過確認的候選。
+4. 繼續Field19→15/3→正常村落及往返，缺少後端／出生資料仍不得以舊fixture當原生填入。
+
+使用者已確認目前只持有影片，沒有另提供原版Server／封包來源。原先資料路徑問題已回答，不重複索求。完整goal保持active，尚無新可玩或全流程完成聲明。

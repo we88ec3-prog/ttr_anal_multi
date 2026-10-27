@@ -1,0 +1,1441 @@
+# Static Lua 5.1 disassembly: kr-qbase.lua
+
+SHA256 `d6e01d85194f452d56961252d797a0e671d7e34a11fe07e96155220f27ee4cc3`. Complete parse consumed 11836 bytes. Source/debug names may be stripped. PC is one based; JMP target PC+1+sBx. No VM execution.
+
+## root file offsets 12..11836 params=0 upvalues=0 stack=2
+
+Constants: ['qco', 'MoCo', 'new', 'f_registerCoroutine', 'f_doCoTask', 'f_removeAllCoroutines', 'g_scenePlaying', 'TRUE', 'g_yesTriggered', 'FALSE', 'g_noTriggered', 'g_transitionIdx', 1.0, 'g_hideOrigObjs', 'g_poisonForestRaidHack', 'yield', 'OnYesTriggered', 'OnNoTriggered', 'OnNextTalk', 'PrologCloseCallback', 'OnEndTalk', 'WaitForScene', 'WaitForCamera', 'WaitForProlog', 'WaitForBook', 'PlayCameraNoWait', 'PlayCamera', 'SkipCamera', 'OpenTalkScene', 'OpenAutoTalkScene', 'CheckConfirmMessage', 'WaitAndCheckConfirmMessage', 'PlayMusic', 'StopMusic', 'StopMusicWithFadeOut', 'WaitForObjectsStop', 'ConvSpeedStepToMultiplier', 'WalkObject', 'WarpObject', 'RotateObject', 'AniObject', 'AniSkip', 'SpeedObject', 'ShowObject', 'FaceObject', 'FlashObject', 'StopObject', 'ClearObjects', 'Transition', 'FlyingObject', 'DelFlyingObject', 'StartLoading', 'EndLoading', 'AttachCamera', 'DetachCamera', 'MoveCamera', 'RotCamera', 'DoProlog', 'PlaySound', 'PlayTalkSound', 'FadeOut', 'FadeIn', 'FadeColor', 'CameraEffect', 'Book', 'Dialogue', 'BalloonTalk', 'BurstStruck', 'NumberPanel', 'Sepia', 'SlowMotion', 'LoadMap', 'RestoreMap', 0.0, 'g_mapFileName', 'null.map', 'g_changeMap', 'CreateObject', 'SetTransitionType', 'SetFinalMusic', 'HideOriginalObjs', 'AllowPoisonForestRaidHack', 'Phase1', 'Phase2', 'Phase3', 'Phase4', 'RevPhase4', 'RevPhase3', 'RevPhase2', 'RevPhase1', 'Register']
+
+```text
+0001 00004005 GETGLOBAL  R0, K1='MoCo'
+0002 00408006 GETTABLE   R0, R0, K2='new'
+0003 0080801c CALL       A=0 B=1 C=2
+0004 00000007 SETGLOBAL  R0, K0='qco'
+0005 00000024 CLOSURE    R0, prototype root.0
+0006 0000c007 SETGLOBAL  R0, K3='f_registerCoroutine'
+0007 00004024 CLOSURE    R0, prototype root.1
+0008 00010007 SETGLOBAL  R0, K4='f_doCoTask'
+0009 00008024 CLOSURE    R0, prototype root.2
+0010 00014007 SETGLOBAL  R0, K5='f_removeAllCoroutines'
+0011 0001c005 GETGLOBAL  R0, K7='TRUE'
+0012 00018007 SETGLOBAL  R0, K6='g_scenePlaying'
+0013 00024005 GETGLOBAL  R0, K9='FALSE'
+0014 00020007 SETGLOBAL  R0, K8='g_yesTriggered'
+0015 00024005 GETGLOBAL  R0, K9='FALSE'
+0016 00028007 SETGLOBAL  R0, K10='g_noTriggered'
+0017 00030001 LOADK      R0, K12=1.0
+0018 0002c007 SETGLOBAL  R0, K11='g_transitionIdx'
+0019 00024005 GETGLOBAL  R0, K9='FALSE'
+0020 00034007 SETGLOBAL  R0, K13='g_hideOrigObjs'
+0021 00024005 GETGLOBAL  R0, K9='FALSE'
+0022 00038007 SETGLOBAL  R0, K14='g_poisonForestRaidHack'
+0023 0000c024 CLOSURE    R0, prototype root.3
+0024 0003c007 SETGLOBAL  R0, K15='yield'
+0025 00010024 CLOSURE    R0, prototype root.4
+0026 00040007 SETGLOBAL  R0, K16='OnYesTriggered'
+0027 00014024 CLOSURE    R0, prototype root.5
+0028 00044007 SETGLOBAL  R0, K17='OnNoTriggered'
+0029 00018024 CLOSURE    R0, prototype root.6
+0030 00048007 SETGLOBAL  R0, K18='OnNextTalk'
+0031 0001c024 CLOSURE    R0, prototype root.7
+0032 0004c007 SETGLOBAL  R0, K19='PrologCloseCallback'
+0033 00020024 CLOSURE    R0, prototype root.8
+0034 00050007 SETGLOBAL  R0, K20='OnEndTalk'
+0035 00024024 CLOSURE    R0, prototype root.9
+0036 00054007 SETGLOBAL  R0, K21='WaitForScene'
+0037 00028024 CLOSURE    R0, prototype root.10
+0038 00058007 SETGLOBAL  R0, K22='WaitForCamera'
+0039 0002c024 CLOSURE    R0, prototype root.11
+0040 0005c007 SETGLOBAL  R0, K23='WaitForProlog'
+0041 00030024 CLOSURE    R0, prototype root.12
+0042 00060007 SETGLOBAL  R0, K24='WaitForBook'
+0043 00034024 CLOSURE    R0, prototype root.13
+0044 00064007 SETGLOBAL  R0, K25='PlayCameraNoWait'
+0045 00038024 CLOSURE    R0, prototype root.14
+0046 00068007 SETGLOBAL  R0, K26='PlayCamera'
+0047 0003c024 CLOSURE    R0, prototype root.15
+0048 0006c007 SETGLOBAL  R0, K27='SkipCamera'
+0049 00040024 CLOSURE    R0, prototype root.16
+0050 00070007 SETGLOBAL  R0, K28='OpenTalkScene'
+0051 00044024 CLOSURE    R0, prototype root.17
+0052 00074007 SETGLOBAL  R0, K29='OpenAutoTalkScene'
+0053 00048024 CLOSURE    R0, prototype root.18
+0054 00078007 SETGLOBAL  R0, K30='CheckConfirmMessage'
+0055 0004c024 CLOSURE    R0, prototype root.19
+0056 0007c007 SETGLOBAL  R0, K31='WaitAndCheckConfirmMessage'
+0057 00050024 CLOSURE    R0, prototype root.20
+0058 00080007 SETGLOBAL  R0, K32='PlayMusic'
+0059 00054024 CLOSURE    R0, prototype root.21
+0060 00084007 SETGLOBAL  R0, K33='StopMusic'
+0061 00058024 CLOSURE    R0, prototype root.22
+0062 00088007 SETGLOBAL  R0, K34='StopMusicWithFadeOut'
+0063 0005c024 CLOSURE    R0, prototype root.23
+0064 0008c007 SETGLOBAL  R0, K35='WaitForObjectsStop'
+0065 00060024 CLOSURE    R0, prototype root.24
+0066 00090007 SETGLOBAL  R0, K36='ConvSpeedStepToMultiplier'
+0067 00064024 CLOSURE    R0, prototype root.25
+0068 00094007 SETGLOBAL  R0, K37='WalkObject'
+0069 00068024 CLOSURE    R0, prototype root.26
+0070 00098007 SETGLOBAL  R0, K38='WarpObject'
+0071 0006c024 CLOSURE    R0, prototype root.27
+0072 0009c007 SETGLOBAL  R0, K39='RotateObject'
+0073 00070024 CLOSURE    R0, prototype root.28
+0074 000a0007 SETGLOBAL  R0, K40='AniObject'
+0075 00074024 CLOSURE    R0, prototype root.29
+0076 000a4007 SETGLOBAL  R0, K41='AniSkip'
+0077 00078024 CLOSURE    R0, prototype root.30
+0078 000a8007 SETGLOBAL  R0, K42='SpeedObject'
+0079 0007c024 CLOSURE    R0, prototype root.31
+0080 000ac007 SETGLOBAL  R0, K43='ShowObject'
+0081 00080024 CLOSURE    R0, prototype root.32
+0082 000b0007 SETGLOBAL  R0, K44='FaceObject'
+0083 00084024 CLOSURE    R0, prototype root.33
+0084 000b4007 SETGLOBAL  R0, K45='FlashObject'
+0085 00088024 CLOSURE    R0, prototype root.34
+0086 000b8007 SETGLOBAL  R0, K46='StopObject'
+0087 0008c024 CLOSURE    R0, prototype root.35
+0088 000bc007 SETGLOBAL  R0, K47='ClearObjects'
+0089 00090024 CLOSURE    R0, prototype root.36
+0090 000c0007 SETGLOBAL  R0, K48='Transition'
+0091 00094024 CLOSURE    R0, prototype root.37
+0092 000c4007 SETGLOBAL  R0, K49='FlyingObject'
+0093 00098024 CLOSURE    R0, prototype root.38
+0094 000c8007 SETGLOBAL  R0, K50='DelFlyingObject'
+0095 0009c024 CLOSURE    R0, prototype root.39
+0096 000cc007 SETGLOBAL  R0, K51='StartLoading'
+0097 000a0024 CLOSURE    R0, prototype root.40
+0098 000d0007 SETGLOBAL  R0, K52='EndLoading'
+0099 000a4024 CLOSURE    R0, prototype root.41
+0100 000d4007 SETGLOBAL  R0, K53='AttachCamera'
+0101 000a8024 CLOSURE    R0, prototype root.42
+0102 000d8007 SETGLOBAL  R0, K54='DetachCamera'
+0103 000ac024 CLOSURE    R0, prototype root.43
+0104 000dc007 SETGLOBAL  R0, K55='MoveCamera'
+0105 000b0024 CLOSURE    R0, prototype root.44
+0106 000e0007 SETGLOBAL  R0, K56='RotCamera'
+0107 000b4024 CLOSURE    R0, prototype root.45
+0108 000e4007 SETGLOBAL  R0, K57='DoProlog'
+0109 000b8024 CLOSURE    R0, prototype root.46
+0110 000e8007 SETGLOBAL  R0, K58='PlaySound'
+0111 000bc024 CLOSURE    R0, prototype root.47
+0112 000ec007 SETGLOBAL  R0, K59='PlayTalkSound'
+0113 000c0024 CLOSURE    R0, prototype root.48
+0114 000f0007 SETGLOBAL  R0, K60='FadeOut'
+0115 000c4024 CLOSURE    R0, prototype root.49
+0116 000f4007 SETGLOBAL  R0, K61='FadeIn'
+0117 000c8024 CLOSURE    R0, prototype root.50
+0118 000f8007 SETGLOBAL  R0, K62='FadeColor'
+0119 000cc024 CLOSURE    R0, prototype root.51
+0120 000fc007 SETGLOBAL  R0, K63='CameraEffect'
+0121 000d0024 CLOSURE    R0, prototype root.52
+0122 00100007 SETGLOBAL  R0, K64='Book'
+0123 000d4024 CLOSURE    R0, prototype root.53
+0124 00104007 SETGLOBAL  R0, K65='Dialogue'
+0125 000d8024 CLOSURE    R0, prototype root.54
+0126 00108007 SETGLOBAL  R0, K66='BalloonTalk'
+0127 000dc024 CLOSURE    R0, prototype root.55
+0128 0010c007 SETGLOBAL  R0, K67='BurstStruck'
+0129 000e0024 CLOSURE    R0, prototype root.56
+0130 00110007 SETGLOBAL  R0, K68='NumberPanel'
+0131 000e4024 CLOSURE    R0, prototype root.57
+0132 00114007 SETGLOBAL  R0, K69='Sepia'
+0133 000e8024 CLOSURE    R0, prototype root.58
+0134 00118007 SETGLOBAL  R0, K70='SlowMotion'
+0135 000ec024 CLOSURE    R0, prototype root.59
+0136 0011c007 SETGLOBAL  R0, K71='LoadMap'
+0137 000f0024 CLOSURE    R0, prototype root.60
+0138 00120007 SETGLOBAL  R0, K72='RestoreMap'
+0139 00124001 LOADK      R0, K73=0.0
+0140 0002c007 SETGLOBAL  R0, K11='g_transitionIdx'
+0141 0012c001 LOADK      R0, K75='null.map'
+0142 00128007 SETGLOBAL  R0, K74='g_mapFileName'
+0143 0001c005 GETGLOBAL  R0, K7='TRUE'
+0144 00130007 SETGLOBAL  R0, K76='g_changeMap'
+0145 000f4024 CLOSURE    R0, prototype root.61
+0146 00134007 SETGLOBAL  R0, K77='CreateObject'
+0147 000f8024 CLOSURE    R0, prototype root.62
+0148 00138007 SETGLOBAL  R0, K78='SetTransitionType'
+0149 000fc024 CLOSURE    R0, prototype root.63
+0150 0013c007 SETGLOBAL  R0, K79='SetFinalMusic'
+0151 00100024 CLOSURE    R0, prototype root.64
+0152 00140007 SETGLOBAL  R0, K80='HideOriginalObjs'
+0153 00104024 CLOSURE    R0, prototype root.65
+0154 00144007 SETGLOBAL  R0, K81='AllowPoisonForestRaidHack'
+0155 00108024 CLOSURE    R0, prototype root.66
+0156 00148007 SETGLOBAL  R0, K82='Phase1'
+0157 0010c024 CLOSURE    R0, prototype root.67
+0158 0014c007 SETGLOBAL  R0, K83='Phase2'
+0159 00110024 CLOSURE    R0, prototype root.68
+0160 00150007 SETGLOBAL  R0, K84='Phase3'
+0161 00114024 CLOSURE    R0, prototype root.69
+0162 00154007 SETGLOBAL  R0, K85='Phase4'
+0163 00118024 CLOSURE    R0, prototype root.70
+0164 00158007 SETGLOBAL  R0, K86='RevPhase4'
+0165 0011c024 CLOSURE    R0, prototype root.71
+0166 0015c007 SETGLOBAL  R0, K87='RevPhase3'
+0167 00120024 CLOSURE    R0, prototype root.72
+0168 00160007 SETGLOBAL  R0, K88='RevPhase2'
+0169 00124024 CLOSURE    R0, prototype root.73
+0170 00164007 SETGLOBAL  R0, K89='RevPhase1'
+0171 00128024 CLOSURE    R0, prototype root.74
+0172 00168007 SETGLOBAL  R0, K90='Register'
+0173 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.0 file offsets 2294..2390 params=1 upvalues=0 stack=4
+
+Constants: ['qco', 'registerCoroutine']
+
+```text
+0001 00000045 GETGLOBAL  R1, K0='qco'
+0002 00c0404b SELF       R1, R1, K1='registerCoroutine'
+0003 000000c0 MOVE       A=3 B=0 C=0
+0004 0180005d TAILCALL   A=1 B=3 C=0
+0005 0000005e RETURN     A=1 B=0 C=0
+0006 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.1 file offsets 2390..2501 params=0 upvalues=0 stack=3
+
+Constants: ['qco', 'doCoTask', 'Q', 'EndCutScene']
+
+```text
+0001 00000005 GETGLOBAL  R0, K0='qco'
+0002 0040400b SELF       R0, R0, K1='doCoTask'
+0003 00008085 GETGLOBAL  R2, K2='Q'
+0004 0140c086 GETTABLE   R2, R2, K3='EndCutScene'
+0005 0180401c CALL       A=0 B=3 C=1
+0006 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.2 file offsets 2501..2591 params=0 upvalues=0 stack=2
+
+Constants: ['qco', 'removeAllCoroutines']
+
+```text
+0001 00000005 GETGLOBAL  R0, K0='qco'
+0002 0040400b SELF       R0, R0, K1='removeAllCoroutines'
+0003 0100401c CALL       A=0 B=2 C=1
+0004 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.3 file offsets 2591..2666 params=0 upvalues=0 stack=2
+
+Constants: ['wait', 0.0]
+
+```text
+0001 00000005 GETGLOBAL  R0, K0='wait'
+0002 00004041 LOADK      R1, K1=0.0
+0003 0100401c CALL       A=0 B=2 C=1
+0004 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.4 file offsets 2666..2748 params=0 upvalues=0 stack=2
+
+Constants: ['g_yesTriggered', 'TRUE']
+
+```text
+0001 00004005 GETGLOBAL  R0, K1='TRUE'
+0002 00000007 SETGLOBAL  R0, K0='g_yesTriggered'
+0003 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.5 file offsets 2748..2829 params=0 upvalues=0 stack=2
+
+Constants: ['g_noTriggered', 'TRUE']
+
+```text
+0001 00004005 GETGLOBAL  R0, K1='TRUE'
+0002 00000007 SETGLOBAL  R0, K0='g_noTriggered'
+0003 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.6 file offsets 2829..2873 params=1 upvalues=0 stack=2
+
+Constants: []
+
+```text
+0001 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.7 file offsets 2873..2990 params=0 upvalues=0 stack=2
+
+Constants: ['print', 'close!!', 'Prolog', 'OnClose']
+
+```text
+0001 00000005 GETGLOBAL  R0, K0='print'
+0002 00004041 LOADK      R1, K1='close!!'
+0003 0100401c CALL       A=0 B=2 C=1
+0004 00008005 GETGLOBAL  R0, K2='Prolog'
+0005 0040c006 GETTABLE   R0, R0, K3='OnClose'
+0006 0080401c CALL       A=0 B=1 C=1
+0007 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.8 file offsets 2990..3073 params=0 upvalues=0 stack=2
+
+Constants: ['g_scenePlaying', 'FALSE']
+
+```text
+0001 00004005 GETGLOBAL  R0, K1='FALSE'
+0002 00000007 SETGLOBAL  R0, K0='g_scenePlaying'
+0003 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.9 file offsets 3073..3212 params=0 upvalues=0 stack=2
+
+Constants: ['yield', 'g_scenePlaying', 0.0, 'wait', 100.0]
+
+```text
+0001 00000005 GETGLOBAL  R0, K0='yield'
+0002 0080401c CALL       A=0 B=1 C=1
+0003 00004005 GETGLOBAL  R0, K1='g_scenePlaying'
+0004 00408057 EQ         A=1, R0, K2=0.0
+0005 8000c016 JMP        A=0, target=10 (sBx=4)
+0006 0000c005 GETGLOBAL  R0, K3='wait'
+0007 00010041 LOADK      R1, K4=100.0
+0008 0100401c CALL       A=0 B=2 C=1
+0009 7ffe0016 JMP        A=0, target=3 (sBx=-7)
+0010 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.10 file offsets 3212..3369 params=0 upvalues=0 stack=2
+
+Constants: ['yield', 'CameraWorks', 'IsEnded', 0.0, 'wait', 100.0]
+
+```text
+0001 00000005 GETGLOBAL  R0, K0='yield'
+0002 0080401c CALL       A=0 B=1 C=1
+0003 00004005 GETGLOBAL  R0, K1='CameraWorks'
+0004 00408006 GETTABLE   R0, R0, K2='IsEnded'
+0005 0080801c CALL       A=0 B=1 C=2
+0006 0040c017 EQ         A=0, R0, K3=0.0
+0007 8000c016 JMP        A=0, target=12 (sBx=4)
+0008 00010005 GETGLOBAL  R0, K4='wait'
+0009 00014041 LOADK      R1, K5=100.0
+0010 0100401c CALL       A=0 B=2 C=1
+0011 7ffd8016 JMP        A=0, target=3 (sBx=-9)
+0012 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.11 file offsets 3369..3524 params=0 upvalues=0 stack=2
+
+Constants: ['yield', 'Q', 'IsPrologRunning', 1.0, 'wait', 100.0]
+
+```text
+0001 00000005 GETGLOBAL  R0, K0='yield'
+0002 0080401c CALL       A=0 B=1 C=1
+0003 00004005 GETGLOBAL  R0, K1='Q'
+0004 00408006 GETTABLE   R0, R0, K2='IsPrologRunning'
+0005 0080801c CALL       A=0 B=1 C=2
+0006 0040c017 EQ         A=0, R0, K3=1.0
+0007 8000c016 JMP        A=0, target=12 (sBx=4)
+0008 00010005 GETGLOBAL  R0, K4='wait'
+0009 00014041 LOADK      R1, K5=100.0
+0010 0100401c CALL       A=0 B=2 C=1
+0011 7ffd8016 JMP        A=0, target=3 (sBx=-9)
+0012 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.12 file offsets 3524..3676 params=0 upvalues=0 stack=2
+
+Constants: ['yield', 'Q', 'IsBookFlying', 1.0, 'wait', 100.0]
+
+```text
+0001 00000005 GETGLOBAL  R0, K0='yield'
+0002 0080401c CALL       A=0 B=1 C=1
+0003 00004005 GETGLOBAL  R0, K1='Q'
+0004 00408006 GETTABLE   R0, R0, K2='IsBookFlying'
+0005 0080801c CALL       A=0 B=1 C=2
+0006 0040c017 EQ         A=0, R0, K3=1.0
+0007 8000c016 JMP        A=0, target=12 (sBx=4)
+0008 00010005 GETGLOBAL  R0, K4='wait'
+0009 00014041 LOADK      R1, K5=100.0
+0010 0100401c CALL       A=0 B=2 C=1
+0011 7ffd8016 JMP        A=0, target=3 (sBx=-9)
+0012 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.13 file offsets 3676..3969 params=5 upvalues=0 stack=14
+
+Constants: [0.0, 'Q', 'GetLeaderPosN', 1.0, 2.0, 'Event/CameraWorks/', 'CameraWorks', 'LoadRel', 'Play']
+
+```text
+0001 01000140 MOVE       A=5 B=2 C=0
+0002 01800180 MOVE       A=6 B=3 C=0
+0003 020001c0 MOVE       A=7 B=4 C=0
+0004 00c00057 EQ         A=1, R1, K0=0.0
+0005 80038016 JMP        A=0, target=21 (sBx=15)
+0006 00004205 GETGLOBAL  R8, K1='Q'
+0007 04408206 GETTABLE   R8, R8, K2='GetLeaderPosN'
+0008 00000241 LOADK      R9, K0=0.0
+0009 0100821c CALL       A=8 B=2 C=2
+0010 0282014c ADD        A=5, R5, R8
+0011 00004205 GETGLOBAL  R8, K1='Q'
+0012 04408206 GETTABLE   R8, R8, K2='GetLeaderPosN'
+0013 0000c241 LOADK      R9, K3=1.0
+0014 0100821c CALL       A=8 B=2 C=2
+0015 0302018c ADD        A=6, R6, R8
+0016 00004205 GETGLOBAL  R8, K1='Q'
+0017 04408206 GETTABLE   R8, R8, K2='GetLeaderPosN'
+0018 00010241 LOADK      R9, K4=2.0
+0019 0100821c CALL       A=8 B=2 C=2
+0020 038201cc ADD        A=7, R7, R8
+0021 00014201 LOADK      R8, K5='Event/CameraWorks/'
+0022 00000240 MOVE       A=9 B=0 C=0
+0023 04024215 CONCAT     A=8 B=8 C=9
+0024 00018245 GETGLOBAL  R9, K6='CameraWorks'
+0025 04c1c246 GETTABLE   R9, R9, K7='LoadRel'
+0026 04000280 MOVE       A=10 B=8 C=0
+0027 028002c0 MOVE       A=11 B=5 C=0
+0028 03000300 MOVE       A=12 B=6 C=0
+0029 03800340 MOVE       A=13 B=7 C=0
+0030 0280425c CALL       A=9 B=5 C=1
+0031 00018245 GETGLOBAL  R9, K6='CameraWorks'
+0032 04c20246 GETTABLE   R9, R9, K8='Play'
+0033 0080425c CALL       A=9 B=1 C=1
+0034 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.14 file offsets 3969..4090 params=5 upvalues=0 stack=11
+
+Constants: ['PlayCameraNoWait', 'WaitForCamera']
+
+```text
+0001 00000145 GETGLOBAL  R5, K0='PlayCameraNoWait'
+0002 00000180 MOVE       A=6 B=0 C=0
+0003 008001c0 MOVE       A=7 B=1 C=0
+0004 01000200 MOVE       A=8 B=2 C=0
+0005 01800240 MOVE       A=9 B=3 C=0
+0006 02000280 MOVE       A=10 B=4 C=0
+0007 0300415c CALL       A=5 B=6 C=1
+0008 00004145 GETGLOBAL  R5, K1='WaitForCamera'
+0009 0080415c CALL       A=5 B=1 C=1
+0010 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.15 file offsets 4090..4192 params=1 upvalues=0 stack=3
+
+Constants: ['Q', 'SkipCamera', 'yield']
+
+```text
+0001 00000045 GETGLOBAL  R1, K0='Q'
+0002 00c04046 GETTABLE   R1, R1, K1='SkipCamera'
+0003 00000080 MOVE       A=2 B=0 C=0
+0004 0100405c CALL       A=1 B=2 C=1
+0005 00008045 GETGLOBAL  R1, K2='yield'
+0006 0080405c CALL       A=1 B=1 C=1
+0007 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.16 file offsets 4192..4357 params=2 upvalues=0 stack=6
+
+Constants: ['g_scenePlaying', 'TRUE', 'ScenarioTalkTable', 'open', 'WaitForScene']
+
+```text
+0001 00004085 GETGLOBAL  R2, K1='TRUE'
+0002 00000087 SETGLOBAL  R2, K0='g_scenePlaying'
+0003 00008085 GETGLOBAL  R2, K2='ScenarioTalkTable'
+0004 0140c086 GETTABLE   R2, R2, K3='open'
+0005 000000c0 MOVE       A=3 B=0 C=0
+0006 00800100 MOVE       A=4 B=1 C=0
+0007 00800142 LOADBOOL   A=5 B=1 C=0
+0008 0200409c CALL       A=2 B=4 C=1
+0009 00010085 GETGLOBAL  R2, K4='WaitForScene'
+0010 0080409c CALL       A=2 B=1 C=1
+0011 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.17 file offsets 4357..4522 params=2 upvalues=0 stack=6
+
+Constants: ['g_scenePlaying', 'TRUE', 'ScenarioTalkTable', 'open', 'WaitForScene']
+
+```text
+0001 00004085 GETGLOBAL  R2, K1='TRUE'
+0002 00000087 SETGLOBAL  R2, K0='g_scenePlaying'
+0003 00008085 GETGLOBAL  R2, K2='ScenarioTalkTable'
+0004 0140c086 GETTABLE   R2, R2, K3='open'
+0005 000000c0 MOVE       A=3 B=0 C=0
+0006 00800100 MOVE       A=4 B=1 C=0
+0007 00000142 LOADBOOL   A=5 B=0 C=0
+0008 0200409c CALL       A=2 B=4 C=1
+0009 00010085 GETGLOBAL  R2, K4='WaitForScene'
+0010 0080409c CALL       A=2 B=1 C=1
+0011 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.18 file offsets 4522..4694 params=0 upvalues=0 stack=2
+
+Constants: ['g_noTriggered', 'FALSE', 0.0, 'g_yesTriggered', 1.0]
+
+```text
+0001 00000005 GETGLOBAL  R0, K0='g_noTriggered'
+0002 00004045 GETGLOBAL  R1, K1='FALSE'
+0003 00004057 EQ         A=1, R0, R1
+0004 80008016 JMP        A=0, target=8 (sBx=3)
+0005 00008001 LOADK      R0, K2=0.0
+0006 0100001e RETURN     A=0 B=2 C=0
+0007 80014016 JMP        A=0, target=14 (sBx=6)
+0008 0000c005 GETGLOBAL  R0, K3='g_yesTriggered'
+0009 00004045 GETGLOBAL  R1, K1='FALSE'
+0010 00004057 EQ         A=1, R0, R1
+0011 80004016 JMP        A=0, target=14 (sBx=2)
+0012 00010001 LOADK      R0, K4=1.0
+0013 0100001e RETURN     A=0 B=2 C=0
+0014 00008001 LOADK      R0, K2=0.0
+0015 0100001e RETURN     A=0 B=2 C=0
+0016 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.19 file offsets 4694..4904 params=0 upvalues=0 stack=2
+
+Constants: ['yield', 'g_yesTriggered', 'FALSE', 'g_noTriggered', 'CheckConfirmMessage']
+
+```text
+0001 00000005 GETGLOBAL  R0, K0='yield'
+0002 0080401c CALL       A=0 B=1 C=1
+0003 00008005 GETGLOBAL  R0, K2='FALSE'
+0004 00004007 SETGLOBAL  R0, K1='g_yesTriggered'
+0005 00008005 GETGLOBAL  R0, K2='FALSE'
+0006 0000c007 SETGLOBAL  R0, K3='g_noTriggered'
+0007 0000c005 GETGLOBAL  R0, K3='g_noTriggered'
+0008 00008045 GETGLOBAL  R1, K2='FALSE'
+0009 00004017 EQ         A=0, R0, R1
+0010 80018016 JMP        A=0, target=18 (sBx=7)
+0011 00004005 GETGLOBAL  R0, K1='g_yesTriggered'
+0012 00008045 GETGLOBAL  R1, K2='FALSE'
+0013 00004017 EQ         A=0, R0, R1
+0014 80008016 JMP        A=0, target=18 (sBx=3)
+0015 00000005 GETGLOBAL  R0, K0='yield'
+0016 0080401c CALL       A=0 B=1 C=1
+0017 7ffd0016 JMP        A=0, target=7 (sBx=-11)
+0018 00010005 GETGLOBAL  R0, K4='CheckConfirmMessage'
+0019 0080001d TAILCALL   A=0 B=1 C=0
+0020 0000001e RETURN     A=0 B=0 C=0
+0021 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.20 file offsets 4904..5043 params=1 upvalues=0 stack=5
+
+Constants: ['Sound/', 'Q', 'PlayMusic', 'TRUE', 'yield']
+
+```text
+0001 00000041 LOADK      R1, K0='Sound/'
+0002 00000080 MOVE       A=2 B=0 C=0
+0003 00808055 CONCAT     A=1 B=1 C=2
+0004 00004085 GETGLOBAL  R2, K1='Q'
+0005 01408086 GETTABLE   R2, R2, K2='PlayMusic'
+0006 008000c0 MOVE       A=3 B=1 C=0
+0007 0000c105 GETGLOBAL  R4, K3='TRUE'
+0008 0180409c CALL       A=2 B=3 C=1
+0009 00010085 GETGLOBAL  R2, K4='yield'
+0010 0080409c CALL       A=2 B=1 C=1
+0011 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.21 file offsets 5043..5140 params=0 upvalues=0 stack=2
+
+Constants: ['Q', 'StopMusic', 'yield']
+
+```text
+0001 00000005 GETGLOBAL  R0, K0='Q'
+0002 00404006 GETTABLE   R0, R0, K1='StopMusic'
+0003 0080401c CALL       A=0 B=1 C=1
+0004 00008005 GETGLOBAL  R0, K2='yield'
+0005 0080401c CALL       A=0 B=1 C=1
+0006 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.22 file offsets 5140..5252 params=1 upvalues=0 stack=3
+
+Constants: ['Q', 'StopMusicWithFadeOut', 'yield']
+
+```text
+0001 00000045 GETGLOBAL  R1, K0='Q'
+0002 00c04046 GETTABLE   R1, R1, K1='StopMusicWithFadeOut'
+0003 00000080 MOVE       A=2 B=0 C=0
+0004 0100405c CALL       A=1 B=2 C=1
+0005 00008045 GETGLOBAL  R1, K2='yield'
+0006 0080405c CALL       A=1 B=1 C=1
+0007 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.23 file offsets 5252..5388 params=0 upvalues=0 stack=2
+
+Constants: ['yield', 'Q', 'IsAllObjectsStopped', 0.0]
+
+```text
+0001 00000005 GETGLOBAL  R0, K0='yield'
+0002 0080401c CALL       A=0 B=1 C=1
+0003 00004005 GETGLOBAL  R0, K1='Q'
+0004 00408006 GETTABLE   R0, R0, K2='IsAllObjectsStopped'
+0005 0080801c CALL       A=0 B=1 C=2
+0006 0040c017 EQ         A=0, R0, K3=0.0
+0007 80008016 JMP        A=0, target=11 (sBx=3)
+0008 00000005 GETGLOBAL  R0, K0='yield'
+0009 0080401c CALL       A=0 B=1 C=1
+0010 7ffdc016 JMP        A=0, target=3 (sBx=-8)
+0011 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.24 file offsets 5388..5681 params=1 upvalues=0 stack=4
+
+Constants: [0.0, 1.0, 1.2, 2.0, 0.5, 3.0, 0.25, 4.0, 0.125, 5.0, 'print', 'Invalid Speedstep ']
+
+```text
+0001 00400017 EQ         A=0, R0, K0=0.0
+0002 80004016 JMP        A=0, target=5 (sBx=2)
+0003 00004001 LOADK      R0, K1=1.0
+0004 80064016 JMP        A=0, target=31 (sBx=26)
+0005 00404017 EQ         A=0, R0, K1=1.0
+0006 80004016 JMP        A=0, target=9 (sBx=2)
+0007 00008001 LOADK      R0, K2=1.2
+0008 80054016 JMP        A=0, target=31 (sBx=22)
+0009 0040c017 EQ         A=0, R0, K3=2.0
+0010 80004016 JMP        A=0, target=13 (sBx=2)
+0011 00010001 LOADK      R0, K4=0.5
+0012 80044016 JMP        A=0, target=31 (sBx=18)
+0013 00414017 EQ         A=0, R0, K5=3.0
+0014 80004016 JMP        A=0, target=17 (sBx=2)
+0015 00018001 LOADK      R0, K6=0.25
+0016 80034016 JMP        A=0, target=31 (sBx=14)
+0017 0041c017 EQ         A=0, R0, K7=4.0
+0018 80004016 JMP        A=0, target=21 (sBx=2)
+0019 00020001 LOADK      R0, K8=0.125
+0020 80024016 JMP        A=0, target=31 (sBx=10)
+0021 00424017 EQ         A=0, R0, K9=5.0
+0022 80004016 JMP        A=0, target=25 (sBx=2)
+0023 00000001 LOADK      R0, K0=0.0
+0024 80014016 JMP        A=0, target=31 (sBx=6)
+0025 00028045 GETGLOBAL  R1, K10='print'
+0026 0002c081 LOADK      R2, K11='Invalid Speedstep '
+0027 000000c0 MOVE       A=3 B=0 C=0
+0028 0100c095 CONCAT     A=2 B=2 C=3
+0029 0100405c CALL       A=1 B=2 C=1
+0030 00004001 LOADK      R0, K1=1.0
+0031 0100001e RETURN     A=0 B=2 C=0
+0032 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.25 file offsets 5681..5880 params=7 upvalues=0 stack=14
+
+Constants: [-1.0, 4.0, 'ConvSpeedStepToMultiplier', 'Q', 'WalkObject', 'yield']
+
+```text
+0001 02c00017 EQ         A=0, R5, K0=-1.0
+0002 80000016 JMP        A=0, target=4 (sBx=1)
+0003 00004141 LOADK      R5, K1=4.0
+0004 000081c5 GETGLOBAL  R7, K2='ConvSpeedStepToMultiplier'
+0005 03000200 MOVE       A=8 B=6 C=0
+0006 010081dc CALL       A=7 B=2 C=2
+0007 03800180 MOVE       A=6 B=7 C=0
+0008 0000c1c5 GETGLOBAL  R7, K3='Q'
+0009 03c101c6 GETTABLE   R7, R7, K4='WalkObject'
+0010 00000200 MOVE       A=8 B=0 C=0
+0011 00800240 MOVE       A=9 B=1 C=0
+0012 01000280 MOVE       A=10 B=2 C=0
+0013 020002c0 MOVE       A=11 B=4 C=0
+0014 02800300 MOVE       A=12 B=5 C=0
+0015 03000340 MOVE       A=13 B=6 C=0
+0016 038041dc CALL       A=7 B=7 C=1
+0017 000141c5 GETGLOBAL  R7, K5='yield'
+0018 008041dc CALL       A=7 B=1 C=1
+0019 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.26 file offsets 5880..6032 params=7 upvalues=0 stack=14
+
+Constants: [-1.0, 1.0, 'Q', 'WarpObject', 'yield']
+
+```text
+0001 03400017 EQ         A=0, R6, K0=-1.0
+0002 80000016 JMP        A=0, target=4 (sBx=1)
+0003 00004181 LOADK      R6, K1=1.0
+0004 000081c5 GETGLOBAL  R7, K2='Q'
+0005 03c0c1c6 GETTABLE   R7, R7, K3='WarpObject'
+0006 00000200 MOVE       A=8 B=0 C=0
+0007 00800240 MOVE       A=9 B=1 C=0
+0008 01000280 MOVE       A=10 B=2 C=0
+0009 020002c0 MOVE       A=11 B=4 C=0
+0010 02800300 MOVE       A=12 B=5 C=0
+0011 03000340 MOVE       A=13 B=6 C=0
+0012 038041dc CALL       A=7 B=7 C=1
+0013 000101c5 GETGLOBAL  R7, K4='yield'
+0014 008041dc CALL       A=7 B=1 C=1
+0015 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.27 file offsets 6032..6166 params=3 upvalues=0 stack=7
+
+Constants: [None, 0.0, 'Q', 'RotateObject', 'yield']
+
+```text
+0001 01400017 EQ         A=0, R2, K0=None
+0002 80000016 JMP        A=0, target=4 (sBx=1)
+0003 00004081 LOADK      R2, K1=0.0
+0004 000080c5 GETGLOBAL  R3, K2='Q'
+0005 01c0c0c6 GETTABLE   R3, R3, K3='RotateObject'
+0006 00000100 MOVE       A=4 B=0 C=0
+0007 00800140 MOVE       A=5 B=1 C=0
+0008 01000180 MOVE       A=6 B=2 C=0
+0009 020040dc CALL       A=3 B=4 C=1
+0010 000100c5 GETGLOBAL  R3, K4='yield'
+0011 008040dc CALL       A=3 B=1 C=1
+0012 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.28 file offsets 6166..6275 params=3 upvalues=0 stack=7
+
+Constants: ['Q', 'AniObject', 'yield']
+
+```text
+0001 000000c5 GETGLOBAL  R3, K0='Q'
+0002 01c040c6 GETTABLE   R3, R3, K1='AniObject'
+0003 00000100 MOVE       A=4 B=0 C=0
+0004 00800140 MOVE       A=5 B=1 C=0
+0005 01000180 MOVE       A=6 B=2 C=0
+0006 020040dc CALL       A=3 B=4 C=1
+0007 000080c5 GETGLOBAL  R3, K2='yield'
+0008 008040dc CALL       A=3 B=1 C=1
+0009 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.29 file offsets 6275..6378 params=2 upvalues=0 stack=5
+
+Constants: ['Q', 'AniSkip', 'yield']
+
+```text
+0001 00000085 GETGLOBAL  R2, K0='Q'
+0002 01404086 GETTABLE   R2, R2, K1='AniSkip'
+0003 000000c0 MOVE       A=3 B=0 C=0
+0004 00800100 MOVE       A=4 B=1 C=0
+0005 0180409c CALL       A=2 B=3 C=1
+0006 00008085 GETGLOBAL  R2, K2='yield'
+0007 0080409c CALL       A=2 B=1 C=1
+0008 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.30 file offsets 6378..6532 params=2 upvalues=0 stack=5
+
+Constants: ['ConvSpeedStepToMultiplier', 'Q', 'SpeedObject', 'yield']
+
+```text
+0001 00000085 GETGLOBAL  R2, K0='ConvSpeedStepToMultiplier'
+0002 008000c0 MOVE       A=3 B=1 C=0
+0003 0100809c CALL       A=2 B=2 C=2
+0004 01000040 MOVE       A=1 B=2 C=0
+0005 00004085 GETGLOBAL  R2, K1='Q'
+0006 01408086 GETTABLE   R2, R2, K2='SpeedObject'
+0007 000000c0 MOVE       A=3 B=0 C=0
+0008 00800100 MOVE       A=4 B=1 C=0
+0009 0180409c CALL       A=2 B=3 C=1
+0010 0000c085 GETGLOBAL  R2, K3='yield'
+0011 0080409c CALL       A=2 B=1 C=1
+0012 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.31 file offsets 6532..6619 params=2 upvalues=0 stack=5
+
+Constants: ['Q', 'ShowObject']
+
+```text
+0001 00000085 GETGLOBAL  R2, K0='Q'
+0002 01404086 GETTABLE   R2, R2, K1='ShowObject'
+0003 000000c0 MOVE       A=3 B=0 C=0
+0004 00800100 MOVE       A=4 B=1 C=0
+0005 0180409c CALL       A=2 B=3 C=1
+0006 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.32 file offsets 6619..6729 params=3 upvalues=0 stack=7
+
+Constants: ['Q', 'FaceObject', 'yield']
+
+```text
+0001 000000c5 GETGLOBAL  R3, K0='Q'
+0002 01c040c6 GETTABLE   R3, R3, K1='FaceObject'
+0003 00000100 MOVE       A=4 B=0 C=0
+0004 00800140 MOVE       A=5 B=1 C=0
+0005 01000180 MOVE       A=6 B=2 C=0
+0006 020040dc CALL       A=3 B=4 C=1
+0007 000080c5 GETGLOBAL  R3, K2='yield'
+0008 008040dc CALL       A=3 B=1 C=1
+0009 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.33 file offsets 6729..6870 params=3 upvalues=0 stack=7
+
+Constants: [5.0, 10.0, 'Q', 'FlashObject', 'yield']
+
+```text
+0001 00c00017 EQ         A=0, R1, K0=5.0
+0002 80000016 JMP        A=0, target=4 (sBx=1)
+0003 00004041 LOADK      R1, K1=10.0
+0004 000080c5 GETGLOBAL  R3, K2='Q'
+0005 01c0c0c6 GETTABLE   R3, R3, K3='FlashObject'
+0006 00000100 MOVE       A=4 B=0 C=0
+0007 00800140 MOVE       A=5 B=1 C=0
+0008 01000180 MOVE       A=6 B=2 C=0
+0009 020040dc CALL       A=3 B=4 C=1
+0010 000100c5 GETGLOBAL  R3, K4='yield'
+0011 008040dc CALL       A=3 B=1 C=1
+0012 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.34 file offsets 6870..6972 params=1 upvalues=0 stack=3
+
+Constants: ['Q', 'StopObject', 'yield']
+
+```text
+0001 00000045 GETGLOBAL  R1, K0='Q'
+0002 00c04046 GETTABLE   R1, R1, K1='StopObject'
+0003 00000080 MOVE       A=2 B=0 C=0
+0004 0100405c CALL       A=1 B=2 C=1
+0005 00008045 GETGLOBAL  R1, K2='yield'
+0006 0080405c CALL       A=1 B=1 C=1
+0007 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.35 file offsets 6972..7056 params=0 upvalues=0 stack=2
+
+Constants: ['Q', 'DeleteAllObject']
+
+```text
+0001 00000005 GETGLOBAL  R0, K0='Q'
+0002 00404006 GETTABLE   R0, R0, K1='DeleteAllObject'
+0003 0080401c CALL       A=0 B=1 C=1
+0004 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.36 file offsets 7056..7180 params=0 upvalues=0 stack=3
+
+Constants: ['Q', 'Transition', 2.0, 120.0, 'yield']
+
+```text
+0001 00000005 GETGLOBAL  R0, K0='Q'
+0002 00404006 GETTABLE   R0, R0, K1='Transition'
+0003 00008041 LOADK      R1, K2=2.0
+0004 0000c081 LOADK      R2, K3=120.0
+0005 0180401c CALL       A=0 B=3 C=1
+0006 00010005 GETGLOBAL  R0, K4='yield'
+0007 0080401c CALL       A=0 B=1 C=1
+0008 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.37 file offsets 7180..7308 params=7 upvalues=0 stack=15
+
+Constants: ['Q', 'FlyingObject', 'yield']
+
+```text
+0001 000001c5 GETGLOBAL  R7, K0='Q'
+0002 03c041c6 GETTABLE   R7, R7, K1='FlyingObject'
+0003 00000200 MOVE       A=8 B=0 C=0
+0004 00800240 MOVE       A=9 B=1 C=0
+0005 01000280 MOVE       A=10 B=2 C=0
+0006 018002c0 MOVE       A=11 B=3 C=0
+0007 02000300 MOVE       A=12 B=4 C=0
+0008 02800340 MOVE       A=13 B=5 C=0
+0009 03000380 MOVE       A=14 B=6 C=0
+0010 040041dc CALL       A=7 B=8 C=1
+0011 000081c5 GETGLOBAL  R7, K2='yield'
+0012 008041dc CALL       A=7 B=1 C=1
+0013 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.38 file offsets 7308..7392 params=0 upvalues=0 stack=2
+
+Constants: ['Q', 'DelFlyingObject']
+
+```text
+0001 00000005 GETGLOBAL  R0, K0='Q'
+0002 00404006 GETTABLE   R0, R0, K1='DelFlyingObject'
+0003 0080401c CALL       A=0 B=1 C=1
+0004 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.39 file offsets 7392..7455 params=0 upvalues=0 stack=2
+
+Constants: ['yield']
+
+```text
+0001 00000005 GETGLOBAL  R0, K0='yield'
+0002 0080401c CALL       A=0 B=1 C=1
+0003 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.40 file offsets 7455..7518 params=0 upvalues=0 stack=2
+
+Constants: ['yield']
+
+```text
+0001 00000005 GETGLOBAL  R0, K0='yield'
+0002 0080401c CALL       A=0 B=1 C=1
+0003 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.41 file offsets 7518..7603 params=1 upvalues=0 stack=3
+
+Constants: ['Q', 'AttachCamera']
+
+```text
+0001 00000045 GETGLOBAL  R1, K0='Q'
+0002 00c04046 GETTABLE   R1, R1, K1='AttachCamera'
+0003 00000080 MOVE       A=2 B=0 C=0
+0004 0100405c CALL       A=1 B=2 C=1
+0005 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.42 file offsets 7603..7684 params=0 upvalues=0 stack=2
+
+Constants: ['Q', 'DetachCamera']
+
+```text
+0001 00000005 GETGLOBAL  R0, K0='Q'
+0002 00404006 GETTABLE   R0, R0, K1='DetachCamera'
+0003 0080401c CALL       A=0 B=1 C=1
+0004 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.43 file offsets 7684..7775 params=3 upvalues=0 stack=7
+
+Constants: ['Q', 'MoveCamera']
+
+```text
+0001 000000c5 GETGLOBAL  R3, K0='Q'
+0002 01c040c6 GETTABLE   R3, R3, K1='MoveCamera'
+0003 00000100 MOVE       A=4 B=0 C=0
+0004 00800140 MOVE       A=5 B=1 C=0
+0005 01000180 MOVE       A=6 B=2 C=0
+0006 020040dc CALL       A=3 B=4 C=1
+0007 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.44 file offsets 7775..7865 params=3 upvalues=0 stack=7
+
+Constants: ['Q', 'RotCamera']
+
+```text
+0001 000000c5 GETGLOBAL  R3, K0='Q'
+0002 01c040c6 GETTABLE   R3, R3, K1='RotCamera'
+0003 00000100 MOVE       A=4 B=0 C=0
+0004 00800140 MOVE       A=5 B=1 C=0
+0005 01000180 MOVE       A=6 B=2 C=0
+0006 020040dc CALL       A=3 B=4 C=1
+0007 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.45 file offsets 7865..7971 params=1 upvalues=0 stack=3
+
+Constants: ['Q', 'Prolog', 'WaitForProlog']
+
+```text
+0001 00000045 GETGLOBAL  R1, K0='Q'
+0002 00c04046 GETTABLE   R1, R1, K1='Prolog'
+0003 00000080 MOVE       A=2 B=0 C=0
+0004 0100405c CALL       A=1 B=2 C=1
+0005 00008045 GETGLOBAL  R1, K2='WaitForProlog'
+0006 0080405c CALL       A=1 B=1 C=1
+0007 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.46 file offsets 7971..8072 params=1 upvalues=0 stack=3
+
+Constants: ['Q', 'PlaySound', 'yield']
+
+```text
+0001 00000045 GETGLOBAL  R1, K0='Q'
+0002 00c04046 GETTABLE   R1, R1, K1='PlaySound'
+0003 00000080 MOVE       A=2 B=0 C=0
+0004 0100405c CALL       A=1 B=2 C=1
+0005 00008045 GETGLOBAL  R1, K2='yield'
+0006 0080405c CALL       A=1 B=1 C=1
+0007 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.47 file offsets 8072..8177 params=1 upvalues=0 stack=3
+
+Constants: ['Q', 'PlayTalkSound', 'yield']
+
+```text
+0001 00000045 GETGLOBAL  R1, K0='Q'
+0002 00c04046 GETTABLE   R1, R1, K1='PlayTalkSound'
+0003 00000080 MOVE       A=2 B=0 C=0
+0004 0100405c CALL       A=1 B=2 C=1
+0005 00008045 GETGLOBAL  R1, K2='yield'
+0006 0080405c CALL       A=1 B=1 C=1
+0007 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.48 file offsets 8177..8276 params=1 upvalues=0 stack=3
+
+Constants: ['Q', 'FadeOut', 'yield']
+
+```text
+0001 00000045 GETGLOBAL  R1, K0='Q'
+0002 00c04046 GETTABLE   R1, R1, K1='FadeOut'
+0003 00000080 MOVE       A=2 B=0 C=0
+0004 0100405c CALL       A=1 B=2 C=1
+0005 00008045 GETGLOBAL  R1, K2='yield'
+0006 0080405c CALL       A=1 B=1 C=1
+0007 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.49 file offsets 8276..8374 params=1 upvalues=0 stack=3
+
+Constants: ['Q', 'FadeIn', 'yield']
+
+```text
+0001 00000045 GETGLOBAL  R1, K0='Q'
+0002 00c04046 GETTABLE   R1, R1, K1='FadeIn'
+0003 00000080 MOVE       A=2 B=0 C=0
+0004 0100405c CALL       A=1 B=2 C=1
+0005 00008045 GETGLOBAL  R1, K2='yield'
+0006 0080405c CALL       A=1 B=1 C=1
+0007 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.50 file offsets 8374..8475 params=1 upvalues=0 stack=3
+
+Constants: ['Q', 'FadeColor', 'yield']
+
+```text
+0001 00000045 GETGLOBAL  R1, K0='Q'
+0002 00c04046 GETTABLE   R1, R1, K1='FadeColor'
+0003 00000080 MOVE       A=2 B=0 C=0
+0004 0100405c CALL       A=1 B=2 C=1
+0005 00008045 GETGLOBAL  R1, K2='yield'
+0006 0080405c CALL       A=1 B=1 C=1
+0007 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.51 file offsets 8475..8644 params=4 upvalues=0 stack=8
+
+Constants: ['Q', 'CameraEffect', 'TRUE', 'wait', 33.333333333333336, 'yield']
+
+```text
+0001 00000105 GETGLOBAL  R4, K0='Q'
+0002 02404106 GETTABLE   R4, R4, K1='CameraEffect'
+0003 00800140 MOVE       A=5 B=1 C=0
+0004 01000180 MOVE       A=6 B=2 C=0
+0005 018001c0 MOVE       A=7 B=3 C=0
+0006 0200411c CALL       A=4 B=4 C=1
+0007 00008105 GETGLOBAL  R4, K2='TRUE'
+0008 00010017 EQ         A=0, R0, R4
+0009 8000c016 JMP        A=0, target=14 (sBx=4)
+0010 0000c105 GETGLOBAL  R4, K3='wait'
+0011 00c1014e MUL        A=5, R1, K4=33.333333333333336
+0012 0100411c CALL       A=4 B=2 C=1
+0013 80004016 JMP        A=0, target=16 (sBx=2)
+0014 00014105 GETGLOBAL  R4, K5='yield'
+0015 0080411c CALL       A=4 B=1 C=1
+0016 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.52 file offsets 8644..8746 params=1 upvalues=0 stack=3
+
+Constants: ['Q', 'Book', 'WaitForBook']
+
+```text
+0001 00000045 GETGLOBAL  R1, K0='Q'
+0002 00c04046 GETTABLE   R1, R1, K1='Book'
+0003 00000080 MOVE       A=2 B=0 C=0
+0004 0100405c CALL       A=1 B=2 C=1
+0005 00008045 GETGLOBAL  R1, K2='WaitForBook'
+0006 0080405c CALL       A=1 B=1 C=1
+0007 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.53 file offsets 8746..8846 params=1 upvalues=0 stack=3
+
+Constants: ['Q', 'Dialogue', 'yield']
+
+```text
+0001 00000045 GETGLOBAL  R1, K0='Q'
+0002 00c04046 GETTABLE   R1, R1, K1='Dialogue'
+0003 00000080 MOVE       A=2 B=0 C=0
+0004 0100405c CALL       A=1 B=2 C=1
+0005 00008045 GETGLOBAL  R1, K2='yield'
+0006 0080405c CALL       A=1 B=1 C=1
+0007 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.54 file offsets 8846..8953 params=2 upvalues=0 stack=5
+
+Constants: ['Q', 'BalloonTalk', 'yield']
+
+```text
+0001 00000085 GETGLOBAL  R2, K0='Q'
+0002 01404086 GETTABLE   R2, R2, K1='BalloonTalk'
+0003 000000c0 MOVE       A=3 B=0 C=0
+0004 00800100 MOVE       A=4 B=1 C=0
+0005 0180409c CALL       A=2 B=3 C=1
+0006 00008085 GETGLOBAL  R2, K2='yield'
+0007 0080409c CALL       A=2 B=1 C=1
+0008 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.55 file offsets 8953..9064 params=3 upvalues=0 stack=7
+
+Constants: ['Q', 'BurstStruck', 'yield']
+
+```text
+0001 000000c5 GETGLOBAL  R3, K0='Q'
+0002 01c040c6 GETTABLE   R3, R3, K1='BurstStruck'
+0003 00000100 MOVE       A=4 B=0 C=0
+0004 00800140 MOVE       A=5 B=1 C=0
+0005 01000180 MOVE       A=6 B=2 C=0
+0006 020040dc CALL       A=3 B=4 C=1
+0007 000080c5 GETGLOBAL  R3, K2='yield'
+0008 008040dc CALL       A=3 B=1 C=1
+0009 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.56 file offsets 9064..9233 params=3 upvalues=0 stack=7
+
+Constants: [4.0, 'Q', 'NumberPanel', 'BattlePanel', 'yield']
+
+```text
+0001 80004019 LE         A=0, K0=4.0, R1
+0002 80018016 JMP        A=0, target=10 (sBx=7)
+0003 000040c5 GETGLOBAL  R3, K1='Q'
+0004 01c080c6 GETTABLE   R3, R3, K2='NumberPanel'
+0005 00000100 MOVE       A=4 B=0 C=0
+0006 00c0014d SUB        A=5, R1, K0=4.0
+0007 01000180 MOVE       A=6 B=2 C=0
+0008 020040dc CALL       A=3 B=4 C=1
+0009 80010016 JMP        A=0, target=15 (sBx=5)
+0010 000040c5 GETGLOBAL  R3, K1='Q'
+0011 01c0c0c6 GETTABLE   R3, R3, K3='BattlePanel'
+0012 00000100 MOVE       A=4 B=0 C=0
+0013 00800140 MOVE       A=5 B=1 C=0
+0014 018040dc CALL       A=3 B=3 C=1
+0015 000100c5 GETGLOBAL  R3, K4='yield'
+0016 008040dc CALL       A=3 B=1 C=1
+0017 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.57 file offsets 9233..9367 params=2 upvalues=0 stack=4
+
+Constants: [0.0, 'Q', 'StartSepia', 'EndSepia']
+
+```text
+0001 00400057 EQ         A=1, R0, K0=0.0
+0002 80010016 JMP        A=0, target=8 (sBx=5)
+0003 00004085 GETGLOBAL  R2, K1='Q'
+0004 01408086 GETTABLE   R2, R2, K2='StartSepia'
+0005 008000c0 MOVE       A=3 B=1 C=0
+0006 0100409c CALL       A=2 B=2 C=1
+0007 8000c016 JMP        A=0, target=12 (sBx=4)
+0008 00004085 GETGLOBAL  R2, K1='Q'
+0009 0140c086 GETTABLE   R2, R2, K3='EndSepia'
+0010 008000c0 MOVE       A=3 B=1 C=0
+0011 0100409c CALL       A=2 B=2 C=1
+0012 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.58 file offsets 9367..9503 params=1 upvalues=0 stack=2
+
+Constants: [0.0, 'Q', 'StartSlowMotion', 'EndSlowMotion']
+
+```text
+0001 00400057 EQ         A=1, R0, K0=0.0
+0002 8000c016 JMP        A=0, target=7 (sBx=4)
+0003 00004045 GETGLOBAL  R1, K1='Q'
+0004 00c08046 GETTABLE   R1, R1, K2='StartSlowMotion'
+0005 0080405c CALL       A=1 B=1 C=1
+0006 80008016 JMP        A=0, target=10 (sBx=3)
+0007 00004045 GETGLOBAL  R1, K1='Q'
+0008 00c0c046 GETTABLE   R1, R1, K3='EndSlowMotion'
+0009 0080405c CALL       A=1 B=1 C=1
+0010 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.59 file offsets 9503..9583 params=1 upvalues=0 stack=3
+
+Constants: ['Q', 'LoadMap']
+
+```text
+0001 00000045 GETGLOBAL  R1, K0='Q'
+0002 00c04046 GETTABLE   R1, R1, K1='LoadMap'
+0003 00000080 MOVE       A=2 B=0 C=0
+0004 0100405c CALL       A=1 B=2 C=1
+0005 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.60 file offsets 9583..9662 params=0 upvalues=0 stack=2
+
+Constants: ['Q', 'RestoreMap']
+
+```text
+0001 00000005 GETGLOBAL  R0, K0='Q'
+0002 00404006 GETTABLE   R0, R0, K1='RestoreMap'
+0003 0080401c CALL       A=0 B=1 C=1
+0004 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.61 file offsets 9662..9852 params=9 upvalues=0 stack=19
+
+Constants: [0.0, 1.0, 'isVisible', 'Q', 'CreateObject']
+
+```text
+0001 02c00017 EQ         A=0, R5, K0=0.0
+0002 80000016 JMP        A=0, target=4 (sBx=1)
+0003 00004141 LOADK      R5, K1=1.0
+0004 03400057 EQ         A=1, R6, K0=0.0
+0005 80008016 JMP        A=0, target=9 (sBx=3)
+0006 00000241 LOADK      R9, K0=0.0
+0007 00008247 SETGLOBAL  R9, K2='isVisible'
+0008 80004016 JMP        A=0, target=11 (sBx=2)
+0009 00004241 LOADK      R9, K1=1.0
+0010 00008247 SETGLOBAL  R9, K2='isVisible'
+0011 0000c245 GETGLOBAL  R9, K3='Q'
+0012 04c10246 GETTABLE   R9, R9, K4='CreateObject'
+0013 00000280 MOVE       A=10 B=0 C=0
+0014 008002c0 MOVE       A=11 B=1 C=0
+0015 01000300 MOVE       A=12 B=2 C=0
+0016 01800340 MOVE       A=13 B=3 C=0
+0017 02000380 MOVE       A=14 B=4 C=0
+0018 028003c0 MOVE       A=15 B=5 C=0
+0019 00008405 GETGLOBAL  R16, K2='isVisible'
+0020 03800440 MOVE       A=17 B=7 C=0
+0021 04000480 MOVE       A=18 B=8 C=0
+0022 0500425c CALL       A=9 B=10 C=1
+0023 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.62 file offsets 9852..9921 params=1 upvalues=0 stack=2
+
+Constants: ['g_transitionIdx']
+
+```text
+0001 00000007 SETGLOBAL  R0, K0='g_transitionIdx'
+0002 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.63 file offsets 9921..10007 params=1 upvalues=0 stack=3
+
+Constants: ['Q', 'SetFinalMusic']
+
+```text
+0001 00000045 GETGLOBAL  R1, K0='Q'
+0002 00c04046 GETTABLE   R1, R1, K1='SetFinalMusic'
+0003 00000080 MOVE       A=2 B=0 C=0
+0004 0100405c CALL       A=1 B=2 C=1
+0005 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.64 file offsets 10007..10075 params=1 upvalues=0 stack=2
+
+Constants: ['g_hideOrigObjs']
+
+```text
+0001 00000007 SETGLOBAL  R0, K0='g_hideOrigObjs'
+0002 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.65 file offsets 10075..10165 params=0 upvalues=0 stack=2
+
+Constants: ['g_poisonForestRaidHack', 'TRUE']
+
+```text
+0001 00004005 GETGLOBAL  R0, K1='TRUE'
+0002 00000007 SETGLOBAL  R0, K0='g_poisonForestRaidHack'
+0003 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.66 file offsets 10165..10769 params=0 upvalues=0 stack=4
+
+Constants: ['g_yesTriggered', 'TRUE', 'g_noTriggered', 'FALSE', 'Q', 'DisableInput', 'g_hideOrigObjs', 0.0, 'DisableObjRender', 'ScenarioTalkTable', 'hideOtherUI', 'yield', 'g_transitionIdx', 1.0, 'Transition', 2.0, 120.0, 'ShowLetterbox', 3.0, 30.0, 'Fade', 'Start', 'wait', 'BeginCameraOverride']
+
+```text
+0001 00004005 GETGLOBAL  R0, K1='TRUE'
+0002 00000007 SETGLOBAL  R0, K0='g_yesTriggered'
+0003 0000c005 GETGLOBAL  R0, K3='FALSE'
+0004 00008007 SETGLOBAL  R0, K2='g_noTriggered'
+0005 00010005 GETGLOBAL  R0, K4='Q'
+0006 00414006 GETTABLE   R0, R0, K5='DisableInput'
+0007 0080401c CALL       A=0 B=1 C=1
+0008 00018005 GETGLOBAL  R0, K6='g_hideOrigObjs'
+0009 0041c057 EQ         A=1, R0, K7=0.0
+0010 80008016 JMP        A=0, target=14 (sBx=3)
+0011 00010005 GETGLOBAL  R0, K4='Q'
+0012 00420006 GETTABLE   R0, R0, K8='DisableObjRender'
+0013 0080401c CALL       A=0 B=1 C=1
+0014 00024005 GETGLOBAL  R0, K9='ScenarioTalkTable'
+0015 00428006 GETTABLE   R0, R0, K10='hideOtherUI'
+0016 0080401c CALL       A=0 B=1 C=1
+0017 0002c005 GETGLOBAL  R0, K11='yield'
+0018 0080401c CALL       A=0 B=1 C=1
+0019 00030005 GETGLOBAL  R0, K12='g_transitionIdx'
+0020 00434017 EQ         A=0, R0, K13=1.0
+0021 80014016 JMP        A=0, target=28 (sBx=6)
+0022 00010005 GETGLOBAL  R0, K4='Q'
+0023 00438006 GETTABLE   R0, R0, K14='Transition'
+0024 0003c041 LOADK      R1, K15=2.0
+0025 00040081 LOADK      R2, K16=120.0
+0026 0180401c CALL       A=0 B=3 C=1
+0027 8005c016 JMP        A=0, target=52 (sBx=24)
+0028 00030005 GETGLOBAL  R0, K12='g_transitionIdx'
+0029 0043c017 EQ         A=0, R0, K15=2.0
+0030 80020016 JMP        A=0, target=40 (sBx=9)
+0031 00010005 GETGLOBAL  R0, K4='Q'
+0032 00438006 GETTABLE   R0, R0, K14='Transition'
+0033 0003c041 LOADK      R1, K15=2.0
+0034 00040081 LOADK      R2, K16=120.0
+0035 0180401c CALL       A=0 B=3 C=1
+0036 00010005 GETGLOBAL  R0, K4='Q'
+0037 00444006 GETTABLE   R0, R0, K17='ShowLetterbox'
+0038 0080401c CALL       A=0 B=1 C=1
+0039 8002c016 JMP        A=0, target=52 (sBx=12)
+0040 00030005 GETGLOBAL  R0, K12='g_transitionIdx'
+0041 00448017 EQ         A=0, R0, K18=3.0
+0042 80020016 JMP        A=0, target=52 (sBx=9)
+0043 0004c001 LOADK      R0, K19=30.0
+0044 00050045 GETGLOBAL  R1, K20='Fade'
+0045 00c54046 GETTABLE   R1, R1, K21='Start'
+0046 0001c081 LOADK      R2, K7=0.0
+0047 000000c0 MOVE       A=3 B=0 C=0
+0048 0180405c CALL       A=1 B=3 C=1
+0049 00058045 GETGLOBAL  R1, K22='wait'
+0050 00000080 MOVE       A=2 B=0 C=0
+0051 0100405c CALL       A=1 B=2 C=1
+0052 00010005 GETGLOBAL  R0, K4='Q'
+0053 0045c006 GETTABLE   R0, R0, K23='BeginCameraOverride'
+0054 0080401c CALL       A=0 B=1 C=1
+0055 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.67 file offsets 10769..10813 params=0 upvalues=0 stack=2
+
+Constants: []
+
+```text
+0001 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.68 file offsets 10813..10857 params=0 upvalues=0 stack=2
+
+Constants: []
+
+```text
+0001 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.69 file offsets 10857..10901 params=0 upvalues=0 stack=2
+
+Constants: []
+
+```text
+0001 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.70 file offsets 10901..10945 params=0 upvalues=0 stack=2
+
+Constants: []
+
+```text
+0001 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.71 file offsets 10945..11028 params=0 upvalues=0 stack=2
+
+Constants: ['CameraWorks', 'Stop']
+
+```text
+0001 00000005 GETGLOBAL  R0, K0='CameraWorks'
+0002 00404006 GETTABLE   R0, R0, K1='Stop'
+0003 0080401c CALL       A=0 B=1 C=1
+0004 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.72 file offsets 11028..11072 params=0 upvalues=0 stack=2
+
+Constants: []
+
+```text
+0001 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.73 file offsets 11072..11704 params=0 upvalues=0 stack=4
+
+Constants: ['Q', 'EndCameraOverride', 'g_transitionIdx', 1.0, 'Transition', 2.0, 120.0, 'HideLetterbox', 3.0, 30.0, 'Fade', 'Start', 'wait', 'EndSepia', 'EndSlowMotion', 'ScenarioTalkTable', 'hide', 'showOtherUI', 'g_hideOrigObjs', 0.0, 'EnableObjRender', 'yield', 'EnableInput', 'EndCutScene']
+
+```text
+0001 00000005 GETGLOBAL  R0, K0='Q'
+0002 00404006 GETTABLE   R0, R0, K1='EndCameraOverride'
+0003 0080401c CALL       A=0 B=1 C=1
+0004 00008005 GETGLOBAL  R0, K2='g_transitionIdx'
+0005 0040c017 EQ         A=0, R0, K3=1.0
+0006 80014016 JMP        A=0, target=13 (sBx=6)
+0007 00000005 GETGLOBAL  R0, K0='Q'
+0008 00410006 GETTABLE   R0, R0, K4='Transition'
+0009 00014041 LOADK      R1, K5=2.0
+0010 00018081 LOADK      R2, K6=120.0
+0011 0180401c CALL       A=0 B=3 C=1
+0012 8005c016 JMP        A=0, target=37 (sBx=24)
+0013 00008005 GETGLOBAL  R0, K2='g_transitionIdx'
+0014 00414017 EQ         A=0, R0, K5=2.0
+0015 80020016 JMP        A=0, target=25 (sBx=9)
+0016 00000005 GETGLOBAL  R0, K0='Q'
+0017 00410006 GETTABLE   R0, R0, K4='Transition'
+0018 00014041 LOADK      R1, K5=2.0
+0019 00018081 LOADK      R2, K6=120.0
+0020 0180401c CALL       A=0 B=3 C=1
+0021 00000005 GETGLOBAL  R0, K0='Q'
+0022 0041c006 GETTABLE   R0, R0, K7='HideLetterbox'
+0023 0080401c CALL       A=0 B=1 C=1
+0024 8002c016 JMP        A=0, target=37 (sBx=12)
+0025 00008005 GETGLOBAL  R0, K2='g_transitionIdx'
+0026 00420017 EQ         A=0, R0, K8=3.0
+0027 80020016 JMP        A=0, target=37 (sBx=9)
+0028 00024001 LOADK      R0, K9=30.0
+0029 00028045 GETGLOBAL  R1, K10='Fade'
+0030 00c2c046 GETTABLE   R1, R1, K11='Start'
+0031 0000c081 LOADK      R2, K3=1.0
+0032 000000c0 MOVE       A=3 B=0 C=0
+0033 0180405c CALL       A=1 B=3 C=1
+0034 00030045 GETGLOBAL  R1, K12='wait'
+0035 00000080 MOVE       A=2 B=0 C=0
+0036 0100405c CALL       A=1 B=2 C=1
+0037 00000005 GETGLOBAL  R0, K0='Q'
+0038 00434006 GETTABLE   R0, R0, K13='EndSepia'
+0039 0080401c CALL       A=0 B=1 C=1
+0040 00000005 GETGLOBAL  R0, K0='Q'
+0041 00438006 GETTABLE   R0, R0, K14='EndSlowMotion'
+0042 0080401c CALL       A=0 B=1 C=1
+0043 0003c005 GETGLOBAL  R0, K15='ScenarioTalkTable'
+0044 00440006 GETTABLE   R0, R0, K16='hide'
+0045 0080401c CALL       A=0 B=1 C=1
+0046 0003c005 GETGLOBAL  R0, K15='ScenarioTalkTable'
+0047 00444006 GETTABLE   R0, R0, K17='showOtherUI'
+0048 0080401c CALL       A=0 B=1 C=1
+0049 00048005 GETGLOBAL  R0, K18='g_hideOrigObjs'
+0050 0044c057 EQ         A=1, R0, K19=0.0
+0051 80008016 JMP        A=0, target=55 (sBx=3)
+0052 00000005 GETGLOBAL  R0, K0='Q'
+0053 00450006 GETTABLE   R0, R0, K20='EnableObjRender'
+0054 0080401c CALL       A=0 B=1 C=1
+0055 00054005 GETGLOBAL  R0, K21='yield'
+0056 0080401c CALL       A=0 B=1 C=1
+0057 00000005 GETGLOBAL  R0, K0='Q'
+0058 00458006 GETTABLE   R0, R0, K22='EnableInput'
+0059 0080401c CALL       A=0 B=1 C=1
+0060 00000005 GETGLOBAL  R0, K0='Q'
+0061 0045c006 GETTABLE   R0, R0, K23='EndCutScene'
+0062 0080401c CALL       A=0 B=1 C=1
+0063 0080001e RETURN     A=0 B=1 C=0
+```
+
+## root.74 file offsets 11704..11824 params=1 upvalues=0 stack=4
+
+Constants: ['f_registerCoroutine', 'coroutine', 'create']
+
+```text
+0001 00000045 GETGLOBAL  R1, K0='f_registerCoroutine'
+0002 00004085 GETGLOBAL  R2, K1='coroutine'
+0003 01408086 GETTABLE   R2, R2, K2='create'
+0004 000000c0 MOVE       A=3 B=0 C=0
+0005 0100009c CALL       A=2 B=2 C=0
+0006 0000405c CALL       A=1 B=0 C=1
+0007 0080001e RETURN     A=0 B=1 C=0
+```

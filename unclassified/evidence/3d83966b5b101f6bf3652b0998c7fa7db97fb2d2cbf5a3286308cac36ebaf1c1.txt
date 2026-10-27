@@ -1,0 +1,43 @@
+# T16 教學節點矩陣
+
+日期：2026-10-28（Asia/Taipei）。Git 基準：`origin/main b8e97085c08833f66fbd06ee4ef3bf7d32276409`。KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。原件唯讀、未執行或附加遊戲／Lua、未 Commit/Push、未改 owner/catalog。
+
+原生已確認＝原件 bytes／可重現解碼／表列值；部分確認＝客戶端鏈已支持但權威或執行語義未閉合；合理推測＝僅候選關聯；資訊缺失＝來源或功能邊缺失。AI/fixture 與待補開發另外標記，均不升格成原版。
+
+`E/S/T/M/R` 編號全部是本報告的分析列名，**不是官方 step ID**。官方 step_id 目前 unknown。Lua 的 progress number、checkpoint id、sceneIdx、scenario/quest id 分開記錄；同名任務僅列候選，不由文字等同數字映射。TRUE=數字1、FALSE=數字0（原版 boot.lua PC1..4），不是 Lua boolean false。所有 while 的精確條件依與數字0的比較還原。
+
+|列|節點|quest_id|其他ID域|前置|觸發/目標|完成/下一步|writer/通知/缺口|證據級別|
+|---|---|---|---|---|---|---|---|---|
+|E0|入口選擇|unknown|unknown|T03/T04 已存在角色；教學適用條件 unknown|native 4C4B10→4A8A60→Tutorial_EntryPoint|載入Main→root初始化→root.8排程TutorialMain|角色/帳號範圍、skip-complete旗標 unknown|部分確認|
+|S0|Synopsis準備|unknown|unknown|Synopsis_EntryPoint 另一路入口|root.9→root.6；禁keymap、PushCamera TutorialCam、RegisterSkipMessage|SynopsisMain coroutine|非 Tutorial 完成事件|原生已確認/腳本|
+|S1|Synopsis播放|unknown|1000 / 15,16,17,18|PrepareSynopsis|播放 BGM000；依序 StartCutScene/等待 IsCutSceneRunning==0|自然結束或 IsSynopsisSkipped!=0 移除子coroutine；DestroyFlyingObjects、PopCamera、恢復keymap|skip 持久化 unknown|原生已確認/腳本|
+|T0|教學準備|unknown|unknown|TutorialMain root.7 PC1..18|close NPC checkpoint10016；yield；SetControlStatus(10,1)|排程 Tutorial_Part1|10016 為 checkpoint domain，不能自動當現行npctable NPC語意|原生已確認/腳本|
+|T1|開場與操作設定|unknown；2742僅文字候選|1000/1|root.4 PC1..27|PostUIMessage(0,1)→scene1000/1→ApplyDefaultCamera→UI progress9|while GetTutorialState()==0 yield；非0前進|GetTutorialState讀controller+134；6BFE90的UI0x578分支寫1，6C0053亦有writer片段；非server ACK|部分確認|
+|T2|鍵盤移動|unknown；2742僅候選|checkpoint1 / UI0|T1完成|InsertTutorialCheckPoint(1)，位置311,149；table range30→category4半徑15；active1|GetControlStatus(1)!=0；close checkpoint1(category4)|544730距離/啟用/鎖存判定→544A00選候選→544070 category4寫controller+B4+id*4=1；非server ACK|部分確認|
+|T3|滑鼠移動|unknown；2743僅候選|1000/3 → checkpoint2 / UI1|T2完成|scene1000/3；InsertTutorialCheckPoint(2)：360,170 table range30→半徑15 active1|GetControlStatus(2)!=0；close checkpoint2(category4)|同一544070本地writer；不是清怪計數或server ACK|部分確認|
+|T4|鏡頭尋人|unknown；2744僅候選|1000/4 / UI2|T3完成|InsertIsilia→while IsIsiliaFound()==0 yield|尋人native predicate返回非0；下一scene1000/6|native含可見性/距離/螢幕區域檢查；幾何單位與所有callee未核定|部分確認|
+|T5|切換隊長|unknown；2745僅候選|1000/6 / UI3或4|T4完成|CheckLeader()==0時yield；KR 另依 IsLeaderDialogOpened 切換UI提示|CheckLeader!=0→scene1000/7|原BIN 4AA4A0檢查當前領隊entity+88的WORD==3；非要求角色4|原生已確認/局部|
+|T6|接近目標NPC|unknown|checkpoint3 / UI5|T5完成|InsertTutorialCheckPoint(3)：383,315 table range100→半徑50 active1|GetControlStatus(3)!=0→Part1 return|effect欄位原文為미사용；勿以table NPC名稱倒推事件權威|部分確認|
+|T7|Part1略過分支|unknown|control0|Part1 coroutine尚活|TutorialMain監看 GetControlStatus(0)!=0|SetControlStatus(0,0)→StopCutScene→移除Part1；與自然結束共用close checkpoint1..3→DeleteObject(240)|6BFE90在F4428型別105BD且payload=6A7時寫control0；只略過Part1，沒有server完成旗標|原生已確認/腳本|
+|T8|戰前劇情|unknown|1000/8|Part1結束或略過|PlayAndWaitForScene(1000,8)→PostUIMessage(0,6)→yield→PostUIMessage(0,1)|RequestStartScenario(14)|Event seq只生成展示角色/刺客，不是官方戰鬥結算規則|原生已確認/腳本|
+|T9|第一戰/劇情14|14（明確script參數）|scenario14；QuestInfo field18|T8完成|4AA4D0送4-byte [0040,000E]（僅全域FBA798==0）；等待 IsScenarioEnded(14)!=0|TUTO child004C→4C4F20取得場景完成項並寫1；Lua再SetUIPage|實際進戰、回到TUTO、勝敗/獎勵、官方server發包時序仍unknown|部分確認|
+|T10|戰後清理與對話|unknown|1000/10,12|T9等待解除|SetUIPage；close NPC checkpoint10016；yield→scene1000/10→scene1000/12|HideUI→PostUIMessage_EmployChar(4)|訊息4是UI參數，不自動等於任務ID或server新增角色成功|原生已確認/腳本|
+|T11|第一個雇用視窗|unknown|global g_TutoEmployCharQuery|T10完成|等待g_TutoEmployCharQuery!=0|reset global=0→UI7→checkpoint4|native6BFAE0可寫此Lua global為數字1；6BF2A0的UI0x578/按鈕來源匹配且context+5F4C==1時呼叫；server ACK仍unknown|部分確認|
+|T12|蘋果家前|unknown；16為表格後繼候選|checkpoint4 / UI7|T11完成|checkpoint4：440,394 table range20→半徑10 active0|GetControlStatus(4)!=0；close checkpoint4(category4)|constructor active→+100；為0時544730還要求其param3非0；精確輸入語義留T10，不改資源|部分確認|
+|T13|家內劇情與角色可用|unknown；16僅表格候選|1000/13|T12完成|RegisterScalingObject(Lenart_PinkoRoom.dds,1024,512)；scene1000/13；DestroyFlyingObjects|等待IsCharacterAvailable(2)!=0|native4A9F00觀察角色資料+47C，並非伺服器資料庫；正式角色/帳號scope unknown|部分確認|
+|T14|第二雇用視窗|unknown|global g_TutoEmployCharQuery|T13完成|HideUI；PostUIMessage_EmployChar(2)；等待global!=0|reset0→open NPC checkpoint10016→scene1000/14|回呼完成不等於Quest16已由server完成|部分確認|
+|T15|教學腳本末端|unknown|1000/14 → UI8|T14完成|scene展示Square03D.fld、10338等角色；顯示TUTORIAL_STARTSCENARIO|Part2 return→TutorialMain coroutine結束|Lua末端沒有AcceptQuest(15)、沒有保存API、沒有直接請求16完成或15開始|原生已確認/腳本；server連結缺失|
+|M0|表格銜接|16 → 15|official step_id unknown|Quest16 Demand14；Quest15 Demand16|Quest15 town5 field19 giver/finisher10338；type2 level1|NPC提供主線候選，原始接受/完成權威unknown|不同於script scene1000/14；不能直接把scene結束當Quest16完成|部分確認|
+|R0|中斷/重登|unknown|unknown|任一等待中斷|Lua來源只有記憶體globals/coroutines；新載入Main重設兩個globals；controller constructor清local controls|CQuestMgr可接收006F bitset重建+5EB0並重算可接清單|沒有證據006F可恢復Lua PC、checkpoint、Part1/2或角色切換中的進度；作用域unknown|部分確認/精確續接缺失|
+
+## 每列原始位置
+
+TutorialMain 完整 disassembly：`evidence/lua-static/kr-TutorialMain.lua.md`。root.4=Part1（PC1..197），root.5=Part2（PC1..158），root.7=TutorialMain（PC1..78），root.8/9=兩個EntryPoint；每個 prototype 的原始 file-offset 區間、常數、所有 instruction word 已保留。TutorialBase root PC1..25給所有枚舉值。非Lua下游見 F03。
+
+## 失敗/重試與驗收界線
+
+所有教學 predicate wait 迴圈均未見 timeout、重試次數或拒絕分支。若 native 值永不改變，腳本持續yield；這是靜態控制流結論，不是實際卡死觀測。PlayAndWaitForScene 在cutscene結束後還額外yield一次。Part1略過會停止cutscene並移除子coroutine，但照常跑Part2。Synopsis略過只停止Synopsis子流程；EndSynopsis負責相機、鍵盤與物件清理。任務失敗/放棄、重登續接、反覆領獎、跨角色共用與server回覆皆不能由這些Lua補出。
+
+## 補核：本地writer已定位
+
+設定UI→controller+134、略過回覆→control0、checkpoint類別4→control1..4與雇用UI→Lua global的精確條件、完整偽碼與raw來源見 [F07](findings/F07-UI-and-checkpoint-writers.md)。表列range是輸入值，category4實際predicate半徑為其一半；cp4另要求傳入啟動flag。官方step_id與server獎勵條件依舊unknown。

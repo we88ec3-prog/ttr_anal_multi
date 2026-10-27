@@ -50,3 +50,6 @@ T08/T09已完成獨立解壓、禁止原anal與目標執行檔讀取、任務查
 這證明有限成果包可攜，不代表全部歷史證據閉合、原生規則已完整還原或遊戲可玩。每項task.json保留缺口；台版不套用韓版結論，保護殼保持停止。最新frame-dispatch保留原階段未驗收限制。
 
 完整壓縮清單：shared/manifests/source-inventory.complete.jsonl.gz；納入／排除：dispositions.jsonl.gz；選入映射：source-map-v2.json。舊檢查點保存在history，Git預設排除它與可重新生成的ZIP。
+
+
+2026-10-28：[本輪整合與T16登記](shared/integrations/T01-20261028-06/README.md)。catalog現為KR/TC各16項、共32項；原頁統計仍為歷史基準，最新限定結論與缺口依catalog／批次紀錄。

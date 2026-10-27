@@ -19,3 +19,5 @@ T16 主責跨任務／跨關卡 Quest & Story Progression；不建立新角色�
 以版本匹配的 KR BIN、客戶端資源、可信封包和原始來源交叉驗證，提供原始位址、指令、來源 SHA、狀態欄位、證據分級和明確缺口。既有 MAINLINE-FLOW、QUEST-STATE-NOTIFICATIONS 與 tutorial fixture 均只能作研究線索。
 
 每個節點應記錄 quest/step ID、前置、trigger、state writer、網路通知、下一節點解鎖、持久化需求、證據與測試案例；未知欄位填 unknown。遵循 AGENTS.md、HANDOFF.md 與 shared/CLIENT-MODIFICATION-POLICY.md。
+
+2026-10-28 來源整合入口：[T01-20261028-06](../../../shared/integrations/T01-20261028-06/README.md)。限定證據、T16分工與更正已入catalog；不等完整原生／遊玩驗收，既有主責與狀態保留。實際接續SHA見批次收據。

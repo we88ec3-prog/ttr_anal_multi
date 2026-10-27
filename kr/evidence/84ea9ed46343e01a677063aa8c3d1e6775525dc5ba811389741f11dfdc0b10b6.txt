@@ -1,0 +1,53 @@
+"""Offline Server-side adapter for the bounded KR 004E/0050/0028 contract.
+
+This does not select a Quest/Case/Map, allocate a token, or establish an
+official backend sequence. The caller supplies an explicit pending offer.
+No network, target APIs, account data, client changes, or runtime startup.
+"""
+from dataclasses import dataclass
+import struct
+
+
+@dataclass(frozen=True)
+class FormationOffer:
+    token: int
+    available_roles: tuple[int, ...]
+    capacity: int
+
+    def __post_init__(self):
+        if type(self.token) is not int or not 0 <= self.token <= 0xFFFF:
+            raise ValueError('token must fit the native unsigned WORD')
+        if type(self.capacity) is not int or not 1 <= self.capacity <= 9:
+            raise ValueError('capacity must fit the nine role slots used here')
+        if not self.available_roles or len(set(self.available_roles)) != len(self.available_roles):
+            raise ValueError('available roles must be nonempty and unique')
+        if any(type(role) is not int or not 1 <= role <= 9 for role in self.available_roles):
+            raise ValueError('role must be 1..9')
+
+    def empty_selection_packets(self) -> tuple[bytes, bytes]:
+        """Reconstruction delivery order: data before open, zero selected/tail.
+
+        The masks and field layout follow native consumers. This order and
+        the caller's capacity/unlocked roster are Server policy, not a capture.
+        """
+        mask = sum(1 << (role - 1) for role in self.available_roles)
+        return (struct.pack('<HHHB', 0x50, mask, 0, self.capacity),
+                struct.pack('<HH', 0x4E, self.token))
+
+    def accept(self, request: bytes) -> tuple[int, ...]:
+        """Validate a request against this pending offer; no state mutation.
+
+        Rejecting stale tokens, malformed payloads and unavailable roles is
+        explicit Server validation. Never interpret token as a resource key.
+        """
+        if len(request) != 13:
+            raise ValueError('0028 requires the nine-slot, 13-byte request')
+        opcode, token = struct.unpack_from('<HH', request)
+        if opcode != 0x28 or token != self.token:
+            raise ValueError('request does not match the pending formation offer')
+        roles = tuple(role for role in request[4:] if role != 0)
+        if not roles or len(roles) > self.capacity or len(set(roles)) != len(roles):
+            raise ValueError('selection must be nonempty, unique and within capacity')
+        if any(role not in self.available_roles for role in roles):
+            raise ValueError('selection contains an unavailable role')
+        return roles

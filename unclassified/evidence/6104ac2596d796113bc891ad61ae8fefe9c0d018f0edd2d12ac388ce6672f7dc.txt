@@ -1,0 +1,92 @@
+# F01：原版封包與bytecode的可重現取證
+
+日期：2026-10-28（Asia/Taipei）。Git 基準：`origin/main b8e97085c08833f66fbd06ee4ef3bf7d32276409`。KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。原件唯讀、未執行或附加遊戲／Lua、未 Commit/Push、未改 owner/catalog。
+
+# T16 本機來源盤點
+
+日期：2026-10-28（Asia/Taipei）。Git 基準：`origin/main b8e97085c08833f66fbd06ee4ef3bf7d32276409`。KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。原件唯讀、未執行或附加遊戲／Lua、未 Commit/Push、未改 owner/catalog。
+
+原生已確認＝原件 bytes／可重現解碼／表列值；部分確認＝客戶端鏈已支持但權威或執行語義未閉合；合理推測＝僅候選關聯；資訊缺失＝來源或功能邊缺失。AI/fixture 與待補開發另外標記，均不升格成原版。
+
+## 版本與來源
+
+KR 原件採 `E:/Tartaros/origin`。其 BIN、Event.stp、Table.stp 與 `D:/ttr` 副本 SHA 一致。這確認本機身份及共同封包集合，不能證明官方發行日期或未見的伺服器版本。KR workspace 的 Table.stp SHA `ea2af30c9a451dcebcf2318868ec13153f8be5647db4ab84e7a38cd1dba4154c` 與 origin 不同，未用作 KR 表內容權威。Event.stp 兩者相同。
+
+TC 從 tc_workspace 提取；另逐檔核對 tc_origin 原件的 BIN/Event/Table。原版路徑及完整 SHA 見下表，未將 TC BIN 交給解殼或沿用 KR VA。
+
+|版本|來源|bytes|SHA256|
+|---|---|---:|---|
+|kr|`E:\Tartaros\origin\Tartaros.bin`|12472320|`9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`|
+|kr|`E:\Tartaros\origin\Event.stp`|11241597|`2e68e0202565530e574e0810ad7f758a2fc8d6826a0de0975ccaff12c2d4718b`|
+|kr|`E:\Tartaros\origin\Table.stp`|5248784|`09e2cc48be98ad491afe394f966feb5812983fbf35da9037a8fa477d9848a442`|
+|kr|`E:\Tartaros\origin\boot.lua`|179|`cae368ebe57828f9201d7db7f71d95130b5dbc0d908d2d7759e4226bd3ac2bce`|
+|kr|`E:\Tartaros\origin\Coroutine.lua`|2168|`c3feac03a40d24a54adf7615781cab175aa4876a2bdad8763987e413d0c2a808`|
+|kr|`E:\Tartaros\origin\Logic.lua`|56|`7402c8224b5579477d61f9160c326c9fce72bce179bc62645d5851983555beb0`|
+|tc|`E:\Tartaros\tc_origin\星空幻想 Rebirth-20261003T084520Z-1-001\星空幻想 Rebirth\Tartaros.bin`|4692992|`f181071094286fe4e72cb12863edbe7e83f8fa825cfb65604143cb53ae2cd873`|
+|tc|`E:\Tartaros\tc_origin\星空幻想 Rebirth-20261003T084520Z-1-001\星空幻想 Rebirth\Event.stp`|11206849|`4b505dd101b0b5f4218c46c571f56eb0217c3cdb04cbafb7e1e023d3c4752917`|
+|tc|`E:\Tartaros\tc_origin\星空幻想 Rebirth-20261003T084520Z-1-001\星空幻想 Rebirth\Table.stp`|4890755|`d0a7980cfa72d41f18ed21da4804b7a5939e86a93d40f07bdcb68d0645a76a84`|
+|tc|`E:\Tartaros\tc_origin\星空幻想 Rebirth-20261003T084520Z-1-001\星空幻想 Rebirth\boot.lua`|179|`cae368ebe57828f9201d7db7f71d95130b5dbc0d908d2d7759e4226bd3ac2bce`|
+|tc|`E:\Tartaros\tc_origin\星空幻想 Rebirth-20261003T084520Z-1-001\星空幻想 Rebirth\Coroutine.lua`|2168|`c3feac03a40d24a54adf7615781cab175aa4876a2bdad8763987e413d0c2a808`|
+|tc|`E:\Tartaros\tc_origin\星空幻想 Rebirth-20261003T084520Z-1-001\星空幻想 Rebirth\Logic.lua`|56|`7402c8224b5579477d61f9160c326c9fce72bce179bc62645d5851983555beb0`|
+
+## 優先六檔
+
+|版本|邏輯路徑|archive id / raw offset|bytes / 格式|SHA256|
+|---|---|---|---|---|
+|kr|`Event/TutorialMain.lua`|7381 / `0xa27810`|5480 / binary|`662f8416ac7f865b94b15d6ea3145e9a59fbbbaaa8e3be6521c4cff636344809`|
+|kr|`Event/TutorialBase.lua`|7380 / `0xa27010`|1416 / binary|`26e5fe047b3489b5198023571d1cd3123e0dce712af2c81f57aa767d42ca7744`|
+|kr|`Table/QuestInfo.xml`|977 / `0x425010`|2503464 / utf-8-sig|`5d251415fdfdc453adefbff03114ded5a8ea41b696ce0aab86a23070e0fdca60`|
+|kr|`Table/QuestTalk.xml`|978 / `0x457010`|342958 / utf-8-sig|`b136fddf1696ff73c5780c269604b5670e35cbb416cd8cce4274aa05865edd28`|
+|kr|`Table/ScenarioBookContents.xml`|982 / `0x468010`|55810 / utf-8-sig|`15b67767af884ac2abe05319ca406c9bc5e705c5ea8311de8d6b45644f8210d1`|
+|kr|`Table/QuestCameraWorks.xml`|NOT-FOUND-IN-INDEXED-CONTAINERS|unknown|unknown|
+|tc|`Event/TutorialMain.lua`|7354 / `0xa1f810`|5350 / binary|`c235ac4959f21925c207d4e9a746c2fac473c54a0d1ea7144f12d6b33300f938`|
+|tc|`Event/TutorialBase.lua`|7353 / `0xa1f010`|1375 / binary|`9763281afd9d01993607441403266f058d10cd3d08ed26c2bf04005977985dac`|
+|tc|`Table/QuestInfo.xml`|971 / `0x3d4010`|2490544 / utf-8-sig|`21e86906fd7c69fc34e04a726e77d383e429aabd3bb9bfa5e775dfd77431b5c5`|
+|tc|`Table/QuestTalk.xml`|972 / `0x405410`|335985 / utf-8-sig|`6239e3fbe18ac451a12aa511148ce3bd9f213b31bfdce289e864da78177d2532`|
+|tc|`Table/ScenarioBookContents.xml`|975 / `0x415410`|49705 / utf-8-sig|`2abd3ac9199ca942d9555805fab33c1b7dc8e6f58903090ff69123ea6b66ddf8`|
+|tc|`Table/QuestCameraWorks.xml`|NOT-FOUND-IN-INDEXED-CONTAINERS|unknown|unknown|
+
+完整來源、外層封包 SHA、stored/decoded SHA、block 範圍、EX header、解碼後 byte 數與文字編碼皆見 `evidence/resource-manifest.json`。這份 manifest 的 archive 解碼產物保持原 bytes；`text/` 只是 UTF-8 衍生閱讀視圖。
+
+## 封裝與提取
+
+STPD 外層檔頭前 4 bytes 保留 `STPD`，其餘結構以 byte XOR FF 讀取。解碼後 +4 為 little-endian 索引位置；原檔該位置必須是 STPI。索引樹由 index+8 開始，name 長度 u16、ASCII name、kind byte：1/2 是含子節點計數的目錄，0 是檔案識別碼記錄。每次解析檢查索引恰好消耗到 EOF。+12 的 block-table offset 為 big-endian；block table count 與每 32-byte row 的 id/size/first/last 為 little-endian。member 來源 offset = 16 + first*1024；檢查 last>=first、size 不超過其 block 容量。XOR 後為 EX 的 member，再按 EX 表頭解碼。
+
+EX 表頭：`45 58`、mode byte、+4 compressed u32、+8 expanded u32、+12 payload offset u32。mode 1 使用 1024-byte key（k0=30、k1=E7；ki=(ki-2+ki-1+13hex-(i==17Chex?56hex:0)) mod256）先 XOR payload，再用 zlib 解壓；mode0 直接 zlib。輸出長度須等於 expanded。範例 QuestInfo EX header 與 raw offset 已在 manifest。教學 Lua 兩檔解 XOR 後直接是 Lua bytecode，並沒有 EX 層。
+
+方法源自已靜態審閱的 `anal/stp_resources.py`，SHA `b47f343d9ab4fdc667939023c0c2fa577975ef3b07c848249a25bbcd1aea0a9d`（精確值亦由工具清單重算），舊原稿所載 native 切入點 715480/715C60、7188D0、72F424..72F54A 僅作方法來歷；本批沒有重新認領或驗收整套資源 loader。可重現工具置於 tools。
+
+## 已掃描封包的有界範圍
+
+|封包|大小|成員數|SHA256|
+|---|---:|---:|---|
+|`E:\Tartaros\origin\Event.stp`|11241597|7382|`2e68e0202565530e574e0810ad7f758a2fc8d6826a0de0975ccaff12c2d4718b`|
+|`E:\Tartaros\origin\Table.stp`|5248784|1026|`09e2cc48be98ad491afe394f966feb5812983fbf35da9037a8fa477d9848a442`|
+|`E:\Tartaros\origin\Synopsis.stp`|1147243|5|`65fbdd6694a0f7a451f2d06f13901b2ee1089db51cc34d6e97c37d6b19a74486`|
+|`E:\Tartaros\origin\Field.stp`|1697954|1540|`18a375bd478133df276df6e97833e03140900454d5f04298ea508d0b67fcb73a`|
+|`E:\Tartaros\origin\Master.stp`|1094887|899|`f59edc403213de3a3923cc47ebf44eb1812705e8693c3c196d122f51ab0c919d`|
+|`E:\Tartaros\origin\Panel.stp`|951661|53|`0bd6ea9bb68499e15c26910ee991715feea055371bbcb88c74e88b88d75929c2`|
+|`E:\Tartaros\origin\Locales.stp`|39404|6|`b9d0ce6fe7de21dfce53357155d2a54ac9ba3815d45e7fc831972c9c4ba8d68b`|
+|`E:\Tartaros\origin\UI\StringTable.stp`|62789|4|`05a1a7ee26e343e1a016a37d1de2418a6da8fc5a71d5322587c49741d1162ef0`|
+|`E:\Tartaros\origin\UI\LUA.stp`|2242|2|`ad8c32595fa5dbe223302d76f52725cba634b6eab1eb43f34f39463a13c73efc`|
+|`E:\Tartaros\tc_workspace\Event.stp`|11206849|7355|`4b505dd101b0b5f4218c46c571f56eb0217c3cdb04cbafb7e1e023d3c4752917`|
+|`E:\Tartaros\tc_workspace\Table.stp`|4890755|1017|`d0a7980cfa72d41f18ed21da4804b7a5939e86a93d40f07bdcb68d0645a76a84`|
+|`E:\Tartaros\tc_workspace\Synopsis.stp`|1147243|5|`65fbdd6694a0f7a451f2d06f13901b2ee1089db51cc34d6e97c37d6b19a74486`|
+|`E:\Tartaros\tc_workspace\Field.stp`|1657553|1504|`6350c02d537baea7b96f09042558278ba75213abb2fd7a6d7dfe323f3a0f62a0`|
+|`E:\Tartaros\tc_workspace\Master.stp`|1092651|897|`c9f16153671426852afb9f91897dcf9866213985288a045565a6ac8bd9ab03f7`|
+|`E:\Tartaros\tc_workspace\Panel.stp`|378632|43|`4f74104dc122208f1278bc9f7bce279881b5f8f2f82c31447fd4846ccf2601a1`|
+|`E:\Tartaros\tc_workspace\Locales.stp`|56812|6|`be318008caa86112002b68fe5d5872a7abb433dcdee55bac3c01a67245aad0a0`|
+|`E:\Tartaros\tc_workspace\UI\StringTable.stp`|57592|3|`18710722f1d18d8e7b82ae52083929e5665fc0f671b2aa64eb17651439ec61f3`|
+|`E:\Tartaros\tc_workspace\UI\LUA.stp`|2242|2|`ad8c32595fa5dbe223302d76f52725cba634b6eab1eb43f34f39463a13c73efc`|
+
+`QuestCameraWorks.xml` 在上述 18 個封包的精確索引未命中；沒有宣稱全硬碟不存在。已得 Event/CameraWorks 的實際 cam 檔，可核對教學鏡頭引用。未掃描所有 Character/Map/Sound 封包，未全解大型 installer。原版伺服器任務規則及可信官方流量未取得；SERVER 中已閱讀之文件明確含歷史本機 fixture/修補，不能充作官方規則。
+
+## Git 與路徑紀錄
+
+使用者指定唯一 Git 來源 `E:/Tartaros/workspace/anal-multi`。`git pull --ff-only origin main` 完成 fetch 後，因 16 個 tracked 變更及 untracked 路徑碰撞中止；使用者明確選擇保留工作樹，直接讀 origin/main。未 stash/reset/merge/切換原分支。54 份最新政策／規劃／T16-1～40 快照與 SHA 見 evidence/baseline/receipt.json。這不代表既有 40 篇或 111054 函式均完整語意驗收。
+
+## Lua 5.1格式
+
+兩份KR Lua header皆為 `1B 4C 75 61 51 00 01 04 04 04 08 00`：Lua5.1、format0、little endian、int4/size_t4/instruction4/number8、number非整數模式。各chunk遞迴解析source字串、line邊界、nup/params/vararg/maxstack、code、constants、children、lineinfo、locals、upvalue names；要求最後位置恰為EOF。debug source為空不能假稱有原始Lua行號。prototype offset與PC是衍生定位。
+
+每條instruction保留原32-bit word：op=x&63，A=(x>>6)&255，C=(x>>14)&511，B=x>>23，Bx=x>>14，sBx=Bx-131071。RK>=256索引constant；JMP目標是one-based PC+1+sBx。EQ/TEST有條件跳過下一instruction，不將緊接JMP誤當無條件。所有header、字串長度、constant tag與EOF皆可由tools/lua51_static.py重現；它不是Lua interpreter，沒有執行payload。

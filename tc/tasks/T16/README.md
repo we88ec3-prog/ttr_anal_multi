@@ -19,3 +19,5 @@ T16 主責跨任務／跨關卡 Quest & Story Progression；不建立新角色�
 目前 TC 原生遊玩功能證據不足，優先盤點版本匹配的 TC 資源、文本、腳本及任務表，建立 KR/TC 版本差異與缺口；不直接套用 KR 位址、封包語義、事件或任務 ID，不自動啟動解殼。
 
 每個節點應記錄 quest/step ID、前置、trigger、state writer、網路通知、下一節點解鎖、持久化需求、證據與測試案例；未知欄位填 unknown。遵循 AGENTS.md、HANDOFF.md 與 shared/CLIENT-MODIFICATION-POLICY.md。
+
+2026-10-28 來源整合入口：[T01-20261028-06](../../../shared/integrations/T01-20261028-06/README.md)。限定證據、T16分工與更正已入catalog；不等完整原生／遊玩驗收，既有主責與狀態保留。實際接續SHA見批次收據。

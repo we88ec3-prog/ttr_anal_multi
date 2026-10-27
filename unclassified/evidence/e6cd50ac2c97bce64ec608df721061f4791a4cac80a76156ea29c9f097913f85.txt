@@ -1,0 +1,20 @@
+from pathlib import Path
+from stp_resources import Archive
+import sys,json,hashlib,xml.etree.ElementTree as ET
+e=Path(sys.argv[1]);m=json.loads((e/'resource-manifest.json').read_text(encoding='utf-8'));inv=json.loads((e/'archive-inventories.json').read_text(encoding='utf-8'))
+for v,root in [('kr',Path('E:/Tartaros/origin')),('tc',Path('E:/Tartaros/tc_workspace'))]:
+ a=Archive(root/'Event.stp');b=a.read('Event/SceneList.xml');s=ET.fromstring(b.decode('cp949') if v=='kr' else b.decode('cp950'))
+ names={x.get('funcName') for x in s if x.get('questIdx') in ['1000','1001','15','117','118','119']}
+ for p in a.files:
+  if Path(p).stem not in names:continue
+  dst=e/'resources'/v/p
+  if dst.exists():continue
+  raw=a.read(p);dst.parent.mkdir(parents=True,exist_ok=True);dst.write_bytes(raw)
+  enc='utf-8-sig'
+  try:t=raw.decode(enc)
+  except UnicodeError:enc='cp949' if v=='kr' else 'cp950';t=raw.decode(enc)
+  td=e/'text'/v/(p+'.txt');td.parent.mkdir(parents=True,exist_ok=True);td.write_text(t,encoding='utf-8')
+  ident=a.files[p];size,first,last=a.blocks[ident];start=16+first*1024;carrier=a.data[start:start+size]
+  m.append(dict(version=v,resource_path=p,container=str(root/'Event.stp'),container_sha256=hashlib.sha256((root/'Event.stp').read_bytes()).hexdigest(),id=ident,block_start=first,block_end=last,raw_offset=start,stored_size=size,stored_xor_decoded_sha256=hashlib.sha256(carrier).hexdigest(),header=carrier[:16].hex(),size=len(raw),sha256=hashlib.sha256(raw).hexdigest(),encoding=enc,output=str(dst)))
+(e/'resource-manifest.json').write_text(json.dumps(m,ensure_ascii=False,indent=2),encoding='utf-8')
+print('dependency members now',len(m))

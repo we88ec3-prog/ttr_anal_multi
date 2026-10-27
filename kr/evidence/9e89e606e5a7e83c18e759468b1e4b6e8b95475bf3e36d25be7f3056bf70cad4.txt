@@ -1,0 +1,39 @@
+-- TTEX Talk Scene File: DO NOT EDIT BY HAND
+-- Quest #1000 / Scene #15 - Function Synopsis_Tartaros
+function Synopsis_Tartaros()
+	SetTransitionType(1)
+	SetFinalMusic("")
+	HideOriginalObjs(1)
+	Phase1()
+
+	LoadMap("synopsis01.fld")
+	MoveCamera(835.76, -111.70, -36.46)
+	RotCamera(0.24, 2.47, 0.00)
+
+	CreateObject(0, 20017, 801.00, 600.00, 0, 0, FALSE, 0, 0)
+
+	Phase2()
+	Phase3()
+	Phase4()
+
+	wait(3000)
+	Book(0)
+	PlayCameraNoWait("Synopsis_Town1_01.cam", 0, 0.00, 0.00, 0.00)
+	PlaySound("Sound/Scenario/Prologue/P00_04.ogg")
+	wait(1000)
+	AniObject(0, 2, 1)
+	wait(20000)
+	FadeOut(100)
+	wait(3000)
+
+	RevPhase4()
+	RevPhase3()
+	RevPhase2()
+
+	Q.DeleteAllObject()
+	RestoreMap()
+
+	RevPhase1()
+end
+
+Register(Synopsis_Tartaros)

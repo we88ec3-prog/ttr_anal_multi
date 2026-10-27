@@ -1,0 +1,40 @@
+# 世界地圖：0042與0059旅行候選要求
+
+roy／T07，必要T02/T05/T08跨查，待整合。原BIN SHA9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91；沿REA6.5.0/Ghidra12.1.4 bulk、Capstone5.0.7原件bytes。原檔唯讀，未執行／附加、未發包或改服務。這是實際sender契約，不是官方目的地決策或完整旅行序列。
+
+## C2S0042：四byte、兩個事件參數
+
+一般Square UI的5B7F80把F4392交5B6620、F4394交5B6770。兩者檢查事件class105BA，取event+14與+18各自低BYTE，組**WORD0042＋BYTE a＋BYTE b，共4bytes**；FBA798==0才sender。沒有Town WORD、Map DWORD或字串，不把a/b自行解釋為Town1/5。
+
+5B6620在目前mode7時只關其兩個視窗並return，**不送0042**；5B6770在mode23時亦只關窗。因此某地圖畫面看見按鈕，不代表按下必定發旅行包，必須同時核mode與UI route。
+
+CWorldMapDialog的649D50目標按鈕（window+FC）在mode7直接關窗；其他可達情況檢查隊伍／必要確認後建立F4392(0,0)。64A360的param2==0路徑亦建立F4392(0,0)，param2==1另走F4394(0,2)，並各有目前mode與隊伍條件。本批已確認預設事件值可對應sender body`42 00 00 00`，但**只作已知來源樣本，不承諾服務回覆必為0069，也不由0/0推出返回馮德斯或廣場**。
+
+此C2S0042與前批讀過的S2C0042/4B2190屬不同方向、不同接收者，不能因opcode相同共用語意。舊Server若已處理42→Square，仍須標示其回覆與目的地是重建政策，非此sender單獨證明。
+
+## C2S0059：只有opcode
+
+649D50另一按鈕（window+124）通過隊伍狀態分支後呼叫64B090。64B090組**WORD0059，共2bytes**，沒有任何目的地欄位，FBA798==0才sender。需確認時以F443E事件等待6A7（Yes），再4A3F80及64B090；不能把Yes尚未到達的分支提前送出。
+
+4A3F80本身是另一個C2S005D＋BYTE參數的3byte sender。本批僅確認worldmap確認路線會先叫它，**尚未完整還原其參數／隊伍業務語意**；不將它直接命名為可任意執行的離隊API，也不以它取代目的地選擇。
+
+0059精確按鈕文字與官方應答仍未閉合。有限UI/Data.stp/Component.stp的WorldMap/TownMap字串目錄查找只取得WorldMap資料XML，沒有藉此找到對應UI文字；不宣稱整包或整個client沒有UI布局。此時最可靠結論是sender位置、無參數長度與必要分支，不能猜它必定返回哪一城鎮。
+
+## 其他路線的排除
+
+- C2S003D＋BYTE（4A3620/5B6250）沿選中角色資料與隊伍檢查路線，不因它有BYTE就當Town選擇。既有Server角色切換實作只作定位背景，原生資料consumer才是依據；本批未將其採作旅行要求。
+- S2C**0099**／4B9320只接受type3，建立CMissionRoom（MISR）、4BCB40註冊、自身init4BCBA0重用／建立kind1 CMissionRoomController並設UI4。opcode來自FD31C4與SceneManager base/stride計算，不能按函式鄰近猜成0080。此條不因此證明村落或可行走，更不能取代已知Square kind2。
+- 006E只允許type1進TUTO；其他值錯誤，不能拿006E0作回村。
+
+## Server需要補足的資料
+
+0033結果返回、0042/0059這些要求都未直接攜帶物理map與spawn。Server必須保有當前任務／結果、來源地點、所選旅行目的地及允許條件，然後供給正確場景安裝、town/field context、0012 map、玩家描述與同世代綁定／ready。不能僅加一個`if opcode==59: map182`就宣稱原版路線已恢復。
+
+對本目標仍需閉合：主線Field19結果後選馮德斯的依據、一次性15/3劇情與提交，及往返廣場／村落時選定目的地來源。地圖／合法位置和角色控制亦須分別驗收；已知C2S要求不等於到達／可操作。
+
+來源與7項有限原件核對見worldmap-request-evidence.json。新結論保持待整合，不把所有選讀函式或原raw parent batch標為語意完整，沒有新可玩Server或runtime驗收。
+
+
+## 增量更正 2026-10-27T15:57:28.182479+00:00
+
+本文件「003D為角色切換而排除」撤回：4E2E70實際查Town開放位元及CTownInfoTable TYPE1。世界地圖F4390亦到此sender。詳TOWN-TRAVEL-003D-CORRECTION.md；保留原文供追溯，不再引用原排除。

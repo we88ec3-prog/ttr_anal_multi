@@ -1,0 +1,36 @@
+-- TTEX Talk Scene File: DO NOT EDIT BY HAND
+-- Quest #1000 / Scene #1 - Function talkevent1_1
+function talkevent1_1()
+	SetTransitionType(2)
+	SetFinalMusic("")
+	HideOriginalObjs(1)
+	Phase1()
+
+	LoadMap("town000D.map")
+	MoveCamera(231.00, 142.00, 96.34)
+	RotCamera(4.71, 1.47, 12.00)
+
+	CreateObject(0, 1478, 231.00, 144.00, 212, 0, FALSE, 1, 1)
+	CreateObject(1, 1480, 238.00, 137.00, 170, 0, FALSE, 1, 19)
+
+	Phase2()
+	Phase3()
+	Phase4()
+
+	PlayMusic("BGM031.ogg")
+	PlayCameraNoWait("tutorial_01_1.cam", 0, 0.00, 0.00, 0.00)
+	wait(500)
+	OpenTalkScene(3, 1)
+	OpenTalkScene(3, 2)
+
+	RevPhase4()
+	RevPhase3()
+	RevPhase2()
+
+	Q.DeleteAllObject()
+	RestoreMap()
+
+	RevPhase1()
+end
+
+Register(talkevent1_1)

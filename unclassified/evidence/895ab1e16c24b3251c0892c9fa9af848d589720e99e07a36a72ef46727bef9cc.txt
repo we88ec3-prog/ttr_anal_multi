@@ -1,0 +1,43 @@
+# T16 KR／TC差異
+
+日期：2026-10-28（Asia/Taipei）。Git 基準：`origin/main b8e97085c08833f66fbd06ee4ef3bf7d32276409`。KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。原件唯讀、未執行或附加遊戲／Lua、未 Commit/Push、未改 owner/catalog。
+
+TC BIN 原件SHA已直接核對 `f181071094286fe4e72cb12863edbe7e83f8fa825cfb65604143cb53ae2cd873`；本文件只比較TC自身資源，不對TC native函式、opcode或封包判定作KR搬用。
+
+## Lua逐prototype比較
+
+|prototype|函式|KR instructions|TC instructions|instruction words相同|constants相同|
+|---|---|---:|---:|---|---|
+|root.0|PlayAndWaitForScene|17|17|True|True|
+|root.1|PrepareSynopsis|13|13|True|True|
+|root.2|SynopsisMain|22|22|True|True|
+|root.3|EndSynopsis|12|12|True|True|
+|root.4|Tutorial_Part1|197|178|False|False|
+|root.5|Tutorial_Part2|158|158|True|True|
+|root.6|PlaySynopsisMain|28|28|True|True|
+|root.7|TutorialMain|78|78|True|True|
+|root.8|Tutorial_EntryPoint|4|4|True|True|
+|root.9|Synopsis_EntryPoint|4|4|True|True|
+
+已確認差異：KR Part1有 IsLeaderDialogOpened 分支，可在UI progress3/4間切換；TC Part1只有CheckLeader等待，少19條指令。TC TutorialBase也沒有 TUTORIAL_LC_DLG_OPENED 這個table key，但其後其他顯式數字常數須按各自檔案讀取，不能因少key就自行位移所有enum。Part2的instruction words與constants逐項相同，只證bytecode等價，不代表TC native API的業務語義與網路等價。
+
+## QuestInfo獨立早期值
+
+|quest|KR subject / rewards|TC subject / rewards|兩邊Demand|
+|---|---|---|---|
+|14|튜토리얼-이실리아 / []|新手教學-伊希莉亞 / []|[] / []|
+|16|튜토리얼-핑코파파 / [{'type': '2', 'value': '50'}]|新手教學-蘋果 / []|['14'] / ['14']|
+|15|핀더스 마을로 / [{'type': '2', 'value': '2800'}, {'type': '4', 'value': '468'}]|前往馮德斯村 / [{'type': '2', 'value': '910'}, {'type': '4', 'value': '468'}]|['16'] / ['16']|
+|117|사소한 소동 / [{'type': '2', 'value': '710'}]|小小的騷動 / []|['15'] / ['15']|
+|118|유리와 라제드 / []|優里和拉傑德 / []|['117'] / ['117']|
+|119|유리와 라제드 (전투) / [{'type': '2', 'value': '5850'}, {'type': '3', 'value': '40'}, {'type': '4', 'value': '900'}]|優里和拉傑德 (戰鬥) / [{'type': '2', 'value': '2217'}, {'type': '3', 'value': '40'}, {'type': '4', 'value': '900'}]|['118'] / ['118']|
+|1002|시놉시스 / []|概要 / []|[] / []|
+|2742|튜토리얼-키보드입력 / [{'type': '2', 'value': '10'}]|教學任務-鍵盤輸入 / [{'type': '2', 'value': '70'}]|[] / []|
+|2743|튜토리얼-마우스입력 / [{'type': '2', 'value': '20'}]|教學任務-滑鼠輸入 / [{'type': '2', 'value': '130'}]|[] / []|
+|2744|튜토리얼-카메라 / [{'type': '2', 'value': '30'}]|教學任務-視角操作 / [{'type': '2', 'value': '190'}]|[] / []|
+|2745|튜토리얼-캐릭터선택 / [{'type': '2', 'value': '40'}]|教學任務-選擇角色 / [{'type': '2', 'value': '250'}]|[] / []|
+|2746|튜토리얼-전투 / [{'type': '2', 'value': '50'}]|教學任務-戰鬥 / [{'type': '2', 'value': '350'}]|[] / []|
+
+KR QuestInfo 4798列、TC 4723列；KR QuestTalk 4320列、TC 4233列。早期Demand鏈兩邊各自存在，但獎勵不同：例如Quest15 type2 reward KR2800/TC910、Quest2742 KR10/TC70；Quest16 KR有type2=50，TC無RewardsEtc。這直接排除『只是翻譯、全部規則相同』。reward type正式語義仍unknown，未套經驗/金錢名稱。
+
+TutCheckPointList兩邊解碼後bytes是否相同：`True`。這不代表事件writer、控制器欄位或保存機制相同。

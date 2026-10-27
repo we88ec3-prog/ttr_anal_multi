@@ -1,0 +1,978 @@
+# F07：UI與checkpoint推進writer閉合
+
+日期：2026-10-28（Asia/Taipei）。Git 基準：`origin/main b8e97085c08833f66fbd06ee4ef3bf7d32276409`。KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。原件唯讀、未執行或附加遊戲／Lua、未 Commit/Push、未改 owner/catalog。
+
+## 本批新增的實際功能鏈
+
+1. Part1 UI progress9→設定視窗操作→6BFE90辨識event+10=0578、event+8與UI object+D0所指元件ID相同；依UI object+C8的+28 bit9選不同設定資料分支，建立F43CC(0或1)、隱藏視窗，若controller存在則寫controller+134=1，再排F43CD/F4403。GetTutorialState在4A9FD0讀同欄，故等待解除是本地UI操作，不需要把它猜成server教學完成旗標。6C0053也有同writer，但其unaff_EBP/in_EAX表示Ghidra恢復的是片段，不能獨立聲稱完整函式邊界/全部caller已核定。
+2. 同6BFE90處理F4428回覆時先驗事件型別105BD，payload+14=6A7才寫controller+B4=1，即control0，TutorialMain監看此欄略過Part1。UI component+84點擊先建立F4428並打開提示框；文字/按鈕正式名稱未定，不補造使用者操作名稱。
+3. 6BF2A0在event+10=0578且event+8等於UI object+D0所指元件ID時，只有client context+5F4C==1走6BFAE0→g_TutoEmployCharQuery=數字1，並清理UI。其他context走414680/4A38D0；沒有證據可把這個UI回呼當官方server已成功雇用。
+4. Tutorial API InsertTutorialCheckPoint→4A9430→4A90C0，以category4建立CCheckPoint；543700將category放+F4、id放+F6、enabled放+105、active放+100、range放+FC，**category4額外將+FC=輸入range*0.5**。
+5. 544730先要求+105啟用，計算玩家/point在同一傳入座標域的距離平方D2，比較(+FC)^2；等於或超出半徑不算命中。active(+100)=0時還要求函式param3非0；+104控制進出範圍鎖存。544A00從候選選距離最小且有效的point，在F942C0==0時呼叫point vslot+0x64。544070的category4分支還要求FBA7AC==4（TutorialController），然後寫controller+B4+sign_extend(point.id)*4=1。與Lua GetControlStatus(id)消費完全同欄。
+
+這一條鏈只補T16目標判定/本地進度接口；移動輸入、座標尺度、NPC互動距離等主責仍屬T08/T09/T10/T05。沒有修改它們，也沒有展開全部通用輸入函式。
+
+## 原表值與實際predicate半徑
+
+|cp|表x,y|表range|category4構造後+FC|table active|其他必要條件|
+|---|---|---:|---:|---:|---|
+|1|311,149|30|15|1|enabled、距離平方<225、鎖存/候選/模式門檻|
+|2|360,170|30|15|1|enabled、距離平方<225、鎖存/候選/模式門檻|
+|3|383,315|100|50|1|enabled、距離平方<2500、鎖存/候選/模式門檻|
+|4|440,394|20|10|0|enabled、距離平方<100、param3非0、鎖存/候選/模式門檻|
+
+數值是原生local predicate中的float域，沒有推定螢幕像素或遊戲world meter單位。548CB0以444960返回物件+7E1是否為1選擇傳入param3的0/1，此欄正式操作名稱留待T10既有輸入證據核對。
+
+## 重要限制
+
+這些local writer不能當成server持久進度；control1..4可由區域互動改值，但Quest2742..2746的官方完成/獎勵仍沒有從此鏈直接證明。即使cp1、cp2文字分別教鍵盤與滑鼠，現在的event predicate主要確認point命中，不足以證必須用指定輸入裝置才會完成。UI object+D0在不同class實例中不可視同同一按鈕。
+
+### 0x6bfe90：已保存 Ghidra 衍生偽碼
+
+Evidence `ev_26c9b25ac781fd62767c699469b5fbde00c2c5244e37a03bdd34f7d8ceec8e2b`；偽碼 SHA `cf09a384516f40d2ce7c4bf19ce7ddb4c2938d89f1bdf1f62856aa5d4fe69a93`；parent raw SHA `3d959dc900b69ecdaefacd7af61fe267fe7ca105865109bbfbc7de5b3ae4503f`。本批已核對本機偽碼與 origin/main blob、index 及 raw SHA 一致。原始 raw 見 `evidence\native\raw\20261025T182755495890-batch-20261025T185026163279-10848.json`；此為靜態分析，不是執行觀測。
+
+```cpp
+void FUN_006bfe90(int *param_1)
+{
+  code *pcVar1;
+  int iVar2;
+  int *piVar3;
+  undefined4 *puVar4;
+  undefined4 *puVar5;
+  int in_ECX;
+  int local_c;
+  piVar3 = param_1;
+  if (param_1[4] == 0x578) {
+    if (param_1[2] == *(int *)(*(int *)(in_ECX + 0x84) + 0x20)) {
+      puVar4 = (undefined4 *)FUN_00891268(0x14);
+      puVar5 = (undefined4 *)0x0;
+      if (puVar4 != (undefined4 *)0x0) {
+        puVar4[3] = 0;
+        *puVar4 = FoxUI::FXUIEvent::vftable;
+        puVar4[1] = 0xffffffff;
+        puVar4[2] = 0xffffffff;
+        puVar4[4] = 0xf4428;
+        puVar5 = puVar4;
+      }
+      param_1 = (int *)&DAT_000001ca;
+      iVar2 = FUN_005854b0();
+      FUN_005740f0(&param_1);
+      if (local_c == *(int *)(iVar2 + 4)) {
+        pcVar1 = (code *)swi(3);
+        (*pcVar1)();
+        return;
+      }
+      puVar4 = (undefined4 *)(local_c + 0x10);
+      if (7 < *(uint *)(local_c + 0x24)) {
+        puVar4 = (undefined4 *)*puVar4;
+      }
+      FUN_00404b10(0xcf,puVar4,&DAT_00bed1fc,puVar5,in_ECX);
+    }
+    if (piVar3[2] == *(int *)(*(int *)(in_ECX + 0xd0) + 0x20)) {
+      if ((*(uint *)(*(int *)(in_ECX + 200) + 0x28) >> 9 & 1) == 0) {
+        iVar2 = FUN_00444960();
+        FUN_006d1be0(iVar2 + 0x504,iVar2 + 0x284);
+        iVar2 = FUN_0048a590();
+        if (iVar2 + 0x24 != iVar2 + 0x14) {
+          FUN_0085e680(**(undefined4 **)(iVar2 + 0x28),*(undefined4 **)(iVar2 + 0x28));
+          FUN_006d4530(iVar2 + 0x14);
+        }
+        puVar5 = (undefined4 *)FUN_00891268(0x18);
+        if (puVar5 != (undefined4 *)0x0) {
+          puVar5[1] = 0xffffffff;
+          puVar5[2] = 0xffffffff;
+          puVar5[3] = 0;
+          puVar5[4] = 0xf43cc;
+          *puVar5 = FoxUI::FXUIEventI1::vftable;
+          puVar5[5] = 1;
+        }
+        FUN_004072a0();
+        (**(code **)(**(int **)(in_ECX + 0xc4) + 0x94))(0);
+      }
+      else {
+        iVar2 = FUN_00444960();
+        FUN_006d1be0(iVar2 + 0x504,iVar2 + 4);
+        iVar2 = FUN_0048a590();
+        if (iVar2 + 0x24 != iVar2 + 4) {
+          FUN_0085e680(**(undefined4 **)(iVar2 + 0x28),*(undefined4 **)(iVar2 + 0x28));
+          FUN_006d4530(iVar2 + 4);
+        }
+        puVar5 = (undefined4 *)FUN_00891268(0x18);
+        if (puVar5 != (undefined4 *)0x0) {
+          puVar5[1] = 0xffffffff;
+          puVar5[2] = 0xffffffff;
+          puVar5[3] = 0;
+          puVar5[4] = 0xf43cc;
+          *puVar5 = FoxUI::FXUIEventI1::vftable;
+          puVar5[5] = 0;
+        }
+        FUN_004072a0();
+        (**(code **)(**(int **)(in_ECX + 0xc4) + 0x94))(0);
+      }
+      if (DAT_00fba7a4 != 0) {
+        *(undefined4 *)(DAT_00fba7a4 + 0x134) = 1;
+      }
+      puVar5 = (undefined4 *)FUN_00891268(0x14);
+      if (puVar5 != (undefined4 *)0x0) {
+        *puVar5 = FoxUI::FXUIEvent::vftable;
+        puVar5[1] = 0xffffffff;
+        puVar5[2] = 0xffffffff;
+        puVar5[3] = 0;
+        puVar5[4] = 0xf43cd;
+      }
+      FUN_004072a0();
+      puVar5 = (undefined4 *)FUN_00891268(0x14);
+      if (puVar5 != (undefined4 *)0x0) {
+        *puVar5 = FoxUI::FXUIEvent::vftable;
+        puVar5[1] = 0xffffffff;
+        puVar5[2] = 0xffffffff;
+        puVar5[3] = 0;
+        puVar5[4] = 0xf4403;
+        FUN_004072a0();
+        return;
+      }
+      FUN_004072a0();
+    }
+  }
+  else if (param_1[4] == 0xf4428) {
+    iVar2 = (**(code **)(*param_1 + 4))();
+    if (iVar2 != 0x105bd) {
+      MessageBoxW((HWND)0x0,L"Wrong EventCasting",L"Error",0);
+      piVar3 = (int *)0x0;
+    }
+    if (piVar3[5] == 0x6a7) {
+      *(undefined4 *)(DAT_00fba7a4 + 0xb4) = 1;
+      return;
+    }
+  }
+  return;
+}
+```
+
+### 0x6c0053：已保存 Ghidra 衍生偽碼
+
+Evidence `ev_26c9b25ac781fd62767c699469b5fbde00c2c5244e37a03bdd34f7d8ceec8e2b`；偽碼 SHA `2e6a30fbbbf3473540c516055a01a4bdf59ef76c3155af01532ca5dc0906fa73`；parent raw SHA `3d959dc900b69ecdaefacd7af61fe267fe7ca105865109bbfbc7de5b3ae4503f`。本批已核對本機偽碼與 origin/main blob、index 及 raw SHA 一致。原始 raw 見 `evidence\native\raw\20261025T182755495890-batch-20261025T185026163279-10848.json`；此為靜態分析，不是執行觀測。
+
+```cpp
+void FUN_006c0053(void)
+{
+  int in_EAX;
+  int iVar1;
+  undefined4 *puVar2;
+  int unaff_EBP;
+  FUN_006d1be0(in_EAX + 0x504);
+  iVar1 = FUN_0048a590();
+  if (iVar1 + 0x24 != iVar1 + 0x14) {
+    FUN_0085e680(**(undefined4 **)(iVar1 + 0x28));
+    FUN_006d4530();
+  }
+  puVar2 = (undefined4 *)FUN_00891268();
+  if (puVar2 != (undefined4 *)0x0) {
+    puVar2[1] = 0xffffffff;
+    puVar2[2] = 0xffffffff;
+    puVar2[3] = 0;
+    puVar2[4] = 0xf43cc;
+    *puVar2 = FoxUI::FXUIEventI1::vftable;
+    puVar2[5] = 1;
+  }
+  FUN_004072a0();
+  (**(code **)(**(int **)(*(int *)(unaff_EBP + -4) + 0xc4) + 0x94))();
+  if (DAT_00fba7a4 != 0) {
+    *(undefined4 *)(DAT_00fba7a4 + 0x134) = 1;
+  }
+  puVar2 = (undefined4 *)FUN_00891268(0x14);
+  if (puVar2 != (undefined4 *)0x0) {
+    *puVar2 = FoxUI::FXUIEvent::vftable;
+    puVar2[1] = 0xffffffff;
+    puVar2[2] = 0xffffffff;
+    puVar2[3] = 0;
+    puVar2[4] = 0xf43cd;
+  }
+  FUN_004072a0();
+  puVar2 = (undefined4 *)FUN_00891268(0x14);
+  if (puVar2 == (undefined4 *)0x0) {
+    FUN_004072a0();
+    return;
+  }
+  *puVar2 = FoxUI::FXUIEvent::vftable;
+  puVar2[1] = 0xffffffff;
+  puVar2[2] = 0xffffffff;
+  puVar2[3] = 0;
+  puVar2[4] = 0xf4403;
+  FUN_004072a0();
+  return;
+}
+```
+
+### 0x6bf2a0：已保存 Ghidra 衍生偽碼
+
+Evidence `ev_26c9b25ac781fd62767c699469b5fbde00c2c5244e37a03bdd34f7d8ceec8e2b`；偽碼 SHA `2c2092d2bf46a7040ffbeb970bf52ed10bb1d7f3874a094d9e3033d07026d52c`；parent raw SHA `3d959dc900b69ecdaefacd7af61fe267fe7ca105865109bbfbc7de5b3ae4503f`。本批已核對本機偽碼與 origin/main blob、index 及 raw SHA 一致。原始 raw 見 `evidence\native\raw\20261025T182755495890-batch-20261025T185026163279-10848.json`；此為靜態分析，不是執行觀測。
+
+```cpp
+void FUN_006bf2a0(int param_1)
+{
+  int iVar1;
+  int *in_ECX;
+  if ((*(int *)(param_1 + 0x10) == 0x578) &&
+     (*(int *)(param_1 + 8) == *(int *)(in_ECX[0x34] + 0x20))) {
+    iVar1 = FUN_00404ba0();
+    if (*(int *)(iVar1 + 0x5f4c) == 1) {
+      FUN_0049b230();
+      FUN_006bfae0();
+      FUN_004054c0();
+      FUN_0058b510();
+      (**(code **)(*in_ECX + 0xd4))();
+      return;
+    }
+    FUN_00414680();
+    FUN_004a38d0();
+  }
+  return;
+}
+```
+
+### 0x6c0170：已保存 Ghidra 衍生偽碼
+
+Evidence `ev_26c9b25ac781fd62767c699469b5fbde00c2c5244e37a03bdd34f7d8ceec8e2b`；偽碼 SHA `8ab7de6b562560ce8ad843b99dca3bddcc4a9fd6d083a1b14ae16bfc52e40a2f`；parent raw SHA `3d959dc900b69ecdaefacd7af61fe267fe7ca105865109bbfbc7de5b3ae4503f`。本批已核對本機偽碼與 origin/main blob、index 及 raw SHA 一致。原始 raw 見 `evidence\native\raw\20261025T182755495890-batch-20261025T185026163279-10848.json`；此為靜態分析，不是執行觀測。
+
+```cpp
+void FUN_006c0170(int *param_1)
+{
+  char cVar1;
+  int iVar2;
+  undefined4 *puVar3;
+  uint uVar4;
+  undefined4 uVar5;
+  int *in_ECX;
+  int *piVar6;
+  uint auStack_74 [4];
+  undefined4 uStack_64;
+  uint uStack_60;
+  undefined1 auStack_58 [60];
+  uint local_1c;
+  void *local_14;
+  undefined1 *puStack_10;
+  undefined4 uStack_c;
+  uStack_c = 0xffffffff;
+  puStack_10 = &LAB_00922a62;
+  local_14 = ExceptionList;
+  local_1c = DAT_00d61f20 ^ (uint)auStack_74;
+  ExceptionList = &local_14;
+  if (param_1 != (int *)0x0) {
+    iVar2 = (**(code **)(*param_1 + 4))(DAT_00d61f20 ^ (uint)&stack0xffffff80);
+    if (iVar2 == 0x105ba) goto LAB_006c01d6;
+    MessageBoxW((HWND)0x0,L"Wrong EventCasting",L"Error",0);
+  }
+  param_1 = (int *)0x0;
+LAB_006c01d6:
+  iVar2 = param_1[6];
+  if (((((iVar2 == 0) || (iVar2 == 4)) || (iVar2 == 6)) || (iVar2 == 10)) && (param_1[5] < 10)) {
+    if (((uint)in_ECX[10] >> 8 & 1) == 0) {
+      (**(code **)(*in_ECX + 0xd0))();
+    }
+    (**(code **)(*(int *)in_ECX[0x20] + 0x94))(param_1[5] != 6);
+    puVar3 = (undefined4 *)FUN_0040ef80();
+    puStack_10 = (undefined1 *)0x0;
+    if (7 < (uint)puVar3[5]) {
+      puVar3 = (undefined4 *)*puVar3;
+    }
+    FUN_0041f460(puVar3);
+    puStack_10._0_1_ = 1;
+    FUN_00405300(in_ECX[0x20] + 0xe8);
+    puStack_10 = (undefined1 *)((uint)puStack_10._1_3_ << 8);
+    FUN_00757640(auStack_58);
+    puStack_10 = (undefined1 *)0xffffffff;
+    if (7 < uStack_60) {
+      FUN_0089120c(auStack_74[0]);
+    }
+    auStack_74[0] = auStack_74[0] & 0xffff0000;
+    uStack_60 = 7;
+    uStack_64 = 0;
+    (**(code **)(*(int *)in_ECX[0x20] + 200))();
+    piVar6 = in_ECX + 0x22;
+    iVar2 = 7;
+    do {
+      (**(code **)(*(int *)*piVar6 + 0x94))(0);
+      piVar6 = piVar6 + 1;
+      iVar2 = iVar2 + -1;
+    } while (iVar2 != 0);
+    piVar6 = in_ECX + 0x29;
+    iVar2 = 8;
+    do {
+      (**(code **)(*(int *)*piVar6 + 0x94))(0);
+      piVar6 = piVar6 + 1;
+      iVar2 = iVar2 + -1;
+    } while (iVar2 != 0);
+    (**(code **)(*(int *)in_ECX[0x21] + 0x94))(param_1[5] < 5);
+    iVar2 = param_1[5];
+    if ((iVar2 < 9) && (in_ECX[iVar2 * 2 + 0x39] != -1)) {
+      (**(code **)(*(int *)in_ECX[in_ECX[iVar2 * 2 + 0x39] + 0x22] + 0x94))(1);
+    }
+    (**(code **)(*(int *)in_ECX[0x31] + 0x94))(param_1[5] == 9);
+    uVar4 = param_1[6];
+    if ((uVar4 == 4) || (uVar4 == 6)) {
+      uVar4 = 1;
+    }
+    else {
+      uVar4 = uVar4 & 0xffffff00;
+    }
+    (**(code **)(*(int *)in_ECX[0x2b] + 0x94))(uVar4);
+    (**(code **)(*(int *)in_ECX[0x2c] + 0x94))(param_1[5] == 6);
+    (**(code **)(*(int *)in_ECX[0x2d] + 0x94))(param_1[5] == 6);
+    (**(code **)(*(int *)in_ECX[0x2e] + 0x94))(param_1[6] == 10);
+    (**(code **)(*(int *)in_ECX[0x2f] + 0x94))(0);
+    (**(code **)(*(int *)in_ECX[0x30] + 0x94))(0);
+    if ((param_1[5] == 3) || (param_1[5] == 4)) {
+      cVar1 = '\x01';
+    }
+    else {
+      cVar1 = '\0';
+    }
+    *(char *)((int)in_ECX + 0xdd) = cVar1;
+    if ((cVar1 == '\0') || (*(char *)((int)in_ECX + 0xde) == '\0')) {
+      uVar5 = 0;
+    }
+    else {
+      uVar5 = 1;
+    }
+    (**(code **)(*(int *)in_ECX[0x2a] + 0x94))(uVar5);
+    if ((*(char *)((int)in_ECX + 0xdd) == '\0') || (*(char *)((int)in_ECX + 0xde) != '\0')) {
+      uVar5 = 0;
+    }
+    else {
+      uVar5 = 1;
+    }
+    (**(code **)(*(int *)in_ECX[0x29] + 0x94))(uVar5);
+  }
+  if (param_1[6] != 0) {
+    (**(code **)(*(int *)in_ECX[0x20] + 0x94))(0);
+    (**(code **)(*(int *)in_ECX[0x20] + 200))();
+    piVar6 = in_ECX + 0x22;
+    iVar2 = 7;
+    do {
+      (**(code **)(*(int *)*piVar6 + 0x94))(0);
+      (**(code **)(*(int *)*piVar6 + 200))();
+      piVar6 = piVar6 + 1;
+      iVar2 = iVar2 + -1;
+    } while (iVar2 != 0);
+  }
+  ExceptionList = local_14;
+  __security_check_cookie(local_1c ^ (uint)auStack_74);
+  return;
+}
+```
+
+### 0x543700：已保存 Ghidra 衍生偽碼
+
+Evidence `ev_e9602c6e577012cccbe9a7810f16befdb18e0466c5468faaa55346daa785ac4f`；偽碼 SHA `d19027eb33e350fc7cd07f868b4c4cfa665447388af56cd5ce5c5a19e9439788`；parent raw SHA `eafd35ba1f01b7739cee6238efa1b80f5a581037a84f910a62356c599c508458`。本批已核對本機偽碼與 origin/main blob、index 及 raw SHA 一致。原始 raw 見 `evidence\native\raw\20261025T182755495890-batch-20261025T184518663465-5280.json`；此為靜態分析，不是執行觀測。
+
+```cpp
+undefined4 *
+FUN_00543700(undefined4 *param_1,short param_2,undefined2 param_3,float param_4,char param_5,
+            undefined4 param_6,undefined1 param_7)
+{
+  float *pfVar1;
+  int iVar2;
+  undefined4 uVar3;
+  undefined4 *puVar4;
+  undefined4 *puVar5;
+  float *in_ECX;
+  undefined4 uVar6;
+  undefined4 uVar7;
+  void *local_10;
+  undefined1 *puStack_c;
+  undefined4 local_8;
+  local_8 = 0xffffffff;
+  puStack_c = &LAB_00929828;
+  local_10 = ExceptionList;
+  ExceptionList = &local_10;
+  FUN_004ca730(DAT_00d61f20 ^ (uint)&stack0xfffffffc);
+  param_1[0x3c] = 0;
+  local_8._0_1_ = 0;
+  local_8._1_3_ = 0;
+  *(undefined2 *)((int)param_1 + 0xf6) = param_3;
+  *(undefined1 *)(param_1 + 0x3e) = param_7;
+  param_1[0x40] = param_6;
+  *param_1 = CCheckPoint::vftable;
+  *(short *)(param_1 + 0x3d) = param_2;
+  param_1[0x3f] = param_4;
+  *(undefined1 *)(param_1 + 0x41) = 0;
+  *(char *)((int)param_1 + 0x105) = param_5;
+  pfVar1 = (float *)(param_1 + 0x28);
+  if ((*in_ECX != (float)param_1[0x28]) || (in_ECX[1] != (float)param_1[0x29])) {
+    *pfVar1 = *in_ECX;
+    param_1[0x29] = in_ECX[1];
+    param_1[0x2b] = 1;
+    FUN_004cab30();
+  }
+  if (param_2 == 2) {
+    iVar2 = FUN_004fb910();
+    if ((iVar2 == 0) || (3 < *(int *)(iVar2 + 8) - 1U)) {
+      iVar2 = 0;
+    }
+    else {
+      iVar2 = *(int *)(iVar2 + 8) + -1;
+    }
+    if ((DAT_00fdf6dc & 1) == 0) {
+      DAT_00fdf6dc = DAT_00fdf6dc | 1;
+      local_8._0_1_ = 1;
+      FUN_00550820();
+      _atexit((_func_4879 *)&LAB_00bce6b0);
+      local_8._0_1_ = 0;
+    }
+    FUN_00551b80(0,iVar2);
+    uVar3 = FUN_00551dd0(&DAT_00fdf680,0,pfVar1,0,0x40000000,0);
+  }
+  else {
+    if (param_2 == 0) {
+      param_1[0x2d] = param_4 * 0.2334;
+      param_1[0x3f] = param_4 * 0.8;
+      if (*(char *)(param_1 + 0x3e) == '\0') {
+        puVar4 = (undefined4 *)FUN_00891268(0x48);
+        local_8._0_1_ = 2;
+        if (puVar4 == (undefined4 *)0x0) {
+          local_8._0_1_ = 0;
+          puVar4 = (undefined4 *)FUN_00489fb0();
+          uVar3 = *puVar4;
+          puVar4 = (undefined4 *)0x0;
+        }
+        else {
+          if (param_5 == '\x01') {
+            iVar2 = 4;
+          }
+          else {
+            iVar2 = *(short *)((int)param_1 + 0xf6) + 1;
+          }
+          puVar4[1] = (int)*(short *)((int)param_1 + 0xf6);
+          puVar4[2] = iVar2;
+          *puVar4 = 8;
+          *(undefined1 *)(puVar4 + 3) = 1;
+          puVar4[4] = *pfVar1;
+          puVar4[5] = param_1[0x29];
+          puVar4[7] = 0;
+          puVar4[6] = 0;
+          puVar4[8] = 0;
+          puVar4[0xe] = 7;
+          puVar4[0xd] = 0;
+          *(undefined2 *)(puVar4 + 9) = 0;
+          FUN_00402160(&DAT_00bed1fc,0);
+          puVar4[0x10] = 0;
+          puVar4[0x11] = 0;
+          local_8._0_1_ = 0;
+          puVar5 = (undefined4 *)FUN_00489fb0();
+          uVar3 = *puVar5;
+        }
+      }
+      else {
+        puVar4 = (undefined4 *)FUN_00891268(0x48);
+        local_8._0_1_ = 3;
+        if (puVar4 == (undefined4 *)0x0) {
+          puVar4 = (undefined4 *)0x0;
+        }
+        else {
+          puVar4[1] = (int)*(short *)((int)param_1 + 0xf6);
+          *puVar4 = 0xb;
+          *(undefined1 *)(puVar4 + 3) = 1;
+          puVar4[2] = (param_5 == '\x01') + 1;
+          puVar4[4] = *pfVar1;
+          uVar3 = param_1[0x29];
+          puVar4[7] = 0;
+          puVar4[5] = uVar3;
+          puVar4[6] = 0;
+          puVar4[8] = 0;
+          puVar4[0xe] = 7;
+          puVar4[0xd] = 0;
+          *(undefined2 *)(puVar4 + 9) = 0;
+          FUN_00402160(&DAT_00bed1fc,0);
+          puVar4[0x10] = 0;
+          puVar4[0x11] = 0;
+        }
+        local_8._0_1_ = 0;
+        puVar5 = (undefined4 *)FUN_00489fb0();
+        uVar3 = *puVar5;
+      }
+      FUN_0056f5c0(uVar3,puVar4);
+      if ((DAT_00fb75b0 & 1) == 0) {
+        DAT_00fb75b0 = DAT_00fb75b0 | 1;
+        local_8._0_1_ = 4;
+        FUN_004f3d80();
+        _atexit((_func_4879 *)&LAB_00bcd1e0);
+        local_8._0_1_ = 0;
+      }
+      FUN_004f7cc0();
+      if ((DAT_00fdf6dc & 1) == 0) {
+        DAT_00fdf6dc = DAT_00fdf6dc | 1;
+        local_8._0_1_ = 5;
+        FUN_00550820();
+        _atexit((_func_4879 *)&LAB_00bce6b0);
+        local_8._0_1_ = 0;
+      }
+      uVar3 = param_1[0x2d];
+      uVar7 = 0;
+      uVar6 = 0;
+    }
+    else {
+      if (param_2 != 4) {
+        ExceptionList = local_10;
+        return param_1;
+      }
+      param_1[0x3f] = param_4 * 0.5;
+      uVar3 = param_1[0x2d];
+      uVar7 = 0;
+      uVar6 = 0;
+      FUN_0049b140(0,0,uVar3);
+    }
+    uVar3 = FUN_00551f90(uVar6,uVar7,uVar3);
+  }
+  param_1[0x3c] = uVar3;
+  ExceptionList = local_10;
+  return param_1;
+}
+```
+
+### 0x544070：已保存 Ghidra 衍生偽碼
+
+Evidence `ev_e9602c6e577012cccbe9a7810f16befdb18e0466c5468faaa55346daa785ac4f`；偽碼 SHA `43eae4cf52a5275fadd54ffd72e52761858cbbd28ce3a173872e449d157d75af`；parent raw SHA `eafd35ba1f01b7739cee6238efa1b80f5a581037a84f910a62356c599c508458`。本批已核對本機偽碼與 origin/main blob、index 及 raw SHA 一致。原始 raw 見 `evidence\native\raw\20261025T182755495890-batch-20261025T184518663465-5280.json`；此為靜態分析，不是執行觀測。
+
+```cpp
+void FUN_00544070(void)
+{
+  short sVar1;
+  short sVar2;
+  code *pcVar3;
+  int *piVar4;
+  int iVar5;
+  int iVar6;
+  undefined4 *puVar7;
+  undefined4 uVar8;
+  undefined4 *puVar9;
+  uint uVar10;
+  int in_ECX;
+  undefined1 *puVar11;
+  float10 fVar12;
+  undefined1 auStack_74 [20];
+  undefined4 uStack_60;
+  undefined1 **ppuStack_5c;
+  undefined1 auStack_58 [20];
+  undefined4 uStack_44;
+  undefined4 uStack_40;
+  undefined4 *puStack_3c;
+  float fStack_24;
+  undefined1 *local_20;
+  undefined1 *local_1c;
+  void *local_14;
+  undefined1 *puStack_10;
+  undefined4 local_c;
+  local_c = 0xffffffff;
+  puStack_10 = &LAB_00947804;
+  local_14 = ExceptionList;
+  sVar1 = *(short *)(in_ECX + 0xf4);
+  if (sVar1 == 3) {
+    ExceptionList = &local_14;
+    piVar4 = (int *)(**(code **)(*DAT_00fba7a4 + 0x20))();
+    if (piVar4 != (int *)0x0) {
+      local_20 = (undefined1 *)((float)piVar4[0x28] - *(float *)(in_ECX + 0xa0));
+      fStack_24 = (float)piVar4[0x29] - *(float *)(in_ECX + 0xa4);
+      fVar12 = (float10)FUN_008fedca();
+      iVar6 = *piVar4;
+      local_20 = (undefined1 *)((float)fVar12 + 1.5707964);
+      puStack_3c = (undefined4 *)0x544110;
+      FUN_004bb450();
+      puStack_3c = (undefined4 *)0x544120;
+      (**(code **)(iVar6 + 0x58))();
+    }
+    puVar11 = (undefined1 *)(int)*(short *)(in_ECX + 0xf6);
+    if ((DAT_00fab29c & 1) == 0) {
+      DAT_00fab29c = DAT_00fab29c | 1;
+      local_c = 0;
+      FUN_004ffe60();
+      puStack_3c = (undefined4 *)0x544151;
+      _atexit((_func_4879 *)&LAB_00bccf00);
+      local_c = 0xffffffff;
+    }
+    puStack_3c = &DAT_00fab2a0;
+    uStack_40 = 0x544167;
+    iVar5 = FUN_00500a80();
+    iVar6 = DAT_00fe1bd0;
+    if (iVar5 == 5) {
+      iVar6 = FUN_00404ba0();
+      iVar6 = *(int *)(iVar6 + 0x5f4c);
+      if (((iVar6 != 3) && (iVar6 != 7)) && ((iVar6 != 0x17 && (iVar6 != 0x18)))) {
+        ExceptionList = local_14;
+        return;
+      }
+      iVar6 = FUN_0041a4d0();
+      if ((*(int *)(iVar6 + 0x5ed8) != 0) && (iVar6 = FUN_00539a70(), iVar6 != 1)) {
+        FUN_004054c0();
+        puStack_3c = (undefined4 *)0x544239;
+        puVar7 = (undefined4 *)FUN_00891268();
+        puVar9 = (undefined4 *)0x0;
+        if (puVar7 != (undefined4 *)0x0) {
+          puVar7[3] = 0;
+          puVar7[6] = 0;
+          puVar7[1] = 0xffffffff;
+          puVar7[2] = 0xffffffff;
+          puVar7[4] = 0xf43d6;
+          *puVar7 = FoxUI::FXUIEventI2::vftable;
+          puVar7[5] = puVar11;
+          puVar9 = puVar7;
+        }
+        FUN_00404aa0();
+        local_20 = auStack_58;
+        ppuStack_5c = (undefined1 **)&DAT_00bed1fc;
+        uStack_60 = 0x544283;
+        puStack_3c = puVar9;
+        FUN_00402250();
+        ppuStack_5c = (undefined1 **)0x20;
+        local_c = 2;
+        uStack_60 = 0x544292;
+        FUN_005854b0();
+        uStack_60 = 0x544299;
+        uVar8 = FUN_00585330();
+        FUN_00402250(uVar8);
+        local_c = 0xffffffff;
+        FUN_0058b270(0xcf);
+        ExceptionList = local_14;
+        return;
+      }
+      puStack_3c = (undefined4 *)0x5442d2;
+      FUN_00539af0();
+      FUN_004054c0();
+      puStack_3c = (undefined4 *)0x5442de;
+      puVar9 = (undefined4 *)FUN_00891268();
+      if (puVar9 == (undefined4 *)0x0) {
+        puVar9 = (undefined4 *)0x0;
+      }
+      else {
+        sVar1 = *(short *)(in_ECX + 0xf6);
+        sVar2 = *(short *)(in_ECX + 0xf4);
+        puVar9[1] = 0xffffffff;
+        puVar9[2] = 0xffffffff;
+        puVar9[3] = 0;
+        puVar9[4] = 0xf43d9;
+        *puVar9 = FoxUI::FXUIEventI3::vftable;
+        puVar9[5] = puVar11;
+        puVar9[6] = (int)sVar2;
+        puVar9[7] = (int)sVar1;
+      }
+      FUN_00404aa0();
+      local_1c = auStack_58;
+      ppuStack_5c = (undefined1 **)&DAT_00bed1fc;
+      uStack_60 = 0x544348;
+      puStack_3c = puVar9;
+      FUN_00402250();
+      local_c = 3;
+      local_20 = (undefined1 *)0x21;
+      ppuStack_5c = (undefined1 **)0x54435d;
+      iVar6 = FUN_005854b0();
+      ppuStack_5c = &local_20;
+      uStack_60 = 0x54436f;
+      FUN_005740f0();
+      if (fStack_24 == *(float *)(iVar6 + 4)) {
+        pcVar3 = (code *)swi(3);
+        (*pcVar3)();
+        return;
+      }
+      puVar9 = (undefined4 *)((int)fStack_24 + 0x10);
+      if (7 < *(uint *)((int)fStack_24 + 0x24)) {
+        puVar9 = (undefined4 *)*puVar9;
+      }
+      local_20 = auStack_74;
+      FUN_00402250(puVar9);
+      local_c = 0xffffffff;
+      FUN_0058b270(0xcf);
+      ExceptionList = local_14;
+      return;
+    }
+    puStack_3c = (undefined4 *)0x544187;
+    local_20 = puVar11;
+    FUN_008438c0();
+    if (fStack_24 == *(float *)(iVar6 + 0xc)) {
+      ExceptionList = local_14;
+      return;
+    }
+    iVar6 = *(int *)((int)fStack_24 + 0x10);
+    if (iVar6 == 0) {
+      ExceptionList = local_14;
+      return;
+    }
+    if (*(int *)(iVar6 + 0x40) == *(int *)(iVar6 + 0x44)) {
+      ExceptionList = local_14;
+      return;
+    }
+    puStack_3c = (undefined4 *)0x5441b4;
+    local_20 = (undefined1 *)FUN_00891268();
+    local_c = 1;
+    if (local_20 != (undefined1 *)0x0) {
+      FUN_0040f060();
+      puStack_3c = (undefined4 *)0x5441e2;
+      local_20 = (undefined1 *)FUN_00753f80();
+      goto LAB_005444f5;
+    }
+  }
+  else {
+    if (sVar1 == 4) {
+      if (DAT_00fba7ac != 4) {
+        return;
+      }
+      DAT_00fba7a4[*(short *)(in_ECX + 0xf6) + 0x2d] = 1;
+      return;
+    }
+    if (sVar1 == 5) {
+      ExceptionList = &local_14;
+      iVar6 = FUN_00404ba0();
+      if (*(int *)(iVar6 + 0x5f4c) != 3) {
+        ExceptionList = local_14;
+        return;
+      }
+      iVar6 = FUN_0040f060();
+      if (*(int *)(iVar6 + 0xf8) == 0) {
+        ExceptionList = local_14;
+        return;
+      }
+      if (*(char *)(*(int *)(iVar6 + 0xf8) + 0x28) == '\0') {
+        FUN_00414680();
+        FUN_004a35c0();
+        ExceptionList = local_14;
+        return;
+      }
+      FUN_00423240();
+      FUN_00516fa0();
+      FUN_00414680();
+      FUN_004a35f0();
+      ExceptionList = local_14;
+      return;
+    }
+    if (sVar1 != 2) {
+      ExceptionList = &local_14;
+      iVar6 = FUN_00404ba0();
+      if ((*(int *)(iVar6 + 0x5f4c) - 0x17U < 2) &&
+         (iVar6 = FUN_0041a4d0(), *(int *)(iVar6 + 0x5ed8) != 0)) {
+        FUN_00404ba0();
+        puStack_3c = (undefined4 *)0x544566;
+        iVar6 = FUN_00539aa0();
+        uVar10 = FUN_00539a70();
+        if (((iVar6 != 0) && (*(char *)(iVar6 + 6) == '\0')) ||
+           (iVar5 = FUN_00404ba0(), *(int *)(iVar5 + 0x5f4c) == 5)) {
+          FUN_004054c0();
+          puStack_3c = (undefined4 *)0x544599;
+          iVar6 = FUN_00891268();
+          if (iVar6 == 0) {
+            uVar8 = 0;
+          }
+          else {
+            puStack_3c = (undefined4 *)0xf4395;
+            uStack_40 = 0x5445bf;
+            uVar8 = FUN_00753e00();
+          }
+          FUN_00404aa0();
+          uStack_40 = 0x196;
+          uStack_44 = 0x5445dc;
+          puStack_3c = (undefined4 *)uVar8;
+          FUN_005854b0();
+          uStack_44 = 0x5445e3;
+          ppuStack_5c = (undefined1 **)FUN_00585330();
+          local_1c = auStack_58;
+          uStack_60 = 0x5445f2;
+          FUN_00402250();
+          ppuStack_5c = (undefined1 **)0x3b;
+          local_c = 5;
+          uStack_60 = 0x544601;
+          FUN_005854b0();
+          uStack_60 = 0x544608;
+          uVar8 = FUN_00585330();
+          local_20 = auStack_74;
+          FUN_00402250(uVar8);
+          local_c = 0xffffffff;
+          FUN_0058b270(0xcf);
+          ExceptionList = local_14;
+          return;
+        }
+        if (((iVar6 != 0) && (*(char *)(iVar6 + 6) != '\0')) && (1 < uVar10)) {
+          FUN_004054c0();
+          puStack_3c = (undefined4 *)0x544666;
+          iVar6 = FUN_00891268();
+          if (iVar6 == 0) {
+            uVar8 = 0;
+          }
+          else {
+            puStack_3c = (undefined4 *)0xf4395;
+            uStack_40 = 0x54468c;
+            uVar8 = FUN_00753e00();
+          }
+          FUN_00404aa0();
+          uStack_40 = 0x196;
+          uStack_44 = 0x5446a9;
+          puStack_3c = (undefined4 *)uVar8;
+          FUN_005854b0();
+          uStack_44 = 0x5446b0;
+          ppuStack_5c = (undefined1 **)FUN_00585330();
+          local_1c = auStack_58;
+          uStack_60 = 0x5446bf;
+          FUN_00402250();
+          ppuStack_5c = (undefined1 **)0x31;
+          local_c = 6;
+          uStack_60 = 0x5446ce;
+          FUN_005854b0();
+          uStack_60 = 0x5446d5;
+          uVar8 = FUN_00585330();
+          local_20 = auStack_74;
+          FUN_00402250(uVar8);
+          local_c = 0xffffffff;
+          FUN_0058b270(0xcf);
+          ExceptionList = local_14;
+          return;
+        }
+      }
+      FUN_00544020();
+      ExceptionList = local_14;
+      return;
+    }
+    ExceptionList = &local_14;
+    iVar6 = FUN_004fb910();
+    if (iVar6 == 0) {
+      ExceptionList = local_14;
+      return;
+    }
+    puStack_3c = (undefined4 *)0x5444af;
+    iVar6 = FUN_00527010();
+    if (iVar6 == 0) {
+      ExceptionList = local_14;
+      return;
+    }
+    if (*(int *)(iVar6 + 0x40) == *(int *)(iVar6 + 0x44)) {
+      ExceptionList = local_14;
+      return;
+    }
+    puStack_3c = (undefined4 *)0x5444ca;
+    local_1c = (undefined1 *)FUN_00891268();
+    local_c = 4;
+    if (local_1c != (undefined1 *)0x0) {
+      FUN_0040f060();
+      puStack_3c = (undefined4 *)0x5444f1;
+      local_20 = (undefined1 *)FUN_00753f80();
+      goto LAB_005444f5;
+    }
+  }
+  local_20 = (undefined1 *)0x0;
+LAB_005444f5:
+  local_c = 0xffffffff;
+  FUN_00404aa0();
+  puStack_3c = (undefined4 *)0x544516;
+  FUN_00804260();
+  ExceptionList = local_14;
+  return;
+}
+```
+
+### 0x544730：已保存 Ghidra 衍生偽碼
+
+Evidence `ev_e9602c6e577012cccbe9a7810f16befdb18e0466c5468faaa55346daa785ac4f`；偽碼 SHA `f44e9b1459b25166aa754becf67569719ac68d21f14e7895a8a8c8ca9ad141bf`；parent raw SHA `eafd35ba1f01b7739cee6238efa1b80f5a581037a84f910a62356c599c508458`。本批已核對本機偽碼與 origin/main blob、index 及 raw SHA 一致。原始 raw 見 `evidence\native\raw\20261025T182755495890-batch-20261025T184518663465-5280.json`；此為靜態分析，不是執行觀測。
+
+```cpp
+undefined4 FUN_00544730(int param_1,float *param_2,int param_3)
+{
+  float fVar1;
+  float fVar2;
+  bool bVar3;
+  float *in_EAX;
+  undefined4 *in_EDX;
+  if (*(char *)(param_1 + 0x105) == '\0') {
+    *in_EDX = 0;
+    return 0;
+  }
+  fVar1 = *in_EAX;
+  *in_EDX = 1;
+  fVar1 = fVar1 - *(float *)(param_1 + 0xa0);
+  fVar2 = in_EAX[1] - *(float *)(param_1 + 0xa4);
+  fVar1 = fVar2 * fVar2 + fVar1 * fVar1;
+  *param_2 = fVar1;
+  bVar3 = *(float *)(param_1 + 0xfc) * *(float *)(param_1 + 0xfc) <= fVar1;
+  if (*(int *)(param_1 + 0x100) == 0) {
+    if ((param_3 == 0) || (bVar3)) {
+LAB_005447e0:
+      *(undefined1 *)(param_1 + 0x104) = 0;
+      return 0;
+    }
+  }
+  else if (bVar3) {
+    if (*(char *)(param_1 + 0x104) == '\0') {
+      *in_EDX = 0;
+    }
+    goto LAB_005447e0;
+  }
+  if (*(char *)(param_1 + 0x104) != '\0') {
+    *in_EDX = 0;
+  }
+  *(undefined1 *)(param_1 + 0x104) = 1;
+  return 1;
+}
+```
+
+### 0x544a00：已保存 Ghidra 衍生偽碼
+
+Evidence `ev_77eb5ef37abe39fa3b5ec94e1c9069c2acf632dbe7e6d3c6a1963cb816c028db`；偽碼 SHA `48b2f3ded973e9fc2c8d02e7221a0f8cd5e9c433a56f0666504b8cc734eeadf2`；parent raw SHA `92d1847916b8d3a1b5bd7da1a4c6401e071fb553c12d32b57c373b27161aa0ea`。本批已核對本機偽碼與 origin/main blob、index 及 raw SHA 一致。原始 raw 見 `evidence\native\raw\20261025T182755495890-batch-20261025T184519499738-5296.json`；此為靜態分析，不是執行觀測。
+
+```cpp
+undefined4 FUN_00544a00(undefined4 param_1)
+{
+  int *piVar1;
+  int iVar2;
+  int in_ECX;
+  uint uVar3;
+  float fVar4;
+  float fStack_2c;
+  int iStack_28;
+  float fStack_24;
+  int *piStack_20;
+  int iStack_1c;
+  void *local_14;
+  undefined1 *puStack_10;
+  undefined4 uStack_c;
+  uStack_c = 0xffffffff;
+  puStack_10 = &LAB_009405be;
+  local_14 = ExceptionList;
+  ExceptionList = &local_14;
+  iStack_1c = (**(code **)(*DAT_00fba7a4 + 0x20))(DAT_00d61f20 ^ (uint)&stack0xffffffc8);
+  uVar3 = 0;
+  if (iStack_1c != 0) {
+    fStack_24 = 999999.0;
+    piStack_20 = (int *)0x0;
+    if (*(int *)(in_ECX + 8) - *(int *)(in_ECX + 4) >> 2 != 0) {
+      fVar4 = 0.0;
+      iStack_1c = iStack_1c + 0xa0;
+      do {
+        iStack_28 = 0;
+        fStack_2c = fVar4;
+        iVar2 = FUN_00544730(*(undefined4 *)(*(int *)(in_ECX + 4) + uVar3 * 4),&fStack_2c,param_1);
+        if (((iStack_28 != 0) && (iVar2 != 0)) && (fStack_2c < fStack_24)) {
+          piStack_20 = *(int **)(uVar3 * 4 + *(int *)(in_ECX + 4));
+          fStack_24 = fStack_2c;
+        }
+        piVar1 = piStack_20;
+        uVar3 = uVar3 + 1;
+      } while (uVar3 < (uint)(*(int *)(in_ECX + 8) - *(int *)(in_ECX + 4) >> 2));
+      if (piStack_20 != (int *)0x0) {
+        if ((DAT_00f94390 & 1) == 0) {
+          DAT_00f94390 = DAT_00f94390 | 1;
+          uStack_c = 0;
+          FUN_004e1590();
+          _atexit((_func_4879 *)&LAB_00bccc80);
+          uStack_c = 0xffffffff;
+        }
+        if (DAT_00f942c0 == '\0') {
+          (**(code **)(*piVar1 + 100))();
+          ExceptionList = local_14;
+          return 1;
+        }
+      }
+    }
+  }
+  ExceptionList = local_14;
+  return 0;
+}
+```
+
+## 原BIN bytes定位補件
+
+`evidence/native/UI-checkpoint-byte-windows.json` 保存UI/controller指標、+134與+B4候選常數周邊的直接bytes、VA/raw及SHA。窗口可能從指令中間開始，明確不冒稱新的反組譯或完整函式邊界；完整控制流引用已保存的Ghidra parent raw。
