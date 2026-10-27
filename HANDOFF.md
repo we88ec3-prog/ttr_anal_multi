@@ -29,3 +29,5 @@ T01-20261027-04 已推送 main：[3ee8df80feb347f1863805ac909cb3431cbd5d29](http
 
 
 [T01-20261027-05](shared/integrations/T01-20261027-05/README.md)：接續審核先前105份source-only報告（上一批89＋更早16），來源SHA與1703項內嵌相對目標自洽核對完成；25筆限定觀察／缺口與13筆更正不等完整native語意通過。最新逐SHA來源狀態 `shared/source-review-status.json`，方法歸屬與T14狀態保留。
+
+T01-20261027-05 已推送 main：[f15b2c0f7c7669afe408de14bb9a61f0e57e4268](https://github.com/we88ec3-prog/ttr_anal_multi/commit/f15b2c0f7c7669afe408de14bb9a61f0e57e4268)；後續收據提交不擴大接受範圍，接續先查本批逐SHA處置與來源審核索引。

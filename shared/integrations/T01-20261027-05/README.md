@@ -14,6 +14,6 @@ T08-130自己記載PE raw400與flat raw0讀到不同bytes，進一步表明前�
 
 快照UTC `2026-10-27T15:22:26.433714+00:00`，2791檔／385666350 bytes，可恢復副本 `work/T01-20261027-05/local-snapshot.zip` SHA `ec7041f559e75bbe25aebe28c262c985b727916095ed5408f468a07c58e084d7`；不含.git與已保存bulk／exports／history，副本不提交。[凍結清單](frozen-inventory.json.gz)與[來源Git狀態](source-git-status.txt.gz)保存本地未提交狀態。原E:未切分支、pull、覆蓋或清理，原anal唯讀。[凍結後變更](post-freeze-changes.json)不屬接受範圍。
 
-驗證結果見[validation.json](validation.json)，後續問題見[NEXT-QUERIES.md](NEXT-QUERIES.md)。本指令承接正常推送main授權，實際接續SHA見本目錄 `push-receipt.json`；獨立分支 `codex/t01-integration-20261027-05`。其他任務依最新逐SHA清單去重；交接僅用文件，未傳訊至其他對話。
+驗證結果見[validation.json](validation.json)，後續問題見[NEXT-QUERIES.md](NEXT-QUERIES.md)。本批已正常推送 origin/main：[整合commit](https://github.com/we88ec3-prog/ttr_anal_multi/commit/f15b2c0f7c7669afe408de14bb9a61f0e57e4268)，SHA `f15b2c0f7c7669afe408de14bb9a61f0e57e4268`；實際遠端確認見[推送收據](push-receipt.json)。其他任務以此commit或包含它的較新main接續；獨立分支 `codex/t01-integration-20261027-05`。其他任務依最新逐SHA清單去重；交接僅用文件，未傳訊至其他對話。
 
 補入早期16份報告時，對構造／網路／場景已覆蓋內容連回既有claim及更正；另外新增兩條T09局部碰撞／BND表示觀察。未整份接受早期彙總草稿。
