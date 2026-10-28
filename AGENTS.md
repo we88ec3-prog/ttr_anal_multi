@@ -1,5 +1,17 @@
 # 分工接續規則
 
+## 跨 Task 驗收退回（以 Task README 通知，不使用 GitHub Issue）
+
+- 各 Task 開工前讀取自己的 kr/tasks/<TaskID>/README.md 中「T01 驗收退回事項」，優先處理 NEEDS_FIX、FIXING、READY_FOR_REVIEW、BLOCKED；沒有此節則照舊工作。
+- T01 先核對原始來源 SHA、PE 映射、指令邊界、驗證工具、完整主張與上下游；若是 T01 自己驗證器錯誤，先自行修復，不通知原作者。
+- 確定需來源 Task 更正時，T01 在對應 Task README 的上述專區建立／更新固定 ID 的退回項；包含原稿完整路徑和 Git blob SHA、錯誤描述、原始反證、修復要求、完成條件、驗收來源。不使用 GitHub Issue。同一問題更新舊紀錄，不重複建立。
+- T01 只可編輯其他 Task README 的退回專區；不可改原稿、Task owner、task.json、catalog、native_complete 或其他 Task 結論。
+- 來源 Task 保留原稿，提供修正版或勘誤檔和新版 SHA，將項目更新為 READY_FOR_REVIEW。T01 複驗通過後才標記 RESOLVED；不得刪除歷史。
+- 狀態流轉 NEEDS_FIX → FIXING → READY_FOR_REVIEW → RESOLVED。現有第一手證據無法再推進時方可標記 BLOCKED 並列解除條件。PARTIAL 僅是尚未全文驗完，不自動視為原稿有錯。
+- FULL-PASS 必須限定版本及全部實質肯定主張的驗證範圍，抽樣位元組通過不等於全文 FULL-PASS，亦不等於整體 Task 的 native_complete。
+- 保持各 Task 的原有分工、分支、提交授權和競爭修改核對要求。
+
+
 ## 已上傳的大量反編譯與審核狀態
 
 使用 KR 原生證據前，先讀 [完整反編譯上傳與狀態索引](shared/integrations/T01-BULK-20261026-02/README.md)。`kr-bulk-roy/<目標SHA>/functions/` 與 `raw/` 已完整保存於 Git；按位址選讀，避免重做全量反編譯。`python -B kr-bulk-roy/review_status.py 0x4df510` 可查逐函式狀態。上傳、方法登記及來源被引用均不等於整個函式已逐項審核，既有正式結論僅在 catalog 指定的有限範圍成立。
