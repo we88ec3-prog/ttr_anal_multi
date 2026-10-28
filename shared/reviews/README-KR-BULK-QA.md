@@ -20,3 +20,11 @@
 - [第三段完整品質報告](KR-BULK-CENTRAL-QA-ROUND-03-20261029.md)：對 `lookup.py`／`review_status.py` 靜態檢查，指出 silent JSON parse skip、重複地址未回報、Evidence 路徑驗證、`assert` 的 `-O` 限制與線性掃描成本；再次核對四個 BIN 入口 16 bytes。**均是有界原碼品質觀察，未宣稱現有完整 index 實際受損。**
 - [第三段機器可讀結果](KR-BULK-CENTRAL-QA-ROUND-03-20261029.json)。
 - 完整 `index.jsonl` 內容在這次工具環境未取得，故**全量 SHA 與 index→raw 逐筆核對仍未完成**；後續須在具完整 Git checkout 的環境實行。狀態依然是 **PARTIAL / NOT FULL-PASS**。
+
+## 第四段：完整性檢查工具（2026-10-29）
+
+- [第四段報告](KR-BULK-CENTRAL-QA-ROUND-04-20261029.md)
+- [唯讀完整性驗證器](tools/bulk_integrity_audit.py)
+- [六項 fixture 測試](tools/test_bulk_integrity_audit.py)
+
+六項本地測試通過；**正式 111,054 筆索引／raw 尚未實行全量核對**。保持 PARTIAL / NOT FULL-PASS。
