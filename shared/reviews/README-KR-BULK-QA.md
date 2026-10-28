@@ -66,3 +66,9 @@
 
 - [第十段技術報告](KR-BULK-CENTRAL-QA-ROUND-10-20261029.md)：確認 index Git blob `89c8d6a75fea00b668df7d96945eadd30b561a97` 可讀 metadata，但限定行內容仍為空；本地 Git DNS 無法解析。另整理全量驗證的版本鎖定與可驗收執行程序。
 - **本段沒有取得 111,054 筆實測結果，維持 BLOCKED-FULL-DATA / PARTIAL / NOT FULL-PASS**。不可把 GitHub API 回傳空正文解讀成檔案為空。
+
+
+## 第十一段：原始 BIN 直接複驗（2026-10-29）
+
+- [第十一段技術報告](KR-BULK-CENTRAL-QA-ROUND-11-20261029.md)：以當次本地原始 BIN 直接對照第二段 GitHub 報告記錄，四個函式入口各 48 bytes，共 **192/192 bytes 完全一致**。
+- **僅證實指定入口機器碼與既有報告的一致性**；未取得 111,054 個函式的全量 hash，維持 PARTIAL / NOT FULL-PASS。
