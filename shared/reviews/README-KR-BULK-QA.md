@@ -72,3 +72,9 @@
 
 - [第十一段技術報告](KR-BULK-CENTRAL-QA-ROUND-11-20261029.md)：以當次本地原始 BIN 直接對照第二段 GitHub 報告記錄，四個函式入口各 48 bytes，共 **192/192 bytes 完全一致**。
 - **僅證實指定入口機器碼與既有報告的一致性**；未取得 111,054 個函式的全量 hash，維持 PARTIAL / NOT FULL-PASS。
+
+
+## 第十二段：BIN-first 重複呼叫序列驗證（2026-10-29）
+
+- [第十二段完整技術報告](KR-BULK-CENTRAL-QA-ROUND-12-20261029.md)：原始 BIN 直接解碼 `FUN_0055D7E0` 的 `E8 rel32`，確認對 `0x006F55B0` 與 `0x006F5790` **各 72 次 direct CALL**，72 個不同的 `EDI` 立即數，以及末端 `0x0055E410`、`0x0055E4F0` 的直接呼叫。
+- 這是有界原生程式碼證據，**尚未驗證上述 callee 的功能語意／完整資料流，也不代表 bulk 全量 QA 完成**。維持 PARTIAL / NOT FULL-PASS。
