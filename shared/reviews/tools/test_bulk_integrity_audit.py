@@ -41,5 +41,26 @@ class TestAudit(unittest.TestCase):
     def test_missing(self):
         self.write(dict(self.row, pseudocode_path="functions/missing.c"))
         self.assertEqual(audit(self.root, SHA)["counts"]["issue_missing_file"], 1)
+    def test_invalid_digest_format(self):
+        self.write(dict(self.row, pseudocode_sha256="z"*64))
+        self.assertEqual(audit(self.root, SHA)["counts"]["issue_bad_reference"], 1)
+    def test_missing_pseudocode_reference(self):
+        item = dict(self.row)
+        del item["pseudocode_path"]
+        self.write(item)
+        self.assertEqual(audit(self.root, SHA)["counts"]["issue_missing_pseudocode_reference"], 1)
+    def test_ambiguous_evidence_reference(self):
+        self.write(dict(self.row, seed_evidence="seed.json", seed_evidence_sha256="0"*64))
+        self.assertEqual(audit(self.root, SHA)["counts"]["issue_ambiguous_evidence_reference"], 1)
+    def test_duplicate_conflict_flag(self):
+        self.write(self.row, dict(self.row, pseudocode_sha256="0"*64))
+        issues = audit(self.root, SHA)["exceptions"]
+        self.assertFalse(next(x for x in issues if x["kind"] == "duplicate_address")["identical"])
+    def test_exception_truncation(self):
+        self.write(self.row, self.row, self.row)
+        result = audit(self.root, SHA, max_exceptions=1)
+        self.assertEqual(len(result["exceptions"]), 1)
+        self.assertTrue(result["exceptions_truncated"])
+        self.assertEqual(result["issues_total"], 2)
 if __name__ == "__main__":
     unittest.main()
