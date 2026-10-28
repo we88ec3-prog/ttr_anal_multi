@@ -2,8 +2,8 @@
 """Read-only frozen KR bulk index and referenced file integrity verifier."""
 import argparse, collections, hashlib, json, pathlib, re, sys
 
-HEX64 = re.compile(r'[0-9a-fA-F]{64}\\Z')
-ADDRESS = re.compile(r'0[xX][0-9a-fA-F]+\\Z')
+HEX64 = re.compile(r'[0-9a-fA-F]{64}\Z')
+ADDRESS = re.compile(r'0[xX][0-9a-fA-F]+\Z')
 
 def hash_file(path):
     h = hashlib.sha256()
