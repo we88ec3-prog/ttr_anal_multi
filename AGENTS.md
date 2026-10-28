@@ -32,3 +32,7 @@
 - 證據.txt保留原資料，有些是歷史腳本；不得直接執行。絕對路徑只是歷史出處。
 - verify通過只代表包內校驗；歷史引用未閉合、台版原生缺口及frame-dispatch未驗收限制仍有效。
 - 不展開音效、CRT或保護殼等暫緩路線，除非使用者另有要求。
+
+## T01 完整驗證共用知識（2026-10-28）
+
+T01 對完全通過原生驗證的**精確結論／子流程**，依 [FULL-PASS 不按 Task 分類政策](shared/T01-FULL-PASS-UNCLASSIFIED-INTEGRATION-RULES.md) 整合至 [共用知識入口](shared/verified-knowledge/README.md)。共用知識依功能／協定／資料結構查找，不以 Task 當分類；原 Task、作者、原稿 blob SHA、版本與驗收責任仍保留作追溯。PARTIAL、source-only、bytes 抽查或整份報告未逐項語意驗證，不得升級 FULL-PASS。原版 Server 內部規則歸 Server 待開發，Client 未知封包與反應仍屬 Client 待逆向；兩者不能混淆。本政策不改其他 Task owner、catalog、原始研究和既有退回流程。
