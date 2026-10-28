@@ -46,7 +46,21 @@
   "unknowns": [
     "版本與替代規則審核，不宣稱現在仍可玩"
   ],
+  "cross_task_review_policy": {
+    "notification_channel": "kr/tasks/<TaskID>/README.md / T01 驗收退回事項",
+    "use_github_issues": false,
+    "cross_task_write_scope": "Only T01 驗收退回事項 section in the other task README",
+    "verify_source_sha_mapping_tool_and_claims_before_return": true,
+    "deduplicate_return_records_by_source_and_defect": true,
+    "require_original_blob_sha_native_counterevidence_and_acceptance": true,
+    "preserve_other_task_source_owner_catalog_and_native_complete": true,
+    "repair_handoff": "source owner publishes new source blob SHA and sets READY_FOR_REVIEW; T01 revalidates then sets RESOLVED",
+    "states": ["NEEDS_FIX", "FIXING", "READY_FOR_REVIEW", "RESOLVED", "BLOCKED"]
+  },
   "next_steps": [
+    "Before reviewing new sources, check T01 returns in owning Task README; diagnose validator and source mapping mismatches before returning source.",
+    "For confirmed defects, update kr/tasks/<TaskID>/README.md T01 驗收退回事項 with original Git blob SHA, native counterevidence and repair acceptance; no GitHub Issue.",
+    "Track T08-157/173/187/196 corrections and legacy mapping reconciliation in kr/tasks/T08/README.md; T01 revalidates source owner's updated SHA before resolving.",
     "Read T01-20261028-06: T16 registered without ownership transfer; source/resource facts separated from official backend/runtime gaps.",
     "Read T01-20261027-05 and shared/source-review-status.json before re-auditing prior source-only reports. Full native gaps remain.",
     "Read T01-20261027-04 source ledger/corrections before new work; pending reports are not complete native-method reviews.",
