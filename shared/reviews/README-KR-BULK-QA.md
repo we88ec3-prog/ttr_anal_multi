@@ -60,3 +60,9 @@
 - [第九段報告](KR-BULK-CENTRAL-QA-ROUND-09-20261029.md)
 - [v2 前置檢查](tools/kr_bulk_preflight.py) 及 [9 項測試定義](tools/test_kr_bulk_preflight.py)：增加逐行 JSON、來源 SHA、地址、重複與預期筆數檢查。
 - 本地同邏輯 fixture 測試 9/9 通過；**正式 GitHub 版本與全量索引仍待在完整 checkout 執行**。維持 PARTIAL / NOT FULL-PASS。
+
+
+## 第十段：真實索引存取阻塞核對（2026-10-29）
+
+- [第十段技術報告](KR-BULK-CENTRAL-QA-ROUND-10-20261029.md)：確認 index Git blob `89c8d6a75fea00b668df7d96945eadd30b561a97` 可讀 metadata，但限定行內容仍為空；本地 Git DNS 無法解析。另整理全量驗證的版本鎖定與可驗收執行程序。
+- **本段沒有取得 111,054 筆實測結果，維持 BLOCKED-FULL-DATA / PARTIAL / NOT FULL-PASS**。不可把 GitHub API 回傳空正文解讀成檔案為空。
