@@ -78,3 +78,9 @@
 
 - [第十二段完整技術報告](KR-BULK-CENTRAL-QA-ROUND-12-20261029.md)：原始 BIN 直接解碼 `FUN_0055D7E0` 的 `E8 rel32`，確認對 `0x006F55B0` 與 `0x006F5790` **各 72 次 direct CALL**，72 個不同的 `EDI` 立即數，以及末端 `0x0055E410`、`0x0055E4F0` 的直接呼叫。
 - 這是有界原生程式碼證據，**尚未驗證上述 callee 的功能語意／完整資料流，也不代表 bulk 全量 QA 完成**。維持 PARTIAL / NOT FULL-PASS。
+
+
+## 第十三段：Closure-like 值與字串鍵寫入鏈（2026-10-29）
+
+- [第十三段 BIN-first 完整原稿](KR-BULK-CENTRAL-QA-ROUND-13-20261029.md)：追查 `0x006F55B0` 的 16-byte stack slot／type 6 記錄配置、`0x006F5790` 的 EDI 字串 key 消費、`0x0055E410`／`0x0055E4F0` 的全域 writer 與 callback 交接。
+- 可用結論：先前 72 組重複呼叫具有 closure-like value 與字串 key 表寫入的有界原生資料流；尚未命名所有函式及完整 script runtime，維持 PARTIAL / NOT FULL-PASS。
