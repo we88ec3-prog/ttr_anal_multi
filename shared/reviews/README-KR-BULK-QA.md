@@ -28,3 +28,8 @@
 - [六項 fixture 測試](tools/test_bulk_integrity_audit.py)
 
 六項本地測試通過；**正式 111,054 筆索引／raw 尚未實行全量核對**。保持 PARTIAL / NOT FULL-PASS。
+
+## 第五段：驗證器格式與例外改進（2026-10-29）
+
+- [第五段完整報告](KR-BULK-CENTRAL-QA-ROUND-05-20261029.md)：增強 SHA/地址格式、重複地址異質性、缺漏與例外截斷紀錄。
+- [更新的驗證器](tools/bulk_integrity_audit.py) 與 [11 項 fixture 測試定義](tools/test_bulk_integrity_audit.py)。**本版測試尚未在本環境執行，沒有全量 index 掃描；非 FULL-PASS。**
