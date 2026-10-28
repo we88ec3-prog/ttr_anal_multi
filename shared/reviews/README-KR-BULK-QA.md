@@ -46,3 +46,10 @@
 - [第七段技術報告](KR-BULK-CENTRAL-QA-ROUND-07-20261029.md)
 - [測試輸出紀錄](KR-BULK-CENTRAL-QA-ROUND-07-20261029-tests.txt)
 - 在本地依遠端程式邏輯重建測試副本，實際執行 14 項 unittest：**14/14 通過**。本地副本並非 Git blob byte-identical；**未對正式 111,054 筆索引進行全量驗證**，維持 PARTIAL / NOT FULL-PASS。
+
+
+## 第八段：真實資料前置檢查（2026-10-29）
+
+- [第八段報告](KR-BULK-CENTRAL-QA-ROUND-08-20261029.md)
+- [前置檢查工具](tools/kr_bulk_preflight.py) 與 [四項測試](tools/test_kr_bulk_preflight.py)：**4/4 通過**，測試副本與 GitHub 遠端 Git blob SHA 完全一致。
+- 實際容器檢查回傳 `BLOCKED_NO_COMPLETE_INDEX`，代表此容器缺資料，**不代表倉庫索引不存在**；未執行 111,054 筆全量 hash。
