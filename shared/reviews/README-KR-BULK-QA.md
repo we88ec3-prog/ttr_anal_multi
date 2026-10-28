@@ -39,3 +39,10 @@
 
 - [第六段完整報告](KR-BULK-CENTRAL-QA-ROUND-06-20261029.md)：修正驗證器 Python raw regex 的多餘反斜線，避免地址／SHA256 `fullmatch` 產生錯誤結果。
 - [更新後驗證器](tools/bulk_integrity_audit.py) 與 [14 個回歸測試定義](tools/test_bulk_integrity_audit.py)。**新版測試及全量索引仍未實行，維持 PARTIAL / NOT FULL-PASS。**
+
+
+## 第七段：14 項 fixture 首次實際執行（2026-10-29）
+
+- [第七段技術報告](KR-BULK-CENTRAL-QA-ROUND-07-20261029.md)
+- [測試輸出紀錄](KR-BULK-CENTRAL-QA-ROUND-07-20261029-tests.txt)
+- 在本地依遠端程式邏輯重建測試副本，實際執行 14 項 unittest：**14/14 通過**。本地副本並非 Git blob byte-identical；**未對正式 111,054 筆索引進行全量驗證**，維持 PARTIAL / NOT FULL-PASS。
