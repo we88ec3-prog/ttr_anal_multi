@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Read-only frozen KR bulk index and referenced file integrity verifier."""
-import argparse, collections, hashlib, json, pathlib, sys
+import argparse, collections, hashlib, json, pathlib, re, sys
+
+HEX64 = re.compile(r'[0-9a-fA-F]{64}\\Z')
+ADDRESS = re.compile(r'0[xX][0-9a-fA-F]+\\Z')
 
 def hash_file(path):
     h = hashlib.sha256()
@@ -30,18 +33,23 @@ def audit(root, source_sha, max_exceptions=100000):
                 continue
             counts["parsed_objects"] += 1
             addr = row.get("address")
-            if not isinstance(addr, str):
+            if not isinstance(addr, str) or not ADDRESS.fullmatch(addr):
                 issue(line_no, "invalid_address", value=str(addr))
                 continue
             if addr in seen:
-                issue(line_no, "duplicate_address", address=addr, previous_line=seen[addr])
+                previous_line, previous_row = seen[addr]
+                issue(line_no, "duplicate_address", address=addr, previous_line=previous_line, identical=(row == previous_row))
             else:
-                seen[addr] = line_no
+                seen[addr] = (line_no, row)
             counts["status_" + str(row.get("status"))] += 1
             if row.get("source_sha256") != source_sha:
                 issue(line_no, "source_sha_mismatch", address=addr)
             if row.get("status") != "ok":
                 continue
+            if "pseudocode_path" not in row:
+                issue(line_no, "missing_pseudocode_reference", address=addr)
+            if "batch_path" in row and "seed_evidence" in row:
+                issue(line_no, "ambiguous_evidence_reference", address=addr)
             for key, digest_key, parent in (
                 ("pseudocode_path", "pseudocode_sha256", base),
                 ("batch_path", "batch_sha256", base),
@@ -50,12 +58,12 @@ def audit(root, source_sha, max_exceptions=100000):
                 if key not in row:
                     continue
                 value, digest = row[key], row.get(digest_key)
-                if not isinstance(value, str) or not isinstance(digest, str) or len(digest) != 64:
+                if not isinstance(value, str) or not isinstance(digest, str) or HEX64.fullmatch(digest) is None:
                     issue(line_no, "bad_reference", address=addr, field=key)
                     continue
                 parent = parent.resolve()
                 path = (parent / value).resolve()
-                if not path.is_relative_to(parent):
+                if pathlib.Path(value).is_absolute() or not path.is_relative_to(parent):
                     issue(line_no, "path_escape", address=addr, field=key)
                 elif not path.is_file():
                     issue(line_no, "missing_file", address=addr, field=key, path=value)
@@ -72,6 +80,7 @@ def audit(root, source_sha, max_exceptions=100000):
         "unique_addresses": len(seen),
         "exceptions": exceptions,
         "exceptions_truncated": sum(v for k,v in counts.items() if k.startswith("issue_")) > len(exceptions),
+        "issues_total": sum(v for k,v in counts.items() if k.startswith("issue_")),
         "classification": "FILE_INTEGRITY_ONLY_NOT_SEMANTIC_OR_FULL_PASS",
     }
 
@@ -80,8 +89,11 @@ def main():
     p.add_argument("repository_root")
     p.add_argument("--sha", default="9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91")
     p.add_argument("--output", required=True)
+    p.add_argument("--max-exceptions", type=int, default=100000)
     a = p.parse_args()
-    result = audit(a.repository_root, a.sha)
+    if a.max_exceptions < 0 or not HEX64.fullmatch(a.sha):
+        p.error("Invalid --max-exceptions or --sha")
+    result = audit(a.repository_root, a.sha, max_exceptions=a.max_exceptions)
     pathlib.Path(a.output).write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps({"counts": result["counts"], "unique_addresses": result["unique_addresses"]}, ensure_ascii=False))
     return int(any(k.startswith("issue_") for k in result["counts"]))
