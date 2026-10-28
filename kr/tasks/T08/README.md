@@ -1,5 +1,47 @@
 # T08 實體生成與移除
 
+## T01 驗收退回事項
+
+本節是 T01 對 T08 分析者的正式 GitHub README 通知；不使用 GitHub Issue。開始下一段工作前請先處理 NEEDS_FIX / FIXING，或明確記錄繼續研究與修正工作的優先序。T01 僅維護本退回專區，T08 保留原稿並產生修正版/勘誤。來源 Task 標記 READY_FOR_REVIEW 後，由 T01 複驗才標記 RESOLVED；已解決紀錄不刪。
+
+### T01-RETURN-T08-157-001 — NEEDS_FIX
+- 原稿：kr-temp-roy/20261028-015216-chatgpt-web-roy-T08-157-packet-row-removal-receiver-boundaries.md
+- 原稿 Git blob SHA：b67b6c415c63034607fadef59b0e4fc2892237e2
+- 問題：0x4B297C 在原稿片段誤作獨立指令起點。原生有效邊界為 0x4B297A cmp eax,[0x00FAB13C]；0x4B2980 je 0x4B2989；0x4B2982 mov esi,[eax+0x10]。原稿出現的 cmp al,0xb1/cli 屬指令中途錯位解碼。
+- T08 修復：按 KR PE .text 的正確節區映射重解 0x4B28D0 整段 CFG；更正組語、ID 查找、分支、偽碼及受影響的主張。提交修正版或勘誤及新 Git blob SHA，交 T01 全文重驗。
+- 來源：T01-030 本地核對；原始 KR BIN SHA256 9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91。
+
+### T01-RETURN-T08-173-001 — NEEDS_FIX
+- 原稿：kr-temp-roy/20261028-085944-chatgpt-web-roy-T08-173-owner-44-writers.md
+- Git blob SHA：f643553ef1145ed65a5a724a0a9a3f19c910e76f
+- 問題：原稿把 0x7B8006 mov [edx+0x44],ecx 視為需由 caller 確認的可變 ECX；同一函式 0x7B7FFE mov ecx,1 已將此路的寫入值定為 1，入口應由 0x7B7FD0 識別。
+- T08 修復：更正 +0x44 enable／disable 的 writer 描述，重驗本函式數值來源與所有受影響論點，提交修正版及 Git blob SHA。
+- 來源：T01-026/027 驗收界線。
+
+### T01-RETURN-T08-187-001 — NEEDS_FIX
+- 原稿：kr-temp-roy/20261028-101203-chatgpt-web-roy-T08-187-acquire-wrapper-and-resource-return.md
+- 問題：原稿將 0x7F6FC1 註為 push 0x30；原始 BIN push 0x30 在 0x7F6FBF，0x7F6FC1 實為 mov edi,eax。
+- T08 修復：重驗 0x7F6FBA 周邊 wrapper 配置、0x7DCFB0 acquire、callsite 和位址；提供修正版本路徑及新 Git blob SHA。
+- 來源：T01-026 的明確原生反證。
+
+### T01-RETURN-T08-196-001 — NEEDS_FIX
+- 原稿：kr-temp-roy/20261028-110153-chatgpt-web-roy-T08-196-composite-id-secondary-tree-remove.md
+- Git blob SHA：b1879330f55b5d7b6d38a697a46a0f40ce3b6aca
+- 問題：原稿將 0x4DFC90 當作 owner+0x18 的第二樹；原生 0x4DFC96 lea edi,[eax+8] 指向主樹。第二樹是獨立的 0x4DFC30（lea ebx,[esi+0x18]）路徑。
+- T08 修復：拆開主樹／次級樹、actor+0x88 條件與 key 移除、不同 payload 清理的全部相關結論；附完整 CFG 與修正版 Git SHA。
+- 來源：T01-026、T01-030 有界核對。
+
+### T01-RETURN-T08-LEGACY-MAPPING-001 — BLOCKED（需來源調和）
+- 範圍：T08-140～152 等較早原稿使用 BIN offset=VA-0x401000 的線性映射；此處是「群組來源調和」提醒，不把每篇都斷言相同錯誤。
+- 具體例子：在 VA 0x7A507F 舊線性映射讀到 c7 46 04 4c f6 c4 00，但目前 KR PE .text VA 0x401000/raw 0x400 的對應 bytes 不同。可能是來源檔格式／攤平 image 類型不同；不可直接將兩種檔案等同。
+- T08 修復：逐一找出舊筆記使用的實際檔案版本、檔案格式、SHA、.text raw 映射；證實後重新解碼並更新出處。無法取得所需原始資料時明列解除條件，勿憑推測修稿。
+- 來源：T01-029 本地映射衝突核查。
+
+### 當前不需退回／避免重複
+- T08-200：0x82EF00 在 lower_bound 後有候選 key 等值檢查，舊退回理由已撤銷；見 [T01-027](../../../shared/integrations/T01-20261028-27/README.md)。
+- T08-153、155、158、159 尚屬 PARTIAL（未驗完）不是已證原稿錯誤，待 T01 繼續驗收；T08-154/156 的歷史 getter 說法已由 T08-158 更新，不把已被正確更正的歷史當成新缺陷。
+
+
 狀態：bounded-review-handoff；負責人未認領。
 
 ## 範圍
