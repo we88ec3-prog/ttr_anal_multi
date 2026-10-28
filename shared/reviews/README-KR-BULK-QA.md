@@ -33,3 +33,9 @@
 
 - [第五段完整報告](KR-BULK-CENTRAL-QA-ROUND-05-20261029.md)：增強 SHA/地址格式、重複地址異質性、缺漏與例外截斷紀錄。
 - [更新的驗證器](tools/bulk_integrity_audit.py) 與 [11 項 fixture 測試定義](tools/test_bulk_integrity_audit.py)。**本版測試尚未在本環境執行，沒有全量 index 掃描；非 FULL-PASS。**
+
+
+## 第六段：嚴格格式檢查缺陷修正（2026-10-29）
+
+- [第六段完整報告](KR-BULK-CENTRAL-QA-ROUND-06-20261029.md)：修正驗證器 Python raw regex 的多餘反斜線，避免地址／SHA256 `fullmatch` 產生錯誤結果。
+- [更新後驗證器](tools/bulk_integrity_audit.py) 與 [14 個回歸測試定義](tools/test_bulk_integrity_audit.py)。**新版測試及全量索引仍未實行，維持 PARTIAL / NOT FULL-PASS。**
