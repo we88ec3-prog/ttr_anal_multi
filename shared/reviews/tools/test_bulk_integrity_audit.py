@@ -62,5 +62,16 @@ class TestAudit(unittest.TestCase):
         self.assertEqual(len(result["exceptions"]), 1)
         self.assertTrue(result["exceptions_truncated"])
         self.assertEqual(result["issues_total"], 2)
+    def test_invalid_address_rejected(self):
+        self.write(dict(self.row, address="INVALID"))
+        result = audit(self.root, SHA)
+        self.assertEqual(result["counts"]["issue_invalid_address"], 1)
+    def test_source_sha_mismatch(self):
+        self.write(dict(self.row, source_sha256="0"*64))
+        self.assertEqual(audit(self.root, SHA)["counts"]["issue_source_sha_mismatch"], 1)
+    def test_duplicate_identical_flag(self):
+        self.write(self.row, self.row)
+        issues = audit(self.root, SHA)["exceptions"]
+        self.assertTrue(next(x for x in issues if x["kind"] == "duplicate_address")["identical"])
 if __name__ == "__main__":
     unittest.main()
