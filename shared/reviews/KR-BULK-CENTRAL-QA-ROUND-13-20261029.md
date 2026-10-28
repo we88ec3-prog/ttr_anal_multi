@@ -26,12 +26,9 @@
 006F55F0 call 0x00700880
 006F55FB mov [eax],edx
 006F5600 mov [ecx+0x1c],eax
-006F560F mov ecx,[ebp+8]
-006F560F ...                       ; next opcode below
-006F560F c6 ...                    ; 注：請以下方逐行正確指令為準
-006F560F mov ecx,[ebp+8]
-006F560F ...                       ; 省略中間已列出 byte/store
-006F560F
+006F560C mov ecx,[ebp+8]
+006F560F mov byte ptr [eax+4],6
+006F5613 mov byte ptr [eax+6],1
 006F5617 mov [eax+0xc],edx
 006F561A mov [eax+0x7],bl
 006F561D mov [eax+0x10],ecx
