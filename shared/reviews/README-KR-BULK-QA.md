@@ -53,3 +53,10 @@
 - [第八段報告](KR-BULK-CENTRAL-QA-ROUND-08-20261029.md)
 - [前置檢查工具](tools/kr_bulk_preflight.py) 與 [四項測試](tools/test_kr_bulk_preflight.py)：**4/4 通過**，測試副本與 GitHub 遠端 Git blob SHA 完全一致。
 - 實際容器檢查回傳 `BLOCKED_NO_COMPLETE_INDEX`，代表此容器缺資料，**不代表倉庫索引不存在**；未執行 111,054 筆全量 hash。
+
+
+## 第九段：JSONL 結構與筆數前置驗證（2026-10-29）
+
+- [第九段報告](KR-BULK-CENTRAL-QA-ROUND-09-20261029.md)
+- [v2 前置檢查](tools/kr_bulk_preflight.py) 及 [9 項測試定義](tools/test_kr_bulk_preflight.py)：增加逐行 JSON、來源 SHA、地址、重複與預期筆數檢查。
+- 本地同邏輯 fixture 測試 9/9 通過；**正式 GitHub 版本與全量索引仍待在完整 checkout 執行**。維持 PARTIAL / NOT FULL-PASS。
