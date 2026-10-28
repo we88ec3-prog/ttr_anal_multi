@@ -3,8 +3,8 @@
   "version": "kr",
   "title": "任務與劇情流程",
   "title_en": "Quest & Story Progression",
-  "scope": "基於既有角色狀態，研究新手教學入口／續接判定、教學／主線／支線任務的前置、事件、階段、交付、解鎖與狀態同步；新手教學與主線優先",
-  "excluded_scope": "T04負責角色初始化與出生資料；T03負責登入選角；T14負責關卡內目標、勝敗與結算；T15負責底層保存；T07負責場景進出；T02負責基底封包；T16不重寫其他Task或臆造官方規則",
+  "scope": "以 KR 原始 Client 為核心，從玩家教學、NPC 對話、任務接取／交付、關卡開始／結束、後續解鎖，追查 Client→Server 封包與 Server→Client 回覆如何改變 Client 任務狀態／UI；主線優先、支線次之。",
+  "excluded_scope": "不以還原原版 Server 內部關卡判定、任務完成／解鎖演算法、DB 寫入作為 T16 分析目標；這些轉為待開發 Server 功能。T02 主責網路底層、T07 場景、T14 關卡勝敗／結算、T15 持久化、T03/T04 角色登入／初始化。TC 與 KR 證據隔離，現在僅研究 KR。",
   "owner": null,
   "state": "unclaimed",
   "native_complete": false,
@@ -19,28 +19,33 @@
     "T15"
   ],
   "priority_order": [
-    "P0 tutorial",
-    "P0 early main story/unlocks",
-    "P1 remaining main story",
-    "P2 side quests, promote blockers"
+    "P0 Client→Server: 教學／關卡啟動、任務接取、任務交付或進度請求的原版封包",
+    "P0 Server→Client: 任務狀態、完成、可接取／解鎖通知與 Client handler/UI consumer",
+    "P0 完整串接 Quest16→Quest15: NPC 可接列表、接取後 outgoing packet、狀態轉換",
+    "P1 本地 Lua、XML、NPC／劇情條件與上述雙向封包之關係",
+    "P1 其他主線；P2 支線及阻塞主線者提前",
+    "P2 重新登入：Client 是否主動請求保存或僅收權威 snapshot，查證後再判定"
   ],
   "unknowns": [
-    "未驗證完整任務定義、狀態轉換與伺服器權威規則",
-    "任務ID/步驟ID/場景與NPC ID可能屬不同命名空間",
-    "KR與TC版本對應需獨立查證"
+    "KR 原生 quest 相關 C→S／S→C 的 opcode、封包長度、欄位、時序、handler 尚未完整追出",
+    "Quest16 進度更新、Quest15 顯示可接取與玩家接取後的 client-side 收發閉環尚未確認",
+    "Quest ID／Step ID／Scenario ID 的 namespace 與映射待原始資源驗證",
+    "登入／重登時 client 是否會發階段保存請求、是否僅收 server snapshot 尚不明；次要優先",
+    "原始 Server 內部規則未知不作為 T16 Client 逆向驗收阻塞"
   ],
   "next_steps": [
-    "Read T01-20261028-06: T16 registered without ownership transfer; source/resource facts separated from official backend/runtime gaps.",
-    "核對GitHub最新整合結果及現有T14/T15等方法歸屬",
-    "逐來源建立任務表、文本、腳本、事件及封包對照",
-    "以T03/T04已建立角色狀態為起點，先追教學入口與逐節點推進，再追主線初期閉環",
-    "逐節點記錄已確認/部分/替代/缺失，避免填補猜測"
+    "T16-69: 追 [0x00FBA854] vtable+0x10 到 enqueue／packet writer／socket；對 0x004AA4D0 生成 4-byte 訊息標記已知欄位與未知協定意義",
+    "定位與 Quest／NPC／教學／關卡進度有關的 S→C opcode、分派器、handler、狀態 writer、UI consumer",
+    "定位任務接取／交付的玩家操作→C→S packet，以及確認後 S→C 回覆→任務／NPC 狀態變化",
+    "取得原始 QuestInfo.xml 15／16 和 TutorialBase.lua，將內容接到雙向封包鏈；缺失仍標 unknown",
+    "引用 T02/T07/T14/T15 已確認介面，不修改其他 Task；重登與保存最後處理"
   ],
   "acceptance": [
-    "完成可追溯的新手教學與主線初期節點／依賴圖及未解清單",
-    "確認各節點觸發、狀態寫入、通知、續接的證據界線",
-    "可玩流程測試與原生證據驗收分開",
-    "交付T04→T16資料邊界，未重做角色初始化或初始位置決策"
+    "對每個玩家操作記錄 Client 是否發包、C→S opcode/長度/欄位/觸發條件（unknown 不猜）、S→C 回覆、Client 狀態/UI 效果",
+    "完成教學與 Quest16→Quest15 的 Client 雙向封包／狀態變更證據矩陣，明列未閉合邊界",
+    "獨立整理 Server 需開發／回覆的介面規格，絕不冒稱還原官方 Server 內部判定規則",
+    "關卡勝敗／解鎖與持久化的 Server 內部實作不作為 T16 必須驗證項；重登狀態列 P2",
+    "保留原生證據、可玩驗收、AI/fixture 推測三者區分；不修改其他任務 owner/catalog"
   ],
   "policy": "原始資料唯讀；修改客戶端另行取得授權；Commit/Push僅在使用者明確要求時執行",
   "proposal_status": "registered-unclaimed",
