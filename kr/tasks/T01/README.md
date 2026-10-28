@@ -1,5 +1,17 @@
 # T01 現有成果來源審核
 
+## 跨 Task 驗收退回、修復及複驗（正式工作流程）
+
+- T01 須先核對原件 SHA／來源版本、PE section 映射、指令界線、工具預期、CFG、caller/callee、資料流與所有實質肯定主張；不得用抽樣 bytes 全部相符冒充全文 FULL-PASS。
+- 發現可補證據的缺口，優先繼續追查及完成本 Task 能處理的分析；若確認原稿錯誤且需原分析者修正，應將退回通知寫入 kr/tasks/<TaskID>/README.md 的「T01 驗收退回事項」，不得使用 GitHub Issue。
+- 每個通知包含固定唯一 ID、原稿完整 GitHub 路徑與 Git blob SHA、錯誤位址/主張、第一手機器碼或資料反證、影響範圍、具體修正工作、完成條件、T01 驗收紀錄來源。
+- 來源 Task README 限修改上述退回節，不能覆寫其他 Task 原稿、其 task.json、owner 或 native_complete。重複問題只更新既有 ID。每次寫入前讀取最新遠端版本，避免併發覆蓋。
+- 狀態 NEEDS_FIX → FIXING → READY_FOR_REVIEW → RESOLVED；無現有證據或權限可再前進時才用 BLOCKED，必須留下解除條件。PARTIAL 不等同於已證錯誤。
+- 原作者保留舊稿並提出修正版/勘誤及新版 blob SHA。T01 對新版受影響的全部主張重新驗收，通過才改為 RESOLVED；舊版仍保留 FAILED/SUPERSEDED 紀錄，禁止偷換 SHA 或刪除錯誤證據。
+- 已獲提交授權時應將退回通知與同批驗收紀錄一起提交並遠端讀回；未獲授權時只保存待提交工作並如實回報。
+- T08 範例與現行通知見 ../T08/README.md 的「T01 驗收退回事項」。已提交的 T01 原稿主張級驗收不會自動升格為遊戲功能完整還原。
+
+
 2026-10-26：[完整反編譯保存批次 T01-BULK-20261026-02](../../../shared/integrations/T01-BULK-20261026-02/README.md)。依使用者指示先全部上傳，逐函式列明尚未完整審核的狀態；不改各功能主責或擴大原生驗收範圍。
 
 狀態：bounded-review-handoff；負責人未認領。
