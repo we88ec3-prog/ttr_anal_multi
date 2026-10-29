@@ -15,7 +15,7 @@ count=struct.unpack_from('<H',b,pe+6)[0]
 sections={}
 for i in range(count):
  o=sec_base+40*i
- name=b[o:o+8].split(b'\\0')[0].decode('ascii','replace')
+ name=b[o:o+8].split(bytes([0]))[0].decode('ascii','replace')
  virtual_size,rva,raw_size,raw_off=struct.unpack_from('<IIII',b,o+8)
  sections[name]=(imagebase+rva,raw_off,raw_size)
 va_base,raw_base,raw_len=sections['.text']
