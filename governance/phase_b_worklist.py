@@ -102,14 +102,18 @@ def evaluate(root: Path = ROOT, *, task: str | None = None, version: str | None 
                 if gid not in gaps:
                     errors.append(f"{rid}: unknown coverage GAP {gid}")
 
+        # Contract-impact links belong to this RR, not every SPEC/TEST in a
+        # shared milestone. B-CONTRACT, for example, spans multiple owners.
         relevant_spec_ids = _distinct(
+            [sid for c in cov_rows for sid in c.get("spec_ids", [])]
+            + [sid for gid in rr.get("gap_ids", [])
+               for sid in gaps.get(gid, {}).get("affected_spec_ids", [])]
+        )
+        milestone_spec_ids = _distinct(
             [sid for m in linked for sid in m.get("spec_ids", [])]
-            + [sid for c in cov_rows for sid in c.get("spec_ids", [])]
-            + [sid for gid in rr.get("gap_ids", []) for sid in gaps.get(gid, {}).get("affected_spec_ids", [])]
         )
         related_test_ids = _distinct(
-            [tid for m in linked for tid in m.get("test_ids", [])]
-            + [tid for sid in relevant_spec_ids for tid in specs.get(sid, {}).get("test_ids", [])]
+            [tid for sid in relevant_spec_ids for tid in specs.get(sid, {}).get("test_ids", [])]
         )
         for sid in relevant_spec_ids:
             s = specs.get(sid)
@@ -146,6 +150,7 @@ def evaluate(root: Path = ROOT, *, task: str | None = None, version: str | None 
             "acceptance_criteria": d.get("acceptance_criteria", ""),
             "gap_ids": _distinct(rr.get("gap_ids", [])),
             "spec_ids": relevant_spec_ids,
+            "milestone_spec_ids": milestone_spec_ids,
             "coverage_ids": _distinct(c["id"] for c in cov_rows),
             "test_ids": related_test_ids,
             "milestone_ids": ordered_packages,
@@ -204,8 +209,9 @@ def markdown(report):
                   f"- Next: {row['next_action']}",
                   f"- Evidence scope: {row['client_version']} / {row['target_sha256']}",
                   f"- Gaps: {', '.join(row['gap_ids']) or 'none'}",
-                  f"- Affected specs: {', '.join(row['spec_ids']) or 'none'}",
-                  f"- Related tests: {', '.join(row['test_ids']) or 'none'}",
+                  f"- Directly related specs (GAP/COV links): {', '.join(row['spec_ids']) or 'none'}",
+                  f"- Broader milestone specs (context only): {', '.join(row['milestone_spec_ids']) or 'none'}",
+                  f"- Tests linked to directly related specs: {', '.join(row['test_ids']) or 'none'}",
                   f"- Acceptance criteria (from authoritative RR): {row['acceptance_criteria'] or 'UNSPECIFIED'}"]
     if report["errors"]:
         lines += ["", "## Integrity errors", *[f"- {e}" for e in report["errors"]]]
