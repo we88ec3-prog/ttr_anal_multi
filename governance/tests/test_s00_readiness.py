@@ -67,6 +67,23 @@ class ReadinessTests(unittest.TestCase):
         self.overwrite("governance/s00-roadmap.json", lambda data: data.update(target_sha256="0"*64))
         self.assertTrue(any("Client SHA" in e for e in assess(self.root)["errors"]))
 
+    def test_roadmap_permutation_preserves_blocker_decisions(self):
+        before = assess(self.root)
+        self.overwrite("governance/s00-roadmap.json",
+                       lambda data: data["milestones"].reverse())
+        after = assess(self.root)
+        self.assertEqual(after["errors"], [], after["errors"])
+        self.assertEqual(after["packages"], before["packages"])
+        self.assertEqual(after["summary"], before["summary"])
+
+    def test_unreviewed_test_status_remains_blocked(self):
+        self.overwrite("conformance/test-index.json",
+                       lambda data: data["items"][0].update(status="FORGED_PASSED"))
+        report = assess(self.root)
+        self.assertTrue(any("UNREVIEWED_TEST_PROVENANCE" in reason
+                            for pkg in report["packages"]
+                            for reason in pkg["blockers"]))
+        self.assertEqual(report["summary"]["packages_blocked"], 6)
 
 if __name__ == "__main__":
     unittest.main()
