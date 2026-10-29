@@ -21,7 +21,7 @@ This is an S00 **read-only queue view** over the [single authoritative RR regist
 | B4 | T02/T03 | RR-0007, RR-0008 | Inbound handler/scene writer, extra/roy1 as cited historical evidence | Scene resources are not unproved wire commands |
 | B5 | T02 | RR-0006 | 0x2633/0x22D7, checksum and malformed downstream | GAP-NET-0003 |
 
-These are research dependencies, **not** an observed original network sequence, and do not rewrite RR priorities.
+These are research dependencies, **not** an observed original network sequence, and do not rewrite RR priorities. RR-0006 is an existing valid P1 request but currently has no delivery milestone; the worklist labels it RESEARCH_BACKLOG rather than failing validation or silently expanding the roadmap.
 
 ## Exact submission contract
 
