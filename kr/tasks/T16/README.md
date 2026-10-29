@@ -262,7 +262,8 @@
 - 驗收紀錄：[本項證據](../../../shared/integrations/T01-20261029-semantic-review/t16/return-proposals.json)。
 
 - **T16 送審（2026-10-29，待 T01 獨立複驗）**：[T16 送審勘誤](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/errata/T16-046-T01-erratum.md)；勘誤 Git blob `13438858f2bfd5e96ed01bb4b6e412dd0a5df9c7`；KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。此狀態僅表示已提交作者端修正證據；若 T01 判定文件／語意尚不足，請保留退回並列具體差距，不得自動升級為 `RESOLVED` 或 `FULL-PASS`。
-#### T01-RETURN-T16-092-6df3bb2c — READY_FOR_REVIEW
+#### T01-RETURN-T16-092-6df3bb2c — RESOLVED
+- **T01 第三輪限定複驗（2026-10-30）**：已依 KR `Tartaros.bin` 原件與本次 phase3 作者 ZIP 的 rooted CFG 逐條核對指令 bytes/邊界、直接 branch/fallthrough、所涉舊窗口及引用的 71 筆歷史 call/jmp；必要的原句位置與已撤回錯誤指令見 [T01 第三輪決議](../../../shared/integrations/T01-20261030-t16-phase3-table-review/README.md) 和 [機器對照](../../../shared/integrations/T01-20261030-t16-phase3-table-review/native-validation.json)。**本 ID 的 appendix 修正已通過；舊版本錯誤、原稿全文 FULL-PASS、Quest wire/Server 行為與可玩性都沒有因此通過。**
 - 原稿：`kr-temp-roy/20261028-204341-chatgpt-web-roy-T16-92-KR-Quest-global-owner-and-real-read-consumers.md`；Git blob `bd044356f64dd859fe898477d443414a468f4b85`；SHA256 `6266a150e2887f4a29895445cb115e20b0c0a31ce401b45f16007f3e8add117b`。
 - 問題：Four reported instruction coordinates are wrong
 - 原生反證：62E5CD is push eax;62E5CE starts8D45C8 lea eax,[ebp-38].5B6CCF is8B5314 mov edx,[ebx+14];5B6CD0 is interior.62F70A is mov esi,[FB114C];62F706 lies inside instruction62F700.62E659 is push esi and call starts62E65A.
@@ -270,7 +271,8 @@
 - 驗收紀錄：[本項證據](../../../shared/integrations/T01-20261029-semantic-review/t16/return-proposals.json)。
 
 - **T16 送審（2026-10-29，待 T01 獨立複驗）**：[T16 送審勘誤](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/errata/T16-092-T01-erratum.md)；勘誤 Git blob `6b5fb000aa1015a0c2f37be9015ab52c24dc8fd0`；[rooted CFG 補證](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/rooted-cfg/T16-092-rooted-cfg-addendum.md)，Git blob `3c80ebbecc3fcc2d78fef25ade744e7ece6466ba`；KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。此狀態僅表示已提交作者端修正證據；若 T01 判定文件／語意尚不足，請保留退回並列具體差距，不得自動升級為 `RESOLVED` 或 `FULL-PASS`。
-#### T01-RETURN-T16-001-c26518b1 — READY_FOR_REVIEW
+#### T01-RETURN-T16-001-c26518b1 — RESOLVED
+- **T01 第三輪限定複驗（2026-10-30）**：已依 KR `Tartaros.bin` 原件與本次 phase3 作者 ZIP 的 rooted CFG 逐條核對指令 bytes/邊界、直接 branch/fallthrough、所涉舊窗口及引用的 71 筆歷史 call/jmp；必要的原句位置與已撤回錯誤指令見 [T01 第三輪決議](../../../shared/integrations/T01-20261030-t16-phase3-table-review/README.md) 和 [機器對照](../../../shared/integrations/T01-20261030-t16-phase3-table-review/native-validation.json)。**本 ID 的 appendix 修正已通過；舊版本錯誤、原稿全文 FULL-PASS、Quest wire/Server 行為與可玩性都沒有因此通過。**
 - 原稿：`kr-temp-roy/20261028-012351-chatgpt-web-roy-T16-1-KR-tutorial-quest-entry.md`；Git blob `ec933435d90f08710ffe594a0b5ac68e3d012f40`；SHA256 `786a654cbaceda45f6cb4ecf57375748f5fabc13977e3fdd4555c3634436bbce`。
 - 問題：Appendix window starts or resumes inside a different instruction
 - 原生反證：Tutorial/Quest literals and local calls are supported; appendix resumes at 4A899F/4A8B2F/50559F inside existing instructions. Re-decode those windows from true roots. No runtime quest authority accepted.
@@ -278,7 +280,8 @@
 - 驗收紀錄：[本項證據](../../../shared/integrations/T01-20261029-semantic-review/t16/return-proposals.json)。
 
 - **T16 送審（2026-10-29，待 T01 獨立複驗）**：[T16 送審勘誤](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/errata/T16-001-T01-erratum.md)；勘誤 Git blob `ad7031509bd926aa9440dae2afaaf6f331e3b539`；[rooted CFG 補證](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/rooted-cfg/T16-001-rooted-cfg-addendum.md)，Git blob `66fb7d663c29aa9ebd7a8ba0151259e39c32d411`；KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。此狀態僅表示已提交作者端修正證據；若 T01 判定文件／語意尚不足，請保留退回並列具體差距，不得自動升級為 `RESOLVED` 或 `FULL-PASS`。
-#### T01-RETURN-T16-009-c26518b1 — READY_FOR_REVIEW
+#### T01-RETURN-T16-009-c26518b1 — RESOLVED
+- **T01 第三輪限定複驗（2026-10-30）**：已依 KR `Tartaros.bin` 原件與本次 phase3 作者 ZIP 的 rooted CFG 逐條核對指令 bytes/邊界、直接 branch/fallthrough、所涉舊窗口及引用的 71 筆歷史 call/jmp；必要的原句位置與已撤回錯誤指令見 [T01 第三輪決議](../../../shared/integrations/T01-20261030-t16-phase3-table-review/README.md) 和 [機器對照](../../../shared/integrations/T01-20261030-t16-phase3-table-review/native-validation.json)。**本 ID 的 appendix 修正已通過；舊版本錯誤、原稿全文 FULL-PASS、Quest wire/Server 行為與可玩性都沒有因此通過。**
 - 原稿：`kr-temp-roy/20261028-014919-chatgpt-web-roy-T16-9-KR-FE18DC-global-index.md`；Git blob `d6bbfe7ac55f07308093cc2ca2f0ad021bed37e5`；SHA256 `ed5a8d7317337f32a5dcdc4a373a6e3f2bb6cfdcfbbae82fe52611bb70d5ed64`。
 - 問題：Appendix window starts or resumes inside a different instruction
 - 原生反證：Four FE18DC literal operands and runtime lookup/payload→16-byte append supported; supplemental block begins at 53FADE inside MOV at53FADC and manufactures lock fcomp. Re-decode disposal block; retain the supported non-quest-authority boundary.
@@ -286,7 +289,8 @@
 - 驗收紀錄：[本項證據](../../../shared/integrations/T01-20261029-semantic-review/t16/return-proposals.json)。
 
 - **T16 送審（2026-10-29，待 T01 獨立複驗）**：[T16 送審勘誤](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/errata/T16-009-T01-erratum.md)；勘誤 Git blob `aae80b9e5f3ec116ea8e8c8f6c3f717308e3eff7`；[rooted CFG 補證](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/rooted-cfg/T16-009-rooted-cfg-addendum.md)，Git blob `5c673ccbb355ab6b6e5b15ce0a2efd0e56fe865b`；KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。此狀態僅表示已提交作者端修正證據；若 T01 判定文件／語意尚不足，請保留退回並列具體差距，不得自動升級為 `RESOLVED` 或 `FULL-PASS`。
-#### T01-RETURN-T16-020-c26518b1 — READY_FOR_REVIEW
+#### T01-RETURN-T16-020-c26518b1 — RESOLVED
+- **T01 第三輪限定複驗（2026-10-30）**：已依 KR `Tartaros.bin` 原件與本次 phase3 作者 ZIP 的 rooted CFG 逐條核對指令 bytes/邊界、直接 branch/fallthrough、所涉舊窗口及引用的 71 筆歷史 call/jmp；必要的原句位置與已撤回錯誤指令見 [T01 第三輪決議](../../../shared/integrations/T01-20261030-t16-phase3-table-review/README.md) 和 [機器對照](../../../shared/integrations/T01-20261030-t16-phase3-table-review/native-validation.json)。**本 ID 的 appendix 修正已通過；舊版本錯誤、原稿全文 FULL-PASS、Quest wire/Server 行為與可玩性都沒有因此通過。**
 - 原稿：`kr-temp-roy/20261028-020939-chatgpt-web-roy-T16-20-KR-quest-ui-status.md`；Git blob `342da9acb11bfe29720419d8a7c615f2296c139a`；SHA256 `c25d02ad83d9d53c0518f07fe84ad04fe781e383a1c7253c8ccbcd6040dab7ea`。
 - 問題：Appendix window starts or resumes inside a different instruction
 - 原生反證：QUESTSTATE/QUEST_READY literal UI uses and listed valid calls supported; opening502460 lies inside JE at50245D, producing false initial instruction rows502460/502462. Re-decode actual parent CFG and retain local-display-only conclusion.
@@ -294,7 +298,8 @@
 - 驗收紀錄：[本項證據](../../../shared/integrations/T01-20261029-semantic-review/t16/return-proposals.json)。
 
 - **T16 送審（2026-10-29，待 T01 獨立複驗）**：[T16 送審勘誤](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/errata/T16-020-T01-erratum.md)；勘誤 Git blob `6c18eadc765bb68c8314ca7dbf5a426bdaf7d419`；[rooted CFG 補證](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/rooted-cfg/T16-020-rooted-cfg-addendum.md)，Git blob `59446bbd4f50bb09e6e2374f1be657a0cbb32458`；KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。此狀態僅表示已提交作者端修正證據；若 T01 判定文件／語意尚不足，請保留退回並列具體差距，不得自動升級為 `RESOLVED` 或 `FULL-PASS`。
-#### T01-RETURN-T16-021-c26518b1 — READY_FOR_REVIEW
+#### T01-RETURN-T16-021-c26518b1 — RESOLVED
+- **T01 第三輪限定複驗（2026-10-30）**：已依 KR `Tartaros.bin` 原件與本次 phase3 作者 ZIP 的 rooted CFG 逐條核對指令 bytes/邊界、直接 branch/fallthrough、所涉舊窗口及引用的 71 筆歷史 call/jmp；必要的原句位置與已撤回錯誤指令見 [T01 第三輪決議](../../../shared/integrations/T01-20261030-t16-phase3-table-review/README.md) 和 [機器對照](../../../shared/integrations/T01-20261030-t16-phase3-table-review/native-validation.json)。**本 ID 的 appendix 修正已通過；舊版本錯誤、原稿全文 FULL-PASS、Quest wire/Server 行為與可玩性都沒有因此通過。**
 - 原稿：`kr-temp-roy/20261028-020939-chatgpt-web-roy-T16-21-KR-tutoquest-parser.md`；Git blob `f6ca97b7c25a0dd957305d98b929e3467253805c`；SHA256 `5949a81f75f1961e0f7bc65ca1b70ac1e3ab0e3360dfa80115f0f4c56ba83a15`。
 - 問題：Appendix window starts or resumes inside a different instruction
 - 原生反證：TutoQuest key lookup, HasQuest vectors and actual valid calls supported.5321A0 starts inside CALL53219F and53FD40 inside allocator CALL53FD3D. Their invented starting instructions cannot be native CFG proof.
@@ -302,7 +307,8 @@
 - 驗收紀錄：[本項證據](../../../shared/integrations/T01-20261029-semantic-review/t16/return-proposals.json)。
 
 - **T16 送審（2026-10-29，待 T01 獨立複驗）**：[T16 送審勘誤](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/errata/T16-021-T01-erratum.md)；勘誤 Git blob `bfa8076bcd1e372c2e28f940c98a6e7231eb7437`；[rooted CFG 補證](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/rooted-cfg/T16-021-rooted-cfg-addendum.md)，Git blob `7b91b63796ed1cdb7fc49386b09c77b1c00f81e9`；KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。此狀態僅表示已提交作者端修正證據；若 T01 判定文件／語意尚不足，請保留退回並列具體差距，不得自動升級為 `RESOLVED` 或 `FULL-PASS`。
-#### T01-RETURN-T16-022-c26518b1 — READY_FOR_REVIEW
+#### T01-RETURN-T16-022-c26518b1 — RESOLVED
+- **T01 第三輪限定複驗（2026-10-30）**：已依 KR `Tartaros.bin` 原件與本次 phase3 作者 ZIP 的 rooted CFG 逐條核對指令 bytes/邊界、直接 branch/fallthrough、所涉舊窗口及引用的 71 筆歷史 call/jmp；必要的原句位置與已撤回錯誤指令見 [T01 第三輪決議](../../../shared/integrations/T01-20261030-t16-phase3-table-review/README.md) 和 [機器對照](../../../shared/integrations/T01-20261030-t16-phase3-table-review/native-validation.json)。**本 ID 的 appendix 修正已通過；舊版本錯誤、原稿全文 FULL-PASS、Quest wire/Server 行為與可玩性都沒有因此通過。**
 - 原稿：`kr-temp-roy/20261028-020939-chatgpt-web-roy-T16-22-KR-tutorial-bootstrap.md`；Git blob `138c49cbd53e41169c386c9f1d7e826211fec283`；SHA256 `126a117ab7b87a42654eb4c4bcad34b199b95bd79cf9ba8fad52f953f8aefd61`。
 - 問題：Appendix window starts or resumes inside a different instruction
 - 原生反證：Lua paths, named dispatch and FBA798 gate semantics supported.4A89A0 starts inside CALL4A899E;4A8B10 is inside MOV4A8B0C and subsequent misdecoded rows. Reconstruct windows from parent roots.
@@ -319,7 +325,8 @@
 - 驗收紀錄：[本項證據](../../../shared/integrations/T01-20261029-semantic-review/t16/return-proposals.json)。
 
 - **T16 送審（2026-10-29，待 T01 獨立複驗）**：[T16 送審勘誤](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/errata/T16-026-T01-erratum.md)；勘誤 Git blob `dc19d1690bf4fad89416c6016780fdb9156aa2d4`；[rooted CFG 補證](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/rooted-cfg/T16-026-rooted-cfg-addendum.md)，Git blob `c22ce563cfd2734ffaac6f8e91fa0f184e2d4443`；KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。此狀態僅表示已提交作者端修正證據；若 T01 判定文件／語意尚不足，請保留退回並列具體差距，不得自動升級為 `RESOLVED` 或 `FULL-PASS`。
-#### T01-RETURN-T16-029-c26518b1 — READY_FOR_REVIEW
+#### T01-RETURN-T16-029-c26518b1 — RESOLVED
+- **T01 第三輪限定複驗（2026-10-30）**：已依 KR `Tartaros.bin` 原件與本次 phase3 作者 ZIP 的 rooted CFG 逐條核對指令 bytes/邊界、直接 branch/fallthrough、所涉舊窗口及引用的 71 筆歷史 call/jmp；必要的原句位置與已撤回錯誤指令見 [T01 第三輪決議](../../../shared/integrations/T01-20261030-t16-phase3-table-review/README.md) 和 [機器對照](../../../shared/integrations/T01-20261030-t16-phase3-table-review/native-validation.json)。**本 ID 的 appendix 修正已通過；舊版本錯誤、原稿全文 FULL-PASS、Quest wire/Server 行為與可玩性都沒有因此通過。**
 - 原稿：`kr-temp-roy/20261028-022116-chatgpt-web-roy-T16-29-KR-quest-ui-notification.md`；Git blob `72d9faebfa9bf65628a57ab0f0d57e67d764a4c4`；SHA256 `e246c6a8eb61e6a8d9e888902284f52932eba5812f901ba5eba0ca943bef998d`。
 - 問題：Appendix window starts or resumes inside a different instruction
 - 原生反證：QUESTSTATE/QUEST_READY display-path facts remain supported.502470/502860 window starts inside true instructions, spawning false rows and a spurious branch list entry50247C. Re-decode and update all dependent listed calls/branches.
@@ -327,7 +334,8 @@
 - 驗收紀錄：[本項證據](../../../shared/integrations/T01-20261029-semantic-review/t16/return-proposals.json)。
 
 - **T16 送審（2026-10-29，待 T01 獨立複驗）**：[T16 送審勘誤](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/errata/T16-029-T01-erratum.md)；勘誤 Git blob `5925836868b7f2d374f6a0bf81565b6cd61f900c`；[rooted CFG 補證](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/rooted-cfg/T16-029-rooted-cfg-addendum.md)，Git blob `69888b75e08d5b75de7111c21bf2fb1dc60a6745`；KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。此狀態僅表示已提交作者端修正證據；若 T01 判定文件／語意尚不足，請保留退回並列具體差距，不得自動升級為 `RESOLVED` 或 `FULL-PASS`。
-#### T01-RETURN-T16-030-c26518b1 — READY_FOR_REVIEW
+#### T01-RETURN-T16-030-c26518b1 — RESOLVED
+- **T01 第三輪限定複驗（2026-10-30）**：已依 KR `Tartaros.bin` 原件與本次 phase3 作者 ZIP 的 rooted CFG 逐條核對指令 bytes/邊界、直接 branch/fallthrough、所涉舊窗口及引用的 71 筆歷史 call/jmp；必要的原句位置與已撤回錯誤指令見 [T01 第三輪決議](../../../shared/integrations/T01-20261030-t16-phase3-table-review/README.md) 和 [機器對照](../../../shared/integrations/T01-20261030-t16-phase3-table-review/native-validation.json)。**本 ID 的 appendix 修正已通過；舊版本錯誤、原稿全文 FULL-PASS、Quest wire/Server 行為與可玩性都沒有因此通過。**
 - 原稿：`kr-temp-roy/20261028-022116-chatgpt-web-roy-T16-30-KR-tutoquest-conditions.md`；Git blob `bc12a16b71a596a32ceeafe47795e892fb2b38f5`；SHA256 `9e94a8a2a78f6b5a41c9e88d6c0060a6b9096d080da7c2a53ed06b5eaae5d1e1`。
 - 問題：Appendix window starts or resumes inside a different instruction
 - 原生反證：TutoQuest/XML-like key and four-vector parsing supported;5321A0 starts inside CALL53219F, manufacturing initial rows. Correct source appendix and regenerate derived observation lists.
@@ -335,7 +343,8 @@
 - 驗收紀錄：[本項證據](../../../shared/integrations/T01-20261029-semantic-review/t16/return-proposals.json)。
 
 - **T16 送審（2026-10-29，待 T01 獨立複驗）**：[T16 送審勘誤](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/errata/T16-030-T01-erratum.md)；勘誤 Git blob `910a4bc2daf1ee4c44d867bb55f550a298886ecf`；[rooted CFG 補證](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/rooted-cfg/T16-030-rooted-cfg-addendum.md)，Git blob `521f15a439ef23c4b3e3b6a6cef6f45dad8b4f90`；KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。此狀態僅表示已提交作者端修正證據；若 T01 判定文件／語意尚不足，請保留退回並列具體差距，不得自動升級為 `RESOLVED` 或 `FULL-PASS`。
-#### T01-RETURN-T16-031-c26518b1 — READY_FOR_REVIEW
+#### T01-RETURN-T16-031-c26518b1 — RESOLVED
+- **T01 第三輪限定複驗（2026-10-30）**：已依 KR `Tartaros.bin` 原件與本次 phase3 作者 ZIP 的 rooted CFG 逐條核對指令 bytes/邊界、直接 branch/fallthrough、所涉舊窗口及引用的 71 筆歷史 call/jmp；必要的原句位置與已撤回錯誤指令見 [T01 第三輪決議](../../../shared/integrations/T01-20261030-t16-phase3-table-review/README.md) 和 [機器對照](../../../shared/integrations/T01-20261030-t16-phase3-table-review/native-validation.json)。**本 ID 的 appendix 修正已通過；舊版本錯誤、原稿全文 FULL-PASS、Quest wire/Server 行為與可玩性都沒有因此通過。**
 - 原稿：`kr-temp-roy/20261028-022116-chatgpt-web-roy-T16-31-KR-tutorial-script-control.md`；Git blob `50d455ad73780a4b351a166dce23f2d0b4ee835e`；SHA256 `49dac7dcaf5aa1b94ab0185f0b615d8c612c7b58bb09244e433f7c61f1ac8110`。
 - 問題：Appendix window starts or resumes inside a different instruction
 - 原生反證：Synopsis/Tutorial call paths and local gate supported;4A89A0 is inside CALL4A899E. Window disclaimer does not make the resulting fabricated instruction an actual native boundary.
@@ -343,7 +352,8 @@
 - 驗收紀錄：[本項證據](../../../shared/integrations/T01-20261029-semantic-review/t16/return-proposals.json)。
 
 - **T16 送審（2026-10-29，待 T01 獨立複驗）**：[T16 送審勘誤](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/errata/T16-031-T01-erratum.md)；勘誤 Git blob `f59171e9c568bd5135d77bdac0e81638d7cb74f4`；[rooted CFG 補證](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/rooted-cfg/T16-031-rooted-cfg-addendum.md)，Git blob `cae6da6b07898ac4c95b5c8ee230a5c6941c8e2d`；KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。此狀態僅表示已提交作者端修正證據；若 T01 判定文件／語意尚不足，請保留退回並列具體差距，不得自動升級為 `RESOLVED` 或 `FULL-PASS`。
-#### T01-RETURN-T16-033-c26518b1 — READY_FOR_REVIEW
+#### T01-RETURN-T16-033-c26518b1 — RESOLVED
+- **T01 第三輪限定複驗（2026-10-30）**：已依 KR `Tartaros.bin` 原件與本次 phase3 作者 ZIP 的 rooted CFG 逐條核對指令 bytes/邊界、直接 branch/fallthrough、所涉舊窗口及引用的 71 筆歷史 call/jmp；必要的原句位置與已撤回錯誤指令見 [T01 第三輪決議](../../../shared/integrations/T01-20261030-t16-phase3-table-review/README.md) 和 [機器對照](../../../shared/integrations/T01-20261030-t16-phase3-table-review/native-validation.json)。**本 ID 的 appendix 修正已通過；舊版本錯誤、原稿全文 FULL-PASS、Quest wire/Server 行為與可玩性都沒有因此通過。**
 - 原稿：`kr-temp-roy/20261028-023112-chatgpt-web-roy-T16-33-KR-Tutorial-entry-upstream-xrefs.md`；Git blob `d4d3e8e5c276c2e0236f16c3381ce9daabbab0e0`；SHA256 `f02fb54df44b61e6dcc41b4b9b8d81b598b54dcb14762b6a690d7a28793a38df`。
 - 問題：Appendix window starts or resumes inside a different instruction
 - 原生反證：4A8A60 gate/calls and direct caller4C4D3F supported. Caller window4C4C80 starts within PUSH4C4C7F;4C4C87 within CALL4C4C84. Correct misdecoded call table and parent context.
@@ -351,7 +361,8 @@
 - 驗收紀錄：[本項證據](../../../shared/integrations/T01-20261029-semantic-review/t16/return-proposals.json)。
 
 - **T16 送審（2026-10-29，待 T01 獨立複驗）**：[T16 送審勘誤](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/errata/T16-033-T01-erratum.md)；勘誤 Git blob `1c26b5275f7c72e2b021617258a278e43c58b183`；[rooted CFG 補證](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/rooted-cfg/T16-033-rooted-cfg-addendum.md)，Git blob `c3f4877c9b1ee072398dc6ff53ee530e15a6f941`；KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。此狀態僅表示已提交作者端修正證據；若 T01 判定文件／語意尚不足，請保留退回並列具體差距，不得自動升級為 `RESOLVED` 或 `FULL-PASS`。
-#### T01-RETURN-T16-034-c26518b1 — READY_FOR_REVIEW
+#### T01-RETURN-T16-034-c26518b1 — RESOLVED
+- **T01 第三輪限定複驗（2026-10-30）**：已依 KR `Tartaros.bin` 原件與本次 phase3 作者 ZIP 的 rooted CFG 逐條核對指令 bytes/邊界、直接 branch/fallthrough、所涉舊窗口及引用的 71 筆歷史 call/jmp；必要的原句位置與已撤回錯誤指令見 [T01 第三輪決議](../../../shared/integrations/T01-20261030-t16-phase3-table-review/README.md) 和 [機器對照](../../../shared/integrations/T01-20261030-t16-phase3-table-review/native-validation.json)。**本 ID 的 appendix 修正已通過；舊版本錯誤、原稿全文 FULL-PASS、Quest wire/Server 行為與可玩性都沒有因此通過。**
 - 原稿：`kr-temp-roy/20261028-023112-chatgpt-web-roy-T16-34-KR-Synopsis-entry-callers.md`；Git blob `d40e04e082a100447c773be6e4a9a3c5f786b57b`；SHA256 `4a5dcf0e30c3e4f068b5dcf8795bfb9564d475aa72fe11b5a69cb7deac2f7767`。
 - 問題：Appendix window starts or resumes inside a different instruction
 - 原生反證：Synopsis entry and two true direct callers supported.47BA80 begins inside MOV47BA7F and4C1F90 inside CALL4C1F8D; resulting synthetic instruction/call rows require regeneration.
@@ -359,7 +370,8 @@
 - 驗收紀錄：[本項證據](../../../shared/integrations/T01-20261029-semantic-review/t16/return-proposals.json)。
 
 - **T16 送審（2026-10-29，待 T01 獨立複驗）**：[T16 送審勘誤](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/errata/T16-034-T01-erratum.md)；勘誤 Git blob `3123d1e815c70c0e2abe3f1055f8dab79895142a`；[rooted CFG 補證](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/rooted-cfg/T16-034-rooted-cfg-addendum.md)，Git blob `e11c6749adb067bfbefbb97a2aae26f1c51a878e`；KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。此狀態僅表示已提交作者端修正證據；若 T01 判定文件／語意尚不足，請保留退回並列具體差距，不得自動升級為 `RESOLVED` 或 `FULL-PASS`。
-#### T01-RETURN-T16-036-c26518b1 — READY_FOR_REVIEW
+#### T01-RETURN-T16-036-c26518b1 — RESOLVED
+- **T01 第三輪限定複驗（2026-10-30）**：已依 KR `Tartaros.bin` 原件與本次 phase3 作者 ZIP 的 rooted CFG 逐條核對指令 bytes/邊界、直接 branch/fallthrough、所涉舊窗口及引用的 71 筆歷史 call/jmp；必要的原句位置與已撤回錯誤指令見 [T01 第三輪決議](../../../shared/integrations/T01-20261030-t16-phase3-table-review/README.md) 和 [機器對照](../../../shared/integrations/T01-20261030-t16-phase3-table-review/native-validation.json)。**本 ID 的 appendix 修正已通過；舊版本錯誤、原稿全文 FULL-PASS、Quest wire/Server 行為與可玩性都沒有因此通過。**
 - 原稿：`kr-temp-roy/20261028-023112-chatgpt-web-roy-T16-36-KR-TutoQuest-node-parser.md`；Git blob `cac59d7ffa953663da5753574eb47304504887f0`；SHA256 `545cfe17a52b4e53dfccec2f0a35fe4d977e3b55e5af7f46309d673af1452e94`。
 - 問題：Appendix window starts or resumes inside a different instruction
 - 原生反證：TutoQuest lookup and generic72E2E0 child lookup facts supported;531E00 is inside JE531DFC and5321E0 inside CMP5321DD. Repair all synthetic rows and derived observations.
@@ -367,7 +379,8 @@
 - 驗收紀錄：[本項證據](../../../shared/integrations/T01-20261029-semantic-review/t16/return-proposals.json)。
 
 - **T16 送審（2026-10-29，待 T01 獨立複驗）**：[T16 送審勘誤](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/errata/T16-036-T01-erratum.md)；勘誤 Git blob `e02e0b4f4503b3e2a6cff2221aa8f3c3cd7f4532`；[rooted CFG 補證](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/rooted-cfg/T16-036-rooted-cfg-addendum.md)，Git blob `ad7fa43ec38eba08e9442d15f5b67e52a3b2b374`；KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。此狀態僅表示已提交作者端修正證據；若 T01 判定文件／語意尚不足，請保留退回並列具體差距，不得自動升級為 `RESOLVED` 或 `FULL-PASS`。
-#### T01-RETURN-T16-040-c26518b1 — READY_FOR_REVIEW
+#### T01-RETURN-T16-040-c26518b1 — RESOLVED
+- **T01 第三輪限定複驗（2026-10-30）**：已依 KR `Tartaros.bin` 原件與本次 phase3 作者 ZIP 的 rooted CFG 逐條核對指令 bytes/邊界、直接 branch/fallthrough、所涉舊窗口及引用的 71 筆歷史 call/jmp；必要的原句位置與已撤回錯誤指令見 [T01 第三輪決議](../../../shared/integrations/T01-20261030-t16-phase3-table-review/README.md) 和 [機器對照](../../../shared/integrations/T01-20261030-t16-phase3-table-review/native-validation.json)。**本 ID 的 appendix 修正已通過；舊版本錯誤、原稿全文 FULL-PASS、Quest wire/Server 行為與可玩性都沒有因此通過。**
 - 原稿：`kr-temp-roy/20261028-023112-chatgpt-web-roy-T16-40-KR-notification-UI-dispatch-crosscheck.md`；Git blob `b35ca329c1a657364c997c701b806d6847ea5917`；SHA256 `1e5a54b4dceadac81cfed8610e46c03b16ca2b120ab3893c7a795799b4ec8499`。
 - 問題：Appendix window starts or resumes inside a different instruction
 - 原生反證：UI-string/default-handler/queue local facts supported;502870 starts inside MOV50286F and generates false instructions502871/502873 and further misalignment. Correct appendix/derived call list while retaining non-authority boundary.
@@ -375,7 +388,8 @@
 - 驗收紀錄：[本項證據](../../../shared/integrations/T01-20261029-semantic-review/t16/return-proposals.json)。
 
 - **T16 送審（2026-10-29，待 T01 獨立複驗）**：[T16 送審勘誤](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/errata/T16-040-T01-erratum.md)；勘誤 Git blob `ae73f08fe02c50d29bc5292253dee25d1747493b`；[rooted CFG 補證](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/rooted-cfg/T16-040-rooted-cfg-addendum.md)，Git blob `b2cd36b3b1cfae6b66c2a50c98d685275d259e25`；KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。此狀態僅表示已提交作者端修正證據；若 T01 判定文件／語意尚不足，請保留退回並列具體差距，不得自動升級為 `RESOLVED` 或 `FULL-PASS`。
-#### T01-RETURN-T16-050-c26518b1 — READY_FOR_REVIEW
+#### T01-RETURN-T16-050-c26518b1 — RESOLVED
+- **T01 第三輪限定複驗（2026-10-30）**：已依 KR `Tartaros.bin` 原件與本次 phase3 作者 ZIP 的 rooted CFG 逐條核對指令 bytes/邊界、直接 branch/fallthrough、所涉舊窗口及引用的 71 筆歷史 call/jmp；必要的原句位置與已撤回錯誤指令見 [T01 第三輪決議](../../../shared/integrations/T01-20261030-t16-phase3-table-review/README.md) 和 [機器對照](../../../shared/integrations/T01-20261030-t16-phase3-table-review/native-validation.json)。**本 ID 的 appendix 修正已通過；舊版本錯誤、原稿全文 FULL-PASS、Quest wire/Server 行為與可玩性都沒有因此通過。**
 - 原稿：`kr-temp-roy/20261028-103208-chatgpt-web-roy-T16-50-KR-lua-bridge-asm.md`；Git blob `bf3fc0814f75e19ced4ac95bfff6a67ebf4e9564`；SHA256 `375392df34f1315e05d676d947b477c1a7599a6bdd091ec7b614c9468da30943`。
 - 問題：Appendix window starts or resumes inside a different instruction
 - 原生反證：Lua name-length/value lookup and Synopsis/Tutorial native entry facts supported.6F4E83 is inside CALL6F4E81 in source appendix; re-decode complete6F4DD0 CFG. No Quest business semantics accepted.
@@ -383,7 +397,8 @@
 - 驗收紀錄：[本項證據](../../../shared/integrations/T01-20261029-semantic-review/t16/return-proposals.json)。
 
 - **T16 送審（2026-10-29，待 T01 獨立複驗）**：[T16 送審勘誤](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/errata/T16-050-T01-erratum.md)；勘誤 Git blob `620f1186066700e97162f0c22ce29b7336766fc2`；[rooted CFG 補證](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/rooted-cfg/T16-050-rooted-cfg-addendum.md)，Git blob `54b20a93d2aad6e2c4b27a1ca75cfdd2015a2c31`；KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。此狀態僅表示已提交作者端修正證據；若 T01 判定文件／語意尚不足，請保留退回並列具體差距，不得自動升級為 `RESOLVED` 或 `FULL-PASS`。
-#### T01-RETURN-T16-051-c26518b1 — READY_FOR_REVIEW
+#### T01-RETURN-T16-051-c26518b1 — RESOLVED
+- **T01 第三輪限定複驗（2026-10-30）**：已依 KR `Tartaros.bin` 原件與本次 phase3 作者 ZIP 的 rooted CFG 逐條核對指令 bytes/邊界、直接 branch/fallthrough、所涉舊窗口及引用的 71 筆歷史 call/jmp；必要的原句位置與已撤回錯誤指令見 [T01 第三輪決議](../../../shared/integrations/T01-20261030-t16-phase3-table-review/README.md) 和 [機器對照](../../../shared/integrations/T01-20261030-t16-phase3-table-review/native-validation.json)。**本 ID 的 appendix 修正已通過；舊版本錯誤、原稿全文 FULL-PASS、Quest wire/Server 行為與可玩性都沒有因此通過。**
 - 原稿：`kr-temp-roy/20261028-103208-chatgpt-web-roy-T16-51-KR-quest-reader-source-boundary.md`；Git blob `d6591307065c066485ec3e312aafe69b38c72448`；SHA256 `59fce8a8ee1466c98df371dc925aca2619127d62d6704b8baa378bffdba3368a`。
 - 問題：Appendix window starts or resumes inside a different instruction
 - 原生反證：Distinct XML reader paths and QuestTalk excerpt boundary supported.504817 is inside MOV504816;50564B is inside CALL50564A. Correct appendix rooted in504740/505570 while retaining original source and current resource clarification.
@@ -391,7 +406,8 @@
 - 驗收紀錄：[本項證據](../../../shared/integrations/T01-20261029-semantic-review/t16/return-proposals.json)。
 
 - **T16 送審（2026-10-29，待 T01 獨立複驗）**：[T16 送審勘誤](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/errata/T16-051-T01-erratum.md)；勘誤 Git blob `b48238622a74e961b6b12125779ec9512e230fdc`；[rooted CFG 補證](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/rooted-cfg/T16-051-rooted-cfg-addendum.md)，Git blob `aa8e019b0b9750fe909897f0e1a2d8088f615ce3`；KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。此狀態僅表示已提交作者端修正證據；若 T01 判定文件／語意尚不足，請保留退回並列具體差距，不得自動升級為 `RESOLVED` 或 `FULL-PASS`。
-#### T01-RETURN-T16-065-c26518b1 — READY_FOR_REVIEW
+#### T01-RETURN-T16-065-c26518b1 — RESOLVED
+- **T01 第三輪限定複驗（2026-10-30）**：已依 KR `Tartaros.bin` 原件與本次 phase3 作者 ZIP 的 rooted CFG 逐條核對指令 bytes/邊界、直接 branch/fallthrough、所涉舊窗口及引用的 71 筆歷史 call/jmp；必要的原句位置與已撤回錯誤指令見 [T01 第三輪決議](../../../shared/integrations/T01-20261030-t16-phase3-table-review/README.md) 和 [機器對照](../../../shared/integrations/T01-20261030-t16-phase3-table-review/native-validation.json)。**本 ID 的 appendix 修正已通過；舊版本錯誤、原稿全文 FULL-PASS、Quest wire/Server 行為與可玩性都沒有因此通過。**
 - 原稿：`kr-temp-roy/20261028-110904-chatgpt-web-roy-T16-65-KR-FE187C-writer-callback-initialization.md`；Git blob `c248ef57f8604d09ed0020c69533b236881cfd5e`；SHA256 `8b76af03d3e6a2017656d60b8876c7a297052d660d46ea599d18d1ff7795e4a8`。
 - 問題：Appendix window starts or resumes inside a different instruction
 - 原生反證：FE187C setter4AB8B8=4AA4D0, literal refs and wrapper delegation supported. Source appendix starts4AB930 inside MOV4AB92F, producing invalid initial instruction; re-decode parent before promoting document entirety.

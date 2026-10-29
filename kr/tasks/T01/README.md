@@ -124,3 +124,5 @@ T01 對 Server 設計的接收、精確主張去重、風險分流及 S00 交接
 2026-10-30 T16 43 筆作者端勘誤後續獨立複驗：[T01-20261030-t16-followup](../../../shared/integrations/T01-20261030-t16-followup/README.md)。11 筆精確退回修正已由 T01 `RESOLVED`，32 筆仍 `READY_FOR_REVIEW`；不表示相關 T16 原稿 FULL-PASS、T16 branch 合併或 S00 SPEC STABLE。精確原件/新舊 blob 與剩餘義務見批次索引。
 
 2026-10-30 T16 第二輪：原始 Event.stp 的 TutorialBase 來源 SHA 更正 14 筆、A0A4/A078 佇列欄位 1 筆、T01 對 4AEDB0 錯誤反證撤回 1 筆；本輪新增 16 筆 RESOLVED，累計 27 RESOLVED / 16 READY_FOR_REVIEW，未提升 T16 原稿全文。完整決議及缺件請求：[第二輪驗收](../../../shared/integrations/T01-20261030-t16-resource-followup/README.md)。
+
+2026-10-30 T16 第三輪：已透過使用者上傳 phase3 ZIP + 原件 KR BIN 對 19 root、4464 native 指令、4905 CFG edges、28 問題窗口、71 舊 call/jmp 做獨立查核，**本輪新增 16 筆 appendix/CFG 限定退回 `RESOLVED`；固定 T16 退回累計 43/43 `RESOLVED`。** 這不是 T16 全稿 FULL-PASS、Quest 原生封包實證或 S00 SPEC STABLE。詳見 [完整獨立驗證與 Table.stp 解包](../../../shared/integrations/T01-20261030-t16-phase3-table-review/README.md)。
