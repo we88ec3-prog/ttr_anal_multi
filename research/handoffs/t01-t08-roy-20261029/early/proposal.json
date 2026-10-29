@@ -1,0 +1,3601 @@
+{
+  "schema": "t01-t08-roy-r1-proposal-v1",
+  "scope": "early",
+  "base_main": "610a822b15346c9e0b69edd4e104c2076f2b59ac",
+  "source_head": "5816884ef481995a9fe0d92277b1dde06aff32e8",
+  "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+  "reviewer": "Codex T01 review_t08_new",
+  "date": "2026-10-29 Asia/Taipei",
+  "source_count": 42,
+  "completed_sources": 42,
+  "remaining_sources_in_scope": 0,
+  "all_sources_registered_or_preexisting": true,
+  "new_native_audits": 0,
+  "native_promotions": 0,
+  "historical_verdict_changes": 0,
+  "groups": [
+    {
+      "key": "early-components",
+      "assertion": "來源描述共用／CMonster建構會把依component+8索引的元件指標存到owner+F4表，並有25槽清理；不賦予事件或遊戲規則名稱。",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "4D1710/4C7070/4C9F90/4CB230/4C7B90局部構造與表操作",
+      "limits": [
+        "正常路/配置失敗與全部例外未在R1驗證",
+        "至少已列元件不是全元件集合",
+        "R1來源整合，不是全文通過、函式通過、native_complete、runtime或Server驗收。"
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "existing_claim_ids": [],
+      "existing_claim_reuse_scope": null,
+      "source_refs": [
+        {
+          "source_file": "kr-temp-roy/20261025-143719-chatgpt-web-roy-T08-CMonster-constructor.md",
+          "source_blob_sha": "0c0c284ee4203e58ba87a8bae9e01a56655f13b6",
+          "source_sha256": "2b2d446bd7e8fa7425fe5c5917d25b7deaf706c0821e8fb91b18a590b16d2b4c",
+          "source_lines": [
+            7,
+            29
+          ],
+          "scope_observation": "建構三種配置／owner+F4索引表；元件ID與欄位用途仍未知。"
+        },
+        {
+          "source_file": "kr-temp-roy/20261026-190148-chatgpt-web-roy-T08-CMonster-inherited-components.md",
+          "source_blob_sha": "77b8dcf98f0c94bd74ad8f52081bd10fea0eb08f",
+          "source_sha256": "baa6880f4b66a090a2e42341e43b4f6760afcb9c57f39ce6ecd81cd6fdcd9765",
+          "source_lines": [
+            11,
+            27
+          ],
+          "scope_observation": "父／派生共用元件表；至少1/2/3/5，fallback+158不證model資源。"
+        },
+        {
+          "source_file": "kr-temp-roy/20261027-014750-chatgpt-web-roy-T08-component-destruction-25-slots.md",
+          "source_blob_sha": "e20aaae0ccb3003beb16920f64ca6f332cfe7835",
+          "source_sha256": "6fab24b82f03505ac5e6ddbb8522e477f328d5ac54c5fbcbde417d21cdc9e9b4",
+          "source_lines": [
+            29,
+            38
+          ],
+          "scope_observation": "25槽0..24與+158表外；virtual0(1)不能冒充virtual4事件。"
+        }
+      ],
+      "risk": "R1 with known conflicts quarantined; any normative native or protocol use requires targeted R2/R3",
+      "integration_proposed": "CONFLICT_CHECKED",
+      "s00_acceptance": "NOT_REQUESTED_OR_GRANTED"
+    },
+    {
+      "key": "early-owner-setter",
+      "assertion": "來源將primary vtable+68解析為4C8DA0，描述寫owner+38C並由+15C/+370 gate轉送參數；事件碼意義保持未知。",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "4CB2C0→C0C9DC+68→4C8DA0局部路徑",
+      "limits": [
+        "不同runtime類別與secondary vptr不得套用",
+        "不是AI或動畫狀態規則",
+        "R1來源整合，不是全文通過、函式通過、native_complete、runtime或Server驗收。"
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "existing_claim_ids": [],
+      "existing_claim_reuse_scope": null,
+      "source_refs": [
+        {
+          "source_file": "kr-temp-roy/20261026-003617-chatgpt-web-roy-T08-owner-vtable-68.md",
+          "source_blob_sha": "5e795621563e36969aa45a59004c383f993b1e3c",
+          "source_sha256": "1e8b63c83cf4a2bd26e1ca04ba6f83aaf9c1b3e89c80b3a9d447dbfd6af90aab",
+          "source_lines": [
+            12,
+            35
+          ],
+          "scope_observation": "primary與+F0次級vptr分開；+38C setter及條件轉送。"
+        }
+      ],
+      "risk": "R1 with known conflicts quarantined; any normative native or protocol use requires targeted R2/R3",
+      "integration_proposed": "CONFLICT_CHECKED",
+      "s00_acceptance": "NOT_REQUESTED_OR_GRANTED"
+    },
+    {
+      "key": "early-linked-lookup",
+      "assertion": "來源描述515790以unsigned DWORD key查有序容器，輸出node/sentinel；7A7800另有重映射與下游查找，不能把返回節點直接當Actor。",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "515790與7A7800指定lookup資料流",
+      "limits": [
+        "R1不重驗實際STL型別或完整caller",
+        "各sentinel flag位移不同",
+        "R1來源整合，不是全文通過、函式通過、native_complete、runtime或Server驗收。"
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "existing_claim_ids": [],
+      "existing_claim_reuse_scope": null,
+      "source_refs": [
+        {
+          "source_file": "kr-temp-roy/20261026-080719-chatgpt-web-roy-T08-lookup-515790.md",
+          "source_blob_sha": "90dce9718c128931560a3e0279f3482b32e3168f",
+          "source_sha256": "b992dd848777fc00a0bfb3c3dc677ec8b5d0fe734440361ec143265a08bfce4e",
+          "source_lines": [
+            8,
+            40
+          ],
+          "scope_observation": "exact-lookup輸出node/sentinel，不直接回Actor；含不同helper旗標offset。"
+        }
+      ],
+      "risk": "R1 with known conflicts quarantined; any normative native or protocol use requires targeted R2/R3",
+      "integration_proposed": "CONFLICT_CHECKED",
+      "s00_acceptance": "NOT_REQUESTED_OR_GRANTED"
+    },
+    {
+      "key": "early-upstream-entry",
+      "assertion": "來源把541130附近node+C列為傳給79D8E0的key來源，並指出更新候選來自既存node+28，不能當新建物件。",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "541130/79D8E0局部key與pointer/control-block更新",
+      "limits": [
+        "完整八DWORD stack建構及上游node來源仍未閉合",
+        "不賦予遊戲語義",
+        "R1來源整合，不是全文通過、函式通過、native_complete、runtime或Server驗收。"
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "existing_claim_ids": [],
+      "existing_claim_reuse_scope": null,
+      "source_refs": [
+        {
+          "source_file": "kr-temp-roy/20261026-115941-chatgpt-web-roy-T08-upstream-key-source.md",
+          "source_blob_sha": "8d6be4c48aa2dde3a633c4711a705b4ac74cb666",
+          "source_sha256": "8316099f2108a88295bd3b5a129a6fa6a54a05e65870d8fd62dd1e0a52f18032",
+          "source_lines": [
+            19,
+            40
+          ],
+          "scope_observation": "node+C為key、candidate+28來源；八DWORD呼叫上下文不只單一push。"
+        }
+      ],
+      "risk": "R1 with known conflicts quarantined; any normative native or protocol use requires targeted R2/R3",
+      "integration_proposed": "CONFLICT_CHECKED",
+      "s00_acceptance": "NOT_REQUESTED_OR_GRANTED"
+    },
+    {
+      "key": "early-string-lookup",
+      "assertion": "來源描述716740以字串查找後把node+28調整+3C交7197E0，並非直接返回payload或建立Actor。",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "716740指定字串轉換/查找/forward窗口",
+      "limits": [
+        "字串及返回C++型別未解",
+        "不與其他名稱容器只按offset等同",
+        "R1來源整合，不是全文通過、函式通過、native_complete、runtime或Server驗收。"
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "existing_claim_ids": [],
+      "existing_claim_reuse_scope": null,
+      "source_refs": [
+        {
+          "source_file": "kr-temp-roy/20261026-175219-chatgpt-web-roy-T08-string-indexed-lookup-716740.md",
+          "source_blob_sha": "e1533923a20621de5e0b760bbe7d1ef141df49b3",
+          "source_sha256": "105392514993edcedf780e38e31f06ff8cbf5ed42416b34f8a32294363f44278",
+          "source_lines": [
+            21,
+            39
+          ],
+          "scope_observation": "字串查找後adjust+3C forward，不是直接Actor建立。"
+        }
+      ],
+      "risk": "R1 with known conflicts quarantined; any normative native or protocol use requires targeted R2/R3",
+      "integration_proposed": "CONFLICT_CHECKED",
+      "s00_acceptance": "NOT_REQUESTED_OR_GRANTED"
+    },
+    {
+      "key": "early-scene-dispatch",
+      "assertion": "來源描述global/scene table的8-byte stride、default forwarding與scene handler index7；transport拆框與wire opcode對應仍未確立。",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "4B7DC0/4B7EC0/4ADD50/4C4670與4AE4D0引用",
+      "limits": [
+        "不把同容量或內部command直接當wire協定",
+        "關鍵封包契約需R2",
+        "R1來源整合，不是全文通過、函式通過、native_complete、runtime或Server驗收。"
+      ],
+      "conflicts": [
+        {
+          "key": "spawn-policy-unknown",
+          "description": "Client row/owner欄與本地fixture不證Server出生時機、波次、AI決策或權威。",
+          "refs": [
+            "kr/tasks/T08/README.md"
+          ],
+          "disposition": "僅資料介面導航；Server決策缺口和Client未解分開，無生成時間/策略規範。",
+          "r2_if_needed": "出現具體協定欄位/順序阻塞再交T02/T08/T06/T07定向。"
+        }
+      ],
+      "affected_spec_ids": [],
+      "existing_claim_ids": [],
+      "existing_claim_reuse_scope": null,
+      "source_refs": [
+        {
+          "source_file": "kr-temp-roy/20261026-211852-chatgpt-web-roy-T08-dispatch-composite-id.md",
+          "source_blob_sha": "96061996117565ac35209a4dcd027155703395d6",
+          "source_sha256": "a9be68489b56d60391801477ed17ed7db2dafb3b63877111687ff08b5b8f11c2",
+          "source_lines": [
+            11,
+            35
+          ],
+          "scope_observation": "global/scene表及三參數轉送；transport未對上。"
+        }
+      ],
+      "risk": "R1 with known conflicts quarantined; any normative native or protocol use requires targeted R2/R3",
+      "integration_proposed": "CONFLICT_CHECKED",
+      "s00_acceptance": "NOT_REQUESTED_OR_GRANTED"
+    },
+    {
+      "key": "early-actor-interface",
+      "assertion": "來源描述0007按前置2 bytes及26-byte row處理、以actor key去重並有4DFF30登記；主樹、其他狀態/資源容器與Server生成政策須分開。",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "4AE4D0/4D1710/4DFF30及相關lookup/registration來源描述",
+      "limits": [
+        "不宣告完整bounds、全部類型或deallocation通過",
+        "Server時機/AI/owner權威未知",
+        "R1來源整合，不是全文通過、函式通過、native_complete、runtime或Server驗收。"
+      ],
+      "conflicts": [
+        {
+          "key": "old-rejection-withdrawn",
+          "description": "82EF00 lower-bound-only舊拒因已撤銷，尾端存在等值條件；不能繼續引用它反駁exact-key用途。",
+          "refs": [
+            "kr/tasks/T08/README.md",
+            "shared/integrations/T01-20261028-27/README.md"
+          ],
+          "disposition": "移除已撤銷拒因；本輪未重驗函式，不由撤銷直接升NATIVE_VERIFIED。",
+          "r2_if_needed": "若需要新R3結論，重用精確已審scope或定向驗證。"
+        },
+        {
+          "key": "spawn-policy-unknown",
+          "description": "Client row/owner欄與本地fixture不證Server出生時機、波次、AI決策或權威。",
+          "refs": [
+            "kr/tasks/T08/README.md"
+          ],
+          "disposition": "僅資料介面導航；Server決策缺口和Client未解分開，無生成時間/策略規範。",
+          "r2_if_needed": "出現具體協定欄位/順序阻塞再交T02/T08/T06/T07定向。"
+        }
+      ],
+      "affected_spec_ids": [],
+      "existing_claim_ids": [],
+      "existing_claim_reuse_scope": null,
+      "source_refs": [
+        {
+          "source_file": "kr-temp-roy/20261026-211852-chatgpt-web-roy-T08-dispatch-composite-id.md",
+          "source_blob_sha": "96061996117565ac35209a4dcd027155703395d6",
+          "source_sha256": "a9be68489b56d60391801477ed17ed7db2dafb3b63877111687ff08b5b8f11c2",
+          "source_lines": [
+            39,
+            61
+          ],
+          "scope_observation": "row計數及composite打包；record[2]==0時32-bit underflow，不可縮成byte。"
+        },
+        {
+          "source_file": "kr-temp-roy/20261026-235051-chatgpt-web-roy-T08-object-tree-lifecycle.md",
+          "source_blob_sha": "2e969d1c238adca0d57db6d4854b7d8010392c5b",
+          "source_sha256": "53758d4cd4508d148eb340e4ae4887b40bac51e3243095f1301b9d54f95d9d22",
+          "source_lines": [
+            11,
+            44
+          ],
+          "scope_observation": "FAB138去重／反向讀取與FC0E90/FAB148分離，4C6E50不是插入證據。"
+        },
+        {
+          "source_file": "kr-temp-roy/20261026-235051-chatgpt-web-roy-T08-object-tree-lifecycle.md",
+          "source_blob_sha": "2e969d1c238adca0d57db6d4854b7d8010392c5b",
+          "source_sha256": "53758d4cd4508d148eb340e4ae4887b40bac51e3243095f1301b9d54f95d9d22",
+          "source_lines": [
+            54,
+            59
+          ],
+          "scope_observation": "這一版尚未定位insert/remove，不把當時未知說成現行不存在。"
+        },
+        {
+          "source_file": "kr-temp-roy/20261028-012810-chatgpt-web-roy-T08-integrated-reaudit-01.md",
+          "source_blob_sha": "b41f55a2fdfb3ef3dc4c1dc58e421466720b45e0",
+          "source_sha256": "6f7b6f43c85ea848f909d06642f94c804a38f6325fb0d480eed5962177a0fb29",
+          "source_lines": [
+            140,
+            181
+          ],
+          "scope_observation": "保留source-level建立/控制槽/移除缺口，不補Server authority/AI。"
+        },
+        {
+          "source_file": "kr-temp-roy/20261028-013305-chatgpt-web-roy-T08-integrated-reaudit-02-spawn-registration-and-script-cleanup.md",
+          "source_blob_sha": "99c9a0edbfffd8a81f7df26a40a9933ddb33f40d",
+          "source_sha256": "3711b79ee117ab0ca0a6bf6f3e6da20621fa0e6b6622dc130ea58493089a8482",
+          "source_lines": [
+            11,
+            16
+          ],
+          "scope_observation": "count/typejump/duplicate診斷/node配置來源描述，不宣稱全部失敗生命期。"
+        }
+      ],
+      "risk": "R1 with known conflicts quarantined; any normative native or protocol use requires targeted R2/R3",
+      "integration_proposed": "CONFLICT_CHECKED",
+      "s00_acceptance": "NOT_REQUESTED_OR_GRANTED"
+    },
+    {
+      "key": "early-event-meaning",
+      "assertion": "元件virtual+4/+8的實際調度者與事件7/8的遊戲含義未被這些來源閉合；不能命名死亡或認為命令151直接觸發事件8。",
+      "evidence_level": "UNKNOWN",
+      "evidence_scope": "type1/3/4元件、4CB2C0/4CB590/4CB850和狀態旗標疑問",
+      "limits": [
+        "unknown不是否定其存在",
+        "不從相同事件數值合併不同slot",
+        "R1來源整合，不是全文通過、函式通過、native_complete、runtime或Server驗收。"
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "existing_claim_ids": [],
+      "existing_claim_reuse_scope": null,
+      "source_refs": [
+        {
+          "source_file": "kr-temp-roy/20261027-014750-chatgpt-web-roy-T08-component-destruction-25-slots.md",
+          "source_blob_sha": "e20aaae0ccb3003beb16920f64ca6f332cfe7835",
+          "source_sha256": "6fab24b82f03505ac5e6ddbb8522e477f328d5ac54c5fbcbde417d21cdc9e9b4",
+          "source_lines": [
+            40,
+            44
+          ],
+          "scope_observation": "事件7/8語義與具體網路移除中間鏈未知。"
+        },
+        {
+          "source_file": "kr-temp-roy/20261027-022355-chatgpt-web-roy-T08-type1-event8-flagged-tree.md",
+          "source_blob_sha": "4608f88c2d66df59fafa134f28488f59734caeda",
+          "source_sha256": "fe0b615c5d07994924e4fe26102ecba78ffe5d5aba0cd651d658a127eb7e3dc2",
+          "source_lines": [
+            19,
+            21
+          ],
+          "scope_observation": "Type1 virtual8與Type3/4 virtual4要分離。"
+        },
+        {
+          "source_file": "kr-temp-roy/20261027-022355-chatgpt-web-roy-T08-type1-event8-flagged-tree.md",
+          "source_blob_sha": "4608f88c2d66df59fafa134f28488f59734caeda",
+          "source_sha256": "fe0b615c5d07994924e4fe26102ecba78ffe5d5aba0cd651d658a127eb7e3dc2",
+          "source_lines": [
+            37,
+            67
+          ],
+          "scope_observation": "flagged state及resource+11C gate不證HP0或死亡。"
+        }
+      ],
+      "risk": "R1 with known conflicts quarantined; any normative native or protocol use requires targeted R2/R3",
+      "integration_proposed": "CONFLICT_CHECKED",
+      "s00_acceptance": "NOT_REQUESTED_OR_GRANTED"
+    },
+    {
+      "key": "early-state-resources",
+      "assertion": "來源把狀態樹批次更新與128個狀態資源槽的按需建立／稍後回收分開；局部缺<128檢查不等於可利用漏洞。",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "4D2Fxx/4C9840/4C83C0/4C8580及owner+164/+36C",
+      "limits": [
+        "合法ID領域/上游bounds和清理時機未全證",
+        "不推固定frame頻率或Server狀態規則",
+        "R1來源整合，不是全文通過、函式通過、native_complete、runtime或Server驗收。"
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "existing_claim_ids": [],
+      "existing_claim_reuse_scope": null,
+      "source_refs": [
+        {
+          "source_file": "kr-temp-roy/20261027-032040-chatgpt-web-roy-T08-state-tree-resource-lifetime.md",
+          "source_blob_sha": "ebe53d869c106230e7a12509d07991d9fe2bc0dd",
+          "source_sha256": "fa9e35311e8e8fb5c5eac37f716c80d5f85faf3c771ee56e85e15e834f8327b5",
+          "source_lines": [
+            9,
+            37
+          ],
+          "scope_observation": "狀態樹清空不同步清128槽，索引上游界限未知。"
+        },
+        {
+          "source_file": "kr-temp-roy/20261027-093000-chatgpt-web-roy-T08-079-state-reconcile.md",
+          "source_blob_sha": "f0939bca42ee0d83489bdb038837d3141ffc98b5",
+          "source_sha256": "5388fa9b8af92a530087e5195250b337f0fe114a1f80976dfe1eb523d9e75e8f",
+          "source_lines": [
+            4,
+            15
+          ],
+          "scope_observation": "+36C倒數後128槽對照狀態樹回收；151更新與即時清槽分離。"
+        },
+        {
+          "source_file": "kr-temp-roy/20261027-093001-chatgpt-web-roy-T08-080-object-update.md",
+          "source_blob_sha": "3ce0f430ab665e69ceb66a7ebedddb1b75323bc1",
+          "source_sha256": "87ebc6cc864388e96cd4e41ece516275cf2cfde0c28a447651932852f805d857",
+          "source_lines": [
+            4,
+            4
+          ],
+          "scope_observation": "共用update轉接與+36C/128槽關聯更新。"
+        },
+        {
+          "source_file": "kr-temp-roy/20261027-093002-chatgpt-web-roy-T08-081-shared-cleanup.md",
+          "source_blob_sha": "1a4a02f0107a3f4d962a369b607b146c28de07b7",
+          "source_sha256": "56e63e4454ff29aac8790e537098380d169efee8d6f129eeedf5f805d8c69bee",
+          "source_lines": [
+            4,
+            4
+          ],
+          "scope_observation": "更新vtable及倒數初值/首次30行為。"
+        }
+      ],
+      "risk": "R1 with known conflicts quarantined; any normative native or protocol use requires targeted R2/R3",
+      "integration_proposed": "CONFLICT_CHECKED",
+      "s00_acceptance": "NOT_REQUESTED_OR_GRANTED"
+    },
+    {
+      "key": "early-update-schedule",
+      "assertion": "真正場景物件vtable+20上層調度與固定更新頻率未在此來源集合中閉合；Binding/manager同offset不能替代scene receiver。",
+      "evidence_level": "UNKNOWN",
+      "evidence_scope": "C07554+20/4C8580與資源管理更新鏈的連結缺口",
+      "limits": [
+        "僅Client未知導航",
+        "不判定原版不存在更新",
+        "R1來源整合，不是全文通過、函式通過、native_complete、runtime或Server驗收。"
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "existing_claim_ids": [],
+      "existing_claim_reuse_scope": null,
+      "source_refs": [
+        {
+          "source_file": "kr-temp-roy/20261027-103853-chatgpt-web-roy-T08-093-resource-update-completion-dispatch.md",
+          "source_blob_sha": "d20bc43bb68f6eaf56973456d5efb24dbfd17316",
+          "source_sha256": "b17ae2afdc89e34836bee26df963ef8c7d0a155a5e4fdfb145d9cd59e6c2a597",
+          "source_lines": [
+            194,
+            203
+          ],
+          "scope_observation": "所有Binding實作/主場景調度尚未閉合，不以active-list代替。"
+        },
+        {
+          "source_file": "kr-temp-roy/20261027-110027-chatgpt-web-roy-T08-096-provider-registration-refcount.md",
+          "source_blob_sha": "7a3b78707951c41795e6f6d2fe292c07aadcfea3",
+          "source_sha256": "12d3c3897caa847b71fa0cacaab07b199848282e426e1e957fed2c0f74cbac4d",
+          "source_lines": [
+            95,
+            100
+          ],
+          "scope_observation": "完整節點/實作/回滾與scene主迴圈是明示未知。"
+        },
+        {
+          "source_file": "kr-temp-roy/20261027-111050-chatgpt-web-roy-T08-097-tree-node-provider-link.md",
+          "source_blob_sha": "e0b3ff5069fc4f66ff17e3b706ecba870360d337",
+          "source_sha256": "1730cfc143ecc508a1d04a4b7f4c845ea3a09c9c3de55d9f19403250db2d5d85",
+          "source_lines": [
+            81,
+            85
+          ],
+          "scope_observation": "明示型別／上游／主調度尚未知。"
+        }
+      ],
+      "risk": "R1 with known conflicts quarantined; any normative native or protocol use requires targeted R2/R3",
+      "integration_proposed": "CONFLICT_CHECKED",
+      "s00_acceptance": "NOT_REQUESTED_OR_GRANTED"
+    },
+    {
+      "key": "early-pool-lifecycle",
+      "assertion": "來源把7C-byte資源取得／reset／解除、mode控制的延後容器與直接清理路徑、+5C與+60計數分開，容器可復用而非只待刪除。",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "7DCFB0/7BE5B0/7BE5F0/7DD1A0/7DD1F0/7DD100及mode控制",
+      "limits": [
+        "各來源覆蓋不同步驟；不推全所有權/並行安全",
+        "mode/gate精確已審部分只引用CLM-CLIENT-0002原scope",
+        "R1來源整合，不是全文通過、函式通過、native_complete、runtime或Server驗收。"
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "existing_claim_ids": [
+        "CLM-CLIENT-0002"
+      ],
+      "existing_claim_reuse_scope": "Only mode/gate normal-path subset under original CLM scope; other lifecycle steps remain PARTIAL.",
+      "source_refs": [
+        {
+          "source_file": "kr-temp-roy/20261027-093001-chatgpt-web-roy-T08-080-object-update.md",
+          "source_blob_sha": "3ce0f430ab665e69ceb66a7ebedddb1b75323bc1",
+          "source_sha256": "87ebc6cc864388e96cd4e41ece516275cf2cfde0c28a447651932852f805d857",
+          "source_lines": [
+            14,
+            14
+          ],
+          "scope_observation": "解除資源與pool/direct分支的來源摘要，固定頻率未知。"
+        },
+        {
+          "source_file": "kr-temp-roy/20261027-093002-chatgpt-web-roy-T08-081-shared-cleanup.md",
+          "source_blob_sha": "1a4a02f0107a3f4d962a369b607b146c28de07b7",
+          "source_sha256": "56e63e4454ff29aac8790e537098380d169efee8d6f129eeedf5f805d8c69bee",
+          "source_lines": [
+            6,
+            6
+          ],
+          "scope_observation": "子項清理、manager+44選路和array free；不等於同時釋放wrapper/resource。"
+        },
+        {
+          "source_file": "kr-temp-roy/20261027-093003-chatgpt-web-roy-T08-082-pool-consumer.md",
+          "source_blob_sha": "a7dd8e0e9b1a156ab8371d77cbacef256814a7fd",
+          "source_sha256": "283ebde77476d492b0e7929bb7c33be1b36922e1c548e7be4cafe18c48556666",
+          "source_lines": [
+            4,
+            14
+          ],
+          "scope_observation": "+7C/+80容器消費、mode排空及+5C/+60計數分離。"
+        },
+        {
+          "source_file": "kr-temp-roy/20261027-093004-chatgpt-web-roy-T08-083-reuse-pool.md",
+          "source_blob_sha": "748ba56c578953c6e16399d383678ee7bc7d1388",
+          "source_sha256": "2ef7a33a0a723778787c42d2a03f569a0dcf887b50abc54189e9e9c1f02613a4",
+          "source_lines": [
+            4,
+            13
+          ],
+          "scope_observation": "取得先pop/reset再新建，池可復用；mode與計數來源區分。"
+        },
+        {
+          "source_file": "kr-temp-roy/20261027-093005-chatgpt-web-roy-T08-084-resource-templates.md",
+          "source_blob_sha": "436c02fd1c945d35f7588f248f559f2703db9542",
+          "source_sha256": "670c183efdc2ba51f0b717cd34ef945b010e94b851b51c635cf0f430cccbd84d",
+          "source_lines": [
+            4,
+            4
+          ],
+          "scope_observation": "復用局部reset與新配置7C/初始化欄位分開。"
+        }
+      ],
+      "risk": "R1 with known conflicts quarantined; any normative native or protocol use requires targeted R2/R3",
+      "integration_proposed": "CONFLICT_CHECKED",
+      "s00_acceptance": "NOT_REQUESTED_OR_GRANTED"
+    },
+    {
+      "key": "early-binding-resolution",
+      "assertion": "來源描述7BDF90按item+4名稱查索引，對node+24 payload virtual+10取得item+8 Binding，與7BE0F0解綁及resource+74流程標記成對；+74=1不保證每項成功。",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "7BDF90/7BE0F0/7DC510局部解析與清理介面",
+      "limits": [
+        "排除heap索引排序樹/RB稱呼",
+        "不把0x8C manager當heap多型Provider",
+        "未知virtual/失敗/ownership不補猜",
+        "R1來源整合，不是全文通過、函式通過、native_complete、runtime或Server驗收。"
+      ],
+      "conflicts": [
+        {
+          "key": "heap-index-tree",
+          "description": "7B86F0/7B8680 相關 heap 名稱索引被早稿稱為 tree/RB erase；既有反證為7B868B..AC hash/mask/bucket及7B86DE→719B20 list unlink/free，不能當排序樹結論。",
+          "refs": [
+            "shared/integrations/T01-20261029-semantic-review/t08-new/return-items.json",
+            "kr/tasks/T08/README.md"
+          ],
+          "disposition": "僅排除 heap 索引的排序樹／RB 斷言；保留查名稱／payload／呼叫資料流作PARTIAL導航，不連帶否定相鄰內嵌樹。",
+          "r2_if_needed": "需要 heap 名稱容器精確類型時重用上述確證反證並定向補來源勘誤；本輪不重驗。"
+        },
+        {
+          "key": "manager-is-provider",
+          "description": "096/097 從0x8C manager 登記路徑連到 heap 多型Provider的推論，098已指出首DWORD是ID，099區分address/value兩容器，100另找0xB4 Provider。",
+          "refs": [
+            "kr-temp-roy/20261027-114418-chatgpt-web-roy-T08-098-name-registry-provider-type-separation.md",
+            "kr-temp-roy/20261027-115552-chatgpt-web-roy-T08-099-dual-global-name-container-disambiguation.md",
+            "kr-temp-roy/20261027-134325-chatgpt-web-roy-T08-100-heap-provider-vtable-binding-clone.md"
+          ],
+          "disposition": "排除0x8C manager等同heap Provider／Binding及錯連容器的部分；後稿只作具版本PARTIAL更正來源，不改早稿歷史判決。",
+          "r2_if_needed": "正式規格需要具體Provider時才查指定constructor/vptr/insert資料流。"
+        }
+      ],
+      "affected_spec_ids": [],
+      "existing_claim_ids": [],
+      "existing_claim_reuse_scope": null,
+      "source_refs": [
+        {
+          "source_file": "kr-temp-roy/20261027-093005-chatgpt-web-roy-T08-084-resource-templates.md",
+          "source_blob_sha": "436c02fd1c945d35f7588f248f559f2703db9542",
+          "source_sha256": "670c183efdc2ba51f0b717cd34ef945b010e94b851b51c635cf0f430cccbd84d",
+          "source_lines": [
+            6,
+            6
+          ],
+          "scope_observation": "名稱predicate/virtual清理只作索引介面導航，排除排序樹措辭。"
+        },
+        {
+          "source_file": "kr-temp-roy/20261027-093006-chatgpt-web-roy-T08-085-template-binding.md",
+          "source_blob_sha": "15960ff22aef13e11d631a4a9db13e881189c5e0",
+          "source_sha256": "33c8c6f59f0fcfd5093e4314b90d77eb0a72e6196d3cba57db09ee92f7b52c4a",
+          "source_lines": [
+            5,
+            6
+          ],
+          "scope_observation": "item名稱→node+24 virtual10→item+8，resolution後+74=1。"
+        },
+        {
+          "source_file": "kr-temp-roy/20261027-105107-chatgpt-web-roy-T08-095-binding-name-resolution-lifecycle.md",
+          "source_blob_sha": "83a20b2e8e2017f48766540d67fabc2f83ebb5f5",
+          "source_sha256": "4639219d7bb12909702cb8a5b0cde719bb33c8b0a7281d1285cc9ad22ef3fab4",
+          "source_lines": [
+            37,
+            44
+          ],
+          "scope_observation": "名稱payload virtual10與解綁/+74成對，不能據+74保證全成功。"
+        },
+        {
+          "source_file": "kr-temp-roy/20261027-105107-chatgpt-web-roy-T08-095-binding-name-resolution-lifecycle.md",
+          "source_blob_sha": "83a20b2e8e2017f48766540d67fabc2f83ebb5f5",
+          "source_sha256": "4639219d7bb12909702cb8a5b0cde719bb33c8b0a7281d1285cc9ad22ef3fab4",
+          "source_lines": [
+            105,
+            109
+          ],
+          "scope_observation": "這一版Provider/Binding方法仍unknown；後續099/100來源分開追溯。"
+        },
+        {
+          "source_file": "kr-temp-roy/20261027-111050-chatgpt-web-roy-T08-097-tree-node-provider-link.md",
+          "source_blob_sha": "e0b3ff5069fc4f66ff17e3b706ecba870360d337",
+          "source_sha256": "1730cfc143ecc508a1d04a4b7f4c845ea3a09c9c3de55d9f19403250db2d5d85",
+          "source_lines": [
+            17,
+            18
+          ],
+          "scope_observation": "heap lookup virtual10寫Binding與兩dispatch槽分開。"
+        }
+      ],
+      "risk": "R1 with known conflicts quarantined; any normative native or protocol use requires targeted R2/R3",
+      "integration_proposed": "CONFLICT_CHECKED",
+      "s00_acceptance": "NOT_REQUESTED_OR_GRANTED"
+    },
+    {
+      "key": "early-name-containers",
+      "assertion": "099以FE173C字面地址對比[FE173C]內容區分相鄰內嵌管理容器與heap名稱索引；節點+24不能證明payload同型，0x8C首DWORD是順序ID。",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "7B7DA0/7D7139/7B82D0/7BDF90/7DCEE0來源級身分辨識",
+      "limits": [
+        "僅採後稿明示更正與來源對應",
+        "不沿用所有container共用7B86F0排序樹的錯說",
+        "R1來源整合，不是全文通過、函式通過、native_complete、runtime或Server驗收。"
+      ],
+      "conflicts": [
+        {
+          "key": "heap-index-tree",
+          "description": "7B86F0/7B8680 相關 heap 名稱索引被早稿稱為 tree/RB erase；既有反證為7B868B..AC hash/mask/bucket及7B86DE→719B20 list unlink/free，不能當排序樹結論。",
+          "refs": [
+            "shared/integrations/T01-20261029-semantic-review/t08-new/return-items.json",
+            "kr/tasks/T08/README.md"
+          ],
+          "disposition": "僅排除 heap 索引的排序樹／RB 斷言；保留查名稱／payload／呼叫資料流作PARTIAL導航，不連帶否定相鄰內嵌樹。",
+          "r2_if_needed": "需要 heap 名稱容器精確類型時重用上述確證反證並定向補來源勘誤；本輪不重驗。"
+        },
+        {
+          "key": "manager-is-provider",
+          "description": "096/097 從0x8C manager 登記路徑連到 heap 多型Provider的推論，098已指出首DWORD是ID，099區分address/value兩容器，100另找0xB4 Provider。",
+          "refs": [
+            "kr-temp-roy/20261027-114418-chatgpt-web-roy-T08-098-name-registry-provider-type-separation.md",
+            "kr-temp-roy/20261027-115552-chatgpt-web-roy-T08-099-dual-global-name-container-disambiguation.md",
+            "kr-temp-roy/20261027-134325-chatgpt-web-roy-T08-100-heap-provider-vtable-binding-clone.md"
+          ],
+          "disposition": "排除0x8C manager等同heap Provider／Binding及錯連容器的部分；後稿只作具版本PARTIAL更正來源，不改早稿歷史判決。",
+          "r2_if_needed": "正式規格需要具體Provider時才查指定constructor/vptr/insert資料流。"
+        }
+      ],
+      "affected_spec_ids": [],
+      "existing_claim_ids": [],
+      "existing_claim_reuse_scope": null,
+      "source_refs": [
+        {
+          "source_file": "kr-temp-roy/20261027-093843-chatgpt-web-roy-T08-086-registry-transform.md",
+          "source_blob_sha": "75f5d65ddbc0e339320ab2037d1c4db356dbb771",
+          "source_sha256": "26e10c5fed4b33c282e14839052b99eece18605fb1eca7d6041f87f7b6c1a266",
+          "source_lines": [
+            5,
+            11
+          ],
+          "scope_observation": "FE173C為heap配置指標，cleanup後置零。"
+        },
+        {
+          "source_file": "kr-temp-roy/20261027-095424-chatgpt-web-roy-T08-087-registry-transform-binding.md",
+          "source_blob_sha": "a22ef45aaa5657a28a1ccfe73577df1c21ddc491",
+          "source_sha256": "c81987576644f2e9cc484e9d07bb9da8b33d586baeba51027238b30b545548a5",
+          "source_lines": [
+            5,
+            5
+          ],
+          "scope_observation": "heap指標與FE1740相鄰容器分離，不合併型別。"
+        },
+        {
+          "source_file": "kr-temp-roy/20261027-110027-chatgpt-web-roy-T08-096-provider-registration-refcount.md",
+          "source_blob_sha": "7a3b78707951c41795e6f6d2fe292c07aadcfea3",
+          "source_sha256": "12d3c3897caa847b71fa0cacaab07b199848282e426e1e957fed2c0f74cbac4d",
+          "source_lines": [
+            13,
+            18
+          ],
+          "scope_observation": "只保留8C管理器計數/初始化與不能混binding+80；排除連成heap Provider與樹稱呼。"
+        },
+        {
+          "source_file": "kr-temp-roy/20261027-111050-chatgpt-web-roy-T08-097-tree-node-provider-link.md",
+          "source_blob_sha": "e0b3ff5069fc4f66ff17e3b706ecba870360d337",
+          "source_sha256": "1730cfc143ecc508a1d04a4b7f4c845ea3a09c9c3de55d9f19403250db2d5d85",
+          "source_lines": [
+            14,
+            16
+          ],
+          "scope_observation": "719B90的node+24拷貝只表示payload來源；不保留L10跨容器Provider等價。"
+        },
+        {
+          "source_file": "kr-temp-roy/20261027-114418-chatgpt-web-roy-T08-098-name-registry-provider-type-separation.md",
+          "source_blob_sha": "ead20dc764c0e17b9cbf1c2775f0c2cc6cb8e70e",
+          "source_sha256": "eb498b9134e670c526150dc9886edd0d810eb2d6e838ab27295b882cfa8e28d8",
+          "source_lines": [
+            13,
+            15
+          ],
+          "scope_observation": "指出8C首DWORD是ID不是vptr，不能當heap Provider。"
+        },
+        {
+          "source_file": "kr-temp-roy/20261027-114418-chatgpt-web-roy-T08-098-name-registry-provider-type-separation.md",
+          "source_blob_sha": "ead20dc764c0e17b9cbf1c2775f0c2cc6cb8e70e",
+          "source_sha256": "eb498b9134e670c526150dc9886edd0d810eb2d6e838ab27295b882cfa8e28d8",
+          "source_lines": [
+            19,
+            28
+          ],
+          "scope_observation": "本版仍把D7139叫同一索引；只保留地址與內容必須分離的待解導航，099已更正。"
+        },
+        {
+          "source_file": "kr-temp-roy/20261027-115552-chatgpt-web-roy-T08-099-dual-global-name-container-disambiguation.md",
+          "source_blob_sha": "e8cf7a61cb841c1903ebe46f25b12fa665b35760",
+          "source_sha256": "707cd8530b39e00a50da81e5d2ba6006ad28752f6307f68b2228cb8f29cbb0d0",
+          "source_lines": [
+            12,
+            20
+          ],
+          "scope_observation": "顯式更正098：address/value及兩容器；不合併payload。"
+        },
+        {
+          "source_file": "kr-temp-roy/20261027-115552-chatgpt-web-roy-T08-099-dual-global-name-container-disambiguation.md",
+          "source_blob_sha": "e8cf7a61cb841c1903ebe46f25b12fa665b35760",
+          "source_sha256": "707cd8530b39e00a50da81e5d2ba6006ad28752f6307f68b2228cb8f29cbb0d0",
+          "source_lines": [
+            35,
+            41
+          ],
+          "scope_observation": "登記stack容器/名稱/payload與heap pointer解參照區分。"
+        },
+        {
+          "source_file": "kr-temp-roy/T08-KNOWLEDGE-BASE.md",
+          "source_blob_sha": "98326bdd1e3ad25903316817b3352a57a0b89cc8",
+          "source_sha256": "4b7d8821a43359e8953cbead34bd17e69bdb09ebac15e6fcbb01bd430acc313a",
+          "source_lines": [
+            53,
+            65
+          ],
+          "scope_observation": "摘要保留address/value與8C/Provider分離；正式native仍回精確原稿。"
+        }
+      ],
+      "risk": "R1 with known conflicts quarantined; any normative native or protocol use requires targeted R2/R3",
+      "integration_proposed": "CONFLICT_CHECKED",
+      "s00_acceptance": "NOT_REQUESTED_OR_GRANTED"
+    },
+    {
+      "key": "early-provider-clone",
+      "assertion": "100描述heap索引7DC660接收0xB4多型Provider，C50A8C+10→7F21A0建立Binding複本，須與0x8C ID管理器及+84次級receiver分開。",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "7DC660/7D6EC4/7D6F51/7F15B0/7F1650/7F21A0",
+      "limits": [
+        "完整複製/引用計數/資源回收與全部vtable邊界未驗",
+        "不推所有Provider均此類",
+        "R1來源整合，不是全文通過、函式通過、native_complete、runtime或Server驗收。"
+      ],
+      "conflicts": [
+        {
+          "key": "manager-is-provider",
+          "description": "096/097 從0x8C manager 登記路徑連到 heap 多型Provider的推論，098已指出首DWORD是ID，099區分address/value兩容器，100另找0xB4 Provider。",
+          "refs": [
+            "kr-temp-roy/20261027-114418-chatgpt-web-roy-T08-098-name-registry-provider-type-separation.md",
+            "kr-temp-roy/20261027-115552-chatgpt-web-roy-T08-099-dual-global-name-container-disambiguation.md",
+            "kr-temp-roy/20261027-134325-chatgpt-web-roy-T08-100-heap-provider-vtable-binding-clone.md"
+          ],
+          "disposition": "排除0x8C manager等同heap Provider／Binding及錯連容器的部分；後稿只作具版本PARTIAL更正來源，不改早稿歷史判決。",
+          "r2_if_needed": "正式規格需要具體Provider時才查指定constructor/vptr/insert資料流。"
+        }
+      ],
+      "affected_spec_ids": [],
+      "existing_claim_ids": [],
+      "existing_claim_reuse_scope": null,
+      "source_refs": [
+        {
+          "source_file": "kr-temp-roy/20261027-134325-chatgpt-web-roy-T08-100-heap-provider-vtable-binding-clone.md",
+          "source_blob_sha": "86975a35928aaf2ebf786b843b5cebd997893806",
+          "source_sha256": "e2911b1fe56920b9ba969468f56afce85867333f287ad14a63751635957126c1",
+          "source_lines": [
+            10,
+            15
+          ],
+          "scope_observation": "找到heap insert/0xB4 Provider及clone slot，分離8C manager。"
+        },
+        {
+          "source_file": "kr-temp-roy/20261027-134325-chatgpt-web-roy-T08-100-heap-provider-vtable-binding-clone.md",
+          "source_blob_sha": "86975a35928aaf2ebf786b843b5cebd997893806",
+          "source_sha256": "e2911b1fe56920b9ba969468f56afce85867333f287ad14a63751635957126c1",
+          "source_lines": [
+            61,
+            64
+          ],
+          "scope_observation": "完整ownership/複製、flag寫入者和主調度未閉合。"
+        }
+      ],
+      "risk": "R1 with known conflicts quarantined; any normative native or protocol use requires targeted R2/R3",
+      "integration_proposed": "CONFLICT_CHECKED",
+      "s00_acceptance": "NOT_REQUESTED_OR_GRANTED"
+    },
+    {
+      "key": "early-numeric-transforms",
+      "assertion": "來源描述2C-byte變換、子項輸出與有序有限float的resource+20最大值聚合；實際量綱、座標系與遊戲名稱未確定。",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "7BE150/77E910/77E800/77E880的來源級數值流程",
+      "limits": [
+        "不宣稱camera/世界座標/動畫長度",
+        "NaN、零除、手性與全部helper未閉合",
+        "R1來源整合，不是全文通過、函式通過、native_complete、runtime或Server驗收。"
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "existing_claim_ids": [],
+      "existing_claim_reuse_scope": null,
+      "source_refs": [
+        {
+          "source_file": "kr-temp-roy/20261027-093006-chatgpt-web-roy-T08-085-template-binding.md",
+          "source_blob_sha": "15960ff22aef13e11d631a4a9db13e881189c5e0",
+          "source_sha256": "33c8c6f59f0fcfd5093e4314b90d77eb0a72e6196d3cba57db09ee92f7b52c4a",
+          "source_lines": [
+            27,
+            38
+          ],
+          "scope_observation": "多float數值流程未命名渲染/世界座標。"
+        },
+        {
+          "source_file": "kr-temp-roy/20261027-093843-chatgpt-web-roy-T08-086-registry-transform.md",
+          "source_blob_sha": "75f5d65ddbc0e339320ab2037d1c4db356dbb771",
+          "source_sha256": "26e10c5fed4b33c282e14839052b99eece18605fb1eca7d6041f87f7b6c1a266",
+          "source_lines": [
+            13,
+            13
+          ],
+          "scope_observation": "數值變換helper組合，矩陣/旋轉細節未定。"
+        },
+        {
+          "source_file": "kr-temp-roy/20261027-095424-chatgpt-web-roy-T08-087-registry-transform-binding.md",
+          "source_blob_sha": "a22ef45aaa5657a28a1ccfe73577df1c21ddc491",
+          "source_sha256": "c81987576644f2e9cc484e9d07bb9da8b33d586baeba51027238b30b545548a5",
+          "source_lines": [
+            7,
+            16
+          ],
+          "scope_observation": "數值寫回bound child與+74，不只是local temporary。"
+        },
+        {
+          "source_file": "kr-temp-roy/20261027-095711-chatgpt-web-roy-T08-088-transform-quaternion-aggregate.md",
+          "source_blob_sha": "beade732f94f2efe96d8e2ae2439f0abf49d7003",
+          "source_sha256": "bf7a45f19f24b7fd2107ccd8e00e826af7cc4fad654aa5439cd25774fd91da25",
+          "source_lines": [
+            5,
+            16
+          ],
+          "scope_observation": "2C變換／quaternion與finite ordered最大值；手性/物理意義不定。"
+        },
+        {
+          "source_file": "kr-temp-roy/20261027-095900-chatgpt-web-roy-T08-089-aggregate-reader-audit.md",
+          "source_blob_sha": "9f30cdfa816082495214dfdefaa9aa83ef46aff9",
+          "source_sha256": "ed569ff3ed20b4619b6958990b5755472eb769e31d6b01d4786f24bf2217a364",
+          "source_lines": [
+            4,
+            12
+          ],
+          "scope_observation": "resource+20最大值writer錨點。"
+        }
+      ],
+      "risk": "R1 with known conflicts quarantined; any normative native or protocol use requires targeted R2/R3",
+      "integration_proposed": "CONFLICT_CHECKED",
+      "s00_acceptance": "NOT_REQUESTED_OR_GRANTED"
+    },
+    {
+      "key": "early-wrapper-provenance",
+      "assertion": "090/091等來源將30-byte wrapper+2C持有的7C-byte資源與wrapper自身欄位區分；同為+20不能當同物件或真正reader證據。",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "7B8230/7F6F50/C511CC/7FF7xx/7FF8xx資料來源",
+      "limits": [
+        "vtable鄰近資料不自動延長表長",
+        "早期resource+20 reader未知已由093提出具體後續來源",
+        "R1來源整合，不是全文通過、函式通過、native_complete、runtime或Server驗收。"
+      ],
+      "conflicts": [
+        {
+          "key": "reader-later-located",
+          "description": "089/090/092的resource+20 reader未定位是當時狀態；093L118/198列7BD8D0具體讀取者。",
+          "refs": [
+            "kr-temp-roy/20261027-103853-chatgpt-web-roy-T08-093-resource-update-completion-dispatch.md"
+          ],
+          "disposition": "不輸出reader不存在／仍完全未定位；保留同offset不同allocation的辨識限制，7BD8D0僅PARTIAL導航。",
+          "r2_if_needed": "需要完成條件精確浮點/NaN契約時查7BD8D0指定分支，不按動畫長度命名。"
+        }
+      ],
+      "affected_spec_ids": [],
+      "existing_claim_ids": [],
+      "existing_claim_reuse_scope": null,
+      "source_refs": [
+        {
+          "source_file": "kr-temp-roy/20261027-095900-chatgpt-web-roy-T08-089-aggregate-reader-audit.md",
+          "source_blob_sha": "9f30cdfa816082495214dfdefaa9aa83ef46aff9",
+          "source_sha256": "ed569ff3ed20b4619b6958990b5755472eb769e31d6b01d4786f24bf2217a364",
+          "source_lines": [
+            14,
+            36
+          ],
+          "scope_observation": "指出另一40-byte allocation的+20不證pooled resource reader；早期reader未知後由093補。"
+        },
+        {
+          "source_file": "kr-temp-roy/20261027-T08-090-pool-pointer-provenance.md",
+          "source_blob_sha": "cb0e79b2e81dc8349f5d88ca83ff562554ba51b3",
+          "source_sha256": "c002e415a89a9ad65dbcddd167fce3b0633ecf31d6d23dc9d1dfb4a4c109de03",
+          "source_lines": [
+            6,
+            25
+          ],
+          "scope_observation": "直接resource返回與30-byte wrapper+2C持有來源分離。"
+        },
+        {
+          "source_file": "kr-temp-roy/20261027-102339-chatgpt-web-roy-T08-091-wrapper-vtable-resource.md",
+          "source_blob_sha": "0c199c355ae3d4db4726f06a5bff2d8de7a47453",
+          "source_sha256": "74bc415d32b5fb333f7910bfa6edadd10cfd508be05e4a85a8938d74446cb30a",
+          "source_lines": [
+            6,
+            24
+          ],
+          "scope_observation": "wrapper表／+2C持有、setter及release；鄰表長度與+20消費不推廣。"
+        }
+      ],
+      "risk": "R1 with known conflicts quarantined; any normative native or protocol use requires targeted R2/R3",
+      "integration_proposed": "CONFLICT_CHECKED",
+      "s00_acceptance": "NOT_REQUESTED_OR_GRANTED"
+    },
+    {
+      "key": "early-resource-update",
+      "assertion": "093描述7BD8D0累加resource+1C、處理子項virtual與變換，讀resource+20並有條件設+6C；不把phase、完成訊號當動畫時間或必然立即free。",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "7BD8D0/7BD7E0/7BDF00/7BDF40與+6C消費鏈",
+      "limits": [
+        "精確x87/NaN、所有virtual及所有權未R1深驗",
+        "早期reader缺口按093版本限定更新",
+        "R1來源整合，不是全文通過、函式通過、native_complete、runtime或Server驗收。"
+      ],
+      "conflicts": [
+        {
+          "key": "reader-later-located",
+          "description": "089/090/092的resource+20 reader未定位是當時狀態；093L118/198列7BD8D0具體讀取者。",
+          "refs": [
+            "kr-temp-roy/20261027-103853-chatgpt-web-roy-T08-093-resource-update-completion-dispatch.md"
+          ],
+          "disposition": "不輸出reader不存在／仍完全未定位；保留同offset不同allocation的辨識限制，7BD8D0僅PARTIAL導航。",
+          "r2_if_needed": "需要完成條件精確浮點/NaN契約時查7BD8D0指定分支，不按動畫長度命名。"
+        }
+      ],
+      "affected_spec_ids": [],
+      "existing_claim_ids": [],
+      "existing_claim_reuse_scope": null,
+      "source_refs": [
+        {
+          "source_file": "kr-temp-roy/20261027-104000-chatgpt-web-roy-T08-092-resource-update-dispatch.md",
+          "source_blob_sha": "cb3a2ea443e40609cc90196760665d16a2859e64",
+          "source_sha256": "842c91190ae5ebac49d90e19fd3eb696a85a11266eef2f6df8a64aa469d09ee9",
+          "source_lines": [
+            57,
+            60
+          ],
+          "scope_observation": "累加float phase仍為暫名；未找到reader是早期狀態。"
+        },
+        {
+          "source_file": "kr-temp-roy/20261027-103853-chatgpt-web-roy-T08-093-resource-update-completion-dispatch.md",
+          "source_blob_sha": "d20bc43bb68f6eaf56973456d5efb24dbfd17316",
+          "source_sha256": "b17ae2afdc89e34836bee26df963ef8c7d0a155a5e4fdfb145d9cd59e6c2a597",
+          "source_lines": [
+            47,
+            118
+          ],
+          "scope_observation": "7BD8D0累加、transform、AND結果及有序完成條件，+20讀取者被明列。"
+        }
+      ],
+      "risk": "R1 with known conflicts quarantined; any normative native or protocol use requires targeted R2/R3",
+      "integration_proposed": "CONFLICT_CHECKED",
+      "s00_acceptance": "NOT_REQUESTED_OR_GRANTED"
+    },
+    {
+      "key": "early-active-transfer",
+      "assertion": "094來源將7A86B0與7A87D0列為共同上游依序調度，並描述未完成資源由+108/+120轉入+10C active list後清槽；不等同actor登記。",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "7A5DBA/7A5DD9/7A87D0/75A6F0/7A6830",
+      "limits": [
+        "複合gate與管理器具體類別未閉合",
+        "完整時序/所有權/釋放條件不推廣",
+        "R1來源整合，不是全文通過、函式通過、native_complete、runtime或Server驗收。"
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "existing_claim_ids": [],
+      "existing_claim_reuse_scope": null,
+      "source_refs": [
+        {
+          "source_file": "kr-temp-roy/20261027-104242-chatgpt-web-roy-T08-094-manager-update-resource-ownership.md",
+          "source_blob_sha": "d9087d9ab2663d32c68e6dad581c8eb4f39b022d",
+          "source_sha256": "557fb5ee47a5e56683196898dbbecfd7597f4b2ba5dfe8b763816c8e3b7d2739",
+          "source_lines": [
+            23,
+            25
+          ],
+          "scope_observation": "共同上游依序調度且不同scene主迴圈。"
+        },
+        {
+          "source_file": "kr-temp-roy/20261027-104242-chatgpt-web-roy-T08-094-manager-update-resource-ownership.md",
+          "source_blob_sha": "d9087d9ab2663d32c68e6dad581c8eb4f39b022d",
+          "source_sha256": "557fb5ee47a5e56683196898dbbecfd7597f4b2ba5dfe8b763816c8e3b7d2739",
+          "source_lines": [
+            107,
+            118
+          ],
+          "scope_observation": "completed/reset/pair轉移多分支，+108/+120轉入list再清槽。"
+        }
+      ],
+      "risk": "R1 with known conflicts quarantined; any normative native or protocol use requires targeted R2/R3",
+      "integration_proposed": "CONFLICT_CHECKED",
+      "s00_acceptance": "NOT_REQUESTED_OR_GRANTED"
+    },
+    {
+      "key": "early-binding-gates",
+      "assertion": "101描述Binding+7C與+80兩旗標分離：7F2520反轉測試結果寫+80，7BDF40僅在特定三重gate派送+18；不是所有更新都停用。",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "7F2520/7F2320/7F23B0/7BDF40與C50A8C/C50ABC",
+      "limits": [
+        "不猜死亡/停止/鎖定語義",
+        "所有alias寫入者與clone ownership未知",
+        "R1來源整合，不是全文通過、函式通過、native_complete、runtime或Server驗收。"
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "existing_claim_ids": [],
+      "existing_claim_reuse_scope": null,
+      "source_refs": [
+        {
+          "source_file": "kr-temp-roy/20261027-104000-chatgpt-web-roy-T08-092-resource-update-dispatch.md",
+          "source_blob_sha": "cb3a2ea443e40609cc90196760665d16a2859e64",
+          "source_sha256": "842c91190ae5ebac49d90e19fd3eb696a85a11266eef2f6df8a64aa469d09ee9",
+          "source_lines": [
+            23,
+            32
+          ],
+          "scope_observation": "child null/byte/+80三重gate及wrapper+2C轉入resource。"
+        },
+        {
+          "source_file": "kr-temp-roy/20261027-140236-chatgpt-web-roy-T08-101-binding-state-virtual-dispatch.md",
+          "source_blob_sha": "d4b91f7bd0e8b68eea0d0a9242382f72b778e607",
+          "source_sha256": "8bd262afa192936cee07358b7bc59d1d21349c5d786b6da63b24a2f8e881ff3c",
+          "source_lines": [
+            11,
+            18
+          ],
+          "scope_observation": "+80反轉Boolean、+7C獨立gate、secondary adjust thunk及clone非單純淺拷貝。"
+        },
+        {
+          "source_file": "kr-temp-roy/20261027-140236-chatgpt-web-roy-T08-101-binding-state-virtual-dispatch.md",
+          "source_blob_sha": "d4b91f7bd0e8b68eea0d0a9242382f72b778e607",
+          "source_sha256": "8bd262afa192936cee07358b7bc59d1d21349c5d786b6da63b24a2f8e881ff3c",
+          "source_lines": [
+            63,
+            66
+          ],
+          "scope_observation": "未知所有alias寫入者與ownership，不把800上限當動畫數。"
+        }
+      ],
+      "risk": "R1 with known conflicts quarantined; any normative native or protocol use requires targeted R2/R3",
+      "integration_proposed": "CONFLICT_CHECKED",
+      "s00_acceptance": "NOT_REQUESTED_OR_GRANTED"
+    },
+    {
+      "key": "early-geometry-meaning",
+      "assertion": "六組四float係數測試與三／四參數入口可作研究導航，但係數物理意義、相機視錐／半徑、正規化方向與NaN契約尚未閉合；早期未找到writer不是不存在writer。",
+      "evidence_level": "UNKNOWN",
+      "evidence_scope": "838800/838860/FB76B0及後續writer導航",
+      "limits": [
+        "只以UNKNOWN交S00，不規範相機或渲染",
+        "118–120後續writer待對應精確來源scope",
+        "R1來源整合，不是全文通過、函式通過、native_complete、runtime或Server驗收。"
+      ],
+      "conflicts": [
+        {
+          "key": "plane-writer-stale",
+          "description": "102–105當時未找到係數writer；KB後續列838430/799D20更新鏈，故早期搜尋未命中不能作現在不存在writer的結論。",
+          "refs": [
+            "kr-temp-roy/T08-KNOWLEDGE-BASE.md"
+          ],
+          "disposition": "只保留camera/正規化/alias語義未知；不把歷史未找到升格不存在寫入者；後續writer導航交middle來源處理。",
+          "r2_if_needed": "若規格依賴係數來源或方向，引用118–120精確版本定向核證。"
+        }
+      ],
+      "affected_spec_ids": [],
+      "existing_claim_ids": [],
+      "existing_claim_reuse_scope": null,
+      "source_refs": [
+        {
+          "source_file": "kr-temp-roy/20261027-140627-chatgpt-web-roy-T08-102-plane-test-binding-initialization-global-buckets.md",
+          "source_blob_sha": "686e64b04fc97141e4a6b5653c7602299515ed7c",
+          "source_sha256": "04f2c9b844600f2a182bb7e4993c10e4660cbfe1b6cf30827fc1301dd90e54d0",
+          "source_lines": [
+            13,
+            16
+          ],
+          "scope_observation": "six coefficient測試但frustum/死亡/動畫名稱不成立。"
+        },
+        {
+          "source_file": "kr-temp-roy/20261027-141126-chatgpt-web-roy-T08-103-plane-buffer-bucket-producers.md",
+          "source_blob_sha": "7d400c1c60155ed80f803cc09f7bfc84ca813a7e",
+          "source_sha256": "26f40f77a254c2b5ffd08040515be95860f0faa741a5c5bb4983895ced9332ec",
+          "source_lines": [
+            354,
+            358
+          ],
+          "scope_observation": "半空間為推測，writer當時未找到不等於不存在。"
+        },
+        {
+          "source_file": "kr-temp-roy/20261027-160157-chatgpt-web-roy-T08-105-extended-six-plane-readers-and-bucket-ownership.md",
+          "source_blob_sha": "8096d2e1639ca22f60d5b95e2c98cd382be9fae6",
+          "source_sha256": "87a8aaa5ddc823df68949a6513a1e5163a8bd365f454f5a489638fd1da77968a",
+          "source_lines": [
+            55,
+            86
+          ],
+          "scope_observation": "三float/四float閾值入口與NaN不能簡化，radius仍推測。"
+        },
+        {
+          "source_file": "kr-temp-roy/T08-KNOWLEDGE-BASE.md",
+          "source_blob_sha": "98326bdd1e3ad25903316817b3352a57a0b89cc8",
+          "source_sha256": "4b7d8821a43359e8953cbead34bd17e69bdb09ebac15e6fcbb01bd430acc313a",
+          "source_lines": [
+            67,
+            83
+          ],
+          "scope_observation": "後續writer導航與camera語義未知並存，早期writer未找到已非現況。"
+        }
+      ],
+      "risk": "R1 with known conflicts quarantined; any normative native or protocol use requires targeted R2/R3",
+      "integration_proposed": "CONFLICT_CHECKED",
+      "s00_acceptance": "NOT_REQUESTED_OR_GRANTED"
+    },
+    {
+      "key": "early-bucket-producers",
+      "assertion": "102/103/105來源描述FB7740的22×2004-byte桶、局部<800限制與append寫入者；producer、配置、清理不等同consumer或每幀reset。",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "798F26/FB7740/7F23B0及其他明列append窗口",
+      "limits": [
+        "不推每個index合法或entry同型",
+        "0x2C058恰等22*2004；排除102 L24孤立「大於」錯字",
+        "R1來源整合，不是全文通過、函式通過、native_complete、runtime或Server驗收。"
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "existing_claim_ids": [],
+      "existing_claim_reuse_scope": null,
+      "source_refs": [
+        {
+          "source_file": "kr-temp-roy/20261027-140627-chatgpt-web-roy-T08-102-plane-test-binding-initialization-global-buckets.md",
+          "source_blob_sha": "686e64b04fc97141e4a6b5653c7602299515ed7c",
+          "source_sha256": "04f2c9b844600f2a182bb7e4993c10e4660cbfe1b6cf30827fc1301dd90e54d0",
+          "source_lines": [
+            24,
+            28
+          ],
+          "scope_observation": "22*2004恰等2C058；排除同句大於錯字，secondary pointer append不證consumer。"
+        },
+        {
+          "source_file": "kr-temp-roy/20261027-141126-chatgpt-web-roy-T08-103-plane-buffer-bucket-producers.md",
+          "source_blob_sha": "7d400c1c60155ed80f803cc09f7bfc84ca813a7e",
+          "source_sha256": "26f40f77a254c2b5ffd08040515be95860f0faa741a5c5bb4983895ced9332ec",
+          "source_lines": [
+            10,
+            14
+          ],
+          "scope_observation": "配置/直接append與未知consumer分離；非全alias掃描。"
+        },
+        {
+          "source_file": "kr-temp-roy/20261027-160157-chatgpt-web-roy-T08-105-extended-six-plane-readers-and-bucket-ownership.md",
+          "source_blob_sha": "8096d2e1639ca22f60d5b95e2c98cd382be9fae6",
+          "source_sha256": "87a8aaa5ddc823df68949a6513a1e5163a8bd365f454f5a489638fd1da77968a",
+          "source_lines": [
+            101,
+            125
+          ],
+          "scope_observation": "22桶配置與額外append；EBX加count未追不能一概count++。"
+        }
+      ],
+      "risk": "R1 with known conflicts quarantined; any normative native or protocol use requires targeted R2/R3",
+      "integration_proposed": "CONFLICT_CHECKED",
+      "s00_acceptance": "NOT_REQUESTED_OR_GRANTED"
+    },
+    {
+      "key": "early-bucket-owner",
+      "assertion": "7D13xx/7D17xx候選dispatch/reset路的實際owner是否等於FB7740全域heap仍須精確alias證據；相似stride或未直接讀global均不足判相同／不同。",
+      "evidence_level": "UNKNOWN",
+      "evidence_scope": "104/105候選consumer、KB限制與129映射衝突",
+      "limits": [
+        "不輸出全域consumer已證實或必定不同實例",
+        "未接通scene主迴圈",
+        "R1來源整合，不是全文通過、函式通過、native_complete、runtime或Server驗收。"
+      ],
+      "conflicts": [
+        {
+          "key": "legacy-coordinate",
+          "description": "歷史flat標籤與PE VA不可拼接；既有24份來源mapping判決及Task退回保留。",
+          "refs": [
+            "shared/integrations/T01-20261029-semantic-review/t08-early/mapping-reviews.json",
+            "kr/tasks/T08/README.md"
+          ],
+          "disposition": "保留座標/來源SHA群組界線；排除錯標VA所衍生caller/vtable等價；不將text -400套到rdata指標或所有早期來源。",
+          "r2_if_needed": "需要映射衝突來源之正式事實時逐blob核PE/raw/完整CFG。"
+        },
+        {
+          "key": "owner-not-resolved",
+          "description": "104/105 從consumer未直接讀FB7740不能推出一定不同實例；後續129有相反owner說法但既有mapping裁決FAILED，不能擇新覆舊。",
+          "refs": [
+            "kr-temp-roy/T08-KNOWLEDGE-BASE.md",
+            "shared/integrations/T01-20261029-semantic-review/t08-early/mapping-reviews.json"
+          ],
+          "disposition": "共同保留實際owner／alias未解，僅允許候選consumer導航；既不斷言等同全域桶也不斷言必定不同。",
+          "r2_if_needed": "S00需要consume/reset順序時依精確PE座標追owner指標到global heap，先處理129來源映射。"
+        },
+        {
+          "key": "plane-writer-stale",
+          "description": "102–105當時未找到係數writer；KB後續列838430/799D20更新鏈，故早期搜尋未命中不能作現在不存在writer的結論。",
+          "refs": [
+            "kr-temp-roy/T08-KNOWLEDGE-BASE.md"
+          ],
+          "disposition": "只保留camera/正規化/alias語義未知；不把歷史未找到升格不存在寫入者；後續writer導航交middle來源處理。",
+          "r2_if_needed": "若規格依賴係數來源或方向，引用118–120精確版本定向核證。"
+        }
+      ],
+      "affected_spec_ids": [],
+      "existing_claim_ids": [],
+      "existing_claim_reuse_scope": null,
+      "source_refs": [
+        {
+          "source_file": "kr-temp-roy/20261027-141645-chatgpt-web-roy-T08-104-dispatch-consumer-ownership.md",
+          "source_blob_sha": "dfc82bdfe01182716a0feb324a06189284eb8823",
+          "source_sha256": "22450653be502fd6347054433fde087c900dc164ef3c439ba72675ecb63897ce",
+          "source_lines": [
+            12,
+            16
+          ],
+          "scope_observation": "記錄候選consumer並保留未證全域owner，不能因非直接global load推不同實例。"
+        },
+        {
+          "source_file": "kr-temp-roy/20261027-141645-chatgpt-web-roy-T08-104-dispatch-consumer-ownership.md",
+          "source_blob_sha": "dfc82bdfe01182716a0feb324a06189284eb8823",
+          "source_sha256": "22450653be502fd6347054433fde087c900dc164ef3c439ba72675ecb63897ce",
+          "source_lines": [
+            180,
+            198
+          ],
+          "scope_observation": "alias/實際基址與主調度為明示缺口。"
+        },
+        {
+          "source_file": "kr-temp-roy/20261027-155733-chatgpt-web-roy-T08-105-global-buckets-plane-writers.md",
+          "source_blob_sha": "b9dec64386ff0f8221eaf31add3876b346bbbf12",
+          "source_sha256": "a4975f5ddd2bf1337b088255541b1e8feb7a0c52b8c61092b7313f997a61d734",
+          "source_lines": [
+            46,
+            57
+          ],
+          "scope_observation": "候選consumer基址和逐位元組xref限制，不是完整指標身份證明。"
+        },
+        {
+          "source_file": "kr-temp-roy/20261027-160157-chatgpt-web-roy-T08-105-extended-six-plane-readers-and-bucket-ownership.md",
+          "source_blob_sha": "8096d2e1639ca22f60d5b95e2c98cd382be9fae6",
+          "source_sha256": "87a8aaa5ddc823df68949a6513a1e5163a8bd365f454f5a489638fd1da77968a",
+          "source_lines": [
+            129,
+            146
+          ],
+          "scope_observation": "多階段dispatch/reset可導航，actual owner/alias仍未解。"
+        },
+        {
+          "source_file": "kr-temp-roy/T08-KNOWLEDGE-BASE.md",
+          "source_blob_sha": "98326bdd1e3ad25903316817b3352a57a0b89cc8",
+          "source_sha256": "4b7d8821a43359e8953cbead34bd17e69bdb09ebac15e6fcbb01bd430acc313a",
+          "source_lines": [
+            87,
+            97
+          ],
+          "scope_observation": "長期明示全域consumer/owner未知及版本衝突，不接受KB自稱穩定作R3。"
+        }
+      ],
+      "risk": "R1 with known conflicts quarantined; any normative native or protocol use requires targeted R2/R3",
+      "integration_proposed": "CONFLICT_CHECKED",
+      "s00_acceptance": "NOT_REQUESTED_OR_GRANTED"
+    },
+    {
+      "key": "early-coordinate-boundary",
+      "assertion": "reaudit來源區分PE映射與歷史flat標籤，text受影響位置的標籤差不能自動移動rdata內真實指標或全程式所有函式。",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "reaudit-01/02的PE/raw/VA與來源群組限制",
+      "limits": [
+        "本輪不重跑native/自動校正原稿",
+        "已FAILED映射版本與Task退回維持",
+        "R1來源整合，不是全文通過、函式通過、native_complete、runtime或Server驗收。"
+      ],
+      "conflicts": [
+        {
+          "key": "legacy-coordinate",
+          "description": "歷史flat標籤與PE VA不可拼接；既有24份來源mapping判決及Task退回保留。",
+          "refs": [
+            "shared/integrations/T01-20261029-semantic-review/t08-early/mapping-reviews.json",
+            "kr/tasks/T08/README.md"
+          ],
+          "disposition": "保留座標/來源SHA群組界線；排除錯標VA所衍生caller/vtable等價；不將text -400套到rdata指標或所有早期來源。",
+          "r2_if_needed": "需要映射衝突來源之正式事實時逐blob核PE/raw/完整CFG。"
+        }
+      ],
+      "affected_spec_ids": [],
+      "existing_claim_ids": [],
+      "existing_claim_reuse_scope": null,
+      "source_refs": [
+        {
+          "source_file": "kr-temp-roy/20261028-012810-chatgpt-web-roy-T08-integrated-reaudit-01.md",
+          "source_blob_sha": "b41f55a2fdfb3ef3dc4c1dc58e421466720b45e0",
+          "source_sha256": "6f7b6f43c85ea848f909d06642f94c804a38f6325fb0d480eed5962177a0fb29",
+          "source_lines": [
+            11,
+            15
+          ],
+          "scope_observation": "明示正式任務scope及PE/flat座標差，不混指標或把bytes當全文pass。"
+        },
+        {
+          "source_file": "kr-temp-roy/20261028-013305-chatgpt-web-roy-T08-integrated-reaudit-02-spawn-registration-and-script-cleanup.md",
+          "source_blob_sha": "99c9a0edbfffd8a81f7df26a40a9933ddb33f40d",
+          "source_sha256": "3711b79ee117ab0ca0a6bf6f3e6da20621fa0e6b6622dc130ea58493089a8482",
+          "source_lines": [
+            22,
+            22
+          ],
+          "scope_observation": "不能統一-400全部function label或跨群拼caller。"
+        }
+      ],
+      "risk": "R1 with known conflicts quarantined; any normative native or protocol use requires targeted R2/R3",
+      "integration_proposed": "CONFLICT_CHECKED",
+      "s00_acceptance": "NOT_REQUESTED_OR_GRANTED"
+    },
+    {
+      "key": "early-script-cleanup",
+      "assertion": "reaudit-02把script DeleteAllObject的owner/tree及virtual清理與GameInfo主樹分開；DeleteObject註冊與no-op不能證明通用Actor erase或最終回收。",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "563A70/823850/5666A0/476430來源級局部介面",
+      "limits": [
+        "動態類型、完整引用清理與GameInfo同步未閉合",
+        "不擬定移除封包/Server時間",
+        "R1來源整合，不是全文通過、函式通過、native_complete、runtime或Server驗收。"
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "existing_claim_ids": [],
+      "existing_claim_reuse_scope": null,
+      "source_refs": [
+        {
+          "source_file": "kr-temp-roy/20261028-013305-chatgpt-web-roy-T08-integrated-reaudit-02-spawn-registration-and-script-cleanup.md",
+          "source_blob_sha": "99c9a0edbfffd8a81f7df26a40a9933ddb33f40d",
+          "source_sha256": "3711b79ee117ab0ca0a6bf6f3e6da20621fa0e6b6622dc130ea58493089a8482",
+          "source_lines": [
+            17,
+            18
+          ],
+          "scope_observation": "script owner清理與GameInfo及no-op DeleteObject分開。"
+        }
+      ],
+      "risk": "R1 with known conflicts quarantined; any normative native or protocol use requires targeted R2/R3",
+      "integration_proposed": "CONFLICT_CHECKED",
+      "s00_acceptance": "NOT_REQUESTED_OR_GRANTED"
+    }
+  ],
+  "sources": [
+    {
+      "source_file": "kr-temp-roy/20261025-143719-chatgpt-web-roy-T08-CMonster-constructor.md",
+      "source_blob_sha": "0c0c284ee4203e58ba87a8bae9e01a56655f13b6",
+      "source_sha256": "2b2d446bd7e8fa7425fe5c5917d25b7deaf706c0821e8fb91b18a590b16d2b4c",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_intake_id": "SRC-0348",
+      "historical_status": "Historical bounded/source-level record; no whole-document FULL_PASS",
+      "historical_status_unchanged": true,
+      "integration_proposed": "CONFLICT_CHECKED",
+      "review_method": "R0 identity and R1 actual narrative reading; bounded source observations only, no new native audit",
+      "claim_keys": [
+        "early-components"
+      ],
+      "source_lines": [
+        [
+          7,
+          29
+        ]
+      ],
+      "observations": [
+        {
+          "claim_key": "early-components",
+          "source_lines": [
+            7,
+            29
+          ],
+          "source_excerpt": "- Summary: Verified the constructor calls `0x004C7070`, allocates three structures (`0x3C`, `0x38`, `0x3C` bytes) and stores their pointers in an indexed table at `object + 0xF4 + index*4`.\n\n## Direct machine-code observations\n\n| VA | Evidence / interpretation |\n| --- | --- |\n| `0x004D173A` | `call 0x004C7070` with object pointer pushed immediately before |\n| `0x004D1747`, `0x004D1773` | `push 0x3c; call 0x00891268` (allocation) |\n| `0x004D1788–0x004D1798` | passes `ecx = 3` and object via `eax` to `0x004CB230`, writes vtable-like `0x00C077CC` |\n| `0x004D17C1` | writes structure pointer to `[edi + ebx*4 + 0xf4]`, `ebx` loaded from `[esi + 8]` |\n| `0x004D17D7–0x004D17D9` | `push 0x38; call 0x00891268` |\n| `0x004D17E6–0x004D17FE` | passes `ecx = 2` to `0x004CB230`, writes vtable-like `0x00C077B4` |\n| `0x004D182F` | second indexed table write |\n| `0x004D1845–0x004D1847` | `push 0x3c; call 0x00891268` |\n| `0x004D185E–0x004D186F` | passes `ecx = 5` to `0x004CB230`, writes vtable-like `0x00C077FC` |\n| `0x004D189A` | third indexed table write |\n| `0x004D18B2` | writes `1` to `[edi + 0x39c]` |\n| `0x004D17B4`, `0x004D1822`, `0x004D188D` | if slot nonzero, calls `0x006EDB60` before writing pointer (semantics unconfirmed) |\n\n## Interpretation limits\n\n- `CMonster` naming comes from prior KR documentation; the binary inspection independently verifies the instructions but not class names.\n- The meanings of component IDs `3`, `2`, `5`, the vtables, and field `+0x39C` remain unknown.",
+          "observation": "建構三種配置／owner+F4索引表；元件ID與欄位用途仍未知。",
+          "conflict_keys": []
+        }
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "spec_disposition": "Downstream Client navigation only; no demonstrated current S00 Phase-B SPEC dependency; S00 acceptance not granted."
+    },
+    {
+      "source_file": "kr-temp-roy/20261026-003617-chatgpt-web-roy-T08-owner-vtable-68.md",
+      "source_blob_sha": "5e795621563e36969aa45a59004c383f993b1e3c",
+      "source_sha256": "1e8b63c83cf4a2bd26e1ca04ba6f83aaf9c1b3e89c80b3a9d447dbfd6af90aab",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_intake_id": "SRC-0349",
+      "historical_status": "Historical bounded/source-level record; no whole-document FULL_PASS",
+      "historical_status_unchanged": true,
+      "integration_proposed": "CONFLICT_CHECKED",
+      "review_method": "R0 identity and R1 actual narrative reading; bounded source observations only, no new native audit",
+      "claim_keys": [
+        "early-owner-setter"
+      ],
+      "source_lines": [
+        [
+          12,
+          35
+        ]
+      ],
+      "observations": [
+        {
+          "claim_key": "early-owner-setter",
+          "source_lines": [
+            12,
+            35
+          ],
+          "source_excerpt": "At `0x004D1749`, CMonster constructor writes vtable pointer `0x00C0C9DC` at `[edi]` (its main-object vptr).\n\n`0x00C0C9DC` is in `.rdata` (VMA `0x00BD2000`, file offset `0x007D0600`). Slot at vtable `+0x68` (file offset `0x0080B044`) contains `0x004C8DA0` little-endian.\n\nThe constructor also sets the different vtable `0x00C0CA64` at object `+0xF0`; its own slot `+0x68` points to `0x004D2820`, **not** `0x004C8DA0`. The call site in `0x004CB2C0` uses `owner = [component+4]` and `vptr = [owner]`, so for the constructed CMonster it resolves through the **primary** vtable. Virtual calls may resolve differently for other runtime object types.\n\n## Target function 0x004C8DA0–0x004C8DCF\n\n| VA | Instruction | Direct observation |\n|---|---|---|\n| `0x004C8DA3` | `mov eax,[ebp+8]` | loads first integer argument |\n| `0x004C8DA7` | `mov edi,[ecx+0x15c]` | loads owner field `+0x15C` |\n| `0x004C8DAD` | `mov [ecx+0x38c],eax` | writes the argument to `owner+0x38C` |\n| `0x004C8DB3–0x004C8DBE` | tests `edi` and `[ecx+0x370]` | gates downstream call on both being nonzero |\n| `0x004C8DC0` | `fld [ebp+0xc]` | loads second argument as 32-bit float |\n| `0x004C8DC3–0x004C8DC8` | pushes float and integer; `call 0x007A6970` | forwards two values to another routine when gate passes |\n| `0x004C8DCF` | `ret 8` | callee pops 8 bytes of arguments |\n\nThe earlier caller `0x004CB2C0` obtains `owner+0x38C` at `0x004CB2D2` and can invoke vtable `+0x68` with a small integer code and `1.0f` (e.g. `0x004CB305–0x004CB315`). This supports a **state-code setter with conditional forwarding** description. Whether these codes are actions, animation states, AI modes, etc. is not established by this trace.\n\n## Limits / follow-up\n\n- Only CMonster's *primary* vtable target is resolved here; other subclasses or stages may have different vptr values.\n- No semantic names are claimed for codes, owner `+0x15C` / `+0x370`, or callee `0x007A6970`.",
+          "observation": "primary與+F0次級vptr分開；+38C setter及條件轉送。",
+          "conflict_keys": []
+        }
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "spec_disposition": "Downstream Client navigation only; no demonstrated current S00 Phase-B SPEC dependency; S00 acceptance not granted."
+    },
+    {
+      "source_file": "kr-temp-roy/20261026-080719-chatgpt-web-roy-T08-lookup-515790.md",
+      "source_blob_sha": "90dce9718c128931560a3e0279f3482b32e3168f",
+      "source_sha256": "b992dd848777fc00a0bfb3c3dc677ec8b5d0fe734440361ec143265a08bfce4e",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_intake_id": "SRC-0350",
+      "historical_status": "Historical bounded/source-level record; no whole-document FULL_PASS",
+      "historical_status_unchanged": true,
+      "integration_proposed": "CONFLICT_CHECKED",
+      "review_method": "R0 identity and R1 actual narrative reading; bounded source observations only, no new native audit",
+      "claim_keys": [
+        "early-linked-lookup"
+      ],
+      "source_lines": [
+        [
+          8,
+          40
+        ]
+      ],
+      "observations": [
+        {
+          "claim_key": "early-linked-lookup",
+          "source_lines": [
+            8,
+            40
+          ],
+          "source_excerpt": "- Summary: `0x00515790` is a 32-bit **unsigned-key ordered-tree exact-lookup** helper. It writes the found node or the sentinel node to an output pointer (EAX), rather than directly returning a game object.\n\n## Direct disassembly evidence\n\n| VA | Instruction/effect |\n|---|---|\n| `0x0051579B` | `mov edx,[esi+4]`: obtains container sentinel |\n| `0x0051579E` | `mov ecx,[edx+4]`: starts traversal |\n| `0x005157A1` | `cmp byte ptr [ecx+0x19],0`: sentinel/end flag |\n| `0x005157B0` | `cmp [ecx+0xc],edi`: compare node key to input key |\n| `0x005157B3` | `jae 0x005157BA`: unsigned comparison |\n| `0x005157B5` | `mov ecx,[ecx+8]`: one child |\n| `0x005157BA–0x005157BC` | retain candidate and traverse `[ecx]`: other child |\n| `0x005157CD` | `cmp edx,ecx`: no candidate if sentinel |\n| `0x005157D1–0x005157D4` | `cmp esi,[edx+0xc]; jb 0x005157E5`: reject if input key is lower than candidate (unsigned) |\n| `0x005157DD` | `mov [eax],ecx`: write matching node |\n| `0x005157EE` | `mov [eax],ecx`: write sentinel for miss |\n\n## Verified call context in 0x007A7800\n\n- `0x007A782F`: calls `0x0047C290`, returning a container pointer in EAX.\n- `0x007A783F`: calls `0x00515790`; `ECX` holds the container, `EAX` points to local output, and stack parameter is pointer to lookup key.\n- `0x007A7844–0x007A784A`: compares returned node with `[container+4]` sentinel; miss branches toward NULL return.\n- `0x007A784C`: hit uses node `+0x10` payload as object pointer.\n- `0x007A784F–0x007A7856`: obtains `[payload+0x54]`, then addresses its `+0xD4` tree.\n- `0x007A7865`: uses *another* helper, `0x0082EF00`, for the final lookup.\n\nTogether, `0x007A7800` contains (1) an optional ID-remapping tree lookup at `this+0x7C`, (2) a link-object lookup using `0x00515790`, and (3) a final data tree lookup using `0x0082EF00`.\n\n## Limits / next steps\n\n- Both helpers are unsigned 32-bit key lookups, but their end flag offsets differ: `0x00515790` uses `+0x19`, whereas `0x0082EF00` uses `+0x15`. The exact STL/container types remain unproven.\n- Neither lookup proves whether the eventual data represents animations, actions, or other gameplay concepts.",
+          "observation": "exact-lookup輸出node/sentinel，不直接回Actor；含不同helper旗標offset。",
+          "conflict_keys": []
+        }
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "spec_disposition": "Downstream Client navigation only; no demonstrated current S00 Phase-B SPEC dependency; S00 acceptance not granted."
+    },
+    {
+      "source_file": "kr-temp-roy/20261026-115941-chatgpt-web-roy-T08-upstream-key-source.md",
+      "source_blob_sha": "8d6be4c48aa2dde3a633c4711a705b4ac74cb666",
+      "source_sha256": "8316099f2108a88295bd3b5a129a6fa6a54a05e65870d8fd62dd1e0a52f18032",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_intake_id": "SRC-0351",
+      "historical_status": "Historical bounded/source-level record; no whole-document FULL_PASS",
+      "historical_status_unchanged": true,
+      "integration_proposed": "CONFLICT_CHECKED",
+      "review_method": "R0 identity and R1 actual narrative reading; bounded source observations only, no new native audit",
+      "claim_keys": [
+        "early-upstream-entry"
+      ],
+      "source_lines": [
+        [
+          19,
+          40
+        ]
+      ],
+      "observations": [
+        {
+          "claim_key": "early-upstream-entry",
+          "source_lines": [
+            19,
+            40
+          ],
+          "source_excerpt": "- `[ebp-0x138]` is an upstream node pointer. `[node+0x0c]` is the immediate source of the integer/key argument.\n- The preceding `0x0054115E` pushes `0x00FC0E90` to `0x0079D610`. `0x00541134–0x0054115A` initializes this global on first use if its flag is unset.\n- `0x0079D8E0` receives the global object in ESI and handles another group of stack arguments (ends in `ret 0x20`). A single `push edx` near the call is **not** the complete eight-dword argument setup; prior stack-built temporary objects also matter.\n\n## Callee observations\n\n| VA | Observed behavior |\n|---|---|\n| `0x0079D915` | calls `0x007D0110` with structure at `[esi+0x10]` |\n| `0x0079D941` | compares candidate with `[esi+0x14]` sentinel |\n| `0x0079D958` | failed match returns `AL=0` |\n| `0x0079D976` | calls `0x00515790` for lookup in ESI container |\n| `0x0079D98A` | calls `0x007A0C70`, an earlier inspected conditional tree insertion helper |\n| `0x0079D993` | calls `0x007A0DA0` with target from `[edi+0x28]` |\n| `0x0079D9AA` | successful branch returns `AL=1` |\n\nThe `[edi+0x28]` source for the update is from the candidate node found by earlier lookup. **Do not claim that the updated pointer is newly constructed at this call site.** Its creation and data provenance are still to be traced.\n\n## Limitations / next steps\n\n- Class names, game semantics, the upstream node's origin, and why two lookup trees are involved are not verified.\n- Review the full enclosing function around `0x00540Fxx–0x005413xx`, especially how local `[ebp-0x138]` is initialized and advanced, to establish the traversal and provenance.",
+          "observation": "node+C為key、candidate+28來源；八DWORD呼叫上下文不只單一push。",
+          "conflict_keys": []
+        }
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "spec_disposition": "Downstream Client navigation only; no demonstrated current S00 Phase-B SPEC dependency; S00 acceptance not granted."
+    },
+    {
+      "source_file": "kr-temp-roy/20261026-175219-chatgpt-web-roy-T08-string-indexed-lookup-716740.md",
+      "source_blob_sha": "e1533923a20621de5e0b760bbe7d1ef141df49b3",
+      "source_sha256": "105392514993edcedf780e38e31f06ff8cbf5ed42416b34f8a32294363f44278",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_intake_id": "SRC-0352",
+      "historical_status": "Historical bounded/source-level record; no whole-document FULL_PASS",
+      "historical_status_unchanged": true,
+      "integration_proposed": "CONFLICT_CHECKED",
+      "review_method": "R0 identity and R1 actual narrative reading; bounded source observations only, no new native audit",
+      "claim_keys": [
+        "early-string-lookup"
+      ],
+      "source_lines": [
+        [
+          21,
+          39
+        ]
+      ],
+      "observations": [
+        {
+          "claim_key": "early-string-lookup",
+          "source_lines": [
+            21,
+            39
+          ],
+          "source_excerpt": "The caller supplies a fixed string pointer in ECX, a container/lookup object pointer in EDX, and an additional stack argument. The meaning of the constant string has not been confirmed here.\n\n## Disassembly-backed observations\n\n| Address | Observation |\n|---|---|\n| `0x00716784–0x00716795` | measures the null-terminated ECX string then calls `0x00402A70` to prepare a temporary string |\n| `0x0071679A–0x007167A3` | passes that temporary string to `0x007B6F30` with the EDX-supplied lookup context |\n| `0x007167AB` | compares returned node with the sentinel at `[esi+0x04]` |\n| `0x007167B0–0x007167BB` | compares candidate node key using `0x0049AE30` |\n| `0x007167F5–0x007167FC` | if sentinel/no match, returns NULL |\n| `0x007167FE` | obtains pointer `[edi+0x28]` from matching node |\n| `0x00716804–0x00716808` | adds `0x3C` to that pointer and calls `0x007197E0` with another argument |\n| `0x00716828–0x0071682A` | returns using `ret 4` |\n\n## Cautions\n\n- `0x00716740` does not directly return `[node+0x28]`: it calls `0x007197E0` on an adjusted pointer.\n- Neither the returned pointer's original C++ type nor the key string's game-specific meaning is yet established.",
+          "observation": "字串查找後adjust+3C forward，不是直接Actor建立。",
+          "conflict_keys": []
+        }
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "spec_disposition": "Downstream Client navigation only; no demonstrated current S00 Phase-B SPEC dependency; S00 acceptance not granted."
+    },
+    {
+      "source_file": "kr-temp-roy/20261026-190148-chatgpt-web-roy-T08-CMonster-inherited-components.md",
+      "source_blob_sha": "77b8dcf98f0c94bd74ad8f52081bd10fea0eb08f",
+      "source_sha256": "baa6880f4b66a090a2e42341e43b4f6760afcb9c57f39ce6ecd81cd6fdcd9765",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_intake_id": "SRC-0353",
+      "historical_status": "Historical bounded/source-level record; no whole-document FULL_PASS",
+      "historical_status_unchanged": true,
+      "integration_proposed": "CONFLICT_CHECKED",
+      "review_method": "R0 identity and R1 actual narrative reading; bounded source observations only, no new native audit",
+      "claim_keys": [
+        "early-components"
+      ],
+      "source_lines": [
+        [
+          11,
+          27
+        ]
+      ],
+      "observations": [
+        {
+          "claim_key": "early-components",
+          "source_lines": [
+            11,
+            27
+          ],
+          "source_excerpt": "1. `CMonster` at `0x004D1710` calls `0x004C7070` at `0x004D173A` after pushing the same object pointer.\n2. The parent constructor `0x004C7070` calls `0x004CA730` (base data layout initialization) at `0x004C709D`. It then calls `0x004C9F90` with address `object+0xF0`; the helper zeros 25 contiguous pointer-sized fields at offsets `+0x04...+0x64` relative to its argument and sets a vtable and `+0x68` zero. Consequently the owner component slot table begins at `object+0xF4`.\n3. The parent ctor allocates `0x38` bytes at `0x004C723F`, invokes `0x004CB230` with `ECX=1`, sets vtable `0x00C0779C`, initializes offsets `+0x28/+0x2C/+0x30` to 1, and inserts this component using its `component+0x08` type id into `object+0xF4 + id*4` at `0x004C72D9`. The parent also populates `object+0x158` if not already set, and initializes other object components later in the parent ctor (outside narrow scope).\n4. The derived `CMonster` ctor initializes `+0x420/+0x428/+0x430` to 0 and `+0x42C` to float zero at `0x004D1759–0x004D176D`.\n5. The derived constructor allocates three more components:\n   - type **3**, `0x3C` bytes, vtable `0x00C077CC` (`0x004D1747–0x004D17C1`);\n   - type **2**, `0x38` bytes, vtable `0x00C077B4` (`0x004D17D7–0x004D182F`);\n   - type **5**, `0x3C` bytes, vtable `0x00C077FC` (`0x004D1845–0x004D189A`).\n   Each uses `0x004CB230` then writes a slot in the same inherited `+0xF4 + id*4` component table.\n6. The `CMonster` ctor sets `object+0x39C=1` at `0x004D18B2`. The parent originally sets the field to `0x7f` at `0x004C717F`; this is an explicit subclass override during construction.\n\n## Important interpretation and limits\n\n- The parent creates at least **one** additional type-1 component. Thus `CMonster` has at least types **1, 2, 3, 5** in its inherited component system; this is a lower bound because other parent constructor parts and later initialization may add entries.\n- `0x004C9F90` is a component-slot-table constructor (its 25 zeroed pointer slots and header), **not evidence of model/AvatarBase resource loading**.\n- The `object+0x158` pointer is a fallback/first-component pointer set if null; **not proven** to be the graphical resource pointer.\n- No direct call to `0x007AEE60`, `0x007197E0` or AvatarBase loaders was observed **within the inspected derived constructor**; lack of a direct call here does not exclude indirect or later binding.",
+          "observation": "父／派生共用元件表；至少1/2/3/5，fallback+158不證model資源。",
+          "conflict_keys": []
+        }
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "spec_disposition": "Downstream Client navigation only; no demonstrated current S00 Phase-B SPEC dependency; S00 acceptance not granted."
+    },
+    {
+      "source_file": "kr-temp-roy/20261026-211852-chatgpt-web-roy-T08-dispatch-composite-id.md",
+      "source_blob_sha": "96061996117565ac35209a4dcd027155703395d6",
+      "source_sha256": "a9be68489b56d60391801477ed17ed7db2dafb3b63877111687ff08b5b8f11c2",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_intake_id": "SRC-0354",
+      "historical_status": "Historical bounded/source-level record; no whole-document FULL_PASS",
+      "historical_status_unchanged": true,
+      "integration_proposed": "CONFLICT_CHECKED",
+      "review_method": "R0 identity and R1 actual narrative reading; bounded source observations only, no new native audit",
+      "claim_keys": [
+        "early-actor-interface",
+        "early-scene-dispatch"
+      ],
+      "source_lines": [
+        [
+          11,
+          35
+        ],
+        [
+          39,
+          61
+        ]
+      ],
+      "observations": [
+        {
+          "claim_key": "early-scene-dispatch",
+          "source_lines": [
+            11,
+            35
+          ],
+          "source_excerpt": "`0x004B7DC0` initializes a **global table**, first entry at `0x00FD2CFC`, stride eight, stop address `0x00FD8BA8`, for **(0xFD8BA8 - 0xFD2CFC) / 8 = 3029** entries. Default handler is `0x004B7EC0`; the second dword is set from `0x00BF2375` (shared diagnostic-name pointer).\n\n`0x004ADD50` initializes a **scene-relative table**, 3029 entries of eight bytes, starting at offset `object+0x04` relative to the table base supplied in EAX. The scene dispatcher `0x004C4670` indexes at `scene+0x5EAC+8*index`. The initializer installs `0x004AE4D0` at table-relative `+0x3C`, equivalent to **index 7**.\n\nThe *same capacity* does not by itself prove that all message IDs have the same semantics between global and scene tables.\n\n## Confirmed three-argument forwarding\n\n`0x004B7EC0`:\n```asm\n004B7EC3 cmp DWORD PTR [ecx+0x5EAC],0\n004B7ECA je 0x004B7EDA\n004B7ECC mov ecx,[ecx+0x5EAC]\n004B7ED2 mov eax,[ecx]\n004B7ED4 mov eax,[eax+0x04]\n004B7ED7 pop ebp\n004B7ED8 jmp eax\n```\nWhen a scene is present, this function uses tail-jump dispatch and does *not* reconstruct the three incoming stack arguments. The scene's `0x004C4670` then reads `[ebp+0x08]` (data), `[ebp+0x0C]` (length), and `[ebp+0x10]` (command), and pushes them again, calling the indexed handler via `call ebx` at `0x004C46C5`.\n\nAbsent a scene, `0x004B7EC0` reports `Received packet from invalid scene. Command #%d` and returns zero.\n\n`0x004FDA30` is an additional table-based fallback dispatcher, also accessing a function and a diagnostic-name pointer at eight-byte stride.\n\n**Limit:** the actual top-level transport/socket receive parser, mapping raw bytes into `data/length/command`, was not established by this step. In particular the first two bytes passed to `0x004AE4D0` cannot yet be conclusively called a network header or command field.",
+          "observation": "global/scene表及三參數轉送；transport未對上。",
+          "conflict_keys": []
+        },
+        {
+          "claim_key": "early-actor-interface",
+          "source_lines": [
+            39,
+            61
+          ],
+          "source_excerpt": "`0x004AE4D0` reads `buffer` from `[ebp+8]` and `length` from `[ebp+0x0C]`. It computes `floor((length-2)/26)` when length >=2, and starts its EBX cursor at `buffer+6`. Thus current record starts at `EBX-4 = buffer+2+26*i`.\n\nIt checks existence with a 16-bit key from `WORD PTR [ebx-4]` (`record+0`) and returns to next record if already found. It also constructs a separate composite identifier:\n```asm\n004AE5B8 movzx eax,BYTE PTR [ebx-4]  ; record[0] type\n004AE5BC movzx edi,BYTE PTR [ebx-2]  ; record[2]\n004AE5C0 movzx ecx,WORD PTR [ebx]    ; record[4..5]\n004AE5C3 dec edi\n004AE5C4 mov edx,eax\n004AE5C6 shl edx,8\n004AE5C9 or edi,edx\n004AE5CB shl edi,16\n004AE5CE or edi,ecx\n004AE5D0 mov [esp+0x1C],edi\n```\nEquivalent:\n```cpp\nuint32_t compositeId = (((uint32_t(record[2]) - 1u) |\n                         (uint32_t(record[0]) << 8)) << 16)\n                        | ReadUInt16LE(record + 4);\n```\nCare: the `record[2] - 1` is computed as a full 32-bit operation; if this byte is zero, `dec edi` underflows and the `or`/shift semantics differ from naive 8-bit field packing. Do not silently narrow without confirming valid domain. The composite value is stored to a local stack slot at `[esp+0x1C]`; its ultimate use requires a follow-on dataflow trace.\n",
+          "observation": "row計數及composite打包；record[2]==0時32-bit underflow，不可縮成byte。",
+          "conflict_keys": [
+            "spawn-policy-unknown"
+          ]
+        }
+      ],
+      "conflicts": [
+        "spawn-policy-unknown"
+      ],
+      "affected_spec_ids": [],
+      "spec_disposition": "Downstream Client navigation only; no demonstrated current S00 Phase-B SPEC dependency; S00 acceptance not granted."
+    },
+    {
+      "source_file": "kr-temp-roy/20261026-235051-chatgpt-web-roy-T08-object-tree-lifecycle.md",
+      "source_blob_sha": "2e969d1c238adca0d57db6d4854b7d8010392c5b",
+      "source_sha256": "53758d4cd4508d148eb340e4ae4887b40bac51e3243095f1301b9d54f95d9d22",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_intake_id": "SRC-0355",
+      "historical_status": "Historical bounded/source-level record; no whole-document FULL_PASS",
+      "historical_status_unchanged": true,
+      "integration_proposed": "CONFLICT_CHECKED",
+      "review_method": "R0 identity and R1 actual narrative reading; bounded source observations only, no new native audit",
+      "claim_keys": [
+        "early-actor-interface"
+      ],
+      "source_lines": [
+        [
+          11,
+          44
+        ],
+        [
+          54,
+          59
+        ]
+      ],
+      "observations": [
+        {
+          "claim_key": "early-actor-interface",
+          "source_lines": [
+            11,
+            44
+          ],
+          "source_excerpt": "\n0x004AE58F: `movzx edx,WORD PTR [ebx-4]`；此時 EBX=record+4，因此 Key=uint16_le(record+0)。\n0x004AE59C: `mov ecx,0x00FAB138`；\n0x004AE5A5: `call 0x0082EF00`；\n0x004AE5AA–0x004AE5B2: 比較結果節點和 [0x00FAB13C]，若不相等則跳到 0x004AED42（下一筆紀錄），因此有重複檢查。\n\n## 2. 0x0082EF00 是有哨兵的 32-bit Key 排序樹查找\n\n0x0082EF0B–0x0082EF11：取得 root/header 與節點 sentinel 標記 [node+0x15]；\n0x0082EF20：比較 [node+0x0C] 與輸入 Key；\n0x0082EF25–0x0082EF2C：沿節點左右子指標遍歷；\n0x0082EF3B–0x0082EF55：檢查結果節點是否符合 Key 邊界。\n因此這是樹狀有序容器而非線性陣列。節點內容 pointer 候選在 +0x10，需透過具體呼叫點區分。\n\n## 3. 同一命令中還有不同用途的容器\n\n0x004AE957–0x004AE984 使用 `0x00FC0E90` 及 `0x00515790` 查詢資源資料 ID（record+4 的 uint16），與場景物件去重樹不同。\n0x004AE9E1–0x004AEA13 使用 `0x00FAB148` 和 `0x008438C0` 查詢另一個物件/狀態樹，並檢查節點值 +0x10 之物件 +0x20 的 byte >=5。\n0x004AEC4A–0x004AEC68 再次使用 `0x00FAB148` 和 `0x008438C0`。\n不能把這三個容器都稱為「CMonster 列表」。\n\n## 4. 已確認的反向讀取者 0x004C6EA0\n\n0x004C6EF9–0x004C6F13：以傳入結構 +0x04 的 32-bit 值查找 0x00FAB138。\n0x004C6F1F：從結果節點 +0x10 讀出物件指標；\n0x004C6F26：讀該物件 +0xBC byte 並返回；查無節點或空指標時返回 0。\n因此這個容器不只是去重機制，還被其他物件狀態查詢讀取。\n\n## 5. 另一條記錄的索引與關聯狀態\n\n0x004AEB2C–0x004AEB30：把 record+0 的 uint16 存入 object+0x04。\n0x004AEC77–0x004AEC83：在條件符合時呼叫 0x004C6E50。\n0x004C6E50 先將輸入 Key 存到傳入上下文 +0x04，接著透過 0x0040F060 回傳的物件 +0x08 樹及 0x0082EF00 查找相同 Key；若找到並且節點 +0x10 非空，取該目標物件 +0x88 的低16位，寫到上下文 +0x08，否則填零。\n這是關聯/反查邏輯，**不是**對 0x00FAB138 插入的證據。",
+          "observation": "FAB138去重／反向讀取與FC0E90/FAB148分離，4C6E50不是插入證據。",
+          "conflict_keys": [
+            "old-rejection-withdrawn"
+          ]
+        },
+        {
+          "claim_key": "early-actor-interface",
+          "source_lines": [
+            54,
+            59
+          ],
+          "source_excerpt": "## 7. 尚未證實\n\n- 0x00FAB138 樹是在哪一處插入 newly allocated CMonster；命令 7 中沒有在上述已審查片段直接識別插入呼叫。\n- 精確的刪除/析構函式，以及刪除命令號。\n- 0x00FAB138、0x00FAB148 的所有權及兩者如何保持同步。\n- 不可把 0x004C6E50 誤認為插入函式；它做 Key-based 反向查找與更新。",
+          "observation": "這一版尚未定位insert/remove，不把當時未知說成現行不存在。",
+          "conflict_keys": []
+        }
+      ],
+      "conflicts": [
+        "old-rejection-withdrawn"
+      ],
+      "affected_spec_ids": [],
+      "spec_disposition": "Downstream Client navigation only; no demonstrated current S00 Phase-B SPEC dependency; S00 acceptance not granted."
+    },
+    {
+      "source_file": "kr-temp-roy/20261027-014750-chatgpt-web-roy-T08-component-destruction-25-slots.md",
+      "source_blob_sha": "e20aaae0ccb3003beb16920f64ca6f332cfe7835",
+      "source_sha256": "6fab24b82f03505ac5e6ddbb8522e477f328d5ac54c5fbcbde417d21cdc9e9b4",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_intake_id": "SRC-0356",
+      "historical_status": "Historical bounded/source-level record; no whole-document FULL_PASS",
+      "historical_status_unchanged": true,
+      "integration_proposed": "CONFLICT_CHECKED",
+      "review_method": "R0 identity and R1 actual narrative reading; bounded source observations only, no new native audit",
+      "claim_keys": [
+        "early-components",
+        "early-event-meaning"
+      ],
+      "source_lines": [
+        [
+          29,
+          38
+        ],
+        [
+          40,
+          44
+        ]
+      ],
+      "observations": [
+        {
+          "claim_key": "early-components",
+          "source_lines": [
+            29,
+            38
+          ],
+          "source_excerpt": "- 25 個槽位，索引 0..24，指標跨度 4 bytes；位置為 owner+0xF4 至 owner+0x154。\n- +0x158 在表外；迴圈結束時 EDI=0，該欄位被清空。\n- 非空元件呼叫其 vtable+0x00，傳入 1，然後將槽位清零。\n- 這是釋放元件，不是呼叫 vtable+0x04 的事件入口；不可據此聲稱事件 7、8 在此觸發。\n\n## 建構端交叉驗證\n\n0x004C7306–0x004C7314：呼叫 0x004CB230 初始化 Type 4，再設定 vtable=0x00C077E4；後續根據 component+0x08 類型索引存入 owner+0xF4+4*type。\n0x004CB850 是 Type 4 vtable+0x04，設定事件 8；0x004CB590 是 Type 3 vtable+0x04，設定事件 7。這些方法的實際調度者仍未直接定位。\n0x004C7DF0 的事件重播使用的是 owner vtable+0x68 並取 owner+0x38C，而非元件 vtable+0x04。",
+          "observation": "25槽0..24與+158表外；virtual0(1)不能冒充virtual4事件。",
+          "conflict_keys": []
+        },
+        {
+          "claim_key": "early-event-meaning",
+          "source_lines": [
+            40,
+            44
+          ],
+          "source_excerpt": "## 尚未確認\n\n- 誰在何種條件下間接呼叫 component vtable+0x04。\n- 命令 26 是否曾在元件析構之前觸發 Type 4 事件 8。\n- 事件 7、8 的遊戲語意（不能直接命名為死亡事件）。",
+          "observation": "事件7/8語義與具體網路移除中間鏈未知。",
+          "conflict_keys": []
+        }
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "spec_disposition": "Downstream Client navigation only; no demonstrated current S00 Phase-B SPEC dependency; S00 acceptance not granted."
+    },
+    {
+      "source_file": "kr-temp-roy/20261027-022355-chatgpt-web-roy-T08-type1-event8-flagged-tree.md",
+      "source_blob_sha": "4608f88c2d66df59fafa134f28488f59734caeda",
+      "source_sha256": "fe0b615c5d07994924e4fe26102ecba78ffe5d5aba0cd651d658a127eb7e3dc2",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_intake_id": "SRC-0357",
+      "historical_status": "Historical bounded/source-level record; no whole-document FULL_PASS",
+      "historical_status_unchanged": true,
+      "integration_proposed": "CONFLICT_CHECKED",
+      "review_method": "R0 identity and R1 actual narrative reading; bounded source observations only, no new native audit",
+      "claim_keys": [
+        "early-event-meaning"
+      ],
+      "source_lines": [
+        [
+          19,
+          21
+        ],
+        [
+          37,
+          67
+        ]
+      ],
+      "observations": [
+        {
+          "claim_key": "early-event-meaning",
+          "source_lines": [
+            19,
+            21
+          ],
+          "source_excerpt": "0x004CB230 把 ECX 類型寫到 component+0x08，owner 指標寫到 component+0x04，之後建構器使用這個類型索引登記到 owner+0xF4+4*type。\n.vtable 0x00C0779C：+0x00=0x004CB8E0，+0x04=0x005F5D10，+0x08=0x004CB2C0，+0x0C=0x005F5D10。\n因此該事件狀態轉換函式是 **Type 1 vtable+0x08**，不同於 Type 3 的事件 7 方法以及 Type 4 的事件 8 方法。",
+          "observation": "Type1 virtual8與Type3/4 virtual4要分離。",
+          "conflict_keys": []
+        },
+        {
+          "claim_key": "early-event-meaning",
+          "source_lines": [
+            37,
+            67
+          ],
+          "source_excerpt": "樹節點 +0x15 用作哨兵判斷；符合節點位元旗標時回傳 1，無符合時回傳 0。暫命名 HasFlaggedStateNode，並無證據等同 HP=0 或死亡。\n\n## 3. Type 1 狀態轉換器的事件 8 條件\n\n```asm\n004CB2C7 mov eax,[ebx+0x04]       ; owner\n004CB2CA mov ecx,[eax+0x15c]      ; resource\n004CB2D2 mov edi,[eax+0x38c]      ; prior event\n004CB2DB test ecx,ecx\n004CB2DF cmp DWORD PTR [eax+0x370],0\n004CB2E8 mov esi,[ecx+0x11c]      ; resource field\n004CB2F2 mov ecx,eax\n004CB2F4 call 0x004C9ED0\n004CB2F9 test eax,eax\n004CB2FB je 0x004CB320\n004CB2FD test esi,esi\n004CB2FF je 0x004CB49E\n004CB305 mov ecx,[ebx+0x04]\n004CB308 fld1\n004CB30C mov edx,[eax+0x68]\n004CB313 push 0x08\n004CB315 call edx\n```\n只有 HasFlaggedStateNode(owner)!=0 且 resource+0x11c 非零才進入該事件 8 分支；目前不能以此推論死亡語意。\n\n## 4. 值得繼續追查\n\n- 誰把 owner+0x3F4 狀態樹節點的 +0x13 bit0 設為 1，何時清除。\n- 哪個函式透過 Type 1 component vtable+0x08 調度 0x004CB2C0。\n- owner+0x15C 資源 +0x11C 指向何種資料；是否對應動作/特效狀態。\n- 是否存在與 HP 更新或命令 26 直接相連的證據。",
+          "observation": "flagged state及resource+11C gate不證HP0或死亡。",
+          "conflict_keys": []
+        }
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "spec_disposition": "Downstream Client navigation only; no demonstrated current S00 Phase-B SPEC dependency; S00 acceptance not granted."
+    },
+    {
+      "source_file": "kr-temp-roy/20261027-032040-chatgpt-web-roy-T08-state-tree-resource-lifetime.md",
+      "source_blob_sha": "ebe53d869c106230e7a12509d07991d9fe2bc0dd",
+      "source_sha256": "fa9e35311e8e8fb5c5eac37f716c80d5f85faf3c771ee56e85e15e834f8327b5",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_intake_id": "SRC-0358",
+      "historical_status": "Historical bounded/source-level record; no whole-document FULL_PASS",
+      "historical_status_unchanged": true,
+      "integration_proposed": "CONFLICT_CHECKED",
+      "review_method": "R0 identity and R1 actual narrative reading; bounded source observations only, no new native audit",
+      "claim_keys": [
+        "early-state-resources"
+      ],
+      "source_lines": [
+        [
+          9,
+          37
+        ]
+      ],
+      "observations": [
+        {
+          "claim_key": "early-state-resources",
+          "source_lines": [
+            9,
+            37
+          ],
+          "source_excerpt": "## 結論一：命令 151 會清空狀態樹，不會在該迴圈同步清空 +0x164 資源槽位\n\n0x004D2F1F 取得 object+0x3F4 的哨兵節點；0x004D2F25 讀取節點；0x004D2F36–0x004D2F4C 逐項經 0x0073EBA0 和 0x0089120C 清理狀態樹節點。\n0x004D2F62–0x004D2F79 重設哨兵節點三個連結；0x004D2F7E、0x004D2F84、0x004D2F8A、0x004D2F90 分別將 owner+0x3F8/+0x400/+0x404/+0x408 清零。\n這段流程沒有將 +0x164 開始的資源指標逐項歸零。\n\n## 結論二：0x004C9840 以 stateId 索引資源槽位並按需建立\n\n```asm\n004C986E movzx edi,cx\n004C98A0 movzx ebx,di\n004C98CE cmp DWORD PTR [esi+ebx*4+0x164],0\n004C98D6 jne 0x004C996D\n...\n004C993B call 0x00551CD0\n004C995D call 0x00551DD0\n004C9966 mov DWORD PTR [esi+ecx*4+0x164],eax\n004C996D lea edx,[ebp-0x10]\n004C9976 call 0x004CA0B0\n004C997E mov WORD PTR [eax],bx\n004C9992 mov BYTE PTR [eax+0x02],dl\n004C99A6 mov BYTE PTR [eax+0x03],cl\n```\n\n在既有指標非零時，跳過新資源建立而繼續更新狀態樹；因此狀態樹每批重建與資源槽位按需建立是不同生命週期機制。舊狀態消失並不意味資源在同個函式中同步析構；不能排除其他地方後續清理。\n\n## 結論三：所核對的直接索引前沒有明確的 <128 比較\n\nstateId 經 MOVZX 成為非負索引並進入 [esi+ebx*4+0x164]；從函式入口至這個首次索引，沒有可辨識的 stateId < 128 檢查。其他已確認的資源清理會遍歷 128 槽，但此時尚不能確定合法 ID 領域及上游完整驗證。不得僅憑此推論為安全漏洞。",
+          "observation": "狀態樹清空不同步清128槽，索引上游界限未知。",
+          "conflict_keys": []
+        }
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "spec_disposition": "Downstream Client navigation only; no demonstrated current S00 Phase-B SPEC dependency; S00 acceptance not granted."
+    },
+    {
+      "source_file": "kr-temp-roy/20261027-093000-chatgpt-web-roy-T08-079-state-reconcile.md",
+      "source_blob_sha": "f0939bca42ee0d83489bdb038837d3141ffc98b5",
+      "source_sha256": "5388fa9b8af92a530087e5195250b337f0fe114a1f80976dfe1eb523d9e75e8f",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_intake_id": "SRC-0024",
+      "historical_status": "PENDING",
+      "historical_status_unchanged": true,
+      "integration_proposed": "CONFLICT_CHECKED",
+      "review_method": "R0 identity and R1 actual narrative reading; bounded source observations only, no new native audit",
+      "claim_keys": [
+        "early-state-resources"
+      ],
+      "source_lines": [
+        [
+          4,
+          15
+        ]
+      ],
+      "observations": [
+        {
+          "claim_key": "early-state-resources",
+          "source_lines": [
+            4,
+            15
+          ],
+          "source_excerpt": "0x004C83C0 在 object+0x36C 倒數為零時掃描 object+0x164 開始的128個指標。0x00826280 在 object+0x3F0 狀態樹查當前 stateId；不存在且槽非空，呼叫 0x004C7DB0 並清空槽。\n\n```asm\n004C83CA cmp dword ptr [esi+36Ch],0\n004C83F3 call 00826280\n004C8400 jne 004C842F\n004C841E call 004C7DB0\n004C8426 mov dword ptr [ebx],0\n004C8436 cmp edi,80h\n```\n\n命令151更新樹卻不立刻清128槽，舊資源可以暫時保留。0x004C9840 直接按 stateId 索引槽，所核對指令沒有顯式 128 邊界；上游檢查仍待驗證，不能當作確認漏洞。",
+          "observation": "+36C倒數後128槽對照狀態樹回收；151更新與即時清槽分離。",
+          "conflict_keys": []
+        }
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "spec_disposition": "Downstream Client navigation only; no demonstrated current S00 Phase-B SPEC dependency; S00 acceptance not granted."
+    },
+    {
+      "source_file": "kr-temp-roy/20261027-093001-chatgpt-web-roy-T08-080-object-update.md",
+      "source_blob_sha": "3ce0f430ab665e69ceb66a7ebedddb1b75323bc1",
+      "source_sha256": "87ebc6cc864388e96cd4e41ece516275cf2cfde0c28a447651932852f805d857",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_intake_id": "SRC-0025",
+      "historical_status": "PENDING",
+      "historical_status_unchanged": true,
+      "integration_proposed": "CONFLICT_CHECKED",
+      "review_method": "R0 identity and R1 actual narrative reading; bounded source observations only, no new native audit",
+      "claim_keys": [
+        "early-pool-lifecycle",
+        "early-state-resources"
+      ],
+      "source_lines": [
+        [
+          4,
+          4
+        ],
+        [
+          14,
+          14
+        ]
+      ],
+      "observations": [
+        {
+          "claim_key": "early-state-resources",
+          "source_lines": [
+            4,
+            4
+          ],
+          "source_excerpt": "0x004C8580 的直接轉接：0x004CDD49、0x004D0F84、0x004D1683、0x004D1AE0(jmp)、0x004D2894。object+0x36C 由更新函式遞減／重設30，後呼叫 0x004C83C0；更新函式另遍歷128槽並將關聯數據寫入 +0x28/+0x2C/+0x30，置 +0x70=1。",
+          "observation": "共用update轉接與+36C/128槽關聯更新。",
+          "conflict_keys": []
+        },
+        {
+          "claim_key": "early-pool-lifecycle",
+          "source_lines": [
+            14,
+            14
+          ],
+          "source_excerpt": "0x007BE5F0 是資源解除關聯並遞減管理器計數的入口，特定條件走同步容器，否則批次清理；返回會清掉持有指標。尚未確認固定 frame 頻率或全部虛擬呼叫者。",
+          "observation": "解除資源與pool/direct分支的來源摘要，固定頻率未知。",
+          "conflict_keys": []
+        }
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "spec_disposition": "Downstream Client navigation only; no demonstrated current S00 Phase-B SPEC dependency; S00 acceptance not granted."
+    },
+    {
+      "source_file": "kr-temp-roy/20261027-093002-chatgpt-web-roy-T08-081-shared-cleanup.md",
+      "source_blob_sha": "1a4a02f0107a3f4d962a369b607b146c28de07b7",
+      "source_sha256": "56e63e4454ff29aac8790e537098380d169efee8d6f129eeedf5f805d8c69bee",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_intake_id": "SRC-0026",
+      "historical_status": "PENDING",
+      "historical_status_unchanged": true,
+      "integration_proposed": "CONFLICT_CHECKED",
+      "review_method": "R0 identity and R1 actual narrative reading; bounded source observations only, no new native audit",
+      "claim_keys": [
+        "early-pool-lifecycle",
+        "early-state-resources"
+      ],
+      "source_lines": [
+        [
+          4,
+          4
+        ],
+        [
+          6,
+          6
+        ]
+      ],
+      "observations": [
+        {
+          "claim_key": "early-state-resources",
+          "source_lines": [
+            4,
+            4
+          ],
+          "source_excerpt": "共用 vtable 基址 0x00C07554，+0x20 指向 0x004C8580。建構 0x004C70BE xor esi,esi，0x004C70EA 寫 object+0x36C=0。首次更新先設30，並非立即清理。",
+          "observation": "更新vtable及倒數初值/首次30行為。",
+          "conflict_keys": []
+        },
+        {
+          "claim_key": "early-pool-lifecycle",
+          "source_lines": [
+            6,
+            6
+          ],
+          "source_excerpt": "0x007BE0F0 逐一解除子項 +0x08 虛擬資源，呼叫 vtable+0x08、+0x00(參數1) 然後清指標，置 resource+0x74=0。0x007DD1A0 根據 manager+0x44 選擇管理器+0x64 鎖保護 +0x7C 資源池，或直接呼叫 0x007BD850 與 0x0089120C free。0x007BD850 釋放子指標動態陣列並清 +0x04/+0x08/+0x0C。底層共享資源不一定與包裝物件同一時刻被釋放。",
+          "observation": "子項清理、manager+44選路和array free；不等於同時釋放wrapper/resource。",
+          "conflict_keys": []
+        }
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "spec_disposition": "Downstream Client navigation only; no demonstrated current S00 Phase-B SPEC dependency; S00 acceptance not granted."
+    },
+    {
+      "source_file": "kr-temp-roy/20261027-093003-chatgpt-web-roy-T08-082-pool-consumer.md",
+      "source_blob_sha": "a7dd8e0e9b1a156ab8371d77cbacef256814a7fd",
+      "source_sha256": "283ebde77476d492b0e7929bb7c33be1b36922e1c548e7be4cafe18c48556666",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_intake_id": "SRC-0027",
+      "historical_status": "PENDING",
+      "historical_status_unchanged": true,
+      "integration_proposed": "CONFLICT_CHECKED",
+      "review_method": "R0 identity and R1 actual narrative reading; bounded source observations only, no new native audit",
+      "claim_keys": [
+        "early-pool-lifecycle"
+      ],
+      "source_lines": [
+        [
+          4,
+          14
+        ]
+      ],
+      "observations": [
+        {
+          "claim_key": "early-pool-lifecycle",
+          "source_lines": [
+            4,
+            14
+          ],
+          "source_excerpt": "0x007DD1F0 消費 manager+0x7C/+0x80 指標陣列：\n```asm\n007DD203 mov eax,[esi+7Ch]\n007DD206 mov ecx,[esi+80h]\n007DD20C sub ecx,eax\n007DD20E sar ecx,2\n007DD21B call 007BE0F0\n007DD232 call 007BD850\n007DD238 call 0089120C\n```\n0x007B8030 批次排空資源池並關閉延後模式，0x007B7FD0 啟用延後模式。0x007DD100 對 manager+0x5C 計數歸零執行清理，+0x60 是不同層級計數。+0x7C 容器的可復用能力在 T08-083 進一步確認。",
+          "observation": "+7C/+80容器消費、mode排空及+5C/+60計數分離。",
+          "conflict_keys": []
+        }
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "spec_disposition": "Downstream Client navigation only; no demonstrated current S00 Phase-B SPEC dependency; S00 acceptance not granted."
+    },
+    {
+      "source_file": "kr-temp-roy/20261027-093004-chatgpt-web-roy-T08-083-reuse-pool.md",
+      "source_blob_sha": "748ba56c578953c6e16399d383678ee7bc7d1388",
+      "source_sha256": "2ef7a33a0a723778787c42d2a03f569a0dcf887b50abc54189e9e9c1f02613a4",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_intake_id": "SRC-0028",
+      "historical_status": "PENDING",
+      "historical_status_unchanged": true,
+      "integration_proposed": "CONFLICT_CHECKED",
+      "review_method": "R0 identity and R1 actual narrative reading; bounded source observations only, no new native audit",
+      "claim_keys": [
+        "early-pool-lifecycle"
+      ],
+      "source_lines": [
+        [
+          4,
+          13
+        ]
+      ],
+      "observations": [
+        {
+          "claim_key": "early-pool-lifecycle",
+          "source_lines": [
+            4,
+            13
+          ],
+          "source_excerpt": "0x007DCFB0 取得資源時先檢查 manager+0x7C 與 +0x80，非空則自尾端取出，交給 0x007BE5B0 reset；空才新建。\n```asm\n007DCFC9 mov eax,[ebx+7Ch]\n007DCFCC cmp eax,[ebx+80h]\n007DCFD2 je 007DD00A\n007DCFDA mov esi,[eax-04h]\n007DCFDF call 007BE5B0\n007DCFF2 mov [ebx+80h],eax\n```\n0x007AAF1F 上游呼叫啟用延遲回收 0x007B7FD0；0x007AB155 上游呼叫排空/停用 0x007B8030。0x007B8522 增 manager+0x5C，0x007DD12A 減，歸零時清理池。0x007DCFB0 增 manager+0x60、0x007BE5F0 減。池應稱為共享資源復用池而非僅待刪除佇列。",
+          "observation": "取得先pop/reset再新建，池可復用；mode與計數來源區分。",
+          "conflict_keys": []
+        }
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "spec_disposition": "Downstream Client navigation only; no demonstrated current S00 Phase-B SPEC dependency; S00 acceptance not granted."
+    },
+    {
+      "source_file": "kr-temp-roy/20261027-093005-chatgpt-web-roy-T08-084-resource-templates.md",
+      "source_blob_sha": "436c02fd1c945d35f7588f248f559f2703db9542",
+      "source_sha256": "670c183efdc2ba51f0b717cd34ef945b010e94b851b51c635cf0f430cccbd84d",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_intake_id": "SRC-0029",
+      "historical_status": "PENDING",
+      "historical_status_unchanged": true,
+      "integration_proposed": "CONFLICT_CHECKED",
+      "review_method": "R0 identity and R1 actual narrative reading; bounded source observations only, no new native audit",
+      "claim_keys": [
+        "early-binding-resolution",
+        "early-pool-lifecycle"
+      ],
+      "source_lines": [
+        [
+          4,
+          4
+        ],
+        [
+          6,
+          6
+        ]
+      ],
+      "observations": [
+        {
+          "claim_key": "early-pool-lifecycle",
+          "source_lines": [
+            4,
+            4
+          ],
+          "source_excerpt": "0x007DCFB0 從池復用舊物件時調 0x007BE5B0 僅局部 reset，保留子項指標陣列；新建路徑在 0x007DD011 配置 0x7C bytes，0x007BD7E0 初始化。新資源 +0x00 指向 manager，+0x04/+0x08/+0x0C=0，+0x18=1.0f，+0x1C=0.0f，+0x70=1，+0x74=0，+0x78=1。manager+0x4C/+0x50 保存模板指標範圍。",
+          "observation": "復用局部reset與新配置7C/初始化欄位分開。",
+          "conflict_keys": []
+        },
+        {
+          "claim_key": "early-binding-resolution",
+          "source_lines": [
+            6,
+            6
+          ],
+          "source_excerpt": "0x007BDF90 為按名稱綁定子項，0x007DC510 使用 0x007B86F0 查名稱樹，命中時呼叫 node+0x24 關聯物件 vtable+0x0C 判定是否移除，若回傳0則虛擬析構並呼叫 0x007B8680 刪樹節點。直接呼叫 0x007DCFB0 至少有 0x007B8275/0x007F6FDC。尚待釐清名稱集合及虛擬方法語意。",
+          "observation": "名稱predicate/virtual清理只作索引介面導航，排除排序樹措辭。",
+          "conflict_keys": [
+            "heap-index-tree"
+          ]
+        }
+      ],
+      "conflicts": [
+        "heap-index-tree"
+      ],
+      "affected_spec_ids": [],
+      "spec_disposition": "Downstream Client navigation only; no demonstrated current S00 Phase-B SPEC dependency; S00 acceptance not granted."
+    },
+    {
+      "source_file": "kr-temp-roy/20261027-093006-chatgpt-web-roy-T08-085-template-binding.md",
+      "source_blob_sha": "15960ff22aef13e11d631a4a9db13e881189c5e0",
+      "source_sha256": "33c8c6f59f0fcfd5093e4314b90d77eb0a72e6196d3cba57db09ee92f7b52c4a",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_intake_id": "SRC-0030",
+      "historical_status": "PENDING",
+      "historical_status_unchanged": true,
+      "integration_proposed": "CONFLICT_CHECKED",
+      "review_method": "R0 identity and R1 actual narrative reading; bounded source observations only, no new native audit",
+      "claim_keys": [
+        "early-binding-resolution",
+        "early-numeric-transforms"
+      ],
+      "source_lines": [
+        [
+          5,
+          6
+        ],
+        [
+          27,
+          38
+        ]
+      ],
+      "observations": [
+        {
+          "claim_key": "early-binding-resolution",
+          "source_lines": [
+            5,
+            6
+          ],
+          "source_excerpt": "## 已確認的新路徑\n0x007BDF90 遍歷 [resource+0x04,resource+0x08) 指標陣列，逐項讀 entry+0x04 名稱，轉為臨時字串，使用全域名稱集合 0x00FE173C 和函式 0x007B86F0 查找。查找命中且 node+0x24 有對象，呼叫該對象 vtable+0x10 並寫回 entry+0x08。空關聯觸發報告路徑。完成後呼叫 0x007BE150 並設 resource+0x74=1。",
+          "observation": "item名稱→node+24 virtual10→item+8，resolution後+74=1。",
+          "conflict_keys": [
+            "heap-index-tree"
+          ]
+        },
+        {
+          "claim_key": "early-numeric-transforms",
+          "source_lines": [
+            27,
+            38
+          ],
+          "source_excerpt": "### 0x007BE150 證據\n```asm\n007BE166 fld dword ptr [ebx+18h]\n007BE1E6 fld dword ptr [ebx+34h]\n007BE1EC call 00790DC0\n007BE1F1 fld dword ptr [ebx+38h]\n007BE1F8 call 00790E90\n007BE1FD fld dword ptr [ebx+3Ch]\n007BE204 call 00790F60\n007BE20D call 00780890\n```\n這是一套讀取多個 float、透過下游轉換函式建立數值狀態的流程；尚不能直接命名為渲染或世界座標更新。",
+          "observation": "多float數值流程未命名渲染/世界座標。",
+          "conflict_keys": []
+        }
+      ],
+      "conflicts": [
+        "heap-index-tree"
+      ],
+      "affected_spec_ids": [],
+      "spec_disposition": "Downstream Client navigation only; no demonstrated current S00 Phase-B SPEC dependency; S00 acceptance not granted."
+    },
+    {
+      "source_file": "kr-temp-roy/20261027-093843-chatgpt-web-roy-T08-086-registry-transform.md",
+      "source_blob_sha": "75f5d65ddbc0e339320ab2037d1c4db356dbb771",
+      "source_sha256": "26e10c5fed4b33c282e14839052b99eece18605fb1eca7d6041f87f7b6c1a266",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_intake_id": "SRC-0031",
+      "historical_status": "PENDING",
+      "historical_status_unchanged": true,
+      "integration_proposed": "CONFLICT_CHECKED",
+      "review_method": "R0 identity and R1 actual narrative reading; bounded source observations only, no new native audit",
+      "claim_keys": [
+        "early-name-containers",
+        "early-numeric-transforms"
+      ],
+      "source_lines": [
+        [
+          5,
+          11
+        ],
+        [
+          13,
+          13
+        ]
+      ],
+      "observations": [
+        {
+          "claim_key": "early-name-containers",
+          "source_lines": [
+            5,
+            11
+          ],
+          "source_excerpt": "0x007B7DA0 initializes dynamically allocated 0x2C registry via 0x007DC3D0, stores pointer into 0x00FE173C. 0x007B7E90 uses 0x007B7EF0 to clean and zero registry.\n\n    007B7DC7 push 2Ch\n    007B7DC9 call 00891268\n    007B7DDE call 007DC3D0\n    007B7DEE mov ds:0FE173Ch,eax\n    007B7E91 mov esi,[0FE173Ch]",
+          "observation": "FE173C為heap配置指標，cleanup後置零。",
+          "conflict_keys": [
+            "heap-index-tree"
+          ]
+        },
+        {
+          "claim_key": "early-numeric-transforms",
+          "source_lines": [
+            13,
+            13
+          ],
+          "source_excerpt": "0x007BE150 builds multiple numeric transform sets using 0x00790DC0, 0x00790E90, 0x00790F60, 0x00780890. Exact matrix/rotation semantics pending. Separate adjacent global 0x00FE1740 investigated in 087.",
+          "observation": "數值變換helper組合，矩陣/旋轉細節未定。",
+          "conflict_keys": []
+        }
+      ],
+      "conflicts": [
+        "heap-index-tree"
+      ],
+      "affected_spec_ids": [],
+      "spec_disposition": "Downstream Client navigation only; no demonstrated current S00 Phase-B SPEC dependency; S00 acceptance not granted."
+    },
+    {
+      "source_file": "kr-temp-roy/20261027-095424-chatgpt-web-roy-T08-087-registry-transform-binding.md",
+      "source_blob_sha": "a22ef45aaa5657a28a1ccfe73577df1c21ddc491",
+      "source_sha256": "c81987576644f2e9cc484e9d07bb9da8b33d586baeba51027238b30b545548a5",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_intake_id": "SRC-0032",
+      "historical_status": "PENDING",
+      "historical_status_unchanged": true,
+      "integration_proposed": "CONFLICT_CHECKED",
+      "review_method": "R0 identity and R1 actual narrative reading; bounded source observations only, no new native audit",
+      "claim_keys": [
+        "early-name-containers",
+        "early-numeric-transforms"
+      ],
+      "source_lines": [
+        [
+          5,
+          5
+        ],
+        [
+          7,
+          16
+        ]
+      ],
+      "observations": [
+        {
+          "claim_key": "early-name-containers",
+          "source_lines": [
+            5,
+            5
+          ],
+          "source_excerpt": "0x007DC3D0 initializes dynamic registry 0x00FE173C, while 0x00FE1740 has separate tree sentinel 0x00FE1744 and vector 0x00FE1750..1758. 0x007DC480 walks first registry and destroys node+0x24 linked objects.",
+          "observation": "heap指標與FE1740相鄰容器分離，不合併型別。",
+          "conflict_keys": [
+            "heap-index-tree"
+          ]
+        },
+        {
+          "claim_key": "early-numeric-transforms",
+          "source_lines": [
+            7,
+            16
+          ],
+          "source_excerpt": "0x007BE150 writes actual transformed values to bound child, not merely local temporaries.\n\n    007BE45A mov eax,[esi+08h]\n    007BE465 mov eax,[eax+78h]\n    007BE478 mov [eax],ecx\n    007BE47E mov [eax+08h],ecx\n    007BE4BF mov dword ptr [eax+28h],1\n    007BE4F3 call 0077E910\n\nComposed transform also written to storage through +0x74. resource+0x20 calculated via per-child aggregation. Exact meaning unresolved at this stage.",
+          "observation": "數值寫回bound child與+74，不只是local temporary。",
+          "conflict_keys": []
+        }
+      ],
+      "conflicts": [
+        "heap-index-tree"
+      ],
+      "affected_spec_ids": [],
+      "spec_disposition": "Downstream Client navigation only; no demonstrated current S00 Phase-B SPEC dependency; S00 acceptance not granted."
+    },
+    {
+      "source_file": "kr-temp-roy/20261027-095711-chatgpt-web-roy-T08-088-transform-quaternion-aggregate.md",
+      "source_blob_sha": "beade732f94f2efe96d8e2ae2439f0abf49d7003",
+      "source_sha256": "bf7a45f19f24b7fd2107ccd8e00e826af7cc4fad654aa5439cd25774fd91da25",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_intake_id": "SRC-0033",
+      "historical_status": "PENDING",
+      "historical_status_unchanged": true,
+      "integration_proposed": "CONFLICT_CHECKED",
+      "review_method": "R0 identity and R1 actual narrative reading; bounded source observations only, no new native audit",
+      "claim_keys": [
+        "early-numeric-transforms"
+      ],
+      "source_lines": [
+        [
+          5,
+          16
+        ]
+      ],
+      "observations": [
+        {
+          "claim_key": "early-numeric-transforms",
+          "source_lines": [
+            5,
+            16
+          ],
+          "source_excerpt": "Transform record 0x2C bytes: +0x00..08 translation float3, +0x0C..18 quaternion float4, +0x1C..24 scale float3, +0x28 marker. 0x0077E910 composes transforms with 0x0077E800 quaternion vector rotation and 0x0077E880 Hamilton product. Handedness and parent-child order pending.\n\n    007BE56E fld dword ptr [esp+2Ch]\n    007BE572 fld dword ptr [esp+30h]\n    007BE576 fcom st(1)\n    007BE578 fnstsw ax\n    007BE57C test ah,41h\n    007BE57F jne 007BE587\n    007BE581 fstp dword ptr [esp+2Ch]\n    007BE5A4 fstp dword ptr [ebx+20h]\n\nFor finite ordered floats this is maximum aggregation to pooled resource +0x20; candidate from binding+0x70, descriptor+0x64 and descriptor+0x40. Real semantic interpretation and division-by-zero handling unknown.",
+          "observation": "2C變換／quaternion與finite ordered最大值；手性/物理意義不定。",
+          "conflict_keys": []
+        }
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "spec_disposition": "Downstream Client navigation only; no demonstrated current S00 Phase-B SPEC dependency; S00 acceptance not granted."
+    },
+    {
+      "source_file": "kr-temp-roy/20261027-095900-chatgpt-web-roy-T08-089-aggregate-reader-audit.md",
+      "source_blob_sha": "9f30cdfa816082495214dfdefaa9aa83ef46aff9",
+      "source_sha256": "ed569ff3ed20b4619b6958990b5755472eb769e31d6b01d4786f24bf2217a364",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_intake_id": "SRC-0034",
+      "historical_status": "PENDING",
+      "historical_status_unchanged": true,
+      "integration_proposed": "CONFLICT_CHECKED",
+      "review_method": "R0 identity and R1 actual narrative reading; bounded source observations only, no new native audit",
+      "claim_keys": [
+        "early-numeric-transforms",
+        "early-wrapper-provenance"
+      ],
+      "source_lines": [
+        [
+          14,
+          36
+        ],
+        [
+          4,
+          12
+        ]
+      ],
+      "observations": [
+        {
+          "claim_key": "early-wrapper-provenance",
+          "source_lines": [
+            14,
+            36
+          ],
+          "source_excerpt": "## Important false positive separation\n    007BEBDF mov eax,[ebx+0Ch]\n    007BEBE8 mov eax,[eax+20h]\n    007BEC0D call 0077F030\n\nThis accesses a field of an object from [ebx+0x0C], not proven to be 0x7C pooled resource.\n\n    007BEE49 push 40h\n    007BEE4B call 00891268\n    007BEE70 fst dword ptr [eax+20h]\n    007BEE98 mov [esi+0Ch],eax\n\nThe latter is definitely a different 0x40-byte allocation: same offset does not establish pooled-resource reader.\n\n## Positive trace anchor\n    007B826B call 007B8180\n    007B8270 test eax,eax\n    007B8272 je 007B82A3\n    007B8274 push eax\n    007B8275 call 007DCFB0\n    007B827A mov esi,eax\n\nA second direct 0x007DCFB0 call is at 0x007F6FDC. The real pooled resource+0x20 reader still cannot be reliably identified. Continue alias and stored pointer tracking. No radius/duration label established. Scene vtable+0x20 caller still unresolved.",
+          "observation": "指出另一40-byte allocation的+20不證pooled resource reader；早期reader未知後由093補。",
+          "conflict_keys": [
+            "reader-later-located"
+          ]
+        },
+        {
+          "claim_key": "early-numeric-transforms",
+          "source_lines": [
+            4,
+            12
+          ],
+          "source_excerpt": "## Writer confirmed\n    007BE56E fld dword ptr [esp+2Ch]\n    007BE572 fld dword ptr [esp+30h]\n    007BE576 fcom st(1)\n    007BE578 fnstsw ax\n    007BE57C test ah,41h\n    007BE581 fstp dword ptr [esp+2Ch]\n    007BE598 jne 007BE390\n    007BE5A4 fstp dword ptr [ebx+20h]",
+          "observation": "resource+20最大值writer錨點。",
+          "conflict_keys": []
+        }
+      ],
+      "conflicts": [
+        "reader-later-located"
+      ],
+      "affected_spec_ids": [],
+      "spec_disposition": "Downstream Client navigation only; no demonstrated current S00 Phase-B SPEC dependency; S00 acceptance not granted."
+    },
+    {
+      "source_file": "kr-temp-roy/20261027-T08-090-pool-pointer-provenance.md",
+      "source_blob_sha": "cb0e79b2e81dc8349f5d88ca83ff562554ba51b3",
+      "source_sha256": "c002e415a89a9ad65dbcddd167fce3b0633ecf31d6d23dc9d1dfb4a4c109de03",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_intake_id": "SRC-0359",
+      "historical_status": "Historical bounded/source-level record; no whole-document FULL_PASS",
+      "historical_status_unchanged": true,
+      "integration_proposed": "CONFLICT_CHECKED",
+      "review_method": "R0 identity and R1 actual narrative reading; bounded source observations only, no new native audit",
+      "claim_keys": [
+        "early-wrapper-provenance"
+      ],
+      "source_lines": [
+        [
+          6,
+          25
+        ]
+      ],
+      "observations": [
+        {
+          "claim_key": "early-wrapper-provenance",
+          "source_lines": [
+            6,
+            25
+          ],
+          "source_excerpt": "## Two acquisition paths\n0x007B8230 looks up manager by name (0x007B8180) and passes result to 0x007DCFB0, returning pooled 0x7C-byte resource directly:\n```asm\n007B826B call 007B8180\n007B8270 test eax,eax\n007B8272 je 007B82A3\n007B8274 push eax\n007B8275 call 007DCFB0\n007B827A mov esi,eax\n007B828F mov eax,esi\n```\nWrapper creation 0x007F6F50 allocates 0x30-byte object and records pooled resource pointer at wrapper+0x2C:\n```asm\n007F6FBF push 30h\n007F6FC3 call 00891268\n007F6FDC call 007DCFB0\n007F7002 fst dword ptr [esi+20h]\n007F700B mov [esi+2Ch],eax\n```\nThus wrapper+0x20 and pooled resource+0x20 are independent fields. vtable for wrapper starts 0x00C511CC. Aggregated maximum written by 0x007BE150 to pooled resource+0x20 still has no proven reader. Other uses of +0x20 must be traced to allocation provenance. The complete original local note is retained at the corresponding local filename; this file is an evidence-based GitHub consolidation, not verbatim.",
+          "observation": "直接resource返回與30-byte wrapper+2C持有來源分離。",
+          "conflict_keys": [
+            "reader-later-located"
+          ]
+        }
+      ],
+      "conflicts": [
+        "reader-later-located"
+      ],
+      "affected_spec_ids": [],
+      "spec_disposition": "Downstream Client navigation only; no demonstrated current S00 Phase-B SPEC dependency; S00 acceptance not granted."
+    },
+    {
+      "source_file": "kr-temp-roy/20261027-102339-chatgpt-web-roy-T08-091-wrapper-vtable-resource.md",
+      "source_blob_sha": "0c199c355ae3d4db4726f06a5bff2d8de7a47453",
+      "source_sha256": "74bc415d32b5fb333f7910bfa6edadd10cfd508be05e4a85a8938d74446cb30a",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_intake_id": "SRC-0035",
+      "historical_status": "PENDING",
+      "historical_status_unchanged": true,
+      "integration_proposed": "CONFLICT_CHECKED",
+      "review_method": "R0 identity and R1 actual narrative reading; bounded source observations only, no new native audit",
+      "claim_keys": [
+        "early-wrapper-provenance"
+      ],
+      "source_lines": [
+        [
+          6,
+          24
+        ]
+      ],
+      "observations": [
+        {
+          "claim_key": "early-wrapper-provenance",
+          "source_lines": [
+            6,
+            24
+          ],
+          "source_excerpt": "The wrapper vtable starts at 0x00C511CC. Confirmed entries: +0x00 0x007FF760 (destructor); +0x08 0x007FF8E0; +0x10 0x007FF7D0; +0x14 0x007FF810; +0x18 0x007FF850; +0x1C 0x007FF880; +0x20 0x007FF8B0. Further neighboring entries require RTTI boundary check.\n\n## Ownership\n```asm\n007F700B mov [esi+2Ch],eax\n007FF790 lea esi,[edi+2Ch]\n007FF79A call 007BE5F0\n```\nConstructor places pooled resource in wrapper+0x2C. Destructor passes the slot to detach/release routine 0x007BE5F0, which can return the resource to reuse pool.\n\n## Resource setters\n```asm\n007FF7E9 mov ecx,[ecx+2Ch]\n007FF7EC mov [ecx+28h],edx\n007FF7F2 mov [ecx+2Ch],edx\n007FF7F8 mov [ecx+30h],eax\n007FF7FB mov dword ptr [ecx+70h],1\n```\n0x007FF810 likewise sets resource+0x34/38/3C; 0x007FF850 updates resource+0x18 and wrapper fields; 0x007FF880 modifies resource+0x1C. Setter paths mark resource+0x70 dirty. 0x007FF8B0 calls 0x007BD8D0 and optionally reset 0x007BE5B0. 0x007FF8E0 forwards resource pointer to 0x007BDF40. None of the checked reads yet proves actual consumption of pooled resource+0x20. Full original local note remains a separate artifact; this upload is technical consolidation.",
+          "observation": "wrapper表／+2C持有、setter及release；鄰表長度與+20消費不推廣。",
+          "conflict_keys": [
+            "reader-later-located"
+          ]
+        }
+      ],
+      "conflicts": [
+        "reader-later-located"
+      ],
+      "affected_spec_ids": [],
+      "spec_disposition": "Downstream Client navigation only; no demonstrated current S00 Phase-B SPEC dependency; S00 acceptance not granted."
+    },
+    {
+      "source_file": "kr-temp-roy/20261027-104000-chatgpt-web-roy-T08-092-resource-update-dispatch.md",
+      "source_blob_sha": "cb3a2ea443e40609cc90196760665d16a2859e64",
+      "source_sha256": "842c91190ae5ebac49d90e19fd3eb696a85a11266eef2f6df8a64aa469d09ee9",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_intake_id": "SRC-0037",
+      "historical_status": "PENDING",
+      "historical_status_unchanged": true,
+      "integration_proposed": "CONFLICT_CHECKED",
+      "review_method": "R0 identity and R1 actual narrative reading; bounded source observations only, no new native audit",
+      "claim_keys": [
+        "early-binding-gates",
+        "early-resource-update"
+      ],
+      "source_lines": [
+        [
+          23,
+          32
+        ],
+        [
+          57,
+          60
+        ]
+      ],
+      "observations": [
+        {
+          "claim_key": "early-binding-gates",
+          "source_lines": [
+            23,
+            32
+          ],
+          "source_excerpt": "It scans DWORD child pointers in [resource+0x04,+0x08). Only when binding +0x08 nonnull, first child byte zero and binding+0x80 zero does it call binding vtable+0x18. It does not read pooled resource+0x20 in this path.\n\n## Wrapper entry 0x007FF8E0\n```asm\n007FF8E0 mov eax,[ecx+2Ch]\n007FF8E3 push eax\n007FF8E4 call 007BDF40\n007FF8E9 ret\n```\nwrapper+0x2C is passed as resource argument.",
+          "observation": "child null/byte/+80三重gate及wrapper+2C轉入resource。",
+          "conflict_keys": []
+        },
+        {
+          "claim_key": "early-resource-update",
+          "source_lines": [
+            57,
+            60
+          ],
+          "source_excerpt": "resource+0x1C is increased by external float argument scaled by resource+0x24. It then constructs numeric/transform intermediary state. Exact semantic name (time/phase/animation progress) unverified; dirty+0x6C handling and full function tail require tracing.\n\n## Unknowns\nActual pooled resource+0x20 reader remains unlocated. Need wrapper virtual callsite, bound child method vtable+0x18 resolution, 0x007BD8D0 trailing branches and field +0x6C semantics. Full on-disk note available with same filename.",
+          "observation": "累加float phase仍為暫名；未找到reader是早期狀態。",
+          "conflict_keys": [
+            "reader-later-located"
+          ]
+        }
+      ],
+      "conflicts": [
+        "reader-later-located"
+      ],
+      "affected_spec_ids": [],
+      "spec_disposition": "Downstream Client navigation only; no demonstrated current S00 Phase-B SPEC dependency; S00 acceptance not granted."
+    },
+    {
+      "source_file": "kr-temp-roy/20261027-103853-chatgpt-web-roy-T08-093-resource-update-completion-dispatch.md",
+      "source_blob_sha": "d20bc43bb68f6eaf56973456d5efb24dbfd17316",
+      "source_sha256": "b17ae2afdc89e34836bee26df963ef8c7d0a155a5e4fdfb145d9cd59e6c2a597",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_intake_id": "SRC-0036",
+      "historical_status": "PENDING",
+      "historical_status_unchanged": true,
+      "integration_proposed": "CONFLICT_CHECKED",
+      "review_method": "R0 identity and R1 actual narrative reading; bounded source observations only, no new native audit",
+      "claim_keys": [
+        "early-resource-update",
+        "early-update-schedule"
+      ],
+      "source_lines": [
+        [
+          47,
+          118
+        ],
+        [
+          194,
+          203
+        ]
+      ],
+      "observations": [
+        {
+          "claim_key": "early-resource-update",
+          "source_lines": [
+            47,
+            118
+          ],
+          "source_excerpt": "確證 `resource+0x1C += delta * resource+0x24`。由後述「相對偏移、分段、循環」的消費形式，`+0x1C` 應暫稱 `phase` / 時間型位置，`+0x24` 應暫稱 `phaseRate`；是否代表真正秒數、動畫時間不可定論。\n\n### 2.2 兩組變換建立及融合\n\n開頭從 `resource+0x18`、`+0x28..+0x30`、`+0x34..+0x3C`、`+0x40`、`+0x44..+0x4C`、`+0x50..+0x58` 建立暫存變換。`0x00790DC0`、`0x00790E90`、`0x00790F60`（可能是軸向變換工具）與 `0x00780890` 被使用兩輪；`0x0089E860` 初始化暫存變換構造物件。此處不能直接把各欄稱為旋轉角/偏移座標，待細查 helper 的引數與輸出。\n\n### 2.3 子項遍歷及虛擬方法\n\n```asm\n007BDB5A mov eax, [edi+08h]\n007BDB61 sub eax, [edi+04h]\n007BDB68 sar eax, 2\n007BDB8B mov esi, [edx+eax*4]   ; item ptr\n007BDB8E mov ebx, [esi+04h]    ; parameter block\n007BDB94 mov ecx, [esi+08h]    ; polymorphic binding\n007BDB99 mov eax, [edx+1Ch]    ; vtable slot\n007BDB9C fmul dword ptr [ebx+64h]\n007BDBB3 call eax\n007BDBB8 and dword ptr [esp+40h], eax\n```\n\n`item+0x04` 是參數塊，`item+0x08` 是 binding。傳入 binding 虛擬槽 `+0x1C` 的資料為 `(resource.phase - block+0x40) * block+0x64`；回傳值採 AND 聚合，用於函式結尾是否允許設完成。`binding` 記憶體 `+0x70`, `+0x74`, `+0x78` 另用於變換合成/寫入。不能僅憑槽位給出原始函式名稱。\n\n### 2.4 子項 transform output\n\n```asm\n007BDBDD mov eax, [ecx+78h]\n007BDBF1 call 0x0077E910\n007BDBF9 mov ecx, [[esi+08h]+74h]\n007BDC07 mov edx, [eax]\n ...\n007BDC50 mov eax, [eax+28h]\n007BDC50..007BDC52 mov [ecx+28h], eax\n```\n\n當 `block+0x60 != 0` 時可直接寫入 binding+0x74 所指之 transform；另一分支經 `0x0077EA00` 完成拷貝。`0x0077EA00` 已於本段直接反組譯，搬移 `0x00..0x28` 共 `0x2C` byte，並在來源與目標相同時跳過。\n\n`block+0x60 == 0` 時依 `block+0x40` 與 `resource+0x1C` 比較，會在相位達標後處理 `resource+0x5C/+0x60/+0x64`，且視 `resource+0x68==0` 首次以 `0x0077E910 → 0x0077EA00` 更新變換，隨後將 `resource+0x68` 遞增。一般分支合成 `resource+0x44..+0x4C` 與變換並輸出。\n\n### 2.5 循環/分段與子項 tick\n\n```asm\n007BDDBF cmp byte ptr [ebx+61h], 0\n007BDDD3 call 0x008FED10\n007BDDE0 cmp eax, ecx\n007BDDE4 lea eax, [ecx-1]\n...\n007BDE36 fmul st, st(2)\n007BDE3C call 0x008FED10\n...\n007BDE71 mov ecx, [esi+08h]\n007BDE79 mov eax, [edx+14h]\n007BDE7C call eax\n007BDE83 mov eax, [edx+28h]\n007BDE88 call eax\n```\n\n`block+0x61` 控制有界的整數段索引，`binding+0x70` 參與 reciprocal / normalization，`0x008FED10` 返回整數。另一分支亦以相同函式形成環狀/分段的餘量，故有明確 **phase 分段或環繞** 的機制；尚未確立這一定是動畫 loop 或資源重播。呼叫 `binding vtable+0x14` 使用兩個浮點引數，隨後呼叫 `+0x28`。\n\n### 2.6 完成條件及狀態\n\n```asm\n007BDEA5 fld [edi+1Ch]\n007BDEA8 fld [edi+20h]\n007BDEAB fcompp\n007BDEB4 cmp dword ptr [esp+40h], 0\n007BDEBB cmp dword ptr [edi+14h], 0\n007BDEC5 mov dword ptr [edi+6Ch], 1\n007BDEF1 mov dword ptr [edi+68h], 0\n```\n\n當 `resource+0x20` 與進度 `+0x1C` 比較達到指定序關係、所有子項的虛擬 `+0x1C` 回傳值聚合非零、以及 `resource+0x14==0` 時，設 `+0x6C=1`，回寫 `+0x5C/+0x60/+0x64`，並重設 `+0x68=0`。注意 x87 flags / NaN 路徑有例外：應寫成「有序比較及條件」而非先假設純粹的 `>=`。此證據也給先前聚合 `resource+0x20` 一個**確證讀取者**：`0x007BD8D0` 自身！但尚不能稱該值為動畫長度。",
+          "observation": "7BD8D0累加、transform、AND結果及有序完成條件，+20讀取者被明列。",
+          "conflict_keys": [
+            "reader-later-located"
+          ]
+        },
+        {
+          "claim_key": "early-update-schedule",
+          "source_lines": [
+            194,
+            203
+          ],
+          "source_excerpt": "## 5. 待釐清、限制及下一段任務\n\n1. 尚未確認所有 `binding vtable+0x18` 實作與具體職責。需以建立 binding 的 allocation 與 vtable 常數回推，避免僅按偏移猜測。\n2. `binding+0x80` 的寫入者仍需追蹤。三重 gate 只證明何時允許子項虛擬更新。\n3. `resource+0x20` 的**第一個可靠讀取者**已定位到 `0x007BD8D0`；要繼續回追聚合來源是否量綱一致，不應僅憑比較命名成「動畫總長」。\n4. `0x007A86B0` 是 active-list 資源回收迴圈，但**不是** `scene object vtable+0x20` 的主場景更新迴圈；後者仍未定位。\n5. `0x007A87D0` 的較大層更新流程需要接續解析，它已同時串入更新資源與 `0x007BDF00` 虛擬派送。\n6. `0x007BE5B0` 在 wrapper 更新完成後可被直接呼叫，但它代表重設而非必然釋放；所有權需分別推理。\n7. `0x008FED10` 應確認確切浮點→整數模式，避免把整數段索引誤稱為帧數。\n8. 須從 `0x007DCFB0` 起沿配置源追蹤 `Resource` 對象到 `+0x20` 的每個讀取者，包含 vtable 導致的間接路徑。",
+          "observation": "所有Binding實作/主場景調度尚未閉合，不以active-list代替。",
+          "conflict_keys": []
+        }
+      ],
+      "conflicts": [
+        "reader-later-located"
+      ],
+      "affected_spec_ids": [],
+      "spec_disposition": "Downstream Client navigation only; no demonstrated current S00 Phase-B SPEC dependency; S00 acceptance not granted."
+    },
+    {
+      "source_file": "kr-temp-roy/20261027-104242-chatgpt-web-roy-T08-094-manager-update-resource-ownership.md",
+      "source_blob_sha": "d9087d9ab2663d32c68e6dad581c8eb4f39b022d",
+      "source_sha256": "557fb5ee47a5e56683196898dbbecfd7597f4b2ba5dfe8b763816c8e3b7d2739",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_intake_id": "SRC-0038",
+      "historical_status": "PENDING",
+      "historical_status_unchanged": true,
+      "integration_proposed": "CONFLICT_CHECKED",
+      "review_method": "R0 identity and R1 actual narrative reading; bounded source observations only, no new native audit",
+      "claim_keys": [
+        "early-active-transfer"
+      ],
+      "source_lines": [
+        [
+          23,
+          25
+        ],
+        [
+          107,
+          118
+        ]
+      ],
+      "observations": [
+        {
+          "claim_key": "early-active-transfer",
+          "source_lines": [
+            23,
+            25
+          ],
+          "source_excerpt": "- **已確認**：`0x007A86B0` 和 `0x007A87D0` 並非相互呼叫，而是由**共同上游**依序調度。前者輸入的浮點數是 `manager+0x104 * [ebp+0x0C]`；後者另以 `[ebp+0x0C]` 及上游暫存的 float 傳入。`0x007A87D0` 函式末尾 `ret 0x0C`，符合三參數。\n- **已確認**：這是資源管理系統的更新調度；尚無證據直接認定為場景 `object vtable+0x20` 主迴圈。\n- 上游 `manager+0x124`、`+0x140` 被用來控制節流/更新分支：`+0x124` 為 0 且 `+0x140 <= 10` 時 `0x007A87D0` 可略過 `manager+0xAC vtable+0x20`，否則呼叫。",
+          "observation": "共同上游依序調度且不同scene主迴圈。",
+          "conflict_keys": []
+        },
+        {
+          "claim_key": "early-active-transfer",
+          "source_lines": [
+            107,
+            118
+          ],
+          "source_excerpt": "1. 在 `+0x11C` 設定且關聯物件 vtable `+0x38` 通過時，若 `+0x108` 非空，可能先呼叫 `0x007BE5B0` 重設它（另有 `manager+0x120` 的分支處理）。\n2. `vtable+0x38` 未通過走到 `0x007A8D96`：若 `resource+0x6C != 0`，呼叫 `0x007BE5F0`，將完成的資源交還底層生命週期；**此處本函式不直接寫空 `+0x108`，`0x007BE5F0` 的指標副作用須另查**。\n3. 若 `resource+0x6C == 0`，把 `(manager+0x108, manager+0x120)` 這對 DWORD 作為局部 pair，呼叫 `0x0075A6F0` 加入 `manager+0x10C` 串列，隨後把 `+0x108/+0x120` 明確置 NULL。**這是未完成資源由單一持有槽轉交 active list 的確證**。\n\n`0x0075A6F0` 讀入局部 pair，呼叫 `0x00404FD0` 配置/插入鏈結節點，遞增 list 計數並連接 next/prev；不是資料庫操作也不是釋放 helper。`manager+0x10C` 在此為雙向串列基底，而前段 `0x007A86B0` 會走訪同一串列，形成**一個插入者＋一個消費者**的閉環。\n\n### 2.4 累進的浮點狀態與 gate\n\n- `manager+0xB4` 是在 `0x007A87D0` 分支中會浮點累進的值；`+0xB8`、`+0xBC`、`+0xC0` 是比較/界限來源。\n- `+0xCC` 控制另一條混合式累進分支，使用 `+0xD0/+0xD4` 查表 `0x00FBAB8C`，更新 `+0xDC/+0xE0/+0xB4`，並在和 `+0xD8` 比較後清零 `+0xCC`。\n- 在 `+0xCC==0` 分支，對 `+0xE0` 使用靜態浮點常數 `0x00C55848` 做分段運算；結果和 `+0xE4/+0xB4` 合成。可說**存在循環或分段累加**，但尚不能命名為動畫 duration/frame-rate。\n- 條件比較會設定 `manager+0x11C`，影響前段的完成/重設/轉移處理。原函式內有兩塊類似累進流程（大致 `0x7A8959～0x7A8AE4` 與 `0x7A8B21～0x7A8CC9`），各 gate 不同，不能簡化成單一完全相同條件。",
+          "observation": "completed/reset/pair轉移多分支，+108/+120轉入list再清槽。",
+          "conflict_keys": []
+        }
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "spec_disposition": "Downstream Client navigation only; no demonstrated current S00 Phase-B SPEC dependency; S00 acceptance not granted."
+    },
+    {
+      "source_file": "kr-temp-roy/20261027-105107-chatgpt-web-roy-T08-095-binding-name-resolution-lifecycle.md",
+      "source_blob_sha": "83a20b2e8e2017f48766540d67fabc2f83ebb5f5",
+      "source_sha256": "4639219d7bb12909702cb8a5b0cde719bb33c8b0a7281d1285cc9ad22ef3fab4",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_intake_id": "SRC-0039",
+      "historical_status": "PENDING",
+      "historical_status_unchanged": true,
+      "integration_proposed": "CONFLICT_CHECKED",
+      "review_method": "R0 identity and R1 actual narrative reading; bounded source observations only, no new native audit",
+      "claim_keys": [
+        "early-binding-resolution"
+      ],
+      "source_lines": [
+        [
+          37,
+          44
+        ],
+        [
+          105,
+          109
+        ]
+      ],
+      "observations": [
+        {
+          "claim_key": "early-binding-resolution",
+          "source_lines": [
+            37,
+            44
+          ],
+          "source_excerpt": "1. `0x007BDF90` 使用 `item+0x04` 存放的 C 字串，建立暫時字串，交由 `0x007B86F0` 查詢全域 `0x00FE173C` 名稱容器。\n2. 查到的樹節點不是 binding：`0x007BE082 mov ecx,[eax+24h]` 先取另一層關聯物件，再調其 vtable slot `+0x10`；回傳的 `eax` 才寫到 `item+0x08`。此來源鏈比「同偏移必然相同型別」更有力。\n3. 缺少關聯時 `item+0x08` 為 0，`0x007BE099..AC` 會由 item 名稱指標走外部診斷呼叫 `[0xBD2490]`；其字串含義、嚴重性仍未考證，**不能直接認定會終止程式**。\n4. `0x007BDF90` 完成後呼叫 `0x007BE150(resource)`，並寫 `resource+0x74=1`。相對的 `0x007BE0F0` 清除 binding 並寫 `resource+0x74=0`，建立明確的開關成對關係。\n5. `0x007BE0F0` 循環讀 `item+0x08`；非空時先呼叫 binding vtable `+0x08`，再 `push 1` 呼叫 `+0x00`，並把 `item+0x08` 清 0。虛擬 slot `+0x00` 形態符合刪除析構器但實作未定位，**只能標注 probable**。\n6. `0x007DCFB0` 在建好 resource 後檢查 **`manager+0x44 >= 1`** 才呼叫 `0x007BDF90`，表示 binding 可因管理器模式而延遲/略過，不能假設所有取得資源都已綁定。\n7. `0x007BE5F0` 的釋放分支呼叫 `0x007BE0F0` 並與 `0x007BD850`、`0x0089120C` 串接；另一分支可進 `0x007DD1A0` 共享復用池，與 T08-079～094 的兩種終止方式連結。\n8. `0x007BDF00` 不檢查 binding 是否非空而直接解參照，相對 `0x007BDF40` 有明確的空值檢查。這是程式內可觀察到的 **不同前置條件**，不等於可利用弱點。",
+          "observation": "名稱payload virtual10與解綁/+74成對，不能據+74保證全成功。",
+          "conflict_keys": [
+            "heap-index-tree",
+            "manager-is-provider"
+          ]
+        },
+        {
+          "claim_key": "early-binding-resolution",
+          "source_lines": [
+            105,
+            109
+          ],
+          "source_excerpt": "- provider vtable 常量與 `+0x10` 確切實作未定位。\n- binding vtable 常量與 `+0x08/+0x18/+0x20` 實作未定位。\n- `binding+0x80` 寫入者未定位；只知 `0x007BDF40` 會檢查該欄位為零。\n- `resource+0x74=1` 是否代表「全子項已成功綁定」不成立：有 missing binding 診斷路徑，仍可寫 1。較保守的語意是「binding resolution pass 已執行」。\n- `manager+0x44` 的完整模式範圍未驗證；只證實此處對值 `>=1` 的條件。",
+          "observation": "這一版Provider/Binding方法仍unknown；後續099/100來源分開追溯。",
+          "conflict_keys": [
+            "manager-is-provider"
+          ]
+        }
+      ],
+      "conflicts": [
+        "heap-index-tree",
+        "manager-is-provider"
+      ],
+      "affected_spec_ids": [],
+      "spec_disposition": "Downstream Client navigation only; no demonstrated current S00 Phase-B SPEC dependency; S00 acceptance not granted."
+    },
+    {
+      "source_file": "kr-temp-roy/20261027-110027-chatgpt-web-roy-T08-096-provider-registration-refcount.md",
+      "source_blob_sha": "7a3b78707951c41795e6f6d2fe292c07aadcfea3",
+      "source_sha256": "12d3c3897caa847b71fa0cacaab07b199848282e426e1e957fed2c0f74cbac4d",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_intake_id": "SRC-0040",
+      "historical_status": "PENDING",
+      "historical_status_unchanged": true,
+      "integration_proposed": "CONFLICT_CHECKED",
+      "review_method": "R0 identity and R1 actual narrative reading; bounded source observations only, no new native audit",
+      "claim_keys": [
+        "early-name-containers",
+        "early-update-schedule"
+      ],
+      "source_lines": [
+        [
+          13,
+          18
+        ],
+        [
+          95,
+          100
+        ]
+      ],
+      "observations": [
+        {
+          "claim_key": "early-name-containers",
+          "source_lines": [
+            13,
+            18
+          ],
+          "source_excerpt": "- `0x007B84F7` 呼叫 `0x007B86F0`；`0x007B851F mov eax,[ecx+24h]` 取現存 node 持有的關聯物件；`0x007B8522 inc dword ptr [eax+5Ch]` 增加引用/持有計數。\n- `0x007B85A4 push 8Ch` 與 `0x007B85A9 call 0x00891268` 是明確的 **0x8C bytes 配置**；`0x007B85B7 call 0x007DCEE0` 初始化該物件。`0x007B85CB` 透過外部多型來源 `vtable+0x10`；`0x007B85DE` 使用另一個 `vtable+0x34`；成功條件下 `0x007B8642 call 0x007DD2A0` 與 `0x007B864E call 0x007B82D0`。\n- `0x007DCEE0` 將全域 `0x00FBA844` 遞增並保存 `object+0x00`，將 `+0x44,+0x4C,+0x50,+0x54,+0x60,+0x7C,+0x80,+0x84` 清零，`+0x5C=1`，初始化 `+0x64` 同步結構；`object+0x04` 寫入 C 字串。**注意**該 0x8C bytes 物件內 `+0x80`，不是第95段尚未定位的 binding `+0x80`，嚴禁混為同型。\n- `0x007B82D0` 首先用傳入名稱與 tree 進行唯一性查詢；若已存在，`0x007B8395 xor eax,eax` 返回失敗；其條件成立時在 `0x007B83A6 ... mov [ecx+44h],eax` 可依 `tree+0x30` 修改傳入物件的 `+0x44`；餘下將進入樹節點建構/插入（原始詳見附錄）。\n- `0x007DC510` 是同一名稱集合的移除者，先以名稱查找 `0x007B86F0`，命中後 `0x007DC599 mov edi,[eax+24h]`，`0x007DC5A3 call [vtable+0x0C]`；若返回 0，呼叫 `vtable+0x00`（push 1）並透過 `0x007B8680` 刪除名稱樹節點。**不能把此處 +0x0C 命名為引用計數遞減而未驗證實作**；但條件性銷毀關係已明確。\n- `0x007BDF90`（前段）從 `node+0x24` 派送 `vtable+0x10` 取得 item binding；**重要型別區分**：本段配置的 0x8C-byte 管理物件與 `node+0x24` 關聯物件存在緊密路徑，但 `0x007B82D0` 的節點實際寫入追蹤仍須確認所有中間物件/別名，不能未經證實視為 binding 本體。",
+          "observation": "只保留8C管理器計數/初始化與不能混binding+80；排除連成heap Provider與樹稱呼。",
+          "conflict_keys": [
+            "manager-is-provider",
+            "heap-index-tree"
+          ]
+        },
+        {
+          "claim_key": "early-update-schedule",
+          "source_lines": [
+            95,
+            100
+          ],
+          "source_excerpt": "1. `0x007B82D0` 插入處如何分配 0x28-byte node 並將 `+0x24` 與傳入指標連結：需要逐分支跟完整參數寄存器/堆疊；目前已確認呼叫鏈及重用支線，沒有聲稱完成所有 tree-node 寫入者。\n2. `node+0x24 -> vtable+0x10` 實作函式及返回 binding 的 allocation/vtable 尚未定位。\n3. `binding+0x80` 寫入者不等同 0x8C 管理器 +0x80；目前不足以將不同類型欄位合併。\n4. `vtable+0x0C` in removal 的回傳值是否真正是最後持有者條件，需該 slot implementation。就目前而言只能稱 `result == 0` 導致移除。\n5. `0x007DD2A0` 會經資料解析/多型來源路徑，還需確認成功碼、失敗清理與所有回滾。\n6. 場景物件 `vtable+0x20` 真正上層迴圈依然未定位，不得將 provider/binding 的同位移虛擬槽混淆。",
+          "observation": "完整節點/實作/回滾與scene主迴圈是明示未知。",
+          "conflict_keys": []
+        }
+      ],
+      "conflicts": [
+        "heap-index-tree",
+        "manager-is-provider"
+      ],
+      "affected_spec_ids": [],
+      "spec_disposition": "Downstream Client navigation only; no demonstrated current S00 Phase-B SPEC dependency; S00 acceptance not granted."
+    },
+    {
+      "source_file": "kr-temp-roy/20261027-111050-chatgpt-web-roy-T08-097-tree-node-provider-link.md",
+      "source_blob_sha": "e0b3ff5069fc4f66ff17e3b706ecba870360d337",
+      "source_sha256": "1730cfc143ecc508a1d04a4b7f4c845ea3a09c9c3de55d9f19403250db2d5d85",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_intake_id": "SRC-0041",
+      "historical_status": "PENDING",
+      "historical_status_unchanged": true,
+      "integration_proposed": "CONFLICT_CHECKED",
+      "review_method": "R0 identity and R1 actual narrative reading; bounded source observations only, no new native audit",
+      "claim_keys": [
+        "early-binding-resolution",
+        "early-name-containers",
+        "early-update-schedule"
+      ],
+      "source_lines": [
+        [
+          14,
+          16
+        ],
+        [
+          17,
+          18
+        ],
+        [
+          81,
+          85
+        ]
+      ],
+      "observations": [
+        {
+          "claim_key": "early-name-containers",
+          "source_lines": [
+            14,
+            16
+          ],
+          "source_excerpt": "1. `0x007B8641 push esi; 0x007B864A push esi; 0x007B864B push eax; 0x007B864C mov ecx,edi; 0x007B864E call 0x007B82D0`：`esi` 為 `0x007B85A4` 申請並以 `0x007DCEE0` 初始化的 0x8C-byte 管理物件；呼叫 `0x007B82D0` 前它作為第二個堆疊參數，第一參數為名稱相關指標。\n2. `0x007B8307 mov eax,[ebp+0x0C]`、`0x007B830F mov [esp+0x14],eax`：登記函式接收並保留關聯物件指標；`0x007B83DB mov edx,[esp+0x14]` 與 `0x007B83DF mov [esp+0x5C],edx`：裝入供樹節點複製的臨時值。\n3. `0x007B83FA call 0x00719B90`：配置樹節點；建構函式 `0x00719BBB push 0x28`、`0x00719BC0 call 0x00891268`；`0x00719C09 mov eax,[ebx+0x1C]`、`0x00719C0C mov [esi+0x1C],eax`，其中 `esi=node+0x08`，所以 **`node+0x24 ← tempValue+0x1C`**。",
+          "observation": "719B90的node+24拷貝只表示payload來源；不保留L10跨容器Provider等價。",
+          "conflict_keys": [
+            "manager-is-provider"
+          ]
+        },
+        {
+          "claim_key": "early-binding-resolution",
+          "source_lines": [
+            17,
+            18
+          ],
+          "source_excerpt": "4. `0x007BDF90` 內 `0x007BE082 mov ecx,[eax+0x24]`、`0x007BE089 mov eax,[ecx]`、`0x007BE08B mov edx,[eax+0x10]`、`0x007BE08E call edx`、`0x007BE090 mov [ebx+0x08],eax`：透過名稱樹節點之管理物件的 vtable slot +0x10 得到 binding 並寫回 item+0x08。\n5. `0x007BDF40` 以 `cmp dword ptr [ecx+0x80],0` 後虛擬呼叫 `vtable+0x18`；`0x007BDF00` 直接對 item 的 binding 呼叫 `vtable+0x20` 並帶入一個參數。兩者是否指向同一實作類別，仍未知。",
+          "observation": "heap lookup virtual10寫Binding與兩dispatch槽分開。",
+          "conflict_keys": [
+            "heap-index-tree",
+            "manager-is-provider"
+          ]
+        },
+        {
+          "claim_key": "early-update-schedule",
+          "source_lines": [
+            81,
+            85
+          ],
+          "source_excerpt": "1. **未定位** `NameProvider_8C` 的實際 vtable：`0x007DCEE0` 並未在函式開頭寫入 vtable；該物件作為 provider 的直接類型仍不應僅憑 `node+0x24` 推定完全同型。下一段應確認 `vtable+0x10` 在此 0x8C-byte 對象上的方法如何建立 binding、以及 vtable 是否處於嵌套物件中。這是目前最重要的型別不確定性。\n2. `binding+0x80` 的寫入者/初始值仍待驗證；與 provider+0x80 嚴格區分。\n3. `node+0x24` 的建立路徑已確定，但 `0x007D1080` 紅黑樹修正細節可作後續研究。\n4. 上游進入 `0x007B84xx` 的所有呼叫者及 provider 回傳值的消費位置仍不完整。\n5. 場景物件 `vtable+0x20` 主更新迴圈仍待獨立定位，不能與 binding slot +0x20 混淆。",
+          "observation": "明示型別／上游／主調度尚未知。",
+          "conflict_keys": []
+        }
+      ],
+      "conflicts": [
+        "heap-index-tree",
+        "manager-is-provider"
+      ],
+      "affected_spec_ids": [],
+      "spec_disposition": "Downstream Client navigation only; no demonstrated current S00 Phase-B SPEC dependency; S00 acceptance not granted."
+    },
+    {
+      "source_file": "kr-temp-roy/20261027-114418-chatgpt-web-roy-T08-098-name-registry-provider-type-separation.md",
+      "source_blob_sha": "ead20dc764c0e17b9cbf1c2775f0c2cc6cb8e70e",
+      "source_sha256": "eb498b9134e670c526150dc9886edd0d810eb2d6e838ab27295b882cfa8e28d8",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_intake_id": "SRC-0042",
+      "historical_status": "PENDING",
+      "historical_status_unchanged": true,
+      "integration_proposed": "CONFLICT_CHECKED",
+      "review_method": "R0 identity and R1 actual narrative reading; bounded source observations only, no new native audit",
+      "claim_keys": [
+        "early-name-containers"
+      ],
+      "source_lines": [
+        [
+          13,
+          15
+        ],
+        [
+          19,
+          28
+        ]
+      ],
+      "observations": [
+        {
+          "claim_key": "early-name-containers",
+          "source_lines": [
+            13,
+            15
+          ],
+          "source_excerpt": "1. `0x007DCEE0` 初始化的 0x8C bytes 管理物件第一個 DWORD 是遞增計數：`mov [esi],eax`，而不是 vtable 常量。`+0x5C` 持有計數初始化為 1、`+0x64` 為同步結構、`+0x7C～0x84` 為復用池管理。由此**不可**將這個 0x8C 物件直接視作在 `0x007BDF90` 執行 `mov eax,[ecx]; call [eax+0x10]` 的多型 Provider。\n2. `0x007B8480` 名稱查找與建立路徑確實會將 0x8C 管理物件交 `0x007B82D0` 登記，但 `0x007B82D0` 是可由不同呼叫來源使用的**通用樹節點登記函式**。因此不能只靠 `node+0x24` 相同就把所有名稱索引的元素類型合併。\n3. `0x007BDF90` 使用全域 `0x00FE173C` 指向的名稱索引結構查找，回傳的 `node+0x24` 必須具有可呼叫 `vtable+0x10` 的物件配置；它不可能僅由先前 0x8C 管理器的首 DWORD ID 證實。",
+          "observation": "指出8C首DWORD是ID不是vptr，不能當heap Provider。",
+          "conflict_keys": [
+            "manager-is-provider"
+          ]
+        },
+        {
+          "claim_key": "early-name-containers",
+          "source_lines": [
+            19,
+            28
+          ],
+          "source_excerpt": "- `0x007D7139` 直接呼叫 `0x007B82D0`；參數是全域名稱容器指標位址 `0x00FE173C` 及先前保存在 `esi` 的物件指標。\n- 呼叫前 `0x007D6F8B` 配置 `0x68` bytes 物件，經 `0x007D6790` 初始化，再於 `0x007D702D` 配置第二個 `0x68` bytes 物件；這些物件被放入先前分配的 `0x8C` 管理器內 `+0x4C` 起的容器。\n- `0x007D6790` 的前段將傳入資料複製到目標，末段呼叫 `0x00898BA0` 以 0x40 bytes 複製來源資料到目標，因此新建 `0x68` 物件的第 0 DWORD 來源需追查該拷貝來源；**尚不能直接確證該物件一定含有效 vtable**。\n- `0x007B7DA0` 建立 `0x00FE173C` 指向的 0x2C bytes 全域索引，另在相鄰 `0x00FE1740` 初始化其他嵌入式結構。兩者不可混成同一個指標或同一物件。\n\n### 已確認 C：全域名稱索引與局部名稱容器的區別\n\n`0x007DC3D0`：以 0x2C bytes 建構全域索引，`+0x04` 配置 0x28 bytes 哨兵節點，`+0x08` 計數歸零，`+0x10～0x18` 為內部陣列邊界；`0x007BDF90` 從 `0x00FE173C` 取得索引。\n\n`0x007B8480`：呼叫 `0x007B86F0` 時使用上游 `[ebp+0x08]` 載入的管理上下文所附容器（以 `ebx+0x04` 取址），而非此處直接硬編碼 `0x00FE173C`；其直接呼叫者為 `0x00550CAB, 0x007AE968, 0x007B07A2, 0x007F7116`。名稱樹節點結構雖可共用，內含的指標目標類型**不能默認共用**。",
+          "observation": "本版仍把D7139叫同一索引；只保留地址與內容必須分離的待解導航，099已更正。",
+          "conflict_keys": [
+            "manager-is-provider",
+            "heap-index-tree"
+          ]
+        }
+      ],
+      "conflicts": [
+        "heap-index-tree",
+        "manager-is-provider"
+      ],
+      "affected_spec_ids": [],
+      "spec_disposition": "Downstream Client navigation only; no demonstrated current S00 Phase-B SPEC dependency; S00 acceptance not granted."
+    },
+    {
+      "source_file": "kr-temp-roy/20261027-115552-chatgpt-web-roy-T08-099-dual-global-name-container-disambiguation.md",
+      "source_blob_sha": "e8cf7a61cb841c1903ebe46f25b12fa665b35760",
+      "source_sha256": "707cd8530b39e00a50da81e5d2ba6006ad28752f6307f68b2228cb8f29cbb0d0",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_intake_id": "SRC-0043",
+      "historical_status": "PENDING",
+      "historical_status_unchanged": true,
+      "integration_proposed": "CONFLICT_CHECKED",
+      "review_method": "R0 identity and R1 actual narrative reading; bounded source observations only, no new native audit",
+      "claim_keys": [
+        "early-name-containers"
+      ],
+      "source_lines": [
+        [
+          12,
+          20
+        ],
+        [
+          35,
+          41
+        ]
+      ],
+      "observations": [
+        {
+          "claim_key": "early-name-containers",
+          "source_lines": [
+            12,
+            20
+          ],
+          "source_excerpt": "**已確認：** `0x00FE173C` 同時具有「全域指標欄位本身的 VA」與「該欄位內容指向的 heap 索引物件」兩種不同語義：\n\n1. `0x007B7DA0` 配置 `0x2C` bytes heap 物件，呼叫 `0x007DC3D0` 初始化，將其指標寫入 **`[0x00FE173C]`**。\n2. 同一 `0x007B7DA0` 隨即在 **`0x00FE1740`** 起初始化另一組**內嵌式**名稱樹。`[0x00FE1744]` 是配置的 0x28 bytes 哨兵指標；`[0x00FE1748]` 初始化為 0（元素計數）；其餘欄位於 `0x00FE1750～0x00FE1758` 初始化。這個實體不是 `[0x00FE173C]` 所指的 0x2C bytes heap 物件。\n3. `0x007D7133 push esi; 0x007D7134 push 0x00FE173C; 0x007D7139 call 0x007B82D0`：**傳入的是全域指標欄位的地址，不是其 DWORD 內容**。`0x007B82D0` 將 `[ebp+8]` 存入 `ebx`，讀取 `[ebx+8]` 指向的哨兵（此時 `0x00FE1744`），並更新 `[ebx+0xC]`（此時 `0x00FE1748`）作計數：實際操作的是相鄰的 **內嵌名稱樹**。其記憶體結構相當於前置 4-byte header 加 tree at +4，而不是 heap 索引的指標解參照。\n4. `0x007BDF90` 的 `0x007BE009 mov esi,[0x00FE173C]` 取得 heap 索引物件，`0x007BE04A call 0x007B86F0` 查詢該物件，從結果 `node+0x24` 讀取 payload，再對 payload 首 DWORD 作 vptr 並呼叫 `+0x10`。\n5. 因此：**0x8C 管理物件登記在內嵌樹中，不是已證明登記在 heap 名稱索引中的 Provider**。兩者雖共用 `0x007B86F0` 查詢演算法及 `node+0x24` 節點結構，但所傳入的 container 不同，且不能合併其 payload 型別。\n\n這是本段實質新發現，並應修正 T08-098 尚未解決的「同一 registry / payload 型別衝突」。此結論並**不**證明真正 Binding Provider 的 vtable；那仍是下一段研究目標。",
+          "observation": "顯式更正098：address/value及兩容器；不合併payload。",
+          "conflict_keys": [
+            "manager-is-provider",
+            "heap-index-tree"
+          ]
+        },
+        {
+          "claim_key": "early-name-containers",
+          "source_lines": [
+            35,
+            41
+          ],
+          "source_excerpt": "### register / calling convention 防混淆\n\n`0x007B82D0` 使用 `ECX` 傳入字串名稱，`[EBP+8]` 傳入容器基址，`[EBP+0xC]` 傳入要存到 node 的 payload。\n\n`0x007D712F mov ecx,[esp+0x14]`（名稱字串指標），`push esi`（0x8C manager 指標），`push 0x00FE173C`（**地址常數**），`call 0x007B82D0`；callee 內 `0x007B830A mov ebx,[ebp+8]`，`0x007B8355 mov ecx,[ebx+8]`，`0x007B83EB mov eax,[ebx+8]`，`0x007B8419 mov [ebx+0xC],ecx`。因此實際以 `0x00FE1744` 為哨兵欄位，`0x00FE1748` 為元素數欄位。\n\n相對地，`0x007BDF90` 先使用 `mov esi,[0x00FE173C]`，再 `mov eax,esi` 呼叫 `0x007B86F0`，是**指標內容**；其索引 `+4` 為哨兵、`+0x10` 為 bucket 陣列，與相鄰樹的欄位來源不同。",
+          "observation": "登記stack容器/名稱/payload與heap pointer解參照區分。",
+          "conflict_keys": [
+            "heap-index-tree"
+          ]
+        }
+      ],
+      "conflicts": [
+        "heap-index-tree",
+        "manager-is-provider"
+      ],
+      "affected_spec_ids": [],
+      "spec_disposition": "Downstream Client navigation only; no demonstrated current S00 Phase-B SPEC dependency; S00 acceptance not granted."
+    },
+    {
+      "source_file": "kr-temp-roy/20261027-134325-chatgpt-web-roy-T08-100-heap-provider-vtable-binding-clone.md",
+      "source_blob_sha": "86975a35928aaf2ebf786b843b5cebd997893806",
+      "source_sha256": "e2911b1fe56920b9ba969468f56afce85867333f287ad14a63751635957126c1",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_intake_id": "SRC-0044",
+      "historical_status": "PENDING",
+      "historical_status_unchanged": true,
+      "integration_proposed": "CONFLICT_CHECKED",
+      "review_method": "R0 identity and R1 actual narrative reading; bounded source observations only, no new native audit",
+      "claim_keys": [
+        "early-provider-clone"
+      ],
+      "source_lines": [
+        [
+          10,
+          15
+        ],
+        [
+          61,
+          64
+        ]
+      ],
+      "observations": [
+        {
+          "claim_key": "early-provider-clone",
+          "source_lines": [
+            10,
+            15
+          ],
+          "source_excerpt": "1. `[0x00FE173C]` 所指的 0x2C heap 索引，其**插入函式是 `0x007DC660`**。`0x007DC660` 以 `esi` 持有索引物件，先呼叫 `0x007DCA10` 查重，再呼叫 `0x00719B90` 生成 0x28 bytes 名稱節點。`[esp+0x10]` 是要存入節點的 payload；`0x00719B90` 把傳入暫存 entry 的 payload 複製到 `node+0x24`（參見 T08-097）。在查重已存在時，`0x007DC7B0` 取回舊節點 payload，`0x007DC7B7` 對其 `+0x08` 增加引用計數，之後以 vtable+0x00 釋放新的候選物件。\n2. `0x007DC660` 在此 BIN 中的**直接 `CALL rel32`** 呼叫點為 `0x007D6EC4` 和 `0x007D6F51`。兩條路徑先從 `[0x00FE173C]` 取得 heap index，於 `esi`，在 `ecx` 提供名稱指標、stack 傳候選物件指標。\n3. `0x007D6EC9` 配置 `0xB4` bytes，`0x007D6EF5` 呼叫 `0x007F15B0`；`0x007D6E55/0x007D6E6A` 另經 `0x007F1650` 建立同類型物件，之後將結果傳入 `0x007DC660`。因此**真正的 heap-index provider payload 屬於具有 vtable 的 `0xB4` bytes 物件家族**，而非內嵌樹的 `0x8C` bytes 順序 ID 管理器。這修正 T08-098 的衝突且補足 T08-099 未定位的插入者。\n4. `0x007F15D7 / 0x007F1673` 均寫 `*(uint32_t*)(obj+0)=0x00C50A8C`；`obj+0x84=0x00C50ABC` 是**第二個子物件的 vptr**，不可混同主 vptr。`0x007F16B9` 額外將 `obj+0x04` 設為 1。\n5. BIN `.rdata` 讀取 `0x00C50A8C+0x10` 的 DWORD 為 **`0x007F21A0`**。此函式 `0x007F21CE` 配置 `0xB4` bytes，`0x007F21F0` 呼叫 `0x007F15B0` 初始化後再拷貝/複製父物件資源與關聯資料，`0x007F230A` 回傳新物件。因此 `0x007BDF90` 呼叫的 `provider->vtable[4]` 對此 vptr **確定是建立/複製 0xB4 bytes binding 型物件**，而不是回傳 0x8C bytes manager。\n6. `binding+0x80` 在 `0x007BDF40` 以 DWORD 比較 0 (`0x007BDF72`)，只有為 0 才呼叫 `binding->vtable+0x18`。本段不能證實所有 `+0x80` 寫入者，亦未證實其語義（鎖定/停用/完成等都只是猜想）。",
+          "observation": "找到heap insert/0xB4 Provider及clone slot，分離8C manager。",
+          "conflict_keys": [
+            "manager-is-provider"
+          ]
+        },
+        {
+          "claim_key": "early-provider-clone",
+          "source_lines": [
+            61,
+            64
+          ],
+          "source_excerpt": "- 完整建立 `0x007F21A0` 後半部複製內容、`+0x88` 的關聯物件和 `0x007C7DD0`、`0x007CBB00` 的用途；原始 provider 與 clone 之間的引用計數及 ownership 邊界。\n- 定位 **`binding+0x80`** 的所有靜態寫入者及條件傳播；確認它與虛擬 `+0x18` 行為的關係。\n- 進一步還原 `0x007F23B0`、`0x007F24F0`、`vtable+0x20`（主物件 `0x007F2320` 與此前 wrapper/scene vtable 不得混淆）。\n- 場景物件 `vtable+0x20` 的主更新迴圈依舊未確認。",
+          "observation": "完整ownership/複製、flag寫入者和主調度未閉合。",
+          "conflict_keys": []
+        }
+      ],
+      "conflicts": [
+        "manager-is-provider"
+      ],
+      "affected_spec_ids": [],
+      "spec_disposition": "Downstream Client navigation only; no demonstrated current S00 Phase-B SPEC dependency; S00 acceptance not granted."
+    },
+    {
+      "source_file": "kr-temp-roy/20261027-140236-chatgpt-web-roy-T08-101-binding-state-virtual-dispatch.md",
+      "source_blob_sha": "d4b91f7bd0e8b68eea0d0a9242382f72b778e607",
+      "source_sha256": "8bd262afa192936cee07358b7bc59d1d21349c5d786b6da63b24a2f8e881ff3c",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_intake_id": "SRC-0045",
+      "historical_status": "PENDING",
+      "historical_status_unchanged": true,
+      "integration_proposed": "CONFLICT_CHECKED",
+      "review_method": "R0 identity and R1 actual narrative reading; bounded source observations only, no new native audit",
+      "claim_keys": [
+        "early-binding-gates"
+      ],
+      "source_lines": [
+        [
+          11,
+          18
+        ],
+        [
+          63,
+          66
+        ]
+      ],
+      "observations": [
+        {
+          "claim_key": "early-binding-gates",
+          "source_lines": [
+            11,
+            18
+          ],
+          "source_excerpt": "1. **`0x007F2520` 是 `binding+0x80` 的確定寫入者**。`0x007F25C7 test eax,eax; 0x007F25C9 sete cl; 0x007F25CE mov [esi+0x80],eax`。它將前段回傳值歸一為 Boolean：返回 **0 則寫 1**，返回非零則寫 0。若全域 `[0x00FB76E4] == 0`，函式先把返回值設為 1，因而寫 0；非零時，呼叫 `0x00838860` 再反轉其是否為零的結果。**精確語義不能直接命名為停止/死亡/鎖定**。\n2. `0x007F2520` 中的計算輸入包括 `binding+0xB0`、以及從 `binding+0x88` 指向的關聯物件讀取 `+0x68/+0x6C/+0x70`（`0x007F254F～0x007F2564`）。這三個 DWORD 以浮點數型態傳遞給 `0x00838860`（該函式的實際業務語義待追）。另外讀取全域 `[0x00FB76B0]`，但呼叫前暫不能單憑此片段判定該全域值是否被後續真正使用。\n3. `0x007BDF40` 的調用閘為 `item+0x08 != NULL`、`item[0] == 0`、`binding+0x80 == 0`，成立才以 `binding->vtable+0x18` 呼叫；`0x007BDF72～0x007BDF82` 可直接驗證。**因此 `+0x80 == 1` 會阻斷此特定虛擬調用路徑**，並非所有 binding 更新都停用。\n4. `0x007F23B0`（主 vtable `+0x18`）**先檢查 `binding+0x7C`**；若非零，會遍歷 `+0x8C～+0x90` 的每筆 8-byte 紀錄並寫入全域索引緩衝，隨後用次級虛擬介面 `binding+0x84` 的 `vtable+0x04` 得到索引，以 0x2004 stride 定位分桶，最多受計數 `0x800` 的界限控制。此路徑**不是直接讀取 `+0x80`**，也不能稱其為動畫或技能事件而無證據。\n5. `0x007F2320`（主 vtable `+0x14`）將參數浮點值與 `binding+0x70` 比較，在特定條件下將 `binding+0x7C = 1`，複製關聯物件變換（`0x0077EA00`）、調度關聯物件 `vtable+0x1C`、再呼叫 `0x00780150`。其他分支將 `+0x7C=0`。因此 `+0x7C` 是另一個**條件式事件/派送旗標**，不是 `+0x80`。\n6. `0x007F24F0`（主 vtable `+0x1C`）讀取 `binding+0x70` 與傳入 float，產生 0/1 返回；不應自動命名成動畫播放完成判斷。\n7. vtable `.rdata` 的精確對照：`0x00C50A8C+0x28 = 0x007F2520`；`0x00C50ABC+0x08 = 0x007F25F0`，其機器碼 `sub ecx,0x84; jmp 0x007F23B0` 是次級子物件的 **this-adjusting thunk**。另一個 `0x007F2600` 對 `ecx` 減 `0x84` 後跳到析構 `0x007F1620`。**主 vtable 與次級 vtable 不是兩個可任意互換的物件類別。**\n8. `0x007F21A0` 的複製路徑已重新核對：配置 `0xB4` bytes → `0x007F15B0` 初始化 → 複製 `+0x70/+0xB0/+0xAC`；如來源 `+0x88` 非 NULL，先呼叫關聯物件 `vtable+0x0C` 取得新關聯物件，再走 `0x007C7DD0`、`0x007F1EB0`、`0x007CBB00`。**這不是單純淺拷貝 `+0x88`**；但內部所有權語義仍待驗證。",
+          "observation": "+80反轉Boolean、+7C獨立gate、secondary adjust thunk及clone非單純淺拷貝。",
+          "conflict_keys": []
+        },
+        {
+          "claim_key": "early-binding-gates",
+          "source_lines": [
+            63,
+            66
+          ],
+          "source_excerpt": "- `0x007F15B0` 對 `+0x84` 寫入次級 vptr，`+0x88` 設 0，且多個末端容器指標設 0；**對 `+0x80` 的具體初始化可能由基底建構 `0x007E9BF0` 進行**，本段未完整讀該基底函式，不能宣稱唯一初值。\n- `0x007F2520` 的 `+0x80` 寫入具備實際反轉外部回傳值的證據；是否尚有其他不在此範圍的寫入者，需要全 `.text` 實體別名及記憶體流追蹤。\n- `0x007F2320` 所使用的 `+0x88` 關聯物件與 `0x007F21A0` 複製時 `vtable+0x0C` 回傳的物件相關，但不能直接定為單純 refcounted clone，因為仍有 `0x007C7DD0` 等資料轉換。\n- `0x007F23B0` 的 `0x800` 計數上限為該條寫入全域分桶路徑上的局部檢查，**不是**指 resource 最多 2048 個動畫或技能。",
+          "observation": "未知所有alias寫入者與ownership，不把800上限當動畫數。",
+          "conflict_keys": []
+        }
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "spec_disposition": "Downstream Client navigation only; no demonstrated current S00 Phase-B SPEC dependency; S00 acceptance not granted."
+    },
+    {
+      "source_file": "kr-temp-roy/20261027-140627-chatgpt-web-roy-T08-102-plane-test-binding-initialization-global-buckets.md",
+      "source_blob_sha": "686e64b04fc97141e4a6b5653c7602299515ed7c",
+      "source_sha256": "04f2c9b844600f2a182bb7e4993c10e4660cbfe1b6cf30827fc1301dd90e54d0",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_intake_id": "SRC-0046",
+      "historical_status": "PENDING",
+      "historical_status_unchanged": true,
+      "integration_proposed": "CONFLICT_CHECKED",
+      "review_method": "R0 identity and R1 actual narrative reading; bounded source observations only, no new native audit",
+      "claim_keys": [
+        "early-bucket-producers",
+        "early-geometry-meaning"
+      ],
+      "source_lines": [
+        [
+          13,
+          16
+        ],
+        [
+          24,
+          28
+        ]
+      ],
+      "observations": [
+        {
+          "claim_key": "early-geometry-meaning",
+          "source_lines": [
+            13,
+            16
+          ],
+          "source_excerpt": "- `EDX` 是一組連續紀錄的起始指標，函式入口 `add edx,8`，迴圈以 `[edx-8], [edx-4], [edx], [edx+4]` 取四個 `float`，每次 `add edx,0x10`，迴圈至第六筆（`cmp ecx,6`）。\n- 四個 stack 參數中，`[ebp+8/+0xC/+0x10]` 作為三維點積三個輸入，`[ebp+0x14]` 是比較基準值（實際 x87 ST 堆疊順序詳見下方反組譯），每輪計算 `a*x+b*y+c*z+d`。由 `fmul/faddp/fcomp` 及 x87 flag `test ah,0x41` 控制返回值：在出現不通過的比較時提前返回 0，六組都通過返回 1。\n- 這強烈符合六個半空間或六個平面所做的幾何篩選（例如視錐平面測試），但**資料來源的物理意義尚未證實**，不可逕稱相機視錐裁切。\n- 參數來自 `0x007F2520`：`binding+0x88` 關聯物件 `+0x68/+0x6C/+0x70` 三個浮點數，`binding+0xB0` 作為第四個浮點數；`EDX=[0x00FB76B0]` 指向平面參數陣列。故 `binding+0x80` 與幾何半空間比較結果直接相關，不能解釋為角色死亡/動畫停止。",
+          "observation": "six coefficient測試但frustum/死亡/動畫名稱不成立。",
+          "conflict_keys": [
+            "plane-writer-stale"
+          ]
+        },
+        {
+          "claim_key": "early-bucket-producers",
+          "source_lines": [
+            24,
+            28
+          ],
+          "source_excerpt": "`0x00798F26 push 0x2C058` 配置，`0x00798F5B mov edx,0x15`、`0x00798F60 lea ecx,[eax+0x2000]`、`0x00798F66 mov [ecx],0` 逐桶清零計數，末尾 `0x00798F78 mov [0x00FB7740],eax`。`0x2C058` 大於 `22*0x2004 (0x2C058)`，**恰好相等**，共22個分桶：每桶 `0x2000` bytes 可以放 2048 個 DWORD 指標，尾端 `+0x2000` 是 DWORD count。\n\n`0x007F23B0` 遍歷 `binding+0x8C..+0x90` 8-byte 項目，先將數值按索引送入 `0x00FB7774+index*0x10` 的另一個容器；接著透過 `binding+0x84` 的 secondary vtable `+0x04` 得到 bucket index，位址為 `base + index*0x2004`，只在 count < 0x800 時存入 `binding+0x84` 並增加 count。注意它存的是**次級子物件指標**，不是 0xB4 物件原始基址。\n\n`0x007995A6` 讀 `[0x00FB7740]`，`0x007995B2 call 0x0089120C` 釋放，接著 `[0x00FB7740]=0`。確定分桶具有啟動/清理生命週期；消費者尚未定位。",
+          "observation": "22*2004恰等2C058；排除同句大於錯字，secondary pointer append不證consumer。",
+          "conflict_keys": []
+        }
+      ],
+      "conflicts": [
+        "plane-writer-stale"
+      ],
+      "affected_spec_ids": [],
+      "spec_disposition": "Downstream Client navigation only; no demonstrated current S00 Phase-B SPEC dependency; S00 acceptance not granted."
+    },
+    {
+      "source_file": "kr-temp-roy/20261027-141126-chatgpt-web-roy-T08-103-plane-buffer-bucket-producers.md",
+      "source_blob_sha": "7d400c1c60155ed80f803cc09f7bfc84ca813a7e",
+      "source_sha256": "26f40f77a254c2b5ffd08040515be95860f0faa741a5c5bb4983895ced9332ec",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_intake_id": "SRC-0047",
+      "historical_status": "PENDING",
+      "historical_status_unchanged": true,
+      "integration_proposed": "CONFLICT_CHECKED",
+      "review_method": "R0 identity and R1 actual narrative reading; bounded source observations only, no new native audit",
+      "claim_keys": [
+        "early-bucket-producers",
+        "early-geometry-meaning"
+      ],
+      "source_lines": [
+        [
+          10,
+          14
+        ],
+        [
+          354,
+          358
+        ]
+      ],
+      "observations": [
+        {
+          "claim_key": "early-bucket-producers",
+          "source_lines": [
+            10,
+            14
+          ],
+          "source_excerpt": "1. `0x00FB76B0` 為 heap 緩衝的全域**指標**。`0x00798E3A` 的 `push 0x60` 配置 96 bytes，緊接的 24 個 x87 DWORD 寫入清零；`0x00798E9C` 將返回指標存入該全域欄位。`0x0079963F–0x00799651` 則釋放並清零。這個尺寸與第102段六組、每組四 float 的 `0x00838860` 半空間判斷相符，但不能因此確認相機來源。\n2. 直接位址參照 `0x00FB76B0` 的 `.text` 指令集中在配置、釋放及多處判斷**讀取**。未找到係數內容的寫入者：寫入者可能操作別名 heap 指標。不能宣稱係數永遠為零。\n3. 除第102段 `0x007F23B0` 外，`0x0079CDA8`、`0x007BED5B`、`0x007CD7C9`、`0x007D34EB` 都具有讀取 `[0x00FB7740]` 並依 `index*0x2004` 選擇分桶、檢查 `<0x800`，附加指標與 `count++` 的確定模式。\n4. `0x007FECE9` 的獨立分支使用**常量偏移** `0x14028` 與 `0x16028`；`0x14028 = 10 * 0x2004`，為第10桶的附加寫入者。不同寫入者傳入的物件不應在缺乏配置來源時全部歸類為 Binding。\n5. 分桶真正消費者（讀取 entries 後處理）與每幀歸零入口**本段仍未證實**。現有結果應明確分類為寫入端，而不是消費端。",
+          "observation": "配置/直接append與未知consumer分離；非全alias掃描。",
+          "conflict_keys": []
+        },
+        {
+          "claim_key": "early-geometry-meaning",
+          "source_lines": [
+            354,
+            358
+          ],
+          "source_excerpt": "**直接已確認**：24 float 清零初始化、`0x60` 配置、釋放路徑、多個 `0x2004` stride 桶 append、`0x800` cap、固定第10桶插入。\n\n**合理推測**：六組係數表示幾何半空間；相關 Binding 幾何判斷參與可見性/空間篩選。但相機/陰影/空間系統具體角色無法命名。\n\n**未確認**：六平面數值寫入者、視圖矩陣來源、分桶消費端、每幀分桶 reset、各種物件的確切型別及場景主更新迴圈 `object vtable+0x20`。",
+          "observation": "半空間為推測，writer當時未找到不等於不存在。",
+          "conflict_keys": [
+            "plane-writer-stale"
+          ]
+        }
+      ],
+      "conflicts": [
+        "plane-writer-stale"
+      ],
+      "affected_spec_ids": [],
+      "spec_disposition": "Downstream Client navigation only; no demonstrated current S00 Phase-B SPEC dependency; S00 acceptance not granted."
+    },
+    {
+      "source_file": "kr-temp-roy/20261027-141645-chatgpt-web-roy-T08-104-dispatch-consumer-ownership.md",
+      "source_blob_sha": "dfc82bdfe01182716a0feb324a06189284eb8823",
+      "source_sha256": "22450653be502fd6347054433fde087c900dc164ef3c439ba72675ecb63897ce",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_intake_id": "SRC-0048",
+      "historical_status": "PENDING",
+      "historical_status_unchanged": true,
+      "integration_proposed": "CONFLICT_CHECKED",
+      "review_method": "R0 identity and R1 actual narrative reading; bounded source observations only, no new native audit",
+      "claim_keys": [
+        "early-bucket-owner"
+      ],
+      "source_lines": [
+        [
+          12,
+          16
+        ],
+        [
+          180,
+          198
+        ]
+      ],
+      "observations": [
+        {
+          "claim_key": "early-bucket-owner",
+          "source_lines": [
+            12,
+            16
+          ],
+          "source_excerpt": "1. **找到真的「讀取 entries → 呼叫虛擬函式 → 清空 count」消費流程**：`0x007D1710～0x007D1758`，位於包含 `0x007D14xx～0x007D17xx` 的大型函式中。它處理索引 19～21 (`0x13...0x15`) 的分桶，透過 `vtable+0x0C` 呼叫每個元素，並逐桶清零計數；後續 `0x007D1780` 另以 22 次迴圈清零另一組桶計數。\n2. **這個消費者不是已證明的 `[0x00FB7740]` 全域堆積分桶消費者**。其指標來自 `ebx` 管理器內嵌陣列，起點 `ebx+0x2604C`，而非從全域記憶體 `0x00FB7740` 讀取。兩種表雖共用桶跨度 0x2004，也不能合併為同一物件。這修正了本段初步尋找消費者時的歸屬錯誤。\n3. `0x0079A3C0` 是另一個**參數化分桶寫入器**：載入 `manager+0x98` 的指標，動態取得桶索引，依 stride `0x2004` 與 count<0x800 追加。這說明多套桶共用程式模式，僅搜尋 stride 無法確認全域緩衝的讀取來源。\n4. `0x007D1620`、`0x007D16A0` 使用管理器 `ebx` 下的其他隊列（`+0x18030/+0x1A030`、`+0x24048/+0x26048`），分別以虛擬方法 `+0x0C` 及不同參數執行處理。顯示同一管理器具有多階段資料提交機制。\n5. 原始 `0x00FB76B0` 六平面緩衝的非零係數寫入者，**仍未找到**。本段沒有將任何 `+0x60` 或近似 float 比較解讀為相機矩陣。",
+          "observation": "記錄候選consumer並保留未證全域owner，不能因非直接global load推不同實例。",
+          "conflict_keys": [
+            "owner-not-resolved"
+          ]
+        },
+        {
+          "claim_key": "early-bucket-owner",
+          "source_lines": [
+            180,
+            198
+          ],
+          "source_excerpt": "從 `manager+0x98` 得到桶基底（不是直接解參照 `[0x00FB7740]`），虛擬方法 `+0x04` 取得索引，然後 `index * 0x2004` 定位。此實作使用 `count < 0x800` 上限。未找到其 `manager+0x98` 一定指向全域桶的決定性賦值證據。\n\n## 五、與前段真正全域桶生產者區分\n\n第103段已確認：\n\n- `0x0079CDA8`、`0x007BED5B`、`0x007CD7C9`、`0x007D34EB`、`0x007F23B0`：直接取得 `[0x00FB7740]`，追加項目。\n- `0x007FECE9`：固定第10桶偏移 `0x14028/0x16028` 追加。\n- `0x00798F26～0x00798F78`：全域桶 heap 配置與初始化。\n\n本段新的消費者用 `ebx+...` 取得指標，**不能反向認定它就是上述全域桶讀者**。真正的全域桶讀者可能是呼叫者將全域位址注入 `manager+0x98`、某個繪圖管理器、或完全其他未找到的別名路徑。這三者皆屬假設。\n\n## 六、下一步追查\n\n1. 追蹤 `0x007D14xx` 大型消費函式的直接呼叫者，與 `ebx` 管理器配置、大小及類型，驗證此消費鏈屬於何種調度。\n2. 針對管理器 `+0x98` 的寫入者與 `0x0079A3C0` 呼叫者，確認是否存在 `[0x00FB7740]` 的別名注入。\n3. 全域桶的讀取需以**實際指標別名**驗證，不能僅用 stride `0x2004` 的相似性替代。\n4. 六平面緩衝 `0x00FB76B0` 的內容寫入者仍需沿參數與非全域指標尋找。\n5. 場景物件 `vtable+0x20` 的主更新迴圈仍未與本段流程相連。",
+          "observation": "alias/實際基址與主調度為明示缺口。",
+          "conflict_keys": [
+            "owner-not-resolved",
+            "plane-writer-stale"
+          ]
+        }
+      ],
+      "conflicts": [
+        "owner-not-resolved",
+        "plane-writer-stale"
+      ],
+      "affected_spec_ids": [],
+      "spec_disposition": "Downstream Client navigation only; no demonstrated current S00 Phase-B SPEC dependency; S00 acceptance not granted."
+    },
+    {
+      "source_file": "kr-temp-roy/20261027-155733-chatgpt-web-roy-T08-105-global-buckets-plane-writers.md",
+      "source_blob_sha": "b9dec64386ff0f8221eaf31add3876b346bbbf12",
+      "source_sha256": "a4975f5ddd2bf1337b088255541b1e8feb7a0c52b8c61092b7313f997a61d734",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_intake_id": "SRC-0049",
+      "historical_status": "PENDING",
+      "historical_status_unchanged": true,
+      "integration_proposed": "CONFLICT_CHECKED",
+      "review_method": "R0 identity and R1 actual narrative reading; bounded source observations only, no new native audit",
+      "claim_keys": [
+        "early-bucket-owner"
+      ],
+      "source_lines": [
+        [
+          46,
+          57
+        ]
+      ],
+      "observations": [
+        {
+          "claim_key": "early-bucket-owner",
+          "source_lines": [
+            46,
+            57
+          ],
+          "source_excerpt": "`edx` 初始為 `0x13`，因此第一段只消費桶 19、20、21；後續清空 22 桶 count。`eax` 來自 `ebx+0x2604C`，不是讀取 `[0x00FB7740]`。對 entry 執行 `vtable+0x0C`，兩參數由 `push esi`、`push edx` 提供。需從完整函式入口追溯 `ebx` 的所有者。\n\n### 全域桶與係數引用的邊界\n\n`[0x00FB7740]` 直接引用有 15 處（含初始化/清理/生產者）；`[0x00FB76B0]` 有 16 處（含初始化/清理/讀取者）。**不能**因係數的直接引用多數用 `mov edx,[global]` 就推斷不存在間接寫入者；反之應對每一處的下游 `edx` 記憶體寫入進行追蹤。\n\n## 待完成（T08-105 延伸或 T08-106）\n\n1. 對係數引用 `0x0049DAFD, 0x004AA322, 0x004C9BED, 0x0055B43B, 0x0055B629, 0x007A5D46, 0x007E10EA, 0x007E4356, 0x007F3032, 0x007F98C0, 0x007FE49A` 各自反組譯至實際 `fstp [edx+...]` 或讀取鏈，判斷是否寫入內容。\n2. 追蹤全域桶所有直接引用的容器基址，尤其 `0x007FECEB` 的第10桶來源與管理器清零者。\n3. 回溯 `0x007D170B` 的 `ebx` 來源、entry vtable 候選實作及呼叫頻率；不得直接命名場景主更新。\n4. 從確實消費全域桶的函式再追至 `0x00C07554+0x20`，目前無直接連結證據。",
+          "observation": "候選consumer基址和逐位元組xref限制，不是完整指標身份證明。",
+          "conflict_keys": [
+            "owner-not-resolved",
+            "plane-writer-stale"
+          ]
+        }
+      ],
+      "conflicts": [
+        "owner-not-resolved",
+        "plane-writer-stale"
+      ],
+      "affected_spec_ids": [],
+      "spec_disposition": "Downstream Client navigation only; no demonstrated current S00 Phase-B SPEC dependency; S00 acceptance not granted."
+    },
+    {
+      "source_file": "kr-temp-roy/20261027-160157-chatgpt-web-roy-T08-105-extended-six-plane-readers-and-bucket-ownership.md",
+      "source_blob_sha": "8096d2e1639ca22f60d5b95e2c98cd382be9fae6",
+      "source_sha256": "87a8aaa5ddc823df68949a6513a1e5163a8bd365f454f5a489638fd1da77968a",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_intake_id": "SRC-0050",
+      "historical_status": "PENDING",
+      "historical_status_unchanged": true,
+      "integration_proposed": "CONFLICT_CHECKED",
+      "review_method": "R0 identity and R1 actual narrative reading; bounded source observations only, no new native audit",
+      "claim_keys": [
+        "early-bucket-owner",
+        "early-bucket-producers",
+        "early-geometry-meaning"
+      ],
+      "source_lines": [
+        [
+          55,
+          86
+        ],
+        [
+          101,
+          125
+        ],
+        [
+          129,
+          146
+        ]
+      ],
+      "observations": [
+        {
+          "claim_key": "early-geometry-meaning",
+          "source_lines": [
+            55,
+            86
+          ],
+          "source_excerpt": "條件依 `fcomp`／`test ah,0x41`／`je` 評估；已確認每組計算 `a*x+b*y+c*z+d`，並對六組做提前結束測試。為避免浮點旗標與 NaN 分支被高階化誤寫，本文不將其簡化成未經證實的精確 `<` / `>=` 排除規則。\n\n已確認入口：`0x0049DAFB`、`0x004AA320`、`0x004C9BEB`、`0x0055B439`、`0x0055B627`，均將三個位置 float 壓入堆疊，`edx=[0x00FB76B0]`，呼叫 `0x00838800`，隨後 `test eax,eax` 決定分支。\n\n### 2.2 `0x00838860`：四 float 測試（第四量用作比較閾值）\n\n```asm\n00838863 fld dword ptr [ebp+0x14] ; fourth scalar\n0083886E fld dword ptr [ebp+0x0c]\n00838871 fld dword ptr [ebp+0x08]\n00838874 fld dword ptr [edx-0x8]  ; a\n00838877 fmul st,st(1)\n00838879 fld dword ptr [edx-0x4]  ; b\n0083887C fmul st,st(3)\n0083887E faddp st(1),st\n00838880 fld dword ptr [edx]      ; c\n00838882 fmul st,st(4)\n00838884 faddp st(1),st\n0083888C fadd dword ptr [edx+0x4] ; + d\n00838895 fcomp st(4)             ; compare to fourth input\n0083889E inc ecx\n0083889F add edx,0x10\n008388A2 cmp ecx,0x6\n008388A9 mov eax,0x1\n008388BA xor eax,eax\n008388B5 ret 0x10\n008388C3 ret 0x10\n```\n\n**已確認**：兩函式均讀同一排列的六個 16-byte 平面係數。前者使用三個 float；後者以第四 float 作比較基準，而**不是**把第四 float 乘上 plane `d`。`0x007F259F`、`0x007F754A`、`0x007F98BE`、`0x007FE498` 等均提供四個 float 呼叫後者。\n\n**推測**：第四參數可能是球形界限相關量，但尚未證實必然是半徑或特定場景物件形狀。",
+          "observation": "三float/四float閾值入口與NaN不能簡化，radius仍推測。",
+          "conflict_keys": [
+            "plane-writer-stale"
+          ]
+        },
+        {
+          "claim_key": "early-bucket-producers",
+          "source_lines": [
+            101,
+            125
+          ],
+          "source_excerpt": "22 個 `0x2004` 的桶（`0x2C058` 正好等於 22*`0x2004`）用於每桶 2048 指標與 count；額外尾端大小為 0。不能僅因其它 manager 具有相同 bucket layout 就視同同一配置。\n\n典型全域插入指令：\n\n```asm\n0079CDA8 mov edi,ds:[0x00FB7740]\n0079CDB0 call edx                  ; object vtable+0x04, return bucket index\n0079CDB2 imul eax,eax,0x2004\n0079CDB8 mov ecx,[eax+edi+0x2000]\n0079CDC1 cmp ecx,0x800\n0079CDC9 mov [eax+ecx*4],esi      ; eax now points to bucket base\n0079CDCC inc dword ptr [eax+0x2000]\n```\n\n另在 `0x007F96ED`、`0x007FEC92` 觀察同型插入；`0x007FECE9` 進一步額外插入固定第10桶：\n\n```asm\n007FECE9 mov edx,ds:[0x00FB7740]\n007FECEF mov ecx,[edx+0x16028]  ; bucket10 count = 10*0x2004 + 0x2000\n007FECF5 cmp ecx,0x800\n007FECFD mov [edx+ecx*4+0x14028],esi\n007FED04 inc dword ptr [edx+0x16028]\n```\n\n**注意**：`0x007F96ED` 局部使用 `add [eax+0x2000],ebx`，是否相當於 count++ 需要先追溯 `ebx`，不能與固定 `inc` 直接等同。",
+          "observation": "22桶配置與額外append；EBX加count未追不能一概count++。",
+          "conflict_keys": []
+        },
+        {
+          "claim_key": "early-bucket-owner",
+          "source_lines": [
+            129,
+            146
+          ],
+          "source_excerpt": "`0x007D13D8`、`0x007D1452`、`0x007D14E0` 的物件來源是 `[ebx + per_bucket_offset + i*4]`，會呼叫 `entry.vtable+0x0C`，第二參數逐段分別為 1、2、4，且各自將 `ebx+bucket_count_offset` 清零。這表明 `0x007D170B` 的 19～21 桶並非唯一內嵌桶 consumer，而是此管理器多階段消費流程末端之一。\n\n進一步 `0x007D16A0` 消費管理器 `[ebx+0x24048]` 的桶；`0x007D16BA` 以 `push 0x00FB76A8` 呼叫 `0x0079A5F0`；`0x007D16E4..0x007D16F6` 遍歷八次另一個由 `0x0079A5F0` 取得的介面方法 `vtable+0xD4`；`0x007D16FD` 從 `[ebx+0x2604C]` 起消費桶 19,20,21，然後 `0x007D1769..0x007D178F` 清掉此**內嵌**物件所有22桶 count。\n\n**已確認的區隔**：這些函式由 `ebx` 管理器位址計算內嵌 bucket，並未在 consumer 中取 `[0x00FB7740]`。故不可把 `0x007D170B`（或同一管理器的早期階段）列為全域分桶的已確認消費者。\n\n**語義限制**：每個 entry vtable+0x0C 的具體類型、`ebx` 的配置者、consumer 的外部呼叫者和周期仍未追畢；僅能確定多階段 dispatch/reset，不可命名為場景主迴圈或渲染主迴圈。\n\n## 5. 新判定：係數直接引用的資料角色\n\n本次檢視先前 16 個 `[0x00FB76B0]` 的直接絕對引用。觀察到初始化（`0x00798E9C`）、清理（`0x0079963F` 及 `0x00799651`）以及大量呼叫 `0x00838800/0x00838860` 的讀取者；例如 `0x007A5D44`、`0x007E10E8`、`0x007E4354`、`0x007F3030`、`0x007F98BE` 皆屬將全域指標交給六平面測試函式的路徑。\n\n因此**直接絕對引用中目前沒有定位到正常影格更新係數內容的寫入者**。但間接別名（結構內指標、參數傳遞、陣列拷貝、memcpy、一次性計算函式等）仍完全可能；不得說系統從不更新係數。\n\n## 6. 待解及下一段 T08-106 建議\n\n1. `0x00FB76B0` 的**非初始化**寫入者：以 `0x60` 長度的 copy/memcpy 或 `mov/fstp [base+0..0x5C]` 反向搜尋；檢查 `[0x00FB76AC]` 是否為計算平面的上游矩陣／向量，但目前只有配置為0x10及 0,0,0,1 初始化之證據。\n2. 全域22桶 consumer：從桶指標存入其它全域／物件欄位的別名流、含 `0x2004` 步距及 `+0x2000` 清零的迴圈檢索。每個候選須證明最後讀取的基址源自 `[0x00FB7740]`。",
+          "observation": "多階段dispatch/reset可導航，actual owner/alias仍未解。",
+          "conflict_keys": [
+            "owner-not-resolved",
+            "plane-writer-stale"
+          ]
+        }
+      ],
+      "conflicts": [
+        "owner-not-resolved",
+        "plane-writer-stale"
+      ],
+      "affected_spec_ids": [],
+      "spec_disposition": "Downstream Client navigation only; no demonstrated current S00 Phase-B SPEC dependency; S00 acceptance not granted."
+    },
+    {
+      "source_file": "kr-temp-roy/20261028-012810-chatgpt-web-roy-T08-integrated-reaudit-01.md",
+      "source_blob_sha": "b41f55a2fdfb3ef3dc4c1dc58e421466720b45e0",
+      "source_sha256": "6f7b6f43c85ea848f909d06642f94c804a38f6325fb0d480eed5962177a0fb29",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_intake_id": "SRC-0360",
+      "historical_status": "Historical bounded/source-level record; no whole-document FULL_PASS",
+      "historical_status_unchanged": true,
+      "integration_proposed": "CONFLICT_CHECKED",
+      "review_method": "R0 identity and R1 actual narrative reading; bounded source observations only, no new native audit",
+      "claim_keys": [
+        "early-actor-interface",
+        "early-coordinate-boundary"
+      ],
+      "source_lines": [
+        [
+          11,
+          15
+        ],
+        [
+          140,
+          181
+        ]
+      ],
+      "observations": [
+        {
+          "claim_key": "early-coordinate-boundary",
+          "source_lines": [
+            11,
+            15
+          ],
+          "source_excerpt": "1. GitHub `kr/tasks/T08/task.json` 的正式 T08 = **實體生成與移除**；`scope=0007 建立、登記、移除的資料介面；不制定生成時間或決策規則`，`owner=null`、`state=unclaimed`、`dependencies=[T02,T06,T07]`。Project `03` 長期包含資源、Binding、場景控制/B queue 等較廣泛主題，僅能作為待審核 cross-task 原稿，不直接以 T08 正式 owner 身分改 catalog。\n2. 原檔 `Tartaros.bin` 是 **PE32 MZ/PE 映像**而不是只含 .text 的 flat dump。標準 PE 映射 `.text` VA `0x401000`→raw `0x400`；歷史 flat 算法 `VA-0x401000` **不等同 PE VA→file offset**。同一標籤 A 的兩處 bytes 不同，這不是純粹文字上的 offset 歧義。\n3. 一組重要反例：`.rdata` 候選 vtable `0x00C4F6C0` 以標準 PE rdata 映射取指標，其 `0x007A8E10` 與 `0x007A3920` **在標準 PE .text 映射讀到正常函式入口候選**；用歷史 flat 映射讀則落在指令中途。此前「中途指令」反證不能直接套用到 vtable 正式 VA。**這支持 vtable 指標遵循標準 PE VA；不等於已完全驗證 vtable 對象或完整 ABI。**\n4. 反之，歷史 `0x007A5050`、`0x007A67C0`、`0x004CA860`、`0x004E1360` 的保存 flat 起點是典型 x86 函式序言；在 PE VA 同名位置不是相同入口。若確實取自對此同一 BIN 的 flat raw bytes 並按 `0x401000` 起算，該**物理位置的標準 PE VA 應為歷史標籤減 `0x400`**（僅限 `.text`、此來源排列、無其他重定位視角的情況），因此不能直接以歷史標籤和 PE vtable entry 比較。需要以函式內 call immediate 和 bulk 函式 bytes 進一步固定各原稿所採用的地址空間。\n5. 本工作包已進行正式 T08 `S2C0007` 的來源復核與靜態 bytes 對照；**尚未完成整條建立→登記→移除鏈的獨立逐分支機器碼重放**。尤其移除路徑及 server authority 仍是缺口，不把來源描述稱作本輪新的完整原生驗收。",
+          "observation": "明示正式任務scope及PE/flat座標差，不混指標或把bytes當全文pass。",
+          "conflict_keys": [
+            "legacy-coordinate"
+          ]
+        },
+        {
+          "claim_key": "early-actor-interface",
+          "source_lines": [
+            140,
+            181
+          ],
+          "source_excerpt": "本節技術數據引用 GitHub 保存的 `kr/evidence/6ef16f451f942d2e828a1b6936b466332736d7dc75fa0152fcbb6289863902dd.txt`，**尚非本輪逐分支完全重新反組譯**。\n\n原版索引描述 `S→C 0007` 的接收函式標籤 `0x004AE4D0`，正常返回 `0x004AED80`，失敗支 `0x004AED83`；`0x004AED90` 起是 jump table data，不能誤解作自然順序的新函式。前置2 bytes，row 26 bytes；依各 row 的 actor ID 低位元組分流。已保存 type1 分支呼叫 `0x004D1710`，暫稱 CMonster 建立。其後設定 transform/model 及加入共用 actor map；manager 間接與腳本建立等共用 caller 仍須依映射重核。\n\n| Row relative offset | 型別 | 已保存的作用與限制 |\n|---:|---|---|\n| 0 | WORD | actor ID；低 byte 參與 type switch |\n| 2 | BYTE | 資源索引第2欄，計算減一；不能獨立命名 |\n| 4 | WORD | 模型/資源編號 |\n| 6, 10 | float, float | 水平座標，進入 actor virtual +0x44 |\n| 14 | float | 提供 actor virtual +0x5C；語意未完成 |\n| 18 | DWORD | 寫 actor+0x9C 的 owner 值；不等於 AI 主控權 |\n| 22 | BYTE | 朝向，actor virtual +0x58 |\n| 23 | BYTE | type-specific 值；monster +0x424、值4另影響+0x428 |\n| 24 | BYTE | actor+0x90 faction |\n| 25 | BYTE | status component virtual +0x8 的參數 |\n\n**建構→登記候選資料流（保存來源，未獨立升級）**：\n\n```text\nnetwork S2C0007  (T02 packet framing responsibility)\n -> receiver 0x004AE4D0 : header(2), rows(26)\n -> row.actor_id low byte discriminator\n -> type1 : 0x004D1710 / CMonster candidate\n -> configure actor position and resources / type flags / owner\n -> 0x004DFF30..0x004DFFA9 : GameInfo+8 map using actor+4 WORD\n -> owner!=0 : optional player-current-actor update via 0x004C6E50..0x004C6E9C\n -> 0x004AE69D auxiliary 0x48 bytes -> 0x004AE77A -> 0x0056F5C0\n    -> global 0x00FDF3C4 minimap marker list, NOT monster AI scheduler\n```\n\n保存 `0x4DFF30` 五個**直接 caller 候選**：`0x4A11B6 / 0x4AA222 / 0x4AEC03 / 0x4AF4F7 / 0x4B2F83`；僅為舊索引，不是完整 XREF 證明。傳遞 GameInfo+8 map 的具體 owner/type 仍需按標準 PE VA 對照。`0x4D1060` 的 CEventObject 分支不得混同 CMonster。`0x4AE69D` 的0x48小地圖標記與 actor 生存/移除是兩種生命週期，不能當作怪物控制佇列。\n\n### 5.1 S2C000A 不等於怪物 AI\n\n來源 `0x004AF920..0x004AFAE7`：header 7 bytes（+2 owner DWORD，+6 signed BYTE row count），row 每4 bytes（actor WORD、related WORD）。本機 owner 相關分支重設槽位並呼叫 controller virtual +4/+8/+10；首筆 actor+0x98=1，後續為0，actor+0x9C=owner。保存索引明言 **沒有證據顯示普通怪物由此取得獨立 AI 決策控制器**。此路徑可作生成後登記對照，但不屬 T08 的怪物 AI 規則設計。\n\n### 5.2 移除：源證據不足，不虛構完整逆鏈\n\n目前讀到 `kr/evidence/3888059...txt` 保存 `0x005666A0` Lua `DeleteObject` registration wrapper，其末尾 `ret 4`；`kr/evidence/a607cd9...txt` 僅 `0x00476430 ret 4`。**一個 wrapper 與 no-op 不足以證實 actor map erase、指標引用減少、物件最終 destructor、minimap marker free 及 server-driven removal 的全局順序**。`DeleteAllObject`／`0x4DFF30` 逆向 erase 尚待逐函式 + 原始 bytes 驗證。不能因登記表有 key 就推導它何時刪掉。\n\n核心未解：（1）rows count 權威及 payload bounds checks；（2）重複 actor key 的行為；（3）哪種封包/腳本導致 remove；（4）GameInfo+8 erase 和物件 destruct / marker cleanup 的先後；（5）owner 權威及斷線事件；（6）每條候選函式的地址標籤轉換與獨立 caller/callee proof。",
+          "observation": "保留source-level建立/控制槽/移除缺口，不補Server authority/AI。",
+          "conflict_keys": [
+            "spawn-policy-unknown"
+          ]
+        }
+      ],
+      "conflicts": [
+        "legacy-coordinate",
+        "spawn-policy-unknown"
+      ],
+      "affected_spec_ids": [],
+      "spec_disposition": "Downstream Client navigation only; no demonstrated current S00 Phase-B SPEC dependency; S00 acceptance not granted."
+    },
+    {
+      "source_file": "kr-temp-roy/20261028-013305-chatgpt-web-roy-T08-integrated-reaudit-02-spawn-registration-and-script-cleanup.md",
+      "source_blob_sha": "99c9a0edbfffd8a81f7df26a40a9933ddb33f40d",
+      "source_sha256": "3711b79ee117ab0ca0a6bf6f3e6da20621fa0e6b6622dc130ea58493089a8482",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_intake_id": "SRC-0361",
+      "historical_status": "Historical bounded/source-level record; no whole-document FULL_PASS",
+      "historical_status_unchanged": true,
+      "integration_proposed": "CONFLICT_CHECKED",
+      "review_method": "R0 identity and R1 actual narrative reading; bounded source observations only, no new native audit",
+      "claim_keys": [
+        "early-actor-interface",
+        "early-coordinate-boundary",
+        "early-script-cleanup"
+      ],
+      "source_lines": [
+        [
+          11,
+          16
+        ],
+        [
+          17,
+          18
+        ],
+        [
+          22,
+          22
+        ]
+      ],
+      "observations": [
+        {
+          "claim_key": "early-actor-interface",
+          "source_lines": [
+            11,
+            16
+          ],
+          "source_excerpt": "1. **0007 長度推導不只「每 row 26 bytes」**：`0x4AE510` 取函式第二參數 `len`，若 `<2` 將 row_count 設為 0；否則 `0x4AE51F..0x4AE529` 對 `len-2` 作常數除法，`0x4AE52C` 保存 `floor((len-2)/26)`；`0x4AE538` 以 0 分支跳 `0x4AED58`。證據：`mov eax,0x4EC4EC4F; mul ecx; shr edx,3`（無號除以26的乘法化形式）。這是**接收函式的計數算法**，不是伺服器生成時機。末尾不足26 bytes 的處置、buffer 真正長度契約需 T02 核對。\n2. **0007 的類型分派**：`0x4AE5B8 movzx eax, byte [ebx-4]`、`0x4AE5D4 cmp eax,7`、`0x4AE5D7 ja 0x4AED83`、`0x4AE5DD jmp [eax*4+0x4AED90]`。種類由 row actor ID 的低 byte 驅動，超過7走錯誤分支；**jump table 是資料，不可當指令**。`0x4AE5BC` 的資源次級 byte `dec edi`，再與類型及 `WORD [ebx]` 組合索引，非獨立的生成規則。\n3. **0007 → GameInfo 登記直接邊**：`0x004AEC03: e8 28 13 03 00` → `0x004DFF30`，PE VA 完全一致。其他保存直接 caller `0x004A11B6,0x004AA222,0x004AF4F7,0x004B2F83` 的 `E8 rel32` 亦在前稿 PE byte 對照已列出（不是完整呼叫者全集）。\n4. **GameInfo 插入採『查無既存 key 時才新增』分支**：`0x4DFF4C` 讀 actor `WORD [edi+4]`，`ebx` 為 GameInfo；`0x4DFF56` 取 `ebx+8` map，`0x4DFF5F` 查 `0x82EF00`，`0x4DFF67 cmp edx,[ebx+0xc]`；若相等（end/sentinel）才經 `0x57EF20` 建節點與 `0x82F200` 唯一插入。**非 sentinel 時走 `0x4DFF90` 記錄訊息後返回**，沒有覆寫舊指標的機器碼證據。`0x4DFF42` 零 actor 則呼叫 `0x6EDC70`，惟該函式是否無返回／中止仍需核對，因此不要宣稱後續讀 `[edi+4]` 永遠安全。\n5. **節點配置及 payload**：`0x57EF26 push 0x18`、`0x57EF28 call 0x891268` 分配24 bytes；節點 `[+0/+4/+8]` 初始皆為 `esi+4` 的 sentinel；`node+0x0c` 起複製 `[edi]`、`[edi+4]` 兩 DWORD（key 與 actor pointer 候選），`node+0x14` 寫WORD零。這對應 `0x4DFF6C..0x4DFF75` 堆疊暫存設定；**不要把不同節點容器的 +0xC/+0x10 與名稱樹 payload 混淆**。\n6. **唯一鍵插入重複分支可見**：`0x82F200..0x82F2C5` 包含按 `[node+0xC]` 比較、`0x44BD00` 插入及 `[esi+4]` 設為1（成功），在另一條分支 `0x82F2B7` 設0（未插入）。由於未完整分析 `0x82EF00` 和回傳所有權，尚不能宣稱重複情況已釋放新 actor，或者重複 ID 永不遺漏。",
+          "observation": "count/typejump/duplicate診斷/node配置來源描述，不宣稱全部失敗生命期。",
+          "conflict_keys": [
+            "spawn-policy-unknown"
+          ]
+        },
+        {
+          "claim_key": "early-script-cleanup",
+          "source_lines": [
+            17,
+            18
+          ],
+          "source_excerpt": "7. **Script DeleteAllObject 是另一個 owner/container**：`0x563AA0 mov eax,[ecx+0x1C]`，走節點 `[+0x10]` 的 object pointer。非空時虛擬表 `+0x14` 與 `+0` 兩段呼叫（後者 `push 1`），循樹迭代後 `0x563B1D call 0x823850` 清理樹；**沒有看到直接對 GameInfo+8 使用相同 erase 路徑**。後續 `0x563BEA call 0x851420`、`0x563C01/0x563C15 lock xadd` 等為額外 resource/refcount 管理，不等於全體 actor 最終回收。\n8. 保存 GitHub `kr/evidence/a607cd903831b70cc24131938368ef19c0a537b63a4506190b2926d48500ae65.txt` 顯示 `0x476430 ret 4`，而 `0x5666A0` 的 DeleteObject 註冊會引用它；因此 **單物件 DeleteObject Lua API 註冊不構成 GameInfo map erase 的證明**。兩者與 `DeleteAllObject` 必須區分。",
+          "observation": "script owner清理與GameInfo及no-op DeleteObject分開。",
+          "conflict_keys": []
+        },
+        {
+          "claim_key": "early-coordinate-boundary",
+          "source_lines": [
+            22,
+            22
+          ],
+          "source_excerpt": "上一批正確觀察：部分歷史 B queue／vtable 筆記確實混入 `.text` flat `raw=VA-0x401000`，與 PE raw 相差 `0x400`。**本批反而提供另一組獨立反證**：`S2C0007 (0x004AE4D0)`、`0x004AEC03`、`0x004DFF30`、`0x00563A70`、`0x0057EF20`、`0x0082F200` 在 PE 的 VMA 下具有自洽呼叫與容器構造；不能以單一 `-0x400` 統一校正所有歷史 function labels。須以**來源檔 SHA + 函式入口 bytes + E8 target + PE section**分群建立 mapping provenance，禁止跨群直接拼連 caller/callee。",
+          "observation": "不能統一-400全部function label或跨群拼caller。",
+          "conflict_keys": [
+            "legacy-coordinate"
+          ]
+        }
+      ],
+      "conflicts": [
+        "legacy-coordinate",
+        "spawn-policy-unknown"
+      ],
+      "affected_spec_ids": [],
+      "spec_disposition": "Downstream Client navigation only; no demonstrated current S00 Phase-B SPEC dependency; S00 acceptance not granted."
+    },
+    {
+      "source_file": "kr-temp-roy/T08-KNOWLEDGE-BASE.md",
+      "source_blob_sha": "98326bdd1e3ad25903316817b3352a57a0b89cc8",
+      "source_sha256": "4b7d8821a43359e8953cbead34bd17e69bdb09ebac15e6fcbb01bd430acc313a",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_intake_id": "SRC-0362",
+      "historical_status": "Historical bounded/source-level record; no whole-document FULL_PASS",
+      "historical_status_unchanged": true,
+      "integration_proposed": "CONFLICT_CHECKED",
+      "review_method": "R0 identity and R1 actual narrative reading; bounded source observations only, no new native audit",
+      "claim_keys": [
+        "early-bucket-owner",
+        "early-geometry-meaning",
+        "early-name-containers"
+      ],
+      "source_lines": [
+        [
+          53,
+          65
+        ],
+        [
+          87,
+          97
+        ],
+        [
+          67,
+          83
+        ]
+      ],
+      "observations": [
+        {
+          "claim_key": "early-name-containers",
+          "source_lines": [
+            53,
+            65
+          ],
+          "source_excerpt": "\n### 名稱索引、Provider 與 Binding：重要歷史修正\n\n**T08-098 發現型別衝突，T08-099 釐清兩套名稱容器**，這是交接必讀事項：\n\n- `[0x00FE173C]` 是指向 heap 配置之名稱索引的指標；`0x00FE1740` 則是另一棵內嵌名稱樹，`[0x00FE1744]` 哨兵、`[0x00FE1748]` 計數。\n- `0x007D7139` 以 `push 0x00FE173C` 傳**位址**給 `0x007B82D0`，寫入內嵌樹中的 `0x8C` bytes 管理物件，其 `+0x00` 為遞增 ID，**不是 vptr**。\n- `0x007BDF90` 則先 `mov esi,[0x00FE173C]` 取得 **heap 索引物件**，查詢後由 `node+0x24` 取得多型 Provider。不可把兩棵樹的 `node+0x24` payload 當成同一種物件。\n- `0x00719B90` 配置 `0x28` bytes 名稱節點，寫入 `node+0x24` payload；其具體類型由登記路徑決定，**不要**單靠此節點寫入推類別。\n- 真正 heap 索引插入者 `0x007DC660`；Provider 登記呼叫點 `0x007D6EC4` / `0x007D6F51`，從 `0x007F15B0` / `0x007F1650` 初始化 `0xB4` bytes 多型物件。\n- 主 Provider vtable `0x00C50A8C`：`+0x00=0x007F1620`，`+0x08=0x007F2110`，`+0x0C=0x007F20E0`，`+0x10=0x007F21A0`（配置/初始化並返回 `0xB4` bytes Binding 複本），`+0x18=0x007F23B0`，`+0x1C=0x007F24F0`，`+0x28=0x007F2520`。\n- 次級 vptr 位於 `object+0x84`，指向 `0x00C50ABC`；`0x007F25F0` 是將 `this` 減去 `0x84` 後轉向 `0x007F23B0` 的 thunk。\n- `0x007BDF90` 依 `item+0x04` 名稱查詢 Provider，以 `vtable+0x10` 得到 Binding，存入 `item+0x08`；`0x007BE0F0` 解除 Binding；`resource+0x74` 表示相關解析/綁定流程狀態。",
+          "observation": "摘要保留address/value與8C/Provider分離；正式native仍回精確原稿。",
+          "conflict_keys": [
+            "heap-index-tree",
+            "manager-is-provider"
+          ]
+        },
+        {
+          "claim_key": "early-bucket-owner",
+          "source_lines": [
+            87,
+            97
+          ],
+          "source_excerpt": "- `0x007D35F7` 的 `ECX=0x00FB76A8` 呼叫 `0x0079A3C0`，而該函式取 `[ECX+0x98]=[0x00FB7740]`，證明此路徑是**全域桶 producer**；其他多個直接引用亦屬 enqueue；第10桶 count 位移為 `0x16028`。\n- `0x00799840` 配置4-byte callback（vptr `0x00C4FF8C`），獨立於 `0x007997A0` 配置並由 `0x00839940` 建構的 `0x470`-byte 核心物件（vptr `0x00C53F44`）。callback `+0x04/+0x08=0x005F5D10` 是直接 `ret`；`+0x0C=0x007D1310` 是按外部 owner 參數處理桶的路徑。\n- `0x007D1310` 從 `[EBP+8]` 取得 owner；`0x007D1769～0x007D178D` 最後清零所有22桶的 count，但**全域 owner 身分未獲驗證**。本筆記不宣稱全域桶已有確認 consumer。\n\n## 長期未解決問題（按優先度）\n\n1. `[0x00FB7740]` 全域桶的實際逐筆 consumer 仍未有完整 owner 指標身分證據；需要定位 callback `0x00C4FF8C+0x0C` 的真正分派者，證明其參數與全域桶的關係。`0x007D1310` 的 22 次 count reset 本身尚不足以完成證明（T08-127～128）。\n2. 六組幾何平面係數的**數學方向、正規化與場景／相機意義**尚未完全證實；但實際內容寫入者 `0x00838430` **已經定位，不再列為待尋找問題**（T08-118～119）。\n3. 場景管理器如何調用共用物件 vtable `0x00C07554+0x20`，以及和 `0x00799D20` 上游調度、資源/渲染派送的時序關係尚未確認。\n4. 分桶 entry `vtable+0x0C` 的具體多型實作、物件來源、不同桶類型與 owner 的所有權。\n5. Provider / Binding 的繼承結構、引用計數及完整所有權；變換與完成狀態真正用途。",
+          "observation": "長期明示全域consumer/owner未知及版本衝突，不接受KB自稱穩定作R3。",
+          "conflict_keys": [
+            "owner-not-resolved",
+            "legacy-coordinate"
+          ]
+        },
+        {
+          "claim_key": "early-geometry-meaning",
+          "source_lines": [
+            67,
+            83
+          ],
+          "source_excerpt": "\n### 變換、幾何測試與分桶\n\n- 變換結構大小 `0x2C`：translation `+0x00` 三 float；quaternion `+0x0C` 四 float；scale `+0x1C` 三 float；marker `+0x28` DWORD。`0x0077E910` 合成變換；`0x0077E800` / `0x0077E880` 旋轉向量/四元數乘法。\n- `0x007BE150` 將子項候選值最大值寫入 `resource+0x20`；尚不可認定為特定物理量。\n- `0x00838860` 對六組四浮點係數進行比較，類似六半空間幾何測試；**未證實**一定是相機視錐。`[0x00FB76B0]` 指向 `0x60` bytes、24 floats 的配置。**內容更新者已確認為 `0x00838430`**，由 `0x00799D20` 呼叫；呼叫鏈及實際寫入證據見 T08-118～120。\n- `[0x00FB7740]` 指向全域22桶的配置，每桶 `0x2004` bytes（2048個4-byte指標與1個4-byte count），整體配置 `0x2C058` bytes。已確認多個寫入者（`0x007F23B0`、`0x0079CDA8`、`0x007BED5B`、`0x007CD7C9`、`0x007D34EB`、`0x007FECE9` 等），第10桶固定寫入者 `0x007FECE9`。\n- **分桶 consumer 的重要界線（T08-104、107、111、125～128）**：`0x007D1310` 的分桶 base 取自 `[EBP+8]` 外部 owner 參數；`0x007D170B～0x007D178F` 會逐筆派送 `entry vtable+0x0C`，後續迴圈清零 **22 個桶的 count**。然而尚未證明實際 owner 等於 `[0x00FB7740]` 的全域 heap 桶；**不能斷言一定是不同實例，也不能斷言就是全域桶 consumer**。`0x00C4FF8C` callback `+0x0C` 指向 `0x007D1310`，`+0x04` 指向單指令 `ret` 的 `0x005F5D10`；兩槽不可混淆（T08-109、113、125）。\n\n\n\n### 六平面正常寫入及更新鏈（T08-118～120，穩定結論）\n\n- 兩個已確認直接呼叫入口 `0x00492567`、`0x007BA56E` 均向 `0x00799D20` 傳入字面 handle 位址 `0x00FB76A8`。在 `0x00799D20`，`EBX=[EBP+8]`，`ESI=[EBX+8]=[0x00FB76B0]`，再呼叫 `0x00838430`。\n- `0x00838430` 實際寫入 `ESI+0x00～0x5C` 共24個 float；`0x00862C00` 以向量差與外積型計算形成四係數平面，`0x00838800` / `0x00838860` 進行六半空間測試。\n- `0x00798DE0` 是 `0x60` bytes **配置及零初始化者**，不可與上述正常內容寫入者混淆。矩陣來源與相機語義仍不可無證據命名；證據詳見 `kr-temp-roy/` 中 T08-118、119、120 原始研究筆記。\n",
+          "observation": "後續writer導航與camera語義未知並存，早期writer未找到已非現況。",
+          "conflict_keys": [
+            "plane-writer-stale"
+          ]
+        }
+      ],
+      "conflicts": [
+        "heap-index-tree",
+        "legacy-coordinate",
+        "manager-is-provider",
+        "owner-not-resolved",
+        "plane-writer-stale"
+      ],
+      "affected_spec_ids": [],
+      "spec_disposition": "Downstream Client navigation only; no demonstrated current S00 Phase-B SPEC dependency; S00 acceptance not granted."
+    }
+  ],
+  "conflict_registry": {
+    "heap-index-tree": {
+      "description": "7B86F0/7B8680 相關 heap 名稱索引被早稿稱為 tree/RB erase；既有反證為7B868B..AC hash/mask/bucket及7B86DE→719B20 list unlink/free，不能當排序樹結論。",
+      "refs": [
+        "shared/integrations/T01-20261029-semantic-review/t08-new/return-items.json",
+        "kr/tasks/T08/README.md"
+      ],
+      "disposition": "僅排除 heap 索引的排序樹／RB 斷言；保留查名稱／payload／呼叫資料流作PARTIAL導航，不連帶否定相鄰內嵌樹。",
+      "r2_if_needed": "需要 heap 名稱容器精確類型時重用上述確證反證並定向補來源勘誤；本輪不重驗。"
+    },
+    "manager-is-provider": {
+      "description": "096/097 從0x8C manager 登記路徑連到 heap 多型Provider的推論，098已指出首DWORD是ID，099區分address/value兩容器，100另找0xB4 Provider。",
+      "refs": [
+        "kr-temp-roy/20261027-114418-chatgpt-web-roy-T08-098-name-registry-provider-type-separation.md",
+        "kr-temp-roy/20261027-115552-chatgpt-web-roy-T08-099-dual-global-name-container-disambiguation.md",
+        "kr-temp-roy/20261027-134325-chatgpt-web-roy-T08-100-heap-provider-vtable-binding-clone.md"
+      ],
+      "disposition": "排除0x8C manager等同heap Provider／Binding及錯連容器的部分；後稿只作具版本PARTIAL更正來源，不改早稿歷史判決。",
+      "r2_if_needed": "正式規格需要具體Provider時才查指定constructor/vptr/insert資料流。"
+    },
+    "owner-not-resolved": {
+      "description": "104/105 從consumer未直接讀FB7740不能推出一定不同實例；後續129有相反owner說法但既有mapping裁決FAILED，不能擇新覆舊。",
+      "refs": [
+        "kr-temp-roy/T08-KNOWLEDGE-BASE.md",
+        "shared/integrations/T01-20261029-semantic-review/t08-early/mapping-reviews.json"
+      ],
+      "disposition": "共同保留實際owner／alias未解，僅允許候選consumer導航；既不斷言等同全域桶也不斷言必定不同。",
+      "r2_if_needed": "S00需要consume/reset順序時依精確PE座標追owner指標到global heap，先處理129來源映射。"
+    },
+    "plane-writer-stale": {
+      "description": "102–105當時未找到係數writer；KB後續列838430/799D20更新鏈，故早期搜尋未命中不能作現在不存在writer的結論。",
+      "refs": [
+        "kr-temp-roy/T08-KNOWLEDGE-BASE.md"
+      ],
+      "disposition": "只保留camera/正規化/alias語義未知；不把歷史未找到升格不存在寫入者；後續writer導航交middle來源處理。",
+      "r2_if_needed": "若規格依賴係數來源或方向，引用118–120精確版本定向核證。"
+    },
+    "reader-later-located": {
+      "description": "089/090/092的resource+20 reader未定位是當時狀態；093L118/198列7BD8D0具體讀取者。",
+      "refs": [
+        "kr-temp-roy/20261027-103853-chatgpt-web-roy-T08-093-resource-update-completion-dispatch.md"
+      ],
+      "disposition": "不輸出reader不存在／仍完全未定位；保留同offset不同allocation的辨識限制，7BD8D0僅PARTIAL導航。",
+      "r2_if_needed": "需要完成條件精確浮點/NaN契約時查7BD8D0指定分支，不按動畫長度命名。"
+    },
+    "legacy-coordinate": {
+      "description": "歷史flat標籤與PE VA不可拼接；既有24份來源mapping判決及Task退回保留。",
+      "refs": [
+        "shared/integrations/T01-20261029-semantic-review/t08-early/mapping-reviews.json",
+        "kr/tasks/T08/README.md"
+      ],
+      "disposition": "保留座標/來源SHA群組界線；排除錯標VA所衍生caller/vtable等價；不將text -400套到rdata指標或所有早期來源。",
+      "r2_if_needed": "需要映射衝突來源之正式事實時逐blob核PE/raw/完整CFG。"
+    },
+    "spawn-policy-unknown": {
+      "description": "Client row/owner欄與本地fixture不證Server出生時機、波次、AI決策或權威。",
+      "refs": [
+        "kr/tasks/T08/README.md"
+      ],
+      "disposition": "僅資料介面導航；Server決策缺口和Client未解分開，無生成時間/策略規範。",
+      "r2_if_needed": "出現具體協定欄位/順序阻塞再交T02/T08/T06/T07定向。"
+    },
+    "old-rejection-withdrawn": {
+      "description": "82EF00 lower-bound-only舊拒因已撤銷，尾端存在等值條件；不能繼續引用它反駁exact-key用途。",
+      "refs": [
+        "kr/tasks/T08/README.md",
+        "shared/integrations/T01-20261028-27/README.md"
+      ],
+      "disposition": "移除已撤銷拒因；本輪未重驗函式，不由撤銷直接升NATIVE_VERIFIED。",
+      "r2_if_needed": "若需要新R3結論，重用精確已審scope或定向驗證。"
+    }
+  },
+  "stop_reason": "R0 identity, bounded scope, source-level dedup and known conflict dispositions completed; R1 stop condition met. Do not launch general re-audit.",
+  "global_progress_note": "These42 are disjoint from middle48/late48; root computes total138 progress."
+}

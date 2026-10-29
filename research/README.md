@@ -17,3 +17,5 @@ T02–T16 研究原稿應繼續保留完整技術證據，對 S00 交付 bounded
 2026-10-29：[T01 新流程首次接續](handoffs/t01-20261029-risk-intake/README.md)。318版完成R0身份收件，其中4個來源完成有限主張／衝突查對，其餘314版待萃取；新增3項重用既有原生決議與1項PARTIAL導航主張。歷史全文通過3／318不變，不作本通道准入門檻；未標S00接受或SPEC_CONSUMABLE。
 
 2026-10-29：[T03 roy/chatgpt-web指定分支整合](handoffs/t01-t03-roy-20261029/README.md)。LOGIN-01／02、T03-3～19共19篇原稿以精確blob保留，13項有限主張與10筆canonical追加來源完成衝突查對；本批新通道剩0篇。Print Screen／D3DX更正與T03-6 API layout退回單獨追溯，沒有新增FULL-PASS、S00接受或RR結案。
+
+2026-10-29：[T08 roy/chatgpt-web指定分支整合](handoffs/t01-t08-roy-20261029/README.md)。138份既有原稿完成新通道查對（本分支剩0）；新增15個SRC、55項有限主張及233筆追加來源，保留3個正式來源關聯。原318版待萃取剩194份；沒有新FULL-PASS、S00接受或既有退回狀態改動。
