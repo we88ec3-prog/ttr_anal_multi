@@ -104,9 +104,10 @@
 | 5 | `0x0055D896` | `0x00C1028C` | `OnNextTalk` |
 | 57 | `0x0055E063` | `0x00C1054C` | `LoadMap` |
 | 58 | `0x0055E089` | `0x00C10554` | `RestoreMap` |
-| 64 | `0x0055E147` | `0x00C10598` | `AllowPoisonForestRaidHack` |
-| 65 | `0x0055E16E` | `0x00C105B4` | `Phase1` |
-| 72 | `0x0055E27A` | `0x00C105F8` | `RevPhase1` |
+| 63 | `0x0055E147` | `0x00C10598` | `AllowPoisonForestRaidHack` |
+| 64 | `0x0055E16E` | `0x00C105B4` | `Phase1` |
+| 71 | `0x0055E27A` | `0x00C105F8` | `RevPhase1` |
+| 72 | `0x0055E2A1` | `0x00C10264` | `Register` |
 
 **完整 72 筆 `mov_va → string_va → 原始字串`** 存在同批次 JSON，供各 Task 依地址或名稱查詢。
 
