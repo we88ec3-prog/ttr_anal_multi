@@ -8,6 +8,8 @@
 - [S00／T01 分析與 Server 規格工作流程（正式內部規則）](governance/workflow.md)
 - [S00 → T01–T16 收件、認領、回報與審查（正式）](research/dispatch/README.md)
 - [S00 Phase B 收斂與 Phase C 工作包計畫](governance/S00-NEXT-PLAN.md)
+- [S00 Iteration 05 — 契約來源與審查狀態防誤升](governance/S00-20261029-ITERATION-05.md)
+- [S00 RR 逐筆決議與來源審查](governance/reviews/README.md)
 - [Server 契約可交付性審核與七項阻塞](spec/IMPLEMENTER-HANDOFF.md)
 - [Server-only ADR 提案（尚未批准）](design/decisions/README.md)
 - [T03 當前收件箱範例](research/dispatch/inbox/T03.md)（KR/TC 請求按版本區分）
