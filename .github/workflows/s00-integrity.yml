@@ -26,7 +26,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Validate S00 registry references
+      - name: Validate S00 registry and source identity
         run: python3 -B governance/validate_s00.py
-      - name: Run S00 validator regression tests
+      - name: Run registry regression tests
         run: python3 -B -m unittest discover -s governance/tests -v
+      - name: Run offline framing subset tests
+        run: python3 -B -m unittest discover -s conformance/protocol -p 'test_*.py' -v
+      - name: Run offline roster shape tests
+        run: python3 -B -m unittest discover -s conformance/character -p 'test_*.py' -v
+      - name: Run offline auth layout tests
+        run: python3 -B -m unittest discover -s conformance/session -p 'test_*.py' -v
