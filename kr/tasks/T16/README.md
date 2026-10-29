@@ -25,7 +25,8 @@
 - **T16 送審（2026-10-29，待 T01 獨立複驗）**：[T16 送審勘誤](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/errata/T16-069-T01-erratum.md)；勘誤 Git blob `f6a35543d5f74c1ac01d05aff2cfc4cd11548a24`；KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。此狀態僅表示已提交作者端修正證據；若 T01 判定文件／語意尚不足，請保留退回並列具體差距，不得自動升級為 `RESOLVED` 或 `FULL-PASS`。
 - [逐項驗收及原生證據](../../../shared/integrations/T01-20261029-continuation-02/t16/README.md)。
 
-#### T01-RETURN-T16-070-CONT02-C06 — READY_FOR_REVIEW
+#### T01-RETURN-T16-070-CONT02-C06 — RESOLVED
+- **T01 獨立複驗（2026-10-30；僅本通知）**：作者獨立勘誤 blob 與 KR 原件、指令界線及原稿受影響的限定敘述已交叉核對；0x807A8F marker 存 [ebp-2]、0x807A93 len 存 [ebp-4]，0x807AE2/807AE9 複製 DWORD，header 為 LE16(len)+LE16(1A68)。 詳見 [T01 本批決議](../../../shared/integrations/T01-20261030-t16-followup/README.md)。**原始舊 blob、全文 FULL-PASS 與 Quest 端到端功能仍不因此通過**。
 - 原稿：`kr-temp-roy/20261028-175141-chatgpt-web-roy-T16-70-KR-queue-drain-framing-and-receive-parser.md`；Git blob `b84f671788f964043180d232323ceab106ced74f`；SHA256 `43c0b0cff8236312cf00af130e889858bf92403924f859adc6a48ad26624c5bb`。
 - 問題：Section1.2 heading gives marker first and length second
 - 原生依據：807A8F stores1A68 to[ebp-2],807A93 storeslength to[ebp-4];807AE2 loadsDWORDfrom[ebp-4],807AE9 copiesheader. ThereforefirstWORD length,secondmarker, as sourceL52/L74 already show.
@@ -33,7 +34,8 @@
 - **T16 送審（2026-10-29，待 T01 獨立複驗）**：[T16 送審勘誤](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/errata/T16-070-T01-erratum.md)；勘誤 Git blob `119fcf1501ddab652c57de9552527adebb97e36c`；KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。此狀態僅表示已提交作者端修正證據；若 T01 判定文件／語意尚不足，請保留退回並列具體差距，不得自動升級為 `RESOLVED` 或 `FULL-PASS`。
 - [逐項驗收及原生證據](../../../shared/integrations/T01-20261029-continuation-02/t16/README.md)。
 
-#### T01-RETURN-T16-070-CONT02-C09 — READY_FOR_REVIEW
+#### T01-RETURN-T16-070-CONT02-C09 — RESOLVED
+- **T01 獨立複驗（2026-10-30；僅本通知）**：作者獨立勘誤 blob 與 KR 原件、指令界線及原稿受影響的限定敘述已交叉核對；0x80620C/0x806234 以 connection+501C 為 stream 基準；callee+5004/+500C 即 connection+A020/+A028，buffer 始於 connection+5020。 詳見 [T01 本批決議](../../../shared/integrations/T01-20261030-t16-followup/README.md)。**原始舊 blob、全文 FULL-PASS 與 Quest 端到端功能仍不因此通過**。
 - 原稿：`kr-temp-roy/20261028-175141-chatgpt-web-roy-T16-70-KR-queue-drain-framing-and-receive-parser.md`；Git blob `b84f671788f964043180d232323ceab106ced74f`；SHA256 `43c0b0cff8236312cf00af130e889858bf92403924f859adc6a48ad26624c5bb`。
 - 問題：Connection-relative buffer offsets5004/500C
 - 原生依據：80620C passes ECX=connection+501C to807830;806234 passes EDI=connection+501C to807A70. Thuscallee+5004 isconnection+A020 writepointer,andcallee+500C isconnection+A028 bufferedlength. Bufferstarts connection+5020. Source uses stream-relative offsets while callingthebaseconnection.
@@ -41,7 +43,8 @@
 - **T16 送審（2026-10-29，待 T01 獨立複驗）**：[T16 送審勘誤](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/errata/T16-070-T01-erratum.md)；勘誤 Git blob `119fcf1501ddab652c57de9552527adebb97e36c`；KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。此狀態僅表示已提交作者端修正證據；若 T01 判定文件／語意尚不足，請保留退回並列具體差距，不得自動升級為 `RESOLVED` 或 `FULL-PASS`。
 - [逐項驗收及原生證據](../../../shared/integrations/T01-20261029-continuation-02/t16/README.md)。
 
-#### T01-RETURN-T16-070-CONT02-C13 — READY_FOR_REVIEW
+#### T01-RETURN-T16-070-CONT02-C13 — RESOLVED
+- **T01 獨立複驗（2026-10-30；僅本通知）**：作者獨立勘誤 blob 與 KR 原件、指令界線及原稿受影響的限定敘述已交叉核對；0x807BD8 BA33260000 為 mov edx,2633；0x807BDD C744242004000000 為 mov [esp+20],4。 詳見 [T01 本批決議](../../../shared/integrations/T01-20261030-t16-followup/README.md)。**原始舊 blob、全文 FULL-PASS 與 Quest 端到端功能仍不因此通過**。
 - 原稿：`kr-temp-roy/20261028-175141-chatgpt-web-roy-T16-70-KR-queue-drain-framing-and-receive-parser.md`；Git blob `b84f671788f964043180d232323ceab106ced74f`；SHA256 `43c0b0cff8236312cf00af130e889858bf92403924f859adc6a48ad26624c5bb`。
 - 問題：Receive ASM block wrong coordinate for mov edx,2633
 - 原生依據：L116at807BDD actuallyC744242004000000 movdword[esp+20],4. CorrectBA33260000 mov edx,2633 is807BD8. Allother18rows inthisblockmatchactualinstructions; rootedCFG hasnooverlap.
@@ -49,7 +52,8 @@
 - **T16 送審（2026-10-29，待 T01 獨立複驗）**：[T16 送審勘誤](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/errata/T16-070-T01-erratum.md)；勘誤 Git blob `119fcf1501ddab652c57de9552527adebb97e36c`；KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。此狀態僅表示已提交作者端修正證據；若 T01 判定文件／語意尚不足，請保留退回並列具體差距，不得自動升級為 `RESOLVED` 或 `FULL-PASS`。
 - [逐項驗收及原生證據](../../../shared/integrations/T01-20261029-continuation-02/t16/README.md)。
 
-#### T01-RETURN-T16-071-CONT02-C05 — READY_FOR_REVIEW
+#### T01-RETURN-T16-071-CONT02-C05 — RESOLVED
+- **T01 獨立複驗（2026-10-30；僅本通知）**：作者獨立勘誤 blob 與 KR 原件、指令界線及原稿受影響的限定敘述已交叉核對；0x8068F3 push EAX 對應 OVERLAPPED conn+A050；0x8068F7 ECX=EAX+14；0x806909 push ECX 是 WSABUF conn+A064。 詳見 [T01 本批決議](../../../shared/integrations/T01-20261030-t16-followup/README.md)。**原始舊 blob、全文 FULL-PASS 與 Quest 端到端功能仍不因此通過**。
 - 原稿：`kr-temp-roy/20261028-183258-chatgpt-web-roy-T16-71-KR-WSASend-and-inbound-dispatch-boundary.md`；Git blob `8f2e297a563e2443ff32601e63654b3e953eaee5`；SHA256 `6aa91628cb809a41ef5b88cb5d2c87fa0cce2c9a736b461f175063681281e711`。
 - 問題：806909 pushECX comment namesLPWSAOVERLAPPED
 - 原生依據：ECX=EAX+14 at8068F7,whereEAX=conn+A050; thus806909 pushesWSABUF atconn+A064. ActualOVERLAPPED conn+A050 waspushedasEAXat8068F3. OriginalopcodepushECXiscorrect; onlyAPIargumentlabelwrong.
@@ -57,7 +61,8 @@
 - **T16 送審（2026-10-29，待 T01 獨立複驗）**：[T16 送審勘誤](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/errata/T16-071-T01-erratum.md)；勘誤 Git blob `bd4d9f45dd428e8d9a12affd7ce465aebbe7054d`；KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。此狀態僅表示已提交作者端修正證據；若 T01 判定文件／語意尚不足，請保留退回並列具體差距，不得自動升級為 `RESOLVED` 或 `FULL-PASS`。
 - [逐項驗收及原生證據](../../../shared/integrations/T01-20261029-continuation-02/t16/README.md)。
 
-#### T01-RETURN-T16-071-CONT02-C06 — READY_FOR_REVIEW
+#### T01-RETURN-T16-071-CONT02-C06 — RESOLVED
+- **T01 獨立複驗（2026-10-30；僅本通知）**：作者獨立勘誤 blob 與 KR 原件、指令界線及原稿受影響的限定敘述已交叉核對；0x806958 pop EDI；0x806959 pop ESI；0x80695A 33C0 xor EAX,EAX，保留原有錯誤回傳 0 行為。 詳見 [T01 本批決議](../../../shared/integrations/T01-20261030-t16-followup/README.md)。**原始舊 blob、全文 FULL-PASS 與 Quest 端到端功能仍不因此通過**。
 - 原稿：`kr-temp-roy/20261028-183258-chatgpt-web-roy-T16-71-KR-WSASend-and-inbound-dispatch-boundary.md`；Git blob `8f2e297a563e2443ff32601e63654b3e953eaee5`；SHA256 `6aa91628cb809a41ef5b88cb5d2c87fa0cce2c9a736b461f175063681281e711`。
 - 問題：Errorresult-zero instruction coordinate
 - 原生依據：806958 is5F popEDI;806959 is5E popESI;80695A is33C0 xorEAX,EAX. Return0 behavior survives butliteraladdressmustchange.
@@ -65,7 +70,8 @@
 - **T16 送審（2026-10-29，待 T01 獨立複驗）**：[T16 送審勘誤](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/errata/T16-071-T01-erratum.md)；勘誤 Git blob `bd4d9f45dd428e8d9a12affd7ce465aebbe7054d`；KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。此狀態僅表示已提交作者端修正證據；若 T01 判定文件／語意尚不足，請保留退回並列具體差距，不得自動升級為 `RESOLVED` 或 `FULL-PASS`。
 - [逐項驗收及原生證據](../../../shared/integrations/T01-20261029-continuation-02/t16/README.md)。
 
-#### T01-RETURN-T16-071-CONT02-C08 — READY_FOR_REVIEW
+#### T01-RETURN-T16-071-CONT02-C08 — RESOLVED
+- **T01 獨立複驗（2026-10-30；僅本通知）**：作者獨立勘誤 blob 與 KR 原件、指令界線及原稿受影響的限定敘述已交叉核對；PE .rdata VA BD2000/raw 7D0600；vtable C51748→raw 84FD48，11 slots，其 +0x10 槽為 8069A0。 詳見 [T01 本批決議](../../../shared/integrations/T01-20261030-t16-followup/README.md)。**原始舊 blob、全文 FULL-PASS 與 Quest 端到端功能仍不因此通過**。
 - 原稿：`kr-temp-roy/20261028-183258-chatgpt-web-roy-T16-71-KR-WSASend-and-inbound-dispatch-boundary.md`；Git blob `8f2e297a563e2443ff32601e63654b3e953eaee5`；SHA256 `6aa91628cb809a41ef5b88cb5d2c87fa0cce2c9a736b461f175063681281e711`。
 - 問題：C51748 vtable raw852D48
 - 原生依據：Parsed.rdata startsVA BD2000/raw7D0600; C51748−BD2000+7D0600=84FD48. Snapshotatwrong852D48differsfrom11vtableentries. Correctmappingalreadyappearsin69. PEdataartifactincludesbothwindows.
@@ -73,7 +79,8 @@
 - **T16 送審（2026-10-29，待 T01 獨立複驗）**：[T16 送審勘誤](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/errata/T16-071-T01-erratum.md)；勘誤 Git blob `bd4d9f45dd428e8d9a12affd7ce465aebbe7054d`；KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。此狀態僅表示已提交作者端修正證據；若 T01 判定文件／語意尚不足，請保留退回並列具體差距，不得自動升級為 `RESOLVED` 或 `FULL-PASS`。
 - [逐項驗收及原生證據](../../../shared/integrations/T01-20261029-continuation-02/t16/README.md)。
 
-#### T01-RETURN-T16-071-CONT02-C14 — READY_FOR_REVIEW
+#### T01-RETURN-T16-071-CONT02-C14 — RESOLVED
+- **T01 獨立複驗（2026-10-30；僅本通知）**：作者獨立勘誤 blob 與 KR 原件、指令界線及原稿受影響的限定敘述已交叉核對；0x807DAB 8BF8 mov edi,eax；0x807DAD E8EEC2FFFF call 8040A0；舊重複 ellipsis 不是 ASM 指令。 詳見 [T01 本批決議](../../../shared/integrations/T01-20261030-t16-followup/README.md)。**原始舊 blob、全文 FULL-PASS 與 Quest 端到端功能仍不因此通過**。
 - 原稿：`kr-temp-roy/20261028-183258-chatgpt-web-roy-T16-71-KR-WSASend-and-inbound-dispatch-boundary.md`；Git blob `8f2e297a563e2443ff32601e63654b3e953eaee5`；SHA256 `6aa91628cb809a41ef5b88cb5d2c87fa0cce2c9a736b461f175063681281e711`。
 - 問題：807DAD movEDI,EAX
 - 原生依據：CorrectmovEDI,EAXis807DABbytes8BF8;807DADbytesE8EEC2FFFFiscall8040A0. Duplicateellipsisnextlineisplaceholder,notanadditionalinstruction. Bothsitesaretrueinstructionboundaries,notmis-decoderinteriors.
@@ -92,7 +99,8 @@
 
 [本批總台帳](../../../shared/integrations/T01-20261029-semantic-review/README.md)；[機器可讀退回紀錄](../../../shared/integrations/T01-20261029-semantic-review/return-notices.json)。
 
-#### T01-RETURN-T16-002-9c70bd9f — READY_FOR_REVIEW
+#### T01-RETURN-T16-002-9c70bd9f — RESOLVED
+- **T01 獨立複驗（2026-10-30；僅本通知）**：作者獨立勘誤 blob 與 KR 原件、指令界線及原稿受影響的限定敘述已交叉核對；0x6F4A94 ESI=1；缺檔跳轉 0x6F4BCF，0x6F4C07 EAX=ESI；成功解析時以 ESI=0。修正 C++ 偽碼的 raw-status 極性。 詳見 [T01 本批決議](../../../shared/integrations/T01-20261030-t16-followup/README.md)。**原始舊 blob、全文 FULL-PASS 與 Quest 端到端功能仍不因此通過**。
 - 原稿：`kr-temp-roy/20261028-012719-chatgpt-web-roy-T16-2-KR-Lua-dispatch-and-quest-fields.md`；Git blob `c3c7a7efc3b1aed44d9bb3187e652ba3638ae595`；SHA256 `59c8a07618e363bfc9f863d233208c124d6b493b1944c9d93fb0aeb2247a720f`。
 - 問題：Native return polarity is inverted in conceptual pseudocode
 - 原生反證：6F4A94 initializes ESI=1; absent resource reaches 6F4BCF and returns EAX=ESI. Normal parse success sets ESI=0.
@@ -100,7 +108,8 @@
 - 驗收紀錄：[本項證據](../../../shared/integrations/T01-20261029-semantic-review/t16/return-proposals.json)。
 
 - **T16 送審（2026-10-29，待 T01 獨立複驗）**：[T16 送審勘誤](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/errata/T16-002-T01-erratum.md)；勘誤 Git blob `e214f68a0c0dfd02f64f1bb3cdb441b048f4a8d8`；KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。此狀態僅表示已提交作者端修正證據；若 T01 判定文件／語意尚不足，請保留退回並列具體差距，不得自動升級為 `RESOLVED` 或 `FULL-PASS`。
-#### T01-RETURN-T16-005-82389c1b — READY_FOR_REVIEW
+#### T01-RETURN-T16-005-82389c1b — RESOLVED
+- **T01 獨立複驗（2026-10-30；僅本通知）**：作者獨立勘誤 blob 與 KR 原件、指令界線及原稿受影響的限定敘述已交叉核對；0x53FEB0 根函式 44 條連續可解碼指令、7 個直接分支目標均為指令起點；0x53FECF 非空轉換值，0x53FF0E 始終用 [ESI+40] 走原節點。 詳見 [T01 本批決議](../../../shared/integrations/T01-20261030-t16-followup/README.md)。**原始舊 blob、全文 FULL-PASS 與 Quest 端到端功能仍不因此通過**。
 - 原稿：`kr-temp-roy/20261028-014323-chatgpt-web-roy-T16-5-KR-child-parser-vector.md`；Git blob `ae3dec4d3e612e2b20e31db54b6425602786c615`；SHA256 `2d9e7779ff5368f496f21062369b4a642de9bb6957f71f2b0f017538769a7105`。
 - 問題：Pseudocode advances the callback result instead of the original Shout node
 - 原生反證：ESI retains original node; virtual +14 result is EAX; next iteration reads [ESI+40]. Null callback result skips append.
@@ -108,7 +117,8 @@
 - 驗收紀錄：[本項證據](../../../shared/integrations/T01-20261029-semantic-review/t16/return-proposals.json)。
 
 - **T16 送審（2026-10-29，待 T01 獨立複驗）**：[T16 送審勘誤](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/errata/T16-005-T01-erratum.md)；勘誤 Git blob `e415707cc217a3d8d363240b14fa72b2dd97c60d`；KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。此狀態僅表示已提交作者端修正證據；若 T01 判定文件／語意尚不足，請保留退回並列具體差距，不得自動升級為 `RESOLVED` 或 `FULL-PASS`。
-#### T01-RETURN-T16-013-36353f64 — READY_FOR_REVIEW
+#### T01-RETURN-T16-013-36353f64 — RESOLVED
+- **T01 獨立複驗（2026-10-30；僅本通知）**：作者獨立勘誤 blob 與 KR 原件、指令界線及原稿受影響的限定敘述已交叉核對；0x8438C0 根函式 47 條連續可解碼指令、6 個直接分支目標均為指令起點，雙 ret4；0x843901 signed cmp key,[best+C]，0x843904 jl 0x843915 排除 key<best。 詳見 [T01 本批決議](../../../shared/integrations/T01-20261030-t16-followup/README.md)。**原始舊 blob、全文 FULL-PASS 與 Quest 端到端功能仍不因此通過**。
 - 原稿：`kr-temp-roy/20261028-020402-chatgpt-web-roy-T16-13-KR-tree-lookup-ABI.md`；Git blob `b5ea5e5ed5312c287f2051b1db6ed3326c44be9c`；SHA256 `ee0226360ca0ccc934993efe8874dd5c166bdc48d7f478bfa21910e5a33a2a93`。
 - 問題：Final signed tree inequality is reversed
 - 原生反證：843901 cmp esi,[edx+C]; 843904 jl sentinel. ESI is search key. Lower-bound best >= key; absent key5 with candidate7 must return sentinel.
@@ -228,7 +238,8 @@
 - 驗收紀錄：[本項證據](../../../shared/integrations/T01-20261029-semantic-review/t16/return-proposals.json)。
 
 - **T16 送審（2026-10-29，待 T01 獨立複驗）**：[T16 送審勘誤](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/errata/T16-068-T01-erratum.md)；勘誤 Git blob `535d1c081ddf492d319950f4b5944619fc062f2b`；KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。此狀態僅表示已提交作者端修正證據；若 T01 判定文件／語意尚不足，請保留退回並列具體差距，不得自動升級為 `RESOLVED` 或 `FULL-PASS`。
-#### T01-RETURN-T16-046-2170ef08 — READY_FOR_REVIEW
+#### T01-RETURN-T16-046-2170ef08 — RESOLVED
+- **T01 獨立複驗（2026-10-30；僅本通知）**：作者獨立勘誤 blob 與 KR 原件、指令界線及原稿受影響的限定敘述已交叉核對；Event.stp TutorialMain.lua proto5 PC20/40/136 原生 words 0080801C/0100801C/0080801C，Lua5.1 CALL 的 C=2 表示1個結果，而不是2個。 詳見 [T01 本批決議](../../../shared/integrations/T01-20261030-t16-followup/README.md)。**原始舊 blob、全文 FULL-PASS 與 Quest 端到端功能仍不因此通過**。
 - 原稿：`kr-temp-roy/20261028-101606-chatgpt-web-roy-T16-46-KR-tutorial-lua-opcode-cfg.md`；Git blob `dea68e6db1af124ecdaca7943a877a7dbddd2377`；SHA256 `25246ae4a95c7837343206e9ff957831dd8c7e0d5e65248d3d63d306cb1a6545`。
 - 問題：Lua CALL C=2 means one result, not two
 - 原生反證：KR TutorialMain prototype5 PC20/40/136 raw words0080801C/0100801C/0080801C have C=2. Lua5.1 VM computes nresults=GETARG_C(i)-1.
