@@ -1,5 +1,11 @@
 # T01 現有成果來源審核
 
+<!-- S00-DISPATCH-BOOTSTRAP:v1 -->
+## S00 研究請求開工檢查（正式）
+
+**開工必讀**：先核對最新 origin/main SHA，讀取 [T01 S00 待審收件箱](../../../research/dispatch/inbox/T01.md)、[唯一 RR 台帳](../../../research/requests/index.json) 與 [派工／審查規則](../../../research/dispatch/README.md)。本收件箱只提示來源報告待審，**不取代下文 T01 FULL-PASS、NEEDS_FIX、README 原有退回制度**。S00 才能 ACCEPTED；任何 RR 完成不自動升格原生證據。
+
+
 ## 跨 Task 驗收退回、修復及複驗（正式工作流程）
 
 - T01 須先核對原件 SHA／來源版本、PE section 映射、指令界線、工具預期、CFG、caller/callee、資料流與所有實質肯定主張；不得用抽樣 bytes 全部相符冒充全文 FULL-PASS。
