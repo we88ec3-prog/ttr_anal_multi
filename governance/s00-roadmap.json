@@ -1,0 +1,217 @@
+{
+  "schema": "s00-delivery-roadmap-v1",
+  "client_version": "kr",
+  "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+  "policy": "Planning and mechanical readiness only. No milestone status here upgrades original native evidence, SPEC maturity, RR dispatch, or authorizes runtime Client execution.",
+  "updated": "2026-10-29",
+  "milestones": [
+    {
+      "id": "B-NET",
+      "name": "Gateway framing/connection handshake contract",
+      "phase": "B",
+      "priority": 0,
+      "owner": "S00",
+      "research_owners": [
+        "T02"
+      ],
+      "depends_on": [],
+      "spec_ids": [
+        "SPEC-NET-0001",
+        "SPEC-NET-0002",
+        "SPEC-NET-0003"
+      ],
+      "gap_ids": [
+        "GAP-NET-0001",
+        "GAP-NET-0002"
+      ],
+      "rr_ids": [
+        "RR-0001",
+        "RR-0004",
+        "RR-0005"
+      ],
+      "test_ids": [
+        "TEST-NET-0001",
+        "TEST-NET-0002",
+        "TEST-NET-0003"
+      ],
+      "acceptance": [
+        "Identify direction-specific wire framing and first application message for the relevant connection (not only local buffer assembly).",
+        "Bind slot, pipeline, mode, handoff state and failure path to source-target versions; no unproven listen-port requirements.",
+        "Add source-backed positive and boundary/error conformance vectors without implying native malformed-packet policy from a conservative tool."
+      ],
+      "handoff_to": "Protocol Gateway implementer after reviewed scoped contract"
+    },
+    {
+      "id": "B-AUTH",
+      "name": "Login result and server-selection handoff contract",
+      "phase": "B",
+      "priority": 1,
+      "owner": "S00",
+      "research_owners": [
+        "T03",
+        "T02"
+      ],
+      "depends_on": [
+        "B-NET"
+      ],
+      "spec_ids": [
+        "SPEC-AUTH-0001",
+        "SPEC-FLOW-0001"
+      ],
+      "gap_ids": [
+        "GAP-AUTH-0001",
+        "GAP-FLOW-0001",
+        "GAP-NET-0002"
+      ],
+      "rr_ids": [
+        "RR-0003",
+        "RR-0005",
+        "RR-0007"
+      ],
+      "test_ids": [
+        "TEST-AUTH-0001"
+      ],
+      "acceptance": [
+        "Specify C2S E8/000F chosen path and S2C login-result consumer including actual command, byte bounds, status and failure branch.",
+        "Bound exact channel/choice and connection handoff order; keep official Server account policy distinct from locally chosen ADR.",
+        "Provide a bidirectional request/reply example with exact provenance or mark the specific indispensable fields as blocked."
+      ],
+      "handoff_to": "Session and Login service implementer after reviewed contract"
+    },
+    {
+      "id": "B-CHAR",
+      "name": "Character roster, selection response and initialization loop",
+      "phase": "B",
+      "priority": 2,
+      "owner": "S00",
+      "research_owners": [
+        "T03",
+        "T04",
+        "T05",
+        "T06"
+      ],
+      "depends_on": [
+        "B-NET",
+        "B-AUTH"
+      ],
+      "spec_ids": [
+        "SPEC-CHAR-0001",
+        "SPEC-FLOW-0001"
+      ],
+      "gap_ids": [
+        "GAP-CHAR-0001",
+        "GAP-FLOW-0001"
+      ],
+      "rr_ids": [
+        "RR-0002",
+        "RR-0007"
+      ],
+      "test_ids": [
+        "TEST-CHAR-0001"
+      ],
+      "acceptance": [
+        "Separate S2C command2 65+53N roster from unrelated 2-byte-prefixed consumer; validate header semantics and ID allocation constraints.",
+        "Pair C2S selection 0x42 with the actual S2C success/error handler and subsequent initialization request/responses; no request+1 guessing.",
+        "Record Session/character state transitions and resource/UI prerequisites in reproducible message order."
+      ],
+      "handoff_to": "Character and roster service implementer after reviewed contract"
+    },
+    {
+      "id": "B-SCENE",
+      "name": "Selected character to field/tutorial scene dependency",
+      "phase": "B",
+      "priority": 3,
+      "owner": "S00",
+      "research_owners": [
+        "T03",
+        "T05",
+        "T07",
+        "T16"
+      ],
+      "depends_on": [
+        "B-CHAR"
+      ],
+      "spec_ids": [
+        "SPEC-FLOW-0001",
+        "SPEC-SCENE-0001"
+      ],
+      "gap_ids": [
+        "GAP-SCENE-0001"
+      ],
+      "rr_ids": [
+        "RR-0008"
+      ],
+      "test_ids": [],
+      "acceptance": [
+        "Identify the exact S2C or local Client state writer that gates scene transitions after successful selection, with native control flow provenance.",
+        "Keep Event/SceneList (1001,1)->tutorial_start static index distinct from any S2C packet; account for 0x565720 reuse after EndCutScene.",
+        "If selection-to-scene remains unknown, mark this milestone blocked and do not invent tutorial/session start payload."
+      ],
+      "handoff_to": "World/scene service only when selection-dependent wire state is demonstrated"
+    },
+    {
+      "id": "B-CONTRACT",
+      "name": "Independent spec-only implementation handoff",
+      "phase": "B",
+      "priority": 4,
+      "owner": "S00",
+      "research_owners": [
+        "T01"
+      ],
+      "depends_on": [
+        "B-NET",
+        "B-AUTH",
+        "B-CHAR"
+      ],
+      "spec_ids": [
+        "SPEC-FLOW-0001",
+        "SPEC-NET-0001",
+        "SPEC-AUTH-0001",
+        "SPEC-CHAR-0001"
+      ],
+      "gap_ids": [
+        "GAP-NET-0001",
+        "GAP-AUTH-0001",
+        "GAP-CHAR-0001",
+        "GAP-FLOW-0001"
+      ],
+      "rr_ids": [
+        "RR-0001",
+        "RR-0002",
+        "RR-0003"
+      ],
+      "test_ids": [
+        "TEST-NET-0001",
+        "TEST-AUTH-0001",
+        "TEST-CHAR-0001"
+      ],
+      "acceptance": [
+        "Provide a new implementer only spec/ and conformance/ plus published ADRs, not raw reverse engineering source; record every necessary ambiguity encountered.",
+        "Demonstrate at least one direction-specific request/reply contract independently understood from SPEC and linked tests; no unsupported wire values.",
+        "Review evidence provenance, errors, and known Client-version limits before Phase B is described as a completed bounded deliverable."
+      ],
+      "handoff_to": "Phase C independent Server repository"
+    },
+    {
+      "id": "C-ENV",
+      "name": "Independent Server environment and compatibility feedback",
+      "phase": "C",
+      "priority": 5,
+      "owner": "Server implementation repository",
+      "research_owners": [],
+      "depends_on": [
+        "B-CONTRACT"
+      ],
+      "spec_ids": [],
+      "gap_ids": [],
+      "rr_ids": [],
+      "test_ids": [],
+      "acceptance": [
+        "Define isolated test instance, data authority and Session ownership in independent Server repo using clearly labeled Server ADRs.",
+        "Return non-sensitive, reproducible feedback with Client version, exact spec revision, test input/result and mismatch classification.",
+        "Only perform original Client runtime compatibility testing after explicit authorization and appropriate environment; never equate static unit tests with original Client success."
+      ],
+      "handoff_to": "S00 FB intake / reconciliation"
+    }
+  ]
+}
