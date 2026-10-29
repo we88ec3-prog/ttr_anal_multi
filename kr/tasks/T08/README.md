@@ -1,5 +1,11 @@
 # T08 實體生成與移除
 
+<!-- S00-DISPATCH-BOOTSTRAP:v1 -->
+## S00 研究請求開工檢查（正式）
+
+**每次開工必讀**：確認最新 origin/main SHA，先檢查本 README 的 T01 驗收退回與既有主責，再讀 [T08 S00 收件箱](../../../research/dispatch/inbox/T08.md)、[唯一 RR 台帳](../../../research/requests/index.json)、[派工／認領／回報規則](../../../research/dispatch/README.md)。先處理已指派且獲使用者授權的 P0/P1；只在認領變更發布於 main 後才算跨 Agent 已認領。完成研究需提交 Markdown + 精確 Git blob SHA 並更新 RR 為 SUBMITTED，S00 才能結案。**收件箱不會自動喚醒本 Agent**；不變更原有 Task owner、原稿及 T01 退回規則。
+
+
 ## T01 驗收退回事項
 
 <!-- T01-20261029-stage-notices:start -->
