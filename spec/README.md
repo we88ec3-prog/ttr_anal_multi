@@ -12,6 +12,12 @@
 | [SPEC-FLOW-0001](session-account/SPEC-FLOW-0001.md) | 登入→選服→清單→選角→場景的已知條件與不連續之處 | 跨步驟真實收發/回覆順序未閉合 |
 | [SPEC-SCENE-0001](world/SPEC-SCENE-0001.md) | extra/roy1 E01–E16 的 SceneList/seq/Lua 靜態資源鏈 | 尚未證明 0x42 回覆到 1001/1 場景 key 的連結 |
 
+## 下一階段工作與驗收門檻
+
+- [S00 Phase B 收斂與 Phase C 交接計畫](../governance/S00-NEXT-PLAN.md)：工作包依賴、完成條件和 Server 實作者交付。
+- [方向別封包／狀態證據矩陣](session-account/phase-b-message-matrix.md)：區分已觀察的 local payload、S2C handler 和仍 UNKNOWN 的交互。
+- [機器工作包計畫](../governance/s00-roadmap.json) 與 [準備度檢查](../governance/check_s00_readiness.py)：從 RR/GAP/SPEC/TEST 計算阻塞；**不會自動宣布相容或 STABLE**。
+
 ## 研究與可實作性的入口
 
 - [T02 既有成果完整盤點及 T01 勘誤對照](protocol/T02-EVIDENCE-INVENTORY.md)
