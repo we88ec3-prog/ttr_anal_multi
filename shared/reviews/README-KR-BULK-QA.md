@@ -84,3 +84,10 @@
 
 - [第十三段 BIN-first 完整原稿](KR-BULK-CENTRAL-QA-ROUND-13-20261029.md)：追查 `0x006F55B0` 的 16-byte stack slot／type 6 記錄配置、`0x006F5790` 的 EDI 字串 key 消費、`0x0055E410`／`0x0055E4F0` 的全域 writer 與 callback 交接。
 - 可用結論：先前 72 組重複呼叫具有 closure-like value 與字串 key 表寫入的有界原生資料流；尚未命名所有函式及完整 script runtime，維持 PARTIAL / NOT FULL-PASS。
+
+
+## 第十四段：72 個原生 script 字串鍵與共同 stub（2026-10-29）
+
+- [完整 BIN-first 技術報告](KR-BULK-CENTRAL-QA-ROUND-14-20261029.md)
+- [可按名稱／VA 查詢的 72 筆 JSON](KR-BULK-CENTRAL-QA-ROUND-14-20261029-keys.json)
+- 原始 `.rdata` 解析取得 72 個不同 NUL 字串名稱，並在 `.text` 確認共同 callback `0x008DC2F0` 是 `xor eax,eax; ret`；72 個名稱共享同一零回傳 stub，不能視為 72 個功能均已實作／逆向完成。維持 PARTIAL / NOT FULL-PASS。
