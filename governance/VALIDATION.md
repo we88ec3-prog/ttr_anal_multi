@@ -50,3 +50,15 @@ python -B -m unittest discover -s governance/tests -v
 ```
 
 `validate_s00.py` 額外禁止未經批准的 ADR-0001～0003 變成規範性決策，也禁止 `REVIEWED/STABLE` SPEC 借用未批准 ADR。契約覆蓋工具對未解的 spec/rr/gap 和沒有來源支持的方向別測試維持 BLOCKED；`--check` 只在資料結構或引用矛盾時失敗。全部成功**不代表完成原版登入連線或發放 Server 相容認證**。
+
+
+## S00 Iteration 06 — live Phase B worklist
+
+```powershell
+python -B governance/phase_b_worklist.py --check
+python -B governance/phase_b_worklist.py --task T02 --version kr --format markdown
+python -B governance/phase_b_worklist.py --task T03 --version kr --format json
+python -B -m unittest discover -s governance/tests -v
+```
+
+This is a derived, read-only report from the sole existing RR registry, not an additional authority. Structural check failure means inconsistent links, not a gameplay/Server compatibility verdict. For human verification and next evidence handoff see [Phase B intake](PHASE-B-INTAKE-REVIEW.md).

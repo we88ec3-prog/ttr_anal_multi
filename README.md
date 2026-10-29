@@ -9,6 +9,8 @@
 - [S00 → T01–T16 收件、認領、回報與審查（正式）](research/dispatch/README.md)
 - [S00 Phase B 收斂與 Phase C 工作包計畫](governance/S00-NEXT-PLAN.md)
 - [S00 Iteration 05 — 契約來源與審查狀態防誤升](governance/S00-20261029-ITERATION-05.md)
+- [S00 Iteration 06 — Phase B 動態工作清單](governance/S00-20261029-ITERATION-06.md)
+- [S00 Phase B 研究收件與有限契約驗收](governance/PHASE-B-INTAKE-REVIEW.md)
 - [S00 RR 逐筆決議與來源審查](governance/reviews/README.md)
 - [Server 契約可交付性審核與七項阻塞](spec/IMPLEMENTER-HANDOFF.md)
 - [Server-only ADR 提案（尚未批准）](design/decisions/README.md)
