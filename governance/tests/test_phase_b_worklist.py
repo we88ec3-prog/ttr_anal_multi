@@ -62,6 +62,13 @@ class PhaseBWorklistTests(unittest.TestCase):
         self.assertTrue(all(x["client_version"] == "kr" for x in t03["requests"]))
         self.assertTrue(all("COV-" in ",".join(x["coverage_ids"]) for x in t02["requests"]))
 
+        # The broad B-CONTRACT milestone must not make T03 auth touch NET/CHAR.
+        auth = next(x for x in t03["requests"] if x["rr_id"] == "RR-0003")
+        self.assertEqual(auth["spec_ids"], ["SPEC-AUTH-0001", "SPEC-FLOW-0001"])
+        self.assertIn("SPEC-NET-0001", auth["milestone_spec_ids"])
+        self.assertNotIn("SPEC-NET-0001", auth["spec_ids"])
+        self.assertEqual(auth["test_ids"], ["TEST-AUTH-0001"])
+
     def test_tc_scope_does_not_inherit_kr_requests(self):
         result = evaluate(self.root, version="tc")
         self.assertEqual(result["errors"], [])
