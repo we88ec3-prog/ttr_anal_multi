@@ -66,3 +66,8 @@ The --check flag fails on invalid links/version/state, **not** merely on eight Q
 ## Next-chat handoff
 
 Read the latest main, this protocol, Iteration 06 results and the live worklist. Reconfirm each RR state before editing it. GitHub updates do **not** automatically wake an Agent. Do not treat an unlaunched T02/T03 Agent as already working.
+
+
+## Iteration 07: submitted research review packet
+
+Run `python -B governance/phase_b_review_preflight.py --rr RR-0001 --format markdown` after an actual submission. It checks canonical report bytes against the RR's Git blob SHA, rejects unsafe paths and shows direct impact SPEC/GAP/COV/TEST and existing UNKNOWN fields. Mechanical artifact presence is **not** a review approval; T01/S00 must separately decide bounded native quality and the RR's acceptance conditions. The new tool never modifies dispatch, reviews or SPEC states.
