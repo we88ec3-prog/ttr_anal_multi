@@ -67,7 +67,7 @@ class ReviewLedgerTests(unittest.TestCase):
         import hashlib
 
         def blob(raw):
-            return hashlib.sha1(b"blob " + str(len(raw)).encode() + b"\\x00" + raw).hexdigest()
+            return hashlib.sha1(b"blob " + str(len(raw)).encode() + b"\x00" + raw).hexdigest()
 
         # Synthetic fixture tests only the ledger integrity algorithm; not native review.
         report_path = "research/handoffs/mock-for-test.md"
