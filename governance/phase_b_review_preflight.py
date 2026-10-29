@@ -181,6 +181,15 @@ def markdown(report):
             item["research_criteria"] or "UNKNOWN",
             "- Manual-review steps:",
         ])
+        for s in item["direct_specs"]:
+            lines.append(f"- SPEC {s['id']} ({s['maturity']}/{s['contract_status']}):")
+            for unknown in s["unknowns"]:
+                lines.append(f"  - UNKNOWN: {unknown}")
+        for g in item["gaps"]:
+            lines.append(f"- GAP {g['id']} ({g['status']}) resolution: {g['resolution_criteria']}")
+        for c in item["coverage"]:
+            facets = ", ".join(f"{k}={v}" for k, v in sorted(c["facets"].items()))
+            lines.append(f"- COV {c['id']} facets: {facets}")
         lines.extend(f"  - {step}" for step in item["review_steps"])
         lines.extend(f"- Artifact error: {e}" for e in item["artifact_errors"])
         lines.append("")
