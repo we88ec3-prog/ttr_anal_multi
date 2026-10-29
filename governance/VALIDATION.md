@@ -62,3 +62,14 @@ python -B -m unittest discover -s governance/tests -v
 ```
 
 This is a derived, read-only report from the sole existing RR registry, not an additional authority. Structural check failure means inconsistent links, not a gameplay/Server compatibility verdict. For human verification and next evidence handoff see [Phase B intake](PHASE-B-INTAKE-REVIEW.md).
+
+
+## S00 Iteration 07 — source report preflight
+
+```powershell
+python -B governance/phase_b_review_preflight.py --check
+python -B governance/phase_b_review_preflight.py --task T02 --version kr --format markdown
+python -B governance/phase_b_review_preflight.py --rr RR-0003 --format json
+```
+
+When a formal RR is `SUBMITTED` or `IN_REVIEW`, the preflight compares the submitted report's current repository bytes with the declared Git blob SHA and displays the *direct* SPEC/GAP/COV/TEST review scope. `NOT_SUBMITTED` is expected on existing QUEUED requests and is **not** a failed CI. `ARTIFACT_PRESENT_FOR_MANUAL_REVIEW` is **not** an evidence or compatibility verdict. See [Iteration 07](S00-20261029-ITERATION-07.md).
