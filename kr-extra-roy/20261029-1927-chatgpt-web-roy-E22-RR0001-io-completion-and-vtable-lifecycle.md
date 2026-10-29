@@ -121,6 +121,32 @@ vtable `+4→0x806CF0` 的 loop 透過 `0xBD2274` import 取 completion，回傳
 
 E21 僅證可能 vtable target；E22 補原生 vptr 安裝/發布與 completion loop。依然不能將 `WSA_IO_PENDING`、queued completion、同步完成視為實際 wire delivery order 的完整測試證據；Windows completion 回報和應用層 Server 回覆是不同狀態。也尚未從 segmented `0xFE3368` consumer 追至 socket: E20 的 producer 指標集合獨立於本次 local buffer output，不要將它們強行接合。
 
+### 第三輪補強：成功 send completion 的精確 OVERLAPPED 比較及 buffer drain
+
+```asm
+806E7D lea edi,[eax+0xA050]         ; send OVERLAPPED
+806E83 cmp edx,edi                  ; edx = completion OVERLAPPED
+806E85 jne 0x806D30                 ; unrelated completion => skip
+806E8B add [ebx+0x28],ecx           ; global successful send byte metrics
+806E8E inc dword ptr [ebx+0x38]    ; global completion count
+806E91 cmp [eax+0xA0AC],esi
+806E97 je 0x806EAB
+806E99 lea esi,[eax+0x501C]         ; local framed staging structure
+806E9F mov edi,ecx                  ; bytes completed
+806EA1 call 0x8077B0               ; local buffer advance/drain function (semantic provisional)
+806EA6 mov eax,[ebp-0x1C]          ; current connection
+806EA9 xor esi,esi
+806EAB cmp [eax+0xA028],esi         ; remaining buffered length
+806EB1 seta cl
+806EB4 mov byte ptr [eax+0xA024],cl ; has buffered bytes flag
+806EBA mov edx,[ebp-0x1C]
+806EBD add edx,0xA0B8
+806EC3 push edx
+806EC4 call dword ptr [0xBD227C]   ; matching in-flight counter update
+```
+
+這將 E22 原本保留的「`0x806E7D` 上游細節待展開」補成更明確的成功送出完成路徑：**只有 OVERLAPPED 指向 connection+0xA050 才處理；依本次 completed byte count 呼叫 `0x8077B0`；重新計算 connection+0xA024；隨後更新 A0B8 計數。** 仍未在此段反組譯 `0x8077B0` 全部內部細節，因此「從傳送緩衝確實刪除多少 bytes」須再由該函式作完整確認。
+
 ## 進度與下一段 E23
 
 - **RR-0001 Client 待逆向**：每個 connection 的首筆 frame builder 呼叫者、first WSASend；收包第一個 frame 及 dispatch 的 exact opcode/order；IOCP completion 成功-send branch 精細 buffer 刪除規則。
