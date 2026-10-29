@@ -1,5 +1,17 @@
-# 相容性測試規格
+# S00 Conformance — Phase B 離線合成測試
 
-`test-index.json` 初始為空；沒有任何已完成的規格相容性測試宣稱。Phase B 從 T02 framing 與 T03 登入/選角起，交付語言無關的輸入、預期結果、狀態前後條件、版本、來源/ADR 與例外。
+本批 TEST-NET-0001/0002、TEST-CHAR-0001、TEST-AUTH-0001 的狀態一律為 **OFFLINE_SYNTHETIC**。由 KR Client 局部原生分析的 **PARTIAL** 主張推導出人工測試資料。它們**不是**真實封包捕獲、不代表可登入 Server、不代表完整原版 Client 相容性。
 
-三種驗收互不取代：`RUNTIME`（Server 真正能啟動）、`CONFORMANCE`（實作符合已發布測試）、`CLIENT_COMPATIBILITY`（有授權時測試原版 Client）。本庫僅發布契約與測試；實際 Server 程式碼獨立。
+| 子集 | 測試內容 | 明確排除 |
+| --- | --- | --- |
+| [Network](protocol/kr-framing-vectors.json) | 1A68/0BBB 本地外框、XOR、校驗值、分片/黏包、收送長度差異 | mode 切換完整時序、0x2633、未知 marker 的原生錯誤路徑 |
+| [Roster](character/kr-roster-vectors.json) | 65+53*N 資料形狀、有限 UI 欄位位置、尾端不足整筆 | 真實角色政策、65-byte prefix 內容、UI 生命週期與選角成功 |
+| [Authentication](session/kr-auth-vectors.json) | E8/000F 本地 payload 長度/slot 分隔與已觀察固定欄位 | 官方認證、ACP、登入回覆及切線 |
+
+```powershell
+python -B -m unittest discover -s conformance/protocol -p "test_*.py" -v
+python -B -m unittest discover -s conformance/character -p "test_*.py" -v
+python -B -m unittest discover -s conformance/session -p "test_*.py" -v
+```
+
+[測試登錄](test-index.json)。`RUNTIME`（Server 可運作）、`CONFORMANCE`（規格相符）、`CLIENT_COMPATIBILITY`（原版 Client 實際測試）互不取代。對非支援 marker／checksum mismatch，測試器採**保守拒絕**，並非宣稱原生 Client 也這麼做。
