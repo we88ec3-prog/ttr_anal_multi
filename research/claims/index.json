@@ -1,5 +1,171 @@
 {
   "schema": "s00-claim-index-v1",
-  "note": "New incremental index only; historical T01 ledger and seven verified-knowledge entries remain unchanged. No claims have been migrated or certified here.",
-  "items": []
+  "note": "Phase B extracted scoped, provisional claims from existing research. PARTIAL is not FULL-PASS; no native verification was newly performed.",
+  "items": [
+    {
+      "id": "CLM-NET-0001",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr/evidence/f398779b1e129b0150f009451dc72b51b1cb9b88e9f2aa5c43b4eeeac02e0e94.txt",
+      "source_blob_sha": "f6686819dc993c2afa3d8c159d23a94a1125f9ff",
+      "source_intake_id": "SRC-0001",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 0x807A70 conditional successful local outbound frame writer, including guards",
+      "assertion": "For valid positive payload length and other output-ring guards, writer 0x807A70 writes LE16 payload length, LE16 marker 0x1A68, then unchanged payload. Total local frame bytes=len+4. Payload maximum for this writer is 0x0FFC.",
+      "limitations": [
+        "Local buffer framing success does not show socket send or complete connection protocol.",
+        "Guarded normal return path; unknown session-level mode and error handling."
+      ],
+      "affected_spec_ids": [
+        "SPEC-NET-0001"
+      ],
+      "conflicts": [],
+      "native_review_ref": null
+    },
+    {
+      "id": "CLM-NET-0002",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr/evidence/f398779b1e129b0150f009451dc72b51b1cb9b88e9f2aa5c43b4eeeac02e0e94.txt",
+      "source_blob_sha": "f6686819dc993c2afa3d8c159d23a94a1125f9ff",
+      "source_intake_id": "SRC-0001",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 0x807830 conditional successful local outbound frame writer",
+      "assertion": "For positive payload with len+6<=0x1000 and ring guards, writer 0x807830 constructs [LE16 payload length, LE16 0x0BBB, LE16 sum(plaintext bytes) mod 65536] followed by payload XOR: first byte xor 0xB6; later bytes xor previous plaintext byte.",
+      "limitations": [
+        "This describes framing in the local outbound buffer, not a captured network transmission.",
+        "Do not infer all nonzero modes always emit this frame; fallback exists."
+      ],
+      "affected_spec_ids": [
+        "SPEC-NET-0001"
+      ],
+      "conflicts": [],
+      "native_review_ref": null
+    },
+    {
+      "id": "CLM-NET-0003",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr/evidence/f398779b1e129b0150f009451dc72b51b1cb9b88e9f2aa5c43b4eeeac02e0e94.txt",
+      "source_blob_sha": "f6686819dc993c2afa3d8c159d23a94a1125f9ff",
+      "source_intake_id": "SRC-0001",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 0x8061A0 connection+0xA02C dispatch and writer return path",
+      "assertion": "For mode byte ==0 consumer chooses 0x807A70; for nonzero it attempts 0x807830 and falls back to 0x807A70 on failure.",
+      "limitations": [
+        "Mode writer/init and actual time-dependent switching not complete.",
+        "Conditional code-path behavior, not full end-to-end Server wire sequence."
+      ],
+      "affected_spec_ids": [
+        "SPEC-NET-0001"
+      ],
+      "conflicts": [],
+      "native_review_ref": null
+    },
+    {
+      "id": "CLM-NET-0004",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr/evidence/f398779b1e129b0150f009451dc72b51b1cb9b88e9f2aa5c43b4eeeac02e0e94.txt",
+      "source_blob_sha": "f6686819dc993c2afa3d8c159d23a94a1125f9ff",
+      "source_intake_id": "SRC-0001",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 0x807B40 observed inbound frame parser branch",
+      "assertion": "Receiver reads LE16 payload length (nonzero, at most 0x1000), discriminator at +2, marker 0x2633=>8-byte header, 0x0BBB=>6, otherwise 4 (including 0x1A68 and 0x22D7); incomplete input is retained; 0x0BBB path checks reconstructed-byte sum.",
+      "limitations": [
+        "Unknown markers reaching default header4 is not proof of valid business packets.",
+        "Checksum mismatch branch may still reach common record handling; exact discard semantics not certified.",
+        "0x2633 transformation and complete queue downstream not closed."
+      ],
+      "affected_spec_ids": [
+        "SPEC-NET-0001"
+      ],
+      "conflicts": [],
+      "native_review_ref": null
+    },
+    {
+      "id": "CLM-CHAR-0001",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr/evidence/7a594f0ba64354a1c22fa2a6fe22f45e3a29699fb2bf5f73c2023e8113b9cac7.txt",
+      "source_blob_sha": "1c05261ac5a5a57bb7b0142bf0bb14fba2cc4603",
+      "source_intake_id": "SRC-0002",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 0x4B7DC0 registration and 0x4B7F00 command-2 roster record loop",
+      "assertion": "Handler registered at dispatch command index 2 uses 65-byte payload prefix followed by 53-byte records; bounded record count on path reaching loop is floor((payload_length-65)/53), first record offset 65.",
+      "limitations": [
+        "Some earlier header fields are read before count calculation: short payload is not proven safe.",
+        "Payload trailing non-whole records are not counted but are not validated away.",
+        "Another consumer uses a 2-byte prefix; do not conflate."
+      ],
+      "affected_spec_ids": [
+        "SPEC-CHAR-0001"
+      ],
+      "conflicts": [],
+      "native_review_ref": null
+    },
+    {
+      "id": "CLM-CHAR-0002",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr/evidence/7a594f0ba64354a1c22fa2a6fe22f45e3a29699fb2bf5f73c2023e8113b9cac7.txt",
+      "source_blob_sha": "1c05261ac5a5a57bb7b0142bf0bb14fba2cc4603",
+      "source_intake_id": "SRC-0002",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 0x4B7F00 ID guard and 0x4D4150 copy interface",
+      "assertion": "Record byte offset +0x2E is ID selection byte; observed guard accepts unsigned ID <=9 when valid destination, then copies record into UI entry at F94304+ID*0x210; leaf copies NUL-terminated UTF-16 name from record +0; byte +0x2F/+0x30 and DWORD +0x31/+0x2A feed specific UI fields. Availability flag +0x5C is set in leaf.",
+      "limitations": [
+        "No proved official valid-ID policy or deduplication; ID0 not thereby certified.",
+        "Source UTF-16 must fit buffers and terminate; unsafe synthetic input is not certified.",
+        "UI record write is not proof of full UI refresh, authorization or scene entry."
+      ],
+      "affected_spec_ids": [
+        "SPEC-CHAR-0001"
+      ],
+      "conflicts": [],
+      "native_review_ref": null
+    },
+    {
+      "id": "CLM-AUTH-0001",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr/evidence/602d11a657a2e8a3dc53cff4664f837d579cd6cb187311b2c4c7070e994887d9.txt",
+      "source_blob_sha": "50d90ef9545337ffc91151cb102d81a0e8fbd83f",
+      "source_intake_id": "SRC-0003",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR client auth payload builders 0x4A3360/0x4A31B0 and 0x440790 mode selection",
+      "assertion": "Observed outbound command 0x00E8 has 112-byte local payload: 2-byte LE command, byte slots +2..52 and +53..103 of capacity 51, unknown +104..109, common source word +110..111. Command 0x000F has 214-byte local payload: two 51 UTF-16-word slots at +2..103 and +104..205, explicit DWORD +206..209 0x00010001, WORD +210..211 0x0034, common source word +212..213.",
+      "limitations": [
+        "Neither proves official credential validation or accepted character length.",
+        "Codepage, exact source data, conversion failures and E8 opaque tail unknown.",
+        "Two commands are not interchangeable; these are client payload builders, not complete wire frames."
+      ],
+      "affected_spec_ids": [
+        "SPEC-AUTH-0001"
+      ],
+      "conflicts": [],
+      "native_review_ref": null
+    },
+    {
+      "id": "CLM-AUTH-0002",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr/evidence/602d11a657a2e8a3dc53cff4664f837d579cd6cb187311b2c4c7070e994887d9.txt",
+      "source_blob_sha": "50d90ef9545337ffc91151cb102d81a0e8fbd83f",
+      "source_intake_id": "SRC-0003",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR client login-result consumer 0x4C37A0 conditional status path and 0x4C3080 group/channel records",
+      "assertion": "Observed consumer branches on status byte at payload+0x16. Status 0 with nonempty wide name at +2 enters data-update path; status 5 is separate nonsuccess branch. Group records in 0x4C3080 use 3-byte group header (uint16 ID + uint8 channel count) and 10-byte channel rows with IPv4 octets at row+4..7.",
+      "limitations": [
+        "Status enum semantics and complete returned-packet validation not established.",
+        "Group cursor, opaque fields, identity capacity, and world connection handoff require further examination.",
+        "Cannot infer server endpoint policy, auth policy, or successful end-to-end login."
+      ],
+      "affected_spec_ids": [
+        "SPEC-AUTH-0001"
+      ],
+      "conflicts": [],
+      "native_review_ref": null
+    }
+  ]
 }
