@@ -998,3 +998,156 @@
   47b5c3:	83 e4 f8             	and    esp,0xfffffff8
   47b5c6:	6a ff                	push   0xffffffff
   47b5c8:	68 7c 10 94 00       	push   0x94107c
+  47b5cd:	64 a1 00 00 00 00    	mov    eax,fs:0x0
+  47b5d3:	50                   	push   eax
+  47b5d4:	51                   	push   ecx
+  47b5d5:	56                   	push   esi
+  47b5d6:	57                   	push   edi
+  47b5d7:	a1 20 1f d6 00       	mov    eax,ds:0xd61f20
+  47b5dc:	33 c4                	xor    eax,esp
+  47b5de:	50                   	push   eax
+  47b5df:	8d 44 24 10          	lea    eax,[esp+0x10]
+  47b5e3:	64 a3 00 00 00 00    	mov    fs:0x0,eax
+  47b5e9:	8b f9                	mov    edi,ecx
+  47b5eb:	81 bf 48 02 00 00 61 	cmp    DWORD PTR [edi+0x248],0xea61
+  47b5f2:	ea 00 00 
+  47b5f5:	75 11                	jne    0x47b608
+  47b5f7:	80 bf 6c 02 00 00 00 	cmp    BYTE PTR [edi+0x26c],0x0
+  47b5fe:	75 4f                	jne    0x47b64f
+  47b600:	57                   	push   edi
+  47b601:	e8 4a 02 00 00       	call   0x47b850
+  47b606:	eb 47                	jmp    0x47b64f
+  47b608:	f6 05 b8 73 fb 00 01 	test   BYTE PTR ds:0xfb73b8,0x1
+  47b60f:	75 29                	jne    0x47b63a
+  47b611:	83 0d b8 73 fb 00 01 	or     DWORD PTR ds:0xfb73b8,0x1
+  47b618:	c7 44 24 18 00 00 00 	mov    DWORD PTR [esp+0x18],0x0
+  47b61f:	00 
+  47b620:	e8 4b 4b 0e 00       	call   0x560170
+  47b625:	68 10 d1 bc 00       	push   0xbcd110
+  47b62a:	e8 eb 6c 41 00       	call   0x89231a
+  47b62f:	83 c4 04             	add    esp,0x4
+  47b632:	c7 44 24 18 ff ff ff 	mov    DWORD PTR [esp+0x18],0xffffffff
+  47b639:	ff 
+  47b63a:	8b 45 08             	mov    eax,DWORD PTR [ebp+0x8]
+  47b63d:	8b 8f 48 02 00 00    	mov    ecx,DWORD PTR [edi+0x248]
+  47b643:	50                   	push   eax
+  47b644:	51                   	push   ecx
+  47b645:	be c0 73 fb 00       	mov    esi,0xfb73c0
+  47b64a:	e8 d1 a0 0e 00       	call   0x565720
+  47b64f:	f6 05 64 0f fc 00  	test   BYTE PTR ds:0xfc0f64,0x1
+
+```
+
+`VA 0x47D530..0x47D5CD`（raw `0x7C930..0x7C9CD`）：
+
+```asm
+  47d530:	55                   	push   ebp
+  47d531:	8b ec                	mov    ebp,esp
+  47d533:	6a ff                	push   0xffffffff
+  47d535:	68 7e 7e 94 00       	push   0x947e7e
+  47d53a:	64 a1 00 00 00 00    	mov    eax,fs:0x0
+  47d540:	50                   	push   eax
+  47d541:	56                   	push   esi
+  47d542:	57                   	push   edi
+  47d543:	a1 20 1f d6 00       	mov    eax,ds:0xd61f20
+  47d548:	33 c5                	xor    eax,ebp
+  47d54a:	50                   	push   eax
+  47d54b:	8d 45 f4             	lea    eax,[ebp-0xc]
+  47d54e:	64 a3 00 00 00 00    	mov    fs:0x0,eax
+  47d554:	8b f1                	mov    esi,ecx
+  47d556:	8b fa                	mov    edi,edx
+  47d558:	8b 86 48 02 00 00    	mov    eax,DWORD PTR [esi+0x248]
+  47d55e:	89 87 20 01 00 00    	mov    DWORD PTR [edi+0x120],eax
+  47d564:	8b 86 4c 02 00 00    	mov    eax,DWORD PTR [esi+0x24c]
+  47d56a:	89 87 1c 01 00 00    	mov    DWORD PTR [edi+0x11c],eax
+  47d570:	b8 01 00 00 00       	mov    eax,0x1
+  47d575:	84 05 64 0f fc 00    	test   BYTE PTR ds:0xfc0f64,al
+  47d57b:	75 26                	jne    0x47d5a3
+  47d57d:	09 05 64 0f fc 00    	or     DWORD PTR ds:0xfc0f64,eax
+  47d583:	c7 45 fc 00 00 00 00 	mov    DWORD PTR [ebp-0x4],0x0
+  47d58a:	e8 51 07 00 00       	call   0x47dce0
+  47d58f:	68 f0 da bc 00       	push   0xbcdaf0
+  47d594:	e8 81 4d 41 00       	call   0x89231a
+  47d599:	83 c4 04             	add    esp,0x4
+  47d59c:	c7 45 fc ff ff ff ff 	mov    DWORD PTR [ebp-0x4],0xffffffff
+  47d5a3:	8b 87 20 01 00 00    	mov    eax,DWORD PTR [edi+0x120]
+  47d5a9:	50                   	push   eax
+  47d5aa:	68 68 0f fc 00       	push   0xfc0f68
+  47d5af:	e8 dc 12 00 00       	call   0x47e890
+  47d5b4:	50                   	push   eax
+  47d5b5:	8b ce                	mov    ecx,esi
+  47d5b7:	e8 04 e0 ff ff       	call   0x47b5c0
+  47d5bc:	57                   	push   edi
+  47d5bd:	e8 2e f8 ff ff       	call   0x47cdf0
+  47d5c2:	8b 8f 00 01 00 00    	mov    ecx,DWORD PTR [edi+0x100]
+  47d5c8:	8b 31                	mov    esi,DWORD PTR [ecx]
+  47d5ca:	e8 41 00         	call   0x47d610
+
+```
+
+`VA 0x565720..0x5657AC`（raw `0x164B20..0x164BAC`）：
+
+```asm
+  565720:	55                   	push   ebp
+  565721:	8b ec                	mov    ebp,esp
+  565723:	83 e4 f8             	and    esp,0xfffffff8
+  565726:	6a ff                	push   0xffffffff
+  565728:	68 e8 fb 93 00       	push   0x93fbe8
+  56572d:	64 a1 00 00 00 00    	mov    eax,fs:0x0
+  565733:	50                   	push   eax
+  565734:	83 ec 34             	sub    esp,0x34
+  565737:	a1 20 1f d6 00       	mov    eax,ds:0xd61f20
+  56573c:	33 c4                	xor    eax,esp
+  56573e:	89 44 24 2c          	mov    DWORD PTR [esp+0x2c],eax
+  565742:	53                   	push   ebx
+  565743:	57                   	push   edi
+  565744:	a1 20 1f d6 00       	mov    eax,ds:0xd61f20
+  565749:	33 c4                	xor    eax,esp
+  56574b:	50                   	push   eax
+  56574c:	8d 44 24 40          	lea    eax,[esp+0x40]
+  565750:	64 a3 00 00 00 00    	mov    fs:0x0,eax
+  565756:	83 7e 28 00          	cmp    DWORD PTR [esi+0x28],0x0
+  56575a:	8b 45 0c             	mov    eax,DWORD PTR [ebp+0xc]
+  56575d:	c6 86 89 00 00 00 01 	mov    BYTE PTR [esi+0x89],0x1
+  565764:	74 17                	je     0x56577d
+  565766:	8b 4d 08             	mov    ecx,DWORD PTR [ebp+0x8]
+  565769:	50                   	push   eax
+  56576a:	51                   	push   ecx
+  56576b:	68 ac 06 c1 00       	push   0xc106ac
+  565770:	e8 eb 83 18 00       	call   0x6edb60
+  565775:	83 c4 0c             	add    esp,0xc
+  565778:	e9 e8 02 00 00       	jmp    0x565a65
+  56577d:	8b 55 08             	mov    edx,DWORD PTR [ebp+0x8]
+  565780:	bb 01 00 00 00       	mov    ebx,0x1
+  565785:	89 56 38             	mov    DWORD PTR [esi+0x38],edx
+  565788:	89 46 3c             	mov    DWORD PTR [esi+0x3c],eax
+  56578b:	89 5e 28             	mov    DWORD PTR [esi+0x28],ebx
+  56578e:	84 1d d4 ad fa 00    	test   BYTE PTR ds:0xfaadd4,bl
+  565794:	75 29                	jne    0x5657bf
+  565796:	09 1d d4 ad fa 00    	or     DWORD PTR ds:0xfaadd4,ebx
+  56579c:	c7 44 24 48 00 00 00 	mov    DWORD PTR [esp+0x48],0x0
+  5657a3:	00 
+  5657a4:	e8 d7 1c 02 00       	call   0x587480
+  5657a9:	68 c0 cc         	push   0xbcccc0
+
+```
+
+**判定**：本輪驗證這些入口的機器碼真實存在與局部控制條件；但未具備該 RR 所需的完整 wire/consumer/時序因果鏈。保留 `UNKNOWN`，不能標為 `SUBMITTED` 或 `ACCEPTED`。
+
+## 跨 Task 依賴與研究順序
+1. T02 RR-0004 和 RR-0001：先固定連線/framing 模式，避免將 payload 與 frame header 混淆。
+2. T03 RR-0003 + T02 RR-0005：認證結果、選服 UI、socket 切線順序。
+3. T02 RR-0007 + T03 RR-0002：選角雙向訊息與 roster parser，完整方向/handler 審計。
+4. T03 RR-0008：只在 S2C handler→state writer 已實證後接至 E06/E18 scene script 鏈。
+5. T02 RR-0006：獨立驗證解壓/校驗錯誤和 Server 相容性，必要時升級其優先。
+
+## 四種完成層級
+- **Client 待逆向**：所有 8 RR 的本輪有界分析都不足以宣告完整封包與成功/失敗分支閉合。
+- **Server 待開發**：帳號 policy、角色進度、教學選擇等屬新相容 Server 決策；不可由現有 Client 靜態字串憑空當官方規格。
+- **跨功能待整合**：T02 framing、T03 auth/selection、T05/07 scene 與 extra/roy1 E01–E18。
+- **待遊玩驗證**：沒有實際 Server／原 Client 互通或真實 pcap，仍需測試契約。
+
+## 正式 RR 管理
+- 本報告作為跨 Task 來源審計與待補證清單，**不是** T02/T03 的認領、關閉或改寫 owner。
+- 正式 CLAIMED 必須由對應 Task owner 經派工 CLI、主線審核合併公告；報告推送 GitHub 必須取得使用者明確授權。
+- T01 FULL-PASS 與 RR ACCEPTED / S00 SPEC STABLE / 伺服器可玩互不等價。
