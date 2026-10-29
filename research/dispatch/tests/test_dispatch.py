@@ -77,6 +77,18 @@ class DispatchTests(unittest.TestCase):
         fp.write_text("# Silently altered research\n",encoding="utf-8")
         self.assertTrue(any("modified submission report" in e for e in validate(self.root,boot=False)))
 
+    def test_kr_tc_claims_are_not_interchangeable(self):
+        self.assertIn("RR-9001", inbox_text("T03", read(self.root)["items"], version="kr"))
+        self.assertNotIn("RR-9001", inbox_text("T03", read(self.root)["items"], version="tc"))
+        with self.assertRaisesRegex(ValueError, "client_version"):
+            transition(self.root, "RR-9001", "CLAIMED", "agent", DATE,
+                       "do not claim KR work as TC",
+                       branch="tc/rr-9001", base=BASE, version="tc")
+        transition(self.root, "RR-9001", "CLAIMED", "agent", DATE,
+                   "verified KR work request", branch="kr/rr-9001",
+                   base=BASE, version="kr")
+        self.assertEqual(validate(self.root, boot=False), [])
+
     def test_duplicate_claim_and_missing_evidence_rejected(self):
         with self.assertRaises(ValueError):
             self.do("CLAIMED",branch="no-baseline")
