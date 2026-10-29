@@ -119,3 +119,6 @@ T01 對 Server 設計的接收、精確主張去重、風險分流及 S00 交接
 
 
 2026-10-30：[T10分支整合階段保存](../../../research/handoffs/t01-t10-roy-20261029/README.md)。依使用者要求暫停；核127份來源、原樣補入22份原稿並補登29個SRC，保存early49／middle44份待裁決提案。未發布新canonical claim，本分支canonical整合剩127份（34份尚無完整提案）；原318版待萃取仍194份。T01自有通知3處誤貼欄位已勘誤，歷史判決及退回狀態不變。
+
+
+2026-10-30 T16 43 筆作者端勘誤後續獨立複驗：[T01-20261030-t16-followup](../../../shared/integrations/T01-20261030-t16-followup/README.md)。11 筆精確退回修正已由 T01 `RESOLVED`，32 筆仍 `READY_FOR_REVIEW`；不表示相關 T16 原稿 FULL-PASS、T16 branch 合併或 S00 SPEC STABLE。精確原件/新舊 blob 與剩餘義務見批次索引。
