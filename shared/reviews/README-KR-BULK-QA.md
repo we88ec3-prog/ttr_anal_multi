@@ -91,3 +91,9 @@
 - [完整 BIN-first 技術報告](KR-BULK-CENTRAL-QA-ROUND-14-20261029.md)
 - [可按名稱／VA 查詢的 72 筆 JSON](KR-BULK-CENTRAL-QA-ROUND-14-20261029-keys.json)
 - 原始 `.rdata` 解析取得 72 個不同 NUL 字串名稱，並在 `.text` 確認共同 callback `0x008DC2F0` 是 `xor eax,eax; ret`；72 個名稱共享同一零回傳 stub，不能視為 72 個功能均已實作／逆向完成。維持 PARTIAL / NOT FULL-PASS。
+
+
+## 第十五段：Rebind／DeleteAllObject 原生 callback 與全域 writer（2026-10-29）
+
+- [第十五段完整 BIN-first 技術報告](KR-BULK-CENTRAL-QA-ROUND-15-20261029.md)：確認原生 `0x0055E590` (GitHub 同名偽碼檔案未收錄) 寫入 `0x00FE1F24`，以及 `0x0055E620` 經 `0x00FE1F28` 間接呼叫；初始 handler `0x005F5D10` 僅 `ret`。
+- **重要限制**：`Rebind` 不等於已證明替 72 個 script key 重新綁定，其他 writer/xref 尚未窮盡；維持 PARTIAL / NOT FULL-PASS。
