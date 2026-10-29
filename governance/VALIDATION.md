@@ -14,3 +14,15 @@ python -B -m unittest discover -s governance/tests -v
 **不能驗證的內容：**原生機器碼語意、封包欄位真值、Client 連線相容性、Server 可運作性。機械檢查綠燈**不會產生**FULL-PASS 或 STABLE 決策。現有舊 318 版台帳與退回原樣保留。
 
 驗證涵蓋的是新工作流索引，不是全庫每一份原稿。若準備發佈相容性規格，仍需另外人工審核來源與實際測試。若沒有本地 Python，Agent 也能透過 GitHub 讀取索引並逐筆做相同的邏輯檢查。
+
+
+## 正式跨 Task 派工與開工規則驗證
+
+```powershell
+python -B research/dispatch/dispatch.py show T03 --version kr
+python -B research/dispatch/dispatch.py show T03 --version tc
+python -B research/dispatch/dispatch.py check
+python -B -m unittest discover -s research/dispatch/tests -p "test_*.py" -v
+```
+
+檢查 KR/TC 共 32 個 Task README 的開工入口、T01–T16 衍生收件箱是否最新、RR owner/version/GAP/優先與狀態歷史、認領者與 SHA、回報檔案 blob 一致性及 S00 最終結案限制。通過不代表 Agent 已開始工作，也不代表原生 BIN 語意或 Server 運行經驗證。只有合併到 main 才對獨立 Agent 可見。
