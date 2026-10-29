@@ -210,6 +210,26 @@ def validate(root: Path) -> list[str]:
                 version(row, item_id)
             refs(row, "spec_ids", "SPEC", item_id)
 
+    for adr_id, adr in tables["ADR"].items():
+        objpath(adr.get("path"), adr_id)
+        state = adr.get("status")
+        if state not in {"PROPOSED", "APPROVED", "REJECTED", "SUPERSEDED"}:
+            fail(adr_id, "ADR status must be a recognized decision review state")
+        if state == "PROPOSED":
+            if adr.get("normative") is not False or adr.get("approval_record") is not None:
+                fail(adr_id, "PROPOSED ADR cannot be normative or approved")
+        if state == "APPROVED":
+            if adr.get("normative") is not True or not adr.get("approval_record"):
+                fail(adr_id, "APPROVED ADR requires an explicit approval record")
+        if adr.get("source_class") != "SERVER_DESIGN_PROPOSAL_NOT_CLIENT_EVIDENCE":
+            fail(adr_id, "ADR must not be represented as Client native evidence")
+    for spec_id, spec_row in tables["SPEC"].items():
+        if spec_row.get("maturity") in {"REVIEWED", "STABLE"}:
+            for adr_id in spec_row.get("adr_ids", []):
+                adr = tables["ADR"].get(adr_id)
+                if adr and (adr.get("status") != "APPROVED" or adr.get("normative") is not True):
+                    fail(spec_id, f"reviewed/stable spec references unapproved ADR {adr_id}")
+
     return errors
 
 def main():
