@@ -72,6 +72,9 @@ class SubmissionPreflightTests(unittest.TestCase):
         self.assertEqual(row["direct_specs"][0]["maturity"], "DRAFT")
         self.assertEqual(row["tests"][0]["status"], "OFFLINE_SYNTHETIC")
         self.assertIn("does not establish native", markdown(result).lower())
+        self.assertIn("UNKNOWN:", markdown(result))
+        self.assertIn("resolution:", markdown(result))
+        self.assertIn("facets:", markdown(result))
 
     def test_blob_tampering_is_detected(self):
         self.submitted(reported_blob="f" * 40)
