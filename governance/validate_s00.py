@@ -186,6 +186,23 @@ def validate(root: Path) -> list[str]:
             if not row.get("evidence_refs"):
                 fail(item_id, "NATIVE_VERIFIED requires scoped native evidence references")
         refs(row, "affected_spec_ids", "SPEC", item_id)
+        src_id = row.get("source_intake_id")
+        intake = tables["SRC"].get(src_id)
+        if intake is None:
+            fail(item_id, f"missing source intake {src_id}")
+        elif (intake.get("source_file") != row.get("source_file")
+              or intake.get("source_blob_sha") != row.get("source_blob_sha")
+              or intake.get("client_version") != row.get("client_version")):
+            fail(item_id, "claim source identity differs from intake")
+        elif item_id not in intake.get("claim_ids", []):
+            fail(item_id, "claim is not linked from source intake")
+
+    for item_id, row in tables["TEST"].items():
+        objpath(row.get("fixture_path"), item_id)
+        objpath(row.get("test_path"), item_id)
+        if row.get("status") != "OFFLINE_SYNTHETIC":
+            fail(item_id, "unsupported test status in Phase B")
+        refs(row, "source_claim_ids", "CLM", item_id)
 
     for kind in ("TEST", "ADR", "FB"):
         for item_id, row in tables[kind].items():
