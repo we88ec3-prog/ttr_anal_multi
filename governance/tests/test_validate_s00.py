@@ -22,7 +22,7 @@ class S00IndexTests(unittest.TestCase):
         for index_path in [value[0] for value in FILES.values()]:
             index=json.loads((ROOT/index_path).read_text(encoding="utf-8"))
             for row in index["items"]:
-                for key in ("spec_path","source_file","fixture_path","test_path","native_review_ref"):
+                for key in ("spec_path","source_file","fixture_path","test_path","native_review_ref","path"):
                     if row.get(key):paths.add(row[key])
                 for s in row.get("source_refs",[]):paths.add(s)
         for path in paths:
@@ -59,6 +59,19 @@ class S00IndexTests(unittest.TestCase):
             entry["claim_ids"]=[]
         self.edit("research/intake/index.json",mutate)
         self.assertTrue(any("promoted source must" in x for x in validate(self.root)))
+
+    def test_server_adr_proposal_cannot_be_normative(self):
+        def mutate(d):
+            d["items"][0]["normative"] = True
+        self.edit("design/decisions/index.json", mutate)
+        self.assertTrue(any("PROPOSED ADR cannot be normative" in x for x in validate(self.root)))
+
+    def test_reviewed_spec_cannot_use_unapproved_adr(self):
+        def mutate(d):
+            d["items"][0]["maturity"] = "REVIEWED"
+            d["items"][0]["adr_ids"] = ["ADR-0001"]
+        self.edit("spec/spec-index.json", mutate)
+        self.assertTrue(any("unapproved ADR" in x for x in validate(self.root)))
 
     def test_wrong_client_target_is_rejected(self):
         self.edit("spec/spec-index.json",lambda d:d["items"][0].update({"client_version":"tc"}))
