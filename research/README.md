@@ -13,3 +13,5 @@ T02–T16 研究原稿應繼續保留完整技術證據，對 S00 交付 bounded
 - [來源收件範本](templates/source-intake.md)、[Server 影響交接範本](templates/server-impact.md)。
 
 - [正式研究派工規則與 T01–T16 收件箱](dispatch/README.md)，KR／TC 共用 RR index，但各 Agent 必須按 client_version 認領。
+
+2026-10-29：[T01 新流程首次接續](handoffs/t01-20261029-risk-intake/README.md)。318版完成R0身份收件，其中4個來源完成有限主張／衝突查對，其餘314版待萃取；新增3項重用既有原生決議與1項PARTIAL導航主張。歷史全文通過3／318不變，不作本通道准入門檻；未標S00接受或SPEC_CONSUMABLE。

@@ -1,6 +1,6 @@
 {
   "schema": "s00-claim-index-v1",
-  "note": "Phase B extracted scoped, provisional claims from existing research. PARTIAL is not FULL-PASS; no native verification was newly performed.",
+  "note": "Scoped source-derived claims and explicitly cited existing native decisions. NATIVE_VERIFIED does not derive from CI/intake state; no new whole-document verdicts generated.",
   "items": [
     {
       "id": "CLM-NET-0001",
@@ -330,6 +330,115 @@
       ],
       "conflicts": [],
       "native_review_ref": null
+    },
+    {
+      "id": "CLM-CLIENT-0001",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261028-015216-chatgpt-web-roy-T08-158-gameinfo-receiver-and-composite-key-abi.md",
+      "source_blob_sha": "f4eeaddf48033005057a5c5a5ec78bd438b0eddd",
+      "source_intake_id": "SRC-0011",
+      "evidence_level": "NATIVE_VERIFIED",
+      "evidence_scope": "40F060 normal return and concrete4B3710→4DFC90 stack/dataflow only",
+      "assertion": "On normal returns,40F060 returnsEAX=FAB130 with plainRET. In4B3710, WORDs are ORed06000000 and pushed beforegetter, preserved until4DFC90 consumesret4 and comparesactor+88 DWORD.",
+      "limitations": [
+        "Valid inputs and stated container invariants.",
+        "No entity-type meaning for6, wire opcode, arbitrary dynamic callback, concurrency or complete backend/gameplay contract.",
+        "No currently applicable S00 Phase-B SPEC dependency; retained as downstream Client navigation."
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "native_review_ref": "shared/integrations/T01-20261029-continuation-02/t08-158/review.json",
+      "evidence_refs": [
+        "shared/integrations/T01-20261029-continuation-02/t08-158/native-cfg/0040f060.json",
+        "shared/integrations/T01-20261029-continuation-02/t08-158/native-cfg/004b3710.json",
+        "shared/integrations/T01-20261029-continuation-02/t08-158/native-cfg/004dfc90.json"
+      ],
+      "knowledge_id": "CK-CLIENT-LAZY-RECEIVER-01",
+      "risk_level": "R3_REUSED_EXISTING_DECISION",
+      "integration_review_ref": "research/handoffs/t01-20261029-risk-intake/README.md"
+    },
+    {
+      "id": "CLM-CLIENT-0002",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261028-094900-chatgpt-web-roy-T08-177-owner-mode-caller-drain-closure.md",
+      "source_blob_sha": "fdc8a64aa0f33866defe5a2484fa432f4bbaf66c",
+      "source_intake_id": "SRC-0018",
+      "evidence_level": "NATIVE_VERIFIED",
+      "evidence_scope": "Exact bounded collection mode/producer gate normal paths, not shared identity or full lifetime",
+      "assertion": "7B7FD0 first invokes first-collection payload virtual+4, then writes second-collection payload+44=1 andcontainer+30=1.7B8030 drains second-collection payloads andclears+44, invokesfirst-collectionvirtual+8, thencontainer+30=0;7DD1A0 uses signedowner+44>=1 producer gate.",
+      "limitations": [
+        "Valid containers/payloads and normal callee returns.",
+        "No cross-instance owner equivalence, exception/reentrancy/thread guarantee, runtime scheduling or Server trigger policy.",
+        "Not currently a Phase-B wire contract."
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "native_review_ref": "shared/integrations/T01-20261029-continuation-02/t08/results.json",
+      "evidence_refs": [
+        "shared/integrations/T01-20261029-continuation-02/t08/native-cfg/007b7fd0.json",
+        "shared/integrations/T01-20261029-continuation-02/t08/native-cfg/007b8030.json",
+        "shared/integrations/T01-20261029-continuation-02/t08/native-cfg/007dd1a0.json"
+      ],
+      "knowledge_id": "CK-CLIENT-COLLECTION-MODE-GATE-01",
+      "risk_level": "R3_REUSED_EXISTING_DECISION",
+      "integration_review_ref": "research/handoffs/t01-20261029-risk-intake/README.md"
+    },
+    {
+      "id": "CLM-CLIENT-0003",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261028-111046-chatgpt-web-roy-T08-197-secondary-tree-key-removal.md",
+      "source_blob_sha": "4812aa8da49c40647538206679b414753a4c6e5e",
+      "source_intake_id": "SRC-0019",
+      "evidence_level": "NATIVE_VERIFIED",
+      "evidence_scope": "4DFC30 versus4DFC90 exact container/sentinel/payload cleanup relation",
+      "assertion": "4DFC30 searches embeddedowner+18 withsentinelowner+1C; on found it conditionally clearsowner+F8, directly freesnon-nullnode+10 payload then erasesnode.4DFC90 instead usesowner+8/C main tree andactor+88 predicate withvirtualcleanup;theseare different bounded paths.",
+      "limitations": [
+        "Valid owner/key/container invariants and normal returns.",
+        "Unknown dynamic payload class, shared ownership, generation/removal policy and upstream message sequence.",
+        "Not a packet format or S00 Phase-B scene gate."
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "native_review_ref": "shared/integrations/T01-20261029-continuation-02/t08/results.json",
+      "evidence_refs": [
+        "shared/integrations/T01-20261029-continuation-02/t08/native-cfg/004dfc30.json",
+        "shared/integrations/T01-20261029-continuation-02/t08/native-cfg/004dfc90.json"
+      ],
+      "knowledge_id": "CK-CLIENT-SECONDARY-KEY-ERASE-01",
+      "risk_level": "R3_REUSED_EXISTING_DECISION",
+      "integration_review_ref": "research/handoffs/t01-20261029-risk-intake/README.md"
+    },
+    {
+      "id": "CLM-QUEST-0001",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261028-185456-chatgpt-web-roy-T16-74-KR-quest-command-notification-enum-tables-and-opcode-boundary.md",
+      "source_blob_sha": "8fe54408cd505caf4ab890c6fcf2302c6a78baf3",
+      "source_intake_id": "SRC-0023",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "T16-74 local data-table navigation only; source-derived bounded claim, no independent new BIN semantic verdict",
+      "assertion": "The source reports12-byte local name/value records: raw963594→kRequestAcceptQuest value1F;raw964BBC/964BC8/964BD4→kAcceptedQuest/kAcceptQuestFailed/kCompletedQuest values11/12/13,commonpointerC11778. These local table values are not established wire opcodes.",
+      "limitations": [
+        "SourceL17–66 andL94–119 explicitly withhold producer/consumer, C2S/S2C domains and actual wire mapping.",
+        "Do not equate localenum13(kCompletedQuest) withauth command13/status consumer or other numeric13 domains.",
+        "No Quest16→15 gate, NPC/UI effect, reply layout, timing or end-to-end closure established.",
+        "No new RR or SPEC change is created from a table name."
+      ],
+      "conflicts": [
+        "Numerical13 overlaps auth/other domains; source explicitly does not establish wire-domain identity. CLM-AUTH-0002 remains unchanged.",
+        "No opposing bounded table claim found in current claim index; lookup/navigation only, no normative protocol use."
+      ],
+      "affected_spec_ids": [
+        "SPEC-NET-0003"
+      ],
+      "native_review_ref": null,
+      "evidence_refs": [],
+      "knowledge_id": null,
+      "risk_level": "R1",
+      "integration_review_ref": "research/handoffs/t01-20261029-risk-intake/README.md"
     }
   ]
 }
