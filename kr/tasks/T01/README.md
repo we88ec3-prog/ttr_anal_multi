@@ -93,3 +93,6 @@
 依 [T01 FULL-PASS 共用知識政策](../../../shared/T01-FULL-PASS-UNCLASSIFIED-INTEGRATION-RULES.md)，T01 對**精確範圍全部原生主張均已核驗**的結論／子流程，發表於 [shared/verified-knowledge](../../../shared/verified-knowledge/README.md)，依玩家功能、協定與資料結構檢索，不依來源 Task 分類。仍保留 Task ID、作者、原稿路徑與 Git blob SHA 為審核及錯誤退回 metadata，不搬移既有原稿。
 
 准入必須完成原件 SHA、PE/VA/raw、指令邊界、CFG／上下游／資料流與相關矛盾的必要查核；抽樣 bytes／SHA 一致、來源收件、局部主張通過不會讓全篇或整 Task 通過。僅通過的有界子流程可納入；所有未通過內容保留待審來源。原版 Server 內部演算法不是 Client 逆向驗收，列 Server 待開發；未知 Client 封包列 Client 待逆向。每批建立 FULL-PASS 條目、更正或撤銷的可追溯清單，禁止隱性升級歷史 accepted-claims。
+
+
+2026-10-29 階段整合：[T01原稿語意驗收檢查點](../../../shared/integrations/T01-20261029-semantic-review/README.md)。318個來源版本已凍結；全文FULL-PASS為0，69個原版已有反證、153部分、9來源級、87待審。46項具體退回及映射群組已更新Task README，另有3項精確原生結論准入共用知識。接續逐篇來源SHA／碼塊待辦，不把本次階段收尾算作318篇完成；實際main基準見批次推送收據。

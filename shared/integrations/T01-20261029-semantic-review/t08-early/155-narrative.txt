@@ -1,0 +1,41 @@
+# KR T08-155 — tree erase node and container invariants
+
+- 研究時間：2026-10-28T01:43:15+08:00 Asia/Taipei；研究者：`chatgpt-web roy`。
+- KR 原始檔：`Tartaros.bin` SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`（本地實際重新核對）；唯讀靜態分析，未啟動或修改程式。
+- 原始碼來源：本次使用 GNU objdump 對 PE32 `.text` 的 VA 反組譯及 E8 相對目的地直接核查。**完整 `.text` 線性反組譯掃描只建立 direct-call 候選集合，不等同完整 CFG，亦可能包括誤解碼區。**
+- GitHub 整合：前次查核 main HEAD `52452b5bc1bf0a6f7a10a7c1c83e4f3aca6a780d`；最新 HEAD 需於提交前複核。正式 T08 為 0007 建立／登記／移除資料介面；不替代 T02/T06/T07 分工。
+- 歷史來源：T08-153 及整合重審-01/02；保留本次覆核與舊報告證據等級差異。
+
+## 首要結論
+
+`0x007B6890..0x007B6AEB` 不負責 actor vtable 清理；其執行的是**通用紅黑樹樣式（顏色 byte +0x14；nil flag +0x15）的結構移除**，最後呼叫 `0x89120C` 釋放節點，計數若非 0 則減 1，並在 iterator 輸出寫回後 `ret 0x0C`。確定其可被多種非 actor 容器共用，不能將呼叫此 helper 解讀為原生實體銷毀。
+
+### 1. 入口、實參及標記
+
+- `0x7B6893 mov eax,[ebp+0x10]`：第三個 stack 參數是待 erase 節點；`[node+0x15]` 作為 nil sentinel 檢查。
+- `0x7B68AB mov ebx,eax`、`0x7B68B4 call 0x49E6A0`：先建立返回 iterator／暫存資訊；`0x49E6A0` 語意需另行核對。
+- `node+0x00/+0x08`：child links，`node+0x04` parent，`node+0x14` 顏色／平衡旗標，`+0x15` nil flag。這套 layout 由多個分支直接讀寫支持。
+- 依據 `0x7B68DD..0x7B69B6` 可見移除節點對父子鏈與容器 head 邊界做修補；`0x7B69D0..0x7B6AC0` 執行顏色／旋轉等平衡處置，轉動交 `0x43E670`、`0x763F60`。
+- 終端 `0x7B6AC3..0x7B6AEB` free old node，計數安全減 1，回填輸出 iterator。
+
+### 2. 一手關鍵原始指令：入口至 unlink
+
+[code block separately audited]
+
+### 3. 一手指令：再平衡與 terminal
+
+[code block separately audited]
+
+### 4. 呼叫端對照與 receiver 注意事項
+
+以下為**全 `.text` 線性掃描的直接 E8 候選**；不同 caller 的 receiver 不能因使用同一 helper 就混為 GameInfo。
+
+[code block separately audited]
+
+GameInfo 單 key 刪除 `0x4DFC1E`、另樹關聯清除 `0x4DFC80`、按 `actor+0x88` 批次 `0x4DFCE1`、型別條件移除 `0x4DFE24` 均進入同一通用 helper。這證明**erase 的容器實現共享**，而非證明物件被同一管線管理。前端各自釋放 `node+0x10` 指向的物件、或先清 reference，再讓 helper 只處理節點。
+
+### 5. 限定偽碼與可測不變量
+
+[code block separately audited]
+
+**需保留的差異與安全邊界**：`0x7B6890` 不認識 actor+0x04、+0x88、+0x9C；不呼叫 actor vtable+0、+0x14。節點在 erase 後不能再沿其指標走訪。`0x4DFC90` 與 `0x4DFD40` 均使用 erase 回傳／另行 successor 的做法避免遞迴跳過節點。即使在本檔存在很多 `call 7B6890`，也不代表同一場景。下一段 T08-156 要把 full clear 與 ID/domain 分離後做生命週期交叉檢查。

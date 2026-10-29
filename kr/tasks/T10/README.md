@@ -1,5 +1,49 @@
 # T10 普通攻擊與連段
 
+## T01 驗收退回事項
+
+<!-- T01-20261029-stage-notices:start -->
+
+### 2026-10-29 階段複驗通知（4筆具體更正，既有ID原位補充）
+
+本次僅通知已證實的錯誤；原稿全文驗收仍未完成。保留原稿，提供獨立修正版及新 blob/SHA；複驗通過前維持 NEEDS_FIX，不能將局部主張支持算作全文 FULL-PASS。
+
+[本批總台帳](../../../shared/integrations/T01-20261029-semantic-review/README.md)；[機器可讀退回紀錄](../../../shared/integrations/T01-20261029-semantic-review/return-notices.json)。
+
+#### T01-RETURN-T10-062-001 — NEEDS_FIX
+- 原稿：`kr-temp-roy/20261028-022217-chatgpt-web-roy-T10-062-lifecycle-reset-dual-branch.md`；Git blob `43ca57972ac64ad0752ce37c419331ff120befda`；SHA256 `5ea18b4b53024c5ca3c1ef67d2b70596c0966ea6d61032d1f55ec1ff0712c0b5`。
+- 問題：First reset branch clears ordinary40bytes before the optional6D1DA0 initialization call, contrary to the stated initialize-then-clear order.
+- 原生反證：第一支可先依 `FB7C14` 呼叫 `6D0750`；但 `0x6D4A95` 僅測試 `FDF3EC` 並留下 flags，`6D4A9C..6D4AC9` 先清普通 40 bytes。`0x6D4ACE` 才依該 flags 選擇分支，未初始化時 `0x6D4AD9 = E8 C2 D2 FF FF` 呼叫 `6D1DA0`，最後 `6D4AF3` 呼叫 `823850` 清特殊樹。故特殊域初始化不在普通清零之前。
+- 修正及複驗條件：Preserve original; supply separate correction with new blob/SHA and revalidate affected argument/control/value flow. Use the per-item specific conditions in DECISIONS.md.
+- 驗收紀錄：[本項證據](../../../shared/integrations/T01-20261029-semantic-review/t10/DECISIONS.md)。
+
+#### T01-RETURN-T10-063-001 — NEEDS_FIX
+- 原稿：`kr-temp-roy/20261028-022217-chatgpt-web-roy-T10-063-indexed-reset-list-partition.md`；Git blob `82b83636f00ded1be14216c7529a686fad331a16`；SHA256 `719c52c2b41b21faf06d4e345e31b01b95c685659239a34298a486e64ea014eb`。
+- 問題：Clear path at6D4CAE has no ESI<=27 guard; reader guard cannot be transferred to writer.
+- 原生反證：第一支可先依 `FB7C14` 呼叫 `6D0750`；但 `0x6D4A95` 僅測試 `FDF3EC` 並留下 flags，`6D4A9C..6D4AC9` 先清普通 40 bytes。`0x6D4ACE` 才依該 flags 選擇分支，未初始化時 `0x6D4AD9 = E8 C2 D2 FF FF` 呼叫 `6D1DA0`，最後 `6D4AF3` 呼叫 `823850` 清特殊樹。故特殊域初始化不在普通清零之前。
+- 修正及複驗條件：Preserve original; supply separate correction with new blob/SHA and revalidate affected argument/control/value flow. Use the per-item specific conditions in DECISIONS.md.
+- 驗收紀錄：[本項證據](../../../shared/integrations/T01-20261029-semantic-review/t10/DECISIONS.md)。
+
+#### T01-RETURN-T10-007-001 — NEEDS_FIX
+- 原稿：`kr-temp-roy/T10/20261027-191139-chatgpt-web-roy-T10-7-runtime-input-merge.md`；Git blob `d99588c94a6647acffb036ef497b66377d22e200`；SHA256 `7c28ce9bbca0d2081a534c51d14231d323dc1263be00d7f307d48cb4e677e3a4`。
+- 問題：5467F1 is pointer load; actual WORD store is5467F4; correct main dataflow retained.
+- 原生反證：第一支可先依 `FB7C14` 呼叫 `6D0750`；但 `0x6D4A95` 僅測試 `FDF3EC` 並留下 flags，`6D4A9C..6D4AC9` 先清普通 40 bytes。`0x6D4ACE` 才依該 flags 選擇分支，未初始化時 `0x6D4AD9 = E8 C2 D2 FF FF` 呼叫 `6D1DA0`，最後 `6D4AF3` 呼叫 `823850` 清特殊樹。故特殊域初始化不在普通清零之前。
+- 修正及複驗條件：Preserve original; supply separate correction with new blob/SHA and revalidate affected argument/control/value flow. Use the per-item specific conditions in DECISIONS.md.
+- 驗收紀錄：[本項證據](../../../shared/integrations/T01-20261029-semantic-review/t10/DECISIONS.md)。
+
+#### T01-RETURN-T10-026-001 — NEEDS_FIX
+- 原稿：`kr-temp-roy/T10/20261027-205931-chatgpt-web-roy-T10-26-subai-cast-state-machine.md`；Git blob `c82bc8c3c53f304faecab0911f214b89440d1784`；SHA256 `8bbf8f35d131d8274a7f49a1d26dac551b60e8f072a0df274de780d19a4ada2f`。
+- 問題：549D54 belongs independent549C60, not549980; function boundary/caller attribution false.
+- 原生反證：第一支可先依 `FB7C14` 呼叫 `6D0750`；但 `0x6D4A95` 僅測試 `FDF3EC` 並留下 flags，`6D4A9C..6D4AC9` 先清普通 40 bytes。`0x6D4ACE` 才依該 flags 選擇分支，未初始化時 `0x6D4AD9 = E8 C2 D2 FF FF` 呼叫 `6D1DA0`，最後 `6D4AF3` 呼叫 `823850` 清特殊樹。故特殊域初始化不在普通清零之前。
+- 修正及複驗條件：Preserve original; supply separate correction with new blob/SHA and revalidate affected argument/control/value flow. Use the per-item specific conditions in DECISIONS.md.
+- 驗收紀錄：[本項證據](../../../shared/integrations/T01-20261029-semantic-review/t10/DECISIONS.md)。
+
+<!-- T01-20261029-stage-notices:end -->
+
+
+
+## 既有任務說明
+
 狀態：bounded-review-handoff；負責人未認領。
 
 ## 範圍

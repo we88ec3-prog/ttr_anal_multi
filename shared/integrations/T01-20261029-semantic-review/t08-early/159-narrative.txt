@@ -1,0 +1,57 @@
+# KR T08-159 — actor virtual cleanup and erase order
+
+- 研究時間：2026-10-28T01:52:16+08:00（Asia/Taipei）；研究者：`chatgpt-web roy`。
+- 第一手來源：唯讀 `Tartaros.bin`，12,472,320 bytes，SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`，GNU objdump 對 PE `.text` VA 反組譯。
+- 正式 Task：GitHub KR T08 只負責 `0007` 實體建立／登記／移除的資料介面；dispatch 框架屬 T02、場景重置屬 T06/T07，僅交叉參照，不更動其他任務。
+- 分級：**原始 bytes**／**已證局部 data-flow**／**有條件推論**／**未知**。線性反組譯與直接呼叫搜尋不代表完整 CFG；外部封包來源與 runtime 未驗證。
+- 參照：`T08-153`、`T08-154`、`T08-155`、`T08-156`；上批保留的映射差異與 `T01-20261027-05` 部分驗收限制持續適用。
+- 無遊戲執行、修改主程式、服務或存檔。本文不是可直接部署的 C++ 原始碼。
+
+## 分析範圍
+
+本段重讀 `0x4DFBC0`、`0x4DFC30`、`0x4DFD40`、`0x4DFE90` 的原生 call order，比較 actor 清理虛擬方法和節點釋放；不因 vtable slot index 類似就升級成 `CMonster::~CMonster` 正式名稱。尤其補上**無節點、空 payload 的錯誤分支風險**，以及樹 helper 與物件清除分離。
+
+### 1. 依 ID 先解控制器槽、再處理物件、最後刪節點
+
+[code block separately audited]
+
+- `4DFBCF` push stack address 當 search key；`4DFBD5 call 82EF00`，`4DFBDD..E0` sentinel equal 時直跳尾端，不作其餘處理。
+- 找到節點後 `4DFBE4..4DFBF6` 固定三次對 `[0xFBA7A4]` controller vptr+0x1C 做間接呼叫；這是**所有找到 key 的路徑**的副作用，不是只在 actor kind 1 才發生。
+- `4DFBF8` 讀 node+0x10 **沒有先測試 null**，即取 `[ecx]` 以執行 vtable +0x14；因此必須保留資料結構 `payload` 非空的**前置條件**。`4DFC02` 後測 null 是第二步，不能拿此 null check 保證前一個 virtual call 安全。
+- vtable+0x14 呼叫後再發出 vtable+0x00 且 push 1，清掉 node payload pointer，最後 `4DFC1E call 7B6890` 只移除 tree node。
+
+限定生命期順序：`find(key) -> controller-slot v1C(3次) -> actor.virtual+14 -> actor.virtual+0(1) -> node+10=0 -> RB erase`。若外部引用依舊持有指標、虛擬函式有額外引用計數，不能由此宣告「無 UAF 風險」或「一定完全 free」。
+
+### 2. 第二棵樹的 erase 路徑並不相同
+
+[code block separately audited]
+
+`4DFC30` 以 `esi+0x18` 的另一樹作查找；如果 `esi+0xF8` 的關聯資料與 key 一致就先清指標；`node+0x10` 的值非空則直接 `0x89120C` free（沒有 actor vtable+0/+14），再交相同 `7B6890` 處理 node。不能把它與 `GameInfo+8` 的物件生命期合併。
+
+### 3. 類型移除與整表清理差異
+
+[code block separately audited]
+
+[code block separately audited]
+
+`4DFD40` 是按條件遍歷的批次移除，會讀 `actor+4` 類型 byte，再根據不同分支調用 virtual 和 node erase；不能憑迴圈調用就認為呼叫了 `4DFBC0` 同樣三次 controller slot reset。`4DFE90` 清全表時的容器清理 helper 不等於 `4DFBC0` 的單鍵刪除；需分開列明哪條路徑會額外解除控制器引用。
+
+### 4. 虛擬函式身分仍需獨立證明
+
+| 呼叫 | 確認 | 目前未知 |
+|---|---|---|
+| controller vptr +0x1C | 4DFBC0 內三槽循環直接指令 | 哪些 controller 實例、slot 與 actor ID 對應 |
+| actor vptr +0x14 | 讀 vptr 再間接 call | CMonster / CCharacter / CEventObject 對各具體 vtable 的 callee |
+| actor vptr +0x00(1) | 帶整數 1 的虛擬調用 | 是否 scalar deleting destructor、實際 free owner 路線 |
+| 7B6890 | node unlink/balance/free，見 T08-155 | 不保證任何 actor deallocation |
+| 823850 | 批次容器清空節點 | 是否呼叫 payload cleanup 視 caller 前序而定 |
+
+### 5. 保守偽碼
+
+[code block separately audited]
+
+此偽碼**不等於**官方類別辨識、完整異常處理、動態分派還原。後續需抽取實際 actor vtable 的 scalar deleting destructor 以驗證 delete flag=1 是否表示 free。採用 BIN 中有效函式入口，不能任選 flat/PE 指令表。
+
+## 下一步
+
+T08-160 整理新修正與可提交的限定結論，建立跨 task provenance；後續 T08-161 可集中比較 vtable+0x14 具體 class 或追 T02 dispatch 表。
