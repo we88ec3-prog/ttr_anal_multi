@@ -17,7 +17,8 @@
 
 逐篇主張與全部碼塊已核對；以下限定需修正的內容，保留其他獨立支持的結論。
 
-#### T01-RETURN-T16-069-CONT02-C11 — READY_FOR_REVIEW
+#### T01-RETURN-T16-069-CONT02-C11 — RESOLVED
+- **T01 第二輪獨立裁決（2026-10-30，僅此固定通知）**：A0A4/A078 修正已按完整局部 producer/consumer 原生指令重新確認。 [原件與精確適用範圍](../../../shared/integrations/T01-20261030-t16-resource-followup/README.md)。**舊版來源的歷史錯誤不被抹除；整篇原稿、Quest 業務封包及 Server 狀態仍未獲 FULL-PASS。**
 - 原稿：`kr-temp-roy/20261028-170434-chatgpt-web-roy-T16-69-KR-virtual-dispatch-and-outbound-queue.md`；Git blob `2f5c65062c7ab82453dfa726019e4d5e2bf0a0dc`；SHA256 `0c0387cc78d2124f788e103344f16f1ec40bfd5c6084aa4e27c59ac27208971c`。
 - 問題：Scenario matrix calls the A0A4 gate a queue-count gate
 - 原生依據：Actual list element count isA078 (+1 onenqueue,-1 ondrain).A0A4 is a different field:804A40 updatesit±5 orresets0 basedondrainstatus. SourceL19 itself leavesA0A4 semantics provisional. Replace the definite queue-count label with signedfieldA0A4>300 gate; retainunknownbusinessmeaning.
@@ -126,7 +127,8 @@
 - 驗收紀錄：[本項證據](../../../shared/integrations/T01-20261029-semantic-review/t16/return-proposals.json)。
 
 - **T16 送審（2026-10-29，待 T01 獨立複驗）**：[T16 送審勘誤](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/errata/T16-013-T01-erratum.md)；勘誤 Git blob `ab33b55d09a87b73d7b9ab2b062b04821b65d36d`；KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。此狀態僅表示已提交作者端修正證據；若 T01 判定文件／語意尚不足，請保留退回並列具體差距，不得自動升級為 `RESOLVED` 或 `FULL-PASS`。
-#### T01-RETURN-T16-045-89ddf3e8 — READY_FOR_REVIEW
+#### T01-RETURN-T16-045-89ddf3e8 — RESOLVED
+- **T01 第二輪獨立裁決（2026-10-30，僅此固定通知）**：原 56-hex SHA 已由作者 erratum 更正，T01 直接由已上傳 Event.stp 重建 member 並核對。 [原件與精確適用範圍](../../../shared/integrations/T01-20261030-t16-resource-followup/README.md)。**舊版來源的歷史錯誤不被抹除；整篇原稿、Quest 業務封包及 Server 狀態仍未獲 FULL-PASS。**
 - 原稿：`kr-temp-roy/20261028-101028-chatgpt-web-roy-T16-45-KR-Lua-XML-source-and-BIN-validation.md`；Git blob `8067059908d888141c8d7b4a12b80eb6b427e49c`；SHA256 `52c9551a807dd347c184b4a9adf044a02d575d0d665870d96756fe35321042c2`。
 - 問題：TutorialBase exact-source SHA is malformed (56 hex characters)
 - 原生反證：Claimed 26e5fe047b3489b5198023571d0dce712af2c81f57aa767d42ca7744 is56 chars. Carrier-bound decoded member SHA256 is26e5fe047b3489b5198023571d1cd3123e0dce712af2c81f57aa767d42ca7744,1416 bytes,6prototypes,72instructions.
@@ -134,7 +136,8 @@
 - 驗收紀錄：[本項證據](../../../shared/integrations/T01-20261029-semantic-review/t16/return-proposals.json)。
 
 - **T16 送審（2026-10-29，待 T01 獨立複驗）**：[T16 送審勘誤](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/errata/T16-045-T01-erratum.md)；勘誤 Git blob `81325624253d6b6eca19da064a69cd992b021f31`；KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。此狀態僅表示已提交作者端修正證據；若 T01 判定文件／語意尚不足，請保留退回並列具體差距，不得自動升級為 `RESOLVED` 或 `FULL-PASS`。
-#### T01-RETURN-T16-046-89ddf3e8 — READY_FOR_REVIEW
+#### T01-RETURN-T16-046-89ddf3e8 — RESOLVED
+- **T01 第二輪獨立裁決（2026-10-30，僅此固定通知）**：原 56-hex SHA 已由作者 erratum 更正，T01 直接由已上傳 Event.stp 重建 member 並核對。 [原件與精確適用範圍](../../../shared/integrations/T01-20261030-t16-resource-followup/README.md)。**舊版來源的歷史錯誤不被抹除；整篇原稿、Quest 業務封包及 Server 狀態仍未獲 FULL-PASS。**
 - 原稿：`kr-temp-roy/20261028-101606-chatgpt-web-roy-T16-46-KR-tutorial-lua-opcode-cfg.md`；Git blob `dea68e6db1af124ecdaca7943a877a7dbddd2377`；SHA256 `25246ae4a95c7837343206e9ff957831dd8c7e0d5e65248d3d63d306cb1a6545`。
 - 問題：TutorialBase exact-source SHA is malformed (56 hex characters)
 - 原生反證：Claimed 26e5fe047b3489b5198023571d0dce712af2c81f57aa767d42ca7744 is56 chars. Carrier-bound decoded member SHA256 is26e5fe047b3489b5198023571d1cd3123e0dce712af2c81f57aa767d42ca7744,1416 bytes,6prototypes,72instructions.
@@ -142,7 +145,8 @@
 - 驗收紀錄：[本項證據](../../../shared/integrations/T01-20261029-semantic-review/t16/return-proposals.json)。
 
 - **T16 送審（2026-10-29，待 T01 獨立複驗）**：[T16 送審勘誤](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/errata/T16-046-T01-erratum.md)；勘誤 Git blob `13438858f2bfd5e96ed01bb4b6e412dd0a5df9c7`；KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。此狀態僅表示已提交作者端修正證據；若 T01 判定文件／語意尚不足，請保留退回並列具體差距，不得自動升級為 `RESOLVED` 或 `FULL-PASS`。
-#### T01-RETURN-T16-048-89ddf3e8 — READY_FOR_REVIEW
+#### T01-RETURN-T16-048-89ddf3e8 — RESOLVED
+- **T01 第二輪獨立裁決（2026-10-30，僅此固定通知）**：原 56-hex SHA 已由作者 erratum 更正，T01 直接由已上傳 Event.stp 重建 member 並核對。 [原件與精確適用範圍](../../../shared/integrations/T01-20261030-t16-resource-followup/README.md)。**舊版來源的歷史錯誤不被抹除；整篇原稿、Quest 業務封包及 Server 狀態仍未獲 FULL-PASS。**
 - 原稿：`kr-temp-roy/20261028-101606-chatgpt-web-roy-T16-48-KR-quest-authority-validation-matrix.md`；Git blob `e4633cecbb8531a950a4d15f24d7db5ae4fd6529`；SHA256 `6f93462118e51cd370df8241aba523eb4678105641ae4b3790a601c1cbc39641`。
 - 問題：TutorialBase exact-source SHA is malformed (56 hex characters)
 - 原生反證：Claimed 26e5fe047b3489b5198023571d0dce712af2c81f57aa767d42ca7744 is56 chars. Carrier-bound decoded member SHA256 is26e5fe047b3489b5198023571d1cd3123e0dce712af2c81f57aa767d42ca7744,1416 bytes,6prototypes,72instructions.
@@ -150,7 +154,8 @@
 - 驗收紀錄：[本項證據](../../../shared/integrations/T01-20261029-semantic-review/t16/return-proposals.json)。
 
 - **T16 送審（2026-10-29，待 T01 獨立複驗）**：[T16 送審勘誤](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/errata/T16-048-T01-erratum.md)；勘誤 Git blob `4843fe5ebe9bcc164c6a69b25fd351ad5f0ef6f1`；KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。此狀態僅表示已提交作者端修正證據；若 T01 判定文件／語意尚不足，請保留退回並列具體差距，不得自動升級為 `RESOLVED` 或 `FULL-PASS`。
-#### T01-RETURN-T16-049-89ddf3e8 — READY_FOR_REVIEW
+#### T01-RETURN-T16-049-89ddf3e8 — RESOLVED
+- **T01 第二輪獨立裁決（2026-10-30，僅此固定通知）**：原 56-hex SHA 已由作者 erratum 更正，T01 直接由已上傳 Event.stp 重建 member 並核對。 [原件與精確適用範圍](../../../shared/integrations/T01-20261030-t16-resource-followup/README.md)。**舊版來源的歷史錯誤不被抹除；整篇原稿、Quest 業務封包及 Server 狀態仍未獲 FULL-PASS。**
 - 原稿：`kr-temp-roy/20261028-103208-chatgpt-web-roy-T16-49-KR-resource-provenance-pe-audit.md`；Git blob `0df285c934581b93bb2339320a2c8a6e69772675`；SHA256 `524227b0093f7ad4c4d9ea591424b21df329a598e3f9a9be8068baf827de5549`。
 - 問題：TutorialBase exact-source SHA is malformed (56 hex characters)
 - 原生反證：Claimed 26e5fe047b3489b5198023571d0dce712af2c81f57aa767d42ca7744 is56 chars. Carrier-bound decoded member SHA256 is26e5fe047b3489b5198023571d1cd3123e0dce712af2c81f57aa767d42ca7744,1416 bytes,6prototypes,72instructions.
@@ -158,7 +163,8 @@
 - 驗收紀錄：[本項證據](../../../shared/integrations/T01-20261029-semantic-review/t16/return-proposals.json)。
 
 - **T16 送審（2026-10-29，待 T01 獨立複驗）**：[T16 送審勘誤](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/errata/T16-049-T01-erratum.md)；勘誤 Git blob `7da5eb9c3b73bbedf16bcd8c2719fa136857932a`；KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。此狀態僅表示已提交作者端修正證據；若 T01 判定文件／語意尚不足，請保留退回並列具體差距，不得自動升級為 `RESOLVED` 或 `FULL-PASS`。
-#### T01-RETURN-T16-052-89ddf3e8 — READY_FOR_REVIEW
+#### T01-RETURN-T16-052-89ddf3e8 — RESOLVED
+- **T01 第二輪獨立裁決（2026-10-30，僅此固定通知）**：原 56-hex SHA 已由作者 erratum 更正，T01 直接由已上傳 Event.stp 重建 member 並核對。 [原件與精確適用範圍](../../../shared/integrations/T01-20261030-t16-resource-followup/README.md)。**舊版來源的歷史錯誤不被抹除；整篇原稿、Quest 業務封包及 Server 狀態仍未獲 FULL-PASS。**
 - 原稿：`kr-temp-roy/20261028-103208-chatgpt-web-roy-T16-52-KR-quest-authority-handoff.md`；Git blob `84e4f83eff35ed0c0da23880fe54553bd065b2ef`；SHA256 `f37d39303baf9cd94ef8e80d3a32e03a51f4cfeccf87e734495a759edaa397bd`。
 - 問題：TutorialBase exact-source SHA is malformed (56 hex characters)
 - 原生反證：Claimed 26e5fe047b3489b5198023571d0dce712af2c81f57aa767d42ca7744 is56 chars. Carrier-bound decoded member SHA256 is26e5fe047b3489b5198023571d1cd3123e0dce712af2c81f57aa767d42ca7744,1416 bytes,6prototypes,72instructions.
@@ -166,7 +172,8 @@
 - 驗收紀錄：[本項證據](../../../shared/integrations/T01-20261029-semantic-review/t16/return-proposals.json)。
 
 - **T16 送審（2026-10-29，待 T01 獨立複驗）**：[T16 送審勘誤](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/errata/T16-052-T01-erratum.md)；勘誤 Git blob `a022e26fd25a59a73299b31f4462f51fe7d0027a`；KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。此狀態僅表示已提交作者端修正證據；若 T01 判定文件／語意尚不足，請保留退回並列具體差距，不得自動升級為 `RESOLVED` 或 `FULL-PASS`。
-#### T01-RETURN-T16-054-89ddf3e8 — READY_FOR_REVIEW
+#### T01-RETURN-T16-054-89ddf3e8 — RESOLVED
+- **T01 第二輪獨立裁決（2026-10-30，僅此固定通知）**：原 56-hex SHA 已由作者 erratum 更正，T01 直接由已上傳 Event.stp 重建 member 並核對。 [原件與精確適用範圍](../../../shared/integrations/T01-20261030-t16-resource-followup/README.md)。**舊版來源的歷史錯誤不被抹除；整篇原稿、Quest 業務封包及 Server 狀態仍未獲 FULL-PASS。**
 - 原稿：`kr-temp-roy/20261028-103816-chatgpt-web-roy-T16-54-KR-tutorial-lua-direct-call-xrefs.md`；Git blob `319c873eab18f80db3c464df38b51ab396dc80a7`；SHA256 `74bbb543328f7f521d716a6e895c17cb6b7e924cae4ee2ea6ff9deb3643e69b9`。
 - 問題：TutorialBase exact-source SHA is malformed (56 hex characters)
 - 原生反證：Claimed 26e5fe047b3489b5198023571d0dce712af2c81f57aa767d42ca7744 is56 chars. Carrier-bound decoded member SHA256 is26e5fe047b3489b5198023571d1cd3123e0dce712af2c81f57aa767d42ca7744,1416 bytes,6prototypes,72instructions.
@@ -174,7 +181,8 @@
 - 驗收紀錄：[本項證據](../../../shared/integrations/T01-20261029-semantic-review/t16/return-proposals.json)。
 
 - **T16 送審（2026-10-29，待 T01 獨立複驗）**：[T16 送審勘誤](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/errata/T16-054-T01-erratum.md)；勘誤 Git blob `1fad5020431f41f54d8296519c00def97c1aadac`；KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。此狀態僅表示已提交作者端修正證據；若 T01 判定文件／語意尚不足，請保留退回並列具體差距，不得自動升級為 `RESOLVED` 或 `FULL-PASS`。
-#### T01-RETURN-T16-056-89ddf3e8 — READY_FOR_REVIEW
+#### T01-RETURN-T16-056-89ddf3e8 — RESOLVED
+- **T01 第二輪獨立裁決（2026-10-30，僅此固定通知）**：原 56-hex SHA 已由作者 erratum 更正，T01 直接由已上傳 Event.stp 重建 member 並核對。 [原件與精確適用範圍](../../../shared/integrations/T01-20261030-t16-resource-followup/README.md)。**舊版來源的歷史錯誤不被抹除；整篇原稿、Quest 業務封包及 Server 狀態仍未獲 FULL-PASS。**
 - 原稿：`kr-temp-roy/20261028-103816-chatgpt-web-roy-T16-56-KR-authority-gap-next-contract.md`；Git blob `f6c7a0bb219c11c561e6463a7ae121bf6a41b4f2`；SHA256 `45a4b69a6190d4c3f5dfb324104433afd690e6303b25adcdfd6e0b48726674c8`。
 - 問題：TutorialBase exact-source SHA is malformed (56 hex characters)
 - 原生反證：Claimed 26e5fe047b3489b5198023571d0dce712af2c81f57aa767d42ca7744 is56 chars. Carrier-bound decoded member SHA256 is26e5fe047b3489b5198023571d1cd3123e0dce712af2c81f57aa767d42ca7744,1416 bytes,6prototypes,72instructions.
@@ -182,7 +190,8 @@
 - 驗收紀錄：[本項證據](../../../shared/integrations/T01-20261029-semantic-review/t16/return-proposals.json)。
 
 - **T16 送審（2026-10-29，待 T01 獨立複驗）**：[T16 送審勘誤](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/errata/T16-056-T01-erratum.md)；勘誤 Git blob `4980478272dfb650daebe4fc4471b356a17bc814`；KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。此狀態僅表示已提交作者端修正證據；若 T01 判定文件／語意尚不足，請保留退回並列具體差距，不得自動升級為 `RESOLVED` 或 `FULL-PASS`。
-#### T01-RETURN-T16-060-89ddf3e8 — READY_FOR_REVIEW
+#### T01-RETURN-T16-060-89ddf3e8 — RESOLVED
+- **T01 第二輪獨立裁決（2026-10-30，僅此固定通知）**：原 56-hex SHA 已由作者 erratum 更正，T01 直接由已上傳 Event.stp 重建 member 並核對。 [原件與精確適用範圍](../../../shared/integrations/T01-20261030-t16-resource-followup/README.md)。**舊版來源的歷史錯誤不被抹除；整篇原稿、Quest 業務封包及 Server 狀態仍未獲 FULL-PASS。**
 - 原稿：`kr-temp-roy/20261028-105806-chatgpt-web-roy-T16-60-KR-Quest16-Quest15-native-proof-matrix.md`；Git blob `b91b766bbfd2272dae446c428c600ccaeaec1fa7`；SHA256 `9e56eb03747e290d564623f8abd42b2ac5031591cf03303375e6b7f35d2ed226`。
 - 問題：TutorialBase exact-source SHA is malformed (56 hex characters)
 - 原生反證：Claimed 26e5fe047b3489b5198023571d0dce712af2c81f57aa767d42ca7744 is56 chars. Carrier-bound decoded member SHA256 is26e5fe047b3489b5198023571d1cd3123e0dce712af2c81f57aa767d42ca7744,1416 bytes,6prototypes,72instructions.
@@ -190,7 +199,8 @@
 - 驗收紀錄：[本項證據](../../../shared/integrations/T01-20261029-semantic-review/t16/return-proposals.json)。
 
 - **T16 送審（2026-10-29，待 T01 獨立複驗）**：[T16 送審勘誤](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/errata/T16-060-T01-erratum.md)；勘誤 Git blob `342d92b1fa3dc4c90e06d3a8c45a8b80a41afb21`；KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。此狀態僅表示已提交作者端修正證據；若 T01 判定文件／語意尚不足，請保留退回並列具體差距，不得自動升級為 `RESOLVED` 或 `FULL-PASS`。
-#### T01-RETURN-T16-061-89ddf3e8 — READY_FOR_REVIEW
+#### T01-RETURN-T16-061-89ddf3e8 — RESOLVED
+- **T01 第二輪獨立裁決（2026-10-30，僅此固定通知）**：原 56-hex SHA 已由作者 erratum 更正，T01 直接由已上傳 Event.stp 重建 member 並核對。 [原件與精確適用範圍](../../../shared/integrations/T01-20261030-t16-resource-followup/README.md)。**舊版來源的歷史錯誤不被抹除；整篇原稿、Quest 業務封包及 Server 狀態仍未獲 FULL-PASS。**
 - 原稿：`kr-temp-roy/20261028-110252-chatgpt-web-roy-T16-61-KR-scenario-lua-callback-argument-marshal.md`；Git blob `d8877384dd938cab6421c67fcc62f451d196ccd5`；SHA256 `3e3f518fdb983cab445ab75a6b4e698a79723cf2a57b871a22d7fea193d9a43e`。
 - 問題：TutorialBase exact-source SHA is malformed (56 hex characters)
 - 原生反證：Claimed 26e5fe047b3489b5198023571d0dce712af2c81f57aa767d42ca7744 is56 chars. Carrier-bound decoded member SHA256 is26e5fe047b3489b5198023571d1cd3123e0dce712af2c81f57aa767d42ca7744,1416 bytes,6prototypes,72instructions.
@@ -198,7 +208,8 @@
 - 驗收紀錄：[本項證據](../../../shared/integrations/T01-20261029-semantic-review/t16/return-proposals.json)。
 
 - **T16 送審（2026-10-29，待 T01 獨立複驗）**：[T16 送審勘誤](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/errata/T16-061-T01-erratum.md)；勘誤 Git blob `d89fc3f116186c2b8cdf262416e525396eef2778`；KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。此狀態僅表示已提交作者端修正證據；若 T01 判定文件／語意尚不足，請保留退回並列具體差距，不得自動升級為 `RESOLVED` 或 `FULL-PASS`。
-#### T01-RETURN-T16-062-89ddf3e8 — READY_FOR_REVIEW
+#### T01-RETURN-T16-062-89ddf3e8 — RESOLVED
+- **T01 第二輪獨立裁決（2026-10-30，僅此固定通知）**：原 56-hex SHA 已由作者 erratum 更正，T01 直接由已上傳 Event.stp 重建 member 並核對。 [原件與精確適用範圍](../../../shared/integrations/T01-20261030-t16-resource-followup/README.md)。**舊版來源的歷史錯誤不被抹除；整篇原稿、Quest 業務封包及 Server 狀態仍未獲 FULL-PASS。**
 - 原稿：`kr-temp-roy/20261028-110252-chatgpt-web-roy-T16-62-KR-quest-xml-node-consumer-callgraph.md`；Git blob `e9b16c654215aa1567cb66571d721c1ab01eea97`；SHA256 `56139bdcb333f02b609dadc7aa45cb18f3a0f4d6b818e5f6bf4494a6272585ed`。
 - 問題：TutorialBase exact-source SHA is malformed (56 hex characters)
 - 原生反證：Claimed 26e5fe047b3489b5198023571d0dce712af2c81f57aa767d42ca7744 is56 chars. Carrier-bound decoded member SHA256 is26e5fe047b3489b5198023571d1cd3123e0dce712af2c81f57aa767d42ca7744,1416 bytes,6prototypes,72instructions.
@@ -206,7 +217,8 @@
 - 驗收紀錄：[本項證據](../../../shared/integrations/T01-20261029-semantic-review/t16/return-proposals.json)。
 
 - **T16 送審（2026-10-29，待 T01 獨立複驗）**：[T16 送審勘誤](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/errata/T16-062-T01-erratum.md)；勘誤 Git blob `f0c0ea584cc85a2e7635830d3bdc2749b6c1a102`；KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。此狀態僅表示已提交作者端修正證據；若 T01 判定文件／語意尚不足，請保留退回並列具體差距，不得自動升級為 `RESOLVED` 或 `FULL-PASS`。
-#### T01-RETURN-T16-063-89ddf3e8 — READY_FOR_REVIEW
+#### T01-RETURN-T16-063-89ddf3e8 — RESOLVED
+- **T01 第二輪獨立裁決（2026-10-30，僅此固定通知）**：原 56-hex SHA 已由作者 erratum 更正，T01 直接由已上傳 Event.stp 重建 member 並核對。 [原件與精確適用範圍](../../../shared/integrations/T01-20261030-t16-resource-followup/README.md)。**舊版來源的歷史錯誤不被抹除；整篇原稿、Quest 業務封包及 Server 狀態仍未獲 FULL-PASS。**
 - 原稿：`kr-temp-roy/20261028-110252-chatgpt-web-roy-T16-63-KR-quest-readers-and-data-lifecycle.md`；Git blob `26c595c295093777a7153426a16757b11eacec19`；SHA256 `02fe48ceb6de16e34edad6699c24680f30f7c29d556a5fd481e7c20e7deab846`。
 - 問題：TutorialBase exact-source SHA is malformed (56 hex characters)
 - 原生反證：Claimed 26e5fe047b3489b5198023571d0dce712af2c81f57aa767d42ca7744 is56 chars. Carrier-bound decoded member SHA256 is26e5fe047b3489b5198023571d1cd3123e0dce712af2c81f57aa767d42ca7744,1416 bytes,6prototypes,72instructions.
@@ -214,7 +226,8 @@
 - 驗收紀錄：[本項證據](../../../shared/integrations/T01-20261029-semantic-review/t16/return-proposals.json)。
 
 - **T16 送審（2026-10-29，待 T01 獨立複驗）**：[T16 送審勘誤](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/errata/T16-063-T01-erratum.md)；勘誤 Git blob `317b498a2dc78ce67a238d095ccc4b1d26f55c71`；KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。此狀態僅表示已提交作者端修正證據；若 T01 判定文件／語意尚不足，請保留退回並列具體差距，不得自動升級為 `RESOLVED` 或 `FULL-PASS`。
-#### T01-RETURN-T16-064-89ddf3e8 — READY_FOR_REVIEW
+#### T01-RETURN-T16-064-89ddf3e8 — RESOLVED
+- **T01 第二輪獨立裁決（2026-10-30，僅此固定通知）**：原 56-hex SHA 已由作者 erratum 更正，T01 直接由已上傳 Event.stp 重建 member 並核對。 [原件與精確適用範圍](../../../shared/integrations/T01-20261030-t16-resource-followup/README.md)。**舊版來源的歷史錯誤不被抹除；整篇原稿、Quest 業務封包及 Server 狀態仍未獲 FULL-PASS。**
 - 原稿：`kr-temp-roy/20261028-110252-chatgpt-web-roy-T16-64-KR-end-to-end-quest16-quest15-evidence-gates.md`；Git blob `dee3295e7cdde882aae96b277d224160420608c8`；SHA256 `84ff514e4b9198f465c451d0c44917e7f5c0d730a2bc50bb20afda5a60fe57f7`。
 - 問題：TutorialBase exact-source SHA is malformed (56 hex characters)
 - 原生反證：Claimed 26e5fe047b3489b5198023571d0dce712af2c81f57aa767d42ca7744 is56 chars. Carrier-bound decoded member SHA256 is26e5fe047b3489b5198023571d1cd3123e0dce712af2c81f57aa767d42ca7744,1416 bytes,6prototypes,72instructions.
@@ -222,7 +235,8 @@
 - 驗收紀錄：[本項證據](../../../shared/integrations/T01-20261029-semantic-review/t16/return-proposals.json)。
 
 - **T16 送審（2026-10-29，待 T01 獨立複驗）**：[T16 送審勘誤](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/errata/T16-064-T01-erratum.md)；勘誤 Git blob `1b5575a25f87c4d8eeb1da93cffe9b6b815399f7`；KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。此狀態僅表示已提交作者端修正證據；若 T01 判定文件／語意尚不足，請保留退回並列具體差距，不得自動升級為 `RESOLVED` 或 `FULL-PASS`。
-#### T01-RETURN-T16-067-89ddf3e8 — READY_FOR_REVIEW
+#### T01-RETURN-T16-067-89ddf3e8 — RESOLVED
+- **T01 第二輪獨立裁決（2026-10-30，僅此固定通知）**：原 56-hex SHA 已由作者 erratum 更正，T01 直接由已上傳 Event.stp 重建 member 並核對。 [原件與精確適用範圍](../../../shared/integrations/T01-20261030-t16-resource-followup/README.md)。**舊版來源的歷史錯誤不被抹除；整篇原稿、Quest 業務封包及 Server 狀態仍未獲 FULL-PASS。**
 - 原稿：`kr-temp-roy/20261028-110904-chatgpt-web-roy-T16-67-KR-scenario-dispatch-state-versus-quest.md`；Git blob `21e9facd60a283e4b9f097937b98b91defbdb53e`；SHA256 `9e8ba04b64205c6126a1ef58434df5d0984b05a0a9e35ae46e207ded11f480a0`。
 - 問題：TutorialBase exact-source SHA is malformed (56 hex characters)
 - 原生反證：Claimed 26e5fe047b3489b5198023571d0dce712af2c81f57aa767d42ca7744 is56 chars. Carrier-bound decoded member SHA256 is26e5fe047b3489b5198023571d1cd3123e0dce712af2c81f57aa767d42ca7744,1416 bytes,6prototypes,72instructions.
@@ -230,7 +244,8 @@
 - 驗收紀錄：[本項證據](../../../shared/integrations/T01-20261029-semantic-review/t16/return-proposals.json)。
 
 - **T16 送審（2026-10-29，待 T01 獨立複驗）**：[T16 送審勘誤](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/errata/T16-067-T01-erratum.md)；勘誤 Git blob `861c5d0f238aae3f3c26a852e0622dfdbd526abb`；KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。此狀態僅表示已提交作者端修正證據；若 T01 判定文件／語意尚不足，請保留退回並列具體差距，不得自動升級為 `RESOLVED` 或 `FULL-PASS`。
-#### T01-RETURN-T16-068-89ddf3e8 — READY_FOR_REVIEW
+#### T01-RETURN-T16-068-89ddf3e8 — RESOLVED
+- **T01 第二輪獨立裁決（2026-10-30，僅此固定通知）**：原 56-hex SHA 已由作者 erratum 更正，T01 直接由已上傳 Event.stp 重建 member 並核對。 [原件與精確適用範圍](../../../shared/integrations/T01-20261030-t16-resource-followup/README.md)。**舊版來源的歷史錯誤不被抹除；整篇原稿、Quest 業務封包及 Server 狀態仍未獲 FULL-PASS。**
 - 原稿：`kr-temp-roy/20261028-110904-chatgpt-web-roy-T16-68-KR-quest16-quest15-native-handoff.md`；Git blob `158ceaa7b548c9216e4b14e2dab80f14a6afa0e7`；SHA256 `31f1c987d0e72d37cccbc981b0debd976ccf562fd6d90de34c2c782625f01098`。
 - 問題：TutorialBase exact-source SHA is malformed (56 hex characters)
 - 原生反證：Claimed 26e5fe047b3489b5198023571d0dce712af2c81f57aa767d42ca7744 is56 chars. Carrier-bound decoded member SHA256 is26e5fe047b3489b5198023571d1cd3123e0dce712af2c81f57aa767d42ca7744,1416 bytes,6prototypes,72instructions.
@@ -295,7 +310,8 @@
 - 驗收紀錄：[本項證據](../../../shared/integrations/T01-20261029-semantic-review/t16/return-proposals.json)。
 
 - **T16 送審（2026-10-29，待 T01 獨立複驗）**：[T16 送審勘誤](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/errata/T16-022-T01-erratum.md)；勘誤 Git blob `f065e2c8458355edcd12c7ad7c493e2dc692caf5`；[rooted CFG 補證](https://github.com/we88ec3-prog/ttr_anal_multi/blob/9ee2234dca294fd0b9f59d730b5f043cc7d50f52/kr-temp-roy/T16-T01-returns-20261029/rooted-cfg/T16-022-rooted-cfg-addendum.md)，Git blob `8833bace8ea8e1d7f3fcb11320fd9782d8004711`；KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。此狀態僅表示已提交作者端修正證據；若 T01 判定文件／語意尚不足，請保留退回並列具體差距，不得自動升級為 `RESOLVED` 或 `FULL-PASS`。
-#### T01-RETURN-T16-026-c26518b1 — READY_FOR_REVIEW
+#### T01-RETURN-T16-026-c26518b1 — RESOLVED
+- **T01 第二輪獨立裁決（2026-10-30，僅此固定通知）**：原 T01 反證失效，由 T01 自行撤回；不要求原作者修補一個不存在的入口錯誤。 [原件與精確適用範圍](../../../shared/integrations/T01-20261030-t16-resource-followup/README.md)。**舊版來源的歷史錯誤不被抹除；整篇原稿、Quest 業務封包及 Server 狀態仍未獲 FULL-PASS。**
 - 原稿：`kr-temp-roy/20261028-022116-chatgpt-web-roy-T16-26-KR-handler-candidate-one.md`；Git blob `1a05ec70ba24945d1dc85952d237983f13056a08`；SHA256 `49d2619048d63ba1174a1b117b986f14f252f47df933a3ede54283e9ed438d11`。
 - 問題：Appendix window starts or resumes inside a different instruction
 - 原生反證：4AE4D0 and valid4AEDxx calls/dataflow supported, with no quest meaning asserted.4AEDB0 begins inside ADD4AEDAF and yields invalid first rows. Repair source appendix and derived observations from parent CFG.
