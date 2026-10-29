@@ -30,6 +30,8 @@ def evaluate(root=ROOT):
         gaps = {r["id"]: r for r in _read(root, "design/gaps/index.json")["items"]}
         requests = {r["id"]: r for r in _read(root, "research/requests/index.json")["items"]}
         tests = {r["id"]: r for r in _read(root, "conformance/test-index.json")["items"]}
+        claims = {r["id"]: r for r in _read(root, "research/claims/index.json")["items"]}
+        sources = {r["id"]: r for r in _read(root, "research/intake/index.json")["items"]}
         target = _read(root, "shared/targets.json")
     except (OSError, ValueError, KeyError, TypeError) as exc:
         errors.append(f"failed loading coverage sources: {exc}")
@@ -74,8 +76,30 @@ def evaluate(root=ROOT):
             if name == "test_provenance" and state == "PARTIAL":
                 errors.append(f"{label}: use explicit OFFLINE_ONLY/NONE for incomplete test provenance")
             if state == "EVIDENCE_BACKED":
-                if not isinstance(row.get("evidence_refs"), list) or not row.get("evidence_refs"):
+                refs = row.get("evidence_refs")
+                if not isinstance(refs, list) or not refs:
                     errors.append(f"{label}: EVIDENCE_BACKED facet needs explicit proof references")
+                else:
+                    for cid in refs:
+                        claim = claims.get(cid) if isinstance(cid, str) else None
+                        if claim is None:
+                            errors.append(f"{label}: unregistered evidence claim {cid}")
+                            reasons.append(f"claim:{cid}=UNVERIFIED")
+                            continue
+                        src = sources.get(claim.get("source_intake_id"))
+                        if (claim.get("client_version") != ver or
+                                claim.get("target_sha256") != row.get("target_sha256") or
+                                src is None or src.get("client_version") != ver or
+                                src.get("target_sha256") != row.get("target_sha256") or
+                                claim.get("source_file") != src.get("source_file") or
+                                claim.get("source_blob_sha") != src.get("source_blob_sha") or
+                                cid not in src.get("claim_ids", [])):
+                            errors.append(f"{label}: evidence claim {cid} source/target lineage mismatch")
+                            reasons.append(f"claim:{cid}=SOURCE_MISMATCH")
+                        if (claim.get("evidence_level") != "NATIVE_VERIFIED" or
+                                not claim.get("native_review_ref") or not claim.get("evidence_refs")):
+                            errors.append(f"{label}: evidence claim {cid} lacks scoped native review")
+                            reasons.append(f"claim:{cid}=NOT_NATIVE_VERIFIED")
             if state not in {"EVIDENCE_BACKED", "NOT_APPLICABLE"}:
                 reasons.append(f"facet:{name}={state}")
         for field, table in [("spec_ids", specs), ("gap_ids", gaps), ("rr_ids", requests)]:
@@ -99,7 +123,24 @@ def evaluate(root=ROOT):
             testids = s.get("test_ids", [])
             if not testids:
                 reasons.append(f"{sid}=NO_REGISTERED_TEST")
-            elif not any(tests.get(t, {}).get("status") not in {None, "OFFLINE_SYNTHETIC"} for t in testids):
+            else:
+                # Phase B's only certified TEST category is offline synthetic.
+                # Do not treat a renamed status as a source-backed conformance run.
+                for tid in testids:
+                    test = tests.get(tid)
+                    if test is None:
+                        errors.append(f"{sid}: unknown TEST reference {tid}")
+                        reasons.append(f"{sid}=TEST_MISSING")
+                    elif test.get("client_version") != ver:
+                        errors.append(f"{sid}: TEST {tid} cross-Client version")
+                        reasons.append(f"{sid}=TEST_VERSION_MISMATCH")
+                    elif test.get("status") != "OFFLINE_SYNTHETIC":
+                        errors.append(
+                            f"{sid}: TEST {tid} status {test.get('status')} is not an "
+                            "approved provenance class; Phase B requires a separate "
+                            "reviewed evidence/test schema before promotion"
+                        )
+                        reasons.append(f"{sid}=TEST_PROVENANCE_UNREVIEWED")
                 reasons.append(f"{sid}=OFFLINE_SYNTHETIC_ONLY")
         for gid in row.get("gap_ids", []):
             if gid in gaps and gaps[gid].get("status") != "RESOLVED":
