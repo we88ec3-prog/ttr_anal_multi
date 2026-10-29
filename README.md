@@ -4,6 +4,8 @@
 
 ## 入口
 
+- [Server 設計與專案分析新流程提案（2026-10-29，尚未生效）](governance/proposals/2026-10-29-server-spec-workflow.md)
+
 - [KR：T01～T16 任務入口](kr/README.md)（T16 新增規劃）
 - [TC：T01～T16 任務入口](tc/README.md)（T16 新增規劃）
 - [T16：任務與劇情流程規劃](T16-KR-TC-ANALYSIS-PLAN.md)
