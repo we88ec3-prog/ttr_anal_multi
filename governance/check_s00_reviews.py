@@ -66,8 +66,9 @@ def evaluate(root=ROOT):
             errors.append(f"{rid}: decision differs from RR dispatch/review")
         if row.get("client_version") != request.get("client_version") or row.get("target_sha256") != targets.get(request.get("client_version"), {}).get("sha256"):
             errors.append(f"{rid}: version/target mismatch")
-        if row.get("actor") != "S00" or review.get("actor") != "S00":
-            errors.append(f"{rid}: only S00 can publish final decisions in this ledger")
+        expected_actors = {"S00"} if row.get("decision") == "ACCEPTED" else {"S00", "T01"}
+        if row.get("actor") not in expected_actors or review.get("actor") != row.get("actor"):
+            errors.append(f"{rid}: reviewer authority differs from RR dispatch")
         outcomes = row.get("outcome_refs")
         if not isinstance(outcomes, list) or not outcomes or any(x not in valid_outcomes for x in outcomes):
             errors.append(f"{rid}: missing/unresolved published outcome references")
