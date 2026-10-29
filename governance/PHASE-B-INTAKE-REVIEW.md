@@ -5,7 +5,7 @@ This is an S00 **read-only queue view** over the [single authoritative RR regist
 ## S00 work cycle
 
 1. Fetch current GitHub main and each Task README/T01 return section; check competing edits.
-2. Run: python -B governance/phase_b_worklist.py --format markdown. For a Task, add --task T02 or --task T03; --version tc never borrows KR evidence.
+2. Run: python -B governance/phase_b_worklist.py --format markdown. For a Task, add --task T02 or --task T03; --version tc never borrows KR evidence. The tool separates direct RR impact (GAP/COV-linked SPEC and their TEST) from **broader milestone context**; do not edit every SPEC merely because the same B-CONTRACT milestone lists it.
 3. Check the authoritative [T02 inbox](../research/dispatch/inbox/T02.md) or [T03 inbox](../research/dispatch/inbox/T03.md). The worklist is not a second dispatch index; a branch-local claim is not public before merging to main.
 4. Prioritize existing SUBMITTED/IN_REVIEW evidence for T01/S00; then previously approved T01 NEEDS_FIX/FIXING returns, user assignments, and remaining P0 then P1 research. Roadmap dependencies constrain **delivery**, not the ability to research a downstream target.
 5. Without submissions, prepare scoped acceptance guidance. Do not manufacture native claims or resolve requests.
