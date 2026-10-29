@@ -1,0 +1,774 @@
+{
+  "number": 200,
+  "source": "kr-temp-roy/20261028-111046-chatgpt-web-roy-T08-200-registration-identity-and-duplicate.md",
+  "source_sha256": "109dce169390bd5942169098e67d7e256382d58db716d4e298efa3587d639d31",
+  "git_blob_sha": "6f867a929563e531a09342c2e0cecafb8d6baf44",
+  "bytes": 9740,
+  "line_count": 191,
+  "lines": [
+    {
+      "line": 1,
+      "text": "# T08-200 — 主索引登記 key、重複分支與生命週期邊界"
+    },
+    {
+      "line": 2,
+      "text": ""
+    },
+    {
+      "line": 3,
+      "text": "- 日期：2026-10-28（Asia/Taipei），研究者：`chatgpt-web roy`"
+    },
+    {
+      "line": 4,
+      "text": "- 原始 KR `Tartaros.bin` SHA256：`9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`（本輪實際重新計算）。"
+    },
+    {
+      "line": 5,
+      "text": "- PE `.text` VA `0x00401000`, raw `0x400`; `objdump -d -Mintel` 針對原始 BIN 以 VA 指定範圍。"
+    },
+    {
+      "line": 6,
+      "text": "- 參照：T08-193～196 本地完整版、GitHub `main` T08-192；源碼來源與研究推論分開。"
+    },
+    {
+      "line": 7,
+      "text": "- Task 範圍：正式 T08 0007 的實體建立、登記、移除資料介面；不推定伺服器波次、生成時間或 AI。"
+    },
+    {
+      "line": 8,
+      "text": ""
+    },
+    {
+      "line": 9,
+      "text": "## 一、T08-200 第一輪新證據"
+    },
+    {
+      "line": 10,
+      "text": ""
+    },
+    {
+      "line": 11,
+      "text": "1. `0x004DFF4C` 使用 `movzx eax,WORD PTR [actor+4]`，將 16 位 key 放入查找引數；此欄位與 actor+0x88 複合 ID 比對不是同一索引。"
+    },
+    {
+      "line": 12,
+      "text": "2. `0x004DFF5F` 用 `0x0082EF00` 查找主樹，僅在結果等於 `[owner+0x0C]` sentinel 時執行 `0x0082F200` 插入。"
+    },
+    {
+      "line": 13,
+      "text": "3. 若 key 已存在，`0x004DFF90` 走 `0x006EDB60` 訊息處理分支；**沒有**在此分支建立替換 actor 或釋放新 actor 的直接呼叫。"
+    },
+    {
+      "line": 14,
+      "text": "4. 對照 `0x004DFBC0` 查找、清理、刪節點，可建立相同 key 協定，但不能推定重複登記時新 actor 的上游記憶體責任。"
+    },
+    {
+      "line": 15,
+      "text": ""
+    },
+    {
+      "line": 16,
+      "text": "## 二、函式／欄位與控制流程"
+    },
+    {
+      "line": 17,
+      "text": ""
+    },
+    {
+      "line": 18,
+      "text": "本批只對原始 BIN 視窗中具體指令、參數、條件及跳躍地址作直接結論。`node+0x10` 指標的真實型別須沿構造路徑核對；相同 offset 不代表不同 owner 具有同一語意。虛擬呼叫 `FF /2` 的靜態槽位已知但動態目標不一定唯一，不得把 CMonster 的主表套至其他實體。"
+    },
+    {
+      "line": 19,
+      "text": ""
+    },
+    {
+      "line": 20,
+      "text": "## 三、三輪深入規則"
+    },
+    {
+      "line": 21,
+      "text": ""
+    },
+    {
+      "line": 22,
+      "text": "**第一輪已達重大進展：** 重大進展：主樹 key 的 16-bit 正規化、duplicate branch 與 actor ownership 未解邊界同步確認。"
+    },
+    {
+      "line": 23,
+      "text": ""
+    },
+    {
+      "line": 24,
+      "text": "依 02 共用規範，T08-200-2、T08-200-3 **未啟動**。完整報告記錄了實際第一輪，未虛構進一步研究。"
+    },
+    {
+      "line": 25,
+      "text": ""
+    },
+    {
+      "line": 26,
+      "text": "## 四、可驗證等級"
+    },
+    {
+      "line": 27,
+      "text": ""
+    },
+    {
+      "line": 28,
+      "text": "- **已確認：** 本檔附錄原始 PE `.text` bytes 的有界解碼、分支條件、對象存取偏移及 direct E8 / indirect vtable 區分。"
+    },
+    {
+      "line": 29,
+      "text": "- **部分確認：** 樹 payload 動態類別、兩套樹是否共享同一物件、全路徑析構防重覆策略。"
+    },
+    {
+      "line": 30,
+      "text": "- **未確認：** runtime 觸發順序、所有異常分支及 server 權威決策；沒有導入 AI 遊戲規則或保證所有個案相同。"
+    },
+    {
+      "line": 31,
+      "text": ""
+    },
+    {
+      "line": 32,
+      "text": "## 五、後續函式及交接"
+    },
+    {
+      "line": 33,
+      "text": ""
+    },
+    {
+      "line": 34,
+      "text": "後續應由插入者追索 `node+0x10` 的 allocation provenance；對 `+0x15C` 子物件追 vptr 寫入；對兩棵樹相同 actor pointer 的所有權與同步刪除做有界 alias 交叉驗證。不得把本檔局部 CFG 視為整個遊戲生命週期全閉合。"
+    },
+    {
+      "line": 35,
+      "text": ""
+    },
+    {
+      "line": 36,
+      "text": "## 六、完整原始 BIN 反組譯節錄"
+    },
+    {
+      "line": 37,
+      "text": ""
+    },
+    {
+      "line": 38,
+      "text": "### 視窗 1: `0x004DFF30..0x004DFFA9`"
+    },
+    {
+      "line": 39,
+      "text": ""
+    },
+    {
+      "line": 40,
+      "text": "```asm"
+    },
+    {
+      "line": 41,
+      "text": "004dff30 <.text+0xdef30>:"
+    },
+    {
+      "line": 42,
+      "text": "  4dff30:\t55                   \tpush   ebp"
+    },
+    {
+      "line": 43,
+      "text": "  4dff31:\t8b ec                \tmov    ebp,esp"
+    },
+    {
+      "line": 44,
+      "text": "  4dff33:\t83 ec 10             \tsub    esp,0x10"
+    },
+    {
+      "line": 45,
+      "text": "  4dff36:\t53                   \tpush   ebx"
+    },
+    {
+      "line": 46,
+      "text": "  4dff37:\t8b 5d 08             \tmov    ebx,DWORD PTR [ebp+0x8]"
+    },
+    {
+      "line": 47,
+      "text": "  4dff3a:\t56                   \tpush   esi"
+    },
+    {
+      "line": 48,
+      "text": "  4dff3b:\t57                   \tpush   edi"
+    },
+    {
+      "line": 49,
+      "text": "  4dff3c:\t8b f8                \tmov    edi,eax"
+    },
+    {
+      "line": 50,
+      "text": "  4dff3e:\t85 ff                \ttest   edi,edi"
+    },
+    {
+      "line": 51,
+      "text": "  4dff40:\t75 0a                \tjne    0x4dff4c"
+    },
+    {
+      "line": 52,
+      "text": "  4dff42:\t68 d0 ce c0 00       \tpush   0xc0ced0"
+    },
+    {
+      "line": 53,
+      "text": "  4dff47:\te8 24 dd 20 00       \tcall   0x6edc70"
+    },
+    {
+      "line": 54,
+      "text": "  4dff4c:\t0f b7 47 04          \tmovzx  eax,WORD PTR [edi+0x4]"
+    },
+    {
+      "line": 55,
+      "text": "  4dff50:\t8d 4d 08             \tlea    ecx,[ebp+0x8]"
+    },
+    {
+      "line": 56,
+      "text": "  4dff53:\t89 45 08             \tmov    DWORD PTR [ebp+0x8],eax"
+    },
+    {
+      "line": 57,
+      "text": "  4dff56:\t8d 73 08             \tlea    esi,[ebx+0x8]"
+    },
+    {
+      "line": 58,
+      "text": "  4dff59:\t51                   \tpush   ecx"
+    },
+    {
+      "line": 59,
+      "text": "  4dff5a:\t8d 45 f8             \tlea    eax,[ebp-0x8]"
+    },
+    {
+      "line": 60,
+      "text": "  4dff5d:\t8b ce                \tmov    ecx,esi"
+    },
+    {
+      "line": 61,
+      "text": "  4dff5f:\te8 9c ef 34 00       \tcall   0x82ef00"
+    },
+    {
+      "line": 62,
+      "text": "  4dff64:\t8b 55 f8             \tmov    edx,DWORD PTR [ebp-0x8]"
+    },
+    {
+      "line": 63,
+      "text": "  4dff67:\t3b 53 0c             \tcmp    edx,DWORD PTR [ebx+0xc]"
+    },
+    {
+      "line": 64,
+      "text": "  4dff6a:\t75 24                \tjne    0x4dff90"
+    },
+    {
+      "line": 65,
+      "text": "  4dff6c:\t8b 45 08             \tmov    eax,DWORD PTR [ebp+0x8]"
+    },
+    {
+      "line": 66,
+      "text": "  4dff6f:\t89 7d f8             \tmov    DWORD PTR [ebp-0x8],edi"
+    },
+    {
+      "line": 67,
+      "text": "  4dff72:\t8d 7d f4             \tlea    edi,[ebp-0xc]"
+    },
+    {
+      "line": 68,
+      "text": "  4dff75:\t89 45 f4             \tmov    DWORD PTR [ebp-0xc],eax"
+    },
+    {
+      "line": 69,
+      "text": "  4dff78:\te8 a3 ef 09 00       \tcall   0x57ef20"
+    },
+    {
+      "line": 70,
+      "text": "  4dff7d:\t50                   \tpush   eax"
+    },
+    {
+      "line": 71,
+      "text": "  4dff7e:\t56                   \tpush   esi"
+    },
+    {
+      "line": 72,
+      "text": "  4dff7f:\t8d 75 f4             \tlea    esi,[ebp-0xc]"
+    },
+    {
+      "line": 73,
+      "text": "  4dff82:\te8 79 f2 34 00       \tcall   0x82f200"
+    },
+    {
+      "line": 74,
+      "text": "  4dff87:\t5f                   \tpop    edi"
+    },
+    {
+      "line": 75,
+      "text": "  4dff88:\t5e                   \tpop    esi"
+    },
+    {
+      "line": 76,
+      "text": "  4dff89:\t5b                   \tpop    ebx"
+    },
+    {
+      "line": 77,
+      "text": "  4dff8a:\t8b e5                \tmov    esp,ebp"
+    },
+    {
+      "line": 78,
+      "text": "  4dff8c:\t5d                   \tpop    ebp"
+    },
+    {
+      "line": 79,
+      "text": "  4dff8d:\tc2 04 00             \tret    0x4"
+    },
+    {
+      "line": 80,
+      "text": "  4dff90:\t8b 4d 08             \tmov    ecx,DWORD PTR [ebp+0x8]"
+    },
+    {
+      "line": 81,
+      "text": "  4dff93:\t51                   \tpush   ecx"
+    },
+    {
+      "line": 82,
+      "text": "  4dff94:\t68 f0 ce c0 00       \tpush   0xc0cef0"
+    },
+    {
+      "line": 83,
+      "text": "  4dff99:\te8 c2 db 20 00       \tcall   0x6edb60"
+    },
+    {
+      "line": 84,
+      "text": "  4dff9e:\t83 c4 08             \tadd    esp,0x8"
+    },
+    {
+      "line": 85,
+      "text": "  4dffa1:\t5f                   \tpop    edi"
+    },
+    {
+      "line": 86,
+      "text": "  4dffa2:\t5e                   \tpop    esi"
+    },
+    {
+      "line": 87,
+      "text": "  4dffa3:\t5b                   \tpop    ebx"
+    },
+    {
+      "line": 88,
+      "text": "  4dffa4:\t8b e5                \tmov    esp,ebp"
+    },
+    {
+      "line": 89,
+      "text": "  4dffa6:\t5d                   \tpop    ebp"
+    },
+    {
+      "line": 90,
+      "text": "  4dffa7:\tc2                   \t.byte 0xc2"
+    },
+    {
+      "line": 91,
+      "text": "  4dffa8:\t04                   \t.byte 0x4"
+    },
+    {
+      "line": 92,
+      "text": "```"
+    },
+    {
+      "line": 93,
+      "text": "### 視窗 2: `0x004DFBC0..0x004DFC2C`"
+    },
+    {
+      "line": 94,
+      "text": ""
+    },
+    {
+      "line": 95,
+      "text": "```asm"
+    },
+    {
+      "line": 96,
+      "text": "004dfbc0 <.text+0xdebc0>:"
+    },
+    {
+      "line": 97,
+      "text": "  4dfbc0:\t55                   \tpush   ebp"
+    },
+    {
+      "line": 98,
+      "text": "  4dfbc1:\t8b ec                \tmov    ebp,esp"
+    },
+    {
+      "line": 99,
+      "text": "  4dfbc3:\t51                   \tpush   ecx"
+    },
+    {
+      "line": 100,
+      "text": "  4dfbc4:\t53                   \tpush   ebx"
+    },
+    {
+      "line": 101,
+      "text": "  4dfbc5:\t56                   \tpush   esi"
+    },
+    {
+      "line": 102,
+      "text": "  4dfbc6:\t8b f0                \tmov    esi,eax"
+    },
+    {
+      "line": 103,
+      "text": "  4dfbc8:\t57                   \tpush   edi"
+    },
+    {
+      "line": 104,
+      "text": "  4dfbc9:\t8d 45 08             \tlea    eax,[ebp+0x8]"
+    },
+    {
+      "line": 105,
+      "text": "  4dfbcc:\t8d 5e 08             \tlea    ebx,[esi+0x8]"
+    },
+    {
+      "line": 106,
+      "text": "  4dfbcf:\t50                   \tpush   eax"
+    },
+    {
+      "line": 107,
+      "text": "  4dfbd0:\t8d 45 fc             \tlea    eax,[ebp-0x4]"
+    },
+    {
+      "line": 108,
+      "text": "  4dfbd3:\t8b cb                \tmov    ecx,ebx"
+    },
+    {
+      "line": 109,
+      "text": "  4dfbd5:\te8 26 f3 34 00       \tcall   0x82ef00"
+    },
+    {
+      "line": 110,
+      "text": "  4dfbda:\t8b 7d fc             \tmov    edi,DWORD PTR [ebp-0x4]"
+    },
+    {
+      "line": 111,
+      "text": "  4dfbdd:\t3b 7e 0c             \tcmp    edi,DWORD PTR [esi+0xc]"
+    },
+    {
+      "line": 112,
+      "text": "  4dfbe0:\t74 41                \tje     0x4dfc23"
+    },
+    {
+      "line": 113,
+      "text": "  4dfbe2:\t33 f6                \txor    esi,esi"
+    },
+    {
+      "line": 114,
+      "text": "  4dfbe4:\t8b 0d a4 a7 fb 00    \tmov    ecx,DWORD PTR ds:0xfba7a4"
+    },
+    {
+      "line": 115,
+      "text": "  4dfbea:\t8b 11                \tmov    edx,DWORD PTR [ecx]"
+    },
+    {
+      "line": 116,
+      "text": "  4dfbec:\t8b 42 1c             \tmov    eax,DWORD PTR [edx+0x1c]"
+    },
+    {
+      "line": 117,
+      "text": "  4dfbef:\t56                   \tpush   esi"
+    },
+    {
+      "line": 118,
+      "text": "  4dfbf0:\tff d0                \tcall   eax"
+    },
+    {
+      "line": 119,
+      "text": "  4dfbf2:\t46                   \tinc    esi"
+    },
+    {
+      "line": 120,
+      "text": "  4dfbf3:\t83 fe 03             \tcmp    esi,0x3"
+    },
+    {
+      "line": 121,
+      "text": "  4dfbf6:\t7c ec                \tjl     0x4dfbe4"
+    },
+    {
+      "line": 122,
+      "text": "  4dfbf8:\t8b 4f 10             \tmov    ecx,DWORD PTR [edi+0x10]"
+    },
+    {
+      "line": 123,
+      "text": "  4dfbfb:\t8b 11                \tmov    edx,DWORD PTR [ecx]"
+    },
+    {
+      "line": 124,
+      "text": "  4dfbfd:\t8b 42 14             \tmov    eax,DWORD PTR [edx+0x14]"
+    },
+    {
+      "line": 125,
+      "text": "  4dfc00:\tff d0                \tcall   eax"
+    },
+    {
+      "line": 126,
+      "text": "  4dfc02:\t8b 4f 10             \tmov    ecx,DWORD PTR [edi+0x10]"
+    },
+    {
+      "line": 127,
+      "text": "  4dfc05:\t85 c9                \ttest   ecx,ecx"
+    },
+    {
+      "line": 128,
+      "text": "  4dfc07:\t74 0f                \tje     0x4dfc18"
+    },
+    {
+      "line": 129,
+      "text": "  4dfc09:\t8b 11                \tmov    edx,DWORD PTR [ecx]"
+    },
+    {
+      "line": 130,
+      "text": "  4dfc0b:\t8b 02                \tmov    eax,DWORD PTR [edx]"
+    },
+    {
+      "line": 131,
+      "text": "  4dfc0d:\t6a 01                \tpush   0x1"
+    },
+    {
+      "line": 132,
+      "text": "  4dfc0f:\tff d0                \tcall   eax"
+    },
+    {
+      "line": 133,
+      "text": "  4dfc11:\tc7 47 10 00 00 00 00 \tmov    DWORD PTR [edi+0x10],0x0"
+    },
+    {
+      "line": 134,
+      "text": "  4dfc18:\t57                   \tpush   edi"
+    },
+    {
+      "line": 135,
+      "text": "  4dfc19:\t8d 4d 08             \tlea    ecx,[ebp+0x8]"
+    },
+    {
+      "line": 136,
+      "text": "  4dfc1c:\t51                   \tpush   ecx"
+    },
+    {
+      "line": 137,
+      "text": "  4dfc1d:\t53                   \tpush   ebx"
+    },
+    {
+      "line": 138,
+      "text": "  4dfc1e:\te8 6d 6c 2d 00       \tcall   0x7b6890"
+    },
+    {
+      "line": 139,
+      "text": "  4dfc23:\t5f                   \tpop    edi"
+    },
+    {
+      "line": 140,
+      "text": "  4dfc24:\t5e                   \tpop    esi"
+    },
+    {
+      "line": 141,
+      "text": "  4dfc25:\t5b                   \tpop    ebx"
+    },
+    {
+      "line": 142,
+      "text": "  4dfc26:\t8b e5                \tmov    esp,ebp"
+    },
+    {
+      "line": 143,
+      "text": "  4dfc28:\t5d                   \tpop    ebp"
+    },
+    {
+      "line": 144,
+      "text": "  4dfc29:\tc2 04 00             \tret    0x4"
+    },
+    {
+      "line": 145,
+      "text": "```"
+    },
+    {
+      "line": 146,
+      "text": "### 視窗 3: `0x004DFC30..0x004DFC90`"
+    },
+    {
+      "line": 147,
+      "text": ""
+    },
+    {
+      "line": 148,
+      "text": "```asm"
+    },
+    {
+      "line": 149,
+      "text": "004dfc30 <.text+0xdec30>:"
+    },
+    {
+      "line": 150,
+      "text": "  4dfc30:\t55                   \tpush   ebp"
+    },
+    {
+      "line": 151,
+      "text": "  4dfc31:\t8b ec                \tmov    ebp,esp"
+    },
+    {
+      "line": 152,
+      "text": "  4dfc33:\t51                   \tpush   ecx"
+    },
+    {
+      "line": 153,
+      "text": "  4dfc34:\t53                   \tpush   ebx"
+    },
+    {
+      "line": 154,
+      "text": "  4dfc35:\t57                   \tpush   edi"
+    },
+    {
+      "line": 155,
+      "text": "  4dfc36:\t8d 45 08             \tlea    eax,[ebp+0x8]"
+    },
+    {
+      "line": 156,
+      "text": "  4dfc39:\t8d 5e 18             \tlea    ebx,[esi+0x18]"
+    },
+    {
+      "line": 157,
+      "text": "  4dfc3c:\t50                   \tpush   eax"
+    },
+    {
+      "line": 158,
+      "text": "  4dfc3d:\t8d 45 fc             \tlea    eax,[ebp-0x4]"
+    },
+    {
+      "line": 159,
+      "text": "  4dfc40:\t8b cb                \tmov    ecx,ebx"
+    },
+    {
+      "line": 160,
+      "text": "  4dfc42:\te8 79 3c 36 00       \tcall   0x8438c0"
+    },
+    {
+      "line": 161,
+      "text": "  4dfc47:\t8b 7d fc             \tmov    edi,DWORD PTR [ebp-0x4]"
+    },
+    {
+      "line": 162,
+      "text": "  4dfc4a:\t3b 7e 1c             \tcmp    edi,DWORD PTR [esi+0x1c]"
+    },
+    {
+      "line": 163,
+      "text": "  4dfc4d:\t74 36                \tje     0x4dfc85"
+    },
+    {
+      "line": 164,
+      "text": "  4dfc4f:\t8b 86 f8 00 00 00    \tmov    eax,DWORD PTR [esi+0xf8]"
+    },
+    {
+      "line": 165,
+      "text": "  4dfc55:\t85 c0                \ttest   eax,eax"
+    },
+    {
+      "line": 166,
+      "text": "  4dfc57:\t74 11                \tje     0x4dfc6a"
+    },
+    {
+      "line": 167,
+      "text": "  4dfc59:\t8b 08                \tmov    ecx,DWORD PTR [eax]"
+    },
+    {
+      "line": 168,
+      "text": "  4dfc5b:\t3b 4d 08             \tcmp    ecx,DWORD PTR [ebp+0x8]"
+    },
+    {
+      "line": 169,
+      "text": "  4dfc5e:\t75 0a                \tjne    0x4dfc6a"
+    },
+    {
+      "line": 170,
+      "text": "  4dfc60:\tc7 86 f8 00 00 00 00 \tmov    DWORD PTR [esi+0xf8],0x0"
+    },
+    {
+      "line": 171,
+      "text": "  4dfc67:\t00 00 00 "
+    },
+    {
+      "line": 172,
+      "text": "  4dfc6a:\t8b 47 10             \tmov    eax,DWORD PTR [edi+0x10]"
+    },
+    {
+      "line": 173,
+      "text": "  4dfc6d:\t85 c0                \ttest   eax,eax"
+    },
+    {
+      "line": 174,
+      "text": "  4dfc6f:\t74 09                \tje     0x4dfc7a"
+    },
+    {
+      "line": 175,
+      "text": "  4dfc71:\t50                   \tpush   eax"
+    },
+    {
+      "line": 176,
+      "text": "  4dfc72:\te8 95 15 3b 00       \tcall   0x89120c"
+    },
+    {
+      "line": 177,
+      "text": "  4dfc77:\t83 c4 04             \tadd    esp,0x4"
+    },
+    {
+      "line": 178,
+      "text": "  4dfc7a:\t57                   \tpush   edi"
+    },
+    {
+      "line": 179,
+      "text": "  4dfc7b:\t8d 55 08             \tlea    edx,[ebp+0x8]"
+    },
+    {
+      "line": 180,
+      "text": "  4dfc7e:\t52                   \tpush   edx"
+    },
+    {
+      "line": 181,
+      "text": "  4dfc7f:\t53                   \tpush   ebx"
+    },
+    {
+      "line": 182,
+      "text": "  4dfc80:\te8 0b 6c 2d 00       \tcall   0x7b6890"
+    },
+    {
+      "line": 183,
+      "text": "  4dfc85:\t5f                   \tpop    edi"
+    },
+    {
+      "line": 184,
+      "text": "  4dfc86:\t5b                   \tpop    ebx"
+    },
+    {
+      "line": 185,
+      "text": "  4dfc87:\t8b e5                \tmov    esp,ebp"
+    },
+    {
+      "line": 186,
+      "text": "  4dfc89:\t5d                   \tpop    ebp"
+    },
+    {
+      "line": 187,
+      "text": "  4dfc8a:\tc2 04 00             \tret    0x4"
+    },
+    {
+      "line": 188,
+      "text": "  4dfc8d:\tcc                   \tint3"
+    },
+    {
+      "line": 189,
+      "text": "  4dfc8e:\tcc                   \tint3"
+    },
+    {
+      "line": 190,
+      "text": "  4dfc8f:\tcc                   \tint3"
+    },
+    {
+      "line": 191,
+      "text": "```"
+    }
+  ]
+}

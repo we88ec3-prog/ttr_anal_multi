@@ -2,7 +2,7 @@
 
 審核者：Codex T01 integrator；2026-10-29 Asia/Taipei。原件 KR `Tartaros.bin`，12,472,320 bytes，SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。PE `.text` VA `0x401000`／raw `0x400`，本頁函式皆使用 `raw=VA-0x400C00`。
 
-以下僅三項明確有界原生主張 FULL-PASS。沒有原稿全文、整個函式語意、Task、Server 或遊玩驗收。主張的機器碼、全部相關正常分支與寄存器／stack 資料流已由指定入口重解；原件 SHA 與 PE headers 獨立核對，非單純抽樣 bytes。
+以下三項明確有界原生主張 FULL-PASS。2026-10-29 接續批次另完成 T08-158 精確來源版本的全文有界主張驗收，見文末追溯；仍不代表整個函式語意、Task、Server 或遊玩驗收。主張的機器碼、全部相關正常分支與寄存器／stack 資料流已由指定入口重解；原件 SHA 與 PE headers 獨立核對，非單純抽樣 bytes。
 
 ## CK-CLIENT-LAZY-RECEIVER-01 — FULL-PASS
 
@@ -31,5 +31,7 @@
 原生證據：[erase完整可達 CFG](../integrations/T01-20261029-semantic-review/t08-early/native-cfg/007b6890.json)、[successor helper](../integrations/T01-20261029-semantic-review/t08-early/native-cfg/0049e6a0.json)、[接收結果 caller](../integrations/T01-20261029-semantic-review/t08-early/native-cfg/004dfc90.json)。來源：原 Task T08、作者 chatgpt-web roy；`kr-temp-roy/20261028-014315-chatgpt-web-roy-T08-155-tree-erase-node-and-container-invariants.md`，Git blob `45a6d797b4c33eabc24daf85292cdb005da39558`，SHA256 `099881b4a44e8c79188bd374f49b2cd46c560b25e8369538e9a3afe06bbf00cf`、原 Task T08、作者 chatgpt-web roy；`kr-temp-roy/20261028-015216-chatgpt-web-roy-T08-158-gameinfo-receiver-and-composite-key-abi.md`，Git blob `f4eeaddf48033005057a5c5a5ec78bd438b0eddd`，SHA256 `eadccf6f5a8894c6aafad7942fc5397944c007e99b488b203e6a1cfa03742b38`。155 的附錄指令界線錯誤與153的 ABI措辭另有退回；不提升整篇來源。
 
 ## 責任與未解範圍
+
+2026-10-29 接續複驗：上述同一 T08-158 blob `f4eeaddf48033005057a5c5a5ec78bd438b0eddd` 的全部13項實質敘述／資料流／範圍主張及4碼塊已由 T01 integrator 核對，判為 `FULL_PASS_DOCUMENT_SCOPED`。保存 [逐項裁決](../integrations/T01-20261029-continuation-02/t08-158/review.json) 與 [重現說明](../integrations/T01-20261029-continuation-02/t08-158/README.md)。此為精確原稿的驗收進度更新；不新增或擴大本頁三項知識的適用條件，也不提升153、154、155、156等其他原稿。
 
 Client 待逆向：所有上游封包註冊、actor+88的業務身分、未知動態 vtable、配置／例外與跨場景世代；Server 待開發：生成／移除時機、任務／勝負／獎勵規則與持久化；跨功能整合與遊玩待驗證：均未完成。以上三條不需要以官方 Server 演算法或遊戲執行證明才能成立，但不得據此補猜那些規則。

@@ -2,6 +2,29 @@
 
 ## T01 驗收退回事項
 
+<!-- T01-continuation-02-notices:start -->
+
+### 2026-10-29 接續第02批複驗
+
+逐篇主張與全部碼塊已核對；以下限定需修正的內容，保留其他獨立支持的結論。
+
+#### T01-RETURN-T10-055-EVIDENCE-001 — NEEDS_QUALIFICATION
+- 原稿：`kr-temp-roy/20261028-021236-chatgpt-web-roy-T10-055-special-key-domain-tree-branches.md`；Git blob `61c1e3bca931c781be72db549bed483202cfff1a`；SHA256 `3b3a2dcf12540643499faa3f00770b61e9e74669fe6048744f0313503280f84a`。
+- 問題：第一視窗起點6D4BB0在6D4BAC指令的immediate內，至6D4BC2才重新對齊；第四視窗6D4D40是6D4D3E LEA的immediate，lock push不是reader正常路徑指令。
+- 原生依據：6D4BAC c7 45 fc 04 00 00 00 (mov[ebp-4],4);6D4BB3 e8 98 bb ff ff (call6D0750);6D4BBD e8 58 d7 1b 00 (call89231A);6D4D3E 8d 4d f0 (lea ecx,[ebp-10h]);6D4D41 51 (push ecx)
+- 修正及複驗：保留原稿與SHA；提供勘誤／標註版，明列錯位視窗頭不屬native instruction證據；分開明示.byte尾端截斷和續行；替泛稱「列出的讀寫/call已確認」限定有效區段。可附本批rooted canonical excerpt，不能更換原來源SHA。
+- [逐項驗收及原生證據](../../../shared/integrations/T01-20261029-continuation-02/t10/README.md)。
+
+#### T01-RETURN-T10-056-EVIDENCE-001 — NEEDS_QUALIFICATION
+- 原稿：`kr-temp-roy/20261028-021236-chatgpt-web-roy-T10-056-indexed-reader-polymorphic-consumers.md`；Git blob `e2da2b34e1c97aeffd192d5af7a258f80b50c527`；SHA256 `0d0b9f07373355c959291cb9ac8fddc5ad840b05167e5222b9001f8626f549a5`。
+- 問題：第三視窗596430落在59642E JMP的rel32內，其假CALL596441→F8DC6459跨過真正59643F CALL的immediate和596444 CMP；596452起才重新對齊。
+- 原生依據：59642E e9 7a 01 00 00 (jmp5965AD);596433 68 34 20 bf 00;596438 e8 f3 76 2e 00 (call87DB30);59643D 32 db (xor bl,bl);59643F e8 9c e8 13 00 (call6D4CE0);596444 83 f8 01 (cmp eax,1)
+- 修正及複驗：保留原稿與SHA；提供勘誤／標註版，明列錯位視窗頭不屬native instruction證據；分開明示.byte尾端截斷和續行；替泛稱「列出的讀寫/call已確認」限定有效區段。可附本批rooted canonical excerpt，不能更換原來源SHA。
+- [逐項驗收及原生證據](../../../shared/integrations/T01-20261029-continuation-02/t10/README.md)。
+
+<!-- T01-continuation-02-notices:end -->
+
+
 <!-- T01-20261029-stage-notices:start -->
 
 ### 2026-10-29 階段複驗通知（4筆具體更正，既有ID原位補充）

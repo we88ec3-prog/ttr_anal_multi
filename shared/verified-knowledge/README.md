@@ -4,7 +4,7 @@
 
 ## 正式已驗證條目
 
-已收錄 **5 筆**經有界逐項審核的 KR Client 原生結論（不代表來源 Task 整體完成）：
+已收錄 **7 筆**經有界逐項審核的 KR Client 原生結論（不代表來源 Task 整體完成）：
 
 - [CK-SCENARIO-MAP-READ-NATIVE-01 — Native Map reader 正常返回路徑](client-scenario-map-native-reader-and-clear.md#ck-scenario-map-read-native-01--full-pass限定正常返回)：`0x4AA510` 在有效 owner/key 及 accessor 正常返回時，從 `ECX+4` 容器讀 DWORD。
 - [CK-SCENARIO-MAP-CLEAR-STATE-01 — Map clear 正常返回後的 sentinel/count](client-scenario-map-native-reader-and-clear.md#ck-scenario-map-clear-state-01--full-pass限定正常返回)：`0x823850` 在有效容器及節點處理正常返回時重設 sentinel links 並將 count 清零。
@@ -23,3 +23,6 @@ PARTIAL、source-only、AI/fixture、抽樣 byte 驗證不得混入正式已驗�
 
 
 2026-10-29：[接收器／精確鍵查找／erase iterator 三項有界 FULL-PASS](client-receiver-exact-lookup-erase-iterator.md)。三項 ID 為 `CK-CLIENT-LAZY-RECEIVER-01`、`CK-CLIENT-EXACT-TREE-LOOKUP-01`、`CK-CLIENT-ERASE-NEXT-ITERATOR-01`；原稿全文均未升級。逐項條件、來源版本及歷史更正見內文。
+
+
+2026-10-29 接續：[集合模式 gate 與次級鍵移除兩項有界 FULL-PASS](client-mode-gates-and-secondary-key-removal.md)。新增 `CK-CLIENT-COLLECTION-MODE-GATE-01`、`CK-CLIENT-SECONDARY-KEY-ERASE-01`；來源177／197的精確版本及158另完成有界全文驗收，既有五項結論的適用範圍不擴張。

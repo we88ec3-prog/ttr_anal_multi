@@ -52,7 +52,9 @@
 - T08 修復：按 KR PE .text 的正確節區映射重解 0x4B28D0 整段 CFG；更正組語、ID 查找、分支、偽碼及受影響的主張。提交修正版或勘誤及新 Git blob SHA，交 T01 全文重驗。
 - 來源：T01-030 本地核對；原始 KR BIN SHA256 9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91。
 
-### T01-RETURN-T08-173-001 — NEEDS_FIX
+### T01-RETURN-T08-173-001 — RESOLVED
+
+2026-10-29 接續第02批結案：修正版 T08-177 blob `fdc8a64aa0f33866defe5a2484fa432f4bbaf66c`／SHA256 `253ccb2b658dcc734efe6bc3d5d6ab6f1629b95d173b998515624c5aa29949ac` 的全文有界主張與所有碼塊已複驗通過，全部受影響的入口、資料流及清理關係均已核對。本退回事項標 RESOLVED；舊 T08-173 blob 仍 FAILED。歷史 NEEDS_FIX 與下列舊補充保留為當時紀錄。[修復對應與驗收](../../../shared/integrations/T01-20261029-continuation-02/t08/issue-resolution.json)。
 
 <!-- T01-RETURN-T08-173-001-20261029-update -->
 2026-10-29 複驗補充：原稿blob `f643553ef1145ed65a5a724a0a9a3f19c910e76f`，SHA256 `1f5b203f381922d09d737d4fd9dbc227ec7e2a1f9597c311c604d3d7dbd9140c`。0x7B7FFE b9 01 00 00 00 dominates 0x7B8006 89 4a 44; ECX is constant1 through the loop. 修正／複驗：Correct the source/value, identify the actual 7B7FD0 entry, and revalidate affected dataflow. T08-177 is a later explicit correction; retain the old source FAILED. [本輪證據](../../../shared/integrations/T01-20261029-semantic-review/t08-new/return-items.json)。
@@ -73,7 +75,9 @@
 - T08 修復：重驗 0x7F6FBA 周邊 wrapper 配置、0x7DCFB0 acquire、callsite 和位址；提供修正版本路徑及新 Git blob SHA。
 - 來源：T01-026 的明確原生反證。
 
-### T01-RETURN-T08-196-001 — NEEDS_FIX
+### T01-RETURN-T08-196-001 — RESOLVED
+
+2026-10-29 接續第02批結案：修正版 T08-197 blob `4812aa8da49c40647538206679b414753a4c6e5e`／SHA256 `555a88a78907b2deb1ea80d552ec64f41d0c52d4d52818e5d9faf3bbe6646ea3` 的全文有界主張與所有碼塊已複驗通過，全部受影響的入口、資料流及清理關係均已核對。本退回事項標 RESOLVED；舊 T08-196 blob 仍 FAILED。歷史 NEEDS_FIX 與下列舊補充保留為當時紀錄。[修復對應與驗收](../../../shared/integrations/T01-20261029-continuation-02/t08/issue-resolution.json)。
 
 <!-- T01-RETURN-T08-196-001-20261029-update -->
 2026-10-29 複驗補充：原稿blob `b1879330f55b5d7b6d38a697a46a0f40ce3b6aca`，SHA256 `e8b1564e8b92aaf59ca2fcffd9e3ca8c834f953811e348a6a8a6ea30e03665b0`。0x4DFC96=8d7808 lea edi,[eax+8]; subsequent sentinel is[edi+4]=owner+C. Secondary tree is the separate4DFC30 ESI+18 path. 修正／複驗：Correct tree base, sentinel and LEA addressing; remove/re-evaluate dual-tree ownership deductions and revalidate complete affected CFG. T08-197 correctly distinguishes the two paths. [本輪證據](../../../shared/integrations/T01-20261029-semantic-review/t08-new/return-items.json)。
