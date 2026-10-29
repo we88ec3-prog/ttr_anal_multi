@@ -238,4 +238,3 @@ Client 待逆向：0x66C620 caller/事件生命週期與 T03 auth 0x13 consumer 
 第一輪對事件碼 0x709/0x70A/0x578 做直接 opcode 來源判斷；第二輪閉合 0x57EF20 node layout（0x18 bytes、+0x0C key、+0x10 Conn*）與 0x57E850 有序插入；第三輪完整限定非等價和下一步。重大有界新增是 exact tree node memory layout + matching consumer，以及 UI event-to-connect handler 的分支條件。RR 未達正式完成條件，不聲稱 T01 FULL-PASS。
 ## E30 首要追蹤
 (1) 0x66C620 所在 vtable/註冊和直接/間接 caller；(2) T03 0x13 native consumer 到 UI event bridge；(3) 0x7B6890 對重複連線 key 節點的 erase / close；(4) connection-specific first frame。
-(1) 0x66C620 所在 vtable/註冊和直接/間接 caller；(2) T03 0x13 native consumer 到 UI event bridge；(3) 0x7B6890 對重複連線 key 節點的 erase / close；(4) connection-specific first frame。
