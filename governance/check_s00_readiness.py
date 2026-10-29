@@ -19,6 +19,35 @@ def _load(root, path):
     return json.loads((root / path).read_text(encoding="utf-8"))
 
 
+def _topological_milestones(items, error):
+    """Stable dependency order: never infer readiness from JSON row ordering."""
+    nodes = {m.get("id"): m for m in items if isinstance(m, dict) and isinstance(m.get("id"), str)}
+    incoming = {key: 0 for key in nodes}
+    children = {key: [] for key in nodes}
+    for m in nodes.values():
+        for dep in m.get("depends_on", []):
+            if dep not in nodes or dep == m["id"]:
+                continue  # Existing validation reports invalid/recursive references.
+            incoming[m["id"]] += 1
+            children[dep].append(m["id"])
+    def order_key(mid):
+        return (nodes[mid].get("priority", 999), mid)
+    ready = sorted((k for k, n in incoming.items() if n == 0), key=order_key)
+    ordered = []
+    while ready:
+        mid = ready.pop(0)
+        ordered.append(nodes[mid])
+        for child in children[mid]:
+            incoming[child] -= 1
+            if incoming[child] == 0:
+                ready.append(child)
+                ready.sort(key=order_key)
+    if len(ordered) < len(nodes):
+        error("roadmap dependency cycle prevents trustworthy readiness ordering")
+        ordered.extend(nodes[k] for k in sorted(nodes) if k not in {m["id"] for m in ordered})
+    return ordered
+
+
 def assess(root=ROOT):
     errors = []
     def error(message):
@@ -92,7 +121,8 @@ def assess(root=ROOT):
         visit(mid)
 
     packages = []
-    for m in items:
+    status_by_id = {}
+    for m in _topological_milestones(items, error):
         if not isinstance(m, dict) or not MUST.issubset(m):
             continue
         blockers = []
@@ -112,11 +142,15 @@ def assess(root=ROOT):
         # All current tests are synthetic. They are useful planning inputs but do
         # not fulfill evidence-backed wire or runtime acceptance on their own.
         for ref in m["test_ids"]:
-            if ref in test and test[ref].get("status") == "OFFLINE_SYNTHETIC":
-                blockers.append(f"{ref}=OFFLINE_SYNTHETIC_ONLY")
+            if ref in test:
+                if test[ref].get("status") == "OFFLINE_SYNTHETIC":
+                    blockers.append(f"{ref}=OFFLINE_SYNTHETIC_ONLY")
+                else:
+                    # No approved provenance review for non-synthetic evidence.
+                    # Keep the milestone blocked; do not award readiness by renaming status.
+                    blockers.append(f"{ref}=UNREVIEWED_TEST_PROVENANCE({test[ref].get('status')})")
         for dep in m["depends_on"]:
-            p = next((p for p in packages if p["id"] == dep), None)
-            if p is None or p["status"] != "REVIEW_CANDIDATE":
+            if status_by_id.get(dep) != "REVIEW_CANDIDATE":
                 blockers.append(f"dependency:{dep}")
         if m["phase"] != "B":
             blockers.append("EXTERNAL_REVIEW_REQUIRED")
@@ -127,6 +161,7 @@ def assess(root=ROOT):
                          "blockers": blockers,
                          "spec_count": len(m["spec_ids"]),
                          "research_count": len(m["rr_ids"])})
+        status_by_id[m['id']] = packages[-1]["status"]
     summary = {"specs": len(spec),
                "specs_reviewed_or_stable": sum(s["maturity"] in {"REVIEWED", "STABLE"} for s in spec.values()),
                "gaps_open": sum(g["status"] != "RESOLVED" for g in gap.values()),
