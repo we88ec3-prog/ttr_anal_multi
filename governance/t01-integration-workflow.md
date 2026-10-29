@@ -36,3 +36,8 @@
 新來源先登錄 `research/intake/index.json`，記錄精確來源檔、Git blob SHA、SHA256、Client 版本與原件 SHA。只有完成 bounded claim 萃取後才可由 REGISTERED 升 CLAIMS_EXTRACTED；主張已和現有版本/反證查對並有紀錄才可升 CONFLICT_CHECKED；S00 確認有限用途並明確記載衝突處置才可升 SPEC_CONSUMABLE。這些狀態皆不代表已完成原生語意驗證。
 
 優先使用 [source-intake 模板](../research/templates/source-intake.md) 和 [server-impact 模板](../research/templates/server-impact.md)。機械性來源 SHA 與引用檢查由 `governance/validate_s00.py` 進行；它不取代 T01 對關鍵原生主張的人工審核。
+
+
+## T01 與 S00 新派工的介面
+
+T01 每次開工先讀 [T01 待審收件箱](../research/dispatch/inbox/T01.md)，其 SUBMITTED/IN_REVIEW 僅表示研究回報待審，**不是** T01 FULL-PASS 驗收通知；本來的 Task README NEEDS_FIX/READY_FOR_REVIEW 退回程序照舊。T01 可在 RR IN_REVIEW 註明有界證據問題並要求 NEEDS_REVISION，但 S00 才能審核請求完成度與最終 ACCEPTED。請求 ACCEPTED 不表示來源原稿、BIN 語義或相關 SPEC 已正式通過。
