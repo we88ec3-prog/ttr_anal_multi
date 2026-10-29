@@ -36,3 +36,8 @@
 ## T01 完整驗證共用知識（2026-10-28）
 
 T01 對完全通過原生驗證的**精確結論／子流程**，依 [FULL-PASS 不按 Task 分類政策](shared/T01-FULL-PASS-UNCLASSIFIED-INTEGRATION-RULES.md) 整合至 [共用知識入口](shared/verified-knowledge/README.md)。共用知識依功能／協定／資料結構查找，不以 Task 當分類；原 Task、作者、原稿 blob SHA、版本與驗收責任仍保留作追溯。PARTIAL、source-only、bytes 抽查或整份報告未逐項語意驗證，不得升級 FULL-PASS。原版 Server 內部規則歸 Server 待開發，Client 未知封包與反應仍屬 Client 待逆向；兩者不能混淆。本政策不改其他 Task owner、catalog、原始研究和既有退回流程。
+
+
+## Server 設計流程 Phase A（獨立分支試行）
+
+本分支建立 [S00 規格整合流程](governance/s00-workflow.md)、[T01 風險分流與整合流程](governance/t01-integration-workflow.md)、[Server 規格入口](spec/README.md)。待維護者確認並合併後採為新整合流程；不覆寫既有歷史原稿、Task owner、退回狀態或 FULL-PASS 嚴格要求。無 REA 的 Agent 可進行 S00 工作；需要原生補證再交 T02–T16。此流程不授權執行原版 Client、修改原件或接收外部 Issues。

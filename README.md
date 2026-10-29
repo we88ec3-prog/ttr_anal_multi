@@ -4,6 +4,9 @@
 
 ## 入口
 
+- [Server 規格（S00，階段 A 試行）](spec/README.md)
+- [新分析與設計工作流程（階段 A 試行）](governance/workflow.md)
+
 - [Server 設計與專案分析新流程提案（2026-10-29，尚未生效）](governance/proposals/2026-10-29-server-spec-workflow.md)
 
 - [KR：T01～T16 任務入口](kr/README.md)（T16 新增規劃）

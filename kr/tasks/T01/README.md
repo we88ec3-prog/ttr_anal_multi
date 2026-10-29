@@ -99,3 +99,8 @@
 
 
 2026-10-29 接續整合：[T01 第02批全文驗收](../../../shared/integrations/T01-20261029-continuation-02/README.md)。本批10篇逐篇核對，158／177／197三篇有界全文通過；舊173／196退回結案但舊版維持FAILED；新增10項修正／限定退回。最新318版狀態為 全文有界通過3、FAILED71、PARTIAL151、SOURCE_ONLY9、PENDING84，未全部完成；以本批 source-ledger 與推送收據接續。
+
+
+## Server 規格整合的新通道（Phase A 試行，待合併）
+
+T01 對 Server 設計的接收、精確主張去重、風險分流及 S00 交接，按 [新 T01 工作流程](../../../governance/t01-integration-workflow.md) 辦理。這是**與舊版全文 FULL-PASS 分開的增量通道**；不更改 318 份歷史來源狀態、其他 Task 主責及 `shared/verified-knowledge/` 准入要求。原稿失敗/部分通過/待審應原樣保留；非已驗證材料只可標註可信度交 S00 參考。
