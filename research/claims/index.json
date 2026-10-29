@@ -10586,6 +10586,106 @@
           "integration_review_ref": "research/handoffs/t01-t08-roy-20261029/README.md"
         }
       ]
+    },
+    {
+      "id": "CLM-NET-0014",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/20261030-022552-chatgpt-web-roy-E50-RR0005-map-replacement-pool48-atomic-IO-lifecycle.md",
+      "source_blob_sha": "f4bd62ce69cf96cc35b566bf62721a586f4f51c7",
+      "source_intake_id": "SRC-0395",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 0x8068B0 WSASend, 0x806CF0 GQCS and 0x8065B0 RX gate",
+      "assertion": "Visible WSASend success or WSA_IO_PENDING branches increment Conn+A0B8; send-matching completion success/failure decrements; RX uses Conn+A030 and separate A0BC controls.",
+      "limitations": "Not all cancel/error/reconnect paths, and A0B8 is NOT a proven aggregate counter for all receive operations.",
+      "conflicts": [
+        "CLM-NET-0013"
+      ],
+      "affected_spec_ids": [],
+      "additional_sources": [
+        {
+          "source_file": "kr-temp-roy/20261028-225239-chatgpt-web-roy-T16-97-KR-send-completion-overlapped-buffer-consumer.md",
+          "source_blob_sha": "417d81dc3b8301530a7e29ba75bbf282df6953e9",
+          "source_intake_id": "SRC-0397",
+          "subset_only": true,
+          "does_not_upgrade_quality": true
+        }
+      ],
+      "review_ref": "research/handoffs/t01-20261030-extra-t16-r2/batch3.md"
+    },
+    {
+      "id": "CLM-NET-0015",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/20261030-014508-chatgpt-web-roy-E49-RR0005-pool-getter-recycle-parser-ABI-boundaries.md",
+      "source_blob_sha": "8f4b0ca731fdc8d0d8c9f264e4c85a956bd5e7d2",
+      "source_intake_id": "SRC-0394",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR Pool+0x28/+0x48 and 0x805B40 recycler (selected paths)",
+      "assertion": "Connect-fail and teardown producers enqueue Conn in Pool+0x48 and clear Conn+0x14; the recycler removes Pool+0x28 tracking by +0x14==0 and only recycles Pool+0x48 entries with Conn+A0B8==0.",
+      "limitations": "No exhaustive Conn+14 writer, allocator/exception, duplicate enqueue, mutex or lifetime verification.",
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "additional_sources": [
+        {
+          "source_file": "kr-extra-roy/20261030-022552-chatgpt-web-roy-E50-RR0005-map-replacement-pool48-atomic-IO-lifecycle.md",
+          "source_blob_sha": "f4bd62ce69cf96cc35b566bf62721a586f4f51c7",
+          "source_intake_id": "SRC-0395",
+          "subset_only": true,
+          "does_not_upgrade_quality": true
+        }
+      ],
+      "review_ref": "research/handoffs/t01-20261030-extra-t16-r2/batch3.md"
+    },
+    {
+      "id": "CLM-NET-0016",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/20261030-022552-chatgpt-web-roy-E50-RR0005-map-replacement-pool48-atomic-IO-lifecycle.md",
+      "source_blob_sha": "f4bd62ce69cf96cc35b566bf62721a586f4f51c7",
+      "source_intake_id": "SRC-0395",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 0x806C9E/806CB3/806CC7/806CD2 manager duplicate-key mapping",
+      "assertion": "Existing key map node is conditionally erased before new key-to-Conn node insertion. This is different from socket close and Pool+0x48 enqueue.",
+      "limitations": "0x7B6890 full downstream destructor unknown; old Conn lifetime and successful IOCP association not established.",
+      "conflicts": [
+        "E48 0x49B070 map detach claim corrected by E49 and E50"
+      ],
+      "affected_spec_ids": [],
+      "additional_sources": [
+        {
+          "source_file": "kr-extra-roy/20261030-010130-chatgpt-web-roy-E48-RR0005-close-failure-IOCP-frame-dispatch.md",
+          "source_blob_sha": "39285bbf723876d58ebdd9f74e197bd0499f3d03",
+          "source_intake_id": "SRC-0393",
+          "subset_only": true,
+          "does_not_upgrade_quality": true
+        }
+      ],
+      "review_ref": "research/handoffs/t01-20261030-extra-t16-r2/batch3.md"
+    },
+    {
+      "id": "CLM-NET-0017",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/20261030-022552-chatgpt-web-roy-E50-RR0005-map-replacement-pool48-atomic-IO-lifecycle.md",
+      "source_blob_sha": "f4bd62ce69cf96cc35b566bf62721a586f4f51c7",
+      "source_intake_id": "SRC-0395",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 0x805950 pooled Conn acquisition / 0x806C87 IOCP key / 0x806D84 GQCS",
+      "assertion": "Pool acquisition may reuse reset Conn or allocate new 0xA0D8 bytes. The connection is used as IOCP completion key and the completion dispatcher reads the returned key instead of doing a fresh Manager key lookup.",
+      "limitations": "Does not prove old Conn freed or retained, socket generation, error balance, ABA safety, or live session ordering.",
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "additional_sources": [
+        {
+          "source_file": "kr-extra-roy/20261030-014508-chatgpt-web-roy-E49-RR0005-pool-getter-recycle-parser-ABI-boundaries.md",
+          "source_blob_sha": "8f4b0ca731fdc8d0d8c9f264e4c85a956bd5e7d2",
+          "source_intake_id": "SRC-0394",
+          "subset_only": true,
+          "does_not_upgrade_quality": true
+        }
+      ],
+      "review_ref": "research/handoffs/t01-20261030-extra-t16-r2/batch3.md"
     }
   ]
 }
