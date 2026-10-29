@@ -39,3 +39,9 @@ T01-20261028-06 已推送 main：[b8c95431063436d24ca473876b937e4a9152210d](http
 
 
 2026-10-28 增量來源索引：[T01-20261028-07](shared/integrations/T01-20261028-07/README.md)。以 `b8c95431063436d24ca473876b937e4a9152210d` 至 `944f06c046236afa97e1c9a46a9b5c9c3596ed4a` 的 93 commits 為收件範圍，登記 T08 173–200（28）、T10 081–100（20）、T16 41–68（32）共 80 份研究原稿；T16 41–44 各有兩份原稿待逐項仲裁。此為已在 main 的來源與 SHA 索引，不是 native 語意驗收；既有 catalog、owner、source-review-status 不變。後續先對照前批 accepted-claims/resolutions/source-review-status 去重與驗證。
+
+
+2026-10-29 階段整合：[T01原稿語意驗收檢查點](shared/integrations/T01-20261029-semantic-review/README.md)。318個來源版本已凍結；全文FULL-PASS為0，69個原版已有反證、153部分、9來源級、87待審。46項具體退回及映射群組已更新Task README，另有3項精確原生結論准入共用知識。接續逐篇來源SHA／碼塊待辦，不把本次階段收尾算作318篇完成；實際main基準見批次推送收據。
+
+
+2026-10-29 接續整合：[T01 第02批全文驗收](shared/integrations/T01-20261029-continuation-02/README.md)。本批10篇逐篇核對，158／177／197三篇有界全文通過；舊173／196退回結案但舊版維持FAILED；新增10項修正／限定退回。最新318版狀態為 全文有界通過3、FAILED71、PARTIAL151、SOURCE_ONLY9、PENDING84，未全部完成；以本批 source-ledger 與推送收據接續。

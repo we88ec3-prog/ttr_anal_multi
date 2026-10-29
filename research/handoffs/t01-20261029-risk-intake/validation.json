@@ -1,0 +1,63 @@
+{
+  "ok": true,
+  "completed_utc": "2026-10-29T06:08:03.334012+00:00",
+  "checks": [
+    {
+      "command": "python -X utf8 -B governance/validate_s00.py",
+      "returncode": 0,
+      "stdout": "S00 registry integrity OK. This is not an original-client semantic verdict or Server compatibility test.",
+      "stderr": ""
+    },
+    {
+      "command": "python -X utf8 -B governance/check_s00_readiness.py --check",
+      "returncode": 0,
+      "stdout": "S00 Planning Readiness (not Client/Server compatibility)\n  B-NET: BLOCKED; blockers=11\n    - GAP-NET-0001=OPEN\n    - GAP-NET-0002=OPEN\n    - RR-0001=QUEUED\n    - RR-0004=QUEUED\n    - RR-0005=QUEUED\n    - SPEC-NET-0001=DRAFT/PARTIAL\n    - SPEC-NET-0002=DRAFT/PARTIAL\n    - SPEC-NET-0003=DRAFT/PARTIAL\n    - TEST-NET-0001=OFFLINE_SYNTHETIC_ONLY\n    - TEST-NET-0002=OFFLINE_SYNTHETIC_ONLY\n    - TEST-NET-0003=OFFLINE_SYNTHETIC_ONLY\n  B-AUTH: BLOCKED; blockers=10\n    - GAP-AUTH-0001=OPEN\n    - GAP-FLOW-0001=OPEN\n    - GAP-NET-0002=OPEN\n    - RR-0003=QUEUED\n    - RR-0005=QUEUED\n    - RR-0007=QUEUED\n    - SPEC-AUTH-0001=DRAFT/PARTIAL\n    - SPEC-FLOW-0001=DRAFT/PARTIAL\n    - TEST-AUTH-0001=OFFLINE_SYNTHETIC_ONLY\n    - dependency:B-NET\n  B-CHAR: BLOCKED; blockers=9\n    - GAP-CHAR-0001=OPEN\n    - GAP-FLOW-0001=OPEN\n    - RR-0002=QUEUED\n    - RR-0007=QUEUED\n    - SPEC-CHAR-0001=DRAFT/PARTIAL\n    - SPEC-FLOW-0001=DRAFT/PARTIAL\n    - TEST-CHAR-0001=OFFLINE_SYNTHETIC_ONLY\n    - dependency:B-NET\n    - dependency:B-AUTH\n  B-SCENE: BLOCKED; blockers=6\n    - GAP-SCENE-0001=OPEN\n    - RR-0008=QUEUED\n    - SPEC-FLOW-0001=DRAFT/PARTIAL\n    - SPEC-SCENE-0001=DRAFT/PARTIAL\n    - dependency:B-CHAR\n    - NO_REGISTERED_CONFORMANCE_TEST\n  B-CONTRACT: BLOCKED; blockers=17\n    - GAP-NET-0001=OPEN\n    - GAP-AUTH-0001=OPEN\n    - GAP-CHAR-0001=OPEN\n    - GAP-FLOW-0001=OPEN\n    - RR-0001=QUEUED\n    - RR-0002=QUEUED\n    - RR-0003=QUEUED\n    - SPEC-FLOW-0001=DRAFT/PARTIAL\n    - SPEC-NET-0001=DRAFT/PARTIAL\n    - SPEC-AUTH-0001=DRAFT/PARTIAL\n    - SPEC-CHAR-0001=DRAFT/PARTIAL\n    - TEST-NET-0001=OFFLINE_SYNTHETIC_ONLY\n    - TEST-AUTH-0001=OFFLINE_SYNTHETIC_ONLY\n    - TEST-CHAR-0001=OFFLINE_SYNTHETIC_ONLY\n    - dependency:B-NET\n    - dependency:B-AUTH\n    - dependency:B-CHAR\n  C-ENV: BLOCKED; blockers=2\n    - dependency:B-CONTRACT\n    - EXTERNAL_REVIEW_REQUIRED\nSummary: {'specs': 7, 'specs_reviewed_or_stable': 0, 'gaps_open': 7, 'requests_queued': 8, 'requests_accepted': 0, 'tests_offline_synthetic': 5, 'packages_blocked': 6}",
+      "stderr": ""
+    },
+    {
+      "command": "python -X utf8 -B -m unittest discover -s governance/tests -v",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "test_current_roadmap_is_structurally_consistent_but_not_ready (test_s00_readiness.ReadinessTests) ... ok\ntest_roadmap_detects_cycle (test_s00_readiness.ReadinessTests) ... ok\ntest_roadmap_detects_missing_rr_and_unassigned_owner (test_s00_readiness.ReadinessTests) ... ok\ntest_wrong_client_sha_is_rejected (test_s00_readiness.ReadinessTests) ... ok\ntest_current_indexes_valid (test_validate_s00.S00IndexTests) ... ok\ntest_reference_and_gate_protection (test_validate_s00.S00IndexTests) ... ok\ntest_source_integrity_is_checked (test_validate_s00.S00IndexTests) ... ok\ntest_source_must_have_claims_before_promotion (test_validate_s00.S00IndexTests) ... ok\ntest_unproven_stable_rejected (test_validate_s00.S00IndexTests) ... ok\ntest_wrong_client_target_is_rejected (test_validate_s00.S00IndexTests) ... ok\n\n----------------------------------------------------------------------\nRan 10 tests in 9.901s\n\nOK"
+    },
+    {
+      "command": "python -X utf8 -B research/dispatch/dispatch.py check",
+      "returncode": 0,
+      "stdout": "S00 dispatch checks OK (not an Agent wakeup or native verification)",
+      "stderr": ""
+    },
+    {
+      "command": "python -X utf8 -B -m unittest discover -s research/dispatch/tests -p test_*.py -v",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "test_duplicate_claim_and_missing_evidence_rejected (test_dispatch.DispatchTests) ... ok\ntest_invalid_history_rejected (test_dispatch.DispatchTests) ... ok\ntest_kr_tc_claims_are_not_interchangeable (test_dispatch.DispatchTests) ... ok\ntest_report_and_acceptance_require_review (test_dispatch.DispatchTests) ... ok\ntest_stale_inbox_and_bad_status_caught (test_dispatch.DispatchTests) ... ok\ntest_task_inboxes_are_derived_not_separate_writable_state (test_dispatch.DispatchTests) ... ok\n\n----------------------------------------------------------------------\nRan 6 tests in 0.185s\n\nOK"
+    },
+    {
+      "command": "python -X utf8 -B -m unittest discover -s conformance/protocol -p test_*.py -v",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "test_conservative_harness_policy (test_kr_frame_subset.FrameSubsetTests) ... ok\ntest_exact_offline_vectors (test_kr_frame_subset.FrameSubsetTests) ... ok\ntest_limits_sender_vs_receiver (test_kr_frame_subset.FrameSubsetTests) ... ok\ntest_split_and_coalesced (test_kr_frame_subset.FrameSubsetTests) ... ok\ntest_sum_wrap (test_kr_frame_subset.FrameSubsetTests) ... ok\ntest_known_connect_calls_are_distinct_roles (test_kr_network_boundary_matrix.NetworkBoundaryMatrix) ... ok\ntest_outbound_chain_reaches_api_but_does_not_prove_ack (test_kr_network_boundary_matrix.NetworkBoundaryMatrix) ... ok\ntest_recv_dispatch_and_business_namespace_separated (test_kr_network_boundary_matrix.NetworkBoundaryMatrix) ... ok\n\n----------------------------------------------------------------------\nRan 8 tests in 0.001s\n\nOK"
+    },
+    {
+      "command": "python -X utf8 -B -m unittest discover -s conformance/character -p test_*.py -v",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "test_only_complete_records (test_kr_roster_subset.RosterShapeTests) ... ok\ntest_strict_harness_is_not_native_error_rule (test_kr_roster_subset.RosterShapeTests) ... ok\ntest_synthetic_geometry (test_kr_roster_subset.RosterShapeTests) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nOK"
+    },
+    {
+      "command": "python -X utf8 -B -m unittest discover -s conformance/session -p test_*.py -v",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "test_e8_and_0f_synthetic_slot_geometry (test_kr_auth_subset.AuthShapeTests) ... ok\ntest_outside_subset_rejected_by_harness (test_kr_auth_subset.AuthShapeTests) ... ok\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK"
+    }
+  ],
+  "new_sources": 318,
+  "new_claims": 4,
+  "history_ledger_rr_owners_catalog_specs_gaps_and_previous_rows_preserved": true,
+  "unpublished_drafts_promoted": false,
+  "spec_consumable": 0,
+  "remaining_registration": 0,
+  "remaining_claim_extraction": 314,
+  "historical_remaining_not_fullpass": 315,
+  "meaning": "Mechanical/new-workflow integrity and offline synthetic regressions only; no new native semantic verdict or Client/Server acceptance."
+}

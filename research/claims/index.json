@@ -1,0 +1,444 @@
+{
+  "schema": "s00-claim-index-v1",
+  "note": "Scoped source-derived claims and explicitly cited existing native decisions. NATIVE_VERIFIED does not derive from CI/intake state; no new whole-document verdicts generated.",
+  "items": [
+    {
+      "id": "CLM-NET-0001",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr/evidence/f398779b1e129b0150f009451dc72b51b1cb9b88e9f2aa5c43b4eeeac02e0e94.txt",
+      "source_blob_sha": "f6686819dc993c2afa3d8c159d23a94a1125f9ff",
+      "source_intake_id": "SRC-0001",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 0x807A70 conditional successful local outbound frame writer, including guards",
+      "assertion": "For valid positive payload length and other output-ring guards, writer 0x807A70 writes LE16 payload length, LE16 marker 0x1A68, then unchanged payload. Total local frame bytes=len+4. Payload maximum for this writer is 0x0FFC.",
+      "limitations": [
+        "Local buffer framing success does not show socket send or complete connection protocol.",
+        "Guarded normal return path; unknown session-level mode and error handling."
+      ],
+      "affected_spec_ids": [
+        "SPEC-NET-0001"
+      ],
+      "conflicts": [],
+      "native_review_ref": null
+    },
+    {
+      "id": "CLM-NET-0002",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr/evidence/f398779b1e129b0150f009451dc72b51b1cb9b88e9f2aa5c43b4eeeac02e0e94.txt",
+      "source_blob_sha": "f6686819dc993c2afa3d8c159d23a94a1125f9ff",
+      "source_intake_id": "SRC-0001",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 0x807830 conditional successful local outbound frame writer",
+      "assertion": "For positive payload with len+6<=0x1000 and ring guards, writer 0x807830 constructs [LE16 payload length, LE16 0x0BBB, LE16 sum(plaintext bytes) mod 65536] followed by payload XOR: first byte xor 0xB6; later bytes xor previous plaintext byte.",
+      "limitations": [
+        "This describes framing in the local outbound buffer, not a captured network transmission.",
+        "Do not infer all nonzero modes always emit this frame; fallback exists."
+      ],
+      "affected_spec_ids": [
+        "SPEC-NET-0001"
+      ],
+      "conflicts": [],
+      "native_review_ref": null
+    },
+    {
+      "id": "CLM-NET-0003",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr/evidence/f398779b1e129b0150f009451dc72b51b1cb9b88e9f2aa5c43b4eeeac02e0e94.txt",
+      "source_blob_sha": "f6686819dc993c2afa3d8c159d23a94a1125f9ff",
+      "source_intake_id": "SRC-0001",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 0x8061A0 connection+0xA02C dispatch and writer return path",
+      "assertion": "For mode byte ==0 consumer chooses 0x807A70; for nonzero it attempts 0x807830 and falls back to 0x807A70 on failure.",
+      "limitations": [
+        "Mode writer/init and actual time-dependent switching not complete.",
+        "Conditional code-path behavior, not full end-to-end Server wire sequence."
+      ],
+      "affected_spec_ids": [
+        "SPEC-NET-0001"
+      ],
+      "conflicts": [],
+      "native_review_ref": null
+    },
+    {
+      "id": "CLM-NET-0004",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr/evidence/f398779b1e129b0150f009451dc72b51b1cb9b88e9f2aa5c43b4eeeac02e0e94.txt",
+      "source_blob_sha": "f6686819dc993c2afa3d8c159d23a94a1125f9ff",
+      "source_intake_id": "SRC-0001",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 0x807B40 observed inbound frame parser branch",
+      "assertion": "Receiver reads LE16 payload length (nonzero, at most 0x1000), discriminator at +2, marker 0x2633=>8-byte header, 0x0BBB=>6, otherwise 4 (including 0x1A68 and 0x22D7); incomplete input is retained; 0x0BBB path checks reconstructed-byte sum.",
+      "limitations": [
+        "Unknown markers reaching default header4 is not proof of valid business packets.",
+        "Checksum mismatch branch may still reach common record handling; exact discard semantics not certified.",
+        "0x2633 transformation and complete queue downstream not closed."
+      ],
+      "affected_spec_ids": [
+        "SPEC-NET-0001"
+      ],
+      "conflicts": [],
+      "native_review_ref": null
+    },
+    {
+      "id": "CLM-CHAR-0001",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr/evidence/7a594f0ba64354a1c22fa2a6fe22f45e3a29699fb2bf5f73c2023e8113b9cac7.txt",
+      "source_blob_sha": "1c05261ac5a5a57bb7b0142bf0bb14fba2cc4603",
+      "source_intake_id": "SRC-0002",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 0x4B7DC0 registration and 0x4B7F00 command-2 roster record loop",
+      "assertion": "Handler registered at dispatch command index 2 uses 65-byte payload prefix followed by 53-byte records; bounded record count on path reaching loop is floor((payload_length-65)/53), first record offset 65.",
+      "limitations": [
+        "Some earlier header fields are read before count calculation: short payload is not proven safe.",
+        "Payload trailing non-whole records are not counted but are not validated away.",
+        "Another consumer uses a 2-byte prefix; do not conflate."
+      ],
+      "affected_spec_ids": [
+        "SPEC-CHAR-0001"
+      ],
+      "conflicts": [],
+      "native_review_ref": null
+    },
+    {
+      "id": "CLM-CHAR-0002",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr/evidence/7a594f0ba64354a1c22fa2a6fe22f45e3a29699fb2bf5f73c2023e8113b9cac7.txt",
+      "source_blob_sha": "1c05261ac5a5a57bb7b0142bf0bb14fba2cc4603",
+      "source_intake_id": "SRC-0002",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 0x4B7F00 ID guard and 0x4D4150 copy interface",
+      "assertion": "Record byte offset +0x2E is ID selection byte; observed guard accepts unsigned ID <=9 when valid destination, then copies record into UI entry at F94304+ID*0x210; leaf copies NUL-terminated UTF-16 name from record +0; byte +0x2F/+0x30 and DWORD +0x31/+0x2A feed specific UI fields. Availability flag +0x5C is set in leaf.",
+      "limitations": [
+        "No proved official valid-ID policy or deduplication; ID0 not thereby certified.",
+        "Source UTF-16 must fit buffers and terminate; unsafe synthetic input is not certified.",
+        "UI record write is not proof of full UI refresh, authorization or scene entry."
+      ],
+      "affected_spec_ids": [
+        "SPEC-CHAR-0001"
+      ],
+      "conflicts": [],
+      "native_review_ref": null
+    },
+    {
+      "id": "CLM-AUTH-0001",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr/evidence/602d11a657a2e8a3dc53cff4664f837d579cd6cb187311b2c4c7070e994887d9.txt",
+      "source_blob_sha": "50d90ef9545337ffc91151cb102d81a0e8fbd83f",
+      "source_intake_id": "SRC-0003",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR client auth payload builders 0x4A3360/0x4A31B0 and 0x440790 mode selection",
+      "assertion": "Observed outbound command 0x00E8 has 112-byte local payload: 2-byte LE command, byte slots +2..52 and +53..103 of capacity 51, unknown +104..109, common source word +110..111. Command 0x000F has 214-byte local payload: two 51 UTF-16-word slots at +2..103 and +104..205, explicit DWORD +206..209 0x00010001, WORD +210..211 0x0034, common source word +212..213.",
+      "limitations": [
+        "Neither proves official credential validation or accepted character length.",
+        "Codepage, exact source data, conversion failures and E8 opaque tail unknown.",
+        "Two commands are not interchangeable; these are client payload builders, not complete wire frames."
+      ],
+      "affected_spec_ids": [
+        "SPEC-AUTH-0001"
+      ],
+      "conflicts": [],
+      "native_review_ref": null
+    },
+    {
+      "id": "CLM-AUTH-0002",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr/evidence/602d11a657a2e8a3dc53cff4664f837d579cd6cb187311b2c4c7070e994887d9.txt",
+      "source_blob_sha": "50d90ef9545337ffc91151cb102d81a0e8fbd83f",
+      "source_intake_id": "SRC-0003",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR client login-result consumer 0x4C37A0 conditional status path and 0x4C3080 group/channel records",
+      "assertion": "Observed consumer branches on status byte at payload+0x16. Status 0 with nonempty wide name at +2 enters data-update path; status 5 is separate nonsuccess branch. Group records in 0x4C3080 use 3-byte group header (uint16 ID + uint8 channel count) and 10-byte channel rows with IPv4 octets at row+4..7.",
+      "limitations": [
+        "Status enum semantics and complete returned-packet validation not established.",
+        "Group cursor, opaque fields, identity capacity, and world connection handoff require further examination.",
+        "Cannot infer server endpoint policy, auth policy, or successful end-to-end login."
+      ],
+      "affected_spec_ids": [
+        "SPEC-AUTH-0001"
+      ],
+      "conflicts": [],
+      "native_review_ref": null
+    },
+    {
+      "id": "CLM-NET-0005",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr/evidence/1e15689d7bbdf4c4a83ae76cf1813d538b8cb38db79098c6b85ba386056dab36.txt",
+      "source_blob_sha": "3710f1360acbac739247ffd9cbdb8cee054349c4",
+      "source_intake_id": "SRC-0004",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 0x5452C0 example C2S input route, 0x8069A0/0x8060D0/0x806060/0x8061A0, 0x804A40, 0x8068B0 and 0x806FC0",
+      "assertion": "On the bounded static input path, the Client routes payload by a connection slot key, queues and frames it, and reaches an overlapped WSASend call through 0x804A40/0x8068B0; a separate 0x806FC0 routine performs socket shutdown/close cleanup.",
+      "limitations": [
+        "Does not prove remote server receipt, actual packet count, ACK, full failure/retry and every Client send path.",
+        "Do not describe A0A4 as proven queue length; T01 requires qualification."
+      ],
+      "affected_spec_ids": [
+        "SPEC-NET-0002"
+      ],
+      "conflicts": [],
+      "native_review_ref": null
+    },
+    {
+      "id": "CLM-NET-0006",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr/evidence/4a64b51809c87fe6c8bab24f033fb4c94964a8e403e861be22e8210d3f639b8e.txt",
+      "source_blob_sha": "0785af3af4df4b11912037504382a26bd026ba8c",
+      "source_intake_id": "SRC-0005",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 0x806CF0 completion, 0x807B40 frame parser, 0x8040A0 queued delivery, 0x804740 pump and 0x4930E0 callback",
+      "assertion": "A bounded received-data route crosses WSARecv/IOCP completion, frame parsing into a queued decoded payload, and CClient callback 0x4930E0; on channel==2 it reads decoded payload's initial word for command handling.",
+      "limitations": [
+        "Native behavior on malformed frames, checksum mismatch, pool initialization, dropped nodes and channel!=2 not fully established.",
+        "Known bounded route not all possible network or interprocess paths."
+      ],
+      "affected_spec_ids": [
+        "SPEC-NET-0003"
+      ],
+      "conflicts": [],
+      "native_review_ref": null
+    },
+    {
+      "id": "CLM-NET-0007",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr/evidence/bcc93c2f8128b12d86fd1e296198e4e1735fd410336510b15c58415b6a0c9ced.txt",
+      "source_blob_sha": "1733907a4685ff40894b81fb84992867c7ea1796",
+      "source_intake_id": "SRC-0006",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 0x806AD0 Connect(address,port,slot,pipeline) and observed callsites at 0x49575B/0x4957EA/0x495803",
+      "assertion": "The bounded KR Client paths call Connect with (port 8415,slot1,pipeline2), (port8416,slot0,pipeline2), and (port8414,slot2,pipeline2); slot is used as outbound network map lookup key and pipeline is stored in connection+A080 for receive delivery.",
+      "limitations": [
+        "These are historic KR static callsite constants, not a live endpoint guarantee or a normative Server listen-port requirement.",
+        "Direct-call scan excludes aliased and computed calls; slot/pipeline are not actors or owner IDs."
+      ],
+      "affected_spec_ids": [
+        "SPEC-NET-0002"
+      ],
+      "conflicts": [],
+      "native_review_ref": null
+    },
+    {
+      "id": "CLM-NET-0008",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr/evidence/4a64b51809c87fe6c8bab24f033fb4c94964a8e403e861be22e8210d3f639b8e.txt",
+      "source_blob_sha": "0785af3af4df4b11912037504382a26bd026ba8c",
+      "source_intake_id": "SRC-0005",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 0x4930E0 and downstream CClient processor/scene dispatch, including 0x4C4670/0x4FDA30 tables",
+      "assertion": "Decoded inbound payload first word acts as a command index on the observed channel2 path; Client processor dispatch can select a Scene-specific override table and a general fallback, making observed handler behavior dependent on scene state.",
+      "limitations": [
+        "Exact handler behaviors and all overrides are not a complete business protocol contract.",
+        "Do not equate equal numerical C2S and S2C command indices with identical messages."
+      ],
+      "affected_spec_ids": [
+        "SPEC-NET-0003"
+      ],
+      "conflicts": [],
+      "native_review_ref": null
+    },
+    {
+      "id": "CLM-SCENE-0001",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/20261029-chatgpt-web-roy-E06-EX-v1-native-codec-SceneList-recovered.md",
+      "source_blob_sha": "d23386c7c1afd96ea30e9e751246f64dda1cb201",
+      "source_intake_id": "SRC-0007",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR Event.stp EX v1 SceneList.xml decryption/decompression sample, restored 158269 bytes",
+      "assertion": "The bounded KR Event.stp EX v1 sample was decoded into a SceneList.xml file containing a scene row questIdx=1001, sceneIdx=1, funcName=tutorial_start, endBehavior=0. The source report counts 1687 SCENE children.",
+      "limitations": [
+        "Static resource table is not evidence of a Server packet, first-login branch, or every player's default scene.",
+        "The raw extracted XML was not provided in this S00 branch; S00 did not independently rerun original resource bytes."
+      ],
+      "affected_spec_ids": [
+        "SPEC-SCENE-0001",
+        "SPEC-FLOW-0001"
+      ],
+      "conflicts": [],
+      "native_review_ref": null
+    },
+    {
+      "id": "CLM-SCENE-0002",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/20261029-chatgpt-web-roy-E08-tutorial-start-Lua-and-scene-index.md",
+      "source_blob_sha": "008442a5a8dc809df06d90e43612c86f7457bee1",
+      "source_intake_id": "SRC-0008",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 0x5607D0/0x568950/0x568680 SceneList two-key index and Event.stp tutorial_start Lua source",
+      "assertion": "The bounded Client SceneList loader extracts questIdx, sceneIdx and funcName, then places the first two as a two-key ordered index to the associated script name; Event.stp includes a Lua tutorial_start function source snippet.",
+      "limitations": [
+        "The observed source snippet does not prove scene startup or define a full native extracted script file length.",
+        "Do not interpret the XML key pair as S2C wire field semantics."
+      ],
+      "affected_spec_ids": [
+        "SPEC-SCENE-0001",
+        "SPEC-FLOW-0001"
+      ],
+      "conflicts": [],
+      "native_review_ref": null
+    },
+    {
+      "id": "CLM-SCENE-0003",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/20261029-chatgpt-web-roy-E13-scene-index-to-seq-path-runtime-bindings.md",
+      "source_blob_sha": "35dd9eefcd0e73d93d5ed00040ba8468f19921b9",
+      "source_intake_id": "SRC-0009",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR SceneList ordered-map readers 0x561A1C... and 0x5658D0... path builder; E13 original scope",
+      "assertion": "At least two bounded Client readers use a SceneList (questIdx,sceneIdx) index hit to assemble Event/Sequences/<funcName>.seq from the selected node.",
+      "limitations": [
+        "Later E14–E16 correct details about callee function names, first path loader and external resource calls; prefer newer bounded findings.",
+        "Path construction does not establish that the script ran successfully or that the chosen keys came from a character-selection packet."
+      ],
+      "affected_spec_ids": [
+        "SPEC-SCENE-0001",
+        "SPEC-FLOW-0001"
+      ],
+      "conflicts": [],
+      "native_review_ref": null
+    },
+    {
+      "id": "CLM-SCENE-0004",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/20261029-chatgpt-web-roy-E16-scene-upstream-and-seq-load-semantics.md",
+      "source_blob_sha": "1e97cafc08bfc9377c97bd946ba364af22807104",
+      "source_intake_id": "SRC-0010",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 0x47B5C0→0x565720, 0x561EF3 EndCutScene→0x565720 and dual script load evidence",
+      "assertion": "The same bounded scene index/load entry 0x565720 is reached from at least two distinct upstream paths, including a 0x47B5C0 state branch and a post-EndCutScene restoration path; therefore it is not proven specific to first login.",
+      "limitations": [
+        "The [object+0x248] writer, origin of key/state values and direct 0x42 selection response integration remain unknown.",
+        "Static paths do not establish successful runtime invocation, actual Server packet or scene transition."
+      ],
+      "affected_spec_ids": [
+        "SPEC-SCENE-0001",
+        "SPEC-FLOW-0001"
+      ],
+      "conflicts": [],
+      "native_review_ref": null
+    },
+    {
+      "id": "CLM-CLIENT-0001",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261028-015216-chatgpt-web-roy-T08-158-gameinfo-receiver-and-composite-key-abi.md",
+      "source_blob_sha": "f4eeaddf48033005057a5c5a5ec78bd438b0eddd",
+      "source_intake_id": "SRC-0011",
+      "evidence_level": "NATIVE_VERIFIED",
+      "evidence_scope": "40F060 normal return and concrete4B3710→4DFC90 stack/dataflow only",
+      "assertion": "On normal returns,40F060 returnsEAX=FAB130 with plainRET. In4B3710, WORDs are ORed06000000 and pushed beforegetter, preserved until4DFC90 consumesret4 and comparesactor+88 DWORD.",
+      "limitations": [
+        "Valid inputs and stated container invariants.",
+        "No entity-type meaning for6, wire opcode, arbitrary dynamic callback, concurrency or complete backend/gameplay contract.",
+        "No currently applicable S00 Phase-B SPEC dependency; retained as downstream Client navigation."
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "native_review_ref": "shared/integrations/T01-20261029-continuation-02/t08-158/review.json",
+      "evidence_refs": [
+        "shared/integrations/T01-20261029-continuation-02/t08-158/native-cfg/0040f060.json",
+        "shared/integrations/T01-20261029-continuation-02/t08-158/native-cfg/004b3710.json",
+        "shared/integrations/T01-20261029-continuation-02/t08-158/native-cfg/004dfc90.json"
+      ],
+      "knowledge_id": "CK-CLIENT-LAZY-RECEIVER-01",
+      "risk_level": "R3_REUSED_EXISTING_DECISION",
+      "integration_review_ref": "research/handoffs/t01-20261029-risk-intake/README.md"
+    },
+    {
+      "id": "CLM-CLIENT-0002",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261028-094900-chatgpt-web-roy-T08-177-owner-mode-caller-drain-closure.md",
+      "source_blob_sha": "fdc8a64aa0f33866defe5a2484fa432f4bbaf66c",
+      "source_intake_id": "SRC-0018",
+      "evidence_level": "NATIVE_VERIFIED",
+      "evidence_scope": "Exact bounded collection mode/producer gate normal paths, not shared identity or full lifetime",
+      "assertion": "7B7FD0 first invokes first-collection payload virtual+4, then writes second-collection payload+44=1 andcontainer+30=1.7B8030 drains second-collection payloads andclears+44, invokesfirst-collectionvirtual+8, thencontainer+30=0;7DD1A0 uses signedowner+44>=1 producer gate.",
+      "limitations": [
+        "Valid containers/payloads and normal callee returns.",
+        "No cross-instance owner equivalence, exception/reentrancy/thread guarantee, runtime scheduling or Server trigger policy.",
+        "Not currently a Phase-B wire contract."
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "native_review_ref": "shared/integrations/T01-20261029-continuation-02/t08/results.json",
+      "evidence_refs": [
+        "shared/integrations/T01-20261029-continuation-02/t08/native-cfg/007b7fd0.json",
+        "shared/integrations/T01-20261029-continuation-02/t08/native-cfg/007b8030.json",
+        "shared/integrations/T01-20261029-continuation-02/t08/native-cfg/007dd1a0.json"
+      ],
+      "knowledge_id": "CK-CLIENT-COLLECTION-MODE-GATE-01",
+      "risk_level": "R3_REUSED_EXISTING_DECISION",
+      "integration_review_ref": "research/handoffs/t01-20261029-risk-intake/README.md"
+    },
+    {
+      "id": "CLM-CLIENT-0003",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261028-111046-chatgpt-web-roy-T08-197-secondary-tree-key-removal.md",
+      "source_blob_sha": "4812aa8da49c40647538206679b414753a4c6e5e",
+      "source_intake_id": "SRC-0019",
+      "evidence_level": "NATIVE_VERIFIED",
+      "evidence_scope": "4DFC30 versus4DFC90 exact container/sentinel/payload cleanup relation",
+      "assertion": "4DFC30 searches embeddedowner+18 withsentinelowner+1C; on found it conditionally clearsowner+F8, directly freesnon-nullnode+10 payload then erasesnode.4DFC90 instead usesowner+8/C main tree andactor+88 predicate withvirtualcleanup;theseare different bounded paths.",
+      "limitations": [
+        "Valid owner/key/container invariants and normal returns.",
+        "Unknown dynamic payload class, shared ownership, generation/removal policy and upstream message sequence.",
+        "Not a packet format or S00 Phase-B scene gate."
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "native_review_ref": "shared/integrations/T01-20261029-continuation-02/t08/results.json",
+      "evidence_refs": [
+        "shared/integrations/T01-20261029-continuation-02/t08/native-cfg/004dfc30.json",
+        "shared/integrations/T01-20261029-continuation-02/t08/native-cfg/004dfc90.json"
+      ],
+      "knowledge_id": "CK-CLIENT-SECONDARY-KEY-ERASE-01",
+      "risk_level": "R3_REUSED_EXISTING_DECISION",
+      "integration_review_ref": "research/handoffs/t01-20261029-risk-intake/README.md"
+    },
+    {
+      "id": "CLM-QUEST-0001",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261028-185456-chatgpt-web-roy-T16-74-KR-quest-command-notification-enum-tables-and-opcode-boundary.md",
+      "source_blob_sha": "8fe54408cd505caf4ab890c6fcf2302c6a78baf3",
+      "source_intake_id": "SRC-0023",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "T16-74 local data-table navigation only; source-derived bounded claim, no independent new BIN semantic verdict",
+      "assertion": "The source reports12-byte local name/value records: raw963594→kRequestAcceptQuest value1F;raw964BBC/964BC8/964BD4→kAcceptedQuest/kAcceptQuestFailed/kCompletedQuest values11/12/13,commonpointerC11778. These local table values are not established wire opcodes.",
+      "limitations": [
+        "SourceL17–66 andL94–119 explicitly withhold producer/consumer, C2S/S2C domains and actual wire mapping.",
+        "Do not equate localenum13(kCompletedQuest) withauth command13/status consumer or other numeric13 domains.",
+        "No Quest16→15 gate, NPC/UI effect, reply layout, timing or end-to-end closure established.",
+        "No new RR or SPEC change is created from a table name."
+      ],
+      "conflicts": [
+        "Numerical13 overlaps auth/other domains; source explicitly does not establish wire-domain identity. CLM-AUTH-0002 remains unchanged.",
+        "No opposing bounded table claim found in current claim index; lookup/navigation only, no normative protocol use."
+      ],
+      "affected_spec_ids": [
+        "SPEC-NET-0003"
+      ],
+      "native_review_ref": null,
+      "evidence_refs": [],
+      "knowledge_id": null,
+      "risk_level": "R1",
+      "integration_review_ref": "research/handoffs/t01-20261029-risk-intake/README.md"
+    }
+  ]
+}

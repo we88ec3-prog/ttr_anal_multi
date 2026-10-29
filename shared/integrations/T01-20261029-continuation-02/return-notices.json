@@ -1,0 +1,125 @@
+{
+  "items": [
+    {
+      "id": "T01-RETURN-T10-055-EVIDENCE-001",
+      "task": "T10",
+      "state": "NEEDS_QUALIFICATION",
+      "source": "kr-temp-roy/20261028-021236-chatgpt-web-roy-T10-055-special-key-domain-tree-branches.md",
+      "sha256": "3b3a2dcf12540643499faa3f00770b61e9e74669fe6048744f0313503280f84a",
+      "git_blob_sha": "61c1e3bca931c781be72db549bed483202cfff1a",
+      "issue": "第一視窗起點6D4BB0在6D4BAC指令的immediate內，至6D4BC2才重新對齊；第四視窗6D4D40是6D4D3E LEA的immediate，lock push不是reader正常路徑指令。",
+      "counterevidence": "6D4BAC c7 45 fc 04 00 00 00 (mov[ebp-4],4);6D4BB3 e8 98 bb ff ff (call6D0750);6D4BBD e8 58 d7 1b 00 (call89231A);6D4D3E 8d 4d f0 (lea ecx,[ebp-10h]);6D4D41 51 (push ecx)",
+      "required_change": "保留原稿與SHA；提供勘誤／標註版，明列錯位視窗頭不屬native instruction證據；分開明示.byte尾端截斷和續行；替泛稱「列出的讀寫/call已確認」限定有效區段。可附本批rooted canonical excerpt，不能更換原來源SHA。",
+      "evidence": "t10/README.md"
+    },
+    {
+      "id": "T01-RETURN-T10-056-EVIDENCE-001",
+      "task": "T10",
+      "state": "NEEDS_QUALIFICATION",
+      "source": "kr-temp-roy/20261028-021236-chatgpt-web-roy-T10-056-indexed-reader-polymorphic-consumers.md",
+      "sha256": "0d0b9f07373355c959291cb9ac8fddc5ad840b05167e5222b9001f8626f549a5",
+      "git_blob_sha": "e2da2b34e1c97aeffd192d5af7a258f80b50c527",
+      "issue": "第三視窗596430落在59642E JMP的rel32內，其假CALL596441→F8DC6459跨過真正59643F CALL的immediate和596444 CMP；596452起才重新對齊。",
+      "counterevidence": "59642E e9 7a 01 00 00 (jmp5965AD);596433 68 34 20 bf 00;596438 e8 f3 76 2e 00 (call87DB30);59643D 32 db (xor bl,bl);59643F e8 9c e8 13 00 (call6D4CE0);596444 83 f8 01 (cmp eax,1)",
+      "required_change": "保留原稿與SHA；提供勘誤／標註版，明列錯位視窗頭不屬native instruction證據；分開明示.byte尾端截斷和續行；替泛稱「列出的讀寫/call已確認」限定有效區段。可附本批rooted canonical excerpt，不能更換原來源SHA。",
+      "evidence": "t10/README.md"
+    },
+    {
+      "id": "T01-RETURN-T16-069-CONT02-C11",
+      "task": "T16",
+      "state": "NEEDS_QUALIFICATION",
+      "source": "kr-temp-roy/20261028-170434-chatgpt-web-roy-T16-69-KR-virtual-dispatch-and-outbound-queue.md",
+      "sha256": "0c0387cc78d2124f788e103344f16f1ec40bfd5c6084aa4e27c59ac27208971c",
+      "git_blob_sha": "2f5c65062c7ab82453dfa726019e4d5e2bf0a0dc",
+      "issue": "Scenario matrix calls the A0A4 gate a queue-count gate",
+      "counterevidence": "Actual list element count isA078 (+1 onenqueue,-1 ondrain).A0A4 is a different field:804A40 updatesit±5 orresets0 basedondrainstatus. SourceL19 itself leavesA0A4 semantics provisional. Replace the definite queue-count label with signedfieldA0A4>300 gate; retainunknownbusinessmeaning.",
+      "required_change": "Preserve original; provide erratum/new source version+SHA correcting this item and affected repetitions. T01 rechecks corrected version, related code blocks and dependents before RESOLVED.",
+      "evidence": "t16/README.md"
+    },
+    {
+      "id": "T01-RETURN-T16-070-CONT02-C06",
+      "task": "T16",
+      "state": "NEEDS_FIX",
+      "source": "kr-temp-roy/20261028-175141-chatgpt-web-roy-T16-70-KR-queue-drain-framing-and-receive-parser.md",
+      "sha256": "43c0b0cff8236312cf00af130e889858bf92403924f859adc6a48ad26624c5bb",
+      "git_blob_sha": "b84f671788f964043180d232323ceab106ced74f",
+      "issue": "Section1.2 heading gives marker first and length second",
+      "counterevidence": "807A8F stores1A68 to[ebp-2],807A93 storeslength to[ebp-4];807AE2 loadsDWORDfrom[ebp-4],807AE9 copiesheader. ThereforefirstWORD length,secondmarker, as sourceL52/L74 already show.",
+      "required_change": "Preserve original; provide erratum/new source version+SHA correcting this item and affected repetitions. T01 rechecks corrected version, related code blocks and dependents before RESOLVED.",
+      "evidence": "t16/README.md"
+    },
+    {
+      "id": "T01-RETURN-T16-070-CONT02-C09",
+      "task": "T16",
+      "state": "NEEDS_FIX",
+      "source": "kr-temp-roy/20261028-175141-chatgpt-web-roy-T16-70-KR-queue-drain-framing-and-receive-parser.md",
+      "sha256": "43c0b0cff8236312cf00af130e889858bf92403924f859adc6a48ad26624c5bb",
+      "git_blob_sha": "b84f671788f964043180d232323ceab106ced74f",
+      "issue": "Connection-relative buffer offsets5004/500C",
+      "counterevidence": "80620C passes ECX=connection+501C to807830;806234 passes EDI=connection+501C to807A70. Thuscallee+5004 isconnection+A020 writepointer,andcallee+500C isconnection+A028 bufferedlength. Bufferstarts connection+5020. Source uses stream-relative offsets while callingthebaseconnection.",
+      "required_change": "Preserve original; provide erratum/new source version+SHA correcting this item and affected repetitions. T01 rechecks corrected version, related code blocks and dependents before RESOLVED.",
+      "evidence": "t16/README.md"
+    },
+    {
+      "id": "T01-RETURN-T16-070-CONT02-C13",
+      "task": "T16",
+      "state": "NEEDS_FIX",
+      "source": "kr-temp-roy/20261028-175141-chatgpt-web-roy-T16-70-KR-queue-drain-framing-and-receive-parser.md",
+      "sha256": "43c0b0cff8236312cf00af130e889858bf92403924f859adc6a48ad26624c5bb",
+      "git_blob_sha": "b84f671788f964043180d232323ceab106ced74f",
+      "issue": "Receive ASM block wrong coordinate for mov edx,2633",
+      "counterevidence": "L116at807BDD actuallyC744242004000000 movdword[esp+20],4. CorrectBA33260000 mov edx,2633 is807BD8. Allother18rows inthisblockmatchactualinstructions; rootedCFG hasnooverlap.",
+      "required_change": "Preserve original; provide erratum/new source version+SHA correcting this item and affected repetitions. T01 rechecks corrected version, related code blocks and dependents before RESOLVED.",
+      "evidence": "t16/README.md"
+    },
+    {
+      "id": "T01-RETURN-T16-071-CONT02-C05",
+      "task": "T16",
+      "state": "NEEDS_FIX",
+      "source": "kr-temp-roy/20261028-183258-chatgpt-web-roy-T16-71-KR-WSASend-and-inbound-dispatch-boundary.md",
+      "sha256": "6aa91628cb809a41ef5b88cb5d2c87fa0cce2c9a736b461f175063681281e711",
+      "git_blob_sha": "8f2e297a563e2443ff32601e63654b3e953eaee5",
+      "issue": "806909 pushECX comment namesLPWSAOVERLAPPED",
+      "counterevidence": "ECX=EAX+14 at8068F7,whereEAX=conn+A050; thus806909 pushesWSABUF atconn+A064. ActualOVERLAPPED conn+A050 waspushedasEAXat8068F3. OriginalopcodepushECXiscorrect; onlyAPIargumentlabelwrong.",
+      "required_change": "Preserve original; provide erratum/new source version+SHA correcting this item and affected repetitions. T01 rechecks corrected version, related code blocks and dependents before RESOLVED.",
+      "evidence": "t16/README.md"
+    },
+    {
+      "id": "T01-RETURN-T16-071-CONT02-C06",
+      "task": "T16",
+      "state": "NEEDS_FIX",
+      "source": "kr-temp-roy/20261028-183258-chatgpt-web-roy-T16-71-KR-WSASend-and-inbound-dispatch-boundary.md",
+      "sha256": "6aa91628cb809a41ef5b88cb5d2c87fa0cce2c9a736b461f175063681281e711",
+      "git_blob_sha": "8f2e297a563e2443ff32601e63654b3e953eaee5",
+      "issue": "Errorresult-zero instruction coordinate",
+      "counterevidence": "806958 is5F popEDI;806959 is5E popESI;80695A is33C0 xorEAX,EAX. Return0 behavior survives butliteraladdressmustchange.",
+      "required_change": "Preserve original; provide erratum/new source version+SHA correcting this item and affected repetitions. T01 rechecks corrected version, related code blocks and dependents before RESOLVED.",
+      "evidence": "t16/README.md"
+    },
+    {
+      "id": "T01-RETURN-T16-071-CONT02-C08",
+      "task": "T16",
+      "state": "NEEDS_FIX",
+      "source": "kr-temp-roy/20261028-183258-chatgpt-web-roy-T16-71-KR-WSASend-and-inbound-dispatch-boundary.md",
+      "sha256": "6aa91628cb809a41ef5b88cb5d2c87fa0cce2c9a736b461f175063681281e711",
+      "git_blob_sha": "8f2e297a563e2443ff32601e63654b3e953eaee5",
+      "issue": "C51748 vtable raw852D48",
+      "counterevidence": "Parsed.rdata startsVA BD2000/raw7D0600; C51748−BD2000+7D0600=84FD48. Snapshotatwrong852D48differsfrom11vtableentries. Correctmappingalreadyappearsin69. PEdataartifactincludesbothwindows.",
+      "required_change": "Preserve original; provide erratum/new source version+SHA correcting this item and affected repetitions. T01 rechecks corrected version, related code blocks and dependents before RESOLVED.",
+      "evidence": "t16/README.md"
+    },
+    {
+      "id": "T01-RETURN-T16-071-CONT02-C14",
+      "task": "T16",
+      "state": "NEEDS_FIX",
+      "source": "kr-temp-roy/20261028-183258-chatgpt-web-roy-T16-71-KR-WSASend-and-inbound-dispatch-boundary.md",
+      "sha256": "6aa91628cb809a41ef5b88cb5d2c87fa0cce2c9a736b461f175063681281e711",
+      "git_blob_sha": "8f2e297a563e2443ff32601e63654b3e953eaee5",
+      "issue": "807DAD movEDI,EAX",
+      "counterevidence": "CorrectmovEDI,EAXis807DABbytes8BF8;807DADbytesE8EEC2FFFFiscall8040A0. Duplicateellipsisnextlineisplaceholder,notanadditionalinstruction. Bothsitesaretrueinstructionboundaries,notmis-decoderinteriors.",
+      "required_change": "Preserve original; provide erratum/new source version+SHA correcting this item and affected repetitions. T01 rechecks corrected version, related code blocks and dependents before RESOLVED.",
+      "evidence": "t16/README.md"
+    }
+  ],
+  "source_errors_do_not_refute_every_claim": true
+}

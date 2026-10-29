@@ -1,17 +1,70 @@
 # T08 實體生成與移除
 
+<!-- S00-DISPATCH-BOOTSTRAP:v1 -->
+## S00 研究請求開工檢查（正式）
+
+**每次開工必讀**：確認最新 origin/main SHA，先檢查本 README 的 T01 驗收退回與既有主責，再讀 [T08 S00 收件箱](../../../research/dispatch/inbox/T08.md)、[唯一 RR 台帳](../../../research/requests/index.json)、[派工／認領／回報規則](../../../research/dispatch/README.md)。先處理已指派且獲使用者授權的 P0/P1；只在認領變更發布於 main 後才算跨 Agent 已認領。完成研究需提交 Markdown + 精確 Git blob SHA 並更新 RR 為 SUBMITTED，S00 才能結案。**收件箱不會自動喚醒本 Agent**；不變更原有 Task owner、原稿及 T01 退回規則。
+
+
 ## T01 驗收退回事項
+
+<!-- T01-20261029-stage-notices:start -->
+
+### 2026-10-29 階段複驗通知（7筆具體更正，既有ID原位補充）
+
+本次僅通知已證實的錯誤；原稿全文驗收仍未完成。保留原稿，提供獨立修正版及新 blob/SHA；複驗通過前維持 NEEDS_FIX，不能將局部主張支持算作全文 FULL-PASS。
+
+[本批總台帳](../../../shared/integrations/T01-20261029-semantic-review/README.md)；[機器可讀退回紀錄](../../../shared/integrations/T01-20261029-semantic-review/return-notices.json)。
+
+#### T01-RETURN-T08-153-ABI-001 — NEEDS_FIX
+- 原稿：`kr-temp-roy/20261028-013809-chatgpt-web-roy-T08-153-GameInfo-actor-erase-bulk-cleanup.md`；Git blob `10bb0608cd1dbc9cf944eab51c74d4a2fa205e1a`；SHA256 `acc9fd34490b2f97293c0eae349c2d203a34c0830e4983bb41b1497a7490bfec`。
+- 問題：Search-key storage and erase output iterator storage are conflated in A1.5/C.
+- 原生反證：Caller pushes &stack key slot, not key value; callee [ebp+0xc] is output iterator pointer and writes successor to it at7B6AE6. The slot originally held key but is now an out-slot. Distinguish search-key pointer passed to82EF00 from iterator out pointer passed to7B6890.
+- 修正及複驗條件：Use erase(tree, &next_iterator, node), describe stack-slot reuse and successor-before-free. Preserve old source and supply separate corrected version for revalidation.
+- 驗收紀錄：[本項證據](../../../shared/integrations/T01-20261029-semantic-review/t08-early/actor-reviews.json)。
+
+#### T01-RETURN-T08-155-ASM-001 — NEEDS_FIX
+- 原稿：`kr-temp-roy/20261028-014315-chatgpt-web-roy-T08-155-tree-erase-node-and-container-invariants.md`；Git blob `45a6d797b4c33eabc24daf85292cdb005da39558`；SHA256 `099881b4a44e8c79188bd374f49b2cd46c560b25e8369538e9a3afe06bbf00cf`。
+- 問題：Appendix restarts in the middle of instruction7B698E and invents instructions7B698F/90/92.
+- 原生反證：Caller pushes &stack key slot, not key value; callee [ebp+0xc] is output iterator pointer and writes successor to it at7B6AE6. The slot originally held key but is now an out-slot. Distinguish search-key pointer passed to82EF00 from iterator out pointer passed to7B6890.
+- 修正及複驗條件：Replace the erroneous excerpt with entry-rooted CFG decode; include7B698E and7B6991, and recheck two-child relocation control flow. T01 provides full corrected native CFG.
+- 驗收紀錄：[本項證據](../../../shared/integrations/T01-20261029-semantic-review/t08-early/actor-reviews.json)。
+
+#### T01-RETURN-T08-183-001 — NEEDS_FIX
+- 原稿：`kr-temp-roy/20261028-100222-chatgpt-web-roy-T08-183-manager-last-release-and-container-destruction.md`；Git blob `ecbec611a9d99a7640ae4fad9668dcc3c06ad4be`；SHA256 `dd3dafebe38b5aa265a46da752269edfe890dbfd5d79451316800a9017a4fc3d`。
+- 問題：0x007B8680 用於樹節點移除／調整
+- 原生反證：7B868B..7B86AC computes string hash/mask and an8-byte bucket; 7B86DE EDI=&index+4 then719B20 unlinks two list links and frees node, without ordered-tree rotations.
+- 修正及複驗條件：Use index-node/hash-bucket/list terminology or provide actual tree construction evidence; preserve the independently supported release ordering and separate the actor RB tree.
+- 驗收紀錄：[本項證據](../../../shared/integrations/T01-20261029-semantic-review/t08-new/return-items.json)。
+
+#### 早期映射退回更新
+
+`T01-RETURN-T08-LEGACY-MAPPING-001` 歷史狀態為 BLOCKED；本輪已取得指定 SHA 原件並逐點核對，改為 NEEDS_FIX。24個來源版本及全部受影響原稿blob列於[映射裁決](../../../shared/integrations/T01-20261029-semantic-review/t08-early/mapping-reviews.json)；其中18篇1263條保存機器碼均在各標示VA減0x400後相符。這不是全程式重定位，也不得平移資料節絕對函式指標。7A8310/7A8E10等實際PE入口有效，早期「vtable指入指令中段」反證應重新裁決。原稿須各自提供正確PE位址／完整相關CFG的新版本；未全部複驗前不標RESOLVED。
+
+<!-- T01-20261029-stage-notices:end -->
+
+
 
 本節是 T01 對 T08 分析者的正式 GitHub README 通知；不使用 GitHub Issue。開始下一段工作前請先處理 NEEDS_FIX / FIXING，或明確記錄繼續研究與修正工作的優先序。T01 僅維護本退回專區，T08 保留原稿並產生修正版/勘誤。來源 Task 標記 READY_FOR_REVIEW 後，由 T01 複驗才標記 RESOLVED；已解決紀錄不刪。
 
 ### T01-RETURN-T08-157-001 — NEEDS_FIX
+
+<!-- T01-RETURN-T08-157-001-20261029-update -->
+2026-10-29 複驗補充：原稿blob `b67b6c415c63034607fadef59b0e4fc2892237e2`，SHA256 `b04539973e1056beea42dd4feefca905dc5b76a359cc5f6a5e24a475042d5164`。Caller pushes &stack key slot, not key value; callee [ebp+0xc] is output iterator pointer and writes successor to it at7B6AE6. The slot originally held key but is now an out-slot. Distinguish search-key pointer passed to82EF00 from iterator out pointer passed to7B6890. 修正／複驗：Update existing return with complete rooted CFG and affected dataflow; retain NEEDS_FIX until a new source version is revalidated. [本輪證據](../../../shared/integrations/T01-20261029-semantic-review/t08-early/actor-reviews.json)。
+
 - 原稿：kr-temp-roy/20261028-015216-chatgpt-web-roy-T08-157-packet-row-removal-receiver-boundaries.md
 - 原稿 Git blob SHA：b67b6c415c63034607fadef59b0e4fc2892237e2
 - 問題：0x4B297C 在原稿片段誤作獨立指令起點。原生有效邊界為 0x4B297A cmp eax,[0x00FAB13C]；0x4B2980 je 0x4B2989；0x4B2982 mov esi,[eax+0x10]。原稿出現的 cmp al,0xb1/cli 屬指令中途錯位解碼。
 - T08 修復：按 KR PE .text 的正確節區映射重解 0x4B28D0 整段 CFG；更正組語、ID 查找、分支、偽碼及受影響的主張。提交修正版或勘誤及新 Git blob SHA，交 T01 全文重驗。
 - 來源：T01-030 本地核對；原始 KR BIN SHA256 9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91。
 
-### T01-RETURN-T08-173-001 — NEEDS_FIX
+### T01-RETURN-T08-173-001 — RESOLVED
+
+2026-10-29 接續第02批結案：修正版 T08-177 blob `fdc8a64aa0f33866defe5a2484fa432f4bbaf66c`／SHA256 `253ccb2b658dcc734efe6bc3d5d6ab6f1629b95d173b998515624c5aa29949ac` 的全文有界主張與所有碼塊已複驗通過，全部受影響的入口、資料流及清理關係均已核對。本退回事項標 RESOLVED；舊 T08-173 blob 仍 FAILED。歷史 NEEDS_FIX 與下列舊補充保留為當時紀錄。[修復對應與驗收](../../../shared/integrations/T01-20261029-continuation-02/t08/issue-resolution.json)。
+
+<!-- T01-RETURN-T08-173-001-20261029-update -->
+2026-10-29 複驗補充：原稿blob `f643553ef1145ed65a5a724a0a9a3f19c910e76f`，SHA256 `1f5b203f381922d09d737d4fd9dbc227ec7e2a1f9597c311c604d3d7dbd9140c`。0x7B7FFE b9 01 00 00 00 dominates 0x7B8006 89 4a 44; ECX is constant1 through the loop. 修正／複驗：Correct the source/value, identify the actual 7B7FD0 entry, and revalidate affected dataflow. T08-177 is a later explicit correction; retain the old source FAILED. [本輪證據](../../../shared/integrations/T01-20261029-semantic-review/t08-new/return-items.json)。
+
 - 原稿：kr-temp-roy/20261028-085944-chatgpt-web-roy-T08-173-owner-44-writers.md
 - Git blob SHA：f643553ef1145ed65a5a724a0a9a3f19c910e76f
 - 問題：原稿把 0x7B8006 mov [edx+0x44],ecx 視為需由 caller 確認的可變 ECX；同一函式 0x7B7FFE mov ecx,1 已將此路的寫入值定為 1，入口應由 0x7B7FD0 識別。
@@ -19,19 +72,29 @@
 - 來源：T01-026/027 驗收界線。
 
 ### T01-RETURN-T08-187-001 — NEEDS_FIX
+
+<!-- T01-RETURN-T08-187-001-20261029-update -->
+2026-10-29 複驗補充：原稿blob `cf2b5d3fc74b6d0199837c957a214765ac14866f`，SHA256 `bc0e9037d4e8a9a3108e395837e583096ed68f6d25230db9d6577488c06e978c`。0x7F6FBF=6a30 push0x30; 0x7F6FC1=8bf8 mov edi,eax. The latter saves manager before allocation. 修正／複驗：Correct instruction address and recheck manager provenance, allocation/null edge, acquire and wrapper+2C storage; source version remains FAILED. [本輪證據](../../../shared/integrations/T01-20261029-semantic-review/t08-new/return-items.json)。
+
 - 原稿：kr-temp-roy/20261028-101203-chatgpt-web-roy-T08-187-acquire-wrapper-and-resource-return.md
 - 問題：原稿將 0x7F6FC1 註為 push 0x30；原始 BIN push 0x30 在 0x7F6FBF，0x7F6FC1 實為 mov edi,eax。
 - T08 修復：重驗 0x7F6FBA 周邊 wrapper 配置、0x7DCFB0 acquire、callsite 和位址；提供修正版本路徑及新 Git blob SHA。
 - 來源：T01-026 的明確原生反證。
 
-### T01-RETURN-T08-196-001 — NEEDS_FIX
+### T01-RETURN-T08-196-001 — RESOLVED
+
+2026-10-29 接續第02批結案：修正版 T08-197 blob `4812aa8da49c40647538206679b414753a4c6e5e`／SHA256 `555a88a78907b2deb1ea80d552ec64f41d0c52d4d52818e5d9faf3bbe6646ea3` 的全文有界主張與所有碼塊已複驗通過，全部受影響的入口、資料流及清理關係均已核對。本退回事項標 RESOLVED；舊 T08-196 blob 仍 FAILED。歷史 NEEDS_FIX 與下列舊補充保留為當時紀錄。[修復對應與驗收](../../../shared/integrations/T01-20261029-continuation-02/t08/issue-resolution.json)。
+
+<!-- T01-RETURN-T08-196-001-20261029-update -->
+2026-10-29 複驗補充：原稿blob `b1879330f55b5d7b6d38a697a46a0f40ce3b6aca`，SHA256 `e8b1564e8b92aaf59ca2fcffd9e3ca8c834f953811e348a6a8a6ea30e03665b0`。0x4DFC96=8d7808 lea edi,[eax+8]; subsequent sentinel is[edi+4]=owner+C. Secondary tree is the separate4DFC30 ESI+18 path. 修正／複驗：Correct tree base, sentinel and LEA addressing; remove/re-evaluate dual-tree ownership deductions and revalidate complete affected CFG. T08-197 correctly distinguishes the two paths. [本輪證據](../../../shared/integrations/T01-20261029-semantic-review/t08-new/return-items.json)。
+
 - 原稿：kr-temp-roy/20261028-110153-chatgpt-web-roy-T08-196-composite-id-secondary-tree-remove.md
 - Git blob SHA：b1879330f55b5d7b6d38a697a46a0f40ce3b6aca
 - 問題：原稿將 0x4DFC90 當作 owner+0x18 的第二樹；原生 0x4DFC96 lea edi,[eax+8] 指向主樹。第二樹是獨立的 0x4DFC30（lea ebx,[esi+0x18]）路徑。
 - T08 修復：拆開主樹／次級樹、actor+0x88 條件與 key 移除、不同 payload 清理的全部相關結論；附完整 CFG 與修正版 Git SHA。
 - 來源：T01-026、T01-030 有界核對。
 
-### T01-RETURN-T08-LEGACY-MAPPING-001 — BLOCKED（需來源調和）
+### T01-RETURN-T08-LEGACY-MAPPING-001 — NEEDS_FIX（來源映射已定位）
 - 範圍：T08-140～152 等較早原稿使用 BIN offset=VA-0x401000 的線性映射；此處是「群組來源調和」提醒，不把每篇都斷言相同錯誤。
 - 具體例子：在 VA 0x7A507F 舊線性映射讀到 c7 46 04 4c f6 c4 00，但目前 KR PE .text VA 0x401000/raw 0x400 的對應 bytes 不同。可能是來源檔格式／攤平 image 類型不同；不可直接將兩種檔案等同。
 - T08 修復：逐一找出舊筆記使用的實際檔案版本、檔案格式、SHA、.text raw 映射；證實後重新解碼並更新出處。無法取得所需原始資料時明列解除條件，勿憑推測修稿。
@@ -39,6 +102,8 @@
 
 ### 當前不需退回／避免重複
 - T08-200：0x82EF00 在 lower_bound 後有候選 key 等值檢查，舊退回理由已撤銷；見 [T01-027](../../../shared/integrations/T01-20261028-27/README.md)。
+2026-10-28歷史快照（保留原文；2026-10-29已對153/155追加確證退回，158/159仍未全文通過）：
+
 - T08-153、155、158、159 尚屬 PARTIAL（未驗完）不是已證原稿錯誤，待 T01 繼續驗收；T08-154/156 的歷史 getter 說法已由 T08-158 更新，不把已被正確更正的歷史當成新缺陷。
 
 

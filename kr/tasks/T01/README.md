@@ -1,5 +1,11 @@
 # T01 現有成果來源審核
 
+<!-- S00-DISPATCH-BOOTSTRAP:v1 -->
+## S00 研究請求開工檢查（正式）
+
+**開工必讀**：先核對最新 origin/main SHA，讀取 [T01 S00 待審收件箱](../../../research/dispatch/inbox/T01.md)、[唯一 RR 台帳](../../../research/requests/index.json) 與 [派工／審查規則](../../../research/dispatch/README.md)。本收件箱只提示來源報告待審，**不取代下文 T01 FULL-PASS、NEEDS_FIX、README 原有退回制度**。S00 才能 ACCEPTED；任何 RR 完成不自動升格原生證據。
+
+
 ## 跨 Task 驗收退回、修復及複驗（正式工作流程）
 
 - T01 須先核對原件 SHA／來源版本、PE section 映射、指令界線、工具預期、CFG、caller/callee、資料流與所有實質肯定主張；不得用抽樣 bytes 全部相符冒充全文 FULL-PASS。
@@ -93,3 +99,16 @@
 依 [T01 FULL-PASS 共用知識政策](../../../shared/T01-FULL-PASS-UNCLASSIFIED-INTEGRATION-RULES.md)，T01 對**精確範圍全部原生主張均已核驗**的結論／子流程，發表於 [shared/verified-knowledge](../../../shared/verified-knowledge/README.md)，依玩家功能、協定與資料結構檢索，不依來源 Task 分類。仍保留 Task ID、作者、原稿路徑與 Git blob SHA 為審核及錯誤退回 metadata，不搬移既有原稿。
 
 准入必須完成原件 SHA、PE/VA/raw、指令邊界、CFG／上下游／資料流與相關矛盾的必要查核；抽樣 bytes／SHA 一致、來源收件、局部主張通過不會讓全篇或整 Task 通過。僅通過的有界子流程可納入；所有未通過內容保留待審來源。原版 Server 內部演算法不是 Client 逆向驗收，列 Server 待開發；未知 Client 封包列 Client 待逆向。每批建立 FULL-PASS 條目、更正或撤銷的可追溯清單，禁止隱性升級歷史 accepted-claims。
+
+
+2026-10-29 階段整合：[T01原稿語意驗收檢查點](../../../shared/integrations/T01-20261029-semantic-review/README.md)。318個來源版本已凍結；全文FULL-PASS為0，69個原版已有反證、153部分、9來源級、87待審。46項具體退回及映射群組已更新Task README，另有3項精確原生結論准入共用知識。接續逐篇來源SHA／碼塊待辦，不把本次階段收尾算作318篇完成；實際main基準見批次推送收據。
+
+
+2026-10-29 接續整合：[T01 第02批全文驗收](../../../shared/integrations/T01-20261029-continuation-02/README.md)。本批10篇逐篇核對，158／177／197三篇有界全文通過；舊173／196退回結案但舊版維持FAILED；新增10項修正／限定退回。最新318版狀態為 全文有界通過3、FAILED71、PARTIAL151、SOURCE_ONLY9、PENDING84，未全部完成；以本批 source-ledger 與推送收據接續。
+
+
+## Server 規格整合的新通道（Phase A 試行，待合併）
+
+T01 對 Server 設計的接收、精確主張去重、風險分流及 S00 交接，按 [新 T01 工作流程](../../../governance/t01-integration-workflow.md) 辦理。這是**與舊版全文 FULL-PASS 分開的增量通道**；不更改 318 份歷史來源狀態、其他 Task 主責及 `shared/verified-knowledge/` 准入要求。原稿失敗/部分通過/待審應原樣保留；非已驗證材料只可標註可信度交 S00 參考。
+
+2026-10-29 使用者指定改按最新main新方法接續：以 `9d97ea37e` 為基準，完成[新流程首次收件與主張交接](../../../research/handoffs/t01-20261029-risk-intake/README.md)。318版R0收件完成（剩0），其中4版萃取有限主張並查對衝突，待萃取314版；歷史全文通過仍3／318、未通過315，不再作規格整合門檻。沒有S00接受或SPEC_CONSUMABLE，舊第03批未提交全文裁決保留本機草稿。

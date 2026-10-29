@@ -1,0 +1,361 @@
+{
+  "schema": "source-version-semantic-review-v1",
+  "reviews": [
+    {
+      "source": "kr-temp-roy/20261028-013809-chatgpt-web-roy-T08-153-GameInfo-actor-erase-bulk-cleanup.md",
+      "git_blob_sha": "10bb0608cd1dbc9cf944eab51c74d4a2fa205e1a",
+      "sha256": "acc9fd34490b2f97293c0eae349c2d203a34c0830e4983bb41b1497a7490bfec",
+      "reviewer": "Codex T01 integrator",
+      "review_date": "2026-10-29 Asia/Taipei",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "review_state": "FAILED",
+      "scope": "All substantive affirmative narrative sections enumerated below; historic/future work is not elevated; assembly appendix byte preflight and rooted-CFG evidence separately retained.",
+      "claims": [
+        {
+          "section": "A1.1–4",
+          "decision": "PASS",
+          "claim": "EAX receiver/+8 find; absent sentinel skips; controller slots0..2; v14 then reloaded v0(1) with payload clear.",
+          "native_functions": [
+            "0x4dfbc0",
+            "0x82ef00"
+          ],
+          "reason": "82EF00 47 instructions includes lower_bound then request<candidate check; equality required under ordered-tree invariant. 4DFBE2 xor esi;inc/cmp3/jl fixes controller count. Payload reload occurs after virtual14."
+        },
+        {
+          "section": "A1.5 / C",
+          "decision": "FAIL",
+          "claim": "7B6890 called with (tree,key,node).",
+          "native_functions": [
+            "0x4dfbc0",
+            "0x7b6890",
+            "0x49e6a0"
+          ],
+          "reason": "Caller pushes &stack key slot, not key value; callee [ebp+0xc] is output iterator pointer and writes successor to it at7B6AE6. The slot originally held key but is now an out-slot. Distinguish search-key pointer passed to82EF00 from iterator out pointer passed to7B6890."
+        },
+        {
+          "section": "A2",
+          "decision": "PASS",
+          "claim": "+18 container and +F8 conditional pointer clear/direct payload deallocation differ from +8 actor virtual cleanup.",
+          "native_functions": [
+            "0x4dfc30",
+            "0x8438c0"
+          ],
+          "reason": "ESI+18 at4DFC39; second exact find; F8 check/store only on key match, then direct89120C and node erase; no controller loop."
+        },
+        {
+          "section": "A3",
+          "decision": "PASS",
+          "claim": "Actor+88 comparison and erase-return successor traversal.",
+          "native_functions": [
+            "0x4dfc90",
+            "0x7b6890",
+            "0x49e6a0"
+          ],
+          "reason": "49E6A0 updates caller stack node pointer to next BEFORE unlink/free;7B6AE6 returns that updated iterator;4DFCE6 consumes result, not freed original node."
+        },
+        {
+          "section": "A4 / D3",
+          "decision": "PASS",
+          "claim": "Byte[actor+4] versus inputWORD;0/1/6/7 conditional association calls; subsequent object and node cleanup.",
+          "native_functions": [
+            "0x4dfd40"
+          ],
+          "reason": "Explicit 107-instruction rooted CFG covers all matches/skips,4DFD73 movzx byte,cmp dx,word; special set only controls7A7CC0/7A7BF0, all matches continue to virtual cleanup/node erase. Type name remains provisional."
+        },
+        {
+          "section": "A5",
+          "decision": "PASS",
+          "claim": "Payload traversal precedes whole +8 node clear and controller+14.",
+          "native_functions": [
+            "0x4dfe90",
+            "0x823850"
+          ],
+          "reason": "60-instruction full reachable body; null payload skips calls;4DFF0A clear helper then4DFF1A controller+14. No global timing claim."
+        },
+        {
+          "section": "B/D/E",
+          "decision": "PASS_WITH_LIMITS",
+          "claim": "Different paths, fields and receivers; creation row and script paths are cited predecessor findings.",
+          "native_functions": [
+            "0x4dfbc0",
+            "0x4dfc30",
+            "0x4dfc90",
+            "0x4dfd40",
+            "0x4dfe90"
+          ],
+          "reason": "No identification of actor+88 as network owner, no opcode/AI/spawn/timing conclusion; referenced creation/script claims remain predecessor scope, not new validation here."
+        }
+      ],
+      "issues": [
+        {
+          "id": "T01-RETURN-T08-153-ABI-001",
+          "problem": "Search-key storage and erase output iterator storage are conflated in A1.5/C.",
+          "repair": "Use erase(tree, &next_iterator, node), describe stack-slot reuse and successor-before-free. Preserve old source and supply separate corrected version for revalidation."
+        }
+      ],
+      "limits": [
+        "Valid data structures and original call/virtual-call paths return normally; no runtime, all-type or official server acceptance."
+      ],
+      "source_whole_document_certified": false,
+      "unreviewed_scope": "Cited predecessor creation/script facts and all dynamic dispatch implementations/runtime behavior remain outside the listed local claim matrix; no whole source upgrade."
+    },
+    {
+      "source": "kr-temp-roy/20261028-014315-chatgpt-web-roy-T08-155-tree-erase-node-and-container-invariants.md",
+      "git_blob_sha": "45a6d797b4c33eabc24daf85292cdb005da39558",
+      "sha256": "099881b4a44e8c79188bd374f49b2cd46c560b25e8369538e9a3afe06bbf00cf",
+      "reviewer": "Codex T01 integrator",
+      "review_date": "2026-10-29 Asia/Taipei",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "review_state": "FAILED",
+      "scope": "All substantive affirmative narrative sections enumerated below; historic/future work is not elevated; assembly appendix byte preflight and rooted-CFG evidence separately retained.",
+      "claims": [
+        {
+          "section": "首要結論 / §1",
+          "decision": "PASS",
+          "claim": "Node-specific unlink, header repair, color/nil fields, rotations, node deallocation/count decrement and successor iterator output.",
+          "native_functions": [
+            "0x7b6890",
+            "0x49e6a0",
+            "0x43e670",
+            "0x763f60",
+            "0x823b80"
+          ],
+          "reason": "223 rooted reachable instructions; both two-child relocation and mirrored fixup branches are covered, including7B6959..7B69B3 omitted by cached pseudocode.49E6A0 updates stack param3 to successor before original node deallocation."
+        },
+        {
+          "section": "§2–3 ASM appendix",
+          "decision": "FAIL",
+          "claim": "Instruction boundaries at7B698F/7B6990/7B6992.",
+          "native_functions": [
+            "0x7b6890"
+          ],
+          "reason": "True boundaries7B698E bytes894104 mov[ecx+4],eax;7B6991 eb0e jmp7B69A1. The original split inside7B698E decodes inc ecx/add al/push cs and loses the real branch. Matching prefix bytes do not validate these mnemonics."
+        },
+        {
+          "section": "§4 direct callers",
+          "decision": "PASS_WITH_LIMITS",
+          "claim": "Listed direct rel32 caller candidates are shared by distinct containers.",
+          "native_functions": [
+            "0x7b6890"
+          ],
+          "reason": "Original explicitly calls the list E8 candidates, not exhaustive dynamic xrefs. It does not infer actor ownership from common helper."
+        },
+        {
+          "section": "§5 pseudocode/invariants",
+          "decision": "PASS_WITH_LIMITS",
+          "claim": "Successor output and node lifetime differ from payload lifetime.",
+          "native_functions": [
+            "0x7b6890",
+            "0x49e6a0"
+          ],
+          "reason": "The read of [ebp+10] at7B6AE0 observes the slot mutated by49E6A0. No actor vtable calls in223-instruction body. Pseudocode is coarse and original retains diagnostics/unknowns."
+        }
+      ],
+      "issues": [
+        {
+          "id": "T01-RETURN-T08-155-ASM-001",
+          "problem": "Appendix restarts in the middle of instruction7B698E and invents instructions7B698F/90/92.",
+          "repair": "Replace the erroneous excerpt with entry-rooted CFG decode; include7B698E and7B6991, and recheck two-child relocation control flow. T01 provides full corrected native CFG."
+        }
+      ],
+      "limits": [
+        "Valid data structures and original call/virtual-call paths return normally; no runtime, all-type or official server acceptance."
+      ],
+      "source_whole_document_certified": false,
+      "unreviewed_scope": "Cited predecessor creation/script facts and all dynamic dispatch implementations/runtime behavior remain outside the listed local claim matrix; no whole source upgrade."
+    },
+    {
+      "source": "kr-temp-roy/20261028-015216-chatgpt-web-roy-T08-157-packet-row-removal-receiver-boundaries.md",
+      "git_blob_sha": "b67b6c415c63034607fadef59b0e4fc2892237e2",
+      "sha256": "b04539973e1056beea42dd4feefca905dc5b76a359cc5f6a5e24a475042d5164",
+      "reviewer": "Codex T01 integrator",
+      "review_date": "2026-10-29 Asia/Taipei",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "review_state": "FAILED",
+      "scope": "All substantive affirmative narrative sections enumerated below; historic/future work is not elevated; assembly appendix byte preflight and rooted-CFG evidence separately retained.",
+      "claims": [
+        {
+          "section": "§1 length/rows",
+          "decision": "PASS",
+          "claim": "Length>=4 gate, WORD rows, missing IDs diagnose then continue.",
+          "native_functions": [
+            "0x4b28d0"
+          ],
+          "reason": "Full156-instruction rooted CFG confirms row cursor+2, bounded count decrement and absent-node continuation; no registration opcode inferred."
+        },
+        {
+          "section": "§1 ASM near4B297C",
+          "decision": "FAIL",
+          "claim": "4B297C as a decoded instruction start.",
+          "native_functions": [
+            "0x4b28d0"
+          ],
+          "reason": "4B297A bytes3b053cb1fa00 is cmp eax,[FAB13C], ends4B2980.4B297C lies inside absolute displacement;4B2980 je4B2989;4B2982 mov esi,[eax+10]."
+        },
+        {
+          "section": "§2",
+          "decision": "PASS",
+          "claim": "Low-byte branch, child-resource checks, controller slot scan precede4DFBC0.",
+          "native_functions": [
+            "0x4b28d0",
+            "0x4dfbc0"
+          ],
+          "reason": "Indirect target names stay unknown; null/missing row branches are not converted into blanket safety guarantees."
+        },
+        {
+          "section": "§3 / §4",
+          "decision": "PASS",
+          "claim": "2-byte header composite key path differs from WORD-ID remove; no unique opcode or unique CMonster erase claim.",
+          "native_functions": [
+            "0x4b3710",
+            "0x40f060",
+            "0x4dfc90"
+          ],
+          "reason": "Guard at4B3717/1A and fixed-return getter preserve pushed composite DWORD; callee ret4 consumes it."
+        }
+      ],
+      "issues": [
+        {
+          "id": "T01-RETURN-T08-157-001",
+          "problem": "Existing return independently reconfirmed; wrong mid-instruction decode.",
+          "repair": "Update existing return with complete rooted CFG and affected dataflow; retain NEEDS_FIX until a new source version is revalidated."
+        }
+      ],
+      "limits": [
+        "Valid data structures and original call/virtual-call paths return normally; no runtime, all-type or official server acceptance."
+      ],
+      "source_whole_document_certified": false,
+      "unreviewed_scope": "Cited predecessor creation/script facts and all dynamic dispatch implementations/runtime behavior remain outside the listed local claim matrix; no whole source upgrade."
+    },
+    {
+      "source": "kr-temp-roy/20261028-015216-chatgpt-web-roy-T08-158-gameinfo-receiver-and-composite-key-abi.md",
+      "git_blob_sha": "f4eeaddf48033005057a5c5a5ec78bd438b0eddd",
+      "sha256": "eadccf6f5a8894c6aafad7942fc5397944c007e99b488b203e6a1cfa03742b38",
+      "reviewer": "Codex T01 integrator",
+      "review_date": "2026-10-29 Asia/Taipei",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "review_state": "FULL_PASS_BOUNDED_NATIVE_CLAIMS",
+      "scope": "All substantive affirmative narrative sections enumerated below; historic/future work is not elevated; assembly appendix byte preflight and rooted-CFG evidence separately retained.",
+      "claims": [
+        {
+          "section": "§1",
+          "decision": "PASS",
+          "claim": "40F060 is a lazy getter returning FAB130, not a key converter.",
+          "native_functions": [
+            "0x40f060"
+          ],
+          "reason": "Flag/FAB22C test and initialization branch, normal-return EAX=FAB130, plain ret; no stack key pop. Exception/initialization side effects not promoted."
+        },
+        {
+          "section": "§2",
+          "decision": "PASS",
+          "claim": "Length guarded WORD rows produce06000000|WORD on stack; EAX getter receiver feeds4DFC90.",
+          "native_functions": [
+            "0x4b3710",
+            "0x40f060",
+            "0x4dfc90"
+          ],
+          "reason": "28-instruction sender-like body includes len<2 path -> count0, shr1 else; key pushed at4B3738 stays through getter;4DFC90 ret4 balances it."
+        },
+        {
+          "section": "§3",
+          "decision": "PASS",
+          "claim": "Receiver+8 tree, actor+88 DWORD condition, cleanup/node erase and successor traversal.",
+          "native_functions": [
+            "0x4dfc90",
+            "0x7b6890",
+            "0x49e6a0"
+          ],
+          "reason": "Complete conditional loop and both matching/nonmatching successor paths checked.49E6A0 mutates iterator output before original free;4DFCE6 consumes safe successor value."
+        },
+        {
+          "section": "§4 / limits",
+          "decision": "PASS_WITH_LIMITS",
+          "claim": "Pseudocode captures guarded length/key flow; domain6,actor+88 identity,opcode dispatch remain unknown.",
+          "native_functions": [
+            "0x4b3710",
+            "0x40f060",
+            "0x4dfc90"
+          ],
+          "reason": "No task ownership/type-wide/runtime/server conclusion; all advertised affirmative local dataflow covered."
+        }
+      ],
+      "issues": [],
+      "limits": [
+        "Valid data structures and original call/virtual-call paths return normally; no runtime, all-type or official server acceptance.",
+        "FULL_PASS applies only to affirmative bounded claims of this exact source version; no full method/Task or runtime certification."
+      ],
+      "source_whole_document_certified": false,
+      "unreviewed_scope": "Cited predecessor creation/script facts and all dynamic dispatch implementations/runtime behavior remain outside the listed local claim matrix; no whole source upgrade."
+    },
+    {
+      "source": "kr-temp-roy/20261028-015216-chatgpt-web-roy-T08-159-actor-virtual-cleanup-and-erase-order.md",
+      "git_blob_sha": "8e0ecfaa1372718f4bf8af0cfeb587ac0c78569e",
+      "sha256": "147b784e90793aab056f3050baeb9252ea0cdea83a304f8baa86c07c947c096d",
+      "reviewer": "Codex T01 integrator",
+      "review_date": "2026-10-29 Asia/Taipei",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "review_state": "FULL_PASS_BOUNDED_NATIVE_CLAIMS",
+      "scope": "All substantive affirmative narrative sections enumerated below; historic/future work is not elevated; assembly appendix byte preflight and rooted-CFG evidence separately retained.",
+      "claims": [
+        {
+          "section": "§1",
+          "decision": "PASS",
+          "claim": "Exact-key lookup then controller3 calls, first payload dereference before null check, reloaded payload v0(1), erase.",
+          "native_functions": [
+            "0x4dfbc0",
+            "0x82ef00"
+          ],
+          "reason": "Key equality verified inside82EF00. The v14 null risk and reload are explicit; virtual implementations not generalized."
+        },
+        {
+          "section": "§2",
+          "decision": "PASS",
+          "claim": "ESI+18 alternate container/direct free path differs.",
+          "native_functions": [
+            "0x4dfc30",
+            "0x8438c0"
+          ],
+          "reason": "Full37-instruction body plus exact lookup examined."
+        },
+        {
+          "section": "§3",
+          "decision": "PASS",
+          "claim": "Conditional batch and full clear have different controller side effects.",
+          "native_functions": [
+            "0x4dfd40",
+            "0x4dfe90",
+            "0x823850"
+          ],
+          "reason": "Complete107/60-instruction bodies checked; full clear virtual payload traversal precedes node clear, controller+14 once; no controller3 loop in batch paths."
+        },
+        {
+          "section": "§4",
+          "decision": "PASS_WITH_LIMITS",
+          "claim": "vtable targets/ownership remain unknown; erase only node structure.",
+          "native_functions": [
+            "0x7b6890",
+            "0x823850"
+          ],
+          "reason": "Both helpers inspect container/node links; actor payload operations occur at callers. No proof of all derived destructors or GPU ownership asserted."
+        },
+        {
+          "section": "§5",
+          "decision": "PASS_WITH_LIMITS",
+          "claim": "Coarse valid-ID pseudocode and explicit lack of exact class/exception/runtime evidence.",
+          "native_functions": [
+            "0x4dfbc0"
+          ],
+          "reason": "uint16 sample is limited to input ID domain, not reconstructed native signature; machine behavior reloads payload after v14 as already stated in §1."
+        }
+      ],
+      "issues": [],
+      "limits": [
+        "Valid data structures and original call/virtual-call paths return normally; no runtime, all-type or official server acceptance.",
+        "Unknown dynamic vtables/alias mutation and server timing remain outside scope."
+      ],
+      "source_whole_document_certified": false,
+      "unreviewed_scope": "Cited predecessor creation/script facts and all dynamic dispatch implementations/runtime behavior remain outside the listed local claim matrix; no whole source upgrade."
+    }
+  ]
+}

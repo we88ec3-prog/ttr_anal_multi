@@ -1,0 +1,56 @@
+--- kr-temp-roy/20261028-175141-chatgpt-web-roy-T16-70-KR-queue-drain-framing-and-receive-parser.md (original b84f671788f964043180d232323ceab106ced74f)
++++ kr-temp-roy/20261028-175141-chatgpt-web-roy-T16-70-KR-queue-drain-framing-and-receive-parser.md (T01 proposed errata; not author replacement)
+@@ -47,11 +47,11 @@
+ 806374: jne 0x8061f6
+ ```
+ 
+-### 1.2 `0x00807A70`：4-byte frame，首 16-bit 固定欄位 `0x1A68`、次 16-bit 為原長度
++### 1.2 `0x00807A70`：4-byte frame，首 16-bit 為原長度、次 16-bit 固定欄位 `0x1A68`
+ 
+ `0x807A84` 讀 `[ebp+0x0C]` 原始 payload length；`0x807A8A` 立即值 `0x1A68` 寫入 `[ebp-2]`；`0x807A93` 將原長度低16位寫入 `[ebp-4]`；兩個局部 word 在記憶體形成 `[length16,0x1A68]`（little-endian；`[ebp-4]` 指向 header 起點）。實際資料寫入是 `0x807AE9 mov [eax],ecx`（其中 `ecx=[ebp-4]`），之後 payload `0x807AF2 memcpy`。
+ 
+-限制：payload length 非零，`len+4 <= 0x1000`，累計 `[edi+0x500C] + len+4 <= 0x4000`，另檢查 write pointer 及末端邊界；回傳 1 才算成功放入更低層的 **connection 內部緩衝** `[edi+0x5004]`，非 OS socket 送出證據。
++限制：payload length 非零，`len+4 <= 0x1000`，累計 `[edi+0x500C] + len+4 <= 0x4000`，另檢查 write pointer 及末端邊界；回傳 1 才算成功放入更低層的 **embedded stream（基址為 connection+0x501C）內部緩衝** `[edi+0x5004]`，即 `[connection+0xA020]`；上文 `[edi+0x500C]` 為 `[connection+0xA028]`，非 OS socket 送出證據。
+ 
+ ```asm
+ 807a84: mov edx,DWORD PTR [ebp+0xc]
+@@ -77,7 +77,7 @@
+ 
+ - `0x80786D` 計算總長度 `len+6`；`0x807870` 用 `mov dword [ebp-0x101A],0x7D810BBB` 與 `0x80787A mov word [ebp-0x101C],di` 構成六位元組 header，布局（記憶體位址由低到高）：`[len16][BB 0B 81 7D]`。**不可將 0x0BBB、0x7D81 立即視為 quest opcode**。
+ - `0x8078FD` 讀 payload 首 byte；`0x807901 xor dl,0xB6` 對首輸出 byte 做轉換；接下來 `0x807967...0x80799C` 的迴圈以相鄰輸入位元組 XOR 產生輸出，並累加 16-bit 中間總和；`0x8079BD...0x8079D0` 收尾；`0x8079E9...0x8079F8` 將總和寫入 header 的 `+4` word。需額外對照 `0x807B40` receiver 才能正式表述此分支完整編碼規格與校驗欄位的語意。
+-- `0x807A02...0x807A25` 將轉換後資料複製到 connection 的 `[+0x5004]` 指向的緩衝區，更新 `[+0x500C]`、`[+0x5004]`；回傳 1 代表進入本地 buffer。未驗證 socket 上是否還有後續 bytes、合併及傳送次數。
++- `0x807A02...0x807A25` 將轉換後資料複製到 embedded stream（connection+0x501C）的 `[+0x5004]` 指向的緩衝區，更新 stream `[+0x500C]`、`[+0x5004]`（即 connection+0xA028、connection+0xA020）；回傳 1 代表進入本地 buffer。未驗證 socket 上是否還有後續 bytes、合併及傳送次數。
+ 
+ ```asm
+ 80786d: lea eax,[edi+0x6]
+@@ -113,7 +113,7 @@
+ 807bbe: mov edx,0x1000
+ 807bc3: cmp si,dx
+ 807bd4: movzx ecx,WORD PTR [ebx+0x2]
+-807bdd: mov edx,0x2633
++807bd8: mov edx,0x2633
+ 807be5: cmp cx,dx
+ 807bf2: mov DWORD PTR [esp+0x20],0x8
+ 807bfc: mov edx,0xbbb
+@@ -140,7 +140,7 @@
+     → for each node: payload ptr=node-data+8, length=node-data+4
+        → mode [connection+A02C] 0: 0x807A70 (4-byte frame)
+        → mode !=0: 0x807830 (6-byte frame) ; failure → fallback 0x807A70
+-       → framing success: move into connection buffer +5004/+500C
++       → framing success: move into embedded stream +5004/+500C = connection +A020/+A028
+        → unlink outbound queue node, decrement +A078
+ → further connection buffer flusher / actual socket send: UNKNOWN
+ 
+@@ -165,11 +165,11 @@
+ - 已否定「`0x806060` 將資料直接寫 socket」的證據等級：本段實際發現**至少又有 outbound queue consumer 與 framing buffer**。不能把 `0x807A70` 成功等同作業系統已送出封包。
+ - `0x807B40` 是 frame parser，並**不是**已識別的 Quest-specific dispatcher；frame type `0x1A68`、`0x0BBB` 非 Quest opcode。缺實際收包 payload 還無法證明 Scenario 的回覆 ID。
+ - `0x807830` 的 XOR 與 checksum 需精確完整 mapping，尚未比對收端 6-byte header decoder；不能聲稱已完整解密協定。
+-- 立即下一段優先尋找 `[connection+0x5004/+0x500C]` 讀取者 → Winsock send/WSASend，定位 `0x8061A0` 被誰呼叫，以及 `0x807B40` 後的 app-level dispatcher → Quest/NPC writer；並從 quest 接取 UI 反追 C→S。
++- 立即下一段優先尋找 `[connection+0xA020/+0xA028]` 讀取者 → Winsock send/WSASend，定位 `0x8061A0` 被誰呼叫，以及 `0x807B40` 後的 app-level dispatcher → Quest/NPC writer；並從 quest 接取 UI 反追 C→S。
+ - 若 GitHub T02 已有 IAT/socket 解析，應引用其**已驗證**介面，不修改 T02 原稿。
+ 
+ ## 5. 共用三輪深入門檻與 Git
+ 
+ **T16-70 第 1 輪已達重大新發現**：首次將前段有界的 4-byte queue 進一步關閉到「出站佇列 consumer → 兩種 frame writer → connection buffer」，並以另一個 native frame parser 精確交叉確認 discriminator 與長度欄位。這是新原生函式／CFG／格式層級的新增證據，非只列 xref。故 `T16-70-2`、`T16-70-3` **未啟動**。研究不等於已證 wire send 或 Quest 完整玩法。
+ 
+-**GitHub 未 Commit/Push**；文件僅放本地 `/mnt/data` 供下載。未修改其他 Task／catalog／owner。+**GitHub 未 Commit/Push**；文件僅放本地 `/mnt/data` 供下載。未修改其他 Task／catalog／owner。
