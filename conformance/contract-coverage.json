@@ -1,0 +1,202 @@
+{
+  "schema": "s00-contract-coverage-v1",
+  "version": "2026-10-29",
+  "policy": "These are S00 evidence/readiness labels, not native verification; readiness must be computed from current SPEC/RR/GAP/TEST registries. NOT_APPLICABLE only permitted for non-wire layers and non-applicable transport fields.",
+  "items": [
+    {
+      "id": "COV-0001",
+      "name": "C2S frame/transport",
+      "kind": "TRANSPORT",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "spec_ids": [
+        "SPEC-NET-0001",
+        "SPEC-NET-0002"
+      ],
+      "rr_ids": [
+        "RR-0001",
+        "RR-0004",
+        "RR-0005"
+      ],
+      "gap_ids": [
+        "GAP-NET-0001",
+        "GAP-NET-0002"
+      ],
+      "facets": {
+        "command_identity": "NOT_APPLICABLE",
+        "connection_context": "UNKNOWN",
+        "byte_layout": "PARTIAL",
+        "request_reply_pairing": "UNKNOWN",
+        "error_semantics": "PARTIAL",
+        "test_provenance": "OFFLINE_ONLY"
+      },
+      "notes": "0x1A68/0x0BBB local sender geometry exists; first actual network message and negotiation unknown"
+    },
+    {
+      "id": "COV-0002",
+      "name": "S2C frame-to-handler",
+      "kind": "TRANSPORT",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "spec_ids": [
+        "SPEC-NET-0001",
+        "SPEC-NET-0003"
+      ],
+      "rr_ids": [
+        "RR-0001",
+        "RR-0006",
+        "RR-0007"
+      ],
+      "gap_ids": [
+        "GAP-NET-0001",
+        "GAP-NET-0003"
+      ],
+      "facets": {
+        "command_identity": "NOT_APPLICABLE",
+        "connection_context": "UNKNOWN",
+        "byte_layout": "PARTIAL",
+        "request_reply_pairing": "UNKNOWN",
+        "error_semantics": "UNKNOWN",
+        "test_provenance": "OFFLINE_ONLY"
+      },
+      "notes": "0x807B40→4930E0 bounded parser/queue route, 0x2633 and checksum failures unresolved"
+    },
+    {
+      "id": "COV-0003",
+      "name": "Authentication C2S request",
+      "kind": "APPLICATION",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "spec_ids": [
+        "SPEC-AUTH-0001",
+        "SPEC-FLOW-0001"
+      ],
+      "rr_ids": [
+        "RR-0003",
+        "RR-0005"
+      ],
+      "gap_ids": [
+        "GAP-AUTH-0001",
+        "GAP-NET-0002"
+      ],
+      "facets": {
+        "command_identity": "PARTIAL",
+        "connection_context": "UNKNOWN",
+        "byte_layout": "PARTIAL",
+        "request_reply_pairing": "UNKNOWN",
+        "error_semantics": "UNKNOWN",
+        "test_provenance": "OFFLINE_ONLY"
+      },
+      "notes": "0x00E8 112 or 0x000F 214 local variants, branch and handshake pairing not closed"
+    },
+    {
+      "id": "COV-0004",
+      "name": "Authentication S2C response/handoff",
+      "kind": "APPLICATION",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "spec_ids": [
+        "SPEC-AUTH-0001",
+        "SPEC-FLOW-0001"
+      ],
+      "rr_ids": [
+        "RR-0003",
+        "RR-0005",
+        "RR-0007"
+      ],
+      "gap_ids": [
+        "GAP-AUTH-0001",
+        "GAP-FLOW-0001"
+      ],
+      "facets": {
+        "command_identity": "UNKNOWN",
+        "connection_context": "UNKNOWN",
+        "byte_layout": "PARTIAL",
+        "request_reply_pairing": "UNKNOWN",
+        "error_semantics": "PARTIAL",
+        "test_provenance": "NONE"
+      },
+      "notes": "0x4C37A0 local consumer is not a complete S2C response contract; 0x13 domain unproven"
+    },
+    {
+      "id": "COV-0005",
+      "name": "Character roster S2C",
+      "kind": "APPLICATION",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "spec_ids": [
+        "SPEC-CHAR-0001",
+        "SPEC-FLOW-0001"
+      ],
+      "rr_ids": [
+        "RR-0002"
+      ],
+      "gap_ids": [
+        "GAP-CHAR-0001"
+      ],
+      "facets": {
+        "command_identity": "PARTIAL",
+        "connection_context": "UNKNOWN",
+        "byte_layout": "PARTIAL",
+        "request_reply_pairing": "UNKNOWN",
+        "error_semantics": "UNKNOWN",
+        "test_provenance": "OFFLINE_ONLY"
+      },
+      "notes": "Handler index2 65+53*N bounded, header and downstream initialization unknown"
+    },
+    {
+      "id": "COV-0006",
+      "name": "Selection C2S and S2C reply",
+      "kind": "APPLICATION",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "spec_ids": [
+        "SPEC-CHAR-0001",
+        "SPEC-FLOW-0001"
+      ],
+      "rr_ids": [
+        "RR-0002",
+        "RR-0008"
+      ],
+      "gap_ids": [
+        "GAP-CHAR-0001",
+        "GAP-SCENE-0001"
+      ],
+      "facets": {
+        "command_identity": "PARTIAL",
+        "connection_context": "UNKNOWN",
+        "byte_layout": "PARTIAL",
+        "request_reply_pairing": "UNKNOWN",
+        "error_semantics": "UNKNOWN",
+        "test_provenance": "NONE"
+      },
+      "notes": "C2S command 0x42 4-byte candidate; exact S2C success/failure handler and scene gate missing"
+    },
+    {
+      "id": "COV-0007",
+      "name": "SceneList-to-Lua local resource path",
+      "kind": "CLIENT_RESOURCE",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "spec_ids": [
+        "SPEC-SCENE-0001",
+        "SPEC-FLOW-0001"
+      ],
+      "rr_ids": [
+        "RR-0008"
+      ],
+      "gap_ids": [
+        "GAP-SCENE-0001"
+      ],
+      "facets": {
+        "command_identity": "NOT_APPLICABLE",
+        "connection_context": "UNKNOWN",
+        "byte_layout": "PARTIAL",
+        "request_reply_pairing": "UNKNOWN",
+        "error_semantics": "UNKNOWN",
+        "test_provenance": "NONE"
+      },
+      "notes": "Non-wire: resource key (1001,1) → tutorial_start is not a confirmed S2C instruction; 0x565720 also called from EndCutScene"
+    }
+  ]
+}
