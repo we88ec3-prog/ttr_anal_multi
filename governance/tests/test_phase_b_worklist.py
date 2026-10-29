@@ -44,7 +44,11 @@ class PhaseBWorklistTests(unittest.TestCase):
         self.assertEqual({x["rr_id"] for x in result["requests"]},
                          {f"RR-{n:04}" for n in range(1, 9)})
         self.assertTrue(all(not x["has_submission"] for x in result["requests"]))
-        self.assertTrue(all(x["blocked_milestones"] for x in result["requests"]))
+        self.assertEqual(result["summary"]["research_backlog_without_milestone"], 1)
+        self.assertEqual(next(x for x in result["requests"] if x["rr_id"] == "RR-0006")["delivery_mapping"],
+                         "RESEARCH_BACKLOG")
+        self.assertTrue(all(x["blocked_milestones"] for x in result["requests"]
+                            if x["delivery_mapping"] == "MILESTONE"))
 
     def test_task_filter_keeps_correct_owners_and_scope(self):
         t02 = evaluate(self.root, task="T02")
@@ -96,7 +100,7 @@ class PhaseBWorklistTests(unittest.TestCase):
 
     def test_markdown_stays_scope_labeled_and_read_only(self):
         content = markdown(evaluate(self.root, task="T03"))
-        self.assertIn("not a claim", content)
+        self.assertIn("not a claim", content.lower())
         self.assertIn("RR-0008", content)
         self.assertIn("S2C", content)
         self.assertIn("SPEC-", content)
