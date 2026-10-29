@@ -61,7 +61,7 @@ class S00IndexTests(unittest.TestCase):
                 "id":"SRC-0001", "client_version":"kr",
                 "target_sha256":"9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
                 "source_file":"kr/tasks/T02/task.json",
-                "source_blob_sha":hashlib.sha1(b"blob "+str(len(s)).encode()+b"\\x00"+s).hexdigest(),
+                "source_blob_sha":hashlib.sha1(b"blob "+str(len(s)).encode()+b"\x00"+s).hexdigest(),
                 "source_sha256":hashlib.sha256(s).hexdigest(),
                 "integration_status":"SPEC_CONSUMABLE","claim_ids":[],
             })
