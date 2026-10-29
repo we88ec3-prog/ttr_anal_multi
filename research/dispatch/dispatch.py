@@ -44,13 +44,15 @@ def valid_date(s):
     except (ValueError,TypeError):
         return False
 
-def inbox_text(task,rows):
+def inbox_text(task,rows,version=None):
     if task=="T01":
         rows=[r for r in rows if r["dispatch"]["state"] in {"SUBMITTED","IN_REVIEW"}]
         intro="這是 S00 回報待審提示；與 T01 原稿 FULL-PASS、退回通知及歷史台帳分離。"
     else:
         rows=[r for r in rows if r["owner_task"]==task and r["dispatch"]["state"] not in {"ACCEPTED","CANCELLED"}]
         intro="開工前先讀 origin/main 的本頁和 RR 台帳；只有已在 main 公開的認領才是跨 Agent 可見。"
+    if version is not None:
+        rows=[r for r in rows if r.get("client_version")==version]
     rows.sort(key=lambda r:(PRIORITIES[r["dispatch"]["priority"]],r["id"]))
     lines=[f"# {task} — S00 研究收件箱（生成檔）","",
            "> 由 research/dispatch/dispatch.py sync 自唯一的 research/requests/index.json 產生，禁止手改本頁。",
@@ -58,12 +60,12 @@ def inbox_text(task,rows):
     if not rows:
         lines.append("目前無待處理的 S00 研究請求。")
     else:
-        lines+=["| ID | 優先 | 狀態 | 主責 | GAP | 研究問題 |",
-                "| --- | --- | --- | --- | --- | --- |"]
+        lines+=["| ID | 版本 | 優先 | 狀態 | 主責 | GAP | 研究問題 |",
+                "| --- | --- | --- | --- | --- | --- | --- |"]
         for r in rows:
             title=r["title"].replace("|","/").replace("\n"," ")
             d=r["dispatch"]
-            lines.append(f'| {r["id"]} | {d["priority"]} | {d["state"]} | {r["owner_task"]} | {", ".join(r["gap_ids"])} | {title} |')
+            lines.append(f'| {r["id"]} | {r["client_version"].upper()} | {d["priority"]} | {d["state"]} | {r["owner_task"]} | {", ".join(r["gap_ids"])} | {title} |')
     lines+=["","新請求不會自動喚醒另一個對話；GitHub 提交/合併後才可供不同 Agent 檢視、認領與回報。",""]
     return "\n".join(lines)
 
@@ -151,25 +153,28 @@ def validate(root=ROOT,boot=True):
             if fp is None or fp.read_text(encoding="utf-8")!=body:
                 errors.append(f"{path}: missing or stale generated inbox")
         for task in TASKS:
-            path=f"kr/tasks/{task}/README.md"
-            fp=safe_file(root,path)
-            if fp is None:
-                errors.append(f"{path}: not found")
-            else:
-                t=fp.read_text(encoding="utf-8")
-                if BOOT_MARKER not in t or f"research/dispatch/inbox/{task}.md" not in t:
-                    errors.append(f"{path}: missing dispatch bootstrap")
+            for client in ("kr","tc"):
+                path=f"{client}/tasks/{task}/README.md"
+                fp=safe_file(root,path)
+                if fp is None:
+                    errors.append(f"{path}: not found")
+                else:
+                    t=fp.read_text(encoding="utf-8")
+                    if BOOT_MARKER not in t or f"research/dispatch/inbox/{task}.md" not in t:
+                        errors.append(f"{path}: missing dispatch bootstrap")
         fp=safe_file(root,"AGENTS.md")
         if fp is None or BOOT_MARKER not in fp.read_text(encoding="utf-8"):
             errors.append("AGENTS.md: missing global startup rule")
     return errors
 
-def transition(root,rid,state,actor,date,note,branch=None,base=None,report=None,outcomes=None):
+def transition(root,rid,state,actor,date,note,branch=None,base=None,report=None,outcomes=None,version=None):
     data=read(root)
     rows=[x for x in data["items"] if x.get("id")==rid]
     if len(rows)!=1:
         raise ValueError(f"unknown/duplicate RR {rid}")
     r=rows[0]
+    if version is not None and r.get("client_version")!=version:
+        raise ValueError("RR client_version does not match the active KR/TC task")
     d=r["dispatch"]
     old=d["state"]
     if state not in NEXT.get(old,set()):
@@ -212,10 +217,12 @@ def main():
     sub.add_parser("sync")
     show=sub.add_parser("show")
     show.add_argument("task",choices=TASKS)
+    show.add_argument("--version",choices=("kr","tc"))
     tr=sub.add_parser("transition")
     tr.add_argument("request")
     tr.add_argument("state",choices=sorted(STATUS))
     tr.add_argument("--actor",required=True)
+    tr.add_argument("--version",required=True,choices=("kr","tc"))
     tr.add_argument("--date",default=dt.date.today().isoformat())
     tr.add_argument("--note",required=True)
     tr.add_argument("--branch")
@@ -233,9 +240,9 @@ def main():
         sync(root,read(root)["items"])
         print("Generated inboxes; review diff before publication")
     elif args.command=="show":
-        print(inbox_text(args.task,read(root)["items"]),end="")
+        print(inbox_text(args.task,read(root)["items"],version=args.version),end="")
     elif args.command=="transition":
         transition(root,args.request,args.state,args.actor,args.date,args.note,
-                   branch=args.branch,base=args.base,report=args.report,outcomes=args.outcome)
+                   branch=args.branch,base=args.base,report=args.report,outcomes=args.outcome,version=args.version)
         print(f"{args.request} -> {args.state}; commit/merge required for cross-Agent visibility")
 if __name__=="__main__":main()
