@@ -36,3 +36,8 @@
 ## 正式研究派工接口（2026-10-29）
 
 S00 需要新 native 證據時，先查既有研究，若仍缺才在 [唯一 RR 台帳](../research/requests/index.json) 新增帶 GAP、owner_task、優先、明確驗收條件的 QUEUED 請求。產生 [T02–T16 收件箱](../research/dispatch/README.md) 並經 main 發布後，Task 開工時自行查閱、認領，按 CLAIMED→IN_PROGRESS→SUBMITTED→IN_REVIEW→ACCEPTED/NEEDS_REVISION 回報。S00 接受的是**某個研究請求的已交付範圍**，不自動升格原生 FULL-PASS 或 SPEC STABLE。需要原生嚴格複驗時回 T01，不代替其原有 README 退回流程。
+
+
+## Phase B 收斂／Phase C 准入（2026-10-29 接續）
+
+依 [S00 下一階段計畫](S00-NEXT-PLAN.md)、[工作包 JSON](s00-roadmap.json) 和 [訊息證據矩陣](../spec/session-account/phase-b-message-matrix.md) 對齊交付。每次開工先檢查 RR/GAP/SPEC/TEST，再執行 `python -B governance/check_s00_readiness.py`。只有具方向別封包、必需狀態、處理錯誤分支與測試來源的 *bounded* 契約可考慮 REVIEWED；不因 RR ACCEPTED、CI 通過或 Server 程式可編譯而自動 STABLE。真正實測原版 Client 另需使用者明確授權。
