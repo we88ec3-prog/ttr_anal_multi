@@ -1,5 +1,20 @@
 # T03 登入與角色選擇
 
+## T01 驗收退回事項
+
+### T01-RETURN-T03-006-LAYOUT-001 — NEEDS_FIX
+
+- 原稿：`kr-temp-roy/20261028-223919-chatgpt-web-roy-T03-6-wsasend-completion-boundary.md`；Git blob `28dc1c2e3e962c85e0187d75d219b9da5ec253aa`；SHA256 `81d1bedd74633751c874d571a45ba99ed7eced38081dd31f217debba41eb2e72`，已原樣保存。
+- 問題：第78行把 `channel+0xA050` 稱為 WSABUF 位置、`+0xA0B8` 稱為 overlapped context，混淆 API 引數與計數器位置。
+- 原始反證：`8068DE lea eax,[esi+A050]`、`8068F3 push eax` 提供 OVERLAPPED；`8068F7 lea ecx,[eax+14]`、`806909 push ecx` 提供 WSABUF 指標，即 connection+A064。`806961/80697A` 計算 +A0B8，`806968/806981` 呼叫 IAT `BD2284=InterlockedIncrement`，並非把 +A0B8 傳給 WSASend 的 OVERLAPPED 引數。
+- 修復要求：保留原稿，提供勘誤／新版本與新 blob／SHA；分離 OVERLAPPED、WSABUF 與 atomic-counter 地址，查對第78、124、145、198行等沿用命名，維持 frame-relative 與 connection-relative 基準區別。原稿獨立成立的 return/pending、completion 及業務未知界線保留，不把全部內容判為錯誤。
+- 完成條件：T01 對新版本及全部受影響的引數／基準／completion 描述定向複驗後才 RESOLVED；本批只建立精確 R2 退回，不宣稱原稿全文已驗收。
+- 驗收來源：[原件 PE import、既有 REA/Ghidra CFG 與 bytes 定向核對](../../../research/handoffs/t01-t03-roy-20261029/r2-evidence.json)；[重現腳本](../../../research/handoffs/t01-t03-roy-20261029/check_r2.py)。
+
+### 2026-10-29 T01 新通道收件（不等於全文通過）
+
+`t03/roy/chatgpt-web@6dc876e84358c1f1ab343ce5b8899006574ddf26` 的 LOGIN-01／02、T03-3～19 共19篇已保留原始 blob、完成有限主張與既有衝突／更正查對。[交接與各篇處置](../../../research/handoffs/t01-t03-roy-20261029/README.md)。T03-18 的 Print Screen／D3DX 更正已連回15～17：局部 stack 事實不自動成為選角回覆／worker parent 來源。所有新原稿全文歷史狀態維持 PENDING，未新增 FULL-PASS；RR／S00 接受與 Task owner 均未改。
+
 <!-- S00-DISPATCH-BOOTSTRAP:v1 -->
 ## S00 研究請求開工檢查（正式）
 

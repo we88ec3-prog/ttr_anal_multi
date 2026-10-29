@@ -15,3 +15,5 @@ T02–T16 研究原稿應繼續保留完整技術證據，對 S00 交付 bounded
 - [正式研究派工規則與 T01–T16 收件箱](dispatch/README.md)，KR／TC 共用 RR index，但各 Agent 必須按 client_version 認領。
 
 2026-10-29：[T01 新流程首次接續](handoffs/t01-20261029-risk-intake/README.md)。318版完成R0身份收件，其中4個來源完成有限主張／衝突查對，其餘314版待萃取；新增3項重用既有原生決議與1項PARTIAL導航主張。歷史全文通過3／318不變，不作本通道准入門檻；未標S00接受或SPEC_CONSUMABLE。
+
+2026-10-29：[T03 roy/chatgpt-web指定分支整合](handoffs/t01-t03-roy-20261029/README.md)。LOGIN-01／02、T03-3～19共19篇原稿以精確blob保留，13項有限主張與10筆canonical追加來源完成衝突查對；本批新通道剩0篇。Print Screen／D3DX更正與T03-6 API layout退回單獨追溯，沒有新增FULL-PASS、S00接受或RR結案。
