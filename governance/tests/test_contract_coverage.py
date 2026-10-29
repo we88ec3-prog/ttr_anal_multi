@@ -14,6 +14,7 @@ FILES = [
     "conformance/contract-coverage.json", "spec/spec-index.json",
     "design/gaps/index.json", "research/requests/index.json",
     "conformance/test-index.json", "shared/targets.json",
+    "research/claims/index.json", "research/intake/index.json",
 ]
 
 class ContractCoverageTests(unittest.TestCase):
@@ -63,6 +64,33 @@ class ContractCoverageTests(unittest.TestCase):
         self.mutate(lambda x: x["facets"].update(connection_context="EVIDENCE_BACKED"))
         self.assertTrue(any("EVIDENCE_BACKED facet needs explicit proof" in e
                             for e in evaluate(self.root)["errors"]))
+    def test_forged_test_status_does_not_remove_synthetic_blocker(self):
+        p = self.root / "conformance/test-index.json"
+        data = json.loads(p.read_text(encoding="utf-8"))
+        data["items"][0]["status"] = "ORIGINAL_CLIENT_COMPATIBILITY"
+        p.write_text(json.dumps(data), encoding="utf-8")
+        result = evaluate(self.root)
+        self.assertTrue(any("not an approved provenance class" in e for e in result["errors"]))
+        self.assertEqual(result["summary"]["review_candidates"], 0)
+
+    def test_unknown_evidence_claim_does_not_count_as_proof(self):
+        self.mutate(lambda x: x.update(evidence_refs=["CLM-DOES-NOT-EXIST"]))
+        self.mutate(lambda x: x["facets"].update(connection_context="EVIDENCE_BACKED"))
+        self.assertTrue(any("unregistered evidence claim" in e for e in evaluate(self.root)["errors"]))
+
+    def test_partial_claim_does_not_auto_upgrade_evidence_facet(self):
+        self.mutate(lambda x: x.update(evidence_refs=["CLM-NET-0001"]))
+        self.mutate(lambda x: x["facets"].update(connection_context="EVIDENCE_BACKED"))
+        self.assertTrue(any("lacks scoped native review" in e for e in evaluate(self.root)["errors"]))
+
+    def test_cross_version_claim_cannot_support_evidence(self):
+        self.mutate(lambda x: x.update(evidence_refs=["CLM-NET-0001"]))
+        self.mutate(lambda x: x["facets"].update(connection_context="EVIDENCE_BACKED"))
+        p = self.root / "research/claims/index.json"
+        data = json.loads(p.read_text(encoding="utf-8"))
+        next(x for x in data["items"] if x["id"] == "CLM-NET-0001")["client_version"] = "tc"
+        p.write_text(json.dumps(data), encoding="utf-8")
+        self.assertTrue(any("source/target lineage mismatch" in e for e in evaluate(self.root)["errors"]))
 
 if __name__ == "__main__":
     unittest.main()
