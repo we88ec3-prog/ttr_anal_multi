@@ -38,6 +38,14 @@
 T01 對完全通過原生驗證的**精確結論／子流程**，依 [FULL-PASS 不按 Task 分類政策](shared/T01-FULL-PASS-UNCLASSIFIED-INTEGRATION-RULES.md) 整合至 [共用知識入口](shared/verified-knowledge/README.md)。共用知識依功能／協定／資料結構查找，不以 Task 當分類；原 Task、作者、原稿 blob SHA、版本與驗收責任仍保留作追溯。PARTIAL、source-only、bytes 抽查或整份報告未逐項語意驗證，不得升級 FULL-PASS。原版 Server 內部規則歸 Server 待開發，Client 未知封包與反應仍屬 Client 待逆向；兩者不能混淆。本政策不改其他 Task owner、catalog、原始研究和既有退回流程。
 
 
-## Server 設計流程 Phase A（獨立分支試行）
+## Server 設計流程與 S00 跨 Task 派工（正式內部規則）
 
-本分支建立 [S00 規格整合流程](governance/s00-workflow.md)、[T01 風險分流與整合流程](governance/t01-integration-workflow.md)、[Server 規格入口](spec/README.md)。待維護者確認並合併後採為新整合流程；不覆寫既有歷史原稿、Task owner、退回狀態或 FULL-PASS 嚴格要求。無 REA 的 Agent 可進行 S00 工作；需要原生補證再交 T02–T16。此流程不授權執行原版 Client、修改原件或接收外部 Issues。
+本庫已建立 [S00 規格整合流程](governance/s00-workflow.md)、[T01 風險分流與整合流程](governance/t01-integration-workflow.md)、[Server 規格入口](spec/README.md)。新收件/認領/回報規則在 main 發布後正式生效；不覆寫既有歷史原稿、Task owner、退回狀態或 FULL-PASS 嚴格要求。無 REA 的 Agent 可進行 S00 工作；需要原生補證再交 T02–T16。此流程不授權執行原版 Client、修改原件或接收外部 Issues。
+
+
+<!-- S00-DISPATCH-BOOTSTRAP:v1 -->
+## S00 收件箱開工檢查（每個 T01–T16 Agent 必讀）
+
+**在任何新的 Task 段落、Agent 對話、復工／交接開始之前**，先取得最新 `origin/main` SHA，再閱讀自身 `kr/tasks/Txx/README.md`（含 T01 驗收退回）與 [S00 派工規則](research/dispatch/README.md)、[該 Task 收件箱](research/dispatch/inbox/T03.md)（改為自己 ID，如 T08）、[唯一 RR 請求台帳](research/requests/index.json)。使用 `python -B research/dispatch/dispatch.py show T03`（替換 ID）檢視當前待辦。T01 讀 T01 review inbox；T02–T16 讀各自 Task 收件箱。
+
+**優先順序與授權**：既有 T01 NEEDS_FIX／FIXING 退回依原規則優先；本次使用者明確任務另列優先；S00 P0→P1 隨之排程。未經明確授權不得提交/推送研究原稿；只在 main 上已公開的 RR CLAIMED 才具跨 Agent 認領效力。提交原始研究成果後需 `SUBMITTED` 附報告檔與 Git blob SHA；T01 來源查核與 S00 規格接受分開，只有 S00 可結案。**GitHub 更新不會自動喚醒其他 ChatGPT Agent。** 不採 GitHub Issues，不更動原有 task.json／owner／historical FULL-PASS/FAILED 認定。
