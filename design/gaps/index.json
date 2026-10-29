@@ -28,7 +28,8 @@
       "status": "OPEN",
       "owner_task": "T03",
       "affected_spec_ids": [
-        "SPEC-CHAR-0001"
+        "SPEC-CHAR-0001",
+        "SPEC-FLOW-0001"
       ],
       "source_refs": [
         "kr/tasks/T03/task.json"
@@ -45,7 +46,8 @@
       "status": "OPEN",
       "owner_task": "T03",
       "affected_spec_ids": [
-        "SPEC-AUTH-0001"
+        "SPEC-AUTH-0001",
+        "SPEC-FLOW-0001"
       ],
       "source_refs": [
         "kr/tasks/T03/task.json"
@@ -62,7 +64,8 @@
       "owner_task": "T02",
       "affected_spec_ids": [
         "SPEC-NET-0002",
-        "SPEC-AUTH-0001"
+        "SPEC-AUTH-0001",
+        "SPEC-FLOW-0001"
       ],
       "source_refs": [
         "kr/tasks/T02/task.json",
@@ -86,6 +89,41 @@
         "kr/tasks/T02/task.json"
       ],
       "resolution_criteria": "Clarify 0x2633/0x22D7 field semantics, 727190 behavior and checksum failure node/pool handling; tie client message handlers to T03-relevant S2C and applicable state."
+    },
+    {
+      "id": "GAP-FLOW-0001",
+      "title": "KR login result to character roster/selection request-response sequencing",
+      "client_version": "kr",
+      "type": "CLIENT_BEHAVIOR_UNKNOWN",
+      "priority": "P0",
+      "status": "OPEN",
+      "owner_task": "T03",
+      "affected_spec_ids": [
+        "SPEC-FLOW-0001"
+      ],
+      "source_refs": [
+        "kr/tasks/T02/task.json",
+        "kr/tasks/T03/task.json"
+      ],
+      "resolution_criteria": "Supply bounded, direction-specific actual message and state ordering between auth response, server selection/handoff, roster handler, selection C2S and S2C replies; preserve failure paths and explicit UNKNOWN until proved."
+    },
+    {
+      "id": "GAP-SCENE-0001",
+      "title": "KR character selection 0x42 result to scene key/first tutorial activation is unlinked",
+      "client_version": "kr",
+      "type": "CLIENT_BEHAVIOR_UNKNOWN",
+      "priority": "P1",
+      "status": "OPEN",
+      "owner_task": "T03",
+      "affected_spec_ids": [
+        "SPEC-SCENE-0001",
+        "SPEC-FLOW-0001"
+      ],
+      "source_refs": [
+        "kr/tasks/T03/task.json",
+        "kr-extra-roy/20261029-chatgpt-web-roy-E16-scene-upstream-and-seq-load-semantics.md"
+      ],
+      "resolution_criteria": "Identify actual 0x42 S2C handler/state and any connection to 0x47B5C0 key writer→0x565720/SceneList; separate client-side script reuse from initial login, include counterexamples and tests. No invented 1001/1 wire values."
     }
   ]
 }

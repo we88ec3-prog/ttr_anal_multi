@@ -246,6 +246,90 @@
       ],
       "conflicts": [],
       "native_review_ref": null
+    },
+    {
+      "id": "CLM-SCENE-0001",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/20261029-chatgpt-web-roy-E06-EX-v1-native-codec-SceneList-recovered.md",
+      "source_blob_sha": "d23386c7c1afd96ea30e9e751246f64dda1cb201",
+      "source_intake_id": "SRC-0007",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR Event.stp EX v1 SceneList.xml decryption/decompression sample, restored 158269 bytes",
+      "assertion": "The bounded KR Event.stp EX v1 sample was decoded into a SceneList.xml file containing a scene row questIdx=1001, sceneIdx=1, funcName=tutorial_start, endBehavior=0. The source report counts 1687 SCENE children.",
+      "limitations": [
+        "Static resource table is not evidence of a Server packet, first-login branch, or every player's default scene.",
+        "The raw extracted XML was not provided in this S00 branch; S00 did not independently rerun original resource bytes."
+      ],
+      "affected_spec_ids": [
+        "SPEC-SCENE-0001",
+        "SPEC-FLOW-0001"
+      ],
+      "conflicts": [],
+      "native_review_ref": null
+    },
+    {
+      "id": "CLM-SCENE-0002",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/20261029-chatgpt-web-roy-E08-tutorial-start-Lua-and-scene-index.md",
+      "source_blob_sha": "008442a5a8dc809df06d90e43612c86f7457bee1",
+      "source_intake_id": "SRC-0008",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 0x5607D0/0x568950/0x568680 SceneList two-key index and Event.stp tutorial_start Lua source",
+      "assertion": "The bounded Client SceneList loader extracts questIdx, sceneIdx and funcName, then places the first two as a two-key ordered index to the associated script name; Event.stp includes a Lua tutorial_start function source snippet.",
+      "limitations": [
+        "The observed source snippet does not prove scene startup or define a full native extracted script file length.",
+        "Do not interpret the XML key pair as S2C wire field semantics."
+      ],
+      "affected_spec_ids": [
+        "SPEC-SCENE-0001",
+        "SPEC-FLOW-0001"
+      ],
+      "conflicts": [],
+      "native_review_ref": null
+    },
+    {
+      "id": "CLM-SCENE-0003",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/20261029-chatgpt-web-roy-E13-scene-index-to-seq-path-runtime-bindings.md",
+      "source_blob_sha": "35dd9eefcd0e73d93d5ed00040ba8468f19921b9",
+      "source_intake_id": "SRC-0009",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR SceneList ordered-map readers 0x561A1C... and 0x5658D0... path builder; E13 original scope",
+      "assertion": "At least two bounded Client readers use a SceneList (questIdx,sceneIdx) index hit to assemble Event/Sequences/<funcName>.seq from the selected node.",
+      "limitations": [
+        "Later E14–E16 correct details about callee function names, first path loader and external resource calls; prefer newer bounded findings.",
+        "Path construction does not establish that the script ran successfully or that the chosen keys came from a character-selection packet."
+      ],
+      "affected_spec_ids": [
+        "SPEC-SCENE-0001",
+        "SPEC-FLOW-0001"
+      ],
+      "conflicts": [],
+      "native_review_ref": null
+    },
+    {
+      "id": "CLM-SCENE-0004",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/20261029-chatgpt-web-roy-E16-scene-upstream-and-seq-load-semantics.md",
+      "source_blob_sha": "1e97cafc08bfc9377c97bd946ba364af22807104",
+      "source_intake_id": "SRC-0010",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 0x47B5C0→0x565720, 0x561EF3 EndCutScene→0x565720 and dual script load evidence",
+      "assertion": "The same bounded scene index/load entry 0x565720 is reached from at least two distinct upstream paths, including a 0x47B5C0 state branch and a post-EndCutScene restoration path; therefore it is not proven specific to first login.",
+      "limitations": [
+        "The [object+0x248] writer, origin of key/state values and direct 0x42 selection response integration remain unknown.",
+        "Static paths do not establish successful runtime invocation, actual Server packet or scene transition."
+      ],
+      "affected_spec_ids": [
+        "SPEC-SCENE-0001",
+        "SPEC-FLOW-0001"
+      ],
+      "conflicts": [],
+      "native_review_ref": null
     }
   ]
 }
