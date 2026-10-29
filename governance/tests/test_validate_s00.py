@@ -42,6 +42,32 @@ class S00IndexTests(unittest.TestCase):
         self.edit("spec/spec-index.json", lambda d: d["items"][0].update({"maturity":"STABLE"}))
         self.assertTrue(any("STABLE requires" in x for x in validate(self.root)))
 
+    def test_intake_invalid_source_sha_rejected(self):
+        def add(d):
+            d["items"].append({
+                "id":"SRC-0001", "client_version":"kr",
+                "target_sha256":"9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+                "source_file":"kr/tasks/T02/task.json", "source_blob_sha":"0"*40,
+                "source_sha256":"0"*64, "integration_status":"REGISTERED", "claim_ids":[],
+            })
+        self.edit("research/intake/index.json", add)
+        self.assertTrue(any("source SHA256 mismatch" in x for x in validate(self.root)))
+
+    def test_intake_promotion_without_claim_rejected(self):
+        def add(d):
+            import hashlib
+            s=(self.root/"kr/tasks/T02/task.json").read_bytes()
+            d["items"].append({
+                "id":"SRC-0001", "client_version":"kr",
+                "target_sha256":"9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+                "source_file":"kr/tasks/T02/task.json",
+                "source_blob_sha":hashlib.sha1(b"blob "+str(len(s)).encode()+b"\\x00"+s).hexdigest(),
+                "source_sha256":hashlib.sha256(s).hexdigest(),
+                "integration_status":"SPEC_CONSUMABLE","claim_ids":[],
+            })
+        self.edit("research/intake/index.json", add)
+        self.assertTrue(any("promoted source must" in x for x in validate(self.root)))
+
     def test_cross_version_target_rejected(self):
         self.edit("spec/spec-index.json", lambda d: d["items"][0].update({"client_version":"tc"}))
         self.assertTrue(any("target SHA differs" in x for x in validate(self.root)))

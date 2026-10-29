@@ -9,7 +9,7 @@ python -B governance/validate_s00.py
 python -B -m unittest discover -s governance/tests -v
 ```
 
-**檢查的內容：**JSON schema 標頭、項目 ID 唯一、SPEC/CLM/RR/GAP/ADR/TEST/FB 跨引用、KR/TC SHA 對應、必要檔案存在、STABLE 最小硬性條件、NATIVE_VERIFIED 所需證據定位欄位。未知或未完成規格應維持 DRAFT。
+**檢查的內容：**JSON schema 標頭、項目 ID 唯一、SPEC/CLM/RR/GAP/ADR/TEST/FB/SRC 跨引用、KR/TC SHA 對應、必要檔案存在、來源 blob SHA256/SHA1 校驗與收件升格門檻、STABLE 最小硬性條件、NATIVE_VERIFIED 所需證據定位欄位。未知或未完成規格應維持 DRAFT。
 
 **不能驗證的內容：**原生機器碼語意、封包欄位真值、Client 連線相容性、Server 可運作性。機械檢查綠燈**不會產生**FULL-PASS 或 STABLE 決策。現有舊 318 版台帳與退回原樣保留。
 

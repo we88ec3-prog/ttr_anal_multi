@@ -30,3 +30,9 @@
 完成來源身份及 bounded claim 的適用範圍、已知衝突標示與 S00 可引用的限定資訊，就停止一般 R1 的重驗。由 S00 遇到具體協定/設計阻塞時再派遣 R2/R3。**不再以完成 318 篇全文 FULL-PASS 作為規格整合門檻。**
 
 精確退回與複驗、不修改其他 Task 原文及未經授權不推研究變更等現行政策仍有效。
+
+## 來源收件操作紀錄
+
+新來源先登錄 `research/intake/index.json`，記錄精確來源檔、Git blob SHA、SHA256、Client 版本與原件 SHA。只有完成 bounded claim 萃取後才可由 REGISTERED 升 CLAIMS_EXTRACTED；主張已和現有版本/反證查對並有紀錄才可升 CONFLICT_CHECKED；S00 確認有限用途並明確記載衝突處置才可升 SPEC_CONSUMABLE。這些狀態皆不代表已完成原生語意驗證。
+
+優先使用 [source-intake 模板](../research/templates/source-intake.md) 和 [server-impact 模板](../research/templates/server-impact.md)。機械性來源 SHA 與引用檢查由 `governance/validate_s00.py` 進行；它不取代 T01 對關鍵原生主張的人工審核。

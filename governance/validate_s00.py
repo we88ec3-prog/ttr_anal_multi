@@ -14,6 +14,7 @@ FILES = {
     "ADR": ("design/decisions/index.json", "s00-adr-index-v1"),
     "FB": ("design/feedback/index.json", "s00-feedback-index-v1"),
     "TEST": ("conformance/test-index.json", "s00-test-index-v1"),
+    "SRC": ("research/intake/index.json", "s00-source-intake-v1"),
 }
 MATURITY = {"DRAFT", "REVIEWED", "STABLE", "DEPRECATED"}
 LEVEL = {"NATIVE_VERIFIED", "PARTIAL", "INFERRED", "UNKNOWN", "REFUTED"}
@@ -142,6 +143,32 @@ def validate(root: Path) -> list[str]:
         if not row.get("question"):
             fail(item_id, "missing research question")
         refs(row, "gap_ids", "GAP", item_id)
+
+    for item_id, row in tables["SRC"].items():
+        version(row, item_id)
+        if row.get("integration_status") not in {
+            "REGISTERED", "CLAIMS_EXTRACTED", "CONFLICT_CHECKED", "SPEC_CONSUMABLE"
+        }:
+            fail(item_id, "invalid integration_status")
+        source = objpath(row.get("source_file"), item_id)
+        blob = row.get("source_blob_sha")
+        digest = row.get("source_sha256")
+        if not isinstance(blob, str) or not SHA1.fullmatch(blob):
+            fail(item_id, "invalid source Git blob SHA")
+        if not isinstance(digest, str) or not SHA256.fullmatch(digest):
+            fail(item_id, "invalid source SHA256")
+        if source and isinstance(blob, str) and SHA1.fullmatch(blob) and isinstance(digest, str) and SHA256.fullmatch(digest):
+            contents = source.read_bytes()
+            if hashlib.sha256(contents).hexdigest() != digest:
+                fail(item_id, "source SHA256 mismatch")
+            git_blob = hashlib.sha1(b"blob " + str(len(contents)).encode() + b"\x00" + contents).hexdigest()
+            if git_blob != blob:
+                fail(item_id, "source Git blob SHA mismatch")
+        refs(row, "claim_ids", "CLM", item_id)
+        if row.get("integration_status") in {"CLAIMS_EXTRACTED", "CONFLICT_CHECKED", "SPEC_CONSUMABLE"} and not row.get("claim_ids"):
+            fail(item_id, "promoted source must enumerate bounded claim IDs")
+        if row.get("integration_status") == "SPEC_CONSUMABLE" and not row.get("conflict_disposition"):
+            fail(item_id, "SPEC_CONSUMABLE requires explicit conflict disposition")
 
     for item_id, row in tables["CLM"].items():
         version(row, item_id)

@@ -8,3 +8,6 @@
 - [舊版嚴格 FULL-PASS](../shared/verified-knowledge/README.md)：完整保留，不從本索引自動推升。
 
 T02–T16 研究原稿應繼續保留完整技術證據，對 S00 交付 bounded claims、server-impact 與必要 GAP；REA 可選，無 REA Agent 也可查原稿/快取/索引。
+
+- `intake/index.json`：**新的 T01 收件台帳**，完整保留精確原稿 SHA 與兩軸工作狀態；Phase A 初始無新來源，不代表歷史來源消失。
+- [來源收件範本](templates/source-intake.md)、[Server 影響交接範本](templates/server-impact.md)。
