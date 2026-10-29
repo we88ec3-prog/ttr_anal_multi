@@ -18,6 +18,13 @@
 - [方向別封包／狀態證據矩陣](session-account/phase-b-message-matrix.md)：區分已觀察的 local payload、S2C handler 和仍 UNKNOWN 的交互。
 - [機器工作包計畫](../governance/s00-roadmap.json) 與 [準備度檢查](../governance/check_s00_readiness.py)：從 RR/GAP/SPEC/TEST 計算阻塞；**不會自動宣布相容或 STABLE**。
 
+## 規格交付與 Server 專屬設計審核
+
+- [獨立實作者規格驗收清單](IMPLEMENTER-HANDOFF.md)：只看 spec/conformance，逐項指出仍需的方向別位元組與狀態。
+- [七項契約覆蓋矩陣](../conformance/contract-coverage.json) 與 [結構／阻塞檢查器](../governance/check_contract_coverage.py)：目前七項均 BLOCKED；這是交付準備度，不是原版 Client 行為檢驗。
+- [三份 Server-only ADR 提案](../design/decisions/README.md)：狀態均為 PROPOSED、NON-NORMATIVE；不能當成官方 Server 語意，也未加入本頁的正式 SPEC normative ADR。
+- [T01 最新 R0 來源整合結果](../research/handoffs/t01-20261029-risk-intake/server-impact.md)：新增 Client/Quest 有界主張，**尚無新登入／選角封包**。
+
 ## 研究與可實作性的入口
 
 - [T02 既有成果完整盤點及 T01 勘誤對照](protocol/T02-EVIDENCE-INVENTORY.md)
@@ -25,7 +32,7 @@
 - [T03 定向研究交接](../governance/T03-S00-AGENT-REQUESTS.md)
 - [連線邊界狀態模型](protocol/t02-network-state-model.md)：只描述已觀察的 Client 路徑，**不宣稱官方 Server state machine**。
 - [S00 整合流程](../governance/s00-workflow.md)、[目前優先的精確研究請求](../governance/T02-S00-AGENT-REQUESTS.md)
-- [機器規格索引](spec-index.json) → [16 條 CLM](../research/claims/index.json) → [10 份 SRC](../research/intake/index.json)，皆非新增 FULL-PASS；[7 個 GAP](../design/gaps/index.json)、[8 個研究請求](../research/requests/index.json)。
+- [機器規格索引](spec-index.json) → [20 條 CLM](../research/claims/index.json) → [328 份 SRC 登記](../research/intake/index.json)；其中後續 T01 新增的 318 份主要為 R0 來源身分收件，**不代表 318 份原稿完成語意驗收或能成為規範性 wire 依據**。目前 [7 個 GAP](../design/gaps/index.json)、[8 個研究請求](../research/requests/index.json) 仍阻塞。
 - [離線測試](../conformance/README.md) 只驗證研究派生的局部格式與靜態邊界映射，**沒有 Client 封包實測或 Server 連線驗收**。
 
 目前不受理外部 Issues；Server 程式碼、運行、資料庫及部署獨立於本設計庫。未證實的官方 Server 內部規則不能轉為此處的 Client 原生事實。

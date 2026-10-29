@@ -19,3 +19,13 @@ python -B -m unittest discover -s conformance/session -p "test_*.py" -v
 ## T02 收發與連線盤點的靜態矩陣測試
 
 新增 [TEST-NET-0003](protocol/kr-network-boundary-matrix.json)：核對舊 KR 靜態呼叫的 `port/slot/pipeline` 分離、發送端 `WSASend` 路徑、接收端經 `4930E0` 命令分派的**整理結果**。對應 [Python unittest](protocol/test_kr_network_boundary_matrix.py) 隨 protocol test discovery 執行。此測試登錄狀態沿用 `OFFLINE_SYNTHETIC`，但內容本身是**來源派生的靜態矩陣**，不代表跑過 socket、連上 Server、擷取到任何真實封包或驗證過公式以外的程序。
+
+
+## Spec-only 契約完整度盤點（非 TEST 登記）
+
+[七項 wire／resource 覆蓋矩陣](contract-coverage.json) 把 Client 連線框架、登入、角色清單、選角、場景本地資源拆開；[檢查器](../governance/check_contract_coverage.py) 與 [獨立實作者驗收](../spec/IMPLEMENTER-HANDOFF.md) 可檢視未知欄位、既有 RR/GAP 是否解除、SPEC 可信度，以及僅有合成向量的阻塞。此為**規格治理檢查**，不產生新的 `TEST-*` 也不自動提供真實封包。
+
+```powershell
+python -B governance/check_contract_coverage.py --json
+python -B governance/check_contract_coverage.py --check
+```

@@ -79,3 +79,12 @@ B-CONTRACT 的工作交付須有：
 - 從內部研究請求制度轉為 GitHub Issues／外部公開提交管道。
 
 完整階段 B 的研究仍須由 T02/T03 Agent **下次開工自行認領**，本規劃不會自動喚醒它們。
+
+
+## Phase B 交付品質門檻接續（S00 第二次迭代；2026-10-29）
+
+新的 T01 [來源接收與有限主張整合](../research/handoffs/t01-20261029-risk-intake/README.md) 已將 318 個歷史來源版本加入新索引（全庫 328 SRC、20 CLM），其中新增 3 項有限原生 Client 主張、1 項 Quest 部分主張；**沒有**新證據閉合 B-NET/B-AUTH/B-CHAR 的 wire 協定。**不要以來源件數計算互通進度**；目前新批 314 個只是 REGISTERED，4 個 CONFLICT_CHECKED，0 個 SPEC_CONSUMABLE。歷史 3/318 全文通過政策不變。
+
+已建立 [三項僅供討論的 Server ADR 提案](../design/decisions/README.md)：連線與 Session 身分分離、帳號資料與密碼驗證、角色資料權威；**尚未批准、不可視為原版 Server 行為，亦不能代替封包逆向**。獨立實作者可用 [SPEC-only 審核表](../spec/IMPLEMENTER-HANDOFF.md) 明確報告仍缺欄位與狀態；[七項覆蓋矩陣](../conformance/contract-coverage.json) 經 [結構檢查](check_contract_coverage.py) 仍均為 BLOCKED，符合目前 7 GAP OPEN／8 RR QUEUED／5 個 synthetic TEST 的事實。
+
+本迭代未認領任何 T02/T03 RR，未實測原版 Client，也不會自動啟動其他 Agent。後續先接受已提交研究、必要時 T01 複驗，再將精確的 Client 條件回填 SPEC、建立有來源向量，最後才交 spec-only implementer 審閱。

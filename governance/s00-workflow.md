@@ -41,3 +41,10 @@ S00 需要新 native 證據時，先查既有研究，若仍缺才在 [唯一 RR
 ## Phase B 收斂／Phase C 准入（2026-10-29 接續）
 
 依 [S00 下一階段計畫](S00-NEXT-PLAN.md)、[工作包 JSON](s00-roadmap.json) 和 [訊息證據矩陣](../spec/session-account/phase-b-message-matrix.md) 對齊交付。每次開工先檢查 RR/GAP/SPEC/TEST，再執行 `python -B governance/check_s00_readiness.py`。只有具方向別封包、必需狀態、處理錯誤分支與測試來源的 *bounded* 契約可考慮 REVIEWED；不因 RR ACCEPTED、CI 通過或 Server 程式可編譯而自動 STABLE。真正實測原版 Client 另需使用者明確授權。
+
+
+## 來源大量收件後的規格影響判定
+
+T01 在 [本批首次新流程來源收件](../research/handoffs/t01-20261029-risk-intake/server-impact.md) 登記 318 個歷史版與 4 條新增 limited CLM。S00 不因 `REGISTERED/CONFLICT_CHECKED` 或既有 bounded native review 就直接寫成新 wire MUST；需逐條確認是否真正接到 Server-facing producer/consumer。若未形成特定消息、方向、狀態與 byte-range 的完整映射，作為研究導航，不升 SPEC_CONSUMABLE，也不關閉相關 GAP。
+
+新的 [ADR-0001..0003](../design/decisions/README.md) 都只有提案地位；只有正式決議和必需的 Client 契約經驗證後才能寫入規範性規格。

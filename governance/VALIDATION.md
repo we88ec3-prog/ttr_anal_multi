@@ -38,3 +38,15 @@ python -B -m unittest discover -s governance/tests -v
 ```
 
 本工具只驗證工作包對現有 SPEC/GAP/RR/TEST 的引用、版本、無依賴循環及是否仍被 DRAFT/OPEN/QUEUED、僅有合成測試等條件阻塞。`--check` 只在計畫本身無效時失敗，**工作包 BLOCKED 是預期狀態**。`REVIEW_CANDIDATE` 亦不是原版 Client 相容、Server 上線或規格正式發布。
+
+
+## Client 契約覆蓋與 ADR 狀態檢查（新增）
+
+```powershell
+python -B governance/check_contract_coverage.py
+python -B governance/check_contract_coverage.py --check
+python -B governance/check_contract_coverage.py --json
+python -B -m unittest discover -s governance/tests -v
+```
+
+`validate_s00.py` 額外禁止未經批准的 ADR-0001～0003 變成規範性決策，也禁止 `REVIEWED/STABLE` SPEC 借用未批准 ADR。契約覆蓋工具對未解的 spec/rr/gap 和沒有來源支持的方向別測試維持 BLOCKED；`--check` 只在資料結構或引用矛盾時失敗。全部成功**不代表完成原版登入連線或發放 Server 相容認證**。
