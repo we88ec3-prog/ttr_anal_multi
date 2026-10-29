@@ -1,5 +1,11 @@
 # T01 現有成果來源審核
 
+<!-- S00-DISPATCH-BOOTSTRAP:v1 -->
+## S00 跨 Task 收件／認領／回報開工檢查（正式）
+
+**TC T01 開工必讀**：先讀原有驗收／退回事項，再查看 [T01 的 S00 待審收件箱](../../../research/dispatch/inbox/T01.md) 與 [唯一 RR 台帳](../../../research/requests/index.json)。只核對 `client_version=tc` 的證據，不將 KR 位址/原稿結論跨用。這是 S00 研究回報提示，**不取代 T01 原本的嚴格 FULL-PASS／退回／複驗制度**；最終 RR 結案由 S00 負責。
+
+
 狀態：background-only-native-evidence-missing；負責人未認領。
 
 ## 範圍
