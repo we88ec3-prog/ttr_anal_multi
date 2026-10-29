@@ -4,8 +4,8 @@
 
 ## Task 啟動的必要順序
 
-1. **先確認 main 最新 SHA**（如 `git fetch origin main`），閱讀 `AGENTS.md` 與 `kr/tasks/Txx/README.md` 既有 T01 退回專區及 `kr/tasks/Txx/task.json`；不可用舊快照誤認未派工。
-2. 閱讀本 Task [收件箱](inbox/T03.md)（依 Task ID 選相應檔）及 [RR 台帳](../requests/index.json)，必要時 `python -B research/dispatch/dispatch.py show T03`。
+1. **先確認 main 最新 SHA**（如 `git fetch origin main`），閱讀 `AGENTS.md` 與對應版本 `kr/tasks/Txx/README.md` 或 `tc/tasks/Txx/README.md` 既有 T01 退回專區及 `kr/tasks/Txx/task.json`；不可用舊快照誤認未派工。
+2. 閱讀本 Task [收件箱](inbox/T03.md)（依 Task ID 選相應檔）及 [RR 台帳](../requests/index.json)，必要時 `python -B research/dispatch/dispatch.py show T03 --version kr --version kr`（TC 改 `tc`）；**不得跨 KR/TC 認領**。
 3. **先處理 T01 NEEDS_FIX／FIXING 的已核准退回優先級**；再按本次明確使用者指示及 P0、P1…研究請求排序。若使用者指定工作範圍不同，以指示為準並記錄延後理由。沒有待辦時續原 Task 計畫。
 4. 如需接手 RR，先檢查最新 main 是否仍為 `QUEUED`，確認自身 Task 為 owner，於**個人工作分支**提出 `CLAIMED` 更新（包含 actor、工作分支、當次 main SHA）。**認領更新經審核合併到 main 才算公開認領**；若他人已認領，不得覆蓋。無提交權／未授權 Push 時先提供變更交 S00 協調，不能聲稱鎖定。
 5. 認領後改 `IN_PROGRESS`，依原 Task BIN-first、來源 SHA、精確證據/未知、修正與提交規則進行定向研究。只研究 RR 所需的**最小阻斷問題**；不要覆蓋原作者原稿、task.json 或其他主責。
@@ -33,11 +33,11 @@
 
 ```powershell
 python -B research/dispatch/dispatch.py show T03
-python -B research/dispatch/dispatch.py transition RR-0008 CLAIMED --actor "t03-agent" --branch "t03/rr-0008" --base "<當時 main 40碼 SHA>" --note "認領選角回覆的定向補證"
-python -B research/dispatch/dispatch.py transition RR-0008 IN_PROGRESS --actor "t03-agent" --note "開始讀取既有來源與有界原生補證"
-python -B research/dispatch/dispatch.py transition RR-0008 SUBMITTED --actor "t03-agent" --report "kr-temp-roy/研究交接.md" --note "完成有界回覆 handler 分析與殘餘未知"
-python -B research/dispatch/dispatch.py transition RR-0008 IN_REVIEW --actor "T01" --note "開始核對來源 blob 及必要 native 反證"
-python -B research/dispatch/dispatch.py transition RR-0008 ACCEPTED --actor "S00" --note "已核對 RR 完成條件，更新 S00 規格" --outcome "SPEC-FLOW-0001"
+python -B research/dispatch/dispatch.py transition RR-0008 CLAIMED --version kr --actor "t03-agent" --branch "t03/rr-0008" --base "<當時 main 40碼 SHA>" --note "認領選角回覆的定向補證"
+python -B research/dispatch/dispatch.py transition RR-0008 IN_PROGRESS --version kr --actor "t03-agent" --note "開始讀取既有來源與有界原生補證"
+python -B research/dispatch/dispatch.py transition RR-0008 SUBMITTED --version kr --actor "t03-agent" --report "kr-temp-roy/研究交接.md" --note "完成有界回覆 handler 分析與殘餘未知"
+python -B research/dispatch/dispatch.py transition RR-0008 IN_REVIEW --version kr --actor "T01" --note "開始核對來源 blob 及必要 native 反證"
+python -B research/dispatch/dispatch.py transition RR-0008 ACCEPTED --version kr --actor "S00" --note "已核對 RR 完成條件，更新 S00 規格" --outcome "SPEC-FLOW-0001"
 python -B research/dispatch/dispatch.py check
 ```
 
@@ -49,3 +49,6 @@ python -B research/dispatch/dispatch.py check
 - Txx 只對自己的 RR 認領／研究／回報，不自行結案或變更其他 owner；T01 原有退回優先規則不變。
 - T01 仍在 Task README 退回專區維護精確 native 的 NEEDS_FIX 等標記，與本表的 NEEDS_REVISION 完全**不同**；不得因本請求已接受就把 FAILED/PARTIAL 自動升為 FULL-PASS。
 - GitHub Actions 只檢查 schema、歷史狀態、來源 SHA、收件箱/開工入口一致；**不代表 Agent 已獲通知、原生 BIN 已驗證、Server 已實際運作或原版遊戲可玩**。
+
+
+**雙版本規範**：KR 與 TC 的 Task 名稱相同，但原始 SHA、位址、分包語意不可互借。RR `owner_task=T03` 且 `client_version=kr` **只屬 KR T03**；TC T03 需 `client_version=tc` 的獨立 RR 與對應 GAP，沒有時不構成待辦。CLI 的 `--version kr|tc` 會在認領／回報時阻擋版本不符。
