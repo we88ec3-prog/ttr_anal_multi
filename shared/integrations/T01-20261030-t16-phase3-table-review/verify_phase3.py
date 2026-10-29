@@ -31,6 +31,26 @@ with zipfile.ZipFile(ZIP) as z:
             if edge["kind"]=="fallthrough":assert dst==src+inst[src]["size"]
             if edge["kind"]!="call":assert dst in inst
             edges[src].append(edge)
+        # A native rooted CFG must include every normal direct successor. 0x50554C
+        # calls the throw/error path 0x87DB30 and has no normal fallthrough into
+        # padding/jump-table data; this exception is explicit, not inferred.
+        for va,node in inst.items():
+            outgoing=edges.get(va,[])
+            kinds=[e["kind"] for e in outgoing]
+            nxt=va+node["size"]
+            if node["op"] in ("ret","retn","retf","int3","ud2","hlt"):
+                assert not outgoing,(hex(va),"terminal with successor")
+            elif node["op"].startswith("j") and node["op"]!="jmp":
+                assert sorted(kinds)==["branch","fallthrough"],(hex(va),kinds)
+                assert any(e["kind"]=="fallthrough" and int(e["to"],16)==nxt for e in outgoing)
+            elif node["op"]=="jmp":
+                assert "branch" in kinds or "indexed-branch" in kinds,(hex(va),kinds)
+                assert "fallthrough" not in kinds
+            elif va==0x50554c and node["op"]=="call" and node["arg"]=="0x87db30":
+                assert not outgoing
+            else:
+                assert len(outgoing)==1 and outgoing[0]["kind"]=="fallthrough"
+                assert int(outgoing[0]["to"],16)==nxt
         for va,i in inst.items():
             raw=b[va-0x400c00:va-0x400c00+i["size"]]
             assert raw.hex()==i["bytes"].lower()
@@ -39,7 +59,7 @@ with zipfile.ZipFile(ZIP) as z:
                 target=(va+5+int.from_bytes(raw[1:],"little",signed=True))&0xffffffff
             elif raw[0]==0xeb and len(raw)==2 or 0x70<=raw[0]<=0x7f and len(raw)==2:
                 target=(va+2+int.from_bytes(raw[1:],"little",signed=True))&0xffffffff
-            elif raw[:1]==b"\\x0f" and len(raw)==6 and 0x80<=raw[1]<=0x8f:
+            elif raw[0]==0x0f and len(raw)==6 and 0x80<=raw[1]<=0x8f:
                 target=(va+6+int.from_bytes(raw[2:],"little",signed=True))&0xffffffff
             else:target=None
             if target is not None:
@@ -73,6 +93,12 @@ with zipfile.ZipFile(ZIP) as z:
         assert (raw[0]==0xe8 if q["claimed_opcode"]=="call" else raw[0] in (0xeb,0xe9))
         assert (va+size+int.from_bytes(raw[1:size],"little",signed=True))&0xffffffff==int(q["claimed_target"],16)
 assert [struct.unpack_from("<I",b,0x505554-0x400c00+4*i)[0] for i in range(6)]==[0x504de2,0x504df4,0x504deb,0x504dfd,0x504e06,0x504e0f]
+with zipfile.ZipFile(ZIP) as z:
+    matching=[n for n in z.namelist() if n.endswith("/native-cfg/root-00504740.json")]
+    assert len(matching)==1
+    case=json.loads(z.read(matching[0]))
+    indexed=sorted(int(e["to"],16) for e in case["edges"] if e["from"].lower()=="0x00504d9e" and e["kind"]=="indexed-branch")
+    assert indexed==sorted([0x504de2,0x504df4,0x504deb,0x504dfd,0x504e06,0x504e0f])
 key=bytearray([0x30,0xe7])
 for i in range(2,1024):key.append((key[i-2]+key[i-1]+0x13-(0x56 if i==0x17c else 0))&255)
 for name,off,size,sha in [("QuestInfo",4345872,204056,"5d251415fdfdc453adefbff03114ded5a8ea41b696ce0aab86a23070e0fdca60"),("QuestTalk",4550672,52404,"b136fddf1696ff73c5780c269604b5670e35cbb416cd8cce4274aa05865edd28")]:
