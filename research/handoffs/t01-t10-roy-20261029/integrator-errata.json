@@ -1,0 +1,26 @@
+{
+  "scope": "Correct T01 notification copy/paste only; no new author defect or changed historical verdict",
+  "changes": [
+    {
+      "return_id": "T01-RETURN-T10-063-001",
+      "old_incorrect_notification_evidence": "第一支可先依 `FB7C14` 呼叫 `6D0750`；但 `0x6D4A95` 僅測試 `FDF3EC` 並留下 flags，`6D4A9C..6D4AC9` 先清普通 40 bytes。`0x6D4ACE` 才依該 flags 選擇分支，未初始化時 `0x6D4AD9 = E8 C2 D2 FF FF` 呼叫 `6D1DA0`，最後 `6D4AF3` 呼叫 `823850` 清特殊樹。故特殊域初始化不在普通清零之前。",
+      "correct_existing_decision_evidence": "`0x6D4C23` 算 ESI-0x2711，`0x6D4C29` 比較 0x270E，`0x6D4C2F = 77 51` 直接跳 0x6D4C82；經 lazy-init 後到 `0x6D4CAE = C6 86 04 90 FB 00 00` indexed zero store，該 clear loop 無 ESI<=0x27 guard。0x6D4CE0 reader 的 guard 不得搬入 writer；上游 ID 值域仍未知，不推斷可利用漏洞。",
+      "decision_ref": "shared/integrations/T01-20261029-semantic-review/t10/DECISIONS.md",
+      "status_unchanged": "NEEDS_FIX"
+    },
+    {
+      "return_id": "T01-RETURN-T10-007-001",
+      "old_incorrect_notification_evidence": "第一支可先依 `FB7C14` 呼叫 `6D0750`；但 `0x6D4A95` 僅測試 `FDF3EC` 並留下 flags，`6D4A9C..6D4AC9` 先清普通 40 bytes。`0x6D4ACE` 才依該 flags 選擇分支，未初始化時 `0x6D4AD9 = E8 C2 D2 FF FF` 呼叫 `6D1DA0`，最後 `6D4AF3` 呼叫 `823850` 清特殊樹。故特殊域初始化不在普通清零之前。",
+      "correct_existing_decision_evidence": "`0x5467F1 = 8B 55 10` 是 mov edx,[ebp+0x10] 載入輸出指標；真正 WORD store 是 `0x5467F4 = 66 89 1A`（mov word [edx],bx）。主要三路 OR／byte 優先資料流不因定位更正撤銷。",
+      "decision_ref": "shared/integrations/T01-20261029-semantic-review/t10/DECISIONS.md",
+      "status_unchanged": "NEEDS_FIX"
+    },
+    {
+      "return_id": "T01-RETURN-T10-026-001",
+      "old_incorrect_notification_evidence": "第一支可先依 `FB7C14` 呼叫 `6D0750`；但 `0x6D4A95` 僅測試 `FDF3EC` 並留下 flags，`6D4A9C..6D4AC9` 先清普通 40 bytes。`0x6D4ACE` 才依該 flags 選擇分支，未初始化時 `0x6D4AD9 = E8 C2 D2 FF FF` 呼叫 `6D1DA0`，最後 `6D4AF3` 呼叫 `823850` 清特殊樹。故特殊域初始化不在普通清零之前。",
+      "correct_existing_decision_evidence": "0x549980 的正常返回為 0x549A34／0x549C4E（C2 10 00）；`0x549C60 = 55 8B EC 83 E4 F8` 是獨立序言。`0x549D54 = E8 17 55 00 00` 呼叫 0x54F270，屬 0x549C60 可達本體，不能歸入 0x549980；局部 state=4 不因此消失，但 caller／實參須從正確入口解讀。",
+      "decision_ref": "shared/integrations/T01-20261029-semantic-review/t10/DECISIONS.md",
+      "status_unchanged": "NEEDS_FIX"
+    }
+  ]
+}

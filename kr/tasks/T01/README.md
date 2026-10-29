@@ -116,3 +116,6 @@ T01 對 Server 設計的接收、精確主張去重、風險分流及 S00 交接
 2026-10-29 指定分支增量：[t03/roy/chatgpt-web整合交接](../../../research/handoffs/t01-t03-roy-20261029/README.md)。19篇原稿、13項有限主張及10筆去重追加來源已完成新通道CONFLICT_CHECKED（本批剩0）；1項精確API layout反證以T03 README退回，Print Screen更正連回早期provenance推論。未新增全文FULL-PASS或SPEC_CONSUMABLE，不改318版既有進度。
 
 2026-10-29 指定T08分支：[t08/roy/chatgpt-web新通道整合](../../../research/handoffs/t01-t08-roy-20261029/README.md)。138份原稿blob原已在main；補15個SRC、完成135份整合差額，保留3份既有正式關聯，本分支剩0份。新增55項有限主張及233筆追加來源，24個映射FAILED與6類既有REFUTED單獨隔離；原318版R1待萃取剩194份，歷史全文判決未改。
+
+
+2026-10-30：[T10分支整合階段保存](../../../research/handoffs/t01-t10-roy-20261029/README.md)。依使用者要求暫停；核127份來源、原樣補入22份原稿並補登29個SRC，保存early49／middle44份待裁決提案。未發布新canonical claim，本分支canonical整合剩127份（34份尚無完整提案）；原318版待萃取仍194份。T01自有通知3處誤貼欄位已勘誤，歷史判決及退回狀態不變。
