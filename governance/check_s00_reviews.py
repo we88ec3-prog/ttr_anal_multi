@@ -24,6 +24,8 @@ def _safe_file(root, path, prefix=None):
     if prefix and not path.startswith(prefix):
         return None
     file = (root / path).resolve()
+    if prefix and not file.is_relative_to((root / prefix).resolve()):
+        return None
     if not file.is_relative_to(root.resolve()) or not file.is_file():
         return None
     return file
@@ -70,7 +72,9 @@ def evaluate(root=ROOT):
         if row.get("actor") not in expected_actors or review.get("actor") != row.get("actor"):
             errors.append(f"{rid}: reviewer authority differs from RR dispatch")
         outcomes = row.get("outcome_refs")
-        if not isinstance(outcomes, list) or not outcomes or any(x not in valid_outcomes for x in outcomes):
+        if (not isinstance(outcomes, list) or
+                (row.get("decision") == "ACCEPTED" and not outcomes) or
+                any(x not in valid_outcomes for x in outcomes)):
             errors.append(f"{rid}: missing/unresolved published outcome references")
         if outcomes != review.get("outcome_refs"):
             errors.append(f"{rid}: outcome refs disagree with RR review")
