@@ -48,3 +48,8 @@ S00 需要新 native 證據時，先查既有研究，若仍缺才在 [唯一 RR
 T01 在 [本批首次新流程來源收件](../research/handoffs/t01-20261029-risk-intake/server-impact.md) 登記 318 個歷史版與 4 條新增 limited CLM。S00 不因 `REGISTERED/CONFLICT_CHECKED` 或既有 bounded native review 就直接寫成新 wire MUST；需逐條確認是否真正接到 Server-facing producer/consumer。若未形成特定消息、方向、狀態與 byte-range 的完整映射，作為研究導航，不升 SPEC_CONSUMABLE，也不關閉相關 GAP。
 
 新的 [ADR-0001..0003](../design/decisions/README.md) 都只有提案地位；只有正式決議和必需的 Client 契約經驗證後才能寫入規範性規格。
+
+
+## Iteration 05: conservative coverage and review guards
+
+[Iteration 05 results](S00-20261029-ITERATION-05.md) add strict contract proof linkage (CLM → SRC), fail-closed non-synthetic TEST provenance, order-independent roadmap analysis and an auditable [RR review ledger](reviews/README.md). The latter mirrors a published S00/T01 review; `research/requests/index.json` remains the sole request state authority. None of these checks is original-Client compatibility proof or automatic SPEC promotion. Run `python -B governance/check_s00_reviews.py --check` with the existing S00 gates.
