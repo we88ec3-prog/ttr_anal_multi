@@ -1,5 +1,11 @@
 # T16 任務與劇情流程（Quest & Story Progression）— TC
 
+<!-- S00-DISPATCH-BOOTSTRAP:v1 -->
+## S00 跨 Task 收件／認領／回報開工檢查（正式）
+
+**TC T16 每次開工必讀**：先同步最新 origin/main，閱讀本 README／T01 原有退回與 task.json，再查看 [T16 S00 收件箱](../../../research/dispatch/inbox/T16.md)、[唯一 RR 台帳](../../../research/requests/index.json) 及 [認領回報規則](../../../research/dispatch/README.md)。**只認領 `owner_task=T16` 且 `client_version=tc` 的請求**；可用 `python -B research/dispatch/dispatch.py show T16 --version tc`。認領需經 GitHub main 發布才有效；完成分析需附 Markdown/精確 blob SHA、SUBMITTED，再交 T01/S00 審查。不得套用 KR 位址、改寫歷史原稿或自動升格 FULL-PASS。
+
+
 > 規劃文件，尚未認領；`native_complete=false`。此文件已納入 GitHub，不代表 catalog 正式登記、原生功能驗收或可遊玩完成。
 
 ## 正式範圍
