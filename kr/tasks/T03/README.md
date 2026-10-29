@@ -135,3 +135,10 @@ parser/auth、角色UI與選服呼叫介面的有限審核已整合；較早段�
 
 
 2026-10-26 T01 整合交接：[T01-20261026-01](../../../shared/integrations/T01-20261026-01/README.md)。僅列明 SHA 的凍結成果已整合；其他暫存／新修改仍待下一輪。各任務未整體完成，接續前以此批次所在 origin/main commit 為基準。
+
+
+## S00 Phase B 設計整合參照（extra/roy1，尚非 T01 原生全文驗收）
+
+2026-10-29：參照 `extra/roy1` 的 E01–E16 SceneList/Lua/教學場景研究，原始 Git blob 完整保留於 `kr-extra-roy/`。S00 只抽取 E06/E08/E13/E16 的有限來源主張，將其與已存在的 T03 登入/選角證據分開；見 [來源整合說明](../../../governance/PHASE-B-T03-EXTRA-ROY1.md)、[跨流程草案](../../../spec/session-account/SPEC-FLOW-0001.md) 與 [場景依賴草案](../../../spec/world/SPEC-SCENE-0001.md)。
+
+**未證明**選角 C2S `0x42` 對應的 S2C 回覆會設定 `(questIdx=1001,sceneIdx=1)`，亦未證首次登入必進教學；E16 對 `0x565720` 的 EndCutScene 重入提供反證。下一項 T03 定向補證為 [RR-0008](../../../governance/T03-S00-AGENT-REQUESTS.md)，不用重新執行整批 E01–E16。這個註記不改 Task owner、原稿、過去 T01 裁定或正式 FULL-PASS 准入。

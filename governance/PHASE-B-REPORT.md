@@ -54,3 +54,13 @@ CI 是離線規格與 SHA 自動檢查，**不能直接推論 Client 相容或 S
 **重要修正：**「WSASend 找不到」「完整命令分派未知」等舊結論已有較新來源補足限定的靜態路徑。仍無完整 `0x13` 回覆→選服/切線、首次 S2C frame、0x2633 與錯誤恢復的契約。桌面 Agent 應只補這些 GAP，而不是重做已定位的收發函式。
 
 [REA/無 REA Agent 精確交接請求](T02-S00-AGENT-REQUESTS.md)。研究請求已建立但**未實際派遣 Agent**；完整 T02/T03 相容性規格尚未完成，所有規格仍維持 DRAFT/PARTIAL。
+
+## T03 第三輪：extra/roy1 來源導入與登入→選角→場景依賴（2026-10-29）
+
+已將 `extra/roy1@44a610968a228d4104e39457891e4fc565a3790c` 中 E01–E16 **16 份原稿 Git blob 原樣保存至本分支**，不合併其他歷史、不中斷原本 T03 研究主責；T01 FULL-PASS 仍需後續獨立審核。
+
+從 E06/E08/E13/E16 **選擇性**登記 SRC-0007..0010（4 份）及 CLM-SCENE-0001..0004（4 條，PARTIAL）。E14/E15 是同一條 Lua loader 研究的必要更正與反證，不能只引用早期 E13 描述。
+
+新增 [SPEC-FLOW-0001](../spec/session-account/SPEC-FLOW-0001.md) 將 E8/0F 認證、登入結果、三條 KR 靜態 Connect、command2 roster、C2S command42 與資源場景依賴並排記錄，但**沒有**推定這些步驟的完整 packet trace。新增 [SPEC-SCENE-0001](../spec/world/SPEC-SCENE-0001.md) 記錄場景雙鍵/seq path 與 E16 `EndCutScene` 重用同一 scene 入口的關鍵反證。新增 GAP-FLOW-0001 / GAP-SCENE-0001 及 RR-0008，下一階段重點是選角回覆的真正 S2C handler 與 scene key writer，而非重做全部 STP/Lua 解析。
+
+本輪只做**來源與規格整合**，沒有重新執行 Client、沒有 REA/BIN 原生深度驗收、沒有 Server 網路相容性測試，也沒有宣稱 `1001/1` 是選角 S2C 欄位。所有新規格保持 DRAFT / PARTIAL。詳見 [交付報告](PHASE-B-T03-EXTRA-ROY1.md) 和 [Agent 任務規格](T03-S00-AGENT-REQUESTS.md)。
