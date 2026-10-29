@@ -2,7 +2,7 @@
 
 ## 跨 Task 驗收退回（以 Task README 通知，不使用 GitHub Issue）
 
-- 各 Task 開工前讀取自己的 kr/tasks/<TaskID>/README.md 中「T01 驗收退回事項」，優先處理 NEEDS_FIX、FIXING、READY_FOR_REVIEW、BLOCKED；沒有此節則照舊工作。
+- 各 Task **在新 ChatGPT 對話首次開工時**讀取自己的 kr/tasks/<TaskID>/README.md 中「T01 驗收退回事項」，優先處理 NEEDS_FIX、FIXING、READY_FOR_REVIEW、BLOCKED；沒有此節則照舊工作。同一對話續段沿用已讀內容，不因每次「請繼續下一段」重抓 GitHub。
 - T01 先核對原始來源 SHA、PE 映射、指令邊界、驗證工具、完整主張與上下游；若是 T01 自己驗證器錯誤，先自行修復，不通知原作者。
 - 確定需來源 Task 更正時，T01 在對應 Task README 的上述專區建立／更新固定 ID 的退回項；包含原稿完整路徑和 Git blob SHA、錯誤描述、原始反證、修復要求、完成條件、驗收來源。不使用 GitHub Issue。同一問題更新舊紀錄，不重複建立。
 - T01 只可編輯其他 Task README 的退回專區；不可改原稿、Task owner、task.json、catalog、native_complete 或其他 Task 結論。
@@ -46,6 +46,8 @@ T01 對完全通過原生驗證的**精確結論／子流程**，依 [FULL-PASS 
 <!-- S00-DISPATCH-BOOTSTRAP:v1 -->
 ## S00 收件箱開工檢查（每個 T01–T16 Agent 必讀）
 
-**在任何新的 Task 段落、Agent 對話、復工／交接開始之前**，先取得最新 `origin/main` SHA，再閱讀對應版本 `kr/tasks/Txx/README.md` 或 `tc/tasks/Txx/README.md`（含 T01 驗收退回）與 [S00 派工規則](research/dispatch/README.md)、[該 Task 收件箱](research/dispatch/inbox/T03.md)（改為自己 ID，如 T08）、[唯一 RR 請求台帳](research/requests/index.json)。使用 `python -B research/dispatch/dispatch.py show T03 --version kr`（TC 改 `--version tc`）（替換 ID）檢視當前待辦。T01 讀 T01 review inbox；T02–T16 讀各自 Task 收件箱，按 `client_version=kr/tc` 嚴格分流。
+**僅在新的 ChatGPT 對話首次開工時**，取得當時最新的 `origin/main` SHA，並閱讀對應版本 `kr/tasks/Txx/README.md` 或 `tc/tasks/Txx/README.md`（含 T01 驗收退回）、[S00 派工規則](research/dispatch/README.md)、[該 Task 收件箱](research/dispatch/inbox/T03.md)（改為自己 ID，如 T08）、[唯一 RR 請求台帳](research/requests/index.json)。可使用 `python -B research/dispatch/dispatch.py show T03 --version kr`（TC 改 `--version tc`）（替換 ID）檢視當前待辦。T01 讀 T01 review inbox；T02–T16 讀各自 Task 收件箱，按 `client_version=kr/tc` 嚴格分流。
+
+**同一對話的後續段落／復工／交接**：沿用首次已核對的 main SHA、Task README、T01 退回、RR 台帳、收件箱及共用驗證索引，不要例行再次連線 GitHub、不必每段查 SHA 或重讀全套文件。只有使用者明確要求 GitHub 查詢／更新／同步／Commit／Push、研究需要首次取得尚未讀取的精確 Git 來源，或有可驗證的分支競爭／來源變更訊號時，才按需存取相關檔案；**進行實際寫入前仍必須核對當前目標分支與檔案 SHA，避免覆寫他人提交**。例外不代表要重做完整開工檢查。沿用舊快照的研究須註明其基準，不能聲稱本段已核對最新 main；收到新對話時再次完整核對。
 
 **優先順序與授權**：既有 T01 NEEDS_FIX／FIXING 退回依原規則優先；本次使用者明確任務另列優先；S00 P0→P1 隨之排程。未經明確授權不得提交/推送研究原稿；只在 main 上已公開的 RR CLAIMED 才具跨 Agent 認領效力。提交原始研究成果後需 `SUBMITTED` 附報告檔與 Git blob SHA；T01 來源查核與 S00 規格接受分開，只有 S00 可結案。**GitHub 更新不會自動喚醒其他 ChatGPT Agent。** 不採 GitHub Issues，不更動原有 task.json／owner／historical FULL-PASS/FAILED 認定。
