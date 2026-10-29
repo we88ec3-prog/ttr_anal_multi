@@ -26,3 +26,15 @@ python -B -m unittest discover -s research/dispatch/tests -p "test_*.py" -v
 ```
 
 檢查 KR/TC 共 32 個 Task README 的開工入口、T01–T16 衍生收件箱是否最新、RR owner/version/GAP/優先與狀態歷史、認領者與 SHA、回報檔案 blob 一致性及 S00 最終結案限制。通過不代表 Agent 已開始工作，也不代表原生 BIN 語意或 Server 運行經驗證。只有合併到 main 才對獨立 Agent 可見。
+
+
+## S00 Phase B/C 規劃門檻與工作包一致性
+
+```powershell
+python -B governance/check_s00_readiness.py
+python -B governance/check_s00_readiness.py --json
+python -B governance/check_s00_readiness.py --check
+python -B -m unittest discover -s governance/tests -v
+```
+
+本工具只驗證工作包對現有 SPEC/GAP/RR/TEST 的引用、版本、無依賴循環及是否仍被 DRAFT/OPEN/QUEUED、僅有合成測試等條件阻塞。`--check` 只在計畫本身無效時失敗，**工作包 BLOCKED 是預期狀態**。`REVIEW_CANDIDATE` 亦不是原版 Client 相容、Server 上線或規格正式發布。
