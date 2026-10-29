@@ -46,6 +46,6 @@ T01 對完全通過原生驗證的**精確結論／子流程**，依 [FULL-PASS 
 <!-- S00-DISPATCH-BOOTSTRAP:v1 -->
 ## S00 收件箱開工檢查（每個 T01–T16 Agent 必讀）
 
-**在任何新的 Task 段落、Agent 對話、復工／交接開始之前**，先取得最新 `origin/main` SHA，再閱讀自身 `kr/tasks/Txx/README.md`（含 T01 驗收退回）與 [S00 派工規則](research/dispatch/README.md)、[該 Task 收件箱](research/dispatch/inbox/T03.md)（改為自己 ID，如 T08）、[唯一 RR 請求台帳](research/requests/index.json)。使用 `python -B research/dispatch/dispatch.py show T03`（替換 ID）檢視當前待辦。T01 讀 T01 review inbox；T02–T16 讀各自 Task 收件箱。
+**在任何新的 Task 段落、Agent 對話、復工／交接開始之前**，先取得最新 `origin/main` SHA，再閱讀對應版本 `kr/tasks/Txx/README.md` 或 `tc/tasks/Txx/README.md`（含 T01 驗收退回）與 [S00 派工規則](research/dispatch/README.md)、[該 Task 收件箱](research/dispatch/inbox/T03.md)（改為自己 ID，如 T08）、[唯一 RR 請求台帳](research/requests/index.json)。使用 `python -B research/dispatch/dispatch.py show T03 --version kr`（TC 改 `--version tc`）（替換 ID）檢視當前待辦。T01 讀 T01 review inbox；T02–T16 讀各自 Task 收件箱，按 `client_version=kr/tc` 嚴格分流。
 
 **優先順序與授權**：既有 T01 NEEDS_FIX／FIXING 退回依原規則優先；本次使用者明確任務另列優先；S00 P0→P1 隨之排程。未經明確授權不得提交/推送研究原稿；只在 main 上已公開的 RR CLAIMED 才具跨 Agent 認領效力。提交原始研究成果後需 `SUBMITTED` 附報告檔與 Git blob SHA；T01 來源查核與 S00 規格接受分開，只有 S00 可結案。**GitHub 更新不會自動喚醒其他 ChatGPT Agent。** 不採 GitHub Issues，不更動原有 task.json／owner／historical FULL-PASS/FAILED 認定。
