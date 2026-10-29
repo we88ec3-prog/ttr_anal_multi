@@ -31,3 +31,8 @@
 限定 T02 封包 framing 與 T03 Session/角色清單/選角。可先有 **DRAFT 規格與明確 GAP**，不能填入未被查證的 opcode、layout、回覆順序。獨立於 REA 與程式語言。後續將這兩個 SPEC 變成可獨立實作的契約才算 B 階段完成。
 
 參考：[工作流程](workflow.md)；[T01 的接口](t01-integration-workflow.md)。
+
+
+## 正式研究派工接口（2026-10-29）
+
+S00 需要新 native 證據時，先查既有研究，若仍缺才在 [唯一 RR 台帳](../research/requests/index.json) 新增帶 GAP、owner_task、優先、明確驗收條件的 QUEUED 請求。產生 [T02–T16 收件箱](../research/dispatch/README.md) 並經 main 發布後，Task 開工時自行查閱、認領，按 CLAIMED→IN_PROGRESS→SUBMITTED→IN_REVIEW→ACCEPTED/NEEDS_REVISION 回報。S00 接受的是**某個研究請求的已交付範圍**，不自動升格原生 FULL-PASS 或 SPEC STABLE。需要原生嚴格複驗時回 T01，不代替其原有 README 退回流程。
