@@ -97,3 +97,9 @@
 
 - [第十五段完整 BIN-first 技術報告](KR-BULK-CENTRAL-QA-ROUND-15-20261029.md)：確認原生 `0x0055E590` (GitHub 同名偽碼檔案未收錄) 寫入 `0x00FE1F24`，以及 `0x0055E620` 經 `0x00FE1F28` 間接呼叫；初始 handler `0x005F5D10` 僅 `ret`。
 - **重要限制**：`Rebind` 不等於已證明替 72 個 script key 重新綁定，其他 writer/xref 尚未窮盡；維持 PARTIAL / NOT FULL-PASS。
+
+
+## 第十六段：第一條 T01 FULL-PASS 候選主張（2026-10-29）
+
+- [完整 BIN-first 候選審核證據](KR-BULK-CENTRAL-QA-ROUND-16-20261029.md)：原生 `0x008DC2F0` 的完整單區塊 CFG `33 C0; C3`；正常返回 `EAX=0` 且無額外 call／顯式 memory write，並實測上游 72 次 `push 0x008DC2F0`。
+- **狀態為 FULL-PASS CANDIDATE / T01 PENDING REVIEW，正式 FULL-PASS 仍是 0**；不得擅自加入 `shared/verified-knowledge/`。
