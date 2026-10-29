@@ -4,10 +4,12 @@
 
 ## 入口
 
-- [Server 規格（S00，階段 A 試行）](spec/README.md)
-- [新分析與設計工作流程（階段 A 試行）](governance/workflow.md)
+- [Server 規格（S00；規格各自維持 DRAFT/PARTIAL）](spec/README.md)
+- [S00／T01 分析與 Server 規格工作流程（正式內部規則）](governance/workflow.md)
+- [S00 → T01–T16 收件、認領、回報與審查（正式）](research/dispatch/README.md)
+- [T03 當前收件箱範例](research/dispatch/inbox/T03.md)（KR/TC 請求按版本區分）
 
-- [Server 設計與專案分析新流程提案（2026-10-29，尚未生效）](governance/proposals/2026-10-29-server-spec-workflow.md)
+- [Server 設計與專案分析原始提案（歷史記錄；派工流程已正式實作，規格仍按成熟度審核）](governance/proposals/2026-10-29-server-spec-workflow.md)
 
 - [KR：T01～T16 任務入口](kr/README.md)（T16 新增規劃）
 - [TC：T01～T16 任務入口](tc/README.md)（T16 新增規劃）
