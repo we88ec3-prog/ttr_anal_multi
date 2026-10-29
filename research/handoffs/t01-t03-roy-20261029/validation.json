@@ -1,0 +1,73 @@
+{
+  "ok": true,
+  "completed_utc": "2026-10-29T11:17:49.965568+00:00",
+  "source_head": "6dc876e84358c1f1ab343ce5b8899006574ddf26",
+  "base_main": "5cb495f4561833e0a123bbded14b76266ac1f201",
+  "exact_source_blobs": 19,
+  "source_bytes": 283064,
+  "new_claims": 13,
+  "additional_source_relations": 10,
+  "new_native_verified": 0,
+  "remaining_this_batch": 0,
+  "spec_consumable": 0,
+  "old318_ledger_and_rr_specs_gaps_adr_test_owners_preserved": true,
+  "old_claim_assertions_and_quality_preserved": true,
+  "source_task_research_body_preserved": true,
+  "checks": [
+    {
+      "command": "python -X utf8 -B governance/validate_s00.py",
+      "returncode": 0,
+      "stdout": "S00 registry integrity OK. This is not an original-client semantic verdict or Server compatibility test.",
+      "stderr": ""
+    },
+    {
+      "command": "python -X utf8 -B governance/check_s00_readiness.py --check",
+      "returncode": 0,
+      "stdout": "S00 Planning Readiness (not Client/Server compatibility)\n  B-NET: BLOCKED; blockers=11\n    - GAP-NET-0001=OPEN\n    - GAP-NET-0002=OPEN\n    - RR-0001=QUEUED\n    - RR-0004=QUEUED\n    - RR-0005=QUEUED\n    - SPEC-NET-0001=DRAFT/PARTIAL\n    - SPEC-NET-0002=DRAFT/PARTIAL\n    - SPEC-NET-0003=DRAFT/PARTIAL\n    - TEST-NET-0001=OFFLINE_SYNTHETIC_ONLY\n    - TEST-NET-0002=OFFLINE_SYNTHETIC_ONLY\n    - TEST-NET-0003=OFFLINE_SYNTHETIC_ONLY\n  B-AUTH: BLOCKED; blockers=10\n    - GAP-AUTH-0001=OPEN\n    - GAP-FLOW-0001=OPEN\n    - GAP-NET-0002=OPEN\n    - RR-0003=QUEUED\n    - RR-0005=QUEUED\n    - RR-0007=QUEUED\n    - SPEC-AUTH-0001=DRAFT/PARTIAL\n    - SPEC-FLOW-0001=DRAFT/PARTIAL\n    - TEST-AUTH-0001=OFFLINE_SYNTHETIC_ONLY\n    - dependency:B-NET\n  B-CHAR: BLOCKED; blockers=9\n    - GAP-CHAR-0001=OPEN\n    - GAP-FLOW-0001=OPEN\n    - RR-0002=QUEUED\n    - RR-0007=QUEUED\n    - SPEC-CHAR-0001=DRAFT/PARTIAL\n    - SPEC-FLOW-0001=DRAFT/PARTIAL\n    - TEST-CHAR-0001=OFFLINE_SYNTHETIC_ONLY\n    - dependency:B-NET\n    - dependency:B-AUTH\n  B-SCENE: BLOCKED; blockers=6\n    - GAP-SCENE-0001=OPEN\n    - RR-0008=QUEUED\n    - SPEC-FLOW-0001=DRAFT/PARTIAL\n    - SPEC-SCENE-0001=DRAFT/PARTIAL\n    - dependency:B-CHAR\n    - NO_REGISTERED_CONFORMANCE_TEST\n  B-CONTRACT: BLOCKED; blockers=17\n    - GAP-NET-0001=OPEN\n    - GAP-AUTH-0001=OPEN\n    - GAP-CHAR-0001=OPEN\n    - GAP-FLOW-0001=OPEN\n    - RR-0001=QUEUED\n    - RR-0002=QUEUED\n    - RR-0003=QUEUED\n    - SPEC-FLOW-0001=DRAFT/PARTIAL\n    - SPEC-NET-0001=DRAFT/PARTIAL\n    - SPEC-AUTH-0001=DRAFT/PARTIAL\n    - SPEC-CHAR-0001=DRAFT/PARTIAL\n    - TEST-NET-0001=OFFLINE_SYNTHETIC_ONLY\n    - TEST-AUTH-0001=OFFLINE_SYNTHETIC_ONLY\n    - TEST-CHAR-0001=OFFLINE_SYNTHETIC_ONLY\n    - dependency:B-NET\n    - dependency:B-AUTH\n    - dependency:B-CHAR\n  C-ENV: BLOCKED; blockers=2\n    - dependency:B-CONTRACT\n    - EXTERNAL_REVIEW_REQUIRED\nSummary: {'specs': 7, 'specs_reviewed_or_stable': 0, 'gaps_open': 7, 'requests_queued': 8, 'requests_accepted': 0, 'tests_offline_synthetic': 5, 'packages_blocked': 6}",
+      "stderr": ""
+    },
+    {
+      "command": "python -X utf8 -B governance/check_contract_coverage.py --check",
+      "returncode": 0,
+      "stdout": "S00 contract coverage (NOT original Client compatibility)\nCOV-0001: BLOCKED; blockers=14\nCOV-0002: BLOCKED; blockers=14\nCOV-0003: BLOCKED; blockers=14\nCOV-0004: BLOCKED; blockers=15\nCOV-0005: BLOCKED; blockers=12\nCOV-0006: BLOCKED; blockers=14\nCOV-0007: BLOCKED; blockers=11\nSummary: {'total': 7, 'blocked': 7, 'review_candidates': 0, 'errors': 0}",
+      "stderr": ""
+    },
+    {
+      "command": "python -X utf8 -B -m unittest discover -s governance/tests -v",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "test_baseline_is_consistent_but_no_wire_contract_ready (test_contract_coverage.ContractCoverageTests) ... ok\ntest_evidence_backed_claim_requires_proof_references (test_contract_coverage.ContractCoverageTests) ... ok\ntest_invalid_version_and_sha_are_rejected (test_contract_coverage.ContractCoverageTests) ... ok\ntest_transport_command_can_be_na_but_layout_cannot (test_contract_coverage.ContractCoverageTests) ... ok\ntest_unregistered_spec_reference_is_rejected (test_contract_coverage.ContractCoverageTests) ... ok\ntest_current_roadmap_is_structurally_consistent_but_not_ready (test_s00_readiness.ReadinessTests) ... ok\ntest_roadmap_detects_cycle (test_s00_readiness.ReadinessTests) ... ok\ntest_roadmap_detects_missing_rr_and_unassigned_owner (test_s00_readiness.ReadinessTests) ... ok\ntest_wrong_client_sha_is_rejected (test_s00_readiness.ReadinessTests) ... ok\ntest_current_indexes_valid (test_validate_s00.S00IndexTests) ... ok\ntest_reference_and_gate_protection (test_validate_s00.S00IndexTests) ... ok\ntest_reviewed_spec_cannot_use_unapproved_adr (test_validate_s00.S00IndexTests) ... ok\ntest_server_adr_proposal_cannot_be_normative (test_validate_s00.S00IndexTests) ... ok\ntest_source_integrity_is_checked (test_validate_s00.S00IndexTests) ... ok\ntest_source_must_have_claims_before_promotion (test_validate_s00.S00IndexTests) ... ok\ntest_unproven_stable_rejected (test_validate_s00.S00IndexTests) ... ok\ntest_wrong_client_target_is_rejected (test_validate_s00.S00IndexTests) ... ok\n\n----------------------------------------------------------------------\nRan 17 tests in 10.227s\n\nOK"
+    },
+    {
+      "command": "python -X utf8 -B research/dispatch/dispatch.py check",
+      "returncode": 0,
+      "stdout": "S00 dispatch checks OK (not an Agent wakeup or native verification)",
+      "stderr": ""
+    },
+    {
+      "command": "python -X utf8 -B -m unittest discover -s research/dispatch/tests -p test_*.py -v",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "test_duplicate_claim_and_missing_evidence_rejected (test_dispatch.DispatchTests) ... ok\ntest_invalid_history_rejected (test_dispatch.DispatchTests) ... ok\ntest_kr_tc_claims_are_not_interchangeable (test_dispatch.DispatchTests) ... ok\ntest_report_and_acceptance_require_review (test_dispatch.DispatchTests) ... ok\ntest_stale_inbox_and_bad_status_caught (test_dispatch.DispatchTests) ... ok\ntest_task_inboxes_are_derived_not_separate_writable_state (test_dispatch.DispatchTests) ... ok\n\n----------------------------------------------------------------------\nRan 6 tests in 0.181s\n\nOK"
+    },
+    {
+      "command": "python -X utf8 -B -m unittest discover -s conformance/protocol -p test_*.py -v",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "test_conservative_harness_policy (test_kr_frame_subset.FrameSubsetTests) ... ok\ntest_exact_offline_vectors (test_kr_frame_subset.FrameSubsetTests) ... ok\ntest_limits_sender_vs_receiver (test_kr_frame_subset.FrameSubsetTests) ... ok\ntest_split_and_coalesced (test_kr_frame_subset.FrameSubsetTests) ... ok\ntest_sum_wrap (test_kr_frame_subset.FrameSubsetTests) ... ok\ntest_known_connect_calls_are_distinct_roles (test_kr_network_boundary_matrix.NetworkBoundaryMatrix) ... ok\ntest_outbound_chain_reaches_api_but_does_not_prove_ack (test_kr_network_boundary_matrix.NetworkBoundaryMatrix) ... ok\ntest_recv_dispatch_and_business_namespace_separated (test_kr_network_boundary_matrix.NetworkBoundaryMatrix) ... ok\n\n----------------------------------------------------------------------\nRan 8 tests in 0.001s\n\nOK"
+    },
+    {
+      "command": "python -X utf8 -B -m unittest discover -s conformance/character -p test_*.py -v",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "test_only_complete_records (test_kr_roster_subset.RosterShapeTests) ... ok\ntest_strict_harness_is_not_native_error_rule (test_kr_roster_subset.RosterShapeTests) ... ok\ntest_synthetic_geometry (test_kr_roster_subset.RosterShapeTests) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nOK"
+    },
+    {
+      "command": "python -X utf8 -B -m unittest discover -s conformance/session -p test_*.py -v",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "test_e8_and_0f_synthetic_slot_geometry (test_kr_auth_subset.AuthShapeTests) ... ok\ntest_outside_subset_rejected_by_harness (test_kr_auth_subset.AuthShapeTests) ... ok\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK"
+    }
+  ],
+  "meaning": "Workflow/source/reference and offline synthetic integrity only. R2 bytes/import proof separate; no new full-document or gameplay certificate."
+}

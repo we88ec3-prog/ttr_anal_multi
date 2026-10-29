@@ -1,0 +1,16 @@
+--- kr-temp-roy/20261028-170434-chatgpt-web-roy-T16-69-KR-virtual-dispatch-and-outbound-queue.md (original 2f5c65062c7ab82453dfa726019e4d5e2bf0a0dc)
++++ kr-temp-roy/20261028-170434-chatgpt-web-roy-T16-69-KR-virtual-dispatch-and-outbound-queue.md (T01 proposed errata; not author replacement)
+@@ -64,7 +64,7 @@
+ 
+ | 玩家情境 | 本地 gate | C→S 已證實 | S→C | Client Quest/NPC/UI | Server 待開發 |
+ |---|---|---|---|---|---|
+-| Lua 發 `RequestStartScenario(n)` | `[FBA798]==0`；channel0 lookup 有效；非零 len；後端 queue count gate | `40 00 nn nn` 進入 local outbound queue（有條件）；**正式 wire opcode unknown** | unknown | unknown | 解譯/回覆待配對；不能推定官方接受規則 |
++| Lua 發 `RequestStartScenario(n)` | `[FBA798]==0`；channel0 lookup 有效；非零 len；欄位 A0A4 的 signed >300 gate（不是已確認的 queue count） | `40 00 nn nn` 進入 local outbound queue（有條件）；**正式 wire opcode unknown** | unknown | unknown | 解譯/回覆待配對；不能推定官方接受規則 |
+ | 教學關卡完成 | unknown | unknown | unknown | unknown | 依實際 client consumer 另行制定完成通知 |
+ | Quest16 完成、Quest15 變可接 | unknown | unknown | unknown | unknown | Quest 解鎖／狀態更新介面待查，不等於官方內部算法 |
+ | 玩家點擊接 Quest15 | unknown | unknown | unknown | unknown | 接受／拒絕接口待第一手封包證據 |
+@@ -377,4 +377,4 @@
+   4aa503:	8b e5                	mov    esp,ebp
+   4aa505:	5d                   	pop    ebp
+   4aa506:	c2 04 00             	ret    0x4
+-```+```

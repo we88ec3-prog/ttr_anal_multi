@@ -1,0 +1,15 @@
+# T16 semantic-review checkpoint — 2026-10-29
+
+User requested a staged stop. Original source versions:97. Whole-source semantic certifications: **0**. All97 remain uncertified as whole documents. No original report is promoted by this checkpoint.
+
+72 source versions have bounded findings:33 BOUNDED_FAILED,30 BOUNDED_SUPPORTED,9 SOURCE_ONLY. These states refer to selected exact claims and observed counterexamples, not complete report acceptance. Their prose was read; not every fenced code block, provenance assertion and affirmative claim has a completed claim-level audit. Accordingly every row explicitly sets original_document_full_pass=false and all_substantive_claims_reviewed=false.
+
+25 source versions lack a finalized bounded decision (IDs69–92 including the second73 version). Prose69–78 was read but findings were not finalized;79–92 require continued review, except92 has a confirmed coordinate counterexample saved separately. Exact source paths, blob and SHA identities appear in pending-sources.json. All97 need exhaustive claim inventories and whole-source closure before whole-document certification.
+
+Evidence: decisions.json contains bounded source findings; claim-matrix.json and return-proposals.json contain precise confirmed counterexamples and proposed corrections. instruction-source-audit.json checks11,916 explicit addressed ASM rows and finds3 byte mismatches in92; that does not prove instruction boundaries or semantics. native-functions.json saves109 candidate-root recursive static CFGs and cached Ghidra evidence (14,436 decoded instructions). Roots and pseudocode remain evidence requiring review. checkpoint-critical-cfg.json independently saves full rooted CFGs for92.
+
+resources.py independently decodes14 KR/TC carrier members and statically parses Lua5.1 without execution; resource-recheck.json and lua/*.json preserve results. tables.py independently checks PE imports, selected vtables and raw E8 candidate sets. Exact target SHA256:9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91.
+
+Key returns: Lua46 C=2 gives1 result;14 reports cite a malformed56-character TutorialBase SHA although the correct original carrier member is available;13 reverses signed tree equality test;5 conflates original iterator and callback result;2 inverts native return polarity;92 has four wrong instruction coordinates while its central owner/lookup relation survives.16 source versions contain mid-instruction appendix rows. Corrections should retain independently supported findings and explicit backend/gameplay unknowns.
+
+Reproduction: Python with capstone5.0.6, review.py audit / cfg, resources.py, tables.py, checkpoint.py. The parent packaged support/audit.py and relative imports. Set T01_TARGET and T01_CAPSTONE_ROOT for supplied original BIN/Capstone; resource-inputs.json preserves the selected carrier metadata. The fourteen carrier members were re-decoded successfully after packaging. Original game/carriers are read-only and were never executed, attached, modified or loaded as executable code. Parent handles integration; no commit/push was performed here.

@@ -1,0 +1,46 @@
+{
+  "items": [
+    {
+      "source": "kr-temp-roy/20261028-085944-chatgpt-web-roy-T08-173-owner-44-writers.md",
+      "git_blob_sha": "f643553ef1145ed65a5a724a0a9a3f19c910e76f",
+      "source_sha256": "1f5b203f381922d09d737d4fd9dbc227ec7e2a1f9597c311c604d3d7dbd9140c",
+      "status": "NEEDS_FIX",
+      "return_id": "T01-RETURN-T08-173-001",
+      "quote": "非零/可變值生產者候選，應按 caller 驗證傳入 ecx",
+      "counterexample": "0x7B7FFE b9 01 00 00 00 dominates 0x7B8006 89 4a 44; ECX is constant1 through the loop.",
+      "repair": "Correct the source/value, identify the actual 7B7FD0 entry, and revalidate affected dataflow. T08-177 is a later explicit correction; retain the old source FAILED.",
+      "later_source_number": 177
+    },
+    {
+      "source": "kr-temp-roy/20261028-100222-chatgpt-web-roy-T08-183-manager-last-release-and-container-destruction.md",
+      "git_blob_sha": "ecbec611a9d99a7640ae4fad9668dcc3c06ad4be",
+      "source_sha256": "dd3dafebe38b5aa265a46da752269edfe890dbfd5d79451316800a9017a4fc3d",
+      "status": "NEEDS_FIX",
+      "return_id": "T01-RETURN-T08-183-001",
+      "quote": "0x007B8680 用於樹節點移除／調整",
+      "counterexample": "7B868B..7B86AC computes string hash/mask and an8-byte bucket; 7B86DE EDI=&index+4 then719B20 unlinks two list links and frees node, without ordered-tree rotations.",
+      "repair": "Use index-node/hash-bucket/list terminology or provide actual tree construction evidence; preserve the independently supported release ordering and separate the actor RB tree."
+    },
+    {
+      "source": "kr-temp-roy/20261028-101203-chatgpt-web-roy-T08-187-acquire-wrapper-and-resource-return.md",
+      "git_blob_sha": "cf2b5d3fc74b6d0199837c957a214765ac14866f",
+      "source_sha256": "bc0e9037d4e8a9a3108e395837e583096ed68f6d25230db9d6577488c06e978c",
+      "status": "NEEDS_FIX",
+      "return_id": "T01-RETURN-T08-187-001",
+      "quote": "0x007F6FC1 push 0x30",
+      "counterexample": "0x7F6FBF=6a30 push0x30; 0x7F6FC1=8bf8 mov edi,eax. The latter saves manager before allocation.",
+      "repair": "Correct instruction address and recheck manager provenance, allocation/null edge, acquire and wrapper+2C storage; source version remains FAILED."
+    },
+    {
+      "source": "kr-temp-roy/20261028-110153-chatgpt-web-roy-T08-196-composite-id-secondary-tree-remove.md",
+      "git_blob_sha": "b1879330f55b5d7b6d38a697a46a0f40ce3b6aca",
+      "source_sha256": "e8b1564e8b92aaf59ca2fcffd9e3ca8c834f953811e348a6a8a6ea30e03665b0",
+      "status": "NEEDS_FIX",
+      "return_id": "T01-RETURN-T08-196-001",
+      "quote": "0x004DFC90 對 owner+0x18 的第二樹",
+      "counterexample": "0x4DFC96=8d7808 lea edi,[eax+8]; subsequent sentinel is[edi+4]=owner+C. Secondary tree is the separate4DFC30 ESI+18 path.",
+      "repair": "Correct tree base, sentinel and LEA addressing; remove/re-evaluate dual-tree ownership deductions and revalidate complete affected CFG. T08-197 correctly distinguishes the two paths.",
+      "later_source_number": 197
+    }
+  ]
+}

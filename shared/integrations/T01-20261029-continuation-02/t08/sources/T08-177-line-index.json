@@ -1,0 +1,2250 @@
+{
+  "number": 177,
+  "source": "kr-temp-roy/20261028-094900-chatgpt-web-roy-T08-177-owner-mode-caller-drain-closure.md",
+  "source_sha256": "253ccb2b658dcc734efe6bc3d5d6ab6f1629b95d173b998515624c5aa29949ac",
+  "git_blob_sha": "fdc8a64aa0f33866defe5a2484fa432f4bbaf66c",
+  "bytes": 33037,
+  "line_count": 560,
+  "lines": [
+    {
+      "line": 1,
+      "text": "# T08-177 — owner+0x44 模式寫入來源、全直接 caller 與 deferred drain 靜態閉合"
+    },
+    {
+      "line": 2,
+      "text": ""
+    },
+    {
+      "line": 3,
+      "text": "- 研究者：`chatgpt-web roy`；實際記錄時間：`2026-10-28T09:49:01+08:00`（Asia/Taipei）。"
+    },
+    {
+      "line": 4,
+      "text": "- 本地完整交付相對路徑：`kr-temp-roy/20261028-094900-chatgpt-web-roy-T08-177-owner-mode-caller-drain-closure.md`；**尚未 Commit／Push**。"
+    },
+    {
+      "line": 5,
+      "text": "- 原始來源：`/mnt/data/Tartaros.bin`，SHA256：`9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`（原始檔直接計算，匹配交接）。"
+    },
+    {
+      "line": 6,
+      "text": "- GitHub 當輪最新查得提交：`33a43543b050c58349b272bf04fc6cc7facdb469`（T10-081，非 T08 原稿）；前次 T08-176 交接：`775ff786efcd710c28fd63dbd8c0ec06f6213fac`。GitHub 記錄只讀，不改他人原稿。"
+    },
+    {
+      "line": 7,
+      "text": "- 基線參考：`kr-temp-roy/T08-KNOWLEDGE-BASE.md`、`kr-temp-roy/20261028-085944-chatgpt-web-roy-T08-176-ownership-lifecycle-audit.md`；`shared/source-review-status.json` 曾讀取，未將其審計級別自動升級成 runtime 證明。BIN 的實際 byte 及 objdump 為本段主證據。"
+    },
+    {
+      "line": 8,
+      "text": "- 位址映射：原始 PE `.text` VA `0x00401000`、raw `0x400`、size `0x007D01F0`，由本地 `objdump -h` 核對。下述 raw offset 僅對此 `.text` 有效，公式 `raw = VA - 0x00401000 + 0x400`。"
+    },
+    {
+      "line": 9,
+      "text": "- 方法：全 `.text` byte 掃描 `E8 + signed rel32` 並計算 `target = call_va+5+rel32`；它只是一階**候選**呼叫枚舉（可能誤中指令內資料），關鍵呼叫點逐一使用 objdump 上下文驗證。間接 `FF /2`、vtable、跨模組/異常路徑不在此枚舉覆蓋範圍。"
+    },
+    {
+      "line": 10,
+      "text": ""
+    },
+    {
+      "line": 11,
+      "text": "## 1. 新確認成果與對舊筆記的精確更正"
+    },
+    {
+      "line": 12,
+      "text": ""
+    },
+    {
+      "line": 13,
+      "text": "1. **`0x007B7FD0` 才是完整函式入口**：前段提及 `0x007B7FA0` 是前一函式的尾段，中途可能落在 `mov ecx,0x10` 的立即數內；真正以 `push ebp / mov ebp,esp` 開始的模式啟用函式是 `0x007B7FD0`，結束於 `0x007B8025: ret 4`。今後 caller 檢索須以 `0x7B7FD0` 定錨。此為新段 BIN-first 更正，不否定前段在 `0x7B8006` 寫入的 byte 事實。"
+    },
+    {
+      "line": 14,
+      "text": "2. **`owner+0x44` 寫入來源是常數 1，已排除該條路徑外部 ECX 未知說法**：`0x7B7FFE: mov ecx,1`，`0x7B8003: mov edx,[eax+0x24]`，`0x7B8006: mov [edx+0x44],ecx`。在同一迴圈 `ecx` 未被改寫；上游 caller 不能在這條路徑決定存入數值。這只證明這一個寫入者，不保證全域只有這一個非零寫入者。"
+    },
+    {
+      "line": 15,
+      "text": "3. `0x7B7FD0` 從傳入的 `[ebp+8]` 取得容器 base `ebx`；先走 `[ebx]` 對應集合的 payload 虛擬呼叫 `vtable+0x04`，再遍歷 `[ebx+0x08]` 指向之另一組節點，將每筆 `node+0x24` payload 的 `+0x44` 設成 1；最後 `[ebx+0x30]=1`。此處兩個容器不可只因都有 `node+0x24` 就混為同一類型。"
+    },
+    {
+      "line": 16,
+      "text": "4. `0x7B8030` 對相同參數容器的 `[ebx+8]` 節點：先以 `esi=[node+0x24]` 執行 `0x7DD1F0`，**然後** `[esi+0x44]=0`；最後對 `[ebx]` 集合的 payload 呼叫另一虛擬函式 `vtable+0x08`，並寫 `[ebx+0x30]=0`。與啟用順序非鏡像：前者先通知另一集合再設模式；後者先 drain/清模式再通知另一集合。"
+    },
+    {
+      "line": 17,
+      "text": "5. 兩個直接 caller 各僅見一處 `E8`，且都 `push 0x00FE173C` 傳入**位址**：`0x007AAF1F → 0x007B7FD0`、`0x007AB155 → 0x007B8030`。故不能把 `0x00FE173C` 誤判成已經解參照的 owner 本體。"
+    },
+    {
+      "line": 18,
+      "text": "6. `0x007DD1F0` **只查得兩個 E8 靜態直接呼叫點**：`0x007B8045`（停用模式時每個 payload drain）與 `0x007DD132`（管理器的 `+0x5C` 計數減到 0 時 drain）。這是全 `.text` E8 byte 掃描及反組譯下的範圍結論；不排除間接/尾呼叫或 DLL 外部調用。"
+    },
+    {
+      "line": 19,
+      "text": "7. `0x007DD100` 以 `ecx` 作管理器基底寫入 `esi`，`0x007DD12A add [esi+0x5C], -1`，只有結果為零才在 `0x007DD132` 呼叫 drain、`0x007DD140` 清 `+0x44`，再逐項呼叫 `0x007DC510`。因此可觀察**條件式最終解除引用時清空佇列**，不是每次引用減少都 drain。"
+    },
+    {
+      "line": 20,
+      "text": "8. `0x007DD1A0` 在 `cmp [ebx+0x44],1; jl immediate` 下，有條件在 `+0x64` 臨界區用 `0x007BB350` 向 `+0x7C/+0x80` 陣列插入指標，否則走 `0x007BD850` 與 `0x0089120C` 的立即釋放；僅能稱**模式閘門**，不能定義為 reference count。"
+    },
+    {
+      "line": 21,
+      "text": "9. `0x007DD1F0` 使用**ESI 寄存器**作 owner 基底，與 C++ 標準 `ecx this` 不同；兩個 caller 都能在呼叫前追到 `esi` 是相應 owner。持 `+0x64` 鎖、對槽位呼叫 `0x007BE0F0`、必要時清理並釋放，最後 `+0x80` 指向 `+0x7C` 相同的 begin。**尤其 `0x7DD26A～0x7DD285` 實際 `mov eax,ecx; sub eax,ecx` => 永遠零，`0x8912F0` 的長度參數為零**，該 `memmove` 不應被筆記錯誤描述為搬移整段記憶體；實際效果以 `end = begin` 及處理槽位為主。"
+    },
+    {
+      "line": 22,
+      "text": ""
+    },
+    {
+      "line": 23,
+      "text": "## 2. 直接 call rel32 搜尋核對表"
+    },
+    {
+      "line": 24,
+      "text": ""
+    },
+    {
+      "line": 25,
+      "text": "掃描來源：SHA256 匹配的本地 BIN `.text` 全區間，命中目標位址；`E8` 證據含原始 5 bytes，詳細上下文見下文逐函式 disassembly。下列只有已識別的直接候選，**不是完整 xref/CFG**。"
+    },
+    {
+      "line": 26,
+      "text": ""
+    },
+    {
+      "line": 27,
+      "text": "| 目標函式 VA | E8 命中數 | 候選 caller VA（原始 bytes） |"
+    },
+    {
+      "line": 28,
+      "text": "|---|---:|---|"
+    },
+    {
+      "line": 29,
+      "text": "| `0x007B7FD0` | 1 | `007AAF1F` (`e8acd00000`) |"
+    },
+    {
+      "line": 30,
+      "text": "| `0x007B8030` | 1 | `007AB155` (`e8d6ce0000`) |"
+    },
+    {
+      "line": 31,
+      "text": "| `0x007DD100` | 1 | `007B8129` (`e8d24f0200`) |"
+    },
+    {
+      "line": 32,
+      "text": "| `0x007DD1A0` | 2 | `007A8741` (`e85a4a0300`); `007BE60F` (`e88ceb0100`) |"
+    },
+    {
+      "line": 33,
+      "text": "| `0x007DD1F0` | 2 | `007B8045` (`e8a6510200`); `007DD132` (`e8b9000000`) |"
+    },
+    {
+      "line": 34,
+      "text": "| `0x007BE5F0` | 42 | `004C7C8F` (`e85c692f00`); `004C7DB4` (`e837682f00`); `004C838C` (`e85f622f00`); `004C83AF` (`e83c622f00`); `004C8411` (`e8da612f00`); `004C902C` (`e8bf552f00`); `004C9066` (`e885552f00`); `004C9074` (`e877552f00`); `004CAFF4` (`e8f7352f00`); `004CC867` (`e8841d2f00`); `004CC89A` (`e8511d2f00`); `004CDDF1` (`e8fa072f00`); `004CE927` (`e8c4fc2e00`); `004CEC2C` (`e8bff92e00`); `004CECA7` (`e844f92e00`)；其餘 27 筆見附錄 |"
+    },
+    {
+      "line": 35,
+      "text": "| `0x004DFF30` | 5 | `004A11B6` (`e875ed0300`); `004AA222` (`e8095d0300`); `004AEC03` (`e828130300`); `004AF4F7` (`e8340a0300`); `004B2F83` (`e8a8cf0200`) |"
+    },
+    {
+      "line": 36,
+      "text": "| `0x004DFBC0` | 2 | `004AA057` (`e8645b0300`); `004B2AC2` (`e8f9d00200`) |"
+    },
+    {
+      "line": 37,
+      "text": "| `0x004DFE90` | 11 | `00424448` (`e843ba0b00`); `004BA9C9` (`e8c2540200`); `004BB62A` (`e861480200`); `004BBCF0` (`e89b410200`); `004BC423` (`e8683a0200`); `004BCCDA` (`e8b1310200`); `004BE5AF` (`e8dc180200`); `004C1706` (`e885e70100`); `004C33E6` (`e8a5ca0100`); `004C4BE3` (`e8a8b20100`); `004C5AA8` (`e8e3a30100`) |"
+    },
+    {
+      "line": 38,
+      "text": ""
+    },
+    {
+      "line": 39,
+      "text": "### E8 位移原始算式抽驗"
+    },
+    {
+      "line": 40,
+      "text": ""
+    },
+    {
+      "line": 41,
+      "text": "- `0x007AAF1F` bytes `E8 AC D0 00 00`：`0x007AAF24 + 0xD0AC = 0x007B7FD0`。"
+    },
+    {
+      "line": 42,
+      "text": "- `0x007AB155` bytes `E8 D6 CE 00 00`：`0x007AB15A + 0xCED6 = 0x007B8030`。"
+    },
+    {
+      "line": 43,
+      "text": "- `0x007B8045` bytes `E8 A6 51 02 00`：`0x007B804A + 0x251A6 = 0x007DD1F0`。"
+    },
+    {
+      "line": 44,
+      "text": "- `0x007DD132` bytes `E8 B9 00 00 00`：`0x007DD137 + 0xB9 = 0x007DD1F0`。"
+    },
+    {
+      "line": 45,
+      "text": "- `0x007B8129` bytes `E8 D2 4F 02 00`：`0x007B812E + 0x24FD2 = 0x007DD100`。"
+    },
+    {
+      "line": 46,
+      "text": "- `0x007A8741` bytes `E8 5A 4A 03 00`：`0x007A8746 + 0x34A5A = 0x007DD1A0`。"
+    },
+    {
+      "line": 47,
+      "text": "- `0x007BE60F` bytes `E8 8C EB 01 00`：`0x007BE614 + 0x1EB8C = 0x007DD1A0`。"
+    },
+    {
+      "line": 48,
+      "text": ""
+    },
+    {
+      "line": 49,
+      "text": "## 3. 資料流與 ABI / 計數協定"
+    },
+    {
+      "line": 50,
+      "text": ""
+    },
+    {
+      "line": 51,
+      "text": "### 3.1 模式啟閉"
+    },
+    {
+      "line": 52,
+      "text": ""
+    },
+    {
+      "line": 53,
+      "text": "```text"
+    },
+    {
+      "line": 54,
+      "text": "初始化上游：0x7AAF1A push &global(0xFE173C)"
+    },
+    {
+      "line": 55,
+      "text": "              0x7AAF1F call 0x7B7FD0(container*)"
+    },
+    {
+      "line": 56,
+      "text": "              先遍歷 container->collection0，呼叫 payload->vfunc(+4)"
+    },
+    {
+      "line": 57,
+      "text": "              後遍歷 container->collection8，payload->field44 = 1"
+    },
+    {
+      "line": 58,
+      "text": "              container->field30 = 1"
+    },
+    {
+      "line": 59,
+      "text": ""
+    },
+    {
+      "line": 60,
+      "text": "終止上游：  0x7AB150 push &global(0xFE173C)"
+    },
+    {
+      "line": 61,
+      "text": "              0x7AB155 call 0x7B8030(container*)"
+    },
+    {
+      "line": 62,
+      "text": "              先遍歷 collection8，ESI=payload; drain(ESI); field44=0"
+    },
+    {
+      "line": 63,
+      "text": "              後遍歷 collection0，呼叫 payload->vfunc(+8)"
+    },
+    {
+      "line": 64,
+      "text": "              container->field30 = 0"
+    },
+    {
+      "line": 65,
+      "text": "```"
+    },
+    {
+      "line": 66,
+      "text": ""
+    },
+    {
+      "line": 67,
+      "text": "`[ebx]` 的解參照級數為 `edi=[ebx] ; eax=[edi+4]; esi=[eax]`；`[ebx+8]` 是另一組來源。因 entry node 與 owner 具型別差異，不能把容器 `+0x30`、owner `+0x44` 及 scene actor `+0x44` 宣稱為同一個欄位。"
+    },
+    {
+      "line": 68,
+      "text": ""
+    },
+    {
+      "line": 69,
+      "text": "### 3.2 生產和兩個消費時機"
+    },
+    {
+      "line": 70,
+      "text": ""
+    },
+    {
+      "line": 71,
+      "text": "```text"
+    },
+    {
+      "line": 72,
+      "text": "resource update (0x7A8741) ─┐"
+    },
+    {
+      "line": 73,
+      "text": "                              ├─> 0x7DD1A0(owner,resource)"
+    },
+    {
+      "line": 74,
+      "text": "release (0x7BE60F) ──────────┘        if owner+44 >= 1: lock(owner+64), append owner+7C..80, unlock"
+    },
+    {
+      "line": 75,
+      "text": "                                       else: resource cleanup/free"
+    },
+    {
+      "line": 76,
+      "text": ""
+    },
+    {
+      "line": 77,
+      "text": "shutdown-mode (0x7B8045) ────┐"
+    },
+    {
+      "line": 78,
+      "text": "                              ├─> 0x7DD1F0(ESI=owner): lock, process slots, end=begin, unlock"
+    },
+    {
+      "line": 79,
+      "text": "last-manager-ref (0x7DD132) ─┘"
+    },
+    {
+      "line": 80,
+      "text": "```"
+    },
+    {
+      "line": 81,
+      "text": ""
+    },
+    {
+      "line": 82,
+      "text": "`0x7BE5F0` 是 slot 指向之 resource 的 release helper，與場景 actor 登記方法不是同一原語；在 `0x7BE60F` push 的資源及 owner 使用 `ecx`/`esi` 上游資料流各自辨識。`0x7A8741` call 前由 `[edi]` 取 owner 並 push 指標，`0x7BE60F` 前從 `[eax]` 取得 owner。`0x7DD1A0` 函式 `ret 8`，是兩個 stack arguments、callee 清 stack。"
+    },
+    {
+      "line": 83,
+      "text": ""
+    },
+    {
+      "line": 84,
+      "text": "### 3.3 `0x7DD100` 解除引用及回傳狀態"
+    },
+    {
+      "line": 85,
+      "text": ""
+    },
+    {
+      "line": 86,
+      "text": "`0x7B8124` 取 `edi=[eax+24]`，`mov ecx,edi; call 0x7DD100`；`0x7DD100` 把 `ecx` 存到 `esi`。若 `--[esi+0x5C] != 0`，跳至尾聲返回當前計數；若等於零，則執行 `drain(esi)`、`[esi+0x44]=0`、循環 `owner+0x4C/+0x50` 並調 `0x7DC510`。其上游 `0x7B812E` 使用返回值判斷是否能釋放 `edi`，但「`0x5C` 是否是唯一所有權計數」仍需建構者與全部 `+0x5C` 寫入者驗證。"
+    },
+    {
+      "line": 87,
+      "text": ""
+    },
+    {
+      "line": 88,
+      "text": "### 3.4 `0x7DD1F0` 鎖與佇列細節"
+    },
+    {
+      "line": 89,
+      "text": ""
+    },
+    {
+      "line": 90,
+      "text": "- 入口 `lea eax,[esi+0x64] ; push eax ; call [0xBD224C]`；退出對相同鎖指標呼叫 `[0xBD2248]`。IAT 具體符號可以另以 import table 核對，不藉指令形態判定平台臨界區 API 名稱。"
+    },
+    {
+      "line": 91,
+      "text": "- begin=`[esi+0x7C]`, end=`[esi+0x80]`，`(end-begin)>>2` 為初始數量；每輪可能重新讀取 end，所以不是對固定快照大小的一次遍歷。"
+    },
+    {
+      "line": 92,
+      "text": "- `push slot ; call 0x7BE0F0` 後檢查原 slot 是否非零；如非零則呼叫 `0x7BD850`、`0x89120C`，將 slot 設零。若 slot 已經為零，直接跳過釋放/清零。`0x7BE0F0` 對傳入值的內部處理需依此前 T08-170 補證，不可推定所有 entry 都保證 non-null。"
+    },
+    {
+      "line": 93,
+      "text": "- `0x7DD26A: mov eax,ecx ; 0x7DD26C: sub eax,ecx`，因此 `eax=0`，計算出的 `ebx=0`；`0x7DD27B` 呼叫 `0x8912F0` 時長度是 0，`0x7DD285: mov [esi+0x80], ebx` 的 `ebx` 在 `0x7DD283 add ebx,edi` 後等於 begin。先前只總結為「複製剩餘資料」的說法在這條具體 BIN 路徑**沒有證據**。"
+    },
+    {
+      "line": 94,
+      "text": "- 本函式沒有直接的時間/帧號讀取；模式停用及最後引用退出都能 drain，不應推定每 frame drain，亦不能推定永不跨 frame。"
+    },
+    {
+      "line": 95,
+      "text": ""
+    },
+    {
+      "line": 96,
+      "text": "## 4. 正式 T08 0007 主責與資源 subsystem 的交界"
+    },
+    {
+      "line": 97,
+      "text": ""
+    },
+    {
+      "line": 98,
+      "text": "- 已知 scene 登記 `0x004DFF30` 共有五個 E8 候選 caller；scene 個別移除 `0x004DFBC0` 兩個；整表清理 `0x004DFE90` 十一個，見下表。三者和 `0x007DD1F0` **沒有證明直接 caller 邊**。"
+    },
+    {
+      "line": 99,
+      "text": "- 觀察到 `0x007BE5F0` 在資源槽解除引用等地方共有 42 個 E8 byte 候選，包含 `0x004C7DB4`、`0x004C838C` 等；這只提供「場景/元件持有 resource 到 resource manager」的局部 bridge，而**不代表 actor tree remove 等於 deferred queue drain**。"
+    },
+    {
+      "line": 100,
+      "text": "- 正式 0007 的 client-side 建立、登記、移除資料介面是 T08；服務端生成時間、波次、出生規則不從本段推導。T02/T06/T07/T16 的責任界面不修改。"
+    },
+    {
+      "line": 101,
+      "text": ""
+    },
+    {
+      "line": 102,
+      "text": "## 5. 證據分級"
+    },
+    {
+      "line": 103,
+      "text": ""
+    },
+    {
+      "line": 104,
+      "text": "| 結論 | 等級 | 證據與邊界 |"
+    },
+    {
+      "line": 105,
+      "text": "|---|---|---|"
+    },
+    {
+      "line": 106,
+      "text": "| `0x7B7FD0` 真正入口，`0x7B7FA0` 不是入口 | 已確認 | PE 反組譯與函式界線；本輪更正 |"
+    },
+    {
+      "line": 107,
+      "text": "| `+0x44=1` 由常數立即數設定 | 已確認 | `0x7B7FFE` / `0x7B8006` |"
+    },
+    {
+      "line": 108,
+      "text": "| mode wrapper caller 使用 `&0xFE173C` | 已確認 | `0x7AAF1A` / `0x7AB150` |"
+    },
+    {
+      "line": 109,
+      "text": "| `0x7DD100` 計數歸零時 drain | 已確認 | `0x7DD12A..0x7DD140` |"
+    },
+    {
+      "line": 110,
+      "text": "| `0x7DD1F0` 直接 E8 caller 僅兩個 | 限定確認 | 全 `.text` E8 掃描，不含 indirect |"
+    },
+    {
+      "line": 111,
+      "text": "| `0x7DD1F0` tail memmove 長度為 0 | 已確認 | `0x7DD26A..0x7DD285`，精確資料流 |"
+    },
+    {
+      "line": 112,
+      "text": "| `owner+44` 代表延遲回收模式 | 合理推測 | 模式值為 1 配合 producer gate；全部 writer/types 尚未閉合 |"
+    },
+    {
+      "line": 113,
+      "text": "| 無其他方式呼叫 drain / 故障回滾 | 尚待驗證 | vtable/間接/callback、例外分支未全面核查 |"
+    },
+    {
+      "line": 114,
+      "text": "| 等同每 frame 清空／跨 frame 語意 | 尚待驗證 | 無 runtime tracing / 外層事件時間源 |"
+    },
+    {
+      "line": 115,
+      "text": "| scene 登記/移除與 deferred 佇列同一生命週期 | 尚待驗證 | 暫無同一 owner/物件身分的直接證據 |"
+    },
+    {
+      "line": 116,
+      "text": ""
+    },
+    {
+      "line": 117,
+      "text": "## 6. 尚未解決與 T08-178 入口"
+    },
+    {
+      "line": 118,
+      "text": ""
+    },
+    {
+      "line": 119,
+      "text": "1. 以 owner 類型與所有配置/建構函式核對 `+0x44` **其他可能寫入者**（含間接/初始化），`+0x5C` 增量寫入者及 mode 啟動/終止是否還有間接 wrapper。"
+    },
+    {
+      "line": 120,
+      "text": "2. 詳析 `0x7B7FD0` `[ebx]` 及 `[ebx+8]` 容器元素 payload 的各自 vptr，並以 `0xFE173C` 實際初始化/解構建立對象身分；避免兩棵名稱容器混同。"
+    },
+    {
+      "line": 121,
+      "text": "3. 驗證 `0x7DD1F0` 中 `0x7BE0F0` 是否可修改 slot、產生重入；索引動態上限、持鎖 callback 的副作用及例外安全仍未知。"
+    },
+    {
+      "line": 122,
+      "text": "4. 檢查 `0x7DD1F0` 函式尾 `0x8912F0` 是否標準 memcpy/memmove stub；零長度可靜態確立，不能因此宣稱編譯器錯誤或 runtime bug。"
+    },
+    {
+      "line": 123,
+      "text": "5. 把正式 `0x004DFF30 / 0x004DFBC0 / 0x004DFE90` 的 owner 取得與 `0x007BE5F0` 的 resource slot 接點逐項比對；沒有型別/指標身分交點就保持隔離。"
+    },
+    {
+      "line": 124,
+      "text": "6. 遠端 `shared/integrations/T01-20261028-06/` 的 PE/flat 限制繼續適用：只以同一 PE raw windows 互證，不使用普遍 `-0x400` 轉位址。"
+    },
+    {
+      "line": 125,
+      "text": ""
+    },
+    {
+      "line": 126,
+      "text": "## 附錄 A：本次原始 BIN 小範圍反組譯"
+    },
+    {
+      "line": 127,
+      "text": ""
+    },
+    {
+      "line": 128,
+      "text": "以下 output 由本輪 `objdump -D -M intel` 直接取得，**不是 GitHub 偽碼摘錄**。截取上游 caller 區段可能從前一函式中間開始，僅用於確認指定 caller 周邊，請勿將區段首位當函式入口。"
+    },
+    {
+      "line": 129,
+      "text": ""
+    },
+    {
+      "line": 130,
+      "text": "### 模式啟用函式（真實入口） — `007B7FD0..007B8026`"
+    },
+    {
+      "line": 131,
+      "text": ""
+    },
+    {
+      "line": 132,
+      "text": "```asm"
+    },
+    {
+      "line": 133,
+      "text": "007b7fd0 <.text+0x3b6fd0>:"
+    },
+    {
+      "line": 134,
+      "text": "  7b7fd0:\t55                   \tpush   ebp"
+    },
+    {
+      "line": 135,
+      "text": "  7b7fd1:\t8b ec                \tmov    ebp,esp"
+    },
+    {
+      "line": 136,
+      "text": "  7b7fd3:\t53                   \tpush   ebx"
+    },
+    {
+      "line": 137,
+      "text": "  7b7fd4:\t8b 5d 08             \tmov    ebx,DWORD PTR [ebp+0x8]"
+    },
+    {
+      "line": 138,
+      "text": "  7b7fd7:\t56                   \tpush   esi"
+    },
+    {
+      "line": 139,
+      "text": "  7b7fd8:\t57                   \tpush   edi"
+    },
+    {
+      "line": 140,
+      "text": "  7b7fd9:\t8b 3b                \tmov    edi,DWORD PTR [ebx]"
+    },
+    {
+      "line": 141,
+      "text": "  7b7fdb:\t8b 47 04             \tmov    eax,DWORD PTR [edi+0x4]"
+    },
+    {
+      "line": 142,
+      "text": "  7b7fde:\t8b 30                \tmov    esi,DWORD PTR [eax]"
+    },
+    {
+      "line": 143,
+      "text": "  7b7fe0:\t3b f0                \tcmp    esi,eax"
+    },
+    {
+      "line": 144,
+      "text": "  7b7fe2:\t74 11                \tje     0x7b7ff5"
+    },
+    {
+      "line": 145,
+      "text": "  7b7fe4:\t8b 4e 24             \tmov    ecx,DWORD PTR [esi+0x24]"
+    },
+    {
+      "line": 146,
+      "text": "  7b7fe7:\t8b 01                \tmov    eax,DWORD PTR [ecx]"
+    },
+    {
+      "line": 147,
+      "text": "  7b7fe9:\t8b 50 04             \tmov    edx,DWORD PTR [eax+0x4]"
+    },
+    {
+      "line": 148,
+      "text": "  7b7fec:\tff d2                \tcall   edx"
+    },
+    {
+      "line": 149,
+      "text": "  7b7fee:\t8b 36                \tmov    esi,DWORD PTR [esi]"
+    },
+    {
+      "line": 150,
+      "text": "  7b7ff0:\t3b 77 04             \tcmp    esi,DWORD PTR [edi+0x4]"
+    },
+    {
+      "line": 151,
+      "text": "  7b7ff3:\t75 ef                \tjne    0x7b7fe4"
+    },
+    {
+      "line": 152,
+      "text": "  7b7ff5:\t8b 4b 08             \tmov    ecx,DWORD PTR [ebx+0x8]"
+    },
+    {
+      "line": 153,
+      "text": "  7b7ff8:\t8b 01                \tmov    eax,DWORD PTR [ecx]"
+    },
+    {
+      "line": 154,
+      "text": "  7b7ffa:\t3b c1                \tcmp    eax,ecx"
+    },
+    {
+      "line": 155,
+      "text": "  7b7ffc:\t74 1c                \tje     0x7b801a"
+    },
+    {
+      "line": 156,
+      "text": "  7b7ffe:\tb9 01 00 00 00       \tmov    ecx,0x1"
+    },
+    {
+      "line": 157,
+      "text": "  7b8003:\t8b 50 24             \tmov    edx,DWORD PTR [eax+0x24]"
+    },
+    {
+      "line": 158,
+      "text": "  7b8006:\t89 4a 44             \tmov    DWORD PTR [edx+0x44],ecx"
+    },
+    {
+      "line": 159,
+      "text": "  7b8009:\t8b 00                \tmov    eax,DWORD PTR [eax]"
+    },
+    {
+      "line": 160,
+      "text": "  7b800b:\t3b 43 08             \tcmp    eax,DWORD PTR [ebx+0x8]"
+    },
+    {
+      "line": 161,
+      "text": "  7b800e:\t75 f3                \tjne    0x7b8003"
+    },
+    {
+      "line": 162,
+      "text": "  7b8010:\t5f                   \tpop    edi"
+    },
+    {
+      "line": 163,
+      "text": "  7b8011:\t5e                   \tpop    esi"
+    },
+    {
+      "line": 164,
+      "text": "  7b8012:\t89 4b 30             \tmov    DWORD PTR [ebx+0x30],ecx"
+    },
+    {
+      "line": 165,
+      "text": "  7b8015:\t5b                   \tpop    ebx"
+    },
+    {
+      "line": 166,
+      "text": "  7b8016:\t5d                   \tpop    ebp"
+    },
+    {
+      "line": 167,
+      "text": "  7b8017:\tc2 04 00             \tret    0x4"
+    },
+    {
+      "line": 168,
+      "text": "  7b801a:\t5f                   \tpop    edi"
+    },
+    {
+      "line": 169,
+      "text": "  7b801b:\t5e                   \tpop    esi"
+    },
+    {
+      "line": 170,
+      "text": "  7b801c:\tc7 43 30 01 00 00 00 \tmov    DWORD PTR [ebx+0x30],0x1"
+    },
+    {
+      "line": 171,
+      "text": "  7b8023:\t5b                   \tpop    ebx"
+    },
+    {
+      "line": 172,
+      "text": "  7b8024:\t5d                   \tpop    ebp"
+    },
+    {
+      "line": 173,
+      "text": "  7b8025:\tc2               \tret    0x4"
+    },
+    {
+      "line": 174,
+      "text": "```"
+    },
+    {
+      "line": 175,
+      "text": ""
+    },
+    {
+      "line": 176,
+      "text": "### 模式停用函式 — `007B8030..007B8080`"
+    },
+    {
+      "line": 177,
+      "text": ""
+    },
+    {
+      "line": 178,
+      "text": "```asm"
+    },
+    {
+      "line": 179,
+      "text": "007b8030 <.text+0x3b7030>:"
+    },
+    {
+      "line": 180,
+      "text": "  7b8030:\t55                   \tpush   ebp"
+    },
+    {
+      "line": 181,
+      "text": "  7b8031:\t8b ec                \tmov    ebp,esp"
+    },
+    {
+      "line": 182,
+      "text": "  7b8033:\t53                   \tpush   ebx"
+    },
+    {
+      "line": 183,
+      "text": "  7b8034:\t8b 5d 08             \tmov    ebx,DWORD PTR [ebp+0x8]"
+    },
+    {
+      "line": 184,
+      "text": "  7b8037:\t8b 43 08             \tmov    eax,DWORD PTR [ebx+0x8]"
+    },
+    {
+      "line": 185,
+      "text": "  7b803a:\t56                   \tpush   esi"
+    },
+    {
+      "line": 186,
+      "text": "  7b803b:\t57                   \tpush   edi"
+    },
+    {
+      "line": 187,
+      "text": "  7b803c:\t8b 38                \tmov    edi,DWORD PTR [eax]"
+    },
+    {
+      "line": 188,
+      "text": "  7b803e:\t3b f8                \tcmp    edi,eax"
+    },
+    {
+      "line": 189,
+      "text": "  7b8040:\t74 16                \tje     0x7b8058"
+    },
+    {
+      "line": 190,
+      "text": "  7b8042:\t8b 77 24             \tmov    esi,DWORD PTR [edi+0x24]"
+    },
+    {
+      "line": 191,
+      "text": "  7b8045:\te8 a6 51 02 00       \tcall   0x7dd1f0"
+    },
+    {
+      "line": 192,
+      "text": "  7b804a:\tc7 46 44 00 00 00 00 \tmov    DWORD PTR [esi+0x44],0x0"
+    },
+    {
+      "line": 193,
+      "text": "  7b8051:\t8b 3f                \tmov    edi,DWORD PTR [edi]"
+    },
+    {
+      "line": 194,
+      "text": "  7b8053:\t3b 7b 08             \tcmp    edi,DWORD PTR [ebx+0x8]"
+    },
+    {
+      "line": 195,
+      "text": "  7b8056:\t75 ea                \tjne    0x7b8042"
+    },
+    {
+      "line": 196,
+      "text": "  7b8058:\t8b 3b                \tmov    edi,DWORD PTR [ebx]"
+    },
+    {
+      "line": 197,
+      "text": "  7b805a:\t8b 47 04             \tmov    eax,DWORD PTR [edi+0x4]"
+    },
+    {
+      "line": 198,
+      "text": "  7b805d:\t8b 30                \tmov    esi,DWORD PTR [eax]"
+    },
+    {
+      "line": 199,
+      "text": "  7b805f:\t3b f0                \tcmp    esi,eax"
+    },
+    {
+      "line": 200,
+      "text": "  7b8061:\t74 11                \tje     0x7b8074"
+    },
+    {
+      "line": 201,
+      "text": "  7b8063:\t8b 4e 24             \tmov    ecx,DWORD PTR [esi+0x24]"
+    },
+    {
+      "line": 202,
+      "text": "  7b8066:\t8b 01                \tmov    eax,DWORD PTR [ecx]"
+    },
+    {
+      "line": 203,
+      "text": "  7b8068:\t8b 50 08             \tmov    edx,DWORD PTR [eax+0x8]"
+    },
+    {
+      "line": 204,
+      "text": "  7b806b:\tff d2                \tcall   edx"
+    },
+    {
+      "line": 205,
+      "text": "  7b806d:\t8b 36                \tmov    esi,DWORD PTR [esi]"
+    },
+    {
+      "line": 206,
+      "text": "  7b806f:\t3b 77 04             \tcmp    esi,DWORD PTR [edi+0x4]"
+    },
+    {
+      "line": 207,
+      "text": "  7b8072:\t75 ef                \tjne    0x7b8063"
+    },
+    {
+      "line": 208,
+      "text": "  7b8074:\t5f                   \tpop    edi"
+    },
+    {
+      "line": 209,
+      "text": "  7b8075:\t5e                   \tpop    esi"
+    },
+    {
+      "line": 210,
+      "text": "  7b8076:\tc7 43 30 00 00 00 00 \tmov    DWORD PTR [ebx+0x30],0x0"
+    },
+    {
+      "line": 211,
+      "text": "  7b807d:\t5b                   \tpop    ebx"
+    },
+    {
+      "line": 212,
+      "text": "  7b807e:\t5d                   \tpop    ebp"
+    },
+    {
+      "line": 213,
+      "text": "  7b807f:\tc2               \tret    0x4"
+    },
+    {
+      "line": 214,
+      "text": "```"
+    },
+    {
+      "line": 215,
+      "text": ""
+    },
+    {
+      "line": 216,
+      "text": "### 模式啟用直接 caller — `007AAF0A..007AAF50`"
+    },
+    {
+      "line": 217,
+      "text": ""
+    },
+    {
+      "line": 218,
+      "text": "```asm"
+    },
+    {
+      "line": 219,
+      "text": "007aaf0a <.text+0x3a9f0a>:"
+    },
+    {
+      "line": 220,
+      "text": "  7aaf0a:\t68 90 e7 bc 00       \tpush   0xbce790"
+    },
+    {
+      "line": 221,
+      "text": "  7aaf0f:\te8 06 74 0e 00       \tcall   0x89231a"
+    },
+    {
+      "line": 222,
+      "text": "  7aaf14:\t83 c4 04             \tadd    esp,0x4"
+    },
+    {
+      "line": 223,
+      "text": "  7aaf17:\t89 5d fc             \tmov    DWORD PTR [ebp-0x4],ebx"
+    },
+    {
+      "line": 224,
+      "text": "  7aaf1a:\t68 3c 17 fe 00       \tpush   0xfe173c"
+    },
+    {
+      "line": 225,
+      "text": "  7aaf1f:\te8 ac d0 00 00       \tcall   0x7b7fd0"
+    },
+    {
+      "line": 226,
+      "text": "  7aaf24:\tf6 05 1c 1e fe 00 01 \ttest   BYTE PTR ds:0xfe1e1c,0x1"
+    },
+    {
+      "line": 227,
+      "text": "  7aaf2b:\t75 22                \tjne    0x7aaf4f"
+    },
+    {
+      "line": 228,
+      "text": "  7aaf2d:\t09 3d 1c 1e fe 00    \tor     DWORD PTR ds:0xfe1e1c,edi"
+    },
+    {
+      "line": 229,
+      "text": "  7aaf33:\tc7 45 fc 08 00 00 00 \tmov    DWORD PTR [ebp-0x4],0x8"
+    },
+    {
+      "line": 230,
+      "text": "  7aaf3a:\te8 81 81 01 00       \tcall   0x7c30c0"
+    },
+    {
+      "line": 231,
+      "text": "  7aaf3f:\t68 b0 f1 bc 00       \tpush   0xbcf1b0"
+    },
+    {
+      "line": 232,
+      "text": "  7aaf44:\te8 d1 73 0e 00       \tcall   0x89231a"
+    },
+    {
+      "line": 233,
+      "text": "  7aaf49:\t83 c4 04             \tadd    esp,0x4"
+    },
+    {
+      "line": 234,
+      "text": "  7aaf4c:\t89 5d fc             \tmov    DWORD PTR [ebp-0x4],ebx"
+    },
+    {
+      "line": 235,
+      "text": "  7aaf4f:\tb9           \tmov    ecx,0xfe1e0c"
+    },
+    {
+      "line": 236,
+      "text": "```"
+    },
+    {
+      "line": 237,
+      "text": ""
+    },
+    {
+      "line": 238,
+      "text": "### 模式停用直接 caller — `007AB13B..007AB175`"
+    },
+    {
+      "line": 239,
+      "text": ""
+    },
+    {
+      "line": 240,
+      "text": "```asm"
+    },
+    {
+      "line": 241,
+      "text": "007ab13b <.text+0x3aa13b>:"
+    },
+    {
+      "line": 242,
+      "text": "  7ab13b:\te8 60 cc 00 00       \tcall   0x7b7da0"
+    },
+    {
+      "line": 243,
+      "text": "  7ab140:\t68 90 e7 bc 00       \tpush   0xbce790"
+    },
+    {
+      "line": 244,
+      "text": "  7ab145:\te8 d0 71 0e 00       \tcall   0x89231a"
+    },
+    {
+      "line": 245,
+      "text": "  7ab14a:\t83 c4 04             \tadd    esp,0x4"
+    },
+    {
+      "line": 246,
+      "text": "  7ab14d:\t89 75 fc             \tmov    DWORD PTR [ebp-0x4],esi"
+    },
+    {
+      "line": 247,
+      "text": "  7ab150:\t68 3c 17 fe 00       \tpush   0xfe173c"
+    },
+    {
+      "line": 248,
+      "text": "  7ab155:\te8 d6 ce 00 00       \tcall   0x7b8030"
+    },
+    {
+      "line": 249,
+      "text": "  7ab15a:\t84 1d f0 93 fd 00    \ttest   BYTE PTR ds:0xfd93f0,bl"
+    },
+    {
+      "line": 250,
+      "text": "  7ab160:\t75 22                \tjne    0x7ab184"
+    },
+    {
+      "line": 251,
+      "text": "  7ab162:\t09 1d f0 93 fd 00    \tor     DWORD PTR ds:0xfd93f0,ebx"
+    },
+    {
+      "line": 252,
+      "text": "  7ab168:\tc7 45 fc 05 00 00 00 \tmov    DWORD PTR [ebp-0x4],0x5"
+    },
+    {
+      "line": 253,
+      "text": "  7ab16f:\te8 6c 03 00 00       \tcall   0x7ab4e0"
+    },
+    {
+      "line": 254,
+      "text": "  7ab174:\t68           \tpush   0xbce6a0"
+    },
+    {
+      "line": 255,
+      "text": "```"
+    },
+    {
+      "line": 256,
+      "text": ""
+    },
+    {
+      "line": 257,
+      "text": "### 管理器計數解除引用 — `007DD100..007DD19C`"
+    },
+    {
+      "line": 258,
+      "text": ""
+    },
+    {
+      "line": 259,
+      "text": "```asm"
+    },
+    {
+      "line": 260,
+      "text": "007dd100 <.text+0x3dc100>:"
+    },
+    {
+      "line": 261,
+      "text": "  7dd100:\t55                   \tpush   ebp"
+    },
+    {
+      "line": 262,
+      "text": "  7dd101:\t8b ec                \tmov    ebp,esp"
+    },
+    {
+      "line": 263,
+      "text": "  7dd103:\t6a ff                \tpush   0xffffffff"
+    },
+    {
+      "line": 264,
+      "text": "  7dd105:\t68 2e 88 91 00       \tpush   0x91882e"
+    },
+    {
+      "line": 265,
+      "text": "  7dd10a:\t64 a1 00 00 00 00    \tmov    eax,fs:0x0"
+    },
+    {
+      "line": 266,
+      "text": "  7dd110:\t50                   \tpush   eax"
+    },
+    {
+      "line": 267,
+      "text": "  7dd111:\t53                   \tpush   ebx"
+    },
+    {
+      "line": 268,
+      "text": "  7dd112:\t56                   \tpush   esi"
+    },
+    {
+      "line": 269,
+      "text": "  7dd113:\t57                   \tpush   edi"
+    },
+    {
+      "line": 270,
+      "text": "  7dd114:\ta1 20 1f d6 00       \tmov    eax,ds:0xd61f20"
+    },
+    {
+      "line": 271,
+      "text": "  7dd119:\t33 c5                \txor    eax,ebp"
+    },
+    {
+      "line": 272,
+      "text": "  7dd11b:\t50                   \tpush   eax"
+    },
+    {
+      "line": 273,
+      "text": "  7dd11c:\t8d 45 f4             \tlea    eax,[ebp-0xc]"
+    },
+    {
+      "line": 274,
+      "text": "  7dd11f:\t64 a3 00 00 00 00    \tmov    fs:0x0,eax"
+    },
+    {
+      "line": 275,
+      "text": "  7dd125:\t8b f1                \tmov    esi,ecx"
+    },
+    {
+      "line": 276,
+      "text": "  7dd127:\t83 cf ff             \tor     edi,0xffffffff"
+    },
+    {
+      "line": 277,
+      "text": "  7dd12a:\t01 7e 5c             \tadd    DWORD PTR [esi+0x5c],edi"
+    },
+    {
+      "line": 278,
+      "text": "  7dd12d:\t8b 46 5c             \tmov    eax,DWORD PTR [esi+0x5c]"
+    },
+    {
+      "line": 279,
+      "text": "  7dd130:\t75 58                \tjne    0x7dd18a"
+    },
+    {
+      "line": 280,
+      "text": "  7dd132:\te8 b9 00 00 00       \tcall   0x7dd1f0"
+    },
+    {
+      "line": 281,
+      "text": "  7dd137:\t33 db                \txor    ebx,ebx"
+    },
+    {
+      "line": 282,
+      "text": "  7dd139:\tf6 05 70 17 fe 00 01 \ttest   BYTE PTR ds:0xfe1770,0x1"
+    },
+    {
+      "line": 283,
+      "text": "  7dd140:\t89 5e 44             \tmov    DWORD PTR [esi+0x44],ebx"
+    },
+    {
+      "line": 284,
+      "text": "  7dd143:\t75 1f                \tjne    0x7dd164"
+    },
+    {
+      "line": 285,
+      "text": "  7dd145:\t83 0d 70 17 fe 00 01 \tor     DWORD PTR ds:0xfe1770,0x1"
+    },
+    {
+      "line": 286,
+      "text": "  7dd14c:\t89 5d fc             \tmov    DWORD PTR [ebp-0x4],ebx"
+    },
+    {
+      "line": 287,
+      "text": "  7dd14f:\te8 4c ac fd ff       \tcall   0x7b7da0"
+    },
+    {
+      "line": 288,
+      "text": "  7dd154:\t68 90 e7 bc 00       \tpush   0xbce790"
+    },
+    {
+      "line": 289,
+      "text": "  7dd159:\te8 bc 51 0b 00       \tcall   0x89231a"
+    },
+    {
+      "line": 290,
+      "text": "  7dd15e:\t83 c4 04             \tadd    esp,0x4"
+    },
+    {
+      "line": 291,
+      "text": "  7dd161:\t89 7d fc             \tmov    DWORD PTR [ebp-0x4],edi"
+    },
+    {
+      "line": 292,
+      "text": "  7dd164:\t8b 7e 50             \tmov    edi,DWORD PTR [esi+0x50]"
+    },
+    {
+      "line": 293,
+      "text": "  7dd167:\t2b 7e 4c             \tsub    edi,DWORD PTR [esi+0x4c]"
+    },
+    {
+      "line": 294,
+      "text": "  7dd16a:\tc1 ff 02             \tsar    edi,0x2"
+    },
+    {
+      "line": 295,
+      "text": "  7dd16d:\t3b fb                \tcmp    edi,ebx"
+    },
+    {
+      "line": 296,
+      "text": "  7dd16f:\t76 16                \tjbe    0x7dd187"
+    },
+    {
+      "line": 297,
+      "text": "  7dd171:\t8b 46 4c             \tmov    eax,DWORD PTR [esi+0x4c]"
+    },
+    {
+      "line": 298,
+      "text": "  7dd174:\t8b 14 98             \tmov    edx,DWORD PTR [eax+ebx*4]"
+    },
+    {
+      "line": 299,
+      "text": "  7dd177:\t8b 0d 3c 17 fe 00    \tmov    ecx,DWORD PTR ds:0xfe173c"
+    },
+    {
+      "line": 300,
+      "text": "  7dd17d:\te8 8e f3 ff ff       \tcall   0x7dc510"
+    },
+    {
+      "line": 301,
+      "text": "  7dd182:\t43                   \tinc    ebx"
+    },
+    {
+      "line": 302,
+      "text": "  7dd183:\t3b df                \tcmp    ebx,edi"
+    },
+    {
+      "line": 303,
+      "text": "  7dd185:\t72 ea                \tjb     0x7dd171"
+    },
+    {
+      "line": 304,
+      "text": "  7dd187:\t8b 46 5c             \tmov    eax,DWORD PTR [esi+0x5c]"
+    },
+    {
+      "line": 305,
+      "text": "  7dd18a:\t8b 4d f4             \tmov    ecx,DWORD PTR [ebp-0xc]"
+    },
+    {
+      "line": 306,
+      "text": "  7dd18d:\t64 89 0d 00 00 00 00 \tmov    DWORD PTR fs:0x0,ecx"
+    },
+    {
+      "line": 307,
+      "text": "  7dd194:\t59                   \tpop    ecx"
+    },
+    {
+      "line": 308,
+      "text": "  7dd195:\t5f                   \tpop    edi"
+    },
+    {
+      "line": 309,
+      "text": "  7dd196:\t5e                   \tpop    esi"
+    },
+    {
+      "line": 310,
+      "text": "  7dd197:\t5b                   \tpop    ebx"
+    },
+    {
+      "line": 311,
+      "text": "  7dd198:\t8b e5                \tmov    esp,ebp"
+    },
+    {
+      "line": 312,
+      "text": "  7dd19a:\t5d                   \tpop    ebp"
+    },
+    {
+      "line": 313,
+      "text": "  7dd19b:\tc3                   \tret"
+    },
+    {
+      "line": 314,
+      "text": "```"
+    },
+    {
+      "line": 315,
+      "text": ""
+    },
+    {
+      "line": 316,
+      "text": "### 佇列生產/立即釋放 — `007DD1A0..007DD1EB`"
+    },
+    {
+      "line": 317,
+      "text": ""
+    },
+    {
+      "line": 318,
+      "text": "```asm"
+    },
+    {
+      "line": 319,
+      "text": "007dd1a0 <.text+0x3dc1a0>:"
+    },
+    {
+      "line": 320,
+      "text": "  7dd1a0:\t55                   \tpush   ebp"
+    },
+    {
+      "line": 321,
+      "text": "  7dd1a1:\t8b ec                \tmov    ebp,esp"
+    },
+    {
+      "line": 322,
+      "text": "  7dd1a3:\t53                   \tpush   ebx"
+    },
+    {
+      "line": 323,
+      "text": "  7dd1a4:\t8b 5d 08             \tmov    ebx,DWORD PTR [ebp+0x8]"
+    },
+    {
+      "line": 324,
+      "text": "  7dd1a7:\t83 7b 44 01          \tcmp    DWORD PTR [ebx+0x44],0x1"
+    },
+    {
+      "line": 325,
+      "text": "  7dd1ab:\t57                   \tpush   edi"
+    },
+    {
+      "line": 326,
+      "text": "  7dd1ac:\t8b 7d 0c             \tmov    edi,DWORD PTR [ebp+0xc]"
+    },
+    {
+      "line": 327,
+      "text": "  7dd1af:\t7c 24                \tjl     0x7dd1d5"
+    },
+    {
+      "line": 328,
+      "text": "  7dd1b1:\t56                   \tpush   esi"
+    },
+    {
+      "line": 329,
+      "text": "  7dd1b2:\t8d 73 64             \tlea    esi,[ebx+0x64]"
+    },
+    {
+      "line": 330,
+      "text": "  7dd1b5:\t56                   \tpush   esi"
+    },
+    {
+      "line": 331,
+      "text": "  7dd1b6:\tff 15 4c 22 bd 00    \tcall   DWORD PTR ds:0xbd224c"
+    },
+    {
+      "line": 332,
+      "text": "  7dd1bc:\t8d 7b 7c             \tlea    edi,[ebx+0x7c]"
+    },
+    {
+      "line": 333,
+      "text": "  7dd1bf:\t8d 45 0c             \tlea    eax,[ebp+0xc]"
+    },
+    {
+      "line": 334,
+      "text": "  7dd1c2:\te8 89 e1 fd ff       \tcall   0x7bb350"
+    },
+    {
+      "line": 335,
+      "text": "  7dd1c7:\t56                   \tpush   esi"
+    },
+    {
+      "line": 336,
+      "text": "  7dd1c8:\tff 15 48 22 bd 00    \tcall   DWORD PTR ds:0xbd2248"
+    },
+    {
+      "line": 337,
+      "text": "  7dd1ce:\t5e                   \tpop    esi"
+    },
+    {
+      "line": 338,
+      "text": "  7dd1cf:\t5f                   \tpop    edi"
+    },
+    {
+      "line": 339,
+      "text": "  7dd1d0:\t5b                   \tpop    ebx"
+    },
+    {
+      "line": 340,
+      "text": "  7dd1d1:\t5d                   \tpop    ebp"
+    },
+    {
+      "line": 341,
+      "text": "  7dd1d2:\tc2 08 00             \tret    0x8"
+    },
+    {
+      "line": 342,
+      "text": "  7dd1d5:\t85 ff                \ttest   edi,edi"
+    },
+    {
+      "line": 343,
+      "text": "  7dd1d7:\t74 0e                \tje     0x7dd1e7"
+    },
+    {
+      "line": 344,
+      "text": "  7dd1d9:\te8 72 06 fe ff       \tcall   0x7bd850"
+    },
+    {
+      "line": 345,
+      "text": "  7dd1de:\t57                   \tpush   edi"
+    },
+    {
+      "line": 346,
+      "text": "  7dd1df:\te8 28 40 0b 00       \tcall   0x89120c"
+    },
+    {
+      "line": 347,
+      "text": "  7dd1e4:\t83 c4 04             \tadd    esp,0x4"
+    },
+    {
+      "line": 348,
+      "text": "  7dd1e7:\t5f                   \tpop    edi"
+    },
+    {
+      "line": 349,
+      "text": "  7dd1e8:\t5b                   \tpop    ebx"
+    },
+    {
+      "line": 350,
+      "text": "  7dd1e9:\t5d                   \tpop    ebp"
+    },
+    {
+      "line": 351,
+      "text": "  7dd1ea:\tc2               \tret    0x8"
+    },
+    {
+      "line": 352,
+      "text": "```"
+    },
+    {
+      "line": 353,
+      "text": ""
+    },
+    {
+      "line": 354,
+      "text": "### 佇列消費 — `007DD1F0..007DD29B`"
+    },
+    {
+      "line": 355,
+      "text": ""
+    },
+    {
+      "line": 356,
+      "text": "```asm"
+    },
+    {
+      "line": 357,
+      "text": "007dd1f0 <.text+0x3dc1f0>:"
+    },
+    {
+      "line": 358,
+      "text": "  7dd1f0:\t55                   \tpush   ebp"
+    },
+    {
+      "line": 359,
+      "text": "  7dd1f1:\t8b ec                \tmov    ebp,esp"
+    },
+    {
+      "line": 360,
+      "text": "  7dd1f3:\t51                   \tpush   ecx"
+    },
+    {
+      "line": 361,
+      "text": "  7dd1f4:\t53                   \tpush   ebx"
+    },
+    {
+      "line": 362,
+      "text": "  7dd1f5:\t8d 46 64             \tlea    eax,[esi+0x64]"
+    },
+    {
+      "line": 363,
+      "text": "  7dd1f8:\t57                   \tpush   edi"
+    },
+    {
+      "line": 364,
+      "text": "  7dd1f9:\t50                   \tpush   eax"
+    },
+    {
+      "line": 365,
+      "text": "  7dd1fa:\t89 45 fc             \tmov    DWORD PTR [ebp-0x4],eax"
+    },
+    {
+      "line": 366,
+      "text": "  7dd1fd:\tff 15 4c 22 bd 00    \tcall   DWORD PTR ds:0xbd224c"
+    },
+    {
+      "line": 367,
+      "text": "  7dd203:\t8b 46 7c             \tmov    eax,DWORD PTR [esi+0x7c]"
+    },
+    {
+      "line": 368,
+      "text": "  7dd206:\t8b 8e 80 00 00 00    \tmov    ecx,DWORD PTR [esi+0x80]"
+    },
+    {
+      "line": 369,
+      "text": "  7dd20c:\t2b c8                \tsub    ecx,eax"
+    },
+    {
+      "line": 370,
+      "text": "  7dd20e:\tc1 f9 02             \tsar    ecx,0x2"
+    },
+    {
+      "line": 371,
+      "text": "  7dd211:\t33 db                \txor    ebx,ebx"
+    },
+    {
+      "line": 372,
+      "text": "  7dd213:\t85 c9                \ttest   ecx,ecx"
+    },
+    {
+      "line": 373,
+      "text": "  7dd215:\t74 46                \tje     0x7dd25d"
+    },
+    {
+      "line": 374,
+      "text": "  7dd217:\t8b 14 98             \tmov    edx,DWORD PTR [eax+ebx*4]"
+    },
+    {
+      "line": 375,
+      "text": "  7dd21a:\t52                   \tpush   edx"
+    },
+    {
+      "line": 376,
+      "text": "  7dd21b:\te8 d0 0e fe ff       \tcall   0x7be0f0"
+    },
+    {
+      "line": 377,
+      "text": "  7dd220:\t8b 46 7c             \tmov    eax,DWORD PTR [esi+0x7c]"
+    },
+    {
+      "line": 378,
+      "text": "  7dd223:\t83 3c 98 00          \tcmp    DWORD PTR [eax+ebx*4],0x0"
+    },
+    {
+      "line": 379,
+      "text": "  7dd227:\t8d 04 98             \tlea    eax,[eax+ebx*4]"
+    },
+    {
+      "line": 380,
+      "text": "  7dd22a:\t74 1e                \tje     0x7dd24a"
+    },
+    {
+      "line": 381,
+      "text": "  7dd22c:\t8b 38                \tmov    edi,DWORD PTR [eax]"
+    },
+    {
+      "line": 382,
+      "text": "  7dd22e:\t85 ff                \ttest   edi,edi"
+    },
+    {
+      "line": 383,
+      "text": "  7dd230:\t74 0e                \tje     0x7dd240"
+    },
+    {
+      "line": 384,
+      "text": "  7dd232:\te8 19 06 fe ff       \tcall   0x7bd850"
+    },
+    {
+      "line": 385,
+      "text": "  7dd237:\t57                   \tpush   edi"
+    },
+    {
+      "line": 386,
+      "text": "  7dd238:\te8 cf 3f 0b 00       \tcall   0x89120c"
+    },
+    {
+      "line": 387,
+      "text": "  7dd23d:\t83 c4 04             \tadd    esp,0x4"
+    },
+    {
+      "line": 388,
+      "text": "  7dd240:\t8b 4e 7c             \tmov    ecx,DWORD PTR [esi+0x7c]"
+    },
+    {
+      "line": 389,
+      "text": "  7dd243:\tc7 04 99 00 00 00 00 \tmov    DWORD PTR [ecx+ebx*4],0x0"
+    },
+    {
+      "line": 390,
+      "text": "  7dd24a:\t8b 46 7c             \tmov    eax,DWORD PTR [esi+0x7c]"
+    },
+    {
+      "line": 391,
+      "text": "  7dd24d:\t8b 96 80 00 00 00    \tmov    edx,DWORD PTR [esi+0x80]"
+    },
+    {
+      "line": 392,
+      "text": "  7dd253:\t2b d0                \tsub    edx,eax"
+    },
+    {
+      "line": 393,
+      "text": "  7dd255:\t43                   \tinc    ebx"
+    },
+    {
+      "line": 394,
+      "text": "  7dd256:\tc1 fa 02             \tsar    edx,0x2"
+    },
+    {
+      "line": 395,
+      "text": "  7dd259:\t3b da                \tcmp    ebx,edx"
+    },
+    {
+      "line": 396,
+      "text": "  7dd25b:\t72 ba                \tjb     0x7dd217"
+    },
+    {
+      "line": 397,
+      "text": "  7dd25d:\t8b 8e 80 00 00 00    \tmov    ecx,DWORD PTR [esi+0x80]"
+    },
+    {
+      "line": 398,
+      "text": "  7dd263:\t8b 7e 7c             \tmov    edi,DWORD PTR [esi+0x7c]"
+    },
+    {
+      "line": 399,
+      "text": "  7dd266:\t3b f9                \tcmp    edi,ecx"
+    },
+    {
+      "line": 400,
+      "text": "  7dd268:\t74 21                \tje     0x7dd28b"
+    },
+    {
+      "line": 401,
+      "text": "  7dd26a:\t8b c1                \tmov    eax,ecx"
+    },
+    {
+      "line": 402,
+      "text": "  7dd26c:\t2b c1                \tsub    eax,ecx"
+    },
+    {
+      "line": 403,
+      "text": "  7dd26e:\tc1 f8 02             \tsar    eax,0x2"
+    },
+    {
+      "line": 404,
+      "text": "  7dd271:\t8d 1c 85 00 00 00 00 \tlea    ebx,[eax*4+0x0]"
+    },
+    {
+      "line": 405,
+      "text": "  7dd278:\t53                   \tpush   ebx"
+    },
+    {
+      "line": 406,
+      "text": "  7dd279:\t51                   \tpush   ecx"
+    },
+    {
+      "line": 407,
+      "text": "  7dd27a:\t57                   \tpush   edi"
+    },
+    {
+      "line": 408,
+      "text": "  7dd27b:\te8 70 40 0b 00       \tcall   0x8912f0"
+    },
+    {
+      "line": 409,
+      "text": "  7dd280:\t83 c4 0c             \tadd    esp,0xc"
+    },
+    {
+      "line": 410,
+      "text": "  7dd283:\t03 df                \tadd    ebx,edi"
+    },
+    {
+      "line": 411,
+      "text": "  7dd285:\t89 9e 80 00 00 00    \tmov    DWORD PTR [esi+0x80],ebx"
+    },
+    {
+      "line": 412,
+      "text": "  7dd28b:\t8b 45 fc             \tmov    eax,DWORD PTR [ebp-0x4]"
+    },
+    {
+      "line": 413,
+      "text": "  7dd28e:\t50                   \tpush   eax"
+    },
+    {
+      "line": 414,
+      "text": "  7dd28f:\tff 15 48 22 bd 00    \tcall   DWORD PTR ds:0xbd2248"
+    },
+    {
+      "line": 415,
+      "text": "  7dd295:\t5f                   \tpop    edi"
+    },
+    {
+      "line": 416,
+      "text": "  7dd296:\t5b                   \tpop    ebx"
+    },
+    {
+      "line": 417,
+      "text": "  7dd297:\t8b e5                \tmov    esp,ebp"
+    },
+    {
+      "line": 418,
+      "text": "  7dd299:\t5d                   \tpop    ebp"
+    },
+    {
+      "line": 419,
+      "text": "  7dd29a:\tc3                   \tret"
+    },
+    {
+      "line": 420,
+      "text": "```"
+    },
+    {
+      "line": 421,
+      "text": ""
+    },
+    {
+      "line": 422,
+      "text": "### 計數解除引用直接 caller — `007B8118..007B8157`"
+    },
+    {
+      "line": 423,
+      "text": ""
+    },
+    {
+      "line": 424,
+      "text": "```asm"
+    },
+    {
+      "line": 425,
+      "text": "007b8118 <.text+0x3b7118>:"
+    },
+    {
+      "line": 426,
+      "text": "  7b8118:\t8b 45 d0             \tmov    eax,DWORD PTR [ebp-0x30]"
+    },
+    {
+      "line": 427,
+      "text": "  7b811b:\t3b 47 08             \tcmp    eax,DWORD PTR [edi+0x8]"
+    },
+    {
+      "line": 428,
+      "text": "  7b811e:\t75 04                \tjne    0x7b8124"
+    },
+    {
+      "line": 429,
+      "text": "  7b8120:\t33 c0                \txor    eax,eax"
+    },
+    {
+      "line": 430,
+      "text": "  7b8122:\teb 32                \tjmp    0x7b8156"
+    },
+    {
+      "line": 431,
+      "text": "  7b8124:\t8b 78 24             \tmov    edi,DWORD PTR [eax+0x24]"
+    },
+    {
+      "line": 432,
+      "text": "  7b8127:\t8b cf                \tmov    ecx,edi"
+    },
+    {
+      "line": 433,
+      "text": "  7b8129:\te8 d2 4f 02 00       \tcall   0x7dd100"
+    },
+    {
+      "line": 434,
+      "text": "  7b812e:\t85 c0                \ttest   eax,eax"
+    },
+    {
+      "line": 435,
+      "text": "  7b8130:\t75 1f                \tjne    0x7b8151"
+    },
+    {
+      "line": 436,
+      "text": "  7b8132:\t85 ff                \ttest   edi,edi"
+    },
+    {
+      "line": 437,
+      "text": "  7b8134:\t74 0e                \tje     0x7b8144"
+    },
+    {
+      "line": 438,
+      "text": "  7b8136:\te8 05 4e 02 00       \tcall   0x7dcf40"
+    },
+    {
+      "line": 439,
+      "text": "  7b813b:\t57                   \tpush   edi"
+    },
+    {
+      "line": 440,
+      "text": "  7b813c:\te8 cb 90 0d 00       \tcall   0x89120c"
+    },
+    {
+      "line": 441,
+      "text": "  7b8141:\t83 c4 04             \tadd    esp,0x4"
+    },
+    {
+      "line": 442,
+      "text": "  7b8144:\t8b 45 d0             \tmov    eax,DWORD PTR [ebp-0x30]"
+    },
+    {
+      "line": 443,
+      "text": "  7b8147:\t50                   \tpush   eax"
+    },
+    {
+      "line": 444,
+      "text": "  7b8148:\t8d 4d d0             \tlea    ecx,[ebp-0x30]"
+    },
+    {
+      "line": 445,
+      "text": "  7b814b:\t51                   \tpush   ecx"
+    },
+    {
+      "line": 446,
+      "text": "  7b814c:\te8 2f 05 00 00       \tcall   0x7b8680"
+    },
+    {
+      "line": 447,
+      "text": "  7b8151:\tb8 01 00 00 00       \tmov    eax,0x1"
+    },
+    {
+      "line": 448,
+      "text": "  7b8156:\t8b               \tmov    ecx,DWORD PTR [ebp-0xc]"
+    },
+    {
+      "line": 449,
+      "text": "```"
+    },
+    {
+      "line": 450,
+      "text": ""
+    },
+    {
+      "line": 451,
+      "text": "### 資源更新到生產 — `007A872B..007A8763`"
+    },
+    {
+      "line": 452,
+      "text": ""
+    },
+    {
+      "line": 453,
+      "text": "```asm"
+    },
+    {
+      "line": 454,
+      "text": "007a872b <.text+0x3a772b>:"
+    },
+    {
+      "line": 455,
+      "text": "  7a872b:\t8b 07                \tmov    eax,DWORD PTR [edi]"
+    },
+    {
+      "line": 456,
+      "text": "  7a872d:\tff 48 60             \tdec    DWORD PTR [eax+0x60]"
+    },
+    {
+      "line": 457,
+      "text": "  7a8730:\t8b 47 74             \tmov    eax,DWORD PTR [edi+0x74]"
+    },
+    {
+      "line": 458,
+      "text": "  7a8733:\t85 c0                \ttest   eax,eax"
+    },
+    {
+      "line": 459,
+      "text": "  7a8735:\t74 11                \tje     0x7a8748"
+    },
+    {
+      "line": 460,
+      "text": "  7a8737:\t83 7f 78 00          \tcmp    DWORD PTR [edi+0x78],0x0"
+    },
+    {
+      "line": 461,
+      "text": "  7a873b:\t74 0b                \tje     0x7a8748"
+    },
+    {
+      "line": 462,
+      "text": "  7a873d:\t8b 0f                \tmov    ecx,DWORD PTR [edi]"
+    },
+    {
+      "line": 463,
+      "text": "  7a873f:\t57                   \tpush   edi"
+    },
+    {
+      "line": 464,
+      "text": "  7a8740:\t51                   \tpush   ecx"
+    },
+    {
+      "line": 465,
+      "text": "  7a8741:\te8 5a 4a 03 00       \tcall   0x7dd1a0"
+    },
+    {
+      "line": 466,
+      "text": "  7a8746:\teb 19                \tjmp    0x7a8761"
+    },
+    {
+      "line": 467,
+      "text": "  7a8748:\t83 f8 01             \tcmp    eax,0x1"
+    },
+    {
+      "line": 468,
+      "text": "  7a874b:\t7c 06                \tjl     0x7a8753"
+    },
+    {
+      "line": 469,
+      "text": "  7a874d:\t57                   \tpush   edi"
+    },
+    {
+      "line": 470,
+      "text": "  7a874e:\te8 9d 59 01 00       \tcall   0x7be0f0"
+    },
+    {
+      "line": 471,
+      "text": "  7a8753:\te8 f8 50 01 00       \tcall   0x7bd850"
+    },
+    {
+      "line": 472,
+      "text": "  7a8758:\t57                   \tpush   edi"
+    },
+    {
+      "line": 473,
+      "text": "  7a8759:\te8 ae 8a 0e 00       \tcall   0x89120c"
+    },
+    {
+      "line": 474,
+      "text": "  7a875e:\t83 c4 04             \tadd    esp,0x4"
+    },
+    {
+      "line": 475,
+      "text": "  7a8761:\t8b 7e              \tmov    edi,DWORD PTR [esi+0xc]"
+    },
+    {
+      "line": 476,
+      "text": "```"
+    },
+    {
+      "line": 477,
+      "text": ""
+    },
+    {
+      "line": 478,
+      "text": "### 資源解除引用到生產 — `007BE5F0..007BE647`"
+    },
+    {
+      "line": 479,
+      "text": ""
+    },
+    {
+      "line": 480,
+      "text": "```asm"
+    },
+    {
+      "line": 481,
+      "text": "007be5f0 <.text+0x3bd5f0>:"
+    },
+    {
+      "line": 482,
+      "text": "  7be5f0:\t8b 06                \tmov    eax,DWORD PTR [esi]"
+    },
+    {
+      "line": 483,
+      "text": "  7be5f2:\t85 c0                \ttest   eax,eax"
+    },
+    {
+      "line": 484,
+      "text": "  7be5f4:\t75 01                \tjne    0x7be5f7"
+    },
+    {
+      "line": 485,
+      "text": "  7be5f6:\tc3                   \tret"
+    },
+    {
+      "line": 486,
+      "text": "  7be5f7:\t8b 00                \tmov    eax,DWORD PTR [eax]"
+    },
+    {
+      "line": 487,
+      "text": "  7be5f9:\tff 48 60             \tdec    DWORD PTR [eax+0x60]"
+    },
+    {
+      "line": 488,
+      "text": "  7be5fc:\t8b 06                \tmov    eax,DWORD PTR [esi]"
+    },
+    {
+      "line": 489,
+      "text": "  7be5fe:\t8b 48 74             \tmov    ecx,DWORD PTR [eax+0x74]"
+    },
+    {
+      "line": 490,
+      "text": "  7be601:\t85 c9                \ttest   ecx,ecx"
+    },
+    {
+      "line": 491,
+      "text": "  7be603:\t74 1b                \tje     0x7be620"
+    },
+    {
+      "line": 492,
+      "text": "  7be605:\t83 78 78 00          \tcmp    DWORD PTR [eax+0x78],0x0"
+    },
+    {
+      "line": 493,
+      "text": "  7be609:\t74 15                \tje     0x7be620"
+    },
+    {
+      "line": 494,
+      "text": "  7be60b:\t50                   \tpush   eax"
+    },
+    {
+      "line": 495,
+      "text": "  7be60c:\t8b 00                \tmov    eax,DWORD PTR [eax]"
+    },
+    {
+      "line": 496,
+      "text": "  7be60e:\t50                   \tpush   eax"
+    },
+    {
+      "line": 497,
+      "text": "  7be60f:\te8 8c eb 01 00       \tcall   0x7dd1a0"
+    },
+    {
+      "line": 498,
+      "text": "  7be614:\tb8 01 00 00 00       \tmov    eax,0x1"
+    },
+    {
+      "line": 499,
+      "text": "  7be619:\tc7 06 00 00 00 00    \tmov    DWORD PTR [esi],0x0"
+    },
+    {
+      "line": 500,
+      "text": "  7be61f:\tc3                   \tret"
+    },
+    {
+      "line": 501,
+      "text": "  7be620:\t83 f9 01             \tcmp    ecx,0x1"
+    },
+    {
+      "line": 502,
+      "text": "  7be623:\t7c 06                \tjl     0x7be62b"
+    },
+    {
+      "line": 503,
+      "text": "  7be625:\t50                   \tpush   eax"
+    },
+    {
+      "line": 504,
+      "text": "  7be626:\te8 c5 fa ff ff       \tcall   0x7be0f0"
+    },
+    {
+      "line": 505,
+      "text": "  7be62b:\t57                   \tpush   edi"
+    },
+    {
+      "line": 506,
+      "text": "  7be62c:\t8b 3e                \tmov    edi,DWORD PTR [esi]"
+    },
+    {
+      "line": 507,
+      "text": "  7be62e:\t85 ff                \ttest   edi,edi"
+    },
+    {
+      "line": 508,
+      "text": "  7be630:\t74 14                \tje     0x7be646"
+    },
+    {
+      "line": 509,
+      "text": "  7be632:\te8 19 f2 ff ff       \tcall   0x7bd850"
+    },
+    {
+      "line": 510,
+      "text": "  7be637:\t57                   \tpush   edi"
+    },
+    {
+      "line": 511,
+      "text": "  7be638:\te8 cf 2b 0d 00       \tcall   0x89120c"
+    },
+    {
+      "line": 512,
+      "text": "  7be63d:\t83 c4 04             \tadd    esp,0x4"
+    },
+    {
+      "line": 513,
+      "text": "  7be640:\tc7 06 00 00 00 00    \tmov    DWORD PTR [esi],0x0"
+    },
+    {
+      "line": 514,
+      "text": "  7be646:\t5f                   \tpop    edi"
+    },
+    {
+      "line": 515,
+      "text": "```"
+    },
+    {
+      "line": 516,
+      "text": ""
+    },
+    {
+      "line": 517,
+      "text": "## 附錄 B：較大量 caller（`0x007BE5F0`）完整 E8 候選"
+    },
+    {
+      "line": 518,
+      "text": ""
+    },
+    {
+      "line": 519,
+      "text": "- `0x004C7C8F`: `e85c692f00` => `0x007BE5F0`"
+    },
+    {
+      "line": 520,
+      "text": "- `0x004C7DB4`: `e837682f00` => `0x007BE5F0`"
+    },
+    {
+      "line": 521,
+      "text": "- `0x004C838C`: `e85f622f00` => `0x007BE5F0`"
+    },
+    {
+      "line": 522,
+      "text": "- `0x004C83AF`: `e83c622f00` => `0x007BE5F0`"
+    },
+    {
+      "line": 523,
+      "text": "- `0x004C8411`: `e8da612f00` => `0x007BE5F0`"
+    },
+    {
+      "line": 524,
+      "text": "- `0x004C902C`: `e8bf552f00` => `0x007BE5F0`"
+    },
+    {
+      "line": 525,
+      "text": "- `0x004C9066`: `e885552f00` => `0x007BE5F0`"
+    },
+    {
+      "line": 526,
+      "text": "- `0x004C9074`: `e877552f00` => `0x007BE5F0`"
+    },
+    {
+      "line": 527,
+      "text": "- `0x004CAFF4`: `e8f7352f00` => `0x007BE5F0`"
+    },
+    {
+      "line": 528,
+      "text": "- `0x004CC867`: `e8841d2f00` => `0x007BE5F0`"
+    },
+    {
+      "line": 529,
+      "text": "- `0x004CC89A`: `e8511d2f00` => `0x007BE5F0`"
+    },
+    {
+      "line": 530,
+      "text": "- `0x004CDDF1`: `e8fa072f00` => `0x007BE5F0`"
+    },
+    {
+      "line": 531,
+      "text": "- `0x004CE927`: `e8c4fc2e00` => `0x007BE5F0`"
+    },
+    {
+      "line": 532,
+      "text": "- `0x004CEC2C`: `e8bff92e00` => `0x007BE5F0`"
+    },
+    {
+      "line": 533,
+      "text": "- `0x004CECA7`: `e844f92e00` => `0x007BE5F0`"
+    },
+    {
+      "line": 534,
+      "text": "- `0x004D0330`: `e8bbe22e00` => `0x007BE5F0`"
+    },
+    {
+      "line": 535,
+      "text": "- `0x004D1333`: `e8b8d22e00` => `0x007BE5F0`"
+    },
+    {
+      "line": 536,
+      "text": "- `0x004D16B8`: `e833cf2e00` => `0x007BE5F0`"
+    },
+    {
+      "line": 537,
+      "text": "- `0x004D2449`: `e8a2c12e00` => `0x007BE5F0`"
+    },
+    {
+      "line": 538,
+      "text": "- `0x004D2497`: `e854c12e00` => `0x007BE5F0`"
+    },
+    {
+      "line": 539,
+      "text": "- `0x004D2522`: `e8c9c02e00` => `0x007BE5F0`"
+    },
+    {
+      "line": 540,
+      "text": "- `0x004D25A6`: `e845c02e00` => `0x007BE5F0`"
+    },
+    {
+      "line": 541,
+      "text": "- `0x004D2632`: `e8b9bf2e00` => `0x007BE5F0`"
+    },
+    {
+      "line": 542,
+      "text": "- `0x004D26BE`: `e82dbf2e00` => `0x007BE5F0`"
+    },
+    {
+      "line": 543,
+      "text": "- `0x004D2772`: `e879be2e00` => `0x007BE5F0`"
+    },
+    {
+      "line": 544,
+      "text": "- `0x004D287D`: `e86ebd2e00` => `0x007BE5F0`"
+    },
+    {
+      "line": 545,
+      "text": "- `0x00543B98`: `e853aa2700` => `0x007BE5F0`"
+    },
+    {
+      "line": 546,
+      "text": "- `0x00543FDF`: `e80ca62700` => `0x007BE5F0`"
+    },
+    {
+      "line": 547,
+      "text": "- `0x0054480B`: `e8e09d2700` => `0x007BE5F0`"
+    },
+    {
+      "line": 548,
+      "text": "- `0x00550B7D`: `e86eda2600` => `0x007BE5F0`"
+    },
+    {
+      "line": 549,
+      "text": "- `0x00550DAE`: `e83dd82600` => `0x007BE5F0`"
+    },
+    {
+      "line": 550,
+      "text": "- `0x00550EF9`: `e8f2d62600` => `0x007BE5F0`"
+    },
+    {
+      "line": 551,
+      "text": "- `0x00550EFE`: `e8edd62600` => `0x007BE5F0`"
+    },
+    {
+      "line": 552,
+      "text": "- `0x00550FB5`: `e836d62600` => `0x007BE5F0`"
+    },
+    {
+      "line": 553,
+      "text": "- `0x00552380`: `e86bc22600` => `0x007BE5F0`"
+    },
+    {
+      "line": 554,
+      "text": "- `0x007A5361`: `e88a920100` => `0x007BE5F0`"
+    },
+    {
+      "line": 555,
+      "text": "- `0x007A69A9`: `e8427c0100` => `0x007BE5F0`"
+    },
+    {
+      "line": 556,
+      "text": "- `0x007A78AA`: `e8416d0100` => `0x007BE5F0`"
+    },
+    {
+      "line": 557,
+      "text": "- `0x007A7A79`: `e8726b0100` => `0x007BE5F0`"
+    },
+    {
+      "line": 558,
+      "text": "- `0x007A7ACE`: `e81d6b0100` => `0x007BE5F0`"
+    },
+    {
+      "line": 559,
+      "text": "- `0x007A8DAC`: `e83f580100` => `0x007BE5F0`"
+    },
+    {
+      "line": 560,
+      "text": "- `0x007FF79A`: `e851eefbff` => `0x007BE5F0`"
+    }
+  ]
+}
