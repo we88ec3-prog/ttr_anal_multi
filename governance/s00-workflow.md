@@ -53,3 +53,8 @@ T01 在 [本批首次新流程來源收件](../research/handoffs/t01-20261029-ri
 ## Iteration 05: conservative coverage and review guards
 
 [Iteration 05 results](S00-20261029-ITERATION-05.md) add strict contract proof linkage (CLM → SRC), fail-closed non-synthetic TEST provenance, order-independent roadmap analysis and an auditable [RR review ledger](reviews/README.md). The latter mirrors a published S00/T01 review; `research/requests/index.json` remains the sole request state authority. None of these checks is original-Client compatibility proof or automatic SPEC promotion. Run `python -B governance/check_s00_reviews.py --check` with the existing S00 gates.
+
+
+## Iteration 06: Phase B live intake without a second RR registry
+
+[Read-only queue generator](phase_b_worklist.py) and [review protocol](PHASE-B-INTAKE-REVIEW.md) derive T02/T03 work scope and S00 source-to-spec impact from the existing RR/GAP/SPEC/COV/TEST and roadmap indices. They do not claim or resolve RR, awaken Agents, perform Client runtime testing or auto-upgrade SPEC. Use `python -B governance/phase_b_worklist.py --check`; review status is still determined only by the canonical request registry and human approval.
