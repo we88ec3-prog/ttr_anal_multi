@@ -1,0 +1,482 @@
+{
+  "schema": "t01-provisional-claim-cross-task",
+  "canonical_claims_unchanged": true,
+  "main_sha": "fb70e1325069c2069b428cf01ab57b4a4d7319c2",
+  "claims": [
+    {
+      "id": "T01-DRAFT-20261030-C01",
+      "claim_id_status": "LOCAL_DRAFT_NOT_CANONICAL",
+      "title": "IAT/API identity",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "evidence_level": "PARTIAL",
+      "review_level": "R2_BIN_BYTES_AND_PE_IMPORT",
+      "assertion": "KR PE imports at VA 0xBD227C/80/84 are InterlockedDecrement/Exchange/Increment; 0xBD20D0 is SetEvent; 0xBD25B8/BC are WSASend/WSARecv.",
+      "limitations": "Import identity is native-verified but call-site semantics and complete control flow are outside this bounded check.",
+      "sources": [
+        {
+          "source_file": "kr-extra-roy/20261030-022552-chatgpt-web-roy-E50-RR0005-map-replacement-pool48-atomic-IO-lifecycle.md",
+          "source_blob_sha": "f4bd62ce69cf96cc35b566bf62721a586f4f51c7"
+        },
+        {
+          "source_file": "kr-temp-roy/20261028-225239-chatgpt-web-roy-T16-97-KR-send-completion-overlapped-buffer-consumer.md",
+          "source_blob_sha": "417d81dc3b8301530a7e29ba75bbf282df6953e9"
+        }
+      ],
+      "existing_claim_link": null,
+      "affected_tasks": [
+        "T01",
+        "T02"
+      ],
+      "affected_rr": [],
+      "native_verified": false,
+      "full_pass": false,
+      "s00_accepted": false
+    },
+    {
+      "id": "T01-DRAFT-20261030-C02",
+      "claim_id_status": "LOCAL_DRAFT_NOT_CANONICAL",
+      "title": "Async I/O counter",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "evidence_level": "PARTIAL",
+      "review_level": "R2_BIN_BYTES_AND_PE_IMPORT",
+      "assertion": "At 0x806961 and 0x80697A the code increments address Conn+A0B8; at 0x806EBD–0x806EC9 the send-completion branch decrements the same offset; 0x805DE9 initializes it. This supports a pending-I/O counter on observed paths.",
+      "limitations": "Does NOT prove all increments/decrements balance across errors, cancellations, reconnects, or that every completion is delivered.",
+      "sources": [
+        {
+          "source_file": "kr-extra-roy/20261030-022552-chatgpt-web-roy-E50-RR0005-map-replacement-pool48-atomic-IO-lifecycle.md",
+          "source_blob_sha": "f4bd62ce69cf96cc35b566bf62721a586f4f51c7"
+        },
+        {
+          "source_file": "kr-temp-roy/20261028-225239-chatgpt-web-roy-T16-97-KR-send-completion-overlapped-buffer-consumer.md",
+          "source_blob_sha": "417d81dc3b8301530a7e29ba75bbf282df6953e9"
+        }
+      ],
+      "existing_claim_link": null,
+      "affected_tasks": [
+        "T01",
+        "T02"
+      ],
+      "affected_rr": [
+        "RR-0005"
+      ],
+      "native_verified": false,
+      "full_pass": false,
+      "s00_accepted": false
+    },
+    {
+      "id": "T01-DRAFT-20261030-C03",
+      "claim_id_status": "LOCAL_DRAFT_NOT_CANONICAL",
+      "title": "Send buffer/OVERLAPPED layout",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "evidence_level": "PARTIAL",
+      "review_level": "R2_BIN_BYTES_AND_PE_IMPORT",
+      "assertion": "At 0x8068DE the wrapper constructs connection+A050 and passes that as OVERLAPPED; at 0x8068F7 it derives +0x14 from this base (connection+A064) for WSABUF and then calls WSASend at 0x806912.",
+      "limitations": "The old T03-6 labeling +A050 as WSABUF and +A0B8 as OVERLAPPED is already REFUTED (CLM-NET-0013); do not create a duplicate return.",
+      "sources": [
+        {
+          "source_file": "kr-temp-roy/20261028-225239-chatgpt-web-roy-T16-97-KR-send-completion-overlapped-buffer-consumer.md",
+          "source_blob_sha": "417d81dc3b8301530a7e29ba75bbf282df6953e9"
+        },
+        {
+          "source_file": "kr-extra-roy/20261030-022552-chatgpt-web-roy-E50-RR0005-map-replacement-pool48-atomic-IO-lifecycle.md",
+          "source_blob_sha": "f4bd62ce69cf96cc35b566bf62721a586f4f51c7"
+        }
+      ],
+      "existing_claim_link": null,
+      "affected_tasks": [
+        "T01",
+        "T02",
+        "T03",
+        "T16"
+      ],
+      "affected_rr": [],
+      "native_verified": false,
+      "full_pass": false,
+      "s00_accepted": false
+    },
+    {
+      "id": "T01-DRAFT-20261030-C04",
+      "claim_id_status": "LOCAL_DRAFT_NOT_CANONICAL",
+      "title": "Pool getter ≠ map erase",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "evidence_level": "PARTIAL",
+      "review_level": "R2_BIN_BYTES_AND_E8",
+      "assertion": "0x49B070 tests FBA858 and FBA85C, calls either 0x49AF60 or 0x49B000 and returns FBA858; 0x80703E calls it to obtain a pool pointer and 0x807045 then calls 0x805A80.",
+      "limitations": "E48 treating 0x49B070 as active key-map detach is contradicted on this path; cannot infer all other erase paths from this one function.",
+      "sources": [
+        {
+          "source_file": "kr-extra-roy/20261030-010130-chatgpt-web-roy-E48-RR0005-close-failure-IOCP-frame-dispatch.md",
+          "source_blob_sha": "39285bbf723876d58ebdd9f74e197bd0499f3d03"
+        },
+        {
+          "source_file": "kr-extra-roy/20261030-014508-chatgpt-web-roy-E49-RR0005-pool-getter-recycle-parser-ABI-boundaries.md",
+          "source_blob_sha": "8f4b0ca731fdc8d0d8c9f264e4c85a956bd5e7d2"
+        },
+        {
+          "source_file": "kr-extra-roy/20261030-022552-chatgpt-web-roy-E50-RR0005-map-replacement-pool48-atomic-IO-lifecycle.md",
+          "source_blob_sha": "f4bd62ce69cf96cc35b566bf62721a586f4f51c7"
+        }
+      ],
+      "existing_claim_link": null,
+      "affected_tasks": [
+        "T01",
+        "T02"
+      ],
+      "affected_rr": [
+        "RR-0005"
+      ],
+      "native_verified": false,
+      "full_pass": false,
+      "s00_accepted": false
+    },
+    {
+      "id": "T01-DRAFT-20261030-C05",
+      "claim_id_status": "LOCAL_DRAFT_NOT_CANONICAL",
+      "title": "Conditional manager tree replacement",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "evidence_level": "PARTIAL",
+      "review_level": "R2_DIRECT_EDGE_AND_PARTIAL_CALLEE",
+      "assertion": "0x806C9E calls tree lookup 0x8438C0; 0x806CAA conditional JE 0x806CB8 skips erase; the other branch calls 0x7B6890 at 0x806CB3 and then 0x57EF20 and 0x57E850 for a new node.",
+      "limitations": "Native table/tree surgery is visible in 0x7B6890, but old Conn ownership/alias and race-free transfer are not fully proven. No unconditional erase claim.",
+      "sources": [
+        {
+          "source_file": "kr-extra-roy/20261030-022552-chatgpt-web-roy-E50-RR0005-map-replacement-pool48-atomic-IO-lifecycle.md",
+          "source_blob_sha": "f4bd62ce69cf96cc35b566bf62721a586f4f51c7"
+        },
+        {
+          "source_file": "kr-extra-roy/20261030-014508-chatgpt-web-roy-E49-RR0005-pool-getter-recycle-parser-ABI-boundaries.md",
+          "source_blob_sha": "8f4b0ca731fdc8d0d8c9f264e4c85a956bd5e7d2"
+        }
+      ],
+      "existing_claim_link": null,
+      "affected_tasks": [
+        "T01",
+        "T02"
+      ],
+      "affected_rr": [
+        "RR-0005"
+      ],
+      "native_verified": false,
+      "full_pass": false,
+      "s00_accepted": false
+    },
+    {
+      "id": "T01-DRAFT-20261030-C06",
+      "claim_id_status": "LOCAL_DRAFT_NOT_CANONICAL",
+      "title": "Two separate pool lists",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "evidence_level": "PARTIAL",
+      "review_level": "R1_SOURCE_TRIANGULATED_R2_SAMPLE",
+      "assertion": "E49/E50 distinguish Pool+28 tracking (0x806FC0→0x805A80) from Pool+48 recycling examined by 0x805B40; 0x805BA6 reads Conn+A0B8 in the Pool+48 scan.",
+      "limitations": "Do not identify list entry, free/reset time, or all producer paths as an atomic close-once lifecycle.",
+      "sources": [
+        {
+          "source_file": "kr-extra-roy/20261030-014508-chatgpt-web-roy-E49-RR0005-pool-getter-recycle-parser-ABI-boundaries.md",
+          "source_blob_sha": "8f4b0ca731fdc8d0d8c9f264e4c85a956bd5e7d2"
+        },
+        {
+          "source_file": "kr-extra-roy/20261030-022552-chatgpt-web-roy-E50-RR0005-map-replacement-pool48-atomic-IO-lifecycle.md",
+          "source_blob_sha": "f4bd62ce69cf96cc35b566bf62721a586f4f51c7"
+        }
+      ],
+      "existing_claim_link": null,
+      "affected_tasks": [
+        "T01",
+        "T02"
+      ],
+      "affected_rr": [
+        "RR-0005"
+      ],
+      "native_verified": false,
+      "full_pass": false,
+      "s00_accepted": false
+    },
+    {
+      "id": "T01-DRAFT-20261030-C07",
+      "claim_id_status": "LOCAL_DRAFT_NOT_CANONICAL",
+      "title": "Queue vs actual wire",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "evidence_level": "PARTIAL",
+      "review_level": "R1_CROSS_SOURCE_R2_CALLSITE_SAMPLE",
+      "assertion": "T02/T16 and extra studies share a conditional local path 0x8069A0→0x8060D0→0x806060→0x8061A0→0x804A40→0x8068B0→WSASend; frame writer 0x807A70 and alternative 0x807830 are downstream of queue.",
+      "limitations": "Not a guarantee that one enqueue is framed, that one frame is sent, or that Server receives the specific business message. Mode and error guards apply.",
+      "sources": [
+        {
+          "source_file": "kr-temp-roy/20261028-224525-chatgpt-web-roy-T16-95-KR-outgoing-queue-drain-and-frame-builder.md",
+          "source_blob_sha": "6f001ac97016fff38b37de2ead294836bfe99764"
+        },
+        {
+          "source_file": "kr-temp-roy/20261028-225239-chatgpt-web-roy-T16-97-KR-send-completion-overlapped-buffer-consumer.md",
+          "source_blob_sha": "417d81dc3b8301530a7e29ba75bbf282df6953e9"
+        },
+        {
+          "source_file": "kr-temp-roy/20261029-225956-chatgpt-web-roy-T16-107-KR-TalkBox-to-CIocpNetwork-queue-frame-and-selection-producer.md",
+          "source_blob_sha": "f246b8f90e61f596653058f8bb883f4caf2cf3bd"
+        },
+        {
+          "source_file": "kr-extra-roy/20261030-003247-chatgpt-web-roy-E47-RR0005-network-vtable-connect-IOCP-runtime-boundaries.md",
+          "source_blob_sha": "7d6e5c214bab55f009a2ca6678528082d65a5adc"
+        }
+      ],
+      "existing_claim_link": "CLM-NET-0005/CLM-NET-0003",
+      "affected_tasks": [
+        "T01",
+        "T02",
+        "T16"
+      ],
+      "affected_rr": [
+        "RR-0001",
+        "RR-0004"
+      ],
+      "native_verified": false,
+      "full_pass": false,
+      "s00_accepted": false
+    },
+    {
+      "id": "T01-DRAFT-20261030-C08",
+      "claim_id_status": "LOCAL_DRAFT_NOT_CANONICAL",
+      "title": "S2C selection-record candidate",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "evidence_level": "PARTIAL",
+      "review_level": "R1_SOURCE_CROSS_LINK",
+      "assertion": "E44 identifies secondary dispatcher 0x4C4670, candidate 0x0013 handler 0x4C37A0 and candidate 0x007A handler 0x4C3C10, linking conditionally to record storage FE1B54 and 0x66C090→0x4957C0.",
+      "limitations": "A handler index observed in a secondary table is not necessarily a standalone transport opcode, nor proof of first-session packet ordering, valid payload lower bounds or all UI aliases.",
+      "sources": [
+        {
+          "source_file": "kr-extra-roy/20261029-234944-chatgpt-web-roy-E44-RR0005-native-0013-007A-choice-table-to-connect.md",
+          "source_blob_sha": "3b3aa88bcb7de51440a31b8798121b2aa53a43f3"
+        },
+        {
+          "source_file": "kr-extra-roy/20261030-003247-chatgpt-web-roy-E47-RR0005-network-vtable-connect-IOCP-runtime-boundaries.md",
+          "source_blob_sha": "7d6e5c214bab55f009a2ca6678528082d65a5adc"
+        }
+      ],
+      "existing_claim_link": "CLM-AUTH-0002",
+      "affected_tasks": [
+        "T01",
+        "T02",
+        "T03"
+      ],
+      "affected_rr": [
+        "RR-0005"
+      ],
+      "native_verified": false,
+      "full_pass": false,
+      "s00_accepted": false
+    },
+    {
+      "id": "T01-DRAFT-20261030-C09",
+      "claim_id_status": "LOCAL_DRAFT_NOT_CANONICAL",
+      "title": "TalkBox 0x36 local send",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "evidence_level": "PARTIAL",
+      "review_level": "R1_SOURCE_CROSS_LINK",
+      "assertion": "T16-107 reports a gated local action 0x6A7 building WORD 0x0036 plus selected record WORD and then invoking the generic send/queue path on key 0.",
+      "limitations": "Does not identify Quest14/16/15 accept as a wire command or guarantee that user action reaches WSASend successfully.",
+      "sources": [
+        {
+          "source_file": "kr-temp-roy/20261029-225956-chatgpt-web-roy-T16-107-KR-TalkBox-to-CIocpNetwork-queue-frame-and-selection-producer.md",
+          "source_blob_sha": "f246b8f90e61f596653058f8bb883f4caf2cf3bd"
+        },
+        {
+          "source_file": "kr-temp-roy/20261029-225143-chatgpt-web-roy-T16-106-KR-scene-table-talk-dialog-UI-message-producer.md",
+          "source_blob_sha": "786762ae5512864eaabee570096b8cc80c23f6e2"
+        }
+      ],
+      "existing_claim_link": null,
+      "affected_tasks": [
+        "T01",
+        "T02",
+        "T16"
+      ],
+      "affected_rr": [],
+      "native_verified": false,
+      "full_pass": false,
+      "s00_accepted": false
+    },
+    {
+      "id": "T01-DRAFT-20261030-C10",
+      "claim_id_status": "LOCAL_DRAFT_NOT_CANONICAL",
+      "title": "Quest 14→16→15 static prerequisite",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "evidence_level": "PARTIAL",
+      "review_level": "R2_ORIGINAL_RESOURCE_DECODE",
+      "assertion": "Original KR Table/QuestInfo.xml Quest16 has Demands/Demand id=14 and Quest15 has Demands/Demand id=16. Quest14 type3 giver/finisher10027; Quest16 type2 giver/finisher10027; Quest15 type2 giver/finisher10338.",
+      "limitations": "Original resource static relationship only; no executable semantics, Server completion policy or Client quest wire identity proven.",
+      "sources": [
+        {
+          "source_file": "kr-temp-roy/20261030-010202-chatgpt-web-roy-T16-112-KR-Quest14-study1-resource-NPC-prerequisite-native-loader-closure.md",
+          "source_blob_sha": "a6376ddebc781dd8d7c17ef3c333bfd87d4fb938"
+        },
+        {
+          "source_file": "kr-temp-roy/20261030-014617-chatgpt-web-roy-T16-113-KR-Quest14-study2-player-trigger-Isilia-proximity-tutorial-script-native.md",
+          "source_blob_sha": "eafe3cb0ae389473e809bcd4360d1a186f0c8367"
+        }
+      ],
+      "existing_claim_link": null,
+      "affected_tasks": [
+        "T01",
+        "T02",
+        "T16"
+      ],
+      "affected_rr": [
+        "RR-0008"
+      ],
+      "native_verified": false,
+      "full_pass": false,
+      "s00_accepted": false
+    },
+    {
+      "id": "T01-DRAFT-20261030-C11",
+      "claim_id_status": "LOCAL_DRAFT_NOT_CANONICAL",
+      "title": "Scenario14 != proven Quest14 completion",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "evidence_level": "PARTIAL",
+      "review_level": "R1_CROSS_SOURCE",
+      "assertion": "T16-110-REV and T16-113 distinguish a local TutorialMain RequestStartScenario(14) → scenario path from QuestInfo Quest id=14 and Quest14-specific completion/accept response.",
+      "limitations": "Shared integer 14 or C2S first WORD 0x40 is insufficient proof that the two identity domains or their business response are identical.",
+      "sources": [
+        {
+          "source_file": "kr-temp-roy/20261030-002349-chatgpt-web-roy-T16-110-REV-Quest14-study4-client-S2C-contract-S00-handoff.md",
+          "source_blob_sha": "df731f2a40626dfdb73f6bfae705bcfe513fc985"
+        },
+        {
+          "source_file": "kr-temp-roy/20261030-014617-chatgpt-web-roy-T16-113-KR-Quest14-study2-player-trigger-Isilia-proximity-tutorial-script-native.md",
+          "source_blob_sha": "eafe3cb0ae389473e809bcd4360d1a186f0c8367"
+        }
+      ],
+      "existing_claim_link": null,
+      "affected_tasks": [
+        "T01",
+        "T02",
+        "T16"
+      ],
+      "affected_rr": [
+        "RR-0008"
+      ],
+      "native_verified": false,
+      "full_pass": false,
+      "s00_accepted": false
+    },
+    {
+      "id": "T01-DRAFT-20261030-C12",
+      "claim_id_status": "LOCAL_DRAFT_NOT_CANONICAL",
+      "title": "Generic S2C scene handlers not Quest14 identity",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "evidence_level": "PARTIAL",
+      "review_level": "R1_SOURCE_CROSS_LINK",
+      "assertion": "T16-110-REV reports bounded native parse/record effects of candidate 0x41/0x42/0x7F and local notifications; does not prove Quest14-specific completion UI.",
+      "limitations": "T01 did not exhaustively reverify these handler CFGs in this batch; treat as source-derived navigation only.",
+      "sources": [
+        {
+          "source_file": "kr-temp-roy/20261030-002349-chatgpt-web-roy-T16-110-REV-Quest14-study4-client-S2C-contract-S00-handoff.md",
+          "source_blob_sha": "df731f2a40626dfdb73f6bfae705bcfe513fc985"
+        },
+        {
+          "source_file": "kr-temp-roy/20261030-003535-chatgpt-web-roy-T16-111-KR-Quest14-tutorial-scenario14-C2S-S2C-client-loop-and-S00-boundaries.md",
+          "source_blob_sha": "9edde5a306b69ba6cd9328b4d904a46d0c7e34c7"
+        }
+      ],
+      "existing_claim_link": null,
+      "affected_tasks": [
+        "T01",
+        "T02",
+        "T16"
+      ],
+      "affected_rr": [],
+      "native_verified": false,
+      "full_pass": false,
+      "s00_accepted": false
+    },
+    {
+      "id": "T01-DRAFT-20261030-C13",
+      "claim_id_status": "LOCAL_DRAFT_NOT_CANONICAL",
+      "title": "T03-6 original WSABUF claim refuted",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "evidence_level": "REFUTED_EXISTING",
+      "review_level": "R2_PRIOR_T01_DECISION_REUSED",
+      "assertion": "T03-6 original mislabels connection+A050 as WSABUF and +A0B8 as OVERLAPPED. Actual WSASend wrapper passes +A050 as OVERLAPPED, +A064 as WSABUF, and +A0B8 to InterlockedIncrement.",
+      "limitations": "Already canonical REFUTED in CLM-NET-0013; historical original blob stays unchanged and is not a new document-wide FAILED verdict.",
+      "sources": [
+        {
+          "source_file": "kr-temp-roy/20261028-225239-chatgpt-web-roy-T16-97-KR-send-completion-overlapped-buffer-consumer.md",
+          "source_blob_sha": "417d81dc3b8301530a7e29ba75bbf282df6953e9"
+        },
+        {
+          "source_file": "kr-extra-roy/20261030-022552-chatgpt-web-roy-E50-RR0005-map-replacement-pool48-atomic-IO-lifecycle.md",
+          "source_blob_sha": "f4bd62ce69cf96cc35b566bf62721a586f4f51c7"
+        }
+      ],
+      "existing_claim_link": "CLM-NET-0013",
+      "affected_tasks": [
+        "T01",
+        "T02",
+        "T03"
+      ],
+      "affected_rr": [],
+      "native_verified": false,
+      "full_pass": false,
+      "s00_accepted": false
+    },
+    {
+      "id": "T01-DRAFT-20261030-C14",
+      "claim_id_status": "LOCAL_DRAFT_NOT_CANONICAL",
+      "title": "RR-0005 end-to-end blocker",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "evidence_level": "UNKNOWN",
+      "review_level": "R1_OUTSTANDING_SCOPE",
+      "assertion": "E50 ends with open ownership of replaced old Conn, complete asynchronous completion accounting, single-session first wire/response and handler payload bounds.",
+      "limitations": "Do not move RR-0005 QUEUED→ACCEPTED, and do not derive S00 STABLE, client full wire implementation or playability from a merge or partial native bytes.",
+      "sources": [
+        {
+          "source_file": "kr-extra-roy/20261030-022552-chatgpt-web-roy-E50-RR0005-map-replacement-pool48-atomic-IO-lifecycle.md",
+          "source_blob_sha": "f4bd62ce69cf96cc35b566bf62721a586f4f51c7"
+        },
+        {
+          "source_file": "kr-temp-roy/20261029-225956-chatgpt-web-roy-T16-107-KR-TalkBox-to-CIocpNetwork-queue-frame-and-selection-producer.md",
+          "source_blob_sha": "f246b8f90e61f596653058f8bb883f4caf2cf3bd"
+        }
+      ],
+      "existing_claim_link": null,
+      "affected_tasks": [
+        "T01",
+        "T02"
+      ],
+      "affected_rr": [
+        "RR-0005"
+      ],
+      "native_verified": false,
+      "full_pass": false,
+      "s00_accepted": false
+    }
+  ],
+  "cross_referenced_sources": [
+    "kr-extra-roy/20261029-234944-chatgpt-web-roy-E44-RR0005-native-0013-007A-choice-table-to-connect.md",
+    "kr-extra-roy/20261030-003247-chatgpt-web-roy-E47-RR0005-network-vtable-connect-IOCP-runtime-boundaries.md",
+    "kr-extra-roy/20261030-010130-chatgpt-web-roy-E48-RR0005-close-failure-IOCP-frame-dispatch.md",
+    "kr-extra-roy/20261030-014508-chatgpt-web-roy-E49-RR0005-pool-getter-recycle-parser-ABI-boundaries.md",
+    "kr-extra-roy/20261030-022552-chatgpt-web-roy-E50-RR0005-map-replacement-pool48-atomic-IO-lifecycle.md",
+    "kr-temp-roy/20261028-224525-chatgpt-web-roy-T16-95-KR-outgoing-queue-drain-and-frame-builder.md",
+    "kr-temp-roy/20261028-225239-chatgpt-web-roy-T16-97-KR-send-completion-overlapped-buffer-consumer.md",
+    "kr-temp-roy/20261029-225143-chatgpt-web-roy-T16-106-KR-scene-table-talk-dialog-UI-message-producer.md",
+    "kr-temp-roy/20261029-225956-chatgpt-web-roy-T16-107-KR-TalkBox-to-CIocpNetwork-queue-frame-and-selection-producer.md",
+    "kr-temp-roy/20261030-002349-chatgpt-web-roy-T16-110-REV-Quest14-study4-client-S2C-contract-S00-handoff.md",
+    "kr-temp-roy/20261030-003535-chatgpt-web-roy-T16-111-KR-Quest14-tutorial-scenario14-C2S-S2C-client-loop-and-S00-boundaries.md",
+    "kr-temp-roy/20261030-010202-chatgpt-web-roy-T16-112-KR-Quest14-study1-resource-NPC-prerequisite-native-loader-closure.md",
+    "kr-temp-roy/20261030-014617-chatgpt-web-roy-T16-113-KR-Quest14-study2-player-trigger-Isilia-proximity-tutorial-script-native.md"
+  ]
+}
