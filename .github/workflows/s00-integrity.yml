@@ -34,6 +34,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Validate S00 registry and source identity
         run: python3 -B governance/validate_s00.py
+      - name: Check S00 roadmap reference integrity and readiness gates
+        run: python3 -B governance/check_s00_readiness.py --check
       - name: Run registry regression tests
         run: python3 -B -m unittest discover -s governance/tests -v
       - name: Check S00 dispatch lifecycle and all Task bootstraps
