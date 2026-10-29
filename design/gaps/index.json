@@ -3,7 +3,7 @@
   "items": [
     {
       "id": "GAP-NET-0001",
-      "title": "KR transport framing and mode/sequence gaps",
+      "title": "KR framing mode selection and cross-direction packet phase",
       "client_version": "kr",
       "type": "CLIENT_PROTOCOL_UNKNOWN",
       "priority": "P0",
@@ -15,8 +15,9 @@
       "source_refs": [
         "kr/tasks/T02/task.json"
       ],
-      "resolution_criteria": "Confirm mode writer/negotiation, 0x2633 and 0x22D7 meaning, complete transport/recv behavior, unknown markers and replayable cross-direction packet captures; validate independently from offline codec tests.",
-      "evidence_update": "2026-10-29 Phase B bounded research extraction; gap remains OPEN"
+      "resolution_criteria": "Known local frame writers/receiver and WSASend/WSARecv static API paths are already documented; resolve selected S2C frame type, A02C writer/aliases and first-message sequencing using bounded data, not repeat discovery of known functions.",
+      "evidence_update": "2026-10-29 Phase B bounded research extraction; gap remains OPEN",
+      "research_update": "2026-10-29 S00 verified historical static paths already identify WSASend and receive dispatcher; remaining unknowns narrowed."
     },
     {
       "id": "GAP-CHAR-0001",
@@ -50,6 +51,41 @@
         "kr/tasks/T03/task.json"
       ],
       "resolution_criteria": "Resolve opaque E8 tail, source codepage, 0x13 response fields/array bounds, result sequence and connection handoff; make official vs self-designed authentication policy explicit."
+    },
+    {
+      "id": "GAP-NET-0002",
+      "title": "KR connection lifecycle and login-to-server handoff ordering",
+      "client_version": "kr",
+      "type": "CLIENT_BEHAVIOR_UNKNOWN",
+      "priority": "P0",
+      "status": "OPEN",
+      "owner_task": "T02",
+      "affected_spec_ids": [
+        "SPEC-NET-0002",
+        "SPEC-AUTH-0001"
+      ],
+      "source_refs": [
+        "kr/tasks/T02/task.json",
+        "kr/tasks/T03/task.json"
+      ],
+      "resolution_criteria": "Bound actual KR Client Connect/close/port roles and 0x13 login-to-choice handoff sequence including first sender/response, error/retry behavior, without inventing endpoint authority."
+    },
+    {
+      "id": "GAP-NET-0003",
+      "title": "KR compressed/unknown incoming frame and dispatcher failure branches",
+      "client_version": "kr",
+      "type": "CLIENT_PROTOCOL_UNKNOWN",
+      "priority": "P1",
+      "status": "OPEN",
+      "owner_task": "T02",
+      "affected_spec_ids": [
+        "SPEC-NET-0003",
+        "SPEC-NET-0001"
+      ],
+      "source_refs": [
+        "kr/tasks/T02/task.json"
+      ],
+      "resolution_criteria": "Clarify 0x2633/0x22D7 field semantics, 727190 behavior and checksum failure node/pool handling; tie client message handlers to T03-relevant S2C and applicable state."
     }
   ]
 }

@@ -3,14 +3,14 @@
   "items": [
     {
       "id": "RR-0001",
-      "title": "Resolve T02 framing for pilot contract",
+      "title": "Resolve remaining KR framing mode and real initial exchange boundaries",
       "client_version": "kr",
       "status": "PENDING",
       "owner_task": "T02",
       "gap_ids": [
         "GAP-NET-0001"
       ],
-      "question": "Which exact native frame boundaries, mode handling and observable send/receive ordering are necessary for Server compatibility? Reuse existing bounded evidence first."
+      "question": "With 0x8068B0 WSASend, 0x806CF0 WSARecv/IOCP and 0x4930E0 downstream dispatch already mapped, determine actual first outgoing/incoming frame type, mode A02C conditional switch, and connection-specific message sequencing; do not re-discover mapped functions."
     },
     {
       "id": "RR-0002",
@@ -33,6 +33,50 @@
         "GAP-AUTH-0001"
       ],
       "question": "Identify bounded E8/000F opaque fields and codepage dependencies, actual 0x13 status response, channel group cursor/limits and subsequent handoff; preserve official-backend unknowns."
+    },
+    {
+      "id": "RR-0004",
+      "title": "A02C indirect writers and mode fallback boundary",
+      "owner_task": "T02",
+      "gap_ids": [
+        "GAP-NET-0001"
+      ],
+      "question": "Trace KR conn+A02C initializer 0x805D02 and possible indirect alias writes; identify conditions under which 0x8061A0 0BBB fails and plaintext fallback actually executes.",
+      "client_version": "kr",
+      "status": "PENDING"
+    },
+    {
+      "id": "RR-0005",
+      "title": "KR login result to Connect slot/port handoff",
+      "owner_task": "T02",
+      "gap_ids": [
+        "GAP-NET-0002"
+      ],
+      "question": "Join T03 0x13 response and choice UI with KR 0x495610/0x4957C0 Connect call sites; derive actual conditions/order, close/retry/slot ownership and initial frame per connection. Separate legacy static port values from server deployment recommendations.",
+      "client_version": "kr",
+      "status": "PENDING"
+    },
+    {
+      "id": "RR-0006",
+      "title": "Compressed 0x2633 and checksum failure downstream",
+      "owner_task": "T02",
+      "gap_ids": [
+        "GAP-NET-0003"
+      ],
+      "question": "Trace 0x807B40 parser 0x2633/0x22D7 behavior, 0x727190 and checksum mismatch into 0x807E50 and node/pool handling; specify only server-relevant error or compatibility requirements.",
+      "client_version": "kr",
+      "status": "PENDING"
+    },
+    {
+      "id": "RR-0007",
+      "title": "Inbound command-to-scene gate for T03 critical responses",
+      "owner_task": "T02",
+      "gap_ids": [
+        "GAP-NET-0003"
+      ],
+      "question": "Using already identified 0x4930E0 channel2 and CClient/scene handlers, identify exact S2C dispatch handlers and state prerequisites for authentication response, roster command2, and selection, without exhaustively tracing all commands.",
+      "client_version": "kr",
+      "status": "PENDING"
     }
   ]
 }

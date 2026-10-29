@@ -166,6 +166,86 @@
       ],
       "conflicts": [],
       "native_review_ref": null
+    },
+    {
+      "id": "CLM-NET-0005",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr/evidence/1e15689d7bbdf4c4a83ae76cf1813d538b8cb38db79098c6b85ba386056dab36.txt",
+      "source_blob_sha": "3710f1360acbac739247ffd9cbdb8cee054349c4",
+      "source_intake_id": "SRC-0004",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 0x5452C0 example C2S input route, 0x8069A0/0x8060D0/0x806060/0x8061A0, 0x804A40, 0x8068B0 and 0x806FC0",
+      "assertion": "On the bounded static input path, the Client routes payload by a connection slot key, queues and frames it, and reaches an overlapped WSASend call through 0x804A40/0x8068B0; a separate 0x806FC0 routine performs socket shutdown/close cleanup.",
+      "limitations": [
+        "Does not prove remote server receipt, actual packet count, ACK, full failure/retry and every Client send path.",
+        "Do not describe A0A4 as proven queue length; T01 requires qualification."
+      ],
+      "affected_spec_ids": [
+        "SPEC-NET-0002"
+      ],
+      "conflicts": [],
+      "native_review_ref": null
+    },
+    {
+      "id": "CLM-NET-0006",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr/evidence/4a64b51809c87fe6c8bab24f033fb4c94964a8e403e861be22e8210d3f639b8e.txt",
+      "source_blob_sha": "0785af3af4df4b11912037504382a26bd026ba8c",
+      "source_intake_id": "SRC-0005",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 0x806CF0 completion, 0x807B40 frame parser, 0x8040A0 queued delivery, 0x804740 pump and 0x4930E0 callback",
+      "assertion": "A bounded received-data route crosses WSARecv/IOCP completion, frame parsing into a queued decoded payload, and CClient callback 0x4930E0; on channel==2 it reads decoded payload's initial word for command handling.",
+      "limitations": [
+        "Native behavior on malformed frames, checksum mismatch, pool initialization, dropped nodes and channel!=2 not fully established.",
+        "Known bounded route not all possible network or interprocess paths."
+      ],
+      "affected_spec_ids": [
+        "SPEC-NET-0003"
+      ],
+      "conflicts": [],
+      "native_review_ref": null
+    },
+    {
+      "id": "CLM-NET-0007",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr/evidence/bcc93c2f8128b12d86fd1e296198e4e1735fd410336510b15c58415b6a0c9ced.txt",
+      "source_blob_sha": "1733907a4685ff40894b81fb84992867c7ea1796",
+      "source_intake_id": "SRC-0006",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 0x806AD0 Connect(address,port,slot,pipeline) and observed callsites at 0x49575B/0x4957EA/0x495803",
+      "assertion": "The bounded KR Client paths call Connect with (port 8415,slot1,pipeline2), (port8416,slot0,pipeline2), and (port8414,slot2,pipeline2); slot is used as outbound network map lookup key and pipeline is stored in connection+A080 for receive delivery.",
+      "limitations": [
+        "These are historic KR static callsite constants, not a live endpoint guarantee or a normative Server listen-port requirement.",
+        "Direct-call scan excludes aliased and computed calls; slot/pipeline are not actors or owner IDs."
+      ],
+      "affected_spec_ids": [
+        "SPEC-NET-0002"
+      ],
+      "conflicts": [],
+      "native_review_ref": null
+    },
+    {
+      "id": "CLM-NET-0008",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr/evidence/4a64b51809c87fe6c8bab24f033fb4c94964a8e403e861be22e8210d3f639b8e.txt",
+      "source_blob_sha": "0785af3af4df4b11912037504382a26bd026ba8c",
+      "source_intake_id": "SRC-0005",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 0x4930E0 and downstream CClient processor/scene dispatch, including 0x4C4670/0x4FDA30 tables",
+      "assertion": "Decoded inbound payload first word acts as a command index on the observed channel2 path; Client processor dispatch can select a Scene-specific override table and a general fallback, making observed handler behavior dependent on scene state.",
+      "limitations": [
+        "Exact handler behaviors and all overrides are not a complete business protocol contract.",
+        "Do not equate equal numerical C2S and S2C command indices with identical messages."
+      ],
+      "affected_spec_ids": [
+        "SPEC-NET-0003"
+      ],
+      "conflicts": [],
+      "native_review_ref": null
     }
   ]
 }
