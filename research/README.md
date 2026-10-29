@@ -19,3 +19,6 @@ T02–T16 研究原稿應繼續保留完整技術證據，對 S00 交付 bounded
 2026-10-29：[T03 roy/chatgpt-web指定分支整合](handoffs/t01-t03-roy-20261029/README.md)。LOGIN-01／02、T03-3～19共19篇原稿以精確blob保留，13項有限主張與10筆canonical追加來源完成衝突查對；本批新通道剩0篇。Print Screen／D3DX更正與T03-6 API layout退回單獨追溯，沒有新增FULL-PASS、S00接受或RR結案。
 
 2026-10-29：[T08 roy/chatgpt-web指定分支整合](handoffs/t01-t08-roy-20261029/README.md)。138份既有原稿完成新通道查對（本分支剩0）；新增15個SRC、55項有限主張及233筆追加來源，保留3個正式來源關聯。原318版待萃取剩194份；沒有新FULL-PASS、S00接受或既有退回狀態改動。
+
+
+2026-10-30：[T10分支整合階段保存](handoffs/t01-t10-roy-20261029/README.md)。依使用者要求暫停；核127份來源、原樣補入22份原稿並補登29個SRC，保存early49／middle44份待裁決提案。未發布新canonical claim，本分支canonical整合剩127份（34份尚無完整提案）；原318版待萃取仍194份。T01自有通知3處誤貼欄位已勘誤，歷史判決及退回狀態不變。
