@@ -1,6 +1,6 @@
-# Server 設計專案工作流程（階段 A，分支試行）
+# Server 設計專案工作流程（S00 內部派工制度正式啟用；規格成熟度仍逐項審查）
 
-狀態：試行規則；合併至 main 並經維護者確認後，才成為新的正式工作流程。日期：2026-10-29。
+日期：2026-10-29。S00 收件／認領／回報流程經維護者要求正式啟用並於 main 發布；現有 SPEC 仍為 DRAFT/PARTIAL，沒有自動升 STABLE。
 
 ## 專案交付目標
 
@@ -34,3 +34,8 @@
 保留所有歷史 318 版原稿台帳、舊退回、歷史 SHA、已發表的 `shared/verified-knowledge/`；現有 FULL-PASS 准入門檻不降低。T01 內部研究退回仍寫來源 Task README，不使用 GitHub Issues。沒有授權不執行/附加原版 Client、不變更原檔或研究原稿。現在不啟用對外 Issue/Discussions，不承諾受理外部回饋。
 
 導入順序：A 工作制度與檢查器 → B T02/T03 規格與可重現測試 → C 獨立 Server 回饋閉環 → D 其他模組 → E 維護交接。參見 [S00](s00-workflow.md)、[T01](t01-integration-workflow.md)。
+
+
+## 跨 Task 正式派工與狀態
+
+[S00 派工手冊](../research/dispatch/README.md) 為收件、claim、submit、T01/S00 review 唯一程序；[RR 台帳](../research/requests/index.json) 為狀態唯一來源，T01–T16 的唯讀收件箱從該台帳產生並由 CI 校驗。認領須透過 Git 合併到 main 才能避免跨分支重複工作，不能以「修改工作分支但尚未推送」宣稱已分配成功；也不會自動啟動其他 Agent。原 T01 退回事項優先順序、原稿完整驗收與 Task owner 不變。
