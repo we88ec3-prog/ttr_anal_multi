@@ -86,8 +86,8 @@ def evaluate(root: Path = ROOT, *, task: str | None = None, version: str | None 
             elif gap.get("owner_task") != rr.get("owner_task"):
                 errors.append(f"{rid}: owner mismatch with GAP {gid}")
         linked = [m for m in roadmap["milestones"] if rid in m.get("rr_ids", [])]
-        if ver == roadmap.get("client_version") and not linked:
-            errors.append(f"{rid}: no scoped roadmap work package")
+        # A valid RR can be a non-gating research backlog item (e.g. RR-0006).
+        # Do not silently insert it into the S00 delivery roadmap.
         for m in linked:
             if m["phase"] == "B" and rr.get("owner_task") not in m.get("research_owners", []):
                 errors.append(f"{rid}: missing milestone research owner {m['id']}")
@@ -149,6 +149,7 @@ def evaluate(root: Path = ROOT, *, task: str | None = None, version: str | None 
             "coverage_ids": _distinct(c["id"] for c in cov_rows),
             "test_ids": related_test_ids,
             "milestone_ids": ordered_packages,
+            "delivery_mapping": "MILESTONE" if ordered_packages else "RESEARCH_BACKLOG",
             "blocked_milestones": [mid for mid in ordered_packages
                                     if milestone_rank.get(mid) is None or
                                     next((p["status"] for p in readiness["packages"] if p["id"] == mid), "BLOCKED") == "BLOCKED"],
@@ -172,6 +173,8 @@ def evaluate(root: Path = ROOT, *, task: str | None = None, version: str | None 
             "ready_to_be_claimed": counts.get("QUEUED", 0),
             "blocked_phase_b_packages": sum(x["status"] == "BLOCKED" and x["phase"] == "B"
                                             for x in readiness["packages"]),
+            "research_backlog_without_milestone": sum(
+                x["delivery_mapping"] == "RESEARCH_BACKLOG" for x in work),
             "target_version_filter": version,
             "task_filter": task,
         },
