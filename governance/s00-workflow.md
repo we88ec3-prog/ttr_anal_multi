@@ -58,3 +58,8 @@ T01 在 [本批首次新流程來源收件](../research/handoffs/t01-20261029-ri
 ## Iteration 06: Phase B live intake without a second RR registry
 
 [Read-only queue generator](phase_b_worklist.py) and [review protocol](PHASE-B-INTAKE-REVIEW.md) derive T02/T03 work scope and S00 source-to-spec impact from the existing RR/GAP/SPEC/COV/TEST and roadmap indices. They do not claim or resolve RR, awaken Agents, perform Client runtime testing or auto-upgrade SPEC. Use `python -B governance/phase_b_worklist.py --check`; review status is still determined only by the canonical request registry and human approval.
+
+
+## Iteration 07: T01/S00 source review entry
+
+The [RR submission preflight](phase_b_review_preflight.py) checks current submitted report path/blob identity and produces read-only, directly scoped SPEC/GAP/COV/TEST review questions. It never judges native semantics or upgrades contracts. Run `python -B governance/phase_b_review_preflight.py --check`; on `SUBMITTED/IN_REVIEW`, have T01 inspect source confidence and S00 decide the exact RR acceptance criteria. See [Iteration 07](S00-20261029-ITERATION-07.md).
