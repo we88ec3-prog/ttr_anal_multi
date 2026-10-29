@@ -2,12 +2,14 @@
 
 此目錄是 **新增整合/檢索通道**，不是既有 `kr/` / `tc/` 原稿及 T01 歷史台帳的替代品。
 
-- `claims/index.json`：精確主張/證據/版本的增量索引；Phase A 初始為空，不表示原版未有已確認主張。
-- `requests/index.json`：依 SPEC/GAP 定義的精確補證請求；不得自行猜測原始協定。
+- `claims/index.json`：增量精確主張/證據/版本索引；不等於原稿已全部通過 FULL-PASS。
+- `requests/index.json`：**唯一的研究補證 RR 台帳**（S00 發件、Task 認領、回報、T01/S00 審查）；不得自行猜測原始協定。
 - [T01 新工作流程](../governance/t01-integration-workflow.md)：風險分流與兩軸狀態。
 - [舊版嚴格 FULL-PASS](../shared/verified-knowledge/README.md)：完整保留，不從本索引自動推升。
 
 T02–T16 研究原稿應繼續保留完整技術證據，對 S00 交付 bounded claims、server-impact 與必要 GAP；REA 可選，無 REA Agent 也可查原稿/快取/索引。
 
-- `intake/index.json`：**新的 T01 收件台帳**，完整保留精確原稿 SHA 與兩軸工作狀態；Phase A 初始無新來源，不代表歷史來源消失。
+- `intake/index.json`：**新的 T01 來源收件台帳**，保留精確原稿 SHA 與兩軸工作狀態，不取代歷史 FULL-PASS。
 - [來源收件範本](templates/source-intake.md)、[Server 影響交接範本](templates/server-impact.md)。
+
+- [正式研究派工規則與 T01–T16 收件箱](dispatch/README.md)，KR／TC 共用 RR index，但各 Agent 必須按 client_version 認領。
