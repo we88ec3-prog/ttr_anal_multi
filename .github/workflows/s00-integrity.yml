@@ -1,0 +1,32 @@
+name: S00 specification registry integrity
+
+on:
+  push:
+    paths:
+      - "governance/**"
+      - "spec/**"
+      - "research/**"
+      - "design/**"
+      - "conformance/**"
+      - ".github/workflows/s00-integrity.yml"
+  pull_request:
+    paths:
+      - "governance/**"
+      - "spec/**"
+      - "research/**"
+      - "design/**"
+      - "conformance/**"
+      - ".github/workflows/s00-integrity.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate S00 registry references
+        run: python3 -B governance/validate_s00.py
+      - name: Run S00 validator regression tests
+        run: python3 -B -m unittest discover -s governance/tests -v
