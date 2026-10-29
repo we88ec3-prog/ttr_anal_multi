@@ -1,13 +1,20 @@
-# SPEC-CHAR-0001 — KR session / character selection (draft pilot)
+# SPEC-CHAR-0001 — KR command 2 角色清單有限契約
 
-**狀態：DRAFT / UNKNOWN；不可宣稱原版 Client 相容。**
+**DRAFT / PARTIAL**｜KR SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。資料形狀僅在有效資源/狀態且路徑進入 0x4B7F00 角色迴圈時適用。
 
-- Client: KR；Tartaros.bin SHA256: `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`
-- Source owner: T03；依賴 T02 網路框架、T04 角色初始化之介面。
-- 請求（C2S）：選角欄位、合法狀態、封包順序尚待完整契約。
-- 回覆（S2C）：成功與失敗回覆、回覆時序、Client 後續狀態尚待完整契約。
-- Server 設計：帳號/Session/角色所有權等應另立 ADR 與測試，不得聲稱原版 Server 決策規則已知。
-- 相關缺口：`GAP-CHAR-0001`；補證請求：`RR-0002`；目前通過的 TEST：無。
-- 升級條件：T03/T02/T04 交付可實作的 bounded 證據、必要狀態與失敗路徑、相容性測試；阻塞性未知消除後才能評估 Stable。
+共享 dispatch handler index 2 對應這個消費者。完整 payload = **65-byte prefix + 53-byte records**；第一筆起點 +65；完整筆數為 floor((payload_len-65)/53)。**另一個 0x4E2730 consumer 用的是 2-byte prefix**，尚未確認命令號，不可混用。64-byte 以下不代表原版會安全拒絕，因為此前已有 header 讀取。
 
-本文件只示範如何承接現有 T03 研究，沒有填入未驗證 opcode 或假定回覆。
+| Record offset | 有限 Client 消費 | 未知 |
+|---|---|---|
+| +0 | NUL 終止 UTF-16 name copy | 名稱政策/容量防護 |
+| +0x2A | u32 → UI+8 | 正式業務意義 |
+| +0x2E | u8 ID（觀察比較 <=9 且有效目標指標），→ UI+4 | 官方合法 ID 集合及去重 |
+| +0x2F | u8 → UI+0xD4 | 業務意義 |
+| +0x30 | u8 → UI+0xDC | 業務意義 |
+| +0x31 | u32 → UI+0x50 | 業務意義 |
+
+0x4D4150 對有效記錄寫入 UI+0x5C=1，只證明此記錄可用旗標，**不代表畫面刷新、成功選角或世界轉場**。清單後還會有初始化請求（包含 26+ID），回覆配對不完整。選角 command42 的完整請求/回覆仍缺。
+
+`conformance/character/` 為人造記錄格式的測試，不是真實回覆或角色合法性。保守拒絕未終止 name／短 header 是**測試器政策**，非原版確認行為。
+
+來源：`CLM-CHAR-0001`、`CLM-CHAR-0002`（PARTIAL）；`kr/evidence/7a594f0ba64354a1c22fa2a6fe22f45e3a29699fb2bf5f73c2023e8113b9cac7.txt`；`GAP-CHAR-0001`、`RR-0002`、`TEST-CHAR-0001`。
