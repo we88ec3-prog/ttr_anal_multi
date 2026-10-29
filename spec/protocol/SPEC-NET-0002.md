@@ -2,7 +2,7 @@
 
 狀態：**DRAFT / PARTIAL**。KR `Tartaros.bin` SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。此為 Client 觀察到的路徑，不是官方 Server 網路部署標準。來源 [T02 盤點](T02-EVIDENCE-INVENTORY.md)。
 
-## 已觀察的連線參數（805AD0/806AD0 系列）
+## 已觀察的連線參數（0x806AD0）
 
 `806AD0` 的呼叫參數依次為 `address, port, slot, pipeline`（第 3 個參數用作 network+0x18 的連線查表鍵，第 4 個寫入 connection+0xA080）。所見舊版 KR 靜態呼叫：
 

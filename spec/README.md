@@ -1,13 +1,21 @@
-# Tartaros Server 規格入口（Phase B 試行）
+# Tartaros Server 規格入口（Phase B — T02 整合試行）
 
-**目前 3 份 KR 規格均為 DRAFT / PARTIAL，尚無 STABLE，也不包含完整 TC 相容性。** 與 `shared/targets.json` 的 Client SHA 嚴格對應。第三方 Server 可以參考有限確定的形狀與條件，但不得將整個登入／選角流程視為已閉合。
+目前 **5 份 KR 規格均為 DRAFT / PARTIAL，沒有 STABLE**。只適用於 `shared/targets.json` 指定的原始 KR SHA；不能跨到 TC。目的是供其他人獨立設計 Server，不要求使用此庫內的任何 Server 實作。
 
-| 規格 | 已萃取的局部內容 | 仍缺 |
+| 規格 | 目前可引用的有限結果 | 尚未完成 |
 |---|---|---|
-| [SPEC-NET-0001](protocol/SPEC-NET-0001.md) | 1A68 / 0BBB framing、模式 fallback、局部收端 | 握手、模式、0x2633 與 socket 時序 |
-| [SPEC-AUTH-0001](session-account/SPEC-AUTH-0001.md) | E8/0F 出站 payload、局部登入結果 | 認證政策、opaque 欄位、完整回覆與切線 |
-| [SPEC-CHAR-0001](session-account/SPEC-CHAR-0001.md) | command2 65+53*N 清單與 UI record | 角色正式資料、選角回覆、初始化與轉場 |
+| [SPEC-NET-0001](protocol/SPEC-NET-0001.md) | 1A68/0BBB frame、XOR/checksum、sender/receiver 長度限制 | 端到端收送模式與全部 marker |
+| [SPEC-NET-0002](protocol/SPEC-NET-0002.md) | Connect 參數/slot/pipeline、outbound queue→WSASend | 握手、連線切換、重試、真正 Server 實收 |
+| [SPEC-NET-0003](protocol/SPEC-NET-0003.md) | WSARecv/IOCP→frame parser→queue→CClient/Scene 命令分派 | 非法 frame 的完整處理與各業務狀態 |
+| [SPEC-AUTH-0001](session-account/SPEC-AUTH-0001.md) | E8/0F 認證 payload 與局部登入回覆消費 | 帳號政策、完整回覆及切線 |
+| [SPEC-CHAR-0001](session-account/SPEC-CHAR-0001.md) | command2 65+53N 角色清單與 UI record 部分對應 | 選角確認、初始化和場景切線 |
 
-[規格索引](spec-index.json) → [8 條 bounded CLM](../research/claims/index.json) → [3 份來源 SRC / SHA](../research/intake/index.json)。所有新主張為 PARTIAL，未升格 NATIVE_VERIFIED。[GAP](../design/gaps/index.json)、[研究請求](../research/requests/index.json)、[離線合成測試](../conformance/README.md) 可查詢未完成部分。
+## 研究與可實作性的入口
 
-**測試資料是手工合成，不是擷取的原版遊戲封包。** Server 程式碼、DB、運行及部署留在獨立實作庫；S00 不強制特定語言或架構，未證的 Server 決策另立 ADR。外部 Issues 目前不受理。
+- [T02 既有成果完整盤點及 T01 勘誤對照](protocol/T02-EVIDENCE-INVENTORY.md)
+- [連線邊界狀態模型](protocol/t02-network-state-model.md)：只描述已觀察的 Client 路徑，**不宣稱官方 Server state machine**。
+- [S00 整合流程](../governance/s00-workflow.md)、[目前優先的精確研究請求](../governance/T02-S00-AGENT-REQUESTS.md)
+- [機器規格索引](spec-index.json) → [12 條 CLM](../research/claims/index.json) → [6 份 SRC](../research/intake/index.json)，皆非新增 FULL-PASS；[5 個 GAP](../design/gaps/index.json)、[7 個研究請求](../research/requests/index.json)。
+- [離線測試](../conformance/README.md) 只驗證研究派生的局部格式與靜態邊界映射，**沒有 Client 封包實測或 Server 連線驗收**。
+
+目前不受理外部 Issues；Server 程式碼、運行、資料庫及部署獨立於本設計庫。未證實的官方 Server 內部規則不能轉為此處的 Client 原生事實。

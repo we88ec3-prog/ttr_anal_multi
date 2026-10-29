@@ -39,3 +39,18 @@ python -B -m unittest discover -s conformance/session -p "test_*.py" -v
 ```
 
 CI 是離線規格與 SHA 自動檢查，**不能直接推論 Client 相容或 Server 可啟動**。
+
+## T02 第二輪：收發／連線邊界既有研究整合（2026-10-29）
+
+本輪未使用 REA 或重做 BIN 深度逆向，從現有 T02、T09 與 T01 T16 勘誤中核對可引用的 bounded 靜態研究，完成：
+
+1. [來源盤點](../spec/protocol/T02-EVIDENCE-INVENTORY.md)：證據路徑、Git blob SHA、T16-69/70/71 更正及過期缺口的精確整理。
+2. [SPEC-NET-0002](../spec/protocol/SPEC-NET-0002.md)：KR `806AD0` 的連線槽、三條已知 port+slot+pipeline 呼叫、C2S→WSASend 邊界。
+3. [SPEC-NET-0003](../spec/protocol/SPEC-NET-0003.md)：WSARecv/IOCP→frame→queue→CClient `4930E0`→Scene dispatch 邊界。
+4. [狀態模型](../spec/protocol/t02-network-state-model.md)：只有有界 Client 路徑，分離 Connect/slot/pipeline/frame mode/業務 Session；未臆造端到端時序。
+5. 新增三份 SHA 綁定來源、四條 PARTIAL 主張；新增 `GAP-NET-0002/0003` 並收窄既有 `GAP-NET-0001`，研究請求精準化至 `RR-0004..0007`。
+6. 新增 `TEST-NET-0003` 為**靜態映射一致性**離線測試，並非對原版 Client 的實際網路相容驗證。
+
+**重要修正：**「WSASend 找不到」「完整命令分派未知」等舊結論已有較新來源補足限定的靜態路徑。仍無完整 `0x13` 回覆→選服/切線、首次 S2C frame、0x2633 與錯誤恢復的契約。桌面 Agent 應只補這些 GAP，而不是重做已定位的收發函式。
+
+[REA/無 REA Agent 精確交接請求](T02-S00-AGENT-REQUESTS.md)。研究請求已建立但**未實際派遣 Agent**；完整 T02/T03 相容性規格尚未完成，所有規格仍維持 DRAFT/PARTIAL。
