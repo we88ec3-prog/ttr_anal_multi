@@ -22,3 +22,6 @@ T02–T16 研究原稿應繼續保留完整技術證據，對 S00 交付 bounded
 
 
 2026-10-30：[T10分支整合階段保存](handoffs/t01-t10-roy-20261029/README.md)。依使用者要求暫停；核127份來源、原樣補入22份原稿並補登29個SRC，保存early49／middle44份待裁決提案。未發布新canonical claim，本分支canonical整合剩127份（34份尚無完整提案）；原318版待萃取仍194份。T01自有通知3處誤貼欄位已勘誤，歷史判決及退回狀態不變。
+
+
+2026-10-30：[extra/roy1 × T16 跨 Task 三批 T01 R0–R2 實質整合](handoffs/t01-20261030-extra-t16-r2/README.md)。保留59份完整來源身份草案及14項有界主張草案；8份高優先來源已具SHA256正式SRC收件，新增4項PARTIAL CLM。第三批對Conn池重用／key-map替換／IOCP completion key再作47條定點指令及15條直接分支驗證。RR-0005仍由T02 CLAIMED、51份來源待正式收件；沒有新R3 FULL-PASS、S00 SPEC STABLE或RR ACCEPTED。
