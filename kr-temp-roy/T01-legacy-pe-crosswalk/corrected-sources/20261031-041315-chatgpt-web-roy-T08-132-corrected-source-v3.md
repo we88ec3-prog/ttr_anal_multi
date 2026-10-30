@@ -13,7 +13,7 @@
 
 有另一consumer caller路徑，A array與B vector由不同欄位/不同指標來源提供；排除generic append是特定B producer的單一實現，真正CDoll producer另由0x7A63C0入B。
 
-**原生詳細核對**：[`20261031-020700-chatgpt-web-roy-T08-132-LEGACY-MAPPING-PE-second-caller-A-B-boundary-revision.md`](../20261031-020700-chatgpt-web-roy-T08-132-LEGACY-MAPPING-PE-second-caller-A-B-boundary-revision.md)。該source提供真PE入口附近機器碼、根CFG／vtable owner，對本篇主張的影響不應用「整篇直平移」取代；同類交叉補證在 [134～151交付索引](../20261031-023700-chatgpt-web-roy-T08-T01-legacy-134-151-BIN-correction-delivery-index.md)、[T08-152 RTTI](../20261031-025103-chatgpt-web-roy-T08-152-native-PE-RTTI-vtable-and-producer-xref-corrections-FULL.md)。
+**原生詳細核對**：[`20261031-020700-chatgpt-web-roy-T08-132-LEGACY-MAPPING-PE-second-caller-A-B-boundary-revision.md`](../../20261031-020700-chatgpt-web-roy-T08-132-LEGACY-MAPPING-PE-second-caller-A-B-boundary-revision.md)。該source提供真PE入口附近機器碼、根CFG／vtable owner，對本篇主張的影響不應用「整篇直平移」取代；同類交叉補證在 [134～151交付索引](../../20261031-023700-chatgpt-web-roy-T08-T01-legacy-134-151-BIN-correction-delivery-index.md)、[T08-152 RTTI](../../20261031-025103-chatgpt-web-roy-T08-152-native-PE-RTTI-vtable-and-producer-xref-corrections-FULL.md)。
 
 **否證／剩餘邊界**：不能用直接E8負證排除virtual caller，不宣稱B→bucket因果。
 
