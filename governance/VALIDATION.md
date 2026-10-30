@@ -73,3 +73,10 @@ python -B governance/phase_b_review_preflight.py --rr RR-0003 --format json
 ```
 
 When a formal RR is `SUBMITTED` or `IN_REVIEW`, the preflight compares the submitted report's current repository bytes with the declared Git blob SHA and displays the *direct* SPEC/GAP/COV/TEST review scope. `NOT_SUBMITTED` is expected on existing QUEUED requests and is **not** a failed CI. `ARTIFACT_PRESENT_FOR_MANUAL_REVIEW` is **not** an evidence or compatibility verdict. See [Iteration 07](S00-20261029-ITERATION-07.md).
+
+
+## S00 Iteration 08 — bounded RR-0003 AUTH source-to-SPEC integration
+
+- The [RR-0003 source-scoped assessment](research-assessments/RR-0003-20261030-S00-source-integration.md) reconciles registered main reports and the conditional `0x0013/0x007A` LOGIN handlers, **not** an actual original Server session trace.
+- Run `python -B -m unittest discover -s conformance/session -p 'test_*.py' -v` for `TEST-AUTH-0001/0002`. Both are OFFLINE_SYNTHETIC; `TEST-AUTH-0002` uses documentation-only group records with a conservative synthetic bounds guard that cannot be credited to the original Client.
+- Continue `python -B governance/validate_s00.py` and `python -B governance/check_contract_coverage.py --check` to verify the linked CLM/SRC/SPEC/TEST references remain structurally consistent. RR-0003 remains IN_REVIEW until the existing dispatch/review procedure explicitly changes it.
