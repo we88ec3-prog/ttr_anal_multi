@@ -57,7 +57,7 @@ def audit(repo, target):
         assert len(srcs) == 1, f"T08-{n}: expected one v3 source, got {srcs}"
         report = srcs[0].read_text("utf-8").lower()
         assert rev["git_blob_sha"] in report, f"T08-{n}: original SHA absent"
-        assert rev["source"] in report, f"T08-{n}: original path absent"
+        assert rev["source"].lower() in report, f"T08-{n}: original path absent"
         assert TARGET_SHA in report, f"T08-{n}: target identity absent"
         rows = by_n.get(n, {}).get("rows", [])
         for row in rows:
