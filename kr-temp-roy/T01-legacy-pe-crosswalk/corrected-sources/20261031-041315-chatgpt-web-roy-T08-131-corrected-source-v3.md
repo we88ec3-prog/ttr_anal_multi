@@ -13,7 +13,7 @@
 
 真0x7B8A50為manager一組constructor入口，真0x7BB240是B consumer；[FBA838] manager多vector欄位不能將A(+A4)與B(+B4/+B8/+BC)混同。
 
-**原生詳細核對**：[`20261031-020700-chatgpt-web-roy-T08-131-LEGACY-MAPPING-PE-queue-constructor-revision.md`](../20261031-020700-chatgpt-web-roy-T08-131-LEGACY-MAPPING-PE-queue-constructor-revision.md)。該source提供真PE入口附近機器碼、根CFG／vtable owner，對本篇主張的影響不應用「整篇直平移」取代；同類交叉補證在 [134～151交付索引](../20261031-023700-chatgpt-web-roy-T08-T01-legacy-134-151-BIN-correction-delivery-index.md)、[T08-152 RTTI](../20261031-025103-chatgpt-web-roy-T08-152-native-PE-RTTI-vtable-and-producer-xref-corrections-FULL.md)。
+**原生詳細核對**：[`20261031-020700-chatgpt-web-roy-T08-131-LEGACY-MAPPING-PE-queue-constructor-revision.md`](../../20261031-020700-chatgpt-web-roy-T08-131-LEGACY-MAPPING-PE-queue-constructor-revision.md)。該source提供真PE入口附近機器碼、根CFG／vtable owner，對本篇主張的影響不應用「整篇直平移」取代；同類交叉補證在 [134～151交付索引](../../20261031-023700-chatgpt-web-roy-T08-T01-legacy-134-151-BIN-correction-delivery-index.md)、[T08-152 RTTI](../../20261031-025103-chatgpt-web-roy-T08-152-native-PE-RTTI-vtable-and-producer-xref-corrections-FULL.md)。
 
 **否證／剩餘邊界**：管理器初始化成功與多型entry實際來源均受執行條件限制。
 
