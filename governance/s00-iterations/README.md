@@ -65,3 +65,10 @@ Iterations 16–17 的正式流程編號合計 **E00–E26（27 個 gate）與 4
 - [Iteration 23 — 遠征隊建名、角色 Full/Delta 同址、UI gate 與 Server 分階段計畫](S00-20261031-ITERATION-23-EXPEDITION-ROSTER-PLAN.md)。本輪 [PR #65](https://github.com/we88ec3-prog/ttr_anal_multi/pull/65) 合併 E76～E79 八個新研究檔案；E79 更正 E72「不同角色 record destination」，證明 S2C app2（65+53N）與 app2B（2+53N）寫入相同 `F94304` pointer cell；E76 有 name ready flag/UI gate；E77 有條件 S2C B6→F4278→角色記錄 UI。
 - [Iteration 23 — 24 項規劃測試](S00-20261031-ITERATION-23-ACCEPTANCE.md)：DOMAIN / STATIC / NEGATIVE / E2E 等級與原版 Client gate 明確分離，全部 `PLAN_ONLY / NOT_RUN`。另更新 `SPEC-CHAR-0001`／`SPEC-FLOW-0001`、`GAP-CHAR-0003`、`SLICE-CREATE` 的 RR9/RR10及 GAP 對照。
 - **未改**正式 REQ/RR/CLM 或原生 TEST index；無 T01 正式新增 CLM（所以不以舊 CLM 假裝 E79 已正式來源驗收）。`RR-0010 BLOCKED`、`GAP-CHAR-0003 OPEN`、SPEC `DRAFT/PARTIAL`；原件 BIN 未在本次環境重跑。完整 Server 可開始做 **ExpeditionProfile/FullRoster+Delta 單一模型與合成測試**，但 Client native adapter 必須等待 T02/T03/T04 條件。
+
+
+## Iteration 24（2026-10-31，E80 選角／Square 串接新手流程）
+
+- [Iteration 24 — RR-0010 斷點不變、E80 選角與 Square 開發交接](S00-20261031-ITERATION-24-SELECTION-SQUARE-HANDOFF.md)：新增 E80 RR-0002 正向 Client 靜態研究（經 PR #67 合併），C2S42 4B roleIndex+mode、ExpeditionScene 選角 UI gate 與 pending flag 可能未送出、候選 S2C69 subtype7→CSquare→C2S43 的不同 owner 來源；非 original Server 42→69 ACK，不能拿選角完成補 RR-0010 建角因果。
+- [Iteration 24 — 20 項規劃測試](S00-20261031-ITERATION-24-ACCEPTANCE.md)：DOMAIN/NEGATIVE/STATIC/E2E 全部 PLAN_ONLY/NOT_RUN，延伸 Iteration23 的 ExpeditionProfile/Full+DeltaRoleStore 至 SelectionAttempt/SceneBootstrap/WorldReady，原 Client/Server 實測另須授權。
+- 更新 DRAFT SPEC-CHAR/FLOW、GAP-CHAR-0001/0003、SLICE-ENTER-WORLD 與 B-CHAR/B-SCENE roadmap；正式 REQ/RR/CLM/TEST 索引不新增或升級。RR-0002、RR-0010 保持 BLOCKED，相關 GAP OPEN，無 T01 FULL-PASS 或新 Server 實作。
