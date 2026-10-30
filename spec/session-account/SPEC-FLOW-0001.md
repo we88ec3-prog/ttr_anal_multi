@@ -64,3 +64,15 @@
 - **E05/E06 子階段（只是計畫，不改原 gate IDs）**：E05-A Expedition identity 空值/命名 UI、E05-B 名稱結果/ready；E06-A Full/Delta RosterHydrated；E06-B 可用角色 UI/placeholder；E07+ 仍需既有 `C2S0x0042` selection→world→tutorial 的獨立 source chain。不得由共享名稱或 role-record flag 推成 `3E→4A→2→2B→B6→42` 是官方順序。
 
 **上線/驗收門檻**：合成 Server Domain/DTO 可先建立並寫 24 項未執行規劃測試；native wire adapter 必須待 T02 frame/Conn + T03/T04 欄位/scene + 另行授權的原 Client 相容驗證。此流程 SPEC 仍 `DRAFT/PARTIAL`、GAP-CHAR-0003 `OPEN`、RR-0010 `BLOCKED`。
+
+
+## Iteration 24（E80）— RoleSelected → SquareBootstrap → World/Tutorial 不可僅以 opcode 串接
+
+完整驗證與開發交接：[S00 Iteration 24](../../governance/s00-iterations/S00-20261031-ITERATION-24-SELECTION-SQUARE-HANDOFF.md)；[20 項未執行案例](../../governance/s00-iterations/S00-20261031-ITERATION-24-ACCEPTANCE.md)。
+
+- Client 在若干 ExpeditionScene/Dialog UI 條件下會 queue **C2S 0x42**（4B，slot0：roleIndex u8 + mode u8〔觀察到0及2〕），但 scene+0xCC 是本地 pending flag，可能在 builder 沒 queue 時也變1。Server 應有獨立 RoleSelectable/SelectionAttempt/lease state。
+- 另一條**不同的 Client incoming handler** 是 S2C 0x69 subtype7：建立 CSquare，將 payload+3/+4 寫入 **CSquareChannelState**；CSquare entry 在一定條件下可送 **C2S 0x43**（4B，slot0：43 00 [CSquareUserData+0x18低8位] 0A）。UserData 與 ChannelState 不可混用，S2C42/43 並非已證 C2S42 ACK。
+- 重要斷點：**尚無原版 Server C2S42→S2C69/7 配對**、沒有所有成功/拒絕 UI consumer、Square resource/Conn/frame 與進入新手教學的完整原生時序。Server V1 可把 SelectionAcceptedInternal→SquareBootstrapPending→WorldReady→TutorialStart 設為**提案的內部狀態機**，不把候選消息列為 official MUST sequence。
+- E79 full app2 / delta app2B 同角色權威資料，與 E76 頁面 ready flag、E77 S2CB6 UI 刷新相容，但它們不強制構成原始 Client 必然順序；新帳號與已持有角色的舊帳號分別處理。
+
+此處為 DRAFT/PARTIAL 限定設計，非原版 Client 或 Server 實測。RR-0002、RR-0010 仍 BLOCKED，GAP-CHAR-0001/0003 OPEN。
