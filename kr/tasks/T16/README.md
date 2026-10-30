@@ -11,7 +11,8 @@
 **T16 作者送審更新（2026-10-29）：下列 43 筆已依 `AGENTS.md` 提交獨立勘誤及原生補證，全部置為 `READY_FOR_REVIEW` 供 T01 審查；此舉不代表驗收成功。** [查看 43 筆送審表](T01-RETURNS-READY-FOR-REVIEW-20261029.md)。
 
 
-#### T01-RETURN-T16-117-Q16-MODE2-C2S36-001 — NEEDS_FIX
+#### T01-RETURN-T16-117-Q16-MODE2-C2S36-001 — RESOLVED
+- **T01 限定複驗 2026-10-30：**作者勘誤 `kr-temp-roy/T16-T01-returns-20261030/errata/T16-117-Q16-MODE2-C2S36-T01-erratum.md`，Git blob `1c5efb4a0bfd07c7fbdf2bb1fcc48c4386c4f2ba`。BIN 8/8 slice SHA256 及 mode1→F4402（636BD6/636BFF）、F4402 action gate（636DF8）、+88 record pointer（636E7C/82）、+80 QuestID、4B3510 獨立 0x36 producer 核對成立；原稿117舊版保留、`CLM-QUEST-0007 REFUTED` 保留。**僅結案此固定退回，非117全文FULL-PASS或mode2 actual submit已證。**[T01 審核](../../../research/handoffs/t01-20261030-t16-quest15-quest16-bounded/README.md)。
 - 原稿：`kr-temp-roy/20261030-034517-chatgpt-web-roy-T16-117-KR-Quest14-study5-Quest16-type2-unlock-UI-C2S-S2C.md`；Git blob `388b9100362ed43ec65ba1f7504f73518dce5d44`；KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`；保留原文。
 - 誤主張：T16-117 D.1/D.3 將 mode1～3 的 UI 動作一概視為 F4402→0x636E10→0x36,QID16，並以 TalkBox+0x88 當 QuestID。
 - 原始反證：0x636BD6 `cmp eax,1` 才沿 mode1 寫 0x636BFF action F4402；0x636DF8 的 action==F4402 gate 才 call 0x636E10；0x636E82 使用 `WORD*([TalkBox+0x88])`，QuestID +0x80 是另一欄位。0x4B3510 為獨立 0x36 producer，不得推論 mode2 永遠不發 0x36。
