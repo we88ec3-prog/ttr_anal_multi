@@ -113,6 +113,46 @@ class ServerRequirementTests(unittest.TestCase):
         self.assertEqual(r["summary"]["requirements"], 5)
         self.assertEqual(r["summary"]["discovery_counts"]["PLAYER_ADMIN_REQUEST"], 2)
 
+    def test_historical_protocol_and_ops_safety_are_user_request_material(self):
+        # Test-only player/admin discovery: not a real user submission.
+        self.add_safe_file("design/requirements/requests/historical-test.md",
+                           "synthetic mocked request, not authentic Client traffic")
+        def edit(d):
+            d["items"][0]["discoveries"].append({
+                "channel": "PLAYER_ADMIN_REQUEST",
+                "requester_role": "ADMINISTRATOR",
+                "request_text": "Please review an old protocol note and access safety.",
+                "request_record_ref": "design/requirements/requests/historical-test.md",
+                "reference_materials": [{
+                    "description": "unverified old Server log",
+                    "location": "attachment://test-only",
+                    "provenance_note": "mock historical note; not authenticated"
+                }],
+            })
+        self.edit(edit)
+        self.assertEqual(evaluate(self.root)["errors"], [])
+        self.edit(lambda d: d["items"][0]["discoveries"][-1].update(
+            channel="HISTORICAL_PROTOCOL_ARTIFACT"))
+        self.assertTrue(any("unsupported discovery channel" in x
+                            for x in evaluate(self.root)["errors"]))
+
+    def test_user_historical_material_needs_provenance_note(self):
+        self.add_safe_file("design/requirements/requests/mock-reference.md",
+                           "synthetic request")
+        def edit(d):
+            d["items"][0]["discoveries"].append({
+                "channel": "PLAYER_ADMIN_REQUEST",
+                "requester_role": "PLAYER",
+                "request_text": "Please research an old Server log.",
+                "request_record_ref": "design/requirements/requests/mock-reference.md",
+                "reference_materials": [{
+                    "description": "old protocol", "location": "attachment://mock"
+                }],
+            })
+        self.edit(edit)
+        self.assertTrue(any("user reference material requires" in x
+                            for x in evaluate(self.root)["errors"]))
+
     def test_user_request_is_not_original_client_evidence(self):
         self.add_safe_file("design/requirements/requests/mock.md", "synthetic")
         def edit(d):
