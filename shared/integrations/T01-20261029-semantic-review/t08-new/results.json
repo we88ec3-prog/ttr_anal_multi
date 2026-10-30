@@ -1,0 +1,2705 @@
+{
+  "schema": "t01-source-semantic-review-v1",
+  "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+  "frozen_base_commit": "a4d58fd21dd40cfd5cc645a829e52e59b23cecaa",
+  "reviewed_reports": 31,
+  "bounded_matrices_completed": 31,
+  "original_documents_full_pass": 0,
+  "remaining_reports_in_assigned_range": 0,
+  "full_document_semantic_review_still_pending": 31,
+  "counts": {
+    "BOUNDED_CLAIMS_PASS": 27,
+    "FAILED": 4
+  },
+  "reports": [
+    {
+      "source": "kr-temp-roy/20261028-023349-chatgpt-web-roy-T08-170-nested-collection-cleanup-7be0f0.md",
+      "sha256": "9773916580dc7b78f8882284aa108d4dc449982f2c05acbcc274887e30cd6e7f",
+      "git_blob_sha": "592aad324dee70c010dca59b8490aabff09e2528",
+      "task": "T08",
+      "number": 170,
+      "bytes": 6747,
+      "historical_review_references": [
+        "shared/integrations/T01-20261028-27/README.md"
+      ],
+      "review_state": "BOUNDED_CLAIMS_PASS",
+      "verdict_basis": "Historical references are not automatically imported as a new semantic verdict.",
+      "review_completed": true,
+      "reviewer": "Codex T01 / review_t08_new",
+      "review_date": "2026-10-29 Asia/Taipei",
+      "original_document_full_pass": false,
+      "all_source_claims_verified": false,
+      "whole_task_native_complete": false,
+      "whole_function_semantics_complete": false,
+      "claim_matrix": [
+        {
+          "id": "T08-170-C1",
+          "statement": "Stack item range +4/+8 contains nodes whose +8 payload is conditionally vcall+8, reloaded, vcall+0(1), then zeroed.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s1",
+            "SEMANTIC-EVIDENCE.md#s4"
+          ]
+        },
+        {
+          "id": "T08-170-C2",
+          "statement": "Null payload is guarded; null node is not. The source explicitly calls its node? pseudocode defensive rather than native.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s1",
+            "SEMANTIC-EVIDENCE.md#s4"
+          ]
+        },
+        {
+          "id": "T08-170-C3",
+          "statement": "Normal completion clears item+74; release helper reads this field, without identifying a gameplay death flag.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s1",
+            "SEMANTIC-EVIDENCE.md#s4"
+          ]
+        }
+      ],
+      "native_evidence": [
+        "native-cfg/007be0f0.json",
+        "native-cfg/007bd850.json",
+        "native-cfg/0089120c.json",
+        "native-cfg/007dcfb0.json",
+        "native-cfg/007be5b0.json",
+        "native-cfg/007be5f0.json",
+        "native-cfg/007f6f50.json",
+        "native-cfg/007bd7e0.json",
+        "native-cfg/007bdf90.json"
+      ],
+      "scope": "Only the explicitly listed claim matrix is adjudicated. Full source document/appendix semantics are not blanket accepted. Historical metadata, research-round claims, authored unknowns and runtime/backend completion are not promoted.",
+      "limits": [
+        "Normal-return paths and valid object/container invariants only.",
+        "Source windows that visibly truncate instructions do not become new instruction-boundary claims; only entry-based CFG supports semantic conclusions.",
+        "Dynamic unknown targets, alias/concurrency/exception guarantees and gameplay are not certified."
+      ],
+      "raw_candidate_evidence": "direct-e8-candidates.json",
+      "source_byte_check": "source-assembly-audit.json"
+    },
+    {
+      "source": "kr-temp-roy/20261028-023349-chatgpt-web-roy-T08-171-cleanup-and-vector-storage-7bd850-7bb350.md",
+      "sha256": "87ba391537aef932b66a47b731ab4ec1c31df7e0a0a39818fb9746d2ab91bf9c",
+      "git_blob_sha": "98cf0873fefdb3d11792f5edafd270b10655ad55",
+      "task": "T08",
+      "number": 171,
+      "bytes": 8809,
+      "historical_review_references": [
+        "shared/integrations/T01-20261028-27/README.md"
+      ],
+      "review_state": "BOUNDED_CLAIMS_PASS",
+      "verdict_basis": "Historical references are not automatically imported as a new semantic verdict.",
+      "review_completed": true,
+      "reviewer": "Codex T01 / review_t08_new",
+      "review_date": "2026-10-29 Asia/Taipei",
+      "original_document_full_pass": false,
+      "all_source_claims_verified": false,
+      "whole_task_native_complete": false,
+      "whole_function_semantics_complete": false,
+      "claim_matrix": [
+        {
+          "id": "T08-171-C1",
+          "statement": "EDI item cleanup frees nonnull pointer-vector entries, frees storage, zeros +4/+8/+C.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s1",
+            "SEMANTIC-EVIDENCE.md#s2"
+          ]
+        },
+        {
+          "id": "T08-171-C2",
+          "statement": "Append receives EDI=&owner+7C and EAX=&source DWORD; source-inside-buffer index survives optional growth.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s1",
+            "SEMANTIC-EVIDENCE.md#s2"
+          ]
+        },
+        {
+          "id": "T08-171-C3",
+          "statement": "Signed mode>=1 enqueues under the same +64 lock; lower mode destroys immediately.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s1",
+            "SEMANTIC-EVIDENCE.md#s2"
+          ]
+        },
+        {
+          "id": "T08-171-C4",
+          "statement": "The cleanup tail computes zero transfer length; no nonzero memmove or leak/double-free conclusion follows.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s1",
+            "SEMANTIC-EVIDENCE.md#s2"
+          ]
+        }
+      ],
+      "native_evidence": [
+        "native-cfg/007be0f0.json",
+        "native-cfg/007bd850.json",
+        "native-cfg/0089120c.json",
+        "native-cfg/007dd1a0.json",
+        "native-cfg/007dd1f0.json",
+        "native-cfg/007bb350.json",
+        "native-cfg/00797930.json"
+      ],
+      "scope": "Only the explicitly listed claim matrix is adjudicated. Full source document/appendix semantics are not blanket accepted. Historical metadata, research-round claims, authored unknowns and runtime/backend completion are not promoted.",
+      "limits": [
+        "Normal-return paths and valid object/container invariants only.",
+        "Source windows that visibly truncate instructions do not become new instruction-boundary claims; only entry-based CFG supports semantic conclusions.",
+        "Dynamic unknown targets, alias/concurrency/exception guarantees and gameplay are not certified."
+      ],
+      "raw_candidate_evidence": "direct-e8-candidates.json",
+      "source_byte_check": "source-assembly-audit.json"
+    },
+    {
+      "source": "kr-temp-roy/20261028-023349-chatgpt-web-roy-T08-172-ownership-defer-immediate-cross-check.md",
+      "sha256": "b160a0e236e82f0b82772627a2131b5cac5cdb6d09c566f6e6d2b1cd0ca2045a",
+      "git_blob_sha": "3f6ae14acbc533c822fd49c85a59ec57c920419c",
+      "task": "T08",
+      "number": 172,
+      "bytes": 11043,
+      "historical_review_references": [
+        "shared/integrations/T01-20261028-27/README.md"
+      ],
+      "review_state": "BOUNDED_CLAIMS_PASS",
+      "verdict_basis": "Historical references are not automatically imported as a new semantic verdict.",
+      "review_completed": true,
+      "reviewer": "Codex T01 / review_t08_new",
+      "review_date": "2026-10-29 Asia/Taipei",
+      "original_document_full_pass": false,
+      "all_source_claims_verified": false,
+      "whole_task_native_complete": false,
+      "whole_function_semantics_complete": false,
+      "claim_matrix": [
+        {
+          "id": "T08-172-C1",
+          "statement": "Release, signed mode gate, vector append, nested virtual precleanup and immediate destruction are distinct stages.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s1",
+            "SEMANTIC-EVIDENCE.md#s2"
+          ]
+        },
+        {
+          "id": "T08-172-C2",
+          "statement": "Node-payload vcall+8 precedes reloaded vcall+0(1); pointer-vector destruction is separate.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s1",
+            "SEMANTIC-EVIDENCE.md#s2"
+          ]
+        },
+        {
+          "id": "T08-172-C3",
+          "statement": "Owner/type identity, thread timing, drain scheduling and gameplay policy remain authored unknowns.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s1",
+            "SEMANTIC-EVIDENCE.md#s2"
+          ]
+        }
+      ],
+      "native_evidence": [
+        "native-cfg/007be0f0.json",
+        "native-cfg/007bd850.json",
+        "native-cfg/0089120c.json",
+        "native-cfg/007dd1a0.json",
+        "native-cfg/007dd1f0.json",
+        "native-cfg/007bb350.json",
+        "native-cfg/00797930.json"
+      ],
+      "scope": "Only the explicitly listed claim matrix is adjudicated. Full source document/appendix semantics are not blanket accepted. Historical metadata, research-round claims, authored unknowns and runtime/backend completion are not promoted.",
+      "limits": [
+        "Normal-return paths and valid object/container invariants only.",
+        "Source windows that visibly truncate instructions do not become new instruction-boundary claims; only entry-based CFG supports semantic conclusions.",
+        "Dynamic unknown targets, alias/concurrency/exception guarantees and gameplay are not certified."
+      ],
+      "raw_candidate_evidence": "direct-e8-candidates.json",
+      "source_byte_check": "source-assembly-audit.json"
+    },
+    {
+      "source": "kr-temp-roy/20261028-085944-chatgpt-web-roy-T08-173-owner-44-writers.md",
+      "sha256": "1f5b203f381922d09d737d4fd9dbc227ec7e2a1f9597c311c604d3d7dbd9140c",
+      "git_blob_sha": "f643553ef1145ed65a5a724a0a9a3f19c910e76f",
+      "task": "T08",
+      "number": 173,
+      "bytes": 11446,
+      "historical_review_references": [
+        "shared/integrations/T01-20261028-10/README.md"
+      ],
+      "review_state": "FAILED",
+      "verdict_basis": "Historical references are not automatically imported as a new semantic verdict.",
+      "review_completed": true,
+      "reviewer": "Codex T01 / review_t08_new",
+      "review_date": "2026-10-29 Asia/Taipei",
+      "original_document_full_pass": false,
+      "all_source_claims_verified": false,
+      "whole_task_native_complete": false,
+      "whole_function_semantics_complete": false,
+      "claim_matrix": [
+        {
+          "id": "T08-173-C1",
+          "statement": "7B804A and 7DD140 clear the applicable owner+44 after drain.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s3"
+          ]
+        },
+        {
+          "id": "T08-173-C2",
+          "statement": "7DD100 decrements +5C and drains only on zero.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s3"
+          ]
+        },
+        {
+          "id": "T08-173-C3",
+          "statement": "7DD1A0 uses signed owner+44>=1 as enqueue gate.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s3"
+          ]
+        },
+        {
+          "id": "T08-173-C4",
+          "statement": "The source claims 7B8006 is a caller-dependent nonzero/variable ECX producer; this is contradicted by local ECX=1.",
+          "decision": "CONTRADICTED",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s3"
+          ]
+        }
+      ],
+      "native_evidence": [
+        "native-cfg/007dd1a0.json",
+        "native-cfg/007dd1f0.json",
+        "native-cfg/007bb350.json",
+        "native-cfg/00797930.json",
+        "native-cfg/007b7fd0.json",
+        "native-cfg/007b8030.json",
+        "native-cfg/007dd100.json",
+        "native-cfg/007b8090.json",
+        "native-cfg/007aad40.json",
+        "native-cfg/007ab020.json"
+      ],
+      "scope": "Only the explicitly listed claim matrix is adjudicated. Full source document/appendix semantics are not blanket accepted. Historical metadata, research-round claims, authored unknowns and runtime/backend completion are not promoted.",
+      "limits": [
+        "Normal-return paths and valid object/container invariants only.",
+        "Source windows that visibly truncate instructions do not become new instruction-boundary claims; only entry-based CFG supports semantic conclusions.",
+        "Dynamic unknown targets, alias/concurrency/exception guarantees and gameplay are not certified."
+      ],
+      "raw_candidate_evidence": "direct-e8-candidates.json",
+      "source_byte_check": "source-assembly-audit.json",
+      "defect": {
+        "return_id": "T01-RETURN-T08-173-001",
+        "quote": "非零/可變值生產者候選，應按 caller 驗證傳入 ecx",
+        "counterexample": "0x7B7FFE b9 01 00 00 00 dominates 0x7B8006 89 4a 44; ECX is constant1 through the loop.",
+        "repair": "Correct the source/value, identify the actual 7B7FD0 entry, and revalidate affected dataflow. T08-177 is a later explicit correction; retain the old source FAILED.",
+        "later_source_number": 177
+      }
+    },
+    {
+      "source": "kr-temp-roy/20261028-085944-chatgpt-web-roy-T08-174-deferred-queue-consumer.md",
+      "sha256": "fd4c488c7dff19f01ff22e3ed5c7df11d2a16afc1bb0165836c844177f1f5c97",
+      "git_blob_sha": "c56a5cae912d81bfad8141eeeaaa3b83016e209b",
+      "task": "T08",
+      "number": 174,
+      "bytes": 11182,
+      "historical_review_references": [
+        "shared/integrations/T01-20261028-10/README.md",
+        "shared/integrations/T01-20261028-26/README.md"
+      ],
+      "review_state": "BOUNDED_CLAIMS_PASS",
+      "verdict_basis": "Historical references are not automatically imported as a new semantic verdict.",
+      "review_completed": true,
+      "reviewer": "Codex T01 / review_t08_new",
+      "review_date": "2026-10-29 Asia/Taipei",
+      "original_document_full_pass": false,
+      "all_source_claims_verified": false,
+      "whole_task_native_complete": false,
+      "whole_function_semantics_complete": false,
+      "claim_matrix": [
+        {
+          "id": "T08-174-C1",
+          "statement": "ESI owner drain holds +64 critical section and processes +7C/+80 DWORD slots through precleanup then optional destruction/free/slot-zero.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s1",
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s3"
+          ]
+        },
+        {
+          "id": "T08-174-C2",
+          "statement": "Producer and consumer use the same +7C field and same +64 critical section.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s1",
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s3"
+          ]
+        },
+        {
+          "id": "T08-174-C3",
+          "statement": "Tail zero-length transfer leads end=begin on normal completion; two specified drain callers are present.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s1",
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s3"
+          ]
+        },
+        {
+          "id": "T08-174-C4",
+          "statement": "No complete runtime/thread/owner universe is certified.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s1",
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s3"
+          ]
+        }
+      ],
+      "native_evidence": [
+        "native-cfg/007be0f0.json",
+        "native-cfg/007bd850.json",
+        "native-cfg/0089120c.json",
+        "native-cfg/007dd1a0.json",
+        "native-cfg/007dd1f0.json",
+        "native-cfg/007bb350.json",
+        "native-cfg/00797930.json",
+        "native-cfg/007b7fd0.json",
+        "native-cfg/007b8030.json",
+        "native-cfg/007dd100.json",
+        "native-cfg/007b8090.json",
+        "native-cfg/007aad40.json",
+        "native-cfg/007ab020.json"
+      ],
+      "scope": "Only the explicitly listed claim matrix is adjudicated. Full source document/appendix semantics are not blanket accepted. Historical metadata, research-round claims, authored unknowns and runtime/backend completion are not promoted.",
+      "limits": [
+        "Normal-return paths and valid object/container invariants only.",
+        "Source windows that visibly truncate instructions do not become new instruction-boundary claims; only entry-based CFG supports semantic conclusions.",
+        "Dynamic unknown targets, alias/concurrency/exception guarantees and gameplay are not certified."
+      ],
+      "raw_candidate_evidence": "direct-e8-candidates.json",
+      "source_byte_check": "source-assembly-audit.json"
+    },
+    {
+      "source": "kr-temp-roy/20261028-085944-chatgpt-web-roy-T08-175-release-protocol.md",
+      "sha256": "97c5837eeb92260a2aa528316cea942917f58741878550df1bece247906984e7",
+      "git_blob_sha": "7af6cbd50284aee17caf4b77912b1a708a239efe",
+      "task": "T08",
+      "number": 175,
+      "bytes": 10482,
+      "historical_review_references": [
+        "shared/integrations/T01-20261028-10/README.md",
+        "shared/integrations/T01-20261028-26/README.md"
+      ],
+      "review_state": "BOUNDED_CLAIMS_PASS",
+      "verdict_basis": "Historical references are not automatically imported as a new semantic verdict.",
+      "review_completed": true,
+      "reviewer": "Codex T01 / review_t08_new",
+      "review_date": "2026-10-29 Asia/Taipei",
+      "original_document_full_pass": false,
+      "all_source_claims_verified": false,
+      "whole_task_native_complete": false,
+      "whole_function_semantics_complete": false,
+      "claim_matrix": [
+        {
+          "id": "T08-175-C1",
+          "statement": "ESI pointer-slot release reads resource+74/+78, pushes resource and its owner to the two-stack-argument ret8 helper, then zeros the original slot.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s1",
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s4"
+          ]
+        },
+        {
+          "id": "T08-175-C2",
+          "statement": "Producer and drain address the same owner+7C/+80 storage under +64.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s1",
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s4"
+          ]
+        },
+        {
+          "id": "T08-175-C3",
+          "statement": "7A8741 is a second local producer callsite with push order owner/item matching the callee ABI.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s1",
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s4"
+          ]
+        },
+        {
+          "id": "T08-175-C4",
+          "statement": "Nested precleanup precedes free and is distinct from the original pointer-slot zeroing; reentrancy safety remains unknown.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s1",
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s4"
+          ]
+        }
+      ],
+      "native_evidence": [
+        "native-cfg/007be0f0.json",
+        "native-cfg/007bd850.json",
+        "native-cfg/0089120c.json",
+        "native-cfg/007dd1a0.json",
+        "native-cfg/007dd1f0.json",
+        "native-cfg/007bb350.json",
+        "native-cfg/00797930.json",
+        "native-cfg/007dcfb0.json",
+        "native-cfg/007be5b0.json",
+        "native-cfg/007be5f0.json",
+        "native-cfg/007f6f50.json",
+        "native-cfg/007bd7e0.json",
+        "native-cfg/007bdf90.json"
+      ],
+      "scope": "Only the explicitly listed claim matrix is adjudicated. Full source document/appendix semantics are not blanket accepted. Historical metadata, research-round claims, authored unknowns and runtime/backend completion are not promoted.",
+      "limits": [
+        "Normal-return paths and valid object/container invariants only.",
+        "Source windows that visibly truncate instructions do not become new instruction-boundary claims; only entry-based CFG supports semantic conclusions.",
+        "Dynamic unknown targets, alias/concurrency/exception guarantees and gameplay are not certified."
+      ],
+      "raw_candidate_evidence": "direct-e8-candidates.json",
+      "source_byte_check": "source-assembly-audit.json"
+    },
+    {
+      "source": "kr-temp-roy/20261028-085944-chatgpt-web-roy-T08-176-ownership-lifecycle-audit.md",
+      "sha256": "3ba321fd1dafd3a5d59480b53f0fab1c952049187ff1a2ae23ecda3c5ff2e041",
+      "git_blob_sha": "735c789499a8af2581f748dc766de87a417def90",
+      "task": "T08",
+      "number": 176,
+      "bytes": 13087,
+      "historical_review_references": [
+        "shared/integrations/T01-20261028-10/README.md",
+        "shared/integrations/T01-20261028-26/README.md"
+      ],
+      "review_state": "BOUNDED_CLAIMS_PASS",
+      "verdict_basis": "Historical references are not automatically imported as a new semantic verdict.",
+      "review_completed": true,
+      "reviewer": "Codex T01 / review_t08_new",
+      "review_date": "2026-10-29 Asia/Taipei",
+      "original_document_full_pass": false,
+      "all_source_claims_verified": false,
+      "whole_task_native_complete": false,
+      "whole_function_semantics_complete": false,
+      "claim_matrix": [
+        {
+          "id": "T08-176-C1",
+          "statement": "Mode compare, vector insertion, drain calls and owner+44 zero stores have the stated local ordering.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s3",
+            "SEMANTIC-EVIDENCE.md#s4"
+          ]
+        },
+        {
+          "id": "T08-176-C2",
+          "statement": "Both lock operations receive owner+64; no global thread-safety inference is admitted.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s3",
+            "SEMANTIC-EVIDENCE.md#s4"
+          ]
+        },
+        {
+          "id": "T08-176-C3",
+          "statement": "The two direct drain sites are 7B8045 and 7DD132; outer triggers and all writers remain unresolved.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s3",
+            "SEMANTIC-EVIDENCE.md#s4"
+          ]
+        }
+      ],
+      "native_evidence": [
+        "native-cfg/007dd1a0.json",
+        "native-cfg/007dd1f0.json",
+        "native-cfg/007bb350.json",
+        "native-cfg/00797930.json",
+        "native-cfg/007b7fd0.json",
+        "native-cfg/007b8030.json",
+        "native-cfg/007dd100.json",
+        "native-cfg/007b8090.json",
+        "native-cfg/007aad40.json",
+        "native-cfg/007ab020.json",
+        "native-cfg/007dcfb0.json",
+        "native-cfg/007be5b0.json",
+        "native-cfg/007be5f0.json",
+        "native-cfg/007f6f50.json",
+        "native-cfg/007bd7e0.json",
+        "native-cfg/007bdf90.json"
+      ],
+      "scope": "Only the explicitly listed claim matrix is adjudicated. Full source document/appendix semantics are not blanket accepted. Historical metadata, research-round claims, authored unknowns and runtime/backend completion are not promoted.",
+      "limits": [
+        "Normal-return paths and valid object/container invariants only.",
+        "Source windows that visibly truncate instructions do not become new instruction-boundary claims; only entry-based CFG supports semantic conclusions.",
+        "Dynamic unknown targets, alias/concurrency/exception guarantees and gameplay are not certified."
+      ],
+      "raw_candidate_evidence": "direct-e8-candidates.json",
+      "source_byte_check": "source-assembly-audit.json"
+    },
+    {
+      "source": "kr-temp-roy/20261028-094900-chatgpt-web-roy-T08-177-owner-mode-caller-drain-closure.md",
+      "sha256": "253ccb2b658dcc734efe6bc3d5d6ab6f1629b95d173b998515624c5aa29949ac",
+      "git_blob_sha": "fdc8a64aa0f33866defe5a2484fa432f4bbaf66c",
+      "task": "T08",
+      "number": 177,
+      "bytes": 33037,
+      "historical_review_references": [
+        "shared/integrations/T01-20261028-10/README.md",
+        "shared/integrations/T01-20261028-25/README.md"
+      ],
+      "review_state": "BOUNDED_CLAIMS_PASS",
+      "verdict_basis": "Historical references are not automatically imported as a new semantic verdict.",
+      "review_completed": true,
+      "reviewer": "Codex T01 / review_t08_new",
+      "review_date": "2026-10-29 Asia/Taipei",
+      "original_document_full_pass": false,
+      "all_source_claims_verified": false,
+      "whole_task_native_complete": false,
+      "whole_function_semantics_complete": false,
+      "claim_matrix": [
+        {
+          "id": "T08-177-C1",
+          "statement": "7B7FD0 is the mode-enable entry; 7B7FA0 is a prior function tail.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s3",
+            "SEMANTIC-EVIDENCE.md#s4"
+          ]
+        },
+        {
+          "id": "T08-177-C2",
+          "statement": "ECX=1 dominates 7B8006 and stays unchanged through its loop; source explicitly corrects T08-173.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s3",
+            "SEMANTIC-EVIDENCE.md#s4"
+          ]
+        },
+        {
+          "id": "T08-177-C3",
+          "statement": "First collection vcall+4 precedes second collection payload+44=1; both returns set container+30=1.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s3",
+            "SEMANTIC-EVIDENCE.md#s4"
+          ]
+        },
+        {
+          "id": "T08-177-C4",
+          "statement": "Disable performs second-collection drain then payload+44=0 before first-collection vcall+8 and container+30=0.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s3",
+            "SEMANTIC-EVIDENCE.md#s4"
+          ]
+        },
+        {
+          "id": "T08-177-C5",
+          "statement": "Wrapper callers push literal &FE173C; manager decrement/zero handling uses ECX->ESI and returns +5C.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s3",
+            "SEMANTIC-EVIDENCE.md#s4"
+          ]
+        },
+        {
+          "id": "T08-177-C6",
+          "statement": "Drain has exactly two raw E8 candidates, ESI owner ABI, a zero-length transfer tail and end=begin; no all-indirect/runtime claim is made.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s3",
+            "SEMANTIC-EVIDENCE.md#s4"
+          ]
+        },
+        {
+          "id": "T08-177-C7",
+          "statement": "The raw E8 candidate sets for specified actor registry and resource helpers match independent full-section enumeration.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s3",
+            "SEMANTIC-EVIDENCE.md#s4"
+          ]
+        }
+      ],
+      "native_evidence": [
+        "native-cfg/007dd1a0.json",
+        "native-cfg/007dd1f0.json",
+        "native-cfg/007bb350.json",
+        "native-cfg/00797930.json",
+        "native-cfg/007b7fd0.json",
+        "native-cfg/007b8030.json",
+        "native-cfg/007dd100.json",
+        "native-cfg/007b8090.json",
+        "native-cfg/007aad40.json",
+        "native-cfg/007ab020.json",
+        "native-cfg/007dcfb0.json",
+        "native-cfg/007be5b0.json",
+        "native-cfg/007be5f0.json",
+        "native-cfg/007f6f50.json",
+        "native-cfg/007bd7e0.json",
+        "native-cfg/007bdf90.json"
+      ],
+      "scope": "Only the explicitly listed claim matrix is adjudicated. Full source document/appendix semantics are not blanket accepted. Historical metadata, research-round claims, authored unknowns and runtime/backend completion are not promoted.",
+      "limits": [
+        "Normal-return paths and valid object/container invariants only.",
+        "Source windows that visibly truncate instructions do not become new instruction-boundary claims; only entry-based CFG supports semantic conclusions.",
+        "Dynamic unknown targets, alias/concurrency/exception guarantees and gameplay are not certified."
+      ],
+      "raw_candidate_evidence": "direct-e8-candidates.json",
+      "source_byte_check": "source-assembly-audit.json"
+    },
+    {
+      "source": "kr-temp-roy/20261028-095341-chatgpt-web-roy-T08-178-mode-two-container-callback-boundary.md",
+      "sha256": "665b338fed2c7f1e8e4d18fb8fb83974bb0341936b3f2da8962d7bd1ad4b19ba",
+      "git_blob_sha": "a338ee89963c817f50010ddec3a2985d6603beee",
+      "task": "T08",
+      "number": 178,
+      "bytes": 8682,
+      "historical_review_references": [
+        "shared/integrations/T01-20261028-10/README.md",
+        "shared/integrations/T01-20261028-20/README.md"
+      ],
+      "review_state": "BOUNDED_CLAIMS_PASS",
+      "verdict_basis": "Historical references are not automatically imported as a new semantic verdict.",
+      "review_completed": true,
+      "reviewer": "Codex T01 / review_t08_new",
+      "review_date": "2026-10-29 Asia/Taipei",
+      "original_document_full_pass": false,
+      "all_source_claims_verified": false,
+      "whole_task_native_complete": false,
+      "whole_function_semantics_complete": false,
+      "claim_matrix": [
+        {
+          "id": "T08-178-C1",
+          "statement": "Enable and disable preserve the specified two-collection callback/write order and distinct payload identity.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s3"
+          ]
+        },
+        {
+          "id": "T08-178-C2",
+          "statement": "Both mode callers pass the slot address &FE173C, not its contents.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s3"
+          ]
+        },
+        {
+          "id": "T08-178-C3",
+          "statement": "Sentinel comparisons and vtable+4/+8 offsets, ret4 and empty-collection mode=1 path agree.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s3"
+          ]
+        },
+        {
+          "id": "T08-178-C4",
+          "statement": "Specified raw direct E8 candidate counts match; abstract collection type and concurrency are expressly unresolved.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s3"
+          ]
+        }
+      ],
+      "native_evidence": [
+        "native-cfg/007dd1a0.json",
+        "native-cfg/007dd1f0.json",
+        "native-cfg/007bb350.json",
+        "native-cfg/00797930.json",
+        "native-cfg/007b7fd0.json",
+        "native-cfg/007b8030.json",
+        "native-cfg/007dd100.json",
+        "native-cfg/007b8090.json",
+        "native-cfg/007aad40.json",
+        "native-cfg/007ab020.json"
+      ],
+      "scope": "Only the explicitly listed claim matrix is adjudicated. Full source document/appendix semantics are not blanket accepted. Historical metadata, research-round claims, authored unknowns and runtime/backend completion are not promoted.",
+      "limits": [
+        "Normal-return paths and valid object/container invariants only.",
+        "Source windows that visibly truncate instructions do not become new instruction-boundary claims; only entry-based CFG supports semantic conclusions.",
+        "Dynamic unknown targets, alias/concurrency/exception guarantees and gameplay are not certified."
+      ],
+      "raw_candidate_evidence": "direct-e8-candidates.json",
+      "source_byte_check": "source-assembly-audit.json"
+    },
+    {
+      "source": "kr-temp-roy/20261028-095341-chatgpt-web-roy-T08-179-last-reference-registry-release.md",
+      "sha256": "e9780b53d20d390b3c43b3dbdc17c10746ab18d40a628f26f252af6ad79c6f93",
+      "git_blob_sha": "76e410b206bde1e85444134303da17b0242794f0",
+      "task": "T08",
+      "number": 179,
+      "bytes": 16337,
+      "historical_review_references": [
+        "shared/integrations/T01-20261028-10/README.md",
+        "shared/integrations/T01-20261028-25/README.md"
+      ],
+      "review_state": "BOUNDED_CLAIMS_PASS",
+      "verdict_basis": "Historical references are not automatically imported as a new semantic verdict.",
+      "review_completed": true,
+      "reviewer": "Codex T01 / review_t08_new",
+      "review_date": "2026-10-29 Asia/Taipei",
+      "original_document_full_pass": false,
+      "all_source_claims_verified": false,
+      "whole_task_native_complete": false,
+      "whole_function_semantics_complete": false,
+      "claim_matrix": [
+        {
+          "id": "T08-179-C1",
+          "statement": "Non-atomic +5C decrement gates drain on zero; drain precedes +44 zero.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s3",
+            "SEMANTIC-EVIDENCE.md#s5",
+            "SEMANTIC-EVIDENCE.md#s6"
+          ]
+        },
+        {
+          "id": "T08-179-C2",
+          "statement": "A separate +4C/+50 pointer array passes each element in EDX and heap index [FE173C] in ECX to 7DC510.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s3",
+            "SEMANTIC-EVIDENCE.md#s5",
+            "SEMANTIC-EVIDENCE.md#s6"
+          ]
+        },
+        {
+          "id": "T08-179-C3",
+          "statement": "Upstream release skips cleanup/free/node removal for nonzero count; zero permits those distinct stages.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s3",
+            "SEMANTIC-EVIDENCE.md#s5",
+            "SEMANTIC-EVIDENCE.md#s6"
+          ]
+        },
+        {
+          "id": "T08-179-C4",
+          "statement": "+4C/+50 and +7C/+80 are different arrays, and the address versus value of FE173C remains distinct.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s3",
+            "SEMANTIC-EVIDENCE.md#s5",
+            "SEMANTIC-EVIDENCE.md#s6"
+          ]
+        }
+      ],
+      "native_evidence": [
+        "native-cfg/007dd1a0.json",
+        "native-cfg/007dd1f0.json",
+        "native-cfg/007bb350.json",
+        "native-cfg/00797930.json",
+        "native-cfg/007b7fd0.json",
+        "native-cfg/007b8030.json",
+        "native-cfg/007dd100.json",
+        "native-cfg/007b8090.json",
+        "native-cfg/007aad40.json",
+        "native-cfg/007ab020.json",
+        "native-cfg/007dc510.json",
+        "native-cfg/007b86f0.json",
+        "native-cfg/007b8680.json",
+        "native-cfg/00719b20.json",
+        "native-cfg/00719b90.json",
+        "native-cfg/005525e0.json",
+        "native-cfg/007b82d0.json",
+        "native-cfg/007dc3d0.json",
+        "native-cfg/007b7da0.json",
+        "native-cfg/007dcc30.json",
+        "native-cfg/007dcf40.json",
+        "native-cfg/007b7f30.json",
+        "native-cfg/007b8090.json"
+      ],
+      "scope": "Only the explicitly listed claim matrix is adjudicated. Full source document/appendix semantics are not blanket accepted. Historical metadata, research-round claims, authored unknowns and runtime/backend completion are not promoted.",
+      "limits": [
+        "Normal-return paths and valid object/container invariants only.",
+        "Source windows that visibly truncate instructions do not become new instruction-boundary claims; only entry-based CFG supports semantic conclusions.",
+        "Dynamic unknown targets, alias/concurrency/exception guarantees and gameplay are not certified."
+      ],
+      "raw_candidate_evidence": "direct-e8-candidates.json",
+      "source_byte_check": "source-assembly-audit.json"
+    },
+    {
+      "source": "kr-temp-roy/20261028-095341-chatgpt-web-roy-T08-180-formal-0007-resource-interface-audit.md",
+      "sha256": "de0a4a1999fb4c784b7145ba26e3c2ba97445be9257f370148d43e57573bf0b6",
+      "git_blob_sha": "4ab548ce691aca8e04f0be4ec83899d577290719",
+      "task": "T08",
+      "number": 180,
+      "bytes": 10921,
+      "historical_review_references": [
+        "shared/integrations/T01-20261028-10/README.md",
+        "shared/integrations/T01-20261028-26/README.md"
+      ],
+      "review_state": "BOUNDED_CLAIMS_PASS",
+      "verdict_basis": "Historical references are not automatically imported as a new semantic verdict.",
+      "review_completed": true,
+      "reviewer": "Codex T01 / review_t08_new",
+      "review_date": "2026-10-29 Asia/Taipei",
+      "original_document_full_pass": false,
+      "all_source_claims_verified": false,
+      "whole_task_native_complete": false,
+      "whole_function_semantics_complete": false,
+      "claim_matrix": [
+        {
+          "id": "T08-180-C1",
+          "statement": "Actor add, individual remove, bulk clear and resource drain have different direct E8 candidate sets.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s4",
+            "SEMANTIC-EVIDENCE.md#s7",
+            "SEMANTIC-EVIDENCE.md#s8",
+            "SEMANTIC-EVIDENCE.md#s9"
+          ]
+        },
+        {
+          "id": "T08-180-C2",
+          "statement": "4C7DB4/4C838C are local bridges to the pointer-slot release helper, not proof of identical scene/index/manager owners.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s4",
+            "SEMANTIC-EVIDENCE.md#s7",
+            "SEMANTIC-EVIDENCE.md#s8",
+            "SEMANTIC-EVIDENCE.md#s9"
+          ]
+        },
+        {
+          "id": "T08-180-C3",
+          "statement": "Release can reach the two-argument producer; drain sites are mode-disable and zero manager count, not a frame-clock rule.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s4",
+            "SEMANTIC-EVIDENCE.md#s7",
+            "SEMANTIC-EVIDENCE.md#s8",
+            "SEMANTIC-EVIDENCE.md#s9"
+          ]
+        },
+        {
+          "id": "T08-180-C4",
+          "statement": "Tail transfer length is zero; the raw candidate tables are independently enumerated without claiming all callers.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s4",
+            "SEMANTIC-EVIDENCE.md#s7",
+            "SEMANTIC-EVIDENCE.md#s8",
+            "SEMANTIC-EVIDENCE.md#s9"
+          ]
+        }
+      ],
+      "native_evidence": [
+        "native-cfg/007dd1a0.json",
+        "native-cfg/007dd1f0.json",
+        "native-cfg/007bb350.json",
+        "native-cfg/00797930.json",
+        "native-cfg/007dcfb0.json",
+        "native-cfg/007be5b0.json",
+        "native-cfg/007be5f0.json",
+        "native-cfg/007f6f50.json",
+        "native-cfg/007bd7e0.json",
+        "native-cfg/007bdf90.json",
+        "native-cfg/004dfbc0.json",
+        "native-cfg/004dfc30.json",
+        "native-cfg/004dfc90.json",
+        "native-cfg/004dfd40.json",
+        "native-cfg/0082ef00.json",
+        "native-cfg/004dfe90.json",
+        "native-cfg/004d1710.json",
+        "native-cfg/004d1f80.json",
+        "native-cfg/004d18d0.json",
+        "native-cfg/004c8360.json",
+        "native-cfg/004c7b90.json",
+        "native-cfg/004dff30.json",
+        "native-cfg/0082ef00.json",
+        "native-cfg/0082f200.json"
+      ],
+      "scope": "Only the explicitly listed claim matrix is adjudicated. Full source document/appendix semantics are not blanket accepted. Historical metadata, research-round claims, authored unknowns and runtime/backend completion are not promoted.",
+      "limits": [
+        "Normal-return paths and valid object/container invariants only.",
+        "Source windows that visibly truncate instructions do not become new instruction-boundary claims; only entry-based CFG supports semantic conclusions.",
+        "Dynamic unknown targets, alias/concurrency/exception guarantees and gameplay are not certified."
+      ],
+      "raw_candidate_evidence": "direct-e8-candidates.json",
+      "source_byte_check": "source-assembly-audit.json"
+    },
+    {
+      "source": "kr-temp-roy/20261028-100222-chatgpt-web-roy-T08-181-reuse-pool-acquisition-and-count-separation.md",
+      "sha256": "551521ea24da699f5c1cd577a286de7d903fe2542f05ec7f1f1f8769365e755a",
+      "git_blob_sha": "2f0175b00bd9f96ec62b92065a832693b4cebe6a",
+      "task": "T08",
+      "number": 181,
+      "bytes": 16350,
+      "historical_review_references": [
+        "shared/integrations/T01-20261028-10/README.md",
+        "shared/integrations/T01-20261028-26/README.md"
+      ],
+      "review_state": "BOUNDED_CLAIMS_PASS",
+      "verdict_basis": "Historical references are not automatically imported as a new semantic verdict.",
+      "review_completed": true,
+      "reviewer": "Codex T01 / review_t08_new",
+      "review_date": "2026-10-29 Asia/Taipei",
+      "original_document_full_pass": false,
+      "all_source_claims_verified": false,
+      "whole_task_native_complete": false,
+      "whole_function_semantics_complete": false,
+      "claim_matrix": [
+        {
+          "id": "T08-181-C1",
+          "statement": "Acquire increments +60 outside the +64 lock; +60 is separate from +5C.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s4"
+          ]
+        },
+        {
+          "id": "T08-181-C2",
+          "statement": "Nonempty pool pops last DWORD, prepares it with 7BE5B0, shrinks end and returns it without free.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s4"
+          ]
+        },
+        {
+          "id": "T08-181-C3",
+          "statement": "Empty pool unlocks, allocates 7C and conditionally constructs with owner+48 float; builds 0C per-name nodes and conditionally calls binding on mode>=1.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s4"
+          ]
+        },
+        {
+          "id": "T08-181-C4",
+          "statement": "The same +7C/+80 storage therefore has a reuse consumer as well as drain; allocation-failure handling is explicitly not certified by the guarded pseudocode.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s4"
+          ]
+        }
+      ],
+      "native_evidence": [
+        "native-cfg/007dd1a0.json",
+        "native-cfg/007dd1f0.json",
+        "native-cfg/007bb350.json",
+        "native-cfg/00797930.json",
+        "native-cfg/007dcfb0.json",
+        "native-cfg/007be5b0.json",
+        "native-cfg/007be5f0.json",
+        "native-cfg/007f6f50.json",
+        "native-cfg/007bd7e0.json",
+        "native-cfg/007bdf90.json"
+      ],
+      "scope": "Only the explicitly listed claim matrix is adjudicated. Full source document/appendix semantics are not blanket accepted. Historical metadata, research-round claims, authored unknowns and runtime/backend completion are not promoted.",
+      "limits": [
+        "Normal-return paths and valid object/container invariants only.",
+        "Source windows that visibly truncate instructions do not become new instruction-boundary claims; only entry-based CFG supports semantic conclusions.",
+        "Dynamic unknown targets, alias/concurrency/exception guarantees and gameplay are not certified."
+      ],
+      "raw_candidate_evidence": "direct-e8-candidates.json",
+      "source_byte_check": "source-assembly-audit.json"
+    },
+    {
+      "source": "kr-temp-roy/20261028-100222-chatgpt-web-roy-T08-182-mode-switch-and-binding-boundary.md",
+      "sha256": "739bc66f916af7b8a5707237e6fec9dd8bef98040e0040c76360a8996eaf0666",
+      "git_blob_sha": "f9717b667a90cee6a554f04d4070472e643918bb",
+      "task": "T08",
+      "number": 182,
+      "bytes": 14304,
+      "historical_review_references": [
+        "shared/integrations/T01-20261028-10/README.md",
+        "shared/integrations/T01-20261028-26/README.md"
+      ],
+      "review_state": "BOUNDED_CLAIMS_PASS",
+      "verdict_basis": "Historical references are not automatically imported as a new semantic verdict.",
+      "review_completed": true,
+      "reviewer": "Codex T01 / review_t08_new",
+      "review_date": "2026-10-29 Asia/Taipei",
+      "original_document_full_pass": false,
+      "all_source_claims_verified": false,
+      "whole_task_native_complete": false,
+      "whole_function_semantics_complete": false,
+      "claim_matrix": [
+        {
+          "id": "T08-182-C1",
+          "statement": "Mode writer is local constant1; disable drains before clearing +44.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s3",
+            "SEMANTIC-EVIDENCE.md#s4",
+            "SEMANTIC-EVIDENCE.md#s5"
+          ]
+        },
+        {
+          "id": "T08-182-C2",
+          "statement": "New allocation alone reaches mode-gated 7BDF90 while reuse reaches 7BE5B0; the source does not assert they are equivalent full initialization.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s3",
+            "SEMANTIC-EVIDENCE.md#s4",
+            "SEMANTIC-EVIDENCE.md#s5"
+          ]
+        },
+        {
+          "id": "T08-182-C3",
+          "statement": "7BDF90 performs name-index lookup and vtable+10 provider callback to populate node+8; 7BE0F0 precleans those payloads.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s3",
+            "SEMANTIC-EVIDENCE.md#s4",
+            "SEMANTIC-EVIDENCE.md#s5"
+          ]
+        },
+        {
+          "id": "T08-182-C4",
+          "statement": "Mode and same-offset fields across object types are not conflated; race/failure/complete-writer coverage remains unknown.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s3",
+            "SEMANTIC-EVIDENCE.md#s4",
+            "SEMANTIC-EVIDENCE.md#s5"
+          ]
+        }
+      ],
+      "native_evidence": [
+        "native-cfg/007dd1a0.json",
+        "native-cfg/007dd1f0.json",
+        "native-cfg/007bb350.json",
+        "native-cfg/00797930.json",
+        "native-cfg/007b7fd0.json",
+        "native-cfg/007b8030.json",
+        "native-cfg/007dd100.json",
+        "native-cfg/007b8090.json",
+        "native-cfg/007aad40.json",
+        "native-cfg/007ab020.json",
+        "native-cfg/007dcfb0.json",
+        "native-cfg/007be5b0.json",
+        "native-cfg/007be5f0.json",
+        "native-cfg/007f6f50.json",
+        "native-cfg/007bd7e0.json",
+        "native-cfg/007bdf90.json",
+        "native-cfg/007dc510.json",
+        "native-cfg/007b86f0.json",
+        "native-cfg/007b8680.json",
+        "native-cfg/00719b20.json",
+        "native-cfg/00719b90.json",
+        "native-cfg/005525e0.json",
+        "native-cfg/007b82d0.json",
+        "native-cfg/007dc3d0.json",
+        "native-cfg/007b7da0.json",
+        "native-cfg/007dcc30.json"
+      ],
+      "scope": "Only the explicitly listed claim matrix is adjudicated. Full source document/appendix semantics are not blanket accepted. Historical metadata, research-round claims, authored unknowns and runtime/backend completion are not promoted.",
+      "limits": [
+        "Normal-return paths and valid object/container invariants only.",
+        "Source windows that visibly truncate instructions do not become new instruction-boundary claims; only entry-based CFG supports semantic conclusions.",
+        "Dynamic unknown targets, alias/concurrency/exception guarantees and gameplay are not certified."
+      ],
+      "raw_candidate_evidence": "direct-e8-candidates.json",
+      "source_byte_check": "source-assembly-audit.json"
+    },
+    {
+      "source": "kr-temp-roy/20261028-100222-chatgpt-web-roy-T08-183-manager-last-release-and-container-destruction.md",
+      "sha256": "dd3dafebe38b5aa265a46da752269edfe890dbfd5d79451316800a9017a4fc3d",
+      "git_blob_sha": "ecbec611a9d99a7640ae4fad9668dcc3c06ad4be",
+      "task": "T08",
+      "number": 183,
+      "bytes": 13180,
+      "historical_review_references": [
+        "shared/integrations/T01-20261028-10/README.md",
+        "shared/integrations/T01-20261028-26/README.md"
+      ],
+      "review_state": "FAILED",
+      "verdict_basis": "Historical references are not automatically imported as a new semantic verdict.",
+      "review_completed": true,
+      "reviewer": "Codex T01 / review_t08_new",
+      "review_date": "2026-10-29 Asia/Taipei",
+      "original_document_full_pass": false,
+      "all_source_claims_verified": false,
+      "whole_task_native_complete": false,
+      "whole_function_semantics_complete": false,
+      "claim_matrix": [
+        {
+          "id": "T08-183-C1",
+          "statement": "7B8124/29 obtains node+24 manager and invokes decrement; EAX nonzero skips cleanup/free.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s3",
+            "SEMANTIC-EVIDENCE.md#s5",
+            "SEMANTIC-EVIDENCE.md#s6"
+          ]
+        },
+        {
+          "id": "T08-183-C2",
+          "statement": "Zero-result path orders manager cleanup, heap free and index-node removal separately.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s3",
+            "SEMANTIC-EVIDENCE.md#s5",
+            "SEMANTIC-EVIDENCE.md#s6"
+          ]
+        },
+        {
+          "id": "T08-183-C3",
+          "statement": "The source affirmatively describes 7B8680 as tree-node erase; native code instead repairs hash-bucket bounds and unlinks a doubly-linked node.",
+          "decision": "CONTRADICTED",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s3",
+            "SEMANTIC-EVIDENCE.md#s5",
+            "SEMANTIC-EVIDENCE.md#s6"
+          ]
+        },
+        {
+          "id": "T08-183-C4",
+          "statement": "Manager cleanup and resource drain are distinct stages, with dynamic callbacks unknown.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s3",
+            "SEMANTIC-EVIDENCE.md#s5",
+            "SEMANTIC-EVIDENCE.md#s6"
+          ]
+        }
+      ],
+      "native_evidence": [
+        "native-cfg/007b7fd0.json",
+        "native-cfg/007b8030.json",
+        "native-cfg/007dd100.json",
+        "native-cfg/007b8090.json",
+        "native-cfg/007aad40.json",
+        "native-cfg/007ab020.json",
+        "native-cfg/007dc510.json",
+        "native-cfg/007b86f0.json",
+        "native-cfg/007b8680.json",
+        "native-cfg/00719b20.json",
+        "native-cfg/00719b90.json",
+        "native-cfg/005525e0.json",
+        "native-cfg/007b82d0.json",
+        "native-cfg/007dc3d0.json",
+        "native-cfg/007b7da0.json",
+        "native-cfg/007dcc30.json",
+        "native-cfg/007dcf40.json",
+        "native-cfg/007b7f30.json",
+        "native-cfg/007b8090.json"
+      ],
+      "scope": "Only the explicitly listed claim matrix is adjudicated. Full source document/appendix semantics are not blanket accepted. Historical metadata, research-round claims, authored unknowns and runtime/backend completion are not promoted.",
+      "limits": [
+        "Normal-return paths and valid object/container invariants only.",
+        "Source windows that visibly truncate instructions do not become new instruction-boundary claims; only entry-based CFG supports semantic conclusions.",
+        "Dynamic unknown targets, alias/concurrency/exception guarantees and gameplay are not certified."
+      ],
+      "raw_candidate_evidence": "direct-e8-candidates.json",
+      "source_byte_check": "source-assembly-audit.json",
+      "defect": {
+        "return_id": "T01-RETURN-T08-183-001",
+        "quote": "0x007B8680 用於樹節點移除／調整",
+        "counterexample": "7B868B..7B86AC computes string hash/mask and an8-byte bucket; 7B86DE EDI=&index+4 then719B20 unlinks two list links and frees node, without ordered-tree rotations.",
+        "repair": "Use index-node/hash-bucket/list terminology or provide actual tree construction evidence; preserve the independently supported release ordering and separate the actor RB tree."
+      }
+    },
+    {
+      "source": "kr-temp-roy/20261028-100222-chatgpt-web-roy-T08-184-0007-scene-actor-resource-ownership-interface.md",
+      "sha256": "c8712b87109a65258e8772506c9c16e0e9adf90bd69bfed4381efaa1fe556a19",
+      "git_blob_sha": "55058a01ad35dc4f01c49ab781780e556ef506ee",
+      "task": "T08",
+      "number": 184,
+      "bytes": 23557,
+      "historical_review_references": [
+        "shared/integrations/T01-20261028-10/README.md",
+        "shared/integrations/T01-20261028-27/README.md"
+      ],
+      "review_state": "BOUNDED_CLAIMS_PASS",
+      "verdict_basis": "Historical references are not automatically imported as a new semantic verdict.",
+      "review_completed": true,
+      "reviewer": "Codex T01 / review_t08_new",
+      "review_date": "2026-10-29 Asia/Taipei",
+      "original_document_full_pass": false,
+      "all_source_claims_verified": false,
+      "whole_task_native_complete": false,
+      "whole_function_semantics_complete": false,
+      "claim_matrix": [
+        {
+          "id": "T08-184-C1",
+          "statement": "Actor add/remove/clear are separate from resource acquire/drain and have no direct E8 to drain in their bodies.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s4",
+            "SEMANTIC-EVIDENCE.md#s7",
+            "SEMANTIC-EVIDENCE.md#s8",
+            "SEMANTIC-EVIDENCE.md#s9"
+          ]
+        },
+        {
+          "id": "T08-184-C2",
+          "statement": "Component helpers provide finite release callsites, then producer enqueues or destroys by signed mode.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s4",
+            "SEMANTIC-EVIDENCE.md#s7",
+            "SEMANTIC-EVIDENCE.md#s8",
+            "SEMANTIC-EVIDENCE.md#s9"
+          ]
+        },
+        {
+          "id": "T08-184-C3",
+          "statement": "Acquire reuses the same storage before drain; this does not prove every actor removal immediately frees a resource.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s4",
+            "SEMANTIC-EVIDENCE.md#s7",
+            "SEMANTIC-EVIDENCE.md#s8",
+            "SEMANTIC-EVIDENCE.md#s9"
+          ]
+        },
+        {
+          "id": "T08-184-C4",
+          "statement": "Manager +5C protocol, scene actor indexing and concrete pointer ownership remain separate.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s4",
+            "SEMANTIC-EVIDENCE.md#s7",
+            "SEMANTIC-EVIDENCE.md#s8",
+            "SEMANTIC-EVIDENCE.md#s9"
+          ]
+        }
+      ],
+      "native_evidence": [
+        "native-cfg/007dd1a0.json",
+        "native-cfg/007dd1f0.json",
+        "native-cfg/007bb350.json",
+        "native-cfg/00797930.json",
+        "native-cfg/007dcfb0.json",
+        "native-cfg/007be5b0.json",
+        "native-cfg/007be5f0.json",
+        "native-cfg/007f6f50.json",
+        "native-cfg/007bd7e0.json",
+        "native-cfg/007bdf90.json",
+        "native-cfg/004dfbc0.json",
+        "native-cfg/004dfc30.json",
+        "native-cfg/004dfc90.json",
+        "native-cfg/004dfd40.json",
+        "native-cfg/0082ef00.json",
+        "native-cfg/004dfe90.json",
+        "native-cfg/004d1710.json",
+        "native-cfg/004d1f80.json",
+        "native-cfg/004d18d0.json",
+        "native-cfg/004c8360.json",
+        "native-cfg/004c7b90.json",
+        "native-cfg/004dff30.json",
+        "native-cfg/0082ef00.json",
+        "native-cfg/0082f200.json"
+      ],
+      "scope": "Only the explicitly listed claim matrix is adjudicated. Full source document/appendix semantics are not blanket accepted. Historical metadata, research-round claims, authored unknowns and runtime/backend completion are not promoted.",
+      "limits": [
+        "Normal-return paths and valid object/container invariants only.",
+        "Source windows that visibly truncate instructions do not become new instruction-boundary claims; only entry-based CFG supports semantic conclusions.",
+        "Dynamic unknown targets, alias/concurrency/exception guarantees and gameplay are not certified."
+      ],
+      "raw_candidate_evidence": "direct-e8-candidates.json",
+      "source_byte_check": "source-assembly-audit.json"
+    },
+    {
+      "source": "kr-temp-roy/20261028-101203-chatgpt-web-roy-T08-185-registry-node-virtual-callback-disposal.md",
+      "sha256": "5bac5f2631344cb0663caca415060bfa8d2c37d40de5251efd8d567ae638e657",
+      "git_blob_sha": "24077d1529e6031fa9fda874ac14b2b79b5ccb7f",
+      "task": "T08",
+      "number": 185,
+      "bytes": 11208,
+      "historical_review_references": [
+        "shared/integrations/T01-20261028-10/README.md",
+        "shared/integrations/T01-20261028-26/README.md"
+      ],
+      "review_state": "BOUNDED_CLAIMS_PASS",
+      "verdict_basis": "Historical references are not automatically imported as a new semantic verdict.",
+      "review_completed": true,
+      "reviewer": "Codex T01 / review_t08_new",
+      "review_date": "2026-10-29 Asia/Taipei",
+      "original_document_full_pass": false,
+      "all_source_claims_verified": false,
+      "whole_task_native_complete": false,
+      "whole_function_semantics_complete": false,
+      "claim_matrix": [
+        {
+          "id": "T08-185-C1",
+          "statement": "ECX/EDX index/key inputs are saved, temporary string built, and 7B86F0 returns node to stack slot.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s3",
+            "SEMANTIC-EVIDENCE.md#s5"
+          ]
+        },
+        {
+          "id": "T08-185-C2",
+          "statement": "Sentinel equality bypasses payload callbacks.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s3",
+            "SEMANTIC-EVIDENCE.md#s5"
+          ]
+        },
+        {
+          "id": "T08-185-C3",
+          "statement": "Non-sentinel payload+24 receives vtable+C, zero return gates vtable+0(1) and 7B8680 erase.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s3",
+            "SEMANTIC-EVIDENCE.md#s5"
+          ]
+        },
+        {
+          "id": "T08-185-C4",
+          "statement": "Manager zero-count path supplies [FE173C] plus name to this helper; no actor-tree identity follows.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s3",
+            "SEMANTIC-EVIDENCE.md#s5"
+          ]
+        }
+      ],
+      "native_evidence": [
+        "native-cfg/007b7fd0.json",
+        "native-cfg/007b8030.json",
+        "native-cfg/007dd100.json",
+        "native-cfg/007b8090.json",
+        "native-cfg/007aad40.json",
+        "native-cfg/007ab020.json",
+        "native-cfg/007dc510.json",
+        "native-cfg/007b86f0.json",
+        "native-cfg/007b8680.json",
+        "native-cfg/00719b20.json",
+        "native-cfg/00719b90.json",
+        "native-cfg/005525e0.json",
+        "native-cfg/007b82d0.json",
+        "native-cfg/007dc3d0.json",
+        "native-cfg/007b7da0.json",
+        "native-cfg/007dcc30.json"
+      ],
+      "scope": "Only the explicitly listed claim matrix is adjudicated. Full source document/appendix semantics are not blanket accepted. Historical metadata, research-round claims, authored unknowns and runtime/backend completion are not promoted.",
+      "limits": [
+        "Normal-return paths and valid object/container invariants only.",
+        "Source windows that visibly truncate instructions do not become new instruction-boundary claims; only entry-based CFG supports semantic conclusions.",
+        "Dynamic unknown targets, alias/concurrency/exception guarantees and gameplay are not certified."
+      ],
+      "raw_candidate_evidence": "direct-e8-candidates.json",
+      "source_byte_check": "source-assembly-audit.json"
+    },
+    {
+      "source": "kr-temp-roy/20261028-101203-chatgpt-web-roy-T08-186-manager-destructor-buffer-lock-order.md",
+      "sha256": "1e184d915ff9bcd2a15ff78f686d14e349831d8f16fd85bfce17763211c787fe",
+      "git_blob_sha": "2e9880fdf0b4a0bec0b2f92dfc401f0013439a1a",
+      "task": "T08",
+      "number": 186,
+      "bytes": 10372,
+      "historical_review_references": [
+        "shared/integrations/T01-20261028-10/README.md",
+        "shared/integrations/T01-20261028-26/README.md"
+      ],
+      "review_state": "BOUNDED_CLAIMS_PASS",
+      "verdict_basis": "Historical references are not automatically imported as a new semantic verdict.",
+      "review_completed": true,
+      "reviewer": "Codex T01 / review_t08_new",
+      "review_date": "2026-10-29 Asia/Taipei",
+      "original_document_full_pass": false,
+      "all_source_claims_verified": false,
+      "whole_task_native_complete": false,
+      "whole_function_semantics_complete": false,
+      "claim_matrix": [
+        {
+          "id": "T08-186-C1",
+          "statement": "EDI manager cleanup frees/zeros +4C/+50 elements.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s3",
+            "SEMANTIC-EVIDENCE.md#s6"
+          ]
+        },
+        {
+          "id": "T08-186-C2",
+          "statement": "+7C backing storage is conditionally freed and +7C/+80/+84 zeroed before DeleteCriticalSection(+64).",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s3",
+            "SEMANTIC-EVIDENCE.md#s6"
+          ]
+        },
+        {
+          "id": "T08-186-C3",
+          "statement": "+4C storage is freed last, then +4C/+50/+54 zeroed; no actor-tree erase is asserted.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s3",
+            "SEMANTIC-EVIDENCE.md#s6"
+          ]
+        },
+        {
+          "id": "T08-186-C4",
+          "statement": "Two stated direct callers supply manager in EDI; raw free-call candidate count is independently recomputed.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s3",
+            "SEMANTIC-EVIDENCE.md#s6"
+          ]
+        }
+      ],
+      "native_evidence": [
+        "native-cfg/007b7fd0.json",
+        "native-cfg/007b8030.json",
+        "native-cfg/007dd100.json",
+        "native-cfg/007b8090.json",
+        "native-cfg/007aad40.json",
+        "native-cfg/007ab020.json",
+        "native-cfg/007dcf40.json",
+        "native-cfg/007b7f30.json",
+        "native-cfg/007b8090.json"
+      ],
+      "scope": "Only the explicitly listed claim matrix is adjudicated. Full source document/appendix semantics are not blanket accepted. Historical metadata, research-round claims, authored unknowns and runtime/backend completion are not promoted.",
+      "limits": [
+        "Normal-return paths and valid object/container invariants only.",
+        "Source windows that visibly truncate instructions do not become new instruction-boundary claims; only entry-based CFG supports semantic conclusions.",
+        "Dynamic unknown targets, alias/concurrency/exception guarantees and gameplay are not certified."
+      ],
+      "raw_candidate_evidence": "direct-e8-candidates.json",
+      "source_byte_check": "source-assembly-audit.json"
+    },
+    {
+      "source": "kr-temp-roy/20261028-101203-chatgpt-web-roy-T08-187-acquire-wrapper-and-resource-return.md",
+      "sha256": "bc0e9037d4e8a9a3108e395837e583096ed68f6d25230db9d6577488c06e978c",
+      "git_blob_sha": "cf2b5d3fc74b6d0199837c957a214765ac14866f",
+      "task": "T08",
+      "number": 187,
+      "bytes": 11875,
+      "historical_review_references": [
+        "shared/integrations/T01-20261028-10/README.md"
+      ],
+      "review_state": "FAILED",
+      "verdict_basis": "Historical references are not automatically imported as a new semantic verdict.",
+      "review_completed": true,
+      "reviewer": "Codex T01 / review_t08_new",
+      "review_date": "2026-10-29 Asia/Taipei",
+      "original_document_full_pass": false,
+      "all_source_claims_verified": false,
+      "whole_task_native_complete": false,
+      "whole_function_semantics_complete": false,
+      "claim_matrix": [
+        {
+          "id": "T08-187-C1",
+          "statement": "Acquire +60 increment, pool pop and empty allocation are distinct from manager +5C.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s4"
+          ]
+        },
+        {
+          "id": "T08-187-C2",
+          "statement": "Pointer-slot release decrements the dereferenced resource owner+60; error-path balance remains unknown.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s4"
+          ]
+        },
+        {
+          "id": "T08-187-C3",
+          "statement": "The source locates push0x30 at 7F6FC1; native push is at 7F6FBF and 7F6FC1 is mov edi,eax.",
+          "decision": "CONTRADICTED",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s4"
+          ]
+        },
+        {
+          "id": "T08-187-C4",
+          "statement": "Wrapper vptr C511CC, resource pointer+2C, acquire call and null-wrapper return branch otherwise agree.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s4"
+          ]
+        }
+      ],
+      "native_evidence": [
+        "native-cfg/007dcfb0.json",
+        "native-cfg/007be5b0.json",
+        "native-cfg/007be5f0.json",
+        "native-cfg/007f6f50.json",
+        "native-cfg/007bd7e0.json",
+        "native-cfg/007bdf90.json"
+      ],
+      "scope": "Only the explicitly listed claim matrix is adjudicated. Full source document/appendix semantics are not blanket accepted. Historical metadata, research-round claims, authored unknowns and runtime/backend completion are not promoted.",
+      "limits": [
+        "Normal-return paths and valid object/container invariants only.",
+        "Source windows that visibly truncate instructions do not become new instruction-boundary claims; only entry-based CFG supports semantic conclusions.",
+        "Dynamic unknown targets, alias/concurrency/exception guarantees and gameplay are not certified."
+      ],
+      "raw_candidate_evidence": "direct-e8-candidates.json",
+      "source_byte_check": "source-assembly-audit.json",
+      "defect": {
+        "return_id": "T01-RETURN-T08-187-001",
+        "quote": "0x007F6FC1 push 0x30",
+        "counterexample": "0x7F6FBF=6a30 push0x30; 0x7F6FC1=8bf8 mov edi,eax. The latter saves manager before allocation.",
+        "repair": "Correct instruction address and recheck manager provenance, allocation/null edge, acquire and wrapper+2C storage; source version remains FAILED."
+      }
+    },
+    {
+      "source": "kr-temp-roy/20261028-101203-chatgpt-web-roy-T08-188-actor-registry-and-resource-lifetime-gap.md",
+      "sha256": "7c7e1dcd0c5c530aeeb56bca21712e22f40178e6cf49646fc25f78c71fdb49f0",
+      "git_blob_sha": "115bbbf2b6005d2920cc46f606763c3ff8b8d687",
+      "task": "T08",
+      "number": 188,
+      "bytes": 15223,
+      "historical_review_references": [
+        "shared/integrations/T01-20261028-10/README.md",
+        "shared/integrations/T01-20261028-27/README.md"
+      ],
+      "review_state": "BOUNDED_CLAIMS_PASS",
+      "verdict_basis": "Historical references are not automatically imported as a new semantic verdict.",
+      "review_completed": true,
+      "reviewer": "Codex T01 / review_t08_new",
+      "review_date": "2026-10-29 Asia/Taipei",
+      "original_document_full_pass": false,
+      "all_source_claims_verified": false,
+      "whole_task_native_complete": false,
+      "whole_function_semantics_complete": false,
+      "claim_matrix": [
+        {
+          "id": "T08-188-C1",
+          "statement": "Actor registration searches and inserts, without direct acquire/drain calls in its body.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s4",
+            "SEMANTIC-EVIDENCE.md#s7",
+            "SEMANTIC-EVIDENCE.md#s8",
+            "SEMANTIC-EVIDENCE.md#s9"
+          ]
+        },
+        {
+          "id": "T08-188-C2",
+          "statement": "Individual removal separates virtual object cleanup from node unlink/free.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s4",
+            "SEMANTIC-EVIDENCE.md#s7",
+            "SEMANTIC-EVIDENCE.md#s8",
+            "SEMANTIC-EVIDENCE.md#s9"
+          ]
+        },
+        {
+          "id": "T08-188-C3",
+          "statement": "Resource owner+60 decrement and +74/+78 gate lead to producer/immediate branches.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s4",
+            "SEMANTIC-EVIDENCE.md#s7",
+            "SEMANTIC-EVIDENCE.md#s8",
+            "SEMANTIC-EVIDENCE.md#s9"
+          ]
+        },
+        {
+          "id": "T08-188-C4",
+          "statement": "Component F4 provenance is a remaining investigation request, not a proved universal actor-wrapper identity.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s4",
+            "SEMANTIC-EVIDENCE.md#s7",
+            "SEMANTIC-EVIDENCE.md#s8",
+            "SEMANTIC-EVIDENCE.md#s9"
+          ]
+        }
+      ],
+      "native_evidence": [
+        "native-cfg/007dd1a0.json",
+        "native-cfg/007dd1f0.json",
+        "native-cfg/007bb350.json",
+        "native-cfg/00797930.json",
+        "native-cfg/007dcfb0.json",
+        "native-cfg/007be5b0.json",
+        "native-cfg/007be5f0.json",
+        "native-cfg/007f6f50.json",
+        "native-cfg/007bd7e0.json",
+        "native-cfg/007bdf90.json",
+        "native-cfg/004dfbc0.json",
+        "native-cfg/004dfc30.json",
+        "native-cfg/004dfc90.json",
+        "native-cfg/004dfd40.json",
+        "native-cfg/0082ef00.json",
+        "native-cfg/004dfe90.json",
+        "native-cfg/004d1710.json",
+        "native-cfg/004d1f80.json",
+        "native-cfg/004d18d0.json",
+        "native-cfg/004c8360.json",
+        "native-cfg/004c7b90.json",
+        "native-cfg/004dff30.json",
+        "native-cfg/0082ef00.json",
+        "native-cfg/0082f200.json"
+      ],
+      "scope": "Only the explicitly listed claim matrix is adjudicated. Full source document/appendix semantics are not blanket accepted. Historical metadata, research-round claims, authored unknowns and runtime/backend completion are not promoted.",
+      "limits": [
+        "Normal-return paths and valid object/container invariants only.",
+        "Source windows that visibly truncate instructions do not become new instruction-boundary claims; only entry-based CFG supports semantic conclusions.",
+        "Dynamic unknown targets, alias/concurrency/exception guarantees and gameplay are not certified."
+      ],
+      "raw_candidate_evidence": "direct-e8-candidates.json",
+      "source_byte_check": "source-assembly-audit.json"
+    },
+    {
+      "source": "kr-temp-roy/20261028-102919-chatgpt-web-roy-T08-189-registry-lookup-payload-vcall-boundary.md",
+      "sha256": "a4e4c41ad67da17f7f0a1f8925dee73b58904b2a622153fb282171049615e6a4",
+      "git_blob_sha": "a593f50abda9dc3523e07c727c8eeab6d3ae4514",
+      "task": "T08",
+      "number": 189,
+      "bytes": 14778,
+      "historical_review_references": [
+        "shared/integrations/T01-20261028-10/README.md",
+        "shared/integrations/T01-20261028-26/README.md"
+      ],
+      "review_state": "BOUNDED_CLAIMS_PASS",
+      "verdict_basis": "Historical references are not automatically imported as a new semantic verdict.",
+      "review_completed": true,
+      "reviewer": "Codex T01 / review_t08_new",
+      "review_date": "2026-10-29 Asia/Taipei",
+      "original_document_full_pass": false,
+      "all_source_claims_verified": false,
+      "whole_task_native_complete": false,
+      "whole_function_semantics_complete": false,
+      "claim_matrix": [
+        {
+          "id": "T08-189-C1",
+          "statement": "Lookup result is compared with index+4 sentinel before accessing payload+24.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s3",
+            "SEMANTIC-EVIDENCE.md#s5"
+          ]
+        },
+        {
+          "id": "T08-189-C2",
+          "statement": "Vtable+C callback return zero gates vtable+0(1), then node erase; callback is not itself identified as destructor.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s3",
+            "SEMANTIC-EVIDENCE.md#s5"
+          ]
+        },
+        {
+          "id": "T08-189-C3",
+          "statement": "Manager final-reference caller uses [FE173C]; concrete payload vptr is expressly unresolved.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s3",
+            "SEMANTIC-EVIDENCE.md#s5"
+          ]
+        },
+        {
+          "id": "T08-189-C4",
+          "statement": "Multiple raw lookup caller candidates exist; same helper does not prove same owner instance.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s3",
+            "SEMANTIC-EVIDENCE.md#s5"
+          ]
+        }
+      ],
+      "native_evidence": [
+        "native-cfg/007b7fd0.json",
+        "native-cfg/007b8030.json",
+        "native-cfg/007dd100.json",
+        "native-cfg/007b8090.json",
+        "native-cfg/007aad40.json",
+        "native-cfg/007ab020.json",
+        "native-cfg/007dc510.json",
+        "native-cfg/007b86f0.json",
+        "native-cfg/007b8680.json",
+        "native-cfg/00719b20.json",
+        "native-cfg/00719b90.json",
+        "native-cfg/005525e0.json",
+        "native-cfg/007b82d0.json",
+        "native-cfg/007dc3d0.json",
+        "native-cfg/007b7da0.json",
+        "native-cfg/007dcc30.json"
+      ],
+      "scope": "Only the explicitly listed claim matrix is adjudicated. Full source document/appendix semantics are not blanket accepted. Historical metadata, research-round claims, authored unknowns and runtime/backend completion are not promoted.",
+      "limits": [
+        "Normal-return paths and valid object/container invariants only.",
+        "Source windows that visibly truncate instructions do not become new instruction-boundary claims; only entry-based CFG supports semantic conclusions.",
+        "Dynamic unknown targets, alias/concurrency/exception guarantees and gameplay are not certified."
+      ],
+      "raw_candidate_evidence": "direct-e8-candidates.json",
+      "source_byte_check": "source-assembly-audit.json"
+    },
+    {
+      "source": "kr-temp-roy/20261028-102919-chatgpt-web-roy-T08-190-resource-counter-acquire-release-balance.md",
+      "sha256": "016aca4717b63a45099131fe8fd2ff7d61e748a307db9165363003d2aa8f8c3d",
+      "git_blob_sha": "a633fc34c161afd168b74ba1f35a6fcf3fd17c33",
+      "task": "T08",
+      "number": 190,
+      "bytes": 15139,
+      "historical_review_references": [
+        "shared/integrations/T01-20261028-10/README.md",
+        "shared/integrations/T01-20261028-27/README.md"
+      ],
+      "review_state": "BOUNDED_CLAIMS_PASS",
+      "verdict_basis": "Historical references are not automatically imported as a new semantic verdict.",
+      "review_completed": true,
+      "reviewer": "Codex T01 / review_t08_new",
+      "review_date": "2026-10-29 Asia/Taipei",
+      "original_document_full_pass": false,
+      "all_source_claims_verified": false,
+      "whole_task_native_complete": false,
+      "whole_function_semantics_complete": false,
+      "claim_matrix": [
+        {
+          "id": "T08-190-C1",
+          "statement": "Acquire +60 increment precedes allocation and locked pool access; nonempty pops/prepares, empty allocates.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s4"
+          ]
+        },
+        {
+          "id": "T08-190-C2",
+          "statement": "Pointer-slot release has corresponding owner+60 decrement and conditionally reaches producer.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s4"
+          ]
+        },
+        {
+          "id": "T08-190-C3",
+          "statement": "Mode+44 and final-reference+5C are distinct fields; strict balance, concurrency and failures remain unknown.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s4"
+          ]
+        }
+      ],
+      "native_evidence": [
+        "native-cfg/007dd1a0.json",
+        "native-cfg/007dd1f0.json",
+        "native-cfg/007bb350.json",
+        "native-cfg/00797930.json",
+        "native-cfg/007dcfb0.json",
+        "native-cfg/007be5b0.json",
+        "native-cfg/007be5f0.json",
+        "native-cfg/007f6f50.json",
+        "native-cfg/007bd7e0.json",
+        "native-cfg/007bdf90.json"
+      ],
+      "scope": "Only the explicitly listed claim matrix is adjudicated. Full source document/appendix semantics are not blanket accepted. Historical metadata, research-round claims, authored unknowns and runtime/backend completion are not promoted.",
+      "limits": [
+        "Normal-return paths and valid object/container invariants only.",
+        "Source windows that visibly truncate instructions do not become new instruction-boundary claims; only entry-based CFG supports semantic conclusions.",
+        "Dynamic unknown targets, alias/concurrency/exception guarantees and gameplay are not certified."
+      ],
+      "raw_candidate_evidence": "direct-e8-candidates.json",
+      "source_byte_check": "source-assembly-audit.json"
+    },
+    {
+      "source": "kr-temp-roy/20261028-102919-chatgpt-web-roy-T08-191-wrapper-binding-registry-integration.md",
+      "sha256": "e9aa08460ef684e777394477d0006046474183165d94f7949f215b525803ca6d",
+      "git_blob_sha": "728bf5f312d0959def19e48b53bc3f25cd28a478",
+      "task": "T08",
+      "number": 191,
+      "bytes": 17001,
+      "historical_review_references": [
+        "shared/integrations/T01-20261028-10/README.md",
+        "shared/integrations/T01-20261028-27/README.md"
+      ],
+      "review_state": "BOUNDED_CLAIMS_PASS",
+      "verdict_basis": "Historical references are not automatically imported as a new semantic verdict.",
+      "review_completed": true,
+      "reviewer": "Codex T01 / review_t08_new",
+      "review_date": "2026-10-29 Asia/Taipei",
+      "original_document_full_pass": false,
+      "all_source_claims_verified": false,
+      "whole_task_native_complete": false,
+      "whole_function_semantics_complete": false,
+      "claim_matrix": [
+        {
+          "id": "T08-191-C1",
+          "statement": "Wrapper-size30, resource-size7C and wrapper resource+2C are separate allocations/fields.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s1",
+            "SEMANTIC-EVIDENCE.md#s4",
+            "SEMANTIC-EVIDENCE.md#s5"
+          ]
+        },
+        {
+          "id": "T08-191-C2",
+          "statement": "New resource mode gate conditionally invokes name lookup/provider callback; resource existence does not require mode.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s1",
+            "SEMANTIC-EVIDENCE.md#s4",
+            "SEMANTIC-EVIDENCE.md#s5"
+          ]
+        },
+        {
+          "id": "T08-191-C3",
+          "statement": "Nested precleanup differs from name-index conditional removal.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s1",
+            "SEMANTIC-EVIDENCE.md#s4",
+            "SEMANTIC-EVIDENCE.md#s5"
+          ]
+        },
+        {
+          "id": "T08-191-C4",
+          "statement": "Heap index [FE173C] and embedded index FE1740 are separate objects; failure symmetry and concrete callback types remain unknown.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s1",
+            "SEMANTIC-EVIDENCE.md#s4",
+            "SEMANTIC-EVIDENCE.md#s5"
+          ]
+        }
+      ],
+      "native_evidence": [
+        "native-cfg/007be0f0.json",
+        "native-cfg/007bd850.json",
+        "native-cfg/0089120c.json",
+        "native-cfg/007dcfb0.json",
+        "native-cfg/007be5b0.json",
+        "native-cfg/007be5f0.json",
+        "native-cfg/007f6f50.json",
+        "native-cfg/007bd7e0.json",
+        "native-cfg/007bdf90.json",
+        "native-cfg/007dc510.json",
+        "native-cfg/007b86f0.json",
+        "native-cfg/007b8680.json",
+        "native-cfg/00719b20.json",
+        "native-cfg/00719b90.json",
+        "native-cfg/005525e0.json",
+        "native-cfg/007b82d0.json",
+        "native-cfg/007dc3d0.json",
+        "native-cfg/007b7da0.json",
+        "native-cfg/007dcc30.json"
+      ],
+      "scope": "Only the explicitly listed claim matrix is adjudicated. Full source document/appendix semantics are not blanket accepted. Historical metadata, research-round claims, authored unknowns and runtime/backend completion are not promoted.",
+      "limits": [
+        "Normal-return paths and valid object/container invariants only.",
+        "Source windows that visibly truncate instructions do not become new instruction-boundary claims; only entry-based CFG supports semantic conclusions.",
+        "Dynamic unknown targets, alias/concurrency/exception guarantees and gameplay are not certified."
+      ],
+      "raw_candidate_evidence": "direct-e8-candidates.json",
+      "source_byte_check": "source-assembly-audit.json"
+    },
+    {
+      "source": "kr-temp-roy/20261028-102919-chatgpt-web-roy-T08-192-0007-actor-component-release-crosscheck.md",
+      "sha256": "05f8cbff5755d0b85ab7b80eb9a5411d4a9c317c158b71b20e779f82a4cafa52",
+      "git_blob_sha": "b94d840de16d8b1d6b43d9132993b52b8ca03175",
+      "task": "T08",
+      "number": 192,
+      "bytes": 17326,
+      "historical_review_references": [
+        "shared/integrations/T01-20261028-10/README.md",
+        "shared/integrations/T01-20261028-27/README.md"
+      ],
+      "review_state": "BOUNDED_CLAIMS_PASS",
+      "verdict_basis": "Historical references are not automatically imported as a new semantic verdict.",
+      "review_completed": true,
+      "reviewer": "Codex T01 / review_t08_new",
+      "review_date": "2026-10-29 Asia/Taipei",
+      "original_document_full_pass": false,
+      "all_source_claims_verified": false,
+      "whole_task_native_complete": false,
+      "whole_function_semantics_complete": false,
+      "claim_matrix": [
+        {
+          "id": "T08-192-C1",
+          "statement": "Actor key search/insert and removal do not directly call drain.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s4",
+            "SEMANTIC-EVIDENCE.md#s7",
+            "SEMANTIC-EVIDENCE.md#s8",
+            "SEMANTIC-EVIDENCE.md#s9"
+          ]
+        },
+        {
+          "id": "T08-192-C2",
+          "statement": "4C83C0 local component path has a direct release call, without universal wrapper ownership claim.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s4",
+            "SEMANTIC-EVIDENCE.md#s7",
+            "SEMANTIC-EVIDENCE.md#s8",
+            "SEMANTIC-EVIDENCE.md#s9"
+          ]
+        },
+        {
+          "id": "T08-192-C3",
+          "statement": "The source explicitly leaves the earlier create chain partially confirmed and does not newly certify it.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s4",
+            "SEMANTIC-EVIDENCE.md#s7",
+            "SEMANTIC-EVIDENCE.md#s8",
+            "SEMANTIC-EVIDENCE.md#s9"
+          ]
+        },
+        {
+          "id": "T08-192-C4",
+          "statement": "Concrete actor/component/wrapper/resource/manager pointer identity remains unresolved.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s2",
+            "SEMANTIC-EVIDENCE.md#s4",
+            "SEMANTIC-EVIDENCE.md#s7",
+            "SEMANTIC-EVIDENCE.md#s8",
+            "SEMANTIC-EVIDENCE.md#s9"
+          ]
+        }
+      ],
+      "native_evidence": [
+        "native-cfg/007dd1a0.json",
+        "native-cfg/007dd1f0.json",
+        "native-cfg/007bb350.json",
+        "native-cfg/00797930.json",
+        "native-cfg/007dcfb0.json",
+        "native-cfg/007be5b0.json",
+        "native-cfg/007be5f0.json",
+        "native-cfg/007f6f50.json",
+        "native-cfg/007bd7e0.json",
+        "native-cfg/007bdf90.json",
+        "native-cfg/004dfbc0.json",
+        "native-cfg/004dfc30.json",
+        "native-cfg/004dfc90.json",
+        "native-cfg/004dfd40.json",
+        "native-cfg/0082ef00.json",
+        "native-cfg/004dfe90.json",
+        "native-cfg/004d1710.json",
+        "native-cfg/004d1f80.json",
+        "native-cfg/004d18d0.json",
+        "native-cfg/004c8360.json",
+        "native-cfg/004c7b90.json",
+        "native-cfg/004dff30.json",
+        "native-cfg/0082ef00.json",
+        "native-cfg/0082f200.json"
+      ],
+      "scope": "Only the explicitly listed claim matrix is adjudicated. Full source document/appendix semantics are not blanket accepted. Historical metadata, research-round claims, authored unknowns and runtime/backend completion are not promoted.",
+      "limits": [
+        "Normal-return paths and valid object/container invariants only.",
+        "Source windows that visibly truncate instructions do not become new instruction-boundary claims; only entry-based CFG supports semantic conclusions.",
+        "Dynamic unknown targets, alias/concurrency/exception guarantees and gameplay are not certified."
+      ],
+      "raw_candidate_evidence": "direct-e8-candidates.json",
+      "source_byte_check": "source-assembly-audit.json"
+    },
+    {
+      "source": "kr-temp-roy/20261028-103715-chatgpt-web-roy-T08-193-cmonster-removal-vtable-precleanup-closure.md",
+      "sha256": "2844039c28979bc3bee36e35288c4f3b6a55b38de6bcf65c0d8a5e387d2ff096",
+      "git_blob_sha": "a5b63c691aefc0bb076283d528f8ea4d912eab4f",
+      "task": "T08",
+      "number": 193,
+      "bytes": 18651,
+      "historical_review_references": [
+        "shared/integrations/T01-20261028-10/README.md",
+        "shared/integrations/T01-20261028-22/README.md"
+      ],
+      "review_state": "BOUNDED_CLAIMS_PASS",
+      "verdict_basis": "Historical references are not automatically imported as a new semantic verdict.",
+      "review_completed": true,
+      "reviewer": "Codex T01 / review_t08_new",
+      "review_date": "2026-10-29 Asia/Taipei",
+      "original_document_full_pass": false,
+      "all_source_claims_verified": false,
+      "whole_task_native_complete": false,
+      "whole_function_semantics_complete": false,
+      "claim_matrix": [
+        {
+          "id": "T08-193-C1",
+          "statement": "Constructor writes C0C9DC main and C0CA64 secondary vptr at the stated offsets.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s4",
+            "SEMANTIC-EVIDENCE.md#s7",
+            "SEMANTIC-EVIDENCE.md#s8"
+          ]
+        },
+        {
+          "id": "T08-193-C2",
+          "statement": "The seven listed main vtable DWORDs match original .rdata; for this exact table +14 targets 4D1F80->4C8360 and +0 targets 4D18D0.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s4",
+            "SEMANTIC-EVIDENCE.md#s7",
+            "SEMANTIC-EVIDENCE.md#s8"
+          ]
+        },
+        {
+          "id": "T08-193-C3",
+          "statement": "Deleting wrapper resets vptrs, calls base4C7B90 and tests argument bit0 before freeing the same actor.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s4",
+            "SEMANTIC-EVIDENCE.md#s7",
+            "SEMANTIC-EVIDENCE.md#s8"
+          ]
+        },
+        {
+          "id": "T08-193-C4",
+          "statement": "Precleanup uses child+8 secondary vcall+8, then conditional resource-slot release for actor+364 and 128 slots at+164.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s4",
+            "SEMANTIC-EVIDENCE.md#s7",
+            "SEMANTIC-EVIDENCE.md#s8"
+          ]
+        },
+        {
+          "id": "T08-193-C5",
+          "statement": "These calls pass &item+24 rather than actor; pointer array slots are not all cleared here.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s4",
+            "SEMANTIC-EVIDENCE.md#s7",
+            "SEMANTIC-EVIDENCE.md#s8"
+          ]
+        },
+        {
+          "id": "T08-193-C6",
+          "statement": "Other dynamic actor types, unknown child target and complete resource ownership remain authored unknowns.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s4",
+            "SEMANTIC-EVIDENCE.md#s7",
+            "SEMANTIC-EVIDENCE.md#s8"
+          ]
+        }
+      ],
+      "native_evidence": [
+        "native-cfg/007dcfb0.json",
+        "native-cfg/007be5b0.json",
+        "native-cfg/007be5f0.json",
+        "native-cfg/007f6f50.json",
+        "native-cfg/007bd7e0.json",
+        "native-cfg/007bdf90.json",
+        "native-cfg/004dfbc0.json",
+        "native-cfg/004dfc30.json",
+        "native-cfg/004dfc90.json",
+        "native-cfg/004dfd40.json",
+        "native-cfg/0082ef00.json",
+        "native-cfg/004dfe90.json",
+        "native-cfg/004d1710.json",
+        "native-cfg/004d1f80.json",
+        "native-cfg/004d18d0.json",
+        "native-cfg/004c8360.json",
+        "native-cfg/004c7b90.json"
+      ],
+      "scope": "Only the explicitly listed claim matrix is adjudicated. Full source document/appendix semantics are not blanket accepted. Historical metadata, research-round claims, authored unknowns and runtime/backend completion are not promoted.",
+      "limits": [
+        "Normal-return paths and valid object/container invariants only.",
+        "Source windows that visibly truncate instructions do not become new instruction-boundary claims; only entry-based CFG supports semantic conclusions.",
+        "Dynamic unknown targets, alias/concurrency/exception guarantees and gameplay are not certified."
+      ],
+      "raw_candidate_evidence": "direct-e8-candidates.json",
+      "source_byte_check": "source-assembly-audit.json"
+    },
+    {
+      "source": "kr-temp-roy/20261028-110153-chatgpt-web-roy-T08-194-bulk-clear-virtual-precleanup.md",
+      "sha256": "6f51a30313002bb55b56e72bd9f7b3cf8e1184e0c40c43be26485e1a65b61553",
+      "git_blob_sha": "ee3ed3098a9a0a4059f99a0430be4ca151f8e8a0",
+      "task": "T08",
+      "number": 194,
+      "bytes": 7922,
+      "historical_review_references": [
+        "shared/integrations/T01-20261028-10/README.md",
+        "shared/integrations/T01-20261028-22/README.md"
+      ],
+      "review_state": "BOUNDED_CLAIMS_PASS",
+      "verdict_basis": "Historical references are not automatically imported as a new semantic verdict.",
+      "review_completed": true,
+      "reviewer": "Codex T01 / review_t08_new",
+      "review_date": "2026-10-29 Asia/Taipei",
+      "original_document_full_pass": false,
+      "all_source_claims_verified": false,
+      "whole_task_native_complete": false,
+      "whole_function_semantics_complete": false,
+      "claim_matrix": [
+        {
+          "id": "T08-194-C1",
+          "statement": "Full clear obtains owner/sentinel, iterates nonnull actor payloads with +14 then +0(1).",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s7",
+            "SEMANTIC-EVIDENCE.md#s8"
+          ]
+        },
+        {
+          "id": "T08-194-C2",
+          "statement": "It traverses the main tree and calls 823850 once, without per-node 7B6890 calls.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s7",
+            "SEMANTIC-EVIDENCE.md#s8"
+          ]
+        },
+        {
+          "id": "T08-194-C3",
+          "statement": "After tree clear the separate FBA7A4 global receives vtable+14 callback.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s7",
+            "SEMANTIC-EVIDENCE.md#s8"
+          ]
+        },
+        {
+          "id": "T08-194-C4",
+          "statement": "CMonster-table case conditionally maps to the same precleanup/deleting targets; no universal runtime class identity is asserted.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s7",
+            "SEMANTIC-EVIDENCE.md#s8"
+          ]
+        }
+      ],
+      "native_evidence": [
+        "native-cfg/004dfbc0.json",
+        "native-cfg/004dfc30.json",
+        "native-cfg/004dfc90.json",
+        "native-cfg/004dfd40.json",
+        "native-cfg/0082ef00.json",
+        "native-cfg/004dfe90.json",
+        "native-cfg/004d1710.json",
+        "native-cfg/004d1f80.json",
+        "native-cfg/004d18d0.json",
+        "native-cfg/004c8360.json",
+        "native-cfg/004c7b90.json"
+      ],
+      "scope": "Only the explicitly listed claim matrix is adjudicated. Full source document/appendix semantics are not blanket accepted. Historical metadata, research-round claims, authored unknowns and runtime/backend completion are not promoted.",
+      "limits": [
+        "Normal-return paths and valid object/container invariants only.",
+        "Source windows that visibly truncate instructions do not become new instruction-boundary claims; only entry-based CFG supports semantic conclusions.",
+        "Dynamic unknown targets, alias/concurrency/exception guarantees and gameplay are not certified."
+      ],
+      "raw_candidate_evidence": "direct-e8-candidates.json",
+      "source_byte_check": "source-assembly-audit.json"
+    },
+    {
+      "source": "kr-temp-roy/20261028-110153-chatgpt-web-roy-T08-195-child-interface-precleanup-abi.md",
+      "sha256": "8f75f47c0e017bbe8c2fb99ce003ae8008cd9c01036d6b06b752775f77d9b459",
+      "git_blob_sha": "90ed8a670620ebe87c6532ebcda881607d410a8f",
+      "task": "T08",
+      "number": 195,
+      "bytes": 5433,
+      "historical_review_references": [
+        "shared/integrations/T01-20261028-10/README.md",
+        "shared/integrations/T01-20261028-22/README.md"
+      ],
+      "review_state": "BOUNDED_CLAIMS_PASS",
+      "verdict_basis": "Historical references are not automatically imported as a new semantic verdict.",
+      "review_completed": true,
+      "reviewer": "Codex T01 / review_t08_new",
+      "review_date": "2026-10-29 Asia/Taipei",
+      "original_document_full_pass": false,
+      "all_source_claims_verified": false,
+      "whole_task_native_complete": false,
+      "whole_function_semantics_complete": false,
+      "claim_matrix": [
+        {
+          "id": "T08-195-C1",
+          "statement": "Precleanup obtains actor+15C child, adjusts ECX to child+8, then loads that secondary vptr slot+8.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s4",
+            "SEMANTIC-EVIDENCE.md#s8"
+          ]
+        },
+        {
+          "id": "T08-195-C2",
+          "statement": "This occurs before actor+364 and 128 +164 item resource-slot releases.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s4",
+            "SEMANTIC-EVIDENCE.md#s8"
+          ]
+        },
+        {
+          "id": "T08-195-C3",
+          "statement": "Actor main vptr, child primary vptr, child+8 secondary vptr, and actor+F0 secondary member are distinct address origins.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s4",
+            "SEMANTIC-EVIDENCE.md#s8"
+          ]
+        },
+        {
+          "id": "T08-195-C4",
+          "statement": "Concrete child constructor/vptr target and complete ownership release remain unresolved.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s4",
+            "SEMANTIC-EVIDENCE.md#s8"
+          ]
+        }
+      ],
+      "native_evidence": [
+        "native-cfg/007dcfb0.json",
+        "native-cfg/007be5b0.json",
+        "native-cfg/007be5f0.json",
+        "native-cfg/007f6f50.json",
+        "native-cfg/007bd7e0.json",
+        "native-cfg/007bdf90.json",
+        "native-cfg/004dfe90.json",
+        "native-cfg/004d1710.json",
+        "native-cfg/004d1f80.json",
+        "native-cfg/004d18d0.json",
+        "native-cfg/004c8360.json",
+        "native-cfg/004c7b90.json"
+      ],
+      "scope": "Only the explicitly listed claim matrix is adjudicated. Full source document/appendix semantics are not blanket accepted. Historical metadata, research-round claims, authored unknowns and runtime/backend completion are not promoted.",
+      "limits": [
+        "Normal-return paths and valid object/container invariants only.",
+        "Source windows that visibly truncate instructions do not become new instruction-boundary claims; only entry-based CFG supports semantic conclusions.",
+        "Dynamic unknown targets, alias/concurrency/exception guarantees and gameplay are not certified."
+      ],
+      "raw_candidate_evidence": "direct-e8-candidates.json",
+      "source_byte_check": "source-assembly-audit.json"
+    },
+    {
+      "source": "kr-temp-roy/20261028-110153-chatgpt-web-roy-T08-196-composite-id-secondary-tree-remove.md",
+      "sha256": "e8b1564e8b92aaf59ca2fcffd9e3ca8c834f953811e348a6a8a6ea30e03665b0",
+      "git_blob_sha": "b1879330f55b5d7b6d38a697a46a0f40ce3b6aca",
+      "task": "T08",
+      "number": 196,
+      "bytes": 12866,
+      "historical_review_references": [
+        "shared/integrations/T01-20261028-10/README.md"
+      ],
+      "review_state": "FAILED",
+      "verdict_basis": "Historical references are not automatically imported as a new semantic verdict.",
+      "review_completed": true,
+      "reviewer": "Codex T01 / review_t08_new",
+      "review_date": "2026-10-29 Asia/Taipei",
+      "original_document_full_pass": false,
+      "all_source_claims_verified": false,
+      "whole_task_native_complete": false,
+      "whole_function_semantics_complete": false,
+      "claim_matrix": [
+        {
+          "id": "T08-196-C1",
+          "statement": "The source attributes 4DFC90 to owner+18/1C second tree; 4DFC96 lea edi,[eax+8] and subsequent sentinel +4 prove main tree+8/C instead.",
+          "decision": "CONTRADICTED",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s7",
+            "SEMANTIC-EVIDENCE.md#s8"
+          ]
+        },
+        {
+          "id": "T08-196-C2",
+          "statement": "The source also writes EDI=[EAX+8]; actual instruction produces the ADDRESS of owner+8, not its stored contents.",
+          "decision": "CONTRADICTED",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s7",
+            "SEMANTIC-EVIDENCE.md#s8"
+          ]
+        },
+        {
+          "id": "T08-196-C3",
+          "statement": "Actor+88 matching, virtual precleanup/deleting calls and erase are present, but the two-tree premise and derived sharing-risk narrative are not supported.",
+          "decision": "CONTRADICTED",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s7",
+            "SEMANTIC-EVIDENCE.md#s8"
+          ]
+        },
+        {
+          "id": "T08-196-C4",
+          "statement": "Conditional CMonster-target mapping remains a separately supported fact, not a repair of the wrong source version.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s7",
+            "SEMANTIC-EVIDENCE.md#s8"
+          ]
+        }
+      ],
+      "native_evidence": [
+        "native-cfg/004dfbc0.json",
+        "native-cfg/004dfc30.json",
+        "native-cfg/004dfc90.json",
+        "native-cfg/004dfd40.json",
+        "native-cfg/0082ef00.json",
+        "native-cfg/004dfe90.json",
+        "native-cfg/004d1710.json",
+        "native-cfg/004d1f80.json",
+        "native-cfg/004d18d0.json",
+        "native-cfg/004c8360.json",
+        "native-cfg/004c7b90.json"
+      ],
+      "scope": "Only the explicitly listed claim matrix is adjudicated. Full source document/appendix semantics are not blanket accepted. Historical metadata, research-round claims, authored unknowns and runtime/backend completion are not promoted.",
+      "limits": [
+        "Normal-return paths and valid object/container invariants only.",
+        "Source windows that visibly truncate instructions do not become new instruction-boundary claims; only entry-based CFG supports semantic conclusions.",
+        "Dynamic unknown targets, alias/concurrency/exception guarantees and gameplay are not certified."
+      ],
+      "raw_candidate_evidence": "direct-e8-candidates.json",
+      "source_byte_check": "source-assembly-audit.json",
+      "defect": {
+        "return_id": "T01-RETURN-T08-196-001",
+        "quote": "0x004DFC90 對 owner+0x18 的第二樹",
+        "counterexample": "0x4DFC96=8d7808 lea edi,[eax+8]; subsequent sentinel is[edi+4]=owner+C. Secondary tree is the separate4DFC30 ESI+18 path.",
+        "repair": "Correct tree base, sentinel and LEA addressing; remove/re-evaluate dual-tree ownership deductions and revalidate complete affected CFG. T08-197 correctly distinguishes the two paths.",
+        "later_source_number": 197
+      }
+    },
+    {
+      "source": "kr-temp-roy/20261028-111046-chatgpt-web-roy-T08-197-secondary-tree-key-removal.md",
+      "sha256": "555a88a78907b2deb1ea80d552ec64f41d0c52d4d52818e5d9faf3bbe6646ea3",
+      "git_blob_sha": "4812aa8da49c40647538206679b414753a4c6e5e",
+      "task": "T08",
+      "number": 197,
+      "bytes": 8176,
+      "historical_review_references": [
+        "shared/integrations/T01-20261028-10/README.md",
+        "shared/integrations/T01-20261028-23/README.md"
+      ],
+      "review_state": "BOUNDED_CLAIMS_PASS",
+      "verdict_basis": "Historical references are not automatically imported as a new semantic verdict.",
+      "review_completed": true,
+      "reviewer": "Codex T01 / review_t08_new",
+      "review_date": "2026-10-29 Asia/Taipei",
+      "original_document_full_pass": false,
+      "all_source_claims_verified": false,
+      "whole_task_native_complete": false,
+      "whole_function_semantics_complete": false,
+      "claim_matrix": [
+        {
+          "id": "T08-197-C1",
+          "statement": "4DFC30 uses ESI+18 tree and 8438C0, independently from main-tree find.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s7"
+          ]
+        },
+        {
+          "id": "T08-197-C2",
+          "statement": "Nonzero owner+F8 is cleared only when its first DWORD equals the key.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s7"
+          ]
+        },
+        {
+          "id": "T08-197-C3",
+          "statement": "Nonnull secondary payload is directly freed without actor+14/+0 virtual calls.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s7"
+          ]
+        },
+        {
+          "id": "T08-197-C4",
+          "statement": "4DFC90 traverses EAX-owner+8 main tree and filters payload+88, correcting the earlier second-tree attribution.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s7"
+          ]
+        }
+      ],
+      "native_evidence": [
+        "native-cfg/004dfbc0.json",
+        "native-cfg/004dfc30.json",
+        "native-cfg/004dfc90.json",
+        "native-cfg/004dfd40.json",
+        "native-cfg/0082ef00.json"
+      ],
+      "scope": "Only the explicitly listed claim matrix is adjudicated. Full source document/appendix semantics are not blanket accepted. Historical metadata, research-round claims, authored unknowns and runtime/backend completion are not promoted.",
+      "limits": [
+        "Normal-return paths and valid object/container invariants only.",
+        "Source windows that visibly truncate instructions do not become new instruction-boundary claims; only entry-based CFG supports semantic conclusions.",
+        "Dynamic unknown targets, alias/concurrency/exception guarantees and gameplay are not certified."
+      ],
+      "raw_candidate_evidence": "direct-e8-candidates.json",
+      "source_byte_check": "source-assembly-audit.json"
+    },
+    {
+      "source": "kr-temp-roy/20261028-111046-chatgpt-web-roy-T08-198-conditional-type-removal.md",
+      "sha256": "d7b0843e14833ae041e57223731e378620e265b0b0aa011d4c6f91b061934ff4",
+      "git_blob_sha": "0a143c3b3a9fa33976e536dc03848041dcd15ec1",
+      "task": "T08",
+      "number": 198,
+      "bytes": 8834,
+      "historical_review_references": [
+        "shared/integrations/T01-20261028-10/README.md",
+        "shared/integrations/T01-20261028-23/README.md"
+      ],
+      "review_state": "BOUNDED_CLAIMS_PASS",
+      "verdict_basis": "Historical references are not automatically imported as a new semantic verdict.",
+      "review_completed": true,
+      "reviewer": "Codex T01 / review_t08_new",
+      "review_date": "2026-10-29 Asia/Taipei",
+      "original_document_full_pass": false,
+      "all_source_claims_verified": false,
+      "whole_task_native_complete": false,
+      "whole_function_semantics_complete": false,
+      "claim_matrix": [
+        {
+          "id": "T08-198-C1",
+          "statement": "Main predicate zero-extends BYTE payload+4 and compares against WORD stack parameter.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s7"
+          ]
+        },
+        {
+          "id": "T08-198-C2",
+          "statement": "Low-byte0/1/6/7 predicates gate extra child/resource processing only; all matched actors then reach common virtual deletion.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s7"
+          ]
+        },
+        {
+          "id": "T08-198-C3",
+          "statement": "Actor+15C and +370 tests precede the two extra helpers; no official gameplay category is asserted.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s7"
+          ]
+        },
+        {
+          "id": "T08-198-C4",
+          "statement": "Nonmatches traverse successor without deletion, matches use erase output to continue.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s7"
+          ]
+        }
+      ],
+      "native_evidence": [
+        "native-cfg/004dfbc0.json",
+        "native-cfg/004dfc30.json",
+        "native-cfg/004dfc90.json",
+        "native-cfg/004dfd40.json",
+        "native-cfg/0082ef00.json"
+      ],
+      "scope": "Only the explicitly listed claim matrix is adjudicated. Full source document/appendix semantics are not blanket accepted. Historical metadata, research-round claims, authored unknowns and runtime/backend completion are not promoted.",
+      "limits": [
+        "Normal-return paths and valid object/container invariants only.",
+        "Source windows that visibly truncate instructions do not become new instruction-boundary claims; only entry-based CFG supports semantic conclusions.",
+        "Dynamic unknown targets, alias/concurrency/exception guarantees and gameplay are not certified."
+      ],
+      "raw_candidate_evidence": "direct-e8-candidates.json",
+      "source_byte_check": "source-assembly-audit.json"
+    },
+    {
+      "source": "kr-temp-roy/20261028-111046-chatgpt-web-roy-T08-199-bulk-removal-sentinel.md",
+      "sha256": "58e6bb6e581d65a20e65ce728ddf4df58d6824142a4971213e64552905bb24c6",
+      "git_blob_sha": "195f91121f21352ad2b8f26d16fb534ce4d84a09",
+      "task": "T08",
+      "number": 199,
+      "bytes": 11923,
+      "historical_review_references": [
+        "shared/integrations/T01-20261028-10/README.md",
+        "shared/integrations/T01-20261028-23/README.md"
+      ],
+      "review_state": "BOUNDED_CLAIMS_PASS",
+      "verdict_basis": "Historical references are not automatically imported as a new semantic verdict.",
+      "review_completed": true,
+      "reviewer": "Codex T01 / review_t08_new",
+      "review_date": "2026-10-29 Asia/Taipei",
+      "original_document_full_pass": false,
+      "all_source_claims_verified": false,
+      "whole_task_native_complete": false,
+      "whole_function_semantics_complete": false,
+      "claim_matrix": [
+        {
+          "id": "T08-199-C1",
+          "statement": "Main-tree full clear reads owner+C sentinel and iterates node+10 actors.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s7",
+            "SEMANTIC-EVIDENCE.md#s8"
+          ]
+        },
+        {
+          "id": "T08-199-C2",
+          "statement": "Nonempty payload +14 then +0(1) precedes one overall tree clear.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s7",
+            "SEMANTIC-EVIDENCE.md#s8"
+          ]
+        },
+        {
+          "id": "T08-199-C3",
+          "statement": "FBA7A4 global +14 callback is distinct from actor +14.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s7",
+            "SEMANTIC-EVIDENCE.md#s8"
+          ]
+        },
+        {
+          "id": "T08-199-C4",
+          "statement": "Conditional erase uses helper output iterator; bulk clear preserves nodes until overall node destruction.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s7",
+            "SEMANTIC-EVIDENCE.md#s8"
+          ]
+        }
+      ],
+      "native_evidence": [
+        "native-cfg/004dfbc0.json",
+        "native-cfg/004dfc30.json",
+        "native-cfg/004dfc90.json",
+        "native-cfg/004dfd40.json",
+        "native-cfg/0082ef00.json",
+        "native-cfg/004dfe90.json",
+        "native-cfg/004d1710.json",
+        "native-cfg/004d1f80.json",
+        "native-cfg/004d18d0.json",
+        "native-cfg/004c8360.json",
+        "native-cfg/004c7b90.json"
+      ],
+      "scope": "Only the explicitly listed claim matrix is adjudicated. Full source document/appendix semantics are not blanket accepted. Historical metadata, research-round claims, authored unknowns and runtime/backend completion are not promoted.",
+      "limits": [
+        "Normal-return paths and valid object/container invariants only.",
+        "Source windows that visibly truncate instructions do not become new instruction-boundary claims; only entry-based CFG supports semantic conclusions.",
+        "Dynamic unknown targets, alias/concurrency/exception guarantees and gameplay are not certified."
+      ],
+      "raw_candidate_evidence": "direct-e8-candidates.json",
+      "source_byte_check": "source-assembly-audit.json"
+    },
+    {
+      "source": "kr-temp-roy/20261028-111046-chatgpt-web-roy-T08-200-registration-identity-and-duplicate.md",
+      "sha256": "109dce169390bd5942169098e67d7e256382d58db716d4e298efa3587d639d31",
+      "git_blob_sha": "6f867a929563e531a09342c2e0cecafb8d6baf44",
+      "task": "T08",
+      "number": 200,
+      "bytes": 9740,
+      "historical_review_references": [
+        "shared/integrations/T01-20261028-10/README.md",
+        "shared/integrations/T01-20261028-27/README.md"
+      ],
+      "review_state": "BOUNDED_CLAIMS_PASS",
+      "verdict_basis": "Historical references are not automatically imported as a new semantic verdict.",
+      "review_completed": true,
+      "reviewer": "Codex T01 / review_t08_new",
+      "review_date": "2026-10-29 Asia/Taipei",
+      "original_document_full_pass": false,
+      "all_source_claims_verified": false,
+      "whole_task_native_complete": false,
+      "whole_function_semantics_complete": false,
+      "claim_matrix": [
+        {
+          "id": "T08-200-C1",
+          "statement": "Registration zero-extends WORD actor+4 as the search key, separate from actor+88 filter.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s7",
+            "SEMANTIC-EVIDENCE.md#s9"
+          ]
+        },
+        {
+          "id": "T08-200-C2",
+          "statement": "82EF00 includes tail key validation, so sentinel/non-sentinel means absent/exact match under tree invariants.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s7",
+            "SEMANTIC-EVIDENCE.md#s9"
+          ]
+        },
+        {
+          "id": "T08-200-C3",
+          "statement": "Only absence inserts via82F200; duplicate branches to6EDB60 and has no direct replacement/free call.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s7",
+            "SEMANTIC-EVIDENCE.md#s9"
+          ]
+        },
+        {
+          "id": "T08-200-C4",
+          "statement": "Upstream duplicate actor ownership remains unresolved.",
+          "decision": "PASS_STATED_BOUNDARY",
+          "evidence_sections": [
+            "SEMANTIC-EVIDENCE.md#s7",
+            "SEMANTIC-EVIDENCE.md#s9"
+          ]
+        }
+      ],
+      "native_evidence": [
+        "native-cfg/004dfbc0.json",
+        "native-cfg/004dfc30.json",
+        "native-cfg/004dfc90.json",
+        "native-cfg/004dfd40.json",
+        "native-cfg/0082ef00.json",
+        "native-cfg/004dff30.json",
+        "native-cfg/0082ef00.json",
+        "native-cfg/0082f200.json"
+      ],
+      "scope": "Only the explicitly listed claim matrix is adjudicated. Full source document/appendix semantics are not blanket accepted. Historical metadata, research-round claims, authored unknowns and runtime/backend completion are not promoted.",
+      "limits": [
+        "Normal-return paths and valid object/container invariants only.",
+        "Source windows that visibly truncate instructions do not become new instruction-boundary claims; only entry-based CFG supports semantic conclusions.",
+        "Dynamic unknown targets, alias/concurrency/exception guarantees and gameplay are not certified."
+      ],
+      "raw_candidate_evidence": "direct-e8-candidates.json",
+      "source_byte_check": "source-assembly-audit.json"
+    }
+  ],
+  "not_promoted": [
+    "original sources",
+    "Task owner/state/native_complete",
+    "catalog",
+    "whole-function/whole-task/backend/gameplay completion"
+  ]
+}

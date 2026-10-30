@@ -1,5 +1,26 @@
 # T03 登入與角色選擇
 
+## T01 驗收退回事項
+
+### T01-RETURN-T03-006-LAYOUT-001 — NEEDS_FIX
+
+- 原稿：`kr-temp-roy/20261028-223919-chatgpt-web-roy-T03-6-wsasend-completion-boundary.md`；Git blob `28dc1c2e3e962c85e0187d75d219b9da5ec253aa`；SHA256 `81d1bedd74633751c874d571a45ba99ed7eced38081dd31f217debba41eb2e72`，已原樣保存。
+- 問題：第78行把 `channel+0xA050` 稱為 WSABUF 位置、`+0xA0B8` 稱為 overlapped context，混淆 API 引數與計數器位置。
+- 原始反證：`8068DE lea eax,[esi+A050]`、`8068F3 push eax` 提供 OVERLAPPED；`8068F7 lea ecx,[eax+14]`、`806909 push ecx` 提供 WSABUF 指標，即 connection+A064。`806961/80697A` 計算 +A0B8，`806968/806981` 呼叫 IAT `BD2284=InterlockedIncrement`，並非把 +A0B8 傳給 WSASend 的 OVERLAPPED 引數。
+- 修復要求：保留原稿，提供勘誤／新版本與新 blob／SHA；分離 OVERLAPPED、WSABUF 與 atomic-counter 地址，查對第78、124、145、198行等沿用命名，維持 frame-relative 與 connection-relative 基準區別。原稿獨立成立的 return/pending、completion 及業務未知界線保留，不把全部內容判為錯誤。
+- 完成條件：T01 對新版本及全部受影響的引數／基準／completion 描述定向複驗後才 RESOLVED；本批只建立精確 R2 退回，不宣稱原稿全文已驗收。
+- 驗收來源：[原件 PE import、既有 REA/Ghidra CFG 與 bytes 定向核對](../../../research/handoffs/t01-t03-roy-20261029/r2-evidence.json)；[重現腳本](../../../research/handoffs/t01-t03-roy-20261029/check_r2.py)。
+
+### 2026-10-29 T01 新通道收件（不等於全文通過）
+
+`t03/roy/chatgpt-web@6dc876e84358c1f1ab343ce5b8899006574ddf26` 的 LOGIN-01／02、T03-3～19 共19篇已保留原始 blob、完成有限主張與既有衝突／更正查對。[交接與各篇處置](../../../research/handoffs/t01-t03-roy-20261029/README.md)。T03-18 的 Print Screen／D3DX 更正已連回15～17：局部 stack 事實不自動成為選角回覆／worker parent 來源。所有新原稿全文歷史狀態維持 PENDING，未新增 FULL-PASS；RR／S00 接受與 Task owner 均未改。
+
+<!-- S00-DISPATCH-BOOTSTRAP:v1 -->
+## S00 研究請求開工檢查（正式）
+
+**每次開工必讀**：確認最新 origin/main SHA，先檢查本 README 的 T01 驗收退回與既有主責，再讀 [T03 S00 收件箱](../../../research/dispatch/inbox/T03.md)、[唯一 RR 台帳](../../../research/requests/index.json)、[派工／認領／回報規則](../../../research/dispatch/README.md)。先處理已指派且獲使用者授權的 P0/P1；只在認領變更發布於 main 後才算跨 Agent 已認領。完成研究需提交 Markdown + 精確 Git blob SHA 並更新 RR 為 SUBMITTED，S00 才能結案。**收件箱不會自動喚醒本 Agent**；不變更原有 Task owner、原稿及 T01 退回規則。
+
+
 狀態：bounded-review-handoff；負責人 roy；定向離線審核進行中。
 
 ## 範圍
@@ -135,3 +156,10 @@ parser/auth、角色UI與選服呼叫介面的有限審核已整合；較早段�
 
 
 2026-10-26 T01 整合交接：[T01-20261026-01](../../../shared/integrations/T01-20261026-01/README.md)。僅列明 SHA 的凍結成果已整合；其他暫存／新修改仍待下一輪。各任務未整體完成，接續前以此批次所在 origin/main commit 為基準。
+
+
+## S00 Phase B 設計整合參照（extra/roy1，尚非 T01 原生全文驗收）
+
+2026-10-29：參照 `extra/roy1` 的 E01–E16 SceneList/Lua/教學場景研究，原始 Git blob 完整保留於 `kr-extra-roy/`。S00 只抽取 E06/E08/E13/E16 的有限來源主張，將其與已存在的 T03 登入/選角證據分開；見 [來源整合說明](../../../governance/PHASE-B-T03-EXTRA-ROY1.md)、[跨流程草案](../../../spec/session-account/SPEC-FLOW-0001.md) 與 [場景依賴草案](../../../spec/world/SPEC-SCENE-0001.md)。
+
+**未證明**選角 C2S `0x42` 對應的 S2C 回覆會設定 `(questIdx=1001,sceneIdx=1)`，亦未證首次登入必進教學；E16 對 `0x565720` 的 EndCutScene 重入提供反證。下一項 T03 定向補證為 [RR-0008](../../../governance/T03-S00-AGENT-REQUESTS.md)，不用重新執行整批 E01–E16。這個註記不改 Task owner、原稿、過去 T01 裁定或正式 FULL-PASS 准入。

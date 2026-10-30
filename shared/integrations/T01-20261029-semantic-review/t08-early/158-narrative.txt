@@ -1,0 +1,50 @@
+# KR T08-158 — gameinfo receiver and composite key abi
+
+- 研究時間：2026-10-28T01:52:16+08:00（Asia/Taipei）；研究者：`chatgpt-web roy`。
+- 第一手來源：唯讀 `Tartaros.bin`，12,472,320 bytes，SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`，GNU objdump 對 PE `.text` VA 反組譯。
+- 正式 Task：GitHub KR T08 只負責 `0007` 實體建立／登記／移除的資料介面；dispatch 框架屬 T02、場景重置屬 T06/T07，僅交叉參照，不更動其他任務。
+- 分級：**原始 bytes**／**已證局部 data-flow**／**有條件推論**／**未知**。線性反組譯與直接呼叫搜尋不代表完整 CFG；外部封包來源與 runtime 未驗證。
+- 參照：`T08-153`、`T08-154`、`T08-155`、`T08-156`；上批保留的映射差異與 `T01-20261027-05` 部分驗收限制持續適用。
+- 無遊戲執行、修改主程式、服務或存檔。本文不是可直接部署的 C++ 原始碼。
+
+## 核心修正：`0x40F060` 不是 key converter
+
+原先 T08-154/156 曾將 `4B3739 call 40F060` 概述為「轉換／定位複合 key」。本段透過 BIN 原始指令**否定**「把 key 作運算轉換」說法。`0x40F060` 進入後處理一次性初始化位元與 SEH，最後 `mov eax,0x00FAB130`，`ret`；caller 的已 `push` DWORD **仍留在 stack**。因 `4DFC90` 使用 `eax` 作 receiver 並以 `ret 4` 清掉一個參數，這實際是 `GameInfo* receiver` 取得器。這不是對舊全文的 native 驗收，只是此指定鏈的直接修正。
+
+### 1. getter 的逐指令證據
+
+[code block separately audited]
+
+`0x40F087 mov eax,1` / `test [0xFAB22C],al` 控制初始化；`0x40F0A2 call 0x4DEC90` 並配合初始化告知；`0x40F0B4 mov eax,0xFAB130` 是 return value 設定。一次性 flag 不等於每次呼叫都先執行清表，也不等於這個 getter 可以生成 actor。
+
+### 2. 4B3710 實際參數路徑
+
+[code block separately audited]
+
+| 位址 | 指令 | 值與生命期 |
+|---|---|---|
+| 4B3730 | `movzx eax, word [esi]` | 提取 raw WORD |
+| 4B3733 | `or eax,0x06000000` | 保留低16 bits，設定高 byte `06` |
+| 4B3738 | `push eax` | DWORD 放在 stack 供下游 callee |
+| 4B3739 | `call 40F060` | EAX 取得 `0xFAB130` 接收器；不 pop stack key |
+| 4B373E | `call 4DFC90` | EAX receiver + 一個 stack argument |
+| 4B3743 | `add esi,2` | 下個 WORD |
+
+### 3. 4DFC90 的遍歷和比較
+
+[code block separately audited]
+
+`4DFC96 lea edi,[eax+8]` 把 receiver 的 `+8` tree 定位；`4DFCB0` 讀 node+10 actor 指標；對 `actor+0x88` 的欄位與 `[ebp+8]` 做 DWORD 比較。匹配則走對象清理和 tree erase，但 node 迭代細節需依 erase 後返回 iterator 驗證，不能假設在刪除節點後仍 dereference 已釋放舊指標。`0x4DFC90` 為條件式篩選，而非 0007 的直接按 actor ID 刪除。
+
+### 4. 型別與 ABI 限制
+
+[code block separately audited]
+
+- **已確認**：直接機器碼 `4B3733` OR、`4B3738` push、`40F0B4` 固定返回 EAX、`4DFC96` +8 tree。
+- **修正**：`40F060` 不是 key→key 的 converter；若需記錄 provenance，標註「GameInfo getter + lazy init」。
+- **未知**：複合 key `0x06000000 | word` 與服務端 packet opcode/資源 category 的正式含義、`actor+0x88` 是否為 script marker key。
+- **分工**：opcode dispatch 請由 T02 與 T08 共用索引交叉引用，不能因本段 caller 指令而另填 catalog owner。
+
+## 下一步
+
+T08-159 深挖 single erase vs linked resource/tree 的清理邊界、虛擬 +0/+14、skip branch，避免把 tree free 認成 actor free。

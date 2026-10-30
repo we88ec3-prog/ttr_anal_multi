@@ -1,0 +1,43 @@
+--- kr-temp-roy/20261028-183258-chatgpt-web-roy-T16-71-KR-WSASend-and-inbound-dispatch-boundary.md (original 8f2e297a563e2443ff32601e63654b3e953eaee5)
++++ kr-temp-roy/20261028-183258-chatgpt-web-roy-T16-71-KR-WSASend-and-inbound-dispatch-boundary.md (T01 proposed errata; not author replacement)
+@@ -26,14 +26,14 @@
+ 8068fc: mov DWORD PTR [eax+0x18],edi   ; WSABUF.buf
+ 806905: mov DWORD PTR [ecx],edx        ; WSABUF.len
+ 806907: mov edx,DWORD PTR [esi]        ; socket
+-806909: push ecx                       ; LPWSAOVERLAPPED
++806909: push ecx                       ; LPWSABUF（connection+0xA064）；OVERLAPPED 在 0x8068F3 push eax
+ 80690a: push edx                       ; SOCKET
+ 806912: call DWORD PTR ds:0xbd25b8    ; WSASend
+ 806920: cmp eax,0xffffffff
+ 806925: call DWORD PTR ds:0xbd25cc    ; WSAGetLastError (import table to verify if cited)
+ 80692d: cmp edi,0x3e5                 ; 997, WSA_IO_PENDING
+ 806933: je 0x806961
+-806958: xor eax,eax                   ; error result 0
++80695a: xor eax,eax                   ; error result 0
+ 806961: add esi,0xa0b8
+ 806967: push esi
+ 806968: call DWORD PTR ds:0xbd2284
+@@ -49,7 +49,7 @@
+ 
+ ### 1.2 vtable+0x0C 與主循環發送觸發的交叉閉合
+ 
+-以 `.rdata` VA `0xC51748` 對應 raw `0x852D48`（`.rdata` VA `0xBD2000`, raw `0x7D0600`）讀出 vtable：
++以 `.rdata` VA `0xC51748` 對應 raw `0x84FD48`（`.rdata` VA `0xBD2000`, raw `0x7D0600`）讀出 vtable：
+ 
+ | slot | native target | 作用／限制 |
+ |---|---|---|
+@@ -131,7 +131,8 @@
+ 807da4: push ecx
+ 807da5: push eax
+ 807da6: call 0x489920                ; candidate application dispatch B
+-807dad: mov edi,eax
++807dab: mov edi,eax
++807dad: call 0x8040a0               ; actual next queue helper, not mov edi,eax
+ 807dad: ...
+ 807db2: movzx edx,WORD PTR [ebx]
+ 807db5: add edx,DWORD PTR [esp+0x20]
+@@ -175,4 +176,4 @@
+ - 對 Quest 業務 opcode：雖已有本機 message `0x0040` 和 frame kind，**仍欠 app dispatcher/semantic opcode 相互證明**；宣稱它是最終 wire opcode 必須在 receiver/message boundary 另行確認。
+ - 真正 `Quest16` 完成、`Quest15` 可接、NPC 點擊接受/拒絕，仍 **unknown**；絕不從一般 socket 路徑推得任務狀態。
+ - 下一段 T16-72 P0 優先 `0x804310`、`0x489920` 的 parser、message domain 和 Quest/Scenario consumer，平行找 Quest UI accept producer 及對應 C→S packet；server writer/DB 非 T16 逆向目標。
+-- 本次未改動 BIN/EXE、其他 Task、owner、catalog；**GitHub 未 Commit/Push**。+- 本次未改動 BIN/EXE、其他 Task、owner、catalog；**GitHub 未 Commit/Push**。

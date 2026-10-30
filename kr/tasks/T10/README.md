@@ -1,5 +1,86 @@
 # T10 普通攻擊與連段
 
+<!-- S00-DISPATCH-BOOTSTRAP:v1 -->
+## S00 研究請求開工檢查（正式）
+
+**每次開工必讀**：確認最新 origin/main SHA，先檢查本 README 的 T01 驗收退回與既有主責，再讀 [T10 S00 收件箱](../../../research/dispatch/inbox/T10.md)、[唯一 RR 台帳](../../../research/requests/index.json)、[派工／認領／回報規則](../../../research/dispatch/README.md)。先處理已指派且獲使用者授權的 P0/P1；只在認領變更發布於 main 後才算跨 Agent 已認領。完成研究需提交 Markdown + 精確 Git blob SHA 並更新 RR 為 SUBMITTED，S00 才能結案。**收件箱不會自動喚醒本 Agent**；不變更原有 Task owner、原稿及 T01 退回規則。
+
+
+## T01 驗收退回事項
+
+<!-- T01-continuation-02-notices:start -->
+
+### 2026-10-29 接續第02批複驗
+
+逐篇主張與全部碼塊已核對；以下限定需修正的內容，保留其他獨立支持的結論。
+
+#### T01-RETURN-T10-055-EVIDENCE-001 — NEEDS_QUALIFICATION
+- 原稿：`kr-temp-roy/20261028-021236-chatgpt-web-roy-T10-055-special-key-domain-tree-branches.md`；Git blob `61c1e3bca931c781be72db549bed483202cfff1a`；SHA256 `3b3a2dcf12540643499faa3f00770b61e9e74669fe6048744f0313503280f84a`。
+- 問題：第一視窗起點6D4BB0在6D4BAC指令的immediate內，至6D4BC2才重新對齊；第四視窗6D4D40是6D4D3E LEA的immediate，lock push不是reader正常路徑指令。
+- 原生依據：6D4BAC c7 45 fc 04 00 00 00 (mov[ebp-4],4);6D4BB3 e8 98 bb ff ff (call6D0750);6D4BBD e8 58 d7 1b 00 (call89231A);6D4D3E 8d 4d f0 (lea ecx,[ebp-10h]);6D4D41 51 (push ecx)
+- 修正及複驗：保留原稿與SHA；提供勘誤／標註版，明列錯位視窗頭不屬native instruction證據；分開明示.byte尾端截斷和續行；替泛稱「列出的讀寫/call已確認」限定有效區段。可附本批rooted canonical excerpt，不能更換原來源SHA。
+- [逐項驗收及原生證據](../../../shared/integrations/T01-20261029-continuation-02/t10/README.md)。
+
+#### T01-RETURN-T10-056-EVIDENCE-001 — NEEDS_QUALIFICATION
+- 原稿：`kr-temp-roy/20261028-021236-chatgpt-web-roy-T10-056-indexed-reader-polymorphic-consumers.md`；Git blob `e2da2b34e1c97aeffd192d5af7a258f80b50c527`；SHA256 `0d0b9f07373355c959291cb9ac8fddc5ad840b05167e5222b9001f8626f549a5`。
+- 問題：第三視窗596430落在59642E JMP的rel32內，其假CALL596441→F8DC6459跨過真正59643F CALL的immediate和596444 CMP；596452起才重新對齊。
+- 原生依據：59642E e9 7a 01 00 00 (jmp5965AD);596433 68 34 20 bf 00;596438 e8 f3 76 2e 00 (call87DB30);59643D 32 db (xor bl,bl);59643F e8 9c e8 13 00 (call6D4CE0);596444 83 f8 01 (cmp eax,1)
+- 修正及複驗：保留原稿與SHA；提供勘誤／標註版，明列錯位視窗頭不屬native instruction證據；分開明示.byte尾端截斷和續行；替泛稱「列出的讀寫/call已確認」限定有效區段。可附本批rooted canonical excerpt，不能更換原來源SHA。
+- [逐項驗收及原生證據](../../../shared/integrations/T01-20261029-continuation-02/t10/README.md)。
+
+<!-- T01-continuation-02-notices:end -->
+
+
+<!-- T01-20261029-stage-notices:start -->
+
+### 2026-10-29 階段複驗通知（4筆具體更正，既有ID原位補充）
+
+本次僅通知已證實的錯誤；原稿全文驗收仍未完成。保留原稿，提供獨立修正版及新 blob/SHA；複驗通過前維持 NEEDS_FIX，不能將局部主張支持算作全文 FULL-PASS。
+
+[本批總台帳](../../../shared/integrations/T01-20261029-semantic-review/README.md)；[機器可讀退回紀錄](../../../shared/integrations/T01-20261029-semantic-review/return-notices.json)。
+
+#### T01-RETURN-T10-062-001 — NEEDS_FIX
+- 原稿：`kr-temp-roy/20261028-022217-chatgpt-web-roy-T10-062-lifecycle-reset-dual-branch.md`；Git blob `43ca57972ac64ad0752ce37c419331ff120befda`；SHA256 `5ea18b4b53024c5ca3c1ef67d2b70596c0966ea6d61032d1f55ec1ff0712c0b5`。
+- 問題：First reset branch clears ordinary40bytes before the optional6D1DA0 initialization call, contrary to the stated initialize-then-clear order.
+- 原生反證：第一支可先依 `FB7C14` 呼叫 `6D0750`；但 `0x6D4A95` 僅測試 `FDF3EC` 並留下 flags，`6D4A9C..6D4AC9` 先清普通 40 bytes。`0x6D4ACE` 才依該 flags 選擇分支，未初始化時 `0x6D4AD9 = E8 C2 D2 FF FF` 呼叫 `6D1DA0`，最後 `6D4AF3` 呼叫 `823850` 清特殊樹。故特殊域初始化不在普通清零之前。
+- 修正及複驗條件：Preserve original; supply separate correction with new blob/SHA and revalidate affected argument/control/value flow. Use the per-item specific conditions in DECISIONS.md.
+- 驗收紀錄：[本項證據](../../../shared/integrations/T01-20261029-semantic-review/t10/DECISIONS.md)。
+
+#### T01-RETURN-T10-063-001 — NEEDS_FIX
+- 原稿：`kr-temp-roy/20261028-022217-chatgpt-web-roy-T10-063-indexed-reset-list-partition.md`；Git blob `82b83636f00ded1be14216c7529a686fad331a16`；SHA256 `719c52c2b41b21faf06d4e345e31b01b95c685659239a34298a486e64ea014eb`。
+- 問題：Clear path at6D4CAE has no ESI<=27 guard; reader guard cannot be transferred to writer.
+- 原生反證：`0x6D4C23` 算 ESI-0x2711，`0x6D4C29` 比較 0x270E，`0x6D4C2F = 77 51` 直接跳 0x6D4C82；經 lazy-init 後到 `0x6D4CAE = C6 86 04 90 FB 00 00` indexed zero store，該 clear loop 無 ESI<=0x27 guard。0x6D4CE0 reader 的 guard 不得搬入 writer；上游 ID 值域仍未知，不推斷可利用漏洞。
+- T01 自有通知勘誤（2026-10-29）：前版此欄誤貼 T10-062 的時序反證；本欄依既有逐項 DECISIONS.md 校正，退回 ID／原稿 SHA／NEEDS_FIX 不變。
+- 修正及複驗條件：Preserve original; supply separate correction with new blob/SHA and revalidate affected argument/control/value flow. Use the per-item specific conditions in DECISIONS.md.
+- 驗收紀錄：[本項證據](../../../shared/integrations/T01-20261029-semantic-review/t10/DECISIONS.md)。
+
+#### T01-RETURN-T10-007-001 — NEEDS_FIX
+- 原稿：`kr-temp-roy/T10/20261027-191139-chatgpt-web-roy-T10-7-runtime-input-merge.md`；Git blob `d99588c94a6647acffb036ef497b66377d22e200`；SHA256 `7c28ce9bbca0d2081a534c51d14231d323dc1263be00d7f307d48cb4e677e3a4`。
+- 問題：5467F1 is pointer load; actual WORD store is5467F4; correct main dataflow retained.
+- 原生反證：`0x5467F1 = 8B 55 10` 是 mov edx,[ebp+0x10] 載入輸出指標；真正 WORD store 是 `0x5467F4 = 66 89 1A`（mov word [edx],bx）。主要三路 OR／byte 優先資料流不因定位更正撤銷。
+- T01 自有通知勘誤（2026-10-29）：前版此欄誤貼 T10-062 的時序反證；本欄依既有逐項 DECISIONS.md 校正，退回 ID／原稿 SHA／NEEDS_FIX 不變。
+- 修正及複驗條件：Preserve original; supply separate correction with new blob/SHA and revalidate affected argument/control/value flow. Use the per-item specific conditions in DECISIONS.md.
+- 驗收紀錄：[本項證據](../../../shared/integrations/T01-20261029-semantic-review/t10/DECISIONS.md)。
+
+#### T01-RETURN-T10-026-001 — NEEDS_FIX
+- 原稿：`kr-temp-roy/T10/20261027-205931-chatgpt-web-roy-T10-26-subai-cast-state-machine.md`；Git blob `c82bc8c3c53f304faecab0911f214b89440d1784`；SHA256 `8bbf8f35d131d8274a7f49a1d26dac551b60e8f072a0df274de780d19a4ada2f`。
+- 問題：549D54 belongs independent549C60, not549980; function boundary/caller attribution false.
+- 原生反證：0x549980 的正常返回為 0x549A34／0x549C4E（C2 10 00）；`0x549C60 = 55 8B EC 83 E4 F8` 是獨立序言。`0x549D54 = E8 17 55 00 00` 呼叫 0x54F270，屬 0x549C60 可達本體，不能歸入 0x549980；局部 state=4 不因此消失，但 caller／實參須從正確入口解讀。
+- T01 自有通知勘誤（2026-10-29）：前版此欄誤貼 T10-062 的時序反證；本欄依既有逐項 DECISIONS.md 校正，退回 ID／原稿 SHA／NEEDS_FIX 不變。
+- 修正及複驗條件：Preserve original; supply separate correction with new blob/SHA and revalidate affected argument/control/value flow. Use the per-item specific conditions in DECISIONS.md.
+- 驗收紀錄：[本項證據](../../../shared/integrations/T01-20261029-semantic-review/t10/DECISIONS.md)。
+
+<!-- T01-20261029-stage-notices:end -->
+
+
+
+### 2026-10-30 整合階段保存與T01通知勘誤
+
+2026-10-30：[T10分支整合階段保存](../../../research/handoffs/t01-t10-roy-20261029/README.md)。依使用者要求暫停；核127份來源、原樣補入22份原稿並補登29個SRC，保存early49／middle44份待裁決提案。未發布新canonical claim，本分支canonical整合剩127份（34份尚無完整提案）；原318版待萃取仍194份。T01自有通知3處誤貼欄位已勘誤，歷史判決及退回狀態不變。
+
+
+## 既有任務說明
+
 狀態：bounded-review-handoff；負責人未認領。
 
 ## 範圍

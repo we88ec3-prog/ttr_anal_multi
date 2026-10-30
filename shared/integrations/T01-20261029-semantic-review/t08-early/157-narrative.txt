@@ -1,0 +1,47 @@
+# KR T08-157 — packet row removal receiver boundaries
+
+- 研究時間：2026-10-28T01:52:16+08:00（Asia/Taipei）；研究者：`chatgpt-web roy`。
+- 第一手來源：唯讀 `Tartaros.bin`，12,472,320 bytes，SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`，GNU objdump 對 PE `.text` VA 反組譯。
+- 正式 Task：GitHub KR T08 只負責 `0007` 實體建立／登記／移除的資料介面；dispatch 框架屬 T02、場景重置屬 T06/T07，僅交叉參照，不更動其他任務。
+- 分級：**原始 bytes**／**已證局部 data-flow**／**有條件推論**／**未知**。線性反組譯與直接呼叫搜尋不代表完整 CFG；外部封包來源與 runtime 未驗證。
+- 參照：`T08-153`、`T08-154`、`T08-155`、`T08-156`；上批保留的映射差異與 `T01-20261027-05` 部分驗收限制持續適用。
+- 無遊戲執行、修改主程式、服務或存檔。本文不是可直接部署的 C++ 原始碼。
+
+## 研究問題
+
+延續 T08-154 的 `0x4B28D0..0x4B2AEB`，查明 single-ID remove 上層的**長度、起始 offset、找不到鍵時分支、類型差異與另一 0007 建立路徑之關係**；再抽取 `0x4B3710` 的平行邊界。無 registration table 明證時不將函式硬命名為正式封包 opcode。
+
+### 1. `0x4B28D0` 的入口與迴圈形成
+
+入口 `mov eax,[ebp+0xC]` 取長度；`cmp eax,4` 決定是否有至少 4 bytes；從 `[ebp+8]` 指向的 buffer 前置資料開始讀取。後續 `0x4B2958` 每回合依 cursor 讀 `WORD`，查找全域 `0xFAB138` 對應的樹，找不到時先記錄診斷再跳到 `0x4B2AC7` 前進下一筆；它**不是遇一個不存在的 ID 就中止整個處理**。迴圈 `0x4B2AC7 +=2`、`0x4B2ACC` 減少剩餘項目，回邊到 `0x4B2928`。
+
+原生 loop-bound 值必須依 `0x4B2900..0x4B2928` 實際指令解釋，不能只從 `+=2` 猜 length 中所含的 header；`cmp eax,4` 是明示的最低長度門檻，非完整 buffer safety 證明。下列完整片段供復核。
+
+[code block separately audited]
+
+### 2. 分支區分：不同 actor 類型與附屬欄位
+
+`0x4B299B movzx eax,word [esi+4]` 後，以 **actor ID 的低 byte** 分流 `0/6/7` 與其他；`0x4B29B7 [esi+0x15C]`、`0x4B29D9 [esi+0x370]` 均出現在限定分支，而非所有 actor 一定有同義欄位。與 T08-153 的 `GameInfo` actor map 查找和 T08-154 提到的控制器前置處理保持分離。`0x4B2A56` 開始會看 `[0xFBA7A4]` 並掃三個槽，於 `0x4B2AC2` 才調用共用的 `4DFBC0`。
+
+[code block separately audited]
+
+### 3. 相似卻不同的批次刪除 `0x4B3710`
+
+此函式使用 `[ebp+0xC]` 長度計算 `count = max(0,(len-2)>>1)`，buffer+2 開始逐 `WORD`，`OR 0x06000000` 建立複合 DWORD，然後在 stack 保留該 DWORD，呼叫 `0x40F060` 取得 GameInfo 接收器，傳給 `0x4DFC90`。**與 `4B28D0` 用 WORD actor ID 查找後調 `4DFBC0` 完全不同。** 本段不把值域 `0x06xxxxxx` 定義為 owner 或怪物 ID。
+
+[code block separately audited]
+
+### 4. 連結圖與負面界線
+
+[code block separately audited]
+
+| 結論 | 證據級別 | 不足之處 |
+|---|---|---|
+| 4B28D0 存在長度/封包狀的陣列解析 | 原始指令確認 | dispatcher opcode 尚未由註冊表獨立定位 |
+| 單鍵 erase 調 4DFBC0 | 原始 E8 bytes 確認 | vtable callee 全型別析構未完成 |
+| 4B3710 的 key 先 `OR 0x06000000` | 原始指令確認 | key 最終欄位語意未命名 |
+| `4B28D0` 是 CMonster 唯一移除入口 | **不成立** | 另有腳本、type bulk、clear-all 路徑 |
+
+## 建議後續
+
+T08-158 釐清 `0x40F060` 的 ABI／receiver 綁定並回溯 `0x4DFC90` 的遍歷與 key 比較，修正 T08-154/156 對「轉換」的不嚴謹描述。T02 應獨立驗證 opcode→handler 表，不自行認領。

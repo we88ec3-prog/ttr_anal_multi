@@ -1,5 +1,11 @@
 # T01 現有成果來源審核
 
+<!-- S00-DISPATCH-BOOTSTRAP:v1 -->
+## S00 研究請求開工檢查（正式）
+
+**開工必讀**：先核對最新 origin/main SHA，讀取 [T01 S00 待審收件箱](../../../research/dispatch/inbox/T01.md)、[唯一 RR 台帳](../../../research/requests/index.json) 與 [派工／審查規則](../../../research/dispatch/README.md)。本收件箱只提示來源報告待審，**不取代下文 T01 FULL-PASS、NEEDS_FIX、README 原有退回制度**。S00 才能 ACCEPTED；任何 RR 完成不自動升格原生證據。
+
+
 ## 跨 Task 驗收退回、修復及複驗（正式工作流程）
 
 - T01 須先核對原件 SHA／來源版本、PE section 映射、指令界線、工具預期、CFG、caller/callee、資料流與所有實質肯定主張；不得用抽樣 bytes 全部相符冒充全文 FULL-PASS。
@@ -93,3 +99,36 @@
 依 [T01 FULL-PASS 共用知識政策](../../../shared/T01-FULL-PASS-UNCLASSIFIED-INTEGRATION-RULES.md)，T01 對**精確範圍全部原生主張均已核驗**的結論／子流程，發表於 [shared/verified-knowledge](../../../shared/verified-knowledge/README.md)，依玩家功能、協定與資料結構檢索，不依來源 Task 分類。仍保留 Task ID、作者、原稿路徑與 Git blob SHA 為審核及錯誤退回 metadata，不搬移既有原稿。
 
 准入必須完成原件 SHA、PE/VA/raw、指令邊界、CFG／上下游／資料流與相關矛盾的必要查核；抽樣 bytes／SHA 一致、來源收件、局部主張通過不會讓全篇或整 Task 通過。僅通過的有界子流程可納入；所有未通過內容保留待審來源。原版 Server 內部演算法不是 Client 逆向驗收，列 Server 待開發；未知 Client 封包列 Client 待逆向。每批建立 FULL-PASS 條目、更正或撤銷的可追溯清單，禁止隱性升級歷史 accepted-claims。
+
+
+2026-10-29 階段整合：[T01原稿語意驗收檢查點](../../../shared/integrations/T01-20261029-semantic-review/README.md)。318個來源版本已凍結；全文FULL-PASS為0，69個原版已有反證、153部分、9來源級、87待審。46項具體退回及映射群組已更新Task README，另有3項精確原生結論准入共用知識。接續逐篇來源SHA／碼塊待辦，不把本次階段收尾算作318篇完成；實際main基準見批次推送收據。
+
+
+2026-10-29 接續整合：[T01 第02批全文驗收](../../../shared/integrations/T01-20261029-continuation-02/README.md)。本批10篇逐篇核對，158／177／197三篇有界全文通過；舊173／196退回結案但舊版維持FAILED；新增10項修正／限定退回。最新318版狀態為 全文有界通過3、FAILED71、PARTIAL151、SOURCE_ONLY9、PENDING84，未全部完成；以本批 source-ledger 與推送收據接續。
+
+
+## Server 規格整合的新通道（Phase A 試行，待合併）
+
+T01 對 Server 設計的接收、精確主張去重、風險分流及 S00 交接，按 [新 T01 工作流程](../../../governance/t01-integration-workflow.md) 辦理。這是**與舊版全文 FULL-PASS 分開的增量通道**；不更改 318 份歷史來源狀態、其他 Task 主責及 `shared/verified-knowledge/` 准入要求。原稿失敗/部分通過/待審應原樣保留；非已驗證材料只可標註可信度交 S00 參考。
+
+2026-10-29 使用者指定改按最新main新方法接續：以 `9d97ea37e` 為基準，完成[新流程首次收件與主張交接](../../../research/handoffs/t01-20261029-risk-intake/README.md)。318版R0收件完成（剩0），其中4版萃取有限主張並查對衝突，待萃取314版；歷史全文通過仍3／318、未通過315，不再作規格整合門檻。沒有S00接受或SPEC_CONSUMABLE，舊第03批未提交全文裁決保留本機草稿。
+
+2026-10-29 指定分支增量：[t03/roy/chatgpt-web整合交接](../../../research/handoffs/t01-t03-roy-20261029/README.md)。19篇原稿、13項有限主張及10筆去重追加來源已完成新通道CONFLICT_CHECKED（本批剩0）；1項精確API layout反證以T03 README退回，Print Screen更正連回早期provenance推論。未新增全文FULL-PASS或SPEC_CONSUMABLE，不改318版既有進度。
+
+2026-10-29 指定T08分支：[t08/roy/chatgpt-web新通道整合](../../../research/handoffs/t01-t08-roy-20261029/README.md)。138份原稿blob原已在main；補15個SRC、完成135份整合差額，保留3份既有正式關聯，本分支剩0份。新增55項有限主張及233筆追加來源，24個映射FAILED與6類既有REFUTED單獨隔離；原318版R1待萃取剩194份，歷史全文判決未改。
+
+
+2026-10-30：[T10分支整合階段保存](../../../research/handoffs/t01-t10-roy-20261029/README.md)。依使用者要求暫停；核127份來源、原樣補入22份原稿並補登29個SRC，保存early49／middle44份待裁決提案。未發布新canonical claim，本分支canonical整合剩127份（34份尚無完整提案）；原318版待萃取仍194份。T01自有通知3處誤貼欄位已勘誤，歷史判決及退回狀態不變。
+
+
+2026-10-30 T16 43 筆作者端勘誤後續獨立複驗：[T01-20261030-t16-followup](../../../shared/integrations/T01-20261030-t16-followup/README.md)。11 筆精確退回修正已由 T01 `RESOLVED`，32 筆仍 `READY_FOR_REVIEW`；不表示相關 T16 原稿 FULL-PASS、T16 branch 合併或 S00 SPEC STABLE。精確原件/新舊 blob 與剩餘義務見批次索引。
+
+2026-10-30 T16 第二輪：原始 Event.stp 的 TutorialBase 來源 SHA 更正 14 筆、A0A4/A078 佇列欄位 1 筆、T01 對 4AEDB0 錯誤反證撤回 1 筆；本輪新增 16 筆 RESOLVED，累計 27 RESOLVED / 16 READY_FOR_REVIEW，未提升 T16 原稿全文。完整決議及缺件請求：[第二輪驗收](../../../shared/integrations/T01-20261030-t16-resource-followup/README.md)。
+
+2026-10-30 T16 第三輪：已透過使用者上傳 phase3 ZIP + 原件 KR BIN 對 19 root、4464 native 指令、4905 CFG edges、28 問題窗口、71 舊 call/jmp 做獨立查核，**本輪新增 16 筆 appendix/CFG 限定退回 `RESOLVED`；固定 T16 退回累計 43/43 `RESOLVED`。** 這不是 T16 全稿 FULL-PASS、Quest 原生封包實證或 S00 SPEC STABLE。詳見 [完整獨立驗證與 Table.stp 解包](../../../shared/integrations/T01-20261030-t16-phase3-table-review/README.md)。
+
+2026-10-30 Quest16 T01 有界驗收整合：[T16-117／121／122／123 四來源與 R2 反證](../../../research/handoffs/t01-20261030-quest16-r0-r2/README.md)。正式新增 4 SRC、6 CLM（5 PARTIAL／1 REFUTED），針對117建立 T01-RETURN-T16-117-Q16-MODE2-C2S36-001 NEEDS_FIX；歷史43筆 RESOLVED 不變，未新增全文FULL-PASS/NATIVE_VERIFIED/SPEC_CONSUMABLE。
+
+2026-10-30 RR-0001／RR-0004 T01 限定驗收：[兩份原始來源、獨立 BIN R2、5 項新 CLM](../../../research/handoffs/t01-20261030-rr0001-rr0004-bounded-r2/README.md)。原樣補入 E57／E58 提交報告 blob 並登錄 SRC-0461/0462，補足原先 main 缺少 RR 來源導致的驗證阻塞；兩 RR 仍由 S00 判定 ACCEPTED。沒有新的全文 FULL-PASS 或 SPEC_CONSUMABLE，不改其它 Task 的原始研究、owner 或 T16 退回。
+
+2026-10-30 T01 多分支 merge／有限驗收：[完整來源、R1 主張及 BIN R2](../../../research/handoffs/t01-20261030-multi-branch-merge-r0-r2/README.md)。保留 extra/roy1、rr/t02/roy 的原始分支提交歷史，整合 T16-114/115/116/118/119/120/124/125 與 E59 共九份 SHA 限定原稿（SRC-0463～0471），新增 8 條 PARTIAL CLM；RR-0006 SUBMITTED、RR-0007 CLAIMED 沿用最新主線，不覆寫 S00 台帳；T16-117 原 NEEDS_FIX 仍有效。來源納入≠全文 FULL-PASS 或 RR/SPEC 接受。

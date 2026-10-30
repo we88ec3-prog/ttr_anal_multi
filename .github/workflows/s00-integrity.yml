@@ -1,0 +1,58 @@
+name: S00 specification registry integrity
+
+on:
+  push:
+    paths:
+      - "governance/**"
+      - "spec/**"
+      - "research/**"
+      - "design/**"
+      - "conformance/**"
+      - "AGENTS.md"
+      - "kr/tasks/**/README.md"
+      - "tc/tasks/**/README.md"
+      - ".github/workflows/s00-integrity.yml"
+  pull_request:
+    paths:
+      - "governance/**"
+      - "spec/**"
+      - "research/**"
+      - "design/**"
+      - "conformance/**"
+      - "AGENTS.md"
+      - "kr/tasks/**/README.md"
+      - "tc/tasks/**/README.md"
+      - ".github/workflows/s00-integrity.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate S00 registry and source identity
+        run: python3 -B governance/validate_s00.py
+      - name: Check S00 roadmap reference integrity and readiness gates
+        run: python3 -B governance/check_s00_readiness.py --check
+      - name: Validate contract coverage and spec-only handoff blockers
+        run: python3 -B governance/check_contract_coverage.py --check
+      - name: Verify S00 RR decision ledger against published evidence
+        run: python3 -B governance/check_s00_reviews.py --check
+      - name: Verify read-only Phase B intake and impact references
+        run: python3 -B governance/phase_b_worklist.py --check
+      - name: Validate submitted research artifact hashes and review scope
+        run: python3 -B governance/phase_b_review_preflight.py --check
+      - name: Run registry regression tests
+        run: python3 -B -m unittest discover -s governance/tests -v
+      - name: Check S00 dispatch lifecycle and all Task bootstraps
+        run: python3 -B research/dispatch/dispatch.py check
+      - name: Test inbox generation, claims and review state machine
+        run: python3 -B -m unittest discover -s research/dispatch/tests -p 'test_*.py' -v
+      - name: Run offline framing subset tests
+        run: python3 -B -m unittest discover -s conformance/protocol -p 'test_*.py' -v
+      - name: Run offline roster shape tests
+        run: python3 -B -m unittest discover -s conformance/character -p 'test_*.py' -v
+      - name: Run offline auth layout tests
+        run: python3 -B -m unittest discover -s conformance/session -p 'test_*.py' -v

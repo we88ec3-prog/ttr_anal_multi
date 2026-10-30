@@ -1,0 +1,168 @@
+{
+  "ok": true,
+  "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+  "scope": "T03-6 API layout correction and T03-18 import identity only; no whole-document or gameplay promotion",
+  "sections": [
+    {
+      "va": 4198400,
+      "raw": 1024,
+      "size": 8192512,
+      "name": ".text"
+    },
+    {
+      "va": 12394496,
+      "raw": 8193536,
+      "size": 1630720,
+      "name": ".rdata"
+    },
+    {
+      "va": 14028800,
+      "raw": 9824256,
+      "size": 2275328,
+      "name": ".data"
+    },
+    {
+      "va": 16683008,
+      "raw": 12099584,
+      "size": 372736,
+      "name": ".rsrc"
+    }
+  ],
+  "imports": [
+    {
+      "iat_va": "0xbd2284",
+      "dll": "KERNEL32.dll",
+      "name": "InterlockedIncrement"
+    },
+    {
+      "iat_va": "0xbd2478",
+      "dll": "USER32.dll",
+      "name": "GetAsyncKeyState"
+    },
+    {
+      "iat_va": "0xbd25f4",
+      "dll": "d3dx9_32.dll",
+      "name": "D3DXSaveSurfaceToFileW"
+    },
+    {
+      "iat_va": "0xbd2618",
+      "dll": "d3dx9_32.dll",
+      "name": "D3DXCreateTexture"
+    },
+    {
+      "iat_va": "0xbd2614",
+      "dll": "d3dx9_32.dll",
+      "name": "D3DXLoadSurfaceFromSurface"
+    }
+  ],
+  "prior_rea_cache_index": {
+    "address": "0x8068b0",
+    "status": "ok",
+    "source_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+    "authority": "unreviewed static output / 待整合",
+    "batch_path": "raw/20261025T182755495890-batch-20261025T184018233619-128.json",
+    "batch_sha256": "b6b3a7a01aa64eb9a57f3bb15de343db340dedde92fe5ffba2e1b7630621fcf0",
+    "procedure": {
+      "status": "resolved",
+      "address": "0x8068b0",
+      "name": "FUN_008068b0"
+    },
+    "pseudocode_path": "functions/0x8068b0.c",
+    "pseudocode_sha256": "3d2671b40acced2230414f3197a0a16c2355b2a942ec55d258f8efb7cbd39a00"
+  },
+  "prior_cfg_source": "shared/integrations/T01-20261029-continuation-02/t16/native-evidence.json",
+  "instructions": [
+    {
+      "va": "0x8068de",
+      "raw": "0x405cde",
+      "bytes": "8d 86 50 a0 00 00",
+      "mnemonic": "lea",
+      "operands": "eax, [esi + 0xa050]",
+      "size": 6
+    },
+    {
+      "va": "0x8068f3",
+      "raw": "0x405cf3",
+      "bytes": "50",
+      "mnemonic": "push",
+      "operands": "eax",
+      "size": 1
+    },
+    {
+      "va": "0x8068f7",
+      "raw": "0x405cf7",
+      "bytes": "8d 48 14",
+      "mnemonic": "lea",
+      "operands": "ecx, [eax + 0x14]",
+      "size": 3
+    },
+    {
+      "va": "0x806903",
+      "raw": "0x405d03",
+      "bytes": "6a 01",
+      "mnemonic": "push",
+      "operands": "1",
+      "size": 2
+    },
+    {
+      "va": "0x806909",
+      "raw": "0x405d09",
+      "bytes": "51",
+      "mnemonic": "push",
+      "operands": "ecx",
+      "size": 1
+    },
+    {
+      "va": "0x806912",
+      "raw": "0x405d12",
+      "bytes": "ff 15 b8 25 bd 00",
+      "mnemonic": "call",
+      "operands": "dword ptr [0xbd25b8]",
+      "size": 6,
+      "call_target": "indirect"
+    },
+    {
+      "va": "0x806961",
+      "raw": "0x405d61",
+      "bytes": "81 c6 b8 a0 00 00",
+      "mnemonic": "add",
+      "operands": "esi, 0xa0b8",
+      "size": 6
+    },
+    {
+      "va": "0x806968",
+      "raw": "0x405d68",
+      "bytes": "ff 15 84 22 bd 00",
+      "mnemonic": "call",
+      "operands": "dword ptr [0xbd2284]",
+      "size": 6,
+      "call_target": "indirect"
+    },
+    {
+      "va": "0x80697a",
+      "raw": "0x405d7a",
+      "bytes": "81 c6 b8 a0 00 00",
+      "mnemonic": "add",
+      "operands": "esi, 0xa0b8",
+      "size": 6
+    },
+    {
+      "va": "0x806981",
+      "raw": "0x405d81",
+      "bytes": "ff 15 84 22 bd 00",
+      "mnemonic": "call",
+      "operands": "dword ptr [0xbd2284]",
+      "size": 6,
+      "call_target": "indirect"
+    }
+  ],
+  "findings": [
+    "8068DE EAX=connection+A050;8068F3 pushesEAX as OVERLAPPED;8068F7 ECX=EAX+14 then806909 pushesWSABUF pointer connection+A064.",
+    "806961/80697A formconnection+A0B8 then806968/806981 callInterlockedIncrement. A0B8 is the DWORD atomic-counter address passed here, not the OVERLAPPED argument.",
+    "GetAsyncKeyState and D3DX imports independently agree with T03-18 exclusion of screenshot branch from selection reply provenance."
+  ],
+  "limitations": [
+    "Static valid-call argument/dataflow; no runtime observation or historical DLL loading claim.",
+    "Source-derived screenshot functional interpretation remains inference; precise COM interface and worker target unknown."
+  ]
+}
