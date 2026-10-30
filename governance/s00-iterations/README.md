@@ -111,3 +111,11 @@ Iterations 16–17 的正式流程編號合計 **E00–E26（27 個 gate）與 4
 - [S29-01～04 機讀契約](S00-ITERATION-29-C05-COMBAT-CONTRACT.json)：pin Iteration28/27/18/26 的 Git blob 和原 E17-E/F/G `evidence_state/blocking_unknown/owners`；真實 Server `main=9caffb75c374147b71dea51227b5c4f13b33071d` 的 8 個來源 blob 只為本輪觀察快照，**CI 不會重新讀遠端 Server**。最新 C02-D 已令 local SQLite 升至 v2；對照 Iteration28 v1 時應以各時點歷史快照為準。
 - [24 個 I29-T01～T24 驗收草案](S00-20261031-ITERATION-29-COMBAT-ACCEPTANCE.md)：全為 `PLAN_ONLY/NOT_RUN`，並非正式 conformance TEST；規劃 CI 以 `python -B governance/check_s00_iteration29.py --check` 和 **18 項回歸測試**保護未經證據的戰鬥成功/Client 兼容宣稱。
 - ADR-0006/0007 仍 **PROPOSED**，尚未修改獨立 Server 的 C05 程式或 migration，也未核准 KR/TC native adapter；攻擊/技能/傷害的原版 Client 研究仍由 E17-E/F/G 既有 Txx 所有者補證。
+
+
+## Iteration 30（2026-10-31）：S27-W05 Scenario14 勝負、波次、唯一結算與 Quest14 交界
+
+- [Iteration30 完整設計／下游 Server PR 切片](S00-20261031-ITERATION-30-OBJECTIVE-SETTLEMENT-PLAN.md)：把 verified ActorDeath、波次/Objective、terminal CAS、Outbox→Quest14 eligibility 分為四個**新 Server mock-only 提案**，不把 Client 局部 `0x004C` map flag 或 timer 當原生勝利證據。
+- [S30-01～04 JSON 契約](S00-ITERATION-30-OBJECTIVE-SETTLEMENT-CONTRACT.json)：pin Iteration29/27/18/17/26 五份來源 Git blob，保存 E17-G/H/I/J 與 E18/19/20 七個原 evidence/owner/blocker；最新 Server `272079cc` 的 C00-OPS 離線 SQLite 維運檔只是快照，當時該提交 CI 尚在執行，不能誤宣稱 C05 已完成或 CI pass。
+- [I30-T01～T24 驗收計畫](S00-20261031-ITERATION-30-ACCEPTANCE.md)：24 個皆 `PLAN_ONLY/NOT_RUN`，並非正式 conformance TEST。新 CI 執行 `python -B governance/check_s00_iteration30.py --check` 與 18 個 regression；只驗本庫規劃/來源未被誤升格，不做獨立 Server 或原版 Client 測試。
+- 接續 Iteration29 W04，後續可規劃 Iteration31 W06/W07 Quest14/16/15 及 RewardLedger；ADR-0006/7 仍 PROPOSED，`SPEC-FLOW/SCENE` 仍 DRAFT/PARTIAL，Native adapter OFF。

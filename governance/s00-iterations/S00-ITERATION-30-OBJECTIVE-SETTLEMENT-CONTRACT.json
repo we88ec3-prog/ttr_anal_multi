@@ -1,0 +1,350 @@
+{
+  "schema": "s00-iteration30-objective-settlement-outbox-v1",
+  "kind": "NON_NORMATIVE_DOMAIN_DESIGN",
+  "authored_date": "2026-10-31",
+  "client_build": "kr",
+  "client_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+  "s00_baseline_main": "295b53b003f93e41d7281f94b98d158f06302bb1",
+  "source_blobs": [
+    {
+      "path": "governance/s00-iterations/S00-ITERATION-29-C05-COMBAT-CONTRACT.json",
+      "git_blob_sha": "bb22562f91ea5cf4fc361630697ab554f6f00e1d"
+    },
+    {
+      "path": "governance/s00-iterations/S00-ITERATION-27-C05-DELIVERY-MATRIX.json",
+      "git_blob_sha": "5d2d814ec73e51d8d49a06b2305dfa9dd0877d78"
+    },
+    {
+      "path": "governance/s00-iterations/S00-ITERATION-18-TUTORIAL-COMBAT-GATES.json",
+      "git_blob_sha": "1f2a7bc63e6bed56c6d5f63a5a2d248f100ea71e"
+    },
+    {
+      "path": "governance/s00-iterations/S00-ITERATION-17-TUTORIAL-COMPLETION-GATES.json",
+      "git_blob_sha": "e5179650c54589630cae094fab4846d3584eb607"
+    },
+    {
+      "path": "governance/s00-iterations/S00-ITERATION-26-ENCOUNTER-QUEST-EXIT-MATRIX.json",
+      "git_blob_sha": "6655e480f3cedb8556d2700a89ef6e9cbb3bd208"
+    }
+  ],
+  "original_gate_snapshots": [
+    {
+      "id": "E17-G",
+      "evidence_state": "NATIVE_STATIC_PARTIAL",
+      "blocking_unknown": "戰鬥結果消費端存在但計算權威、命中/死亡責任未閉合",
+      "owners": [
+        "T12",
+        "T08",
+        "T10",
+        "T11"
+      ],
+      "native_compatibility_confirmed": false,
+      "official_status": "PLAN_ONLY"
+    },
+    {
+      "id": "E17-H",
+      "evidence_state": "DISCOVERY_REQUIRED",
+      "blocking_unknown": "Scenario14 真正的 wave、objective 與勝敗觸發未知",
+      "owners": [
+        "T14",
+        "T07",
+        "T08",
+        "T16"
+      ],
+      "native_compatibility_confirmed": false,
+      "official_status": "PLAN_ONLY"
+    },
+    {
+      "id": "E17-I",
+      "evidence_state": "NATIVE_STATIC_PARTIAL",
+      "blocking_unknown": "CTutorial 0x4C 消費局部成立但完整 Server result/QuestInfo14 writer 未閉合",
+      "owners": [
+        "T14",
+        "T16",
+        "T02",
+        "T07"
+      ],
+      "native_compatibility_confirmed": false,
+      "official_status": "PLAN_ONLY"
+    },
+    {
+      "id": "E17-J",
+      "evidence_state": "SERVER_POLICY_PENDING_ADR",
+      "blocking_unknown": "重試/重送/跨 scene/斷線復原與交易邊界待 ADR",
+      "owners": [
+        "T15",
+        "T02",
+        "T07",
+        "T14"
+      ],
+      "native_compatibility_confirmed": false,
+      "official_status": "PLAN_ONLY"
+    },
+    {
+      "id": "E18",
+      "evidence_state": "SOURCE_BACKED_PARTIAL",
+      "blocking_unknown": "0x4C key14 是 Client handler 可消費形狀，不是已捕獲原 Server result；init 可能清 map；不等於 Quest14 完成",
+      "owners": [
+        "T14",
+        "T16",
+        "T02",
+        "T07"
+      ],
+      "native_compatibility_confirmed": false,
+      "official_status": "PLAN_ONLY"
+    },
+    {
+      "id": "E19",
+      "evidence_state": "LOCAL_SOURCE_PARTIAL",
+      "blocking_unknown": "各個 callback、尾端關閉、reentry 和實際完成條件未整體閉合",
+      "owners": [
+        "T16",
+        "T06",
+        "T07"
+      ],
+      "native_compatibility_confirmed": false,
+      "official_status": "PLAN_ONLY"
+    },
+    {
+      "id": "E20",
+      "evidence_state": "NATIVE_DISCOVERY_REQUIRED",
+      "blocking_unknown": "Scenario14 ended!=QuestInfo14 completed；不可僅靠本地 script map 將任務14設完成",
+      "owners": [
+        "T16",
+        "T14",
+        "T15"
+      ],
+      "native_compatibility_confirmed": false,
+      "official_status": "PLAN_ONLY"
+    }
+  ],
+  "server_snapshot": {
+    "repo": "we88ec3-prog/ttr_server_roy",
+    "observed_main": "272079cc69b124870af303d711931ec20bce2229",
+    "ci_run_at_observation": 41134733149,
+    "ci_conclusion_at_observation": "IN_PROGRESS_NOT_CLAIMED_SUCCESS",
+    "latest_change": "C00-OPS_SQLITE_MAINTENANCE_ONLY_NO_C05_IMPLEMENTATION",
+    "anchors": [
+      {
+        "path": "src/Tartaros.Persistence/SqliteLocalDatabase.cs",
+        "git_blob_sha": "c38f647521f5e3f1e897f8a6d9331e8eecdbbb9b"
+      },
+      {
+        "path": "src/Tartaros.Persistence/SqliteLocalOperations.cs",
+        "git_blob_sha": "21973380dd9a3bff0abaee3cfc2c19aba9f561e1"
+      },
+      {
+        "path": "src/Tartaros.Persistence/SqliteCharacterStore.cs",
+        "git_blob_sha": "6d423cf3b14627b89dc28912518b531aa0560f4e"
+      },
+      {
+        "path": "src/Tartaros.Session/ISessionLeaseRegistry.cs",
+        "git_blob_sha": "40512cc33e6e8ec6c90224d5a53ffdd8881fa929"
+      },
+      {
+        "path": "docs/DEVELOPMENT-PLAN.md",
+        "git_blob_sha": "a780495f33c7a6015935c3291fe1af17fa302647"
+      },
+      {
+        "path": "docs/OPS-LOCAL-SQLITE.md",
+        "git_blob_sha": "0a85a8281bce99571223d330a0966b60c2bbcf4d"
+      },
+      {
+        "path": "contracts/spec-revision.json",
+        "git_blob_sha": "a296c8dd101872c5e5c0b99fe03642fab0fd7c1a"
+      }
+    ],
+    "ci_checks_remote_main": false
+  },
+  "parent_workstream": "S27-W05",
+  "required_upstream_workstreams": [
+    "S28-01",
+    "S28-02",
+    "S28-03",
+    "S29-03",
+    "S29-04"
+  ],
+  "next_handoff": "S27-W06_QUEST14_POLICY_SEPARATE",
+  "policies": {
+    "adr_ids": [
+      "ADR-0006",
+      "ADR-0007"
+    ],
+    "adr_status": "PROPOSED_NOT_APPROVED",
+    "mode": "SERVER_MOCK_ONLY",
+    "original_client_runtime_executed": false,
+    "original_server_trace_verified": false,
+    "server_c05_implemented": false,
+    "domain_tests_executed": false,
+    "native_adapter_enabled": false,
+    "formal_rr_clm_req_test_promotion": false,
+    "ci_does_not_test_remote_server": true
+  },
+  "transaction_model": {
+    "server_owned_only": true,
+    "sqlite_existing_version": 2,
+    "postgres_existing_migrations": 3,
+    "migration_sqlite_next": "PROPOSED_V3_NOT_APPLIED",
+    "migration_pg_next": "PROPOSED_V4_NOT_APPLIED",
+    "tables": [
+      "mock_objective_progress",
+      "mock_wave_progress",
+      "mock_death_inbox",
+      "mock_scenario_settlement",
+      "mock_domain_outbox",
+      "mock_consumer_inbox"
+    ],
+    "transaction_invariant": "Full AccountId + SessionId + ConnectionId + Revision + ExpiresAt + selected owned role + ban + current Encounter/Actor generation must be checked at the authoritative mutation boundary; background objective worker requires separately explicit fenced Server-owned processing lease, never blind Client trust",
+    "fencing": "Encounter aggregate revision CAS + valid producer event + config digest, source lease epoch and scoped idempotency/event keys",
+    "outbox": "Atomic settlement result and one durable event; delivery at-least-once, consumer idempotent; no exactly-once network claim",
+    "native_result_adapter": "DISABLED_UNTIL_SOURCE_PROVEN_AND_SEPARATE_RUNTIME_AUTHORIZATION",
+    "quest_boundary": "Scenario outcome -> independently reviewed Quest14 eligibility only, not Quest14 completed or turned in"
+  },
+  "packages": [
+    {
+      "id": "S30-01",
+      "title": "Verified CombatDeath inbox and objective prerequisites",
+      "depends_on": [],
+      "parent": "S27-W05",
+      "gates": [
+        "E17-G",
+        "E17-H"
+      ],
+      "apis": [
+        "RecordAuthorizedActorDeathAsync(EncounterId, DeathEventId, ActorId, SourceActionId, AggregateRevision, CancellationToken)",
+        "ReadObjectiveProgressAsync(EncounterId, CancellationToken)"
+      ],
+      "must": [
+        "Only accept verified S29-03/04 ActorDeath from the same encounter, actor generation and committed HP=0, not Client-supplied kill flags",
+        "Deduplicate by encounter + authoritative DeathEventId + actor spawn generation, with persisted event fingerprint; conflicting replay is Conflict",
+        "Only ACTIVE, current-fenced encounter can advance objective; death event is not a terminal or quest event",
+        "Progress revision CAS and actor membership, wave version, owner/SessionEpoch consistency in one authoritative transaction",
+        "Keep NPC identity in explicit MOCK namespace; no inferred Scenario14 actors or kill totals"
+      ],
+      "cases": [
+        "I30-T01",
+        "I30-T02",
+        "I30-T03",
+        "I30-T04",
+        "I30-T05",
+        "I30-T06"
+      ],
+      "native_missing": "T12/T08/T14 Client/Server hit/death origin, Scenario14 objectives/actor identity and real wave ownership still unknown"
+    },
+    {
+      "id": "S30-02",
+      "title": "Wave/objective deterministic mock predicate and fail precedence",
+      "depends_on": [
+        "S30-01"
+      ],
+      "parent": "S27-W05",
+      "gates": [
+        "E17-H",
+        "E17-J"
+      ],
+      "apis": [
+        "EvaluateMockObjectiveAsync(EncounterId, ExpectedRevision, MockObjectiveConfigHash, ServerTick, CancellationToken)",
+        "AdvanceMockWaveAsync(EncounterId, WaveId, ExpectedRevision, CancellationToken)"
+      ],
+      "must": [
+        "Use version-pinned bounded mock objective config to define wave roster, required death-event set, timeout and failure/restart policy; no original Scenario14 numbers assumed",
+        "Only advance from explicit verified prior wave COMPLETE and exact configuration/aggregate revision, one wave at a time; stale event from earlier wave rejects",
+        "A valid Server-owned timeout/invalid-health/abort can cause candidate FAILURE under approved mock policy, but never automatic SUCCESS",
+        "SUCCESS predicate requires all objective conditions met, active verified actor count zero as appropriate to mock config and no higher-priority terminal failure",
+        "Resolve simultaneous last kill vs timeout/abort deterministically under CAS using documented fixture precedence, not non-deterministic scheduler timing"
+      ],
+      "cases": [
+        "I30-T07",
+        "I30-T08",
+        "I30-T09",
+        "I30-T10",
+        "I30-T11",
+        "I30-T12"
+      ],
+      "native_missing": "T14/T07/T08/T16 original Scenario14 wave spawn/goal/failure scripts and original Client result sequence unproven"
+    },
+    {
+      "id": "S30-03",
+      "title": "Once-only scenario terminal commit and audit",
+      "depends_on": [
+        "S30-01",
+        "S30-02"
+      ],
+      "parent": "S27-W05",
+      "gates": [
+        "E17-H",
+        "E17-I",
+        "E17-J"
+      ],
+      "apis": [
+        "CommitMockScenarioTerminalAsync(EncounterId, ExpectedRevision, ObjectiveDecisionId, CancellationToken)",
+        "ReadScenarioTerminalAsync(EncounterId, CancellationToken)"
+      ],
+      "must": [
+        "Terminal decision requires persisted objective proof/version and one CAS of ACTIVE -> SUCCEEDED/FAILED/ABORTED; never infer success from Lua map[14] or Client packet",
+        "Scope unique settlementKey to EncounterId + scenario instance/config + terminal decision, and disallow a second terminal even with a different key",
+        "Persist terminal, objective snapshot hash, audit event and internal outbound intent in one transaction or approved equivalent recovery model",
+        "Replay with identical decision returns original durable result after authorization/reconciliation, but conflicting terminal is Conflict; stale lease does not leak success",
+        "No direct Quest14 complete/turn-in, Quest16, reward ledger or tutorial COMPLETED from Scenario settlement"
+      ],
+      "cases": [
+        "I30-T13",
+        "I30-T14",
+        "I30-T15",
+        "I30-T16",
+        "I30-T17",
+        "I30-T18"
+      ],
+      "native_missing": "T14/T16/T02/T07 official terminal conditions, S2C 0x004C sender/payload, scene and Quest14 writer not confirmed"
+    },
+    {
+      "id": "S30-04",
+      "title": "Durable outbox delivery recovery and Quest14 boundary",
+      "depends_on": [
+        "S30-03"
+      ],
+      "parent": "S27-W05",
+      "gates": [
+        "E17-I",
+        "E17-J",
+        "E18",
+        "E19",
+        "E20"
+      ],
+      "apis": [
+        "DequeueMockScenarioOutboxAsync(ConsumerId, ExpectedDeliveryRevision, CancellationToken)",
+        "AcknowledgeMockScenarioOutboxAsync(EventId, ConsumerId, CancellationToken)",
+        "OfferQuest14EligibilityFromSettledScenarioAsync(RoleId, EncounterId, CancellationToken)"
+      ],
+      "must": [
+        "Transactional outbox stores one ScenarioTerminal event; transport dispatch is at-least-once, subscriber dedup inbox and delivery retries are independent of exactly-once DB effect",
+        "Outbox/offline synthetic result must NOT enqueue original KR S2C 0x4C, invent a result code, or mutate Client-local map/IsScenarioEnded(14)",
+        "Quest14 is a separate downstream eligibility proposal; settlement only offers a bounded domain fact, requires independent Quest ownership/turn-in authority",
+        "Crash after commit before dispatch, after dispatch before ack, and after ack with duplicate consumer processing must not create another terminal or quest/reward commit",
+        "Retry/backoff/dead-letter and operator reconciliation are review-required Server policy; preserve data and explicitly mark UNDELIVERABLE when native adapter disabled"
+      ],
+      "cases": [
+        "I30-T19",
+        "I30-T20",
+        "I30-T21",
+        "I30-T22",
+        "I30-T23",
+        "I30-T24"
+      ],
+      "native_missing": "T16/T14/T15 full Scenario14 S2C 0x4C consumer/original server sender plus Quest14 NPC 10027 writer/status/relogin path missing"
+    }
+  ],
+  "expected_case_count": 24,
+  "acceptance_file": "governance/s00-iterations/S00-20261031-ITERATION-30-ACCEPTANCE.md",
+  "prohibitions": [
+    "NO_CLIENT_REPORTED_KILL_AS_AUTHORITY",
+    "NO_TIMER_BASED_AUTOWIN",
+    "NO_NATIVE_SCENARIO14_RESULT_OPCODE_GUESS",
+    "NO_SCENARIO_SUCCESS_EQUALS_QUEST14_COMPLETE",
+    "NO_ORIGINAL_CLIENT_RUNTIME_CLAIM",
+    "NO_ADR_AUTO_APPROVAL",
+    "NO_REMOTE_SERVER_CI_PASS_GUESS",
+    "NO_DOUBLE_TERMINAL_OR_REWARD",
+    "NO_IMPLICIT_NATIVE_ADAPTER"
+  ]
+}

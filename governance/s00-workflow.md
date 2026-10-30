@@ -128,3 +128,8 @@ Domain mock/prototype 可採並行研究和工程化測試，但正式業務 pol
 [Iteration29](s00-iterations/S00-20261031-ITERATION-29-COMBAT-IMPLEMENTATION-PLAN.md) 延續 Iteration28 的同交易 full lease/selected-role/Encounter 授權，不許另一次 `IsCurrentAsync`/選角 check 後直接寫 Hit；攻擊/技能只是意圖，技能費用/冷卻/取消必須以 mock policy CAS 防重複，Hit/HP/Death 由 Server-authoritative event 同交易更新，ActorDeath 只交給下一個 W05 objective，不可直接改 Scenario14/Quest/TutorialCompleted。**C02-D 最新 SQLite local v2 停權及 Session revoke 也須在 combat mutation gate 被重驗**；不能推論 PG 同步實作。
 
 `python -B governance/check_s00_iteration29.py --check` 僅保護本庫 source blob、E17-E/F/G 未升格、24 個 `NOT_RUN` 與 ADR-0006/0007 原提案狀態；無遠端 Server 程式碼執行、原版 Client 啟動或 GitHub API live snapshot revalidate。正式 REQ/RR/GAP/CLM/SPEC/TEST 需原唯一台帳審查，Server domain 需其維護者核准持久化與 cooldown/refund 規則，KR/TC 原生封包需同版正向來源及另行授權的 Client runtime。
+
+
+## Iteration 30：原始 Scenario14 研究與 Server mock Objective 隔離
+
+[Iteration30 設計](s00-iterations/S00-20261031-ITERATION-30-OBJECTIVE-SETTLEMENT-PLAN.md) 從 Iteration29 verified domain ActorDeath 開始，必須有 encounter/actor generation/DeathEvent 唯一鍵及 authority；原版 Client 的 Local Scenario `map[14]`、`IsScenarioEnded(14)`、S2C app0x004C 部分 handler **都不能直接構成 Server 成功條件**。Server domain mock 的 wave/objective 決策、終局 CAS、Outbox 與 Quest14 eligibility 四邊界需獨立 transaction/稽核；Quest14 completed/turned-in 必須另經 W06/NPC/Quest record writer 正向規格。出現真 source 差異要依既有 Task/RR/CLM 逐項去重、審查，不可直接修改台帳狀態。 `python -B governance/check_s00_iteration30.py --check` 是本庫**只讀規劃驗證**；不會驗證獨立 Server CI、真正原 Client Gameplay 或自動核准 ADR-0006/0007。
