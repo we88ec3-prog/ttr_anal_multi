@@ -119,3 +119,11 @@ Iterations 16–17 的正式流程編號合計 **E00–E26（27 個 gate）與 4
 - [S30-01～04 JSON 契約](S00-ITERATION-30-OBJECTIVE-SETTLEMENT-CONTRACT.json)：pin Iteration29/27/18/17/26 五份來源 Git blob，保存 E17-G/H/I/J 與 E18/19/20 七個原 evidence/owner/blocker；最新 Server `272079cc` 的 C00-OPS 離線 SQLite 維運檔只是快照，當時該提交 CI 尚在執行，不能誤宣稱 C05 已完成或 CI pass。
 - [I30-T01～T24 驗收計畫](S00-20261031-ITERATION-30-ACCEPTANCE.md)：24 個皆 `PLAN_ONLY/NOT_RUN`，並非正式 conformance TEST。新 CI 執行 `python -B governance/check_s00_iteration30.py --check` 與 18 個 regression；只驗本庫規劃/來源未被誤升格，不做獨立 Server 或原版 Client 測試。
 - 接續 Iteration29 W04，後續可規劃 Iteration31 W06/W07 Quest14/16/15 及 RewardLedger；ADR-0006/7 仍 PROPOSED，`SPEC-FLOW/SCENE` 仍 DRAFT/PARTIAL，Native adapter OFF。
+
+
+## Iteration 31（2026-10-31）：Quest14→16→15 及唯一獎勵帳本
+
+- [Iteration31 完整 Server 設計交接](S00-20261031-ITERATION-31-QUEST-REWARD-PLAN.md)：從 Iteration30 ScenarioTerminal 的 durable proof 才進 Quest14 eligibility／交付，再以獨立 NPC/mock policy 進 Quest16，Reward type2/value50 語意未證時**絕不入帳**，Quest15 AVAILABLE 不等於 accepted 或 WorldReady。
+- [S31-01～04 機讀契約](S00-ITERATION-31-QUEST-REWARD-CONTRACT.json)：固定 Iteration30/27/17/26 來源 Git blob、E20-E24/E26 原始 gate 的 evidence/owner/blocker、8 個真 Server 來源 blob；最新 Server C00-OPS/C02-D/C03 尚無 C05 Quest/Reward code。Server 快照僅為本輪 GitHub 唯讀觀察，不在 S00 CI 自動再次驗證。
+- [24 個 I31-T01～24 驗收草案](S00-20261031-ITERATION-31-ACCEPTANCE.md)：全部 `PLAN_ONLY / NOT_RUN`；新規劃 CI 執行 `governance/check_s00_iteration31.py --check` 與 **18 項回歸測試**，不執行任何 .NET/原版 KR Client。
+- **新的整合要求**：Iterations28～30 各自提過 SQLite 候選 v3／PG004；Iteration31 不會再重複佔用這些版本，要求 Server maintainer 統一配置 C05 全模組 migration 序列，當前一切下一版號 `UNALLOCATED_NOT_APPLIED`。ADR-0006/0007 仍 PROPOSED，Native adapter OFF。
