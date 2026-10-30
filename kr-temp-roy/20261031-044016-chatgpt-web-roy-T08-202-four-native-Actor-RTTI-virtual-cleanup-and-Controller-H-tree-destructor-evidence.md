@@ -194,3 +194,17 @@ Common subcleanup \`0x4C8360\`:
 - **CController / MissionRoom / Tutorial** 的已知vptr+0 多數為 \`0x544E50\`，它一開始於 \`0x544E56 call 0x544E80\`，故在此已知類別表下有共同的base H-tree析構終點。
 
 這是**至少六張已知Controller主vtable的真正生命週期共通點**：除slot14重置以外，型別的deleting destructor終會處理+48 H-tree、+88另一tree和+30 pair vector配置。**但這不證明Actor命令26/81即時析構Controller**，因它們只是對現有Controller呼叫slot14（26條件性），不是vptr+0 deleting destructor。未核所有外部Plugin或動態vptr替換，也不能由此證明Actor與Controller的跨owner引用安全性。
+
+
+## 6. 更精確六型別 H-tree 基底析構 caller 全部六個直接E8站點
+
+2026-10-31同原件再以整個PE .text搜尋真 \`E8 rel32→0x544E80\` 的byte模式，六個候選站點正好為：
+\`0x44438A,0x544E56,0x54720C,0x5476AD,0x5486BA,0x548C8C\`；依真根入口逐一比對：
+- CTag→\`444300\` at **\`44438A e8 f1 0a 10 00\`**
+- CController→\`544E50\` at **\`544E56 e8 25 00 00 00\`**
+- CEmpty→\`547200\` at **\`54720C e8 6f dc ff ff\`**
+- CMissionRoom派生destructor→其resource cleanup在**\`5476AD e8 ce d7 ff ff\`**呼叫base
+- CSingle→\`548630\` at **\`5486BA e8 c1 c7 ff ff\`**
+- CTutorial派生deleting destructor **\`548C80\` at \`548C8C e8 ef c1 ff ff\`**：注意這修正§5過於簡化的「Tutorial也直接用544E50」表述。真正C0FB1C primary vptr+0是**548C80**，它會先寫\`[ESI]=0xC0FB1C\`再call 544E80。
+
+上述更精確的六入口與各vtable+0對應，表明已知Controller型別之正常析構在native静態CFG上可一致到達H-tree釋放。**沒有**證明所有CI callback都循此路，也**沒有**把單純index26/81 Actor移除提升為Controller的實際析構；這兩件事仍應分開。
