@@ -36,3 +36,10 @@
 可以分別實作 T02 framing 子集、E8/000F payload 解析、command2 roster 資料幾何，並於實作庫分開管理自己的帳號 Session；但**不能只依本文件完成原版 Client 的登入/選角/教學端到端運行**。
 
 開發前的阻塞：`GAP-AUTH-0001`、`GAP-CHAR-0001`、`GAP-NET-0002`、`GAP-FLOW-0001`、`GAP-SCENE-0001`；研究請求 `RR-0002`、`RR-0003`、`RR-0005`、`RR-0008`。來源 `CLM-AUTH-0001..0006`、`CLM-NET-0007/0018..0020/0030`、`CLM-CHAR-0001/0002`、`CLM-SCENE-0001..0004`，全部 PARTIAL。**本規格沒有新增 wire conformance fixture 或運行證據，不可升 STABLE。**
+
+## Iteration 21 — 創角入口與交易缺口（2026-10-31，DRAFT／非封包契約）
+
+- `GAP-CHAR-0002`／`RR-0009 (QUEUED)`：目前沒有證明 KR Client 從 `command2 N=0` 或「新增角色」控制器到**可操作的創角對話框**的正向 scene/dialog/callback 鏈。T03 研究 UI event/scene gate，T06 協查同版本資源。UI 本地事件不等於 Client↔Server message。
+- `GAP-CHAR-0003`／`RR-0010 (QUEUED)`：目前沒有可核定的建立角色 C2S builder 與 S2C 成功/拒絕 consumer 配對、方向別 layout、slot/frame/encoding、創角後 roster/init 時序；T03 為研究主責，T04/T02 提供欄位/transport 介面。
+- **選角不是創角**：既有 C2S `0x42` 是選中既有角色的有界 Client builder；`RR-0002 BLOCKED` 處理選角結果，`RR-0007 IN_REVIEW` 處理 dispatcher，`RR-0008 IN_REVIEW` 處理選角到場景。新請求不得替代它們，也不能借用 S2C `0x42/0x43` 當創角回覆。
+- **可實作限制**：此時只能做獨立的 Server-side domain mock / adapter fail-closed 設計，不可硬編任何未證的 Create opcode、初始數值、官方回覆結果或直接宣稱原版 Client 可以創角。正式台帳與原 Client 執行授權各自獨立。
