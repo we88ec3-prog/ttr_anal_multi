@@ -47,7 +47,7 @@ def audit(repo, target):
     reviews = json.loads(reviews_path.read_text("utf-8"))
     assert mapping["target_sha256"] == TARGET_SHA, "mapping provenance"
     by_n = {int(r["number"]): r for r in mapping["reports"]}
-    reviews_by_n = {int(re.search(r"T08-(\\d+)-", r["source"]).group(1)): r for r in reviews["reviews"]}
+    reviews_by_n = {int(re.search(r"T08-(\d+)-", r["source"]).group(1)): r for r in reviews["reviews"]}
     assert len(reviews_by_n) == 24 and len(by_n) == 18, "expected review/map counts"
     covered = 0
     summary = []
