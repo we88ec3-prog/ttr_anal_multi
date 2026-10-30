@@ -43,3 +43,12 @@
 - `GAP-CHAR-0003`／`RR-0010 (QUEUED)`：目前沒有可核定的建立角色 C2S builder 與 S2C 成功/拒絕 consumer 配對、方向別 layout、slot/frame/encoding、創角後 roster/init 時序；T03 為研究主責，T04/T02 提供欄位/transport 介面。
 - **選角不是創角**：既有 C2S `0x42` 是選中既有角色的有界 Client builder；`RR-0002 BLOCKED` 處理選角結果，`RR-0007 IN_REVIEW` 處理 dispatcher，`RR-0008 IN_REVIEW` 處理選角到場景。新請求不得替代它們，也不能借用 S2C `0x42/0x43` 當創角回覆。
 - **可實作限制**：此時只能做獨立的 Server-side domain mock / adapter fail-closed 設計，不可硬編任何未證的 Create opcode、初始數值、官方回覆結果或直接宣稱原版 Client 可以創角。正式台帳與原 Client 執行授權各自獨立。
+
+
+## 2026-10-31 RR-0010 源級正向補證與流程仍未閉合
+
+詳見 [S00 對 extra/roy1 E71–E74 的有限驗證](../../governance/s00-iterations/S00-20261031-RR0010-EXTRA-ROY1-REVIEW.md)。相對於 Iteration 21 的歷史 QUEUED 敘述，RR-0010 後續已 `BLOCKED`，新增的 Client 源級正向發現是「**遠征隊名稱 UI→C2S 0x003E sender**」及獨立「**LOGIN scene S2C 0x004A result→本地 F4245→成功 UI name**」。`S2C app2` 的 header name `+0x0C` 和結果 UI 寫入同一 `F938F2`，此交會點已查到；`app2` per-row C2S `0x26` 與 list-end C2S `0x24` 是另一個 bounded 下游，並非已證配對。
+
+**必須保留的斷點**：N0 roster→建名視窗（RR-0009）；`C2S0x3E` `+2..5` unknown / framing / Conn；原版 Server 是否 `3E→4A`、非1結果實際意義、`4A→app2` 時序；建立 Expedition 名稱與招募/建立 playable-character 的不同業務步驟；其後的選角 `0x42`、tutorial scene activation。未知的原始 Server side policy 不妨礙先做獨立內部模型／合成錯誤測試，但**不能寫成已確認的 Client↔Server 原始完整時序**。
+
+狀態維持 `SPEC-FLOW-0001 DRAFT/PARTIAL`，`GAP-CHAR-0003 OPEN`，`RR-0010 BLOCKED`；此次 S00 未重跑原始 BIN、未執行原 Client，也不是 T01 FULL-PASS。

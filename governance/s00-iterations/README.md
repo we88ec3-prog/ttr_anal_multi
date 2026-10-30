@@ -52,3 +52,9 @@ Iterations 16–17 的正式流程編號合計 **E00–E26（27 個 gate）與 4
 - [Iteration 22 正式管理員需求與實作交接](S00-20261031-ITERATION-22-ADMIN-WEB-V1.md)；[WEB Admin V1 功能設計](../../design/admin-web/ADMIN-WEB-V1-PLAN.md)；[25 項未執行驗收草案](../../design/admin-web/ADMIN-WEB-V1-ACCEPTANCE.md)。
 - REQ-0006 管理員權限稽核、REQ-0007 新增玩家帳號、REQ-0008 停權 N 天／永久／解封，以**真實** `PLAYER_ADMIN_REQUEST` 去敏登錄；不污染原有 CODE_ANALYSIS 需求。
 - ADR-0004/0005 提供 Server-only 安全、停權與 Session 整合提案，全部 **PROPOSED**。此輪沒有修改 `ttr_server_roy`、沒有新 Client RR/GAP/SPEC/TEST/CLM，亦沒有部署 WEB 或測試執行。
+
+
+## RR-0010 extra/roy1 合併來源有界複核（2026-10-31）
+
+- [S00 逐條驗證與 Server 交接](S00-20261031-RR0010-EXTRA-ROY1-REVIEW.md)：在 [PR #63](https://github.com/we88ec3-prog/ttr_anal_multi/pull/63) 合併 E71–E75 研究後，核對 Git blobs、E73/E74 的 Client 建名 sender/result/shared-name、和已保存同版 Ghidra 偽碼；本環境沒有原始 KR BIN，不宣稱親自重跑作者 58/81 項 source-byte checker。
+- [SPEC-CHAR](../../spec/session-account/SPEC-CHAR-0001.md)、[SPEC-FLOW](../../spec/session-account/SPEC-FLOW-0001.md) 及 `GAP-CHAR-0003` 只新增「有界證據／未知」註記，`RR-0010=BLOCKED`、`GAP-CHAR-0003=OPEN`、SPEC `DRAFT/PARTIAL`；**無原版 Server 0x3E↔0x4A 配對、角色建立→roster 因果，沒有新增 accepted claim/full pass**。E75 屬 RR-0002 的相鄰補證，不能冒稱 RR-0010 閉合。
