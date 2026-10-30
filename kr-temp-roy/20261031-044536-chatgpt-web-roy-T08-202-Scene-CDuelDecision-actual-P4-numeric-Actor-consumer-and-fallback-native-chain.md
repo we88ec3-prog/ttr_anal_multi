@@ -102,3 +102,20 @@
 4. T02 wire framing→Client handler index的正式業務domain，以及相容Server應產出哪種資料；這屬跨Task交接，不是原版Server算法可反推。
 
 Client已證為上述確切有界鏈；**Client待逆向**為1–3；**Server待開發**為相容資料/決鬥業務判斷（不得宣稱復刻官方）；**跨T02/T06/T07/T14/S00**資料契約和顯示結果待串；**待遊玩驗證**與靜態SRC證據分開。**T08-202仍不應因單一新Scene consumer就標整體FINISHED**；此為真新的限定進展而非另一份描述舊P建立的重複報告。
+
+
+## 6. 當批追加：0x4BD600 的真正多型介面已在原生vtable直接定位
+
+本篇初稿對 \`0x4BD600\` 的上游只知同類別函式，未確認可經哪個virtual slot派送；隨即用原始BIN全長DWORD搜尋得 **exact \`0x004BD600\` hit只有一筆，raw \`0x8056FC\`**。按.rdata真PE對照 **VA=0xC070FC = Scene::CDuelDecision primary vptr \`0xC070CC\` +0x30**。所以在動態vptr仍為C070CC、場景dispatcher呼叫該物件virtual+0x30時，**必定跳入0x4BD600 P+4 consumer**。前面僅列8個vtable slot未顯示到此slot，這裡補上完整關鍵交界：
+
+~~~text
+C070C8 = C69B28   MSVC COL (Scene::CDuelDecision)
+C070CC = 4BD5D0   vptr +0 : deleting destructor
+C070F8 = 4B2570   vptr +2C : another function
+C070FC = 4BD600   **vptr +30 : verified P+4 numeric consumer**
+C07100 = 4C0B20   vptr +34
+C07104 = 4BD820   vptr +38
+C07108 = C69B7C   **NEXT CLASS COL, not CDuelDecision method +3C**
+~~~
+
+全.text以原始 \`E8 rel32\`搜尋 \`0x4BD600\` **0個direct E8 byte candidate**，與它是virtual method相容；**不能**據此說不存在場景caller。完整scene update迴圈是哪個主體對CDuelDecision呼叫vptr+0x30及其時序，仍待追具體ECX來源；本篇目前已從「函式無caller」進步為**完整RTTI/vtable可達接口**，不可提升為「已實際在玩家每幀調用」。
