@@ -547,18 +547,28 @@
       "id": "RR-0009",
       "title": "KR empty-roster to create-character UI entry, event and resource prerequisites",
       "client_version": "kr",
-      "status": "PENDING",
+      "status": "ACTIVE",
       "owner_task": "T03",
       "gap_ids": [
         "GAP-CHAR-0002"
       ],
       "question": "From known KR S2C command2 65+53*N roster handling and 0x4D4150 data-writing to the actual zero-character/create-button GUI branch, identify the reachable Client scene/dialog/control producer and callback/consumer chain, with T06 resource consultation; do not infer UI readiness from F42EF/F4246/F4247/F4278 or 0x665150 list-hit.",
       "dispatch": {
-        "state": "QUEUED",
+        "state": "SUBMITTED",
         "priority": "P0",
         "acceptance_criteria": "1) Record exact KR Client source SHA, bounded native function/branch, GUI resource identities, scene/state prerequisites, and local event producer→consumer→actual create dialog/control. 2) Explicitly test reasoning for N=0, N>0, missing resource, and data-written-but-UI-not-ready counterexamples. 3) Separate local UI state from S2C roster command2 and from create C2S wire; cite existing RR-0002/RR-0007 and avoid re-opening their selection/dispatch scope. 4) Attach full reproducible report, unknowns and relevant SPEC/GAP/TEST impact; source-only evidence is not runtime display proof. 5) If no positive native entry exists in examined sources, submit exact blocker/what evidence would unblock without fabricating a path.",
-        "claim": null,
-        "submission": null,
+        "claim": {
+          "actor": "chatgpt-web roy",
+          "branch": "extra/roy1",
+          "base_commit": "b326cb271aa0eb56655b5db323217ca5c58eef09",
+          "date": "2026-10-31"
+        },
+        "submission": {
+          "report_path": "kr-extra-roy/20261031-chatgpt-web-roy-E70-RR0009-empty-roster-GUI-blocker.md",
+          "report_blob_sha": "ef778ac58ccdfd4013962b86a2aa33bf6f245d13",
+          "date": "2026-10-31",
+          "summary": "KR T03 RR-0009 E70 acceptance criterion #5 bounded native static blocker submission for manual T01/S00 review (NOT create-UI functional closure). Original BIN Tartaros.bin SHA256 9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91. N=0 S2C0x0002 65+53*N skips row loop 0x4B894C→0x4B8A20, common mask+0x4E5FB0; N>0 record 0x4D4150 +0x5C. RTTI CEmployNewCharacter@FUI@@ at vptr C3F024, cache 5AB020→5AB280, UI owner 5C30FD/5C316A, local 65D550 0x387→F4350 separately established; cannot positively join N0→actual visible create dialog/control. F42EF/665150 list-hit is existing-character detail, not create. Missing matching-version GUI layout/control resource, actual UI listener/state and runtime view, blocker/unblock evidence specified for N0/N>0/missing resource/UI-not-ready. Source-only 30 assertions passed; not Client runtime, not original Server wire, not T01 FULL-PASS or S00 ACCEPTED. Research on extra/roy1 commit e22786050e133b5be79e0e37198f37466f7a4508, exact report Git blob ef778ac58ccdfd4013962b86a2aa33bf6f245d13 mirrored identically to main; test script blob 8435e2a363c135b0df12cf0a8c6c1958a1d02b7d on extra/roy1. GAP-CHAR-0002 stays OPEN, SPEC-CHAR-0001/SPEC-FLOW-0001 not STABLE, RR-0010 remains QUEUED."
+        },
         "review": null,
         "events": [
           {
@@ -567,6 +577,27 @@
             "actor": "S00",
             "date": "2026-10-31",
             "note": "Iteration 21: deduped from RR-0002 selection, RR-0007 dispatcher and RR-0008 scene transition; scoped GAP-CHAR-0002 native research, no Agent automatically claimed or awakened."
+          },
+          {
+            "from": "QUEUED",
+            "to": "CLAIMED",
+            "actor": "chatgpt-web roy",
+            "date": "2026-10-31",
+            "note": "User explicitly authorized RR-0009; main→extra/roy1 real merge PR #58 f764b88b77a9e10f1b5ec43f247637b873b6b874 verified. Research only on existing extra/roy1, no new branch. T03 older T01 NEEDS_FIX remains independent; RR-0010 remains QUEUED."
+          },
+          {
+            "from": "CLAIMED",
+            "to": "IN_PROGRESS",
+            "actor": "chatgpt-web roy",
+            "date": "2026-10-31",
+            "note": "E70 native BIN-first RR-0009 analysis completed on extra/roy1 commit e22786050e133b5be79e0e37198f37466f7a4508; 572-line report blob ef778ac58ccdfd4013962b86a2aa33bf6f245d13 and 30-static-check source blob 8435e2a363c135b0df12cf0a8c6c1958a1d02b7d. Zero-row branch, CEmployNewCharacter RTTI/cache and F4350 UI event independently verified. Positive zero-roster→visible create UI entry not proven; explicit acceptance criterion #5 permits precise evidence blocker submitted for review."
+          },
+          {
+            "from": "IN_PROGRESS",
+            "to": "SUBMITTED",
+            "actor": "chatgpt-web roy",
+            "date": "2026-10-31",
+            "note": "KR T03 RR-0009 E70 acceptance criterion #5 bounded native static blocker submission for manual T01/S00 review (NOT create-UI functional closure). Original BIN Tartaros.bin SHA256 9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91. N=0 S2C0x0002 65+53*N skips row loop 0x4B894C→0x4B8A20, common mask+0x4E5FB0; N>0 record 0x4D4150 +0x5C. RTTI CEmployNewCharacter@FUI@@ at vptr C3F024, cache 5AB020→5AB280, UI owner 5C30FD/5C316A, local 65D550 0x387→F4350 separately established; cannot positively join N0→actual visible create dialog/control. F42EF/665150 list-hit is existing-character detail, not create. Missing matching-version GUI layout/control resource, actual UI listener/state and runtime view, blocker/unblock evidence specified for N0/N>0/missing resource/UI-not-ready. Source-only 30 assertions passed; not Client runtime, not original Server wire, not T01 FULL-PASS or S00 ACCEPTED. Research on extra/roy1 commit e22786050e133b5be79e0e37198f37466f7a4508, exact report Git blob ef778ac58ccdfd4013962b86a2aa33bf6f245d13 mirrored identically to main; test script blob 8435e2a363c135b0df12cf0a8c6c1958a1d02b7d on extra/roy1. GAP-CHAR-0002 stays OPEN, SPEC-CHAR-0001/SPEC-FLOW-0001 not STABLE, RR-0010 remains QUEUED."
           }
         ]
       }
