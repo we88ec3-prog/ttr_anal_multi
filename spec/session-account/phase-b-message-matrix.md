@@ -30,3 +30,9 @@
 來源：[SPEC-NET-0001](../protocol/SPEC-NET-0001.md)、[SPEC-NET-0002](../protocol/SPEC-NET-0002.md)、[SPEC-NET-0003](../protocol/SPEC-NET-0003.md)、[SPEC-AUTH-0001](SPEC-AUTH-0001.md)、[SPEC-CHAR-0001](SPEC-CHAR-0001.md)、[SPEC-FLOW-0001](SPEC-FLOW-0001.md)、[SPEC-SCENE-0001](../world/SPEC-SCENE-0001.md)。
 
 在 [s00-roadmap.json](../../governance/s00-roadmap.json) 中，此表對應 B-NET、B-AUTH、B-CHAR、B-SCENE、B-CONTRACT。**目前所有 B 階段工作包仍有阻塞**，S00 不應為了填表而提升證據等級。
+
+## 2026-10-30 RR-0006/0007 bounded receive and scene-dispatch update
+
+- S2C **0x2633**: 8-byte header, seed-0x7C rolling XOR input and `0x727190` inflate-like decode with output capacity `0x1000`. Header+4..+7 still opaque. **0x0BBB** uses seed-0xB6 XOR plus LE16 checksum; bad checksum and bad inflate skip application delivery and recycle a zero-length node, while outer invalid n returns parser0 (different IOCP branch). Incomplete frame is retained. See [SPEC-NET-0001](../protocol/SPEC-NET-0001.md).
+- Decoded **application** LE16 is distinct from frame marker; global command `0x0002` first-level direct handler exists, while `0x0013/0x007A` require active LOGIN scene second-level table. Incoming base-scene **0x0042/0x0043 handler registration** does **not** establish that either is the original S2C selection-success response to C2S 0x42. See [SPEC-NET-0003](../protocol/SPEC-NET-0003.md).
+- Evidence `CLM-NET-0026..0031` remains PARTIAL; `RR-0006/0007=IN_REVIEW`, `RR-0002=BLOCKED`, `GAP-NET-0003=OPEN` and all existing TEST stay OFFLINE_SYNTHETIC. No captured original Server message order or runtime validation.
