@@ -76,3 +76,16 @@
 - E79 full app2 / delta app2B 同角色權威資料，與 E76 頁面 ready flag、E77 S2CB6 UI 刷新相容，但它們不強制構成原始 Client 必然順序；新帳號與已持有角色的舊帳號分別處理。
 
 此處為 DRAFT/PARTIAL 限定設計，非原版 Client 或 Server 實測。RR-0002、RR-0010 仍 BLOCKED，GAP-CHAR-0001/0003 OPEN。
+
+
+## Iteration 25（E10–E26）：首次教程狀態不可混成 Client 可玩證明
+
+[Iteration25 教學入場／重登提案](../../governance/s00-iterations/S00-20261031-ITERATION-25-TUTORIAL-ENTRY-RECOVERY-PLAN.md) 及 [ADR-0006（PROPOSED）](../../design/decisions/ADR-0006-tutorial-progress-and-session-fencing.md)。這是 Server domain 候選，**不是已審核的 KR Client wire SHOULD/MUST 或 normative ADR**。
+
+- Account／ExpeditionName／PlayableRole 與 TutorialProgress 分離：per-role durable NOT_STARTED/IN_PROGRESS/COMPLETED 是新的 Server policy 提案；首次條件是 account-first 或 role-first 仍需維護者決議，並未由原生 Client 證實。
+- C2S 0x42 的 Client local UI pending、S2C0x69 subtype7 的 CSquare 和 C2S0x43 的角色／channel 局部 index，都不能代表 Server 已核准教學場景、Client 真正可以操作或教程正式完成。分離 RoleAdmission SessionEpoch、WorldAdmission、ClientReadyObserved、TutorialProgress 的資料權威與驗收等級。
+- E16 局部 source 的 C2S 40 00 0E 00 是 Client candidate Scenario14 start；E18 S2C0x4C 可能令 CTutorial 本地 map[14]=1；**不等於** Quest14/16 完成、Quest15 完成、角色教程結案或原版 Server 結算政策。
+- 原版 E10–E12 world→tutorial scene/Conn/first-player-ready 與 E23–E26 exit/relogin 正向配對及失敗 consumer 未閉合。Domain 可按候選政策建 revision、lease/fencing、checkpoint/event inbox/outbox、Quest/RewardLedger，但 native adapter **預設關**。
+- 原版 Client runtime 與 Server mock 必須獨立測；Iteration25 [16 案例](../../governance/s00-iterations/S00-20261031-ITERATION-25-ACCEPTANCE.md) 全部 PLAN_ONLY／NOT_RUN。
+
+此更新不升格 SPEC-FLOW-0001：仍 **DRAFT / PARTIAL**，與 RR-0002/0010 BLOCKED、RR-0008 IN_REVIEW、GAP-FLOW-0001 OPEN 並存；ADR-0006 不加入正式規範性 adr_ids。

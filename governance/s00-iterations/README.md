@@ -72,3 +72,10 @@ Iterations 16–17 的正式流程編號合計 **E00–E26（27 個 gate）與 4
 - [Iteration 24 — RR-0010 斷點不變、E80 選角與 Square 開發交接](S00-20261031-ITERATION-24-SELECTION-SQUARE-HANDOFF.md)：新增 E80 RR-0002 正向 Client 靜態研究（經 PR #67 合併），C2S42 4B roleIndex+mode、ExpeditionScene 選角 UI gate 與 pending flag 可能未送出、候選 S2C69 subtype7→CSquare→C2S43 的不同 owner 來源；非 original Server 42→69 ACK，不能拿選角完成補 RR-0010 建角因果。
 - [Iteration 24 — 20 項規劃測試](S00-20261031-ITERATION-24-ACCEPTANCE.md)：DOMAIN/NEGATIVE/STATIC/E2E 全部 PLAN_ONLY/NOT_RUN，延伸 Iteration23 的 ExpeditionProfile/Full+DeltaRoleStore 至 SelectionAttempt/SceneBootstrap/WorldReady，原 Client/Server 實測另須授權。
 - 更新 DRAFT SPEC-CHAR/FLOW、GAP-CHAR-0001/0003、SLICE-ENTER-WORLD 與 B-CHAR/B-SCENE roadmap；正式 REQ/RR/CLM/TEST 索引不新增或升級。RR-0002、RR-0010 保持 BLOCKED，相關 GAP OPEN，無 T01 FULL-PASS 或新 Server 實作。
+
+
+## Iteration 25（2026-10-31）：首次教學入場及復原 Server domain
+
+- [Iteration25 — 教學首次入場、Progress/Session lease、Scenario/Quest/Reward、離場重登的完整交接](S00-20261031-ITERATION-25-TUTORIAL-ENTRY-RECOVERY-PLAN.md)：承接 Iteration23 Account/Expedition/Role、Iteration24 SelectionAttempt/Square 候選；把 E10–E26 的進度與 Client 場景可操作證據分層。**沒有原版 Client 遊玩、沒有完整官方 Client↔Server 因果鏈**。
+- [Iteration25 — I25-T01～T16 計畫測試](S00-20261031-ITERATION-25-ACCEPTANCE.md)：16 項全部 PLAN_ONLY/NOT_RUN，重點在 per-role State、SessionEpoch fencing、outbox/reward idempotency、ban/unban、scene/Conn/Quest 誤判反例。沒有註冊正式 native TEST。
+- [ADR-0006](../../design/decisions/ADR-0006-tutorial-progress-and-session-fencing.md) 正式列入 ADR 台帳，狀態 PROPOSED、非規範；路線圖增列與 Client 研究可並行但**需維護者批准後才能作正式業務政策**的 C-TUTORIAL-DOMAIN。維持 RR-0002/0010 BLOCKED、RR-0008 IN_REVIEW（當時 main）、SPEC-FLOW/SCENE DRAFT/PARTIAL，native adapters OFF。
