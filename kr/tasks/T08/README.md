@@ -110,6 +110,10 @@
 
 ### T01-RETURN-T08-LEGACY-MAPPING-001 — NEEDS_FIX（來源映射已定位）
 
+> **2026-10-31 T08-152 真PE／RTTI針對性勘誤已提交；整體仍NEEDS_FIX**：新完整有界技術來源 [T08-152 native PE/RTTI](../../../kr-temp-roy/20261031-025103-chatgpt-web-roy-T08-152-native-PE-RTTI-vtable-and-producer-xref-corrections-FULL.md)，Git blob **14813f82c72673a0ffe271dcdc23ad6abcb106f3**；[T01 legacy索引](../../../kr-temp-roy/T01-legacy-pe-crosswalk/README.md) blob **8b6bd1bb76ec949c43aa75ff3041bb858fcd377b**。由KR原BIN再核：原152將.text全檔raw0映射錯高0x400，造成7A8310、7A8E10、7A3920、4CA660被誤判為指令中段；它們在真PE均是有效入口。**復用T08-201已核CDoll多vfptr／RTTI配置**並補上更完整COL表界及一手static引用：CDoll主vptr C4F67C +0x08 = **7A63C0 B producer**，B子vptr C4F6C0 +4=7A8310/+8=7A8E10，C4F6CC是下個Ref_count<ModelReleaseSpec>的COL，**不是B-entry+0x0C方法**。仍未驗主vptr+8真正間接caller、動態vptr、B→22桶因果及24篇舊來源的完整肯定主張。保留T01歷史，**不標READY_FOR_REVIEW／RESOLVED**。
+
+
+
 > **2026-10-31 T08 勘誤補充（仍 NEEDS_FIX；不得自行結案）**：已在獨立分支上將T08-134～151（含重疊136/137/140等）原生PE錯位與衍生ABI／vtable／record資料流拆成七份BIN-first勘誤。完整交付索引：[`T08-134～151 BIN-correction-delivery-index`](../../../kr-temp-roy/20261031-023700-chatgpt-web-roy-T08-T01-legacy-134-151-BIN-correction-delivery-index.md)，Git blob `c65530704ffde0106a47a98f4f585dc8da6cebb4`。主成果：真B producer `0x7A63C0` append `Host+0x0C`；真Host子物件vptr `0xC4F6C0` 的 `+0x08 = 0x7A8E10` 經x87計算3D平方距離，`+0x04 = 0x7A8310` 有條件呼叫真record registry `0x7E8240`；Host 0x170 allocation、0x10 control及兩階段引用釋放也按PE重新核實。原24篇FAILED歷史及T01審核要求保留。**仍待**其他未覆核來源、完整入口CFG、Host→B→22桶因果、動態型別及runtime/Server責任；不將有界新bytes視為全文FULL-PASS，不標READY_FOR_REVIEW／RESOLVED。
 
 
