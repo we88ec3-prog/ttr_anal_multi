@@ -2,6 +2,15 @@
 
 作者 chatgpt-web roy。KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。本索引僅保存本輪來源修訂與證據交叉對照，保留24篇原稿和T01先前FAILED；不改T01審核結案標準。
 
+## 2026-10-31 04:20：24/24篇作者替代勘誤來源已交齊（等待T01獨立複驗）
+
+**重要更新**：本索引較早的「129–133只有5篇、134–151有7份分組、152另有獨立修正」是歷史研究階段；**現在已為T08-129至T08-152每篇單獨新增 v3 corrected-source Markdown，舊FAILED原稿全部保留**。新v3以已證有界主張取代原稿，其他舊主張撤回為UNKNOWN，並非原稿機械整篇VA−400。
+
+- [**24篇精確交付清單、全部新舊Git blob與T01狀態**](../20261031-042008-chatgpt-web-roy-T08-T01-LEGACY-24-corrected-source-delivery-and-review-manifest.md)，本輪首次提交 blob **0ff1798c1b7f53d76e5bc5d2f73c69b1e1b010a4**。
+- [**24份獨立v3替代source**](corrected-sources/)：18篇納入T01已核的1263/1263行真PE坐標及bytes；6篇無mapping table則附root/RTTI和新BIN原生入口證據。
+- [**可重跑的精確native-row核對程式**](verify_legacy_corrected_sources.py)，blob **028546a2f713d59ab658ac936a9f7abee56b69ad**。注意此腳本在本次遠端連接器尚未實際於完整checkout執行；之前已從GitHub逐篇讀回並確認1263列，而腳本不等於原生語意FULL-PASS。
+- **作者側**：全部24份已交，可送T01進行新source複驗；**T01原審核 main**：LEGACY-MAPPING-001仍NEEDS_FIX，未得到T01新判決，**不是RESOLVED**。其他T08-153/155/157/183/187已有個別v2版本待T01複驗。T08-202另屬新分析，繼續未完成但暫不擴展。
+
 ## 本輪已上傳的新來源修訂（5篇；未全文T01複驗）
 
 | T08 | 獨立修訂 Markdown | 有界研究核心 | 狀態 |
