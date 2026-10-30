@@ -9,6 +9,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "governance"))
 from phase_b_worklist import evaluate, markdown  # noqa: E402
+from s00_test_fixtures import reset_queued_fixture
 
 FILES = [
     "research/requests/index.json", "design/gaps/index.json",
@@ -27,6 +28,8 @@ class PhaseBWorklistTests(unittest.TestCase):
             dest = self.root / rel
             dest.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(ROOT / rel, dest)
+
+        reset_queued_fixture(self.root)
 
     def mutate(self, name, operation):
         dest = self.root / name

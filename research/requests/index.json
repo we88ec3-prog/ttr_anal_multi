@@ -5,18 +5,28 @@
       "id": "RR-0001",
       "title": "Resolve remaining KR framing mode and real initial exchange boundaries",
       "client_version": "kr",
-      "status": "PENDING",
+      "status": "ACTIVE",
       "owner_task": "T02",
       "gap_ids": [
         "GAP-NET-0001"
       ],
       "question": "With 0x8068B0 WSASend, 0x806CF0 WSARecv/IOCP and 0x4930E0 downstream dispatch already mapped, determine actual first outgoing/incoming frame type, mode A02C conditional switch, and connection-specific message sequencing; do not re-discover mapped functions.",
       "dispatch": {
-        "state": "QUEUED",
+        "state": "IN_REVIEW",
         "priority": "P0",
         "acceptance_criteria": "研究問題：With 0x8068B0 WSASend, 0x806CF0 WSARecv/IOCP and 0x4930E0 downstream dispatch already mapped, determine actual first outgoing/incoming frame type, mode A02C conditional switch, and connection-specific message sequencing; do not re-discover mapped functions.\nGAP-NET-0001：Known local frame writers/receiver and WSASend/WSARecv static API paths are already documented; resolve selected S2C frame type, A02C writer/aliases and first-message sequencing using bounded data, not repeat discovery of known functions.",
-        "claim": null,
-        "submission": null,
+        "claim": {
+          "actor": "chatgpt-web roy",
+          "branch": "rr/t02/roy/rr-0001",
+          "base_commit": "2eba5d68701538504f405768b971bb3beedd5202",
+          "date": "2026-10-30"
+        },
+        "submission": {
+          "report_path": "kr-extra-roy/20261030-103206-chatgpt-web-roy-E57-RR0001-KR-first-frame-0BBB-1A68-mode-sequencing-static-contract.md",
+          "report_blob_sha": "a379f776b9a1d7566de539daa7153f33b9b91e36",
+          "date": "2026-10-30",
+          "summary": "提交 KR T02 RR-0001 有界 BIN-first 靜態 Client E57：0x0BBB/0x1A68 逐 byte header、XOR-chain/16-bit checksum 及 fallback、Conn+A02C direct writer/reader 搜尋界線、S2C 0x2633/0x0BBB/0x1A68/0x22D7 marker parser、key0/1/2 首批 C2S local queue 與 IOCP/send pump 條件。原版 Server first S2C marker/opcode 和跨 socket wire order 不能由 Client 原件決定，標 U；RR-0004 A02C alias 全域專查維持 QUEUED。KR Tartaros.bin SHA256 9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91。供 T01/S00 bounded review，非 ACCEPTED/FULL-PASS。"
+        },
         "review": null,
         "events": [
           {
@@ -25,6 +35,34 @@
             "actor": "S00",
             "date": "2026-10-29",
             "note": "既有 Phase-B RR 遷入正式收件台帳；尚未由 Task Agent 認領或通知執行"
+          },
+          {
+            "from": "QUEUED",
+            "to": "CLAIMED",
+            "actor": "chatgpt-web roy",
+            "date": "2026-10-30",
+            "note": "User-authorized T02 RR-0001 claim; independent RR-0004 remains QUEUED. Work branch rr/t02/roy/rr-0001."
+          },
+          {
+            "from": "CLAIMED",
+            "to": "IN_PROGRESS",
+            "actor": "chatgpt-web roy",
+            "date": "2026-10-30",
+            "note": "Started RR-0001 KR native BIN-first research; E57 full static first-frame/0BBB-XOR/checksum/1A68 fallback and per-key matrix published on rr/t02/roy/rr-0001 commit 36b8d7580f4dc46f7d28f66ce826beaefcade5b0. Pending formal SUBMITTED review; RR-0004 untouched."
+          },
+          {
+            "from": "IN_PROGRESS",
+            "to": "SUBMITTED",
+            "actor": "chatgpt-web roy",
+            "date": "2026-10-30",
+            "note": "提交 KR T02 RR-0001 有界 BIN-first 靜態 Client E57：0x0BBB/0x1A68 逐 byte header、XOR-chain/16-bit checksum 及 fallback、Conn+A02C direct writer/reader 搜尋界線、S2C 0x2633/0x0BBB/0x1A68/0x22D7 marker parser、key0/1/2 首批 C2S local queue 與 IOCP/send pump 條件。原版 Server first S2C marker/opcode 和跨 socket wire order 不能由 Client 原件決定，標 U；RR-0004 A02C alias 全域專查維持 QUEUED。KR Tartaros.bin SHA256 9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91。供 T01/S00 bounded review，非 ACCEPTED/FULL-PASS。"
+          },
+          {
+            "from": "SUBMITTED",
+            "to": "IN_REVIEW",
+            "actor": "T01",
+            "date": "2026-10-30",
+            "note": "T01 已有 E57 限定原生 R0–R2 複核與 R1/衝突去重（t01-20261030-rr0001-rr0004-bounded-r2）；進入正式 S00 審查。非全文 FULL-PASS；未知首個實際遠端 S2C 與 alias 不推定。"
           }
         ]
       }
@@ -33,104 +71,20 @@
       "id": "RR-0002",
       "title": "Resolve T03 selection response contract",
       "client_version": "kr",
-      "status": "PENDING",
+      "status": "BLOCKED",
       "owner_task": "T03",
       "gap_ids": [
         "GAP-CHAR-0001"
       ],
       "question": "Which C2S selection fields and S2C reply fields/order does original Client require? Preserve unknown values; reuse T02/T04 contracts.",
       "dispatch": {
-        "state": "QUEUED",
+        "state": "BLOCKED",
         "priority": "P0",
         "acceptance_criteria": "研究問題：Which C2S selection fields and S2C reply fields/order does original Client require? Preserve unknown values; reuse T02/T04 contracts.\nGAP-CHAR-0001：Complete command2 header fields, role record authority and initialization prerequisites, actual selection request+responses and scene transition with scoped evidence and relevant Client tests.",
-        "claim": null,
-        "submission": null,
-        "review": null,
-        "events": [
-          {
-            "from": null,
-            "to": "QUEUED",
-            "actor": "S00",
-            "date": "2026-10-29",
-            "note": "既有 Phase-B RR 遷入正式收件台帳；尚未由 Task Agent 認領或通知執行"
-          }
-        ]
-      }
-    },
-    {
-      "id": "RR-0003",
-      "title": "Close KR client auth payload and 0x13 result consumer interface",
-      "client_version": "kr",
-      "status": "PENDING",
-      "owner_task": "T03",
-      "gap_ids": [
-        "GAP-AUTH-0001"
-      ],
-      "question": "Identify bounded E8/000F opaque fields and codepage dependencies, actual 0x13 status response, channel group cursor/limits and subsequent handoff; preserve official-backend unknowns.",
-      "dispatch": {
-        "state": "QUEUED",
-        "priority": "P0",
-        "acceptance_criteria": "研究問題：Identify bounded E8/000F opaque fields and codepage dependencies, actual 0x13 status response, channel group cursor/limits and subsequent handoff; preserve official-backend unknowns.\nGAP-AUTH-0001：Resolve opaque E8 tail, source codepage, 0x13 response fields/array bounds, result sequence and connection handoff; make official vs self-designed authentication policy explicit.",
-        "claim": null,
-        "submission": null,
-        "review": null,
-        "events": [
-          {
-            "from": null,
-            "to": "QUEUED",
-            "actor": "S00",
-            "date": "2026-10-29",
-            "note": "既有 Phase-B RR 遷入正式收件台帳；尚未由 Task Agent 認領或通知執行"
-          }
-        ]
-      }
-    },
-    {
-      "id": "RR-0004",
-      "title": "A02C indirect writers and mode fallback boundary",
-      "owner_task": "T02",
-      "gap_ids": [
-        "GAP-NET-0001"
-      ],
-      "question": "Trace KR conn+A02C initializer 0x805D02 and possible indirect alias writes; identify conditions under which 0x8061A0 0BBB fails and plaintext fallback actually executes.",
-      "client_version": "kr",
-      "status": "PENDING",
-      "dispatch": {
-        "state": "QUEUED",
-        "priority": "P0",
-        "acceptance_criteria": "研究問題：Trace KR conn+A02C initializer 0x805D02 and possible indirect alias writes; identify conditions under which 0x8061A0 0BBB fails and plaintext fallback actually executes.\nGAP-NET-0001：Known local frame writers/receiver and WSASend/WSARecv static API paths are already documented; resolve selected S2C frame type, A02C writer/aliases and first-message sequencing using bounded data, not repeat discovery of known functions.",
-        "claim": null,
-        "submission": null,
-        "review": null,
-        "events": [
-          {
-            "from": null,
-            "to": "QUEUED",
-            "actor": "S00",
-            "date": "2026-10-29",
-            "note": "既有 Phase-B RR 遷入正式收件台帳；尚未由 Task Agent 認領或通知執行"
-          }
-        ]
-      }
-    },
-    {
-      "id": "RR-0005",
-      "title": "KR login result to Connect slot/port handoff",
-      "owner_task": "T02",
-      "gap_ids": [
-        "GAP-NET-0002"
-      ],
-      "question": "Join T03 0x13 response and choice UI with KR 0x495610/0x4957C0 Connect call sites; derive actual conditions/order, close/retry/slot ownership and initial frame per connection. Separate legacy static port values from server deployment recommendations.",
-      "client_version": "kr",
-      "status": "ACTIVE",
-      "dispatch": {
-        "state": "CLAIMED",
-        "priority": "P0",
-        "acceptance_criteria": "研究問題：Join T03 0x13 response and choice UI with KR 0x495610/0x4957C0 Connect call sites; derive actual conditions/order, close/retry/slot ownership and initial frame per connection. Separate legacy static port values from server deployment recommendations.\nGAP-NET-0002：Bound actual KR Client Connect/close/port roles and 0x13 login-to-choice handoff sequence including first sender/response, error/retry behavior, without inventing endpoint authority.",
         "claim": {
           "actor": "chatgpt-web roy",
           "branch": "extra/roy1",
-          "base_commit": "fb70e1325069c2069b428cf01ab57b4a4d7319c2",
+          "base_commit": "82376b3d999f7069aaacc3f1a372277d590b2e3f",
           "date": "2026-10-30"
         },
         "submission": null,
@@ -148,7 +102,244 @@
             "to": "CLAIMED",
             "actor": "chatgpt-web roy",
             "date": "2026-10-30",
+            "note": "User explicitly authorized KR T03 RR-0002 and mandated extra/roy1 as sole research branch, no other branches.  T01-RETURN-T03-006-LAYOUT-001 NEEDS_FIX kept unchanged by user-priority scope; technical study C2S selection, roster and S2C result."
+          },
+          {
+            "from": "CLAIMED",
+            "to": "IN_PROGRESS",
+            "actor": "chatgpt-web roy",
+            "date": "2026-10-30",
+            "note": "User authorized RR-0002 BIN-first research exclusively on extra/roy1; complete E61/E62 original technical evidence pushed as 275253a51ea75cc3ce35c3d4a619dd881baa75e3 and 94083d9a4a6f7ef6c2b5d434d24df2d1e69424f2. C2S 42 four-byte builder, command2 roster 65+53n, base S2C42/43 effects and scene caller audited. Acceptance NOT YET MET: no positive native C2S selection→S2C success/error→scene writer relation; preserve unknown and continue without claiming SUBMITTED. Prior T03 NEEDS_FIX not changed."
+          },
+          {
+            "from": "IN_PROGRESS",
+            "to": "BLOCKED",
+            "actor": "chatgpt-web roy",
+            "date": "2026-10-30",
+            "note": "RR-0002 native-static evidence blocker after E61-E67: full T02/T03 client C2S0x42 four-byte and roster cmd2 65+53N, S2C0x42/43 negative effects, ScenarioReview RTTI, S2C0x69/7→CSquare→C2S0x43 local chain, scene-specific S2C0x68/0x6A, CSquareUserData vs CSquareChannelState proven from KR BIN 9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91. Exact ORIGINAL Server success/error opcode/body/order pairing in RR acceptance remains unknown and cannot be manufactured from Client-only static handlers. Concrete unblock: (A) trusted same-KR-version original multi-Conn key0/1/2 capture around actual successful/failed C2S42 with frame decode and UI/scene timing; or (B) verified original Server handler/source with reply fields/order; or (C) newly identified KR Client native positive response-state writer/caller coupling; S00 may separately redefine bounded compatibility contract. Full E66 Git blob a802e8482af20145476015c17ee3dda029558f6c and E67 blocker matrix blob 835ce66c56e91f65b1f1e32176d3892834992a70 at extra/roy1 commit e6f8ee212e504db482c7cf3d3c8432473068c7ca. This is NOT SUBMITTED/ACCEPTED/FULL-PASS. User requested RR2 specifically; T03 T01 NEEDS_FIX remains open."
+          }
+        ]
+      }
+    },
+    {
+      "id": "RR-0003",
+      "title": "Close KR client auth payload and 0x13 result consumer interface",
+      "client_version": "kr",
+      "status": "ACTIVE",
+      "owner_task": "T03",
+      "gap_ids": [
+        "GAP-AUTH-0001"
+      ],
+      "question": "Identify bounded E8/000F opaque fields and codepage dependencies, actual 0x13 status response, channel group cursor/limits and subsequent handoff; preserve official-backend unknowns.",
+      "dispatch": {
+        "state": "IN_REVIEW",
+        "priority": "P0",
+        "acceptance_criteria": "研究問題：Identify bounded E8/000F opaque fields and codepage dependencies, actual 0x13 status response, channel group cursor/limits and subsequent handoff; preserve official-backend unknowns.\nGAP-AUTH-0001：Resolve opaque E8 tail, source codepage, 0x13 response fields/array bounds, result sequence and connection handoff; make official vs self-designed authentication policy explicit.",
+        "claim": {
+          "actor": "chatgpt-web roy",
+          "branch": "t03/roy/chatgpt-web",
+          "base_commit": "edbf681af76909abbdcb82d6ba223bfbc27b3619",
+          "date": "2026-10-30"
+        },
+        "submission": {
+          "report_path": "kr-temp-roy/20261030-142513-chatgpt-web-roy-T03-RR0003-KR-auth-E8-000F-13-codepage-group-handoff.md",
+          "report_blob_sha": "64c8c1a3429ae6ff177a84dee0d08ad69dba0b17",
+          "date": "2026-10-30",
+          "summary": "T03 KR RR-0003 complete bounded native static contract (1463 lines): mode52 C2S 0x00E8/112B vs mode54/default 0x000F/214B, per-field capacity/constant vs opaque E8 tail, global FBA808 CP_ACP virtual-zero initialization and direct xref limits, S2C 0x0013 active LOGIN handler 0x4C37A0 status 0/5/other/empty-name paths, +2/+0x16/+0x17/+0x18/+0x1C/+0x86/+0x87/+0x8C/+0x90/+0x92 writers, 3B group/10B channel cursor with missing per-row remaining-length guard, distinct 0x007A +2/+6 layout, F4243/F4241 notifications and conditional UI→key0/key2 Connect; native original BIN 9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91. Actual original Server auth/token/backend and runtime sequences UNKNOWN. Original technical report isolated to t03/roy/chatgpt-web commit cfeda726bde096d3d2224b0fe69a309a6266e8d6; T01/S00 review, not ACCEPTED/FULL-PASS. GAP-AUTH-0001."
+        },
+        "review": null,
+        "events": [
+          {
+            "from": null,
+            "to": "QUEUED",
+            "actor": "S00",
+            "date": "2026-10-29",
+            "note": "既有 Phase-B RR 遷入正式收件台帳；尚未由 Task Agent 認領或通知執行"
+          },
+          {
+            "from": "QUEUED",
+            "to": "CLAIMED",
+            "actor": "chatgpt-web roy",
+            "date": "2026-10-30",
+            "note": "User authorized new RR analysis; chose P0 KR T03 RR-0003. T03 mandatory main->t03/roy/chatgpt-web merge verified at fd975a2650552ffafdadc37ac8bbb3c5ec96ae03. T01-RETURN-T03-006-LAYOUT-001 remains NEEDS_FIX, deferred by user-specific RR request. Original technical report only on T03 work branch."
+          },
+          {
+            "from": "CLAIMED",
+            "to": "IN_PROGRESS",
+            "actor": "chatgpt-web roy",
+            "date": "2026-10-30",
+            "note": "T03 main merge fd975a2650552ffafdadc37ac8bbb3c5ec96ae03 verified. Full 1463-line RR-0003 BIN-first report pushed to t03/roy/chatgpt-web commit cfeda726bde096d3d2224b0fe69a309a6266e8d6, original Git blob 64c8c1a3429ae6ff177a84dee0d08ad69dba0b17. Covers 00E8/000F auth, codepage virtual-zero initial value, S2C cmd13 status, group/channel cursor, +0x7A distinction and UI→Connect handoff; formal SUBMITTED review follows."
+          },
+          {
+            "from": "IN_PROGRESS",
+            "to": "SUBMITTED",
+            "actor": "chatgpt-web roy",
+            "date": "2026-10-30",
+            "note": "T03 KR RR-0003 complete bounded native static contract (1463 lines): mode52 C2S 0x00E8/112B vs mode54/default 0x000F/214B, per-field capacity/constant vs opaque E8 tail, global FBA808 CP_ACP virtual-zero initialization and direct xref limits, S2C 0x0013 active LOGIN handler 0x4C37A0 status 0/5/other/empty-name paths, +2/+0x16/+0x17/+0x18/+0x1C/+0x86/+0x87/+0x8C/+0x90/+0x92 writers, 3B group/10B channel cursor with missing per-row remaining-length guard, distinct 0x007A +2/+6 layout, F4243/F4241 notifications and conditional UI→key0/key2 Connect; native original BIN 9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91. Actual original Server auth/token/backend and runtime sequences UNKNOWN. Original technical report isolated to t03/roy/chatgpt-web commit cfeda726bde096d3d2224b0fe69a309a6266e8d6; T01/S00 review, not ACCEPTED/FULL-PASS. GAP-AUTH-0001."
+          },
+          {
+            "from": "SUBMITTED",
+            "to": "IN_REVIEW",
+            "actor": "T01",
+            "date": "2026-10-30",
+            "note": "T01 exact R0 source blob 64c8c1a3429ae6ff177a84dee0d08ad69dba0b17 imported to main; bounded original BIN R2 (10 SHA256 slices) documented; SRC-0473 and CLM-AUTH-0003..0005 PARTIAL. Original Server auth/reply, codepage runtime and E8 opaque tail UNKNOWN; not FULL-PASS, S00 decides acceptance."
+          }
+        ]
+      }
+    },
+    {
+      "id": "RR-0004",
+      "title": "A02C indirect writers and mode fallback boundary",
+      "owner_task": "T02",
+      "gap_ids": [
+        "GAP-NET-0001"
+      ],
+      "question": "Trace KR conn+A02C initializer 0x805D02 and possible indirect alias writes; identify conditions under which 0x8061A0 0BBB fails and plaintext fallback actually executes.",
+      "client_version": "kr",
+      "status": "ACTIVE",
+      "dispatch": {
+        "state": "IN_REVIEW",
+        "priority": "P0",
+        "acceptance_criteria": "研究問題：Trace KR conn+A02C initializer 0x805D02 and possible indirect alias writes; identify conditions under which 0x8061A0 0BBB fails and plaintext fallback actually executes.\nGAP-NET-0001：Known local frame writers/receiver and WSASend/WSARecv static API paths are already documented; resolve selected S2C frame type, A02C writer/aliases and first-message sequencing using bounded data, not repeat discovery of known functions.",
+        "claim": {
+          "actor": "chatgpt-web roy",
+          "branch": "rr/t02/roy/rr-0004",
+          "base_commit": "2523cb4e8739ae1b751dd399800bfc4ec3448f1e",
+          "date": "2026-10-30"
+        },
+        "submission": {
+          "report_path": "kr-extra-roy/20261030-110906-chatgpt-web-roy-E58-RR0004-A02C-alias-mode-fallback-bounded-BIN-first.md",
+          "report_blob_sha": "b5c53b93ec20e056fb3f07374468a341ce4ee9c9",
+          "date": "2026-10-30",
+          "summary": "RR-0004 bounded native static E58: fresh Conn A02C=2, reset/reuse preservation, direct displacement + call xrefs, no evidenced indirect mode0 writer (unknown, not disproved), mode!=0 0BBB attempt, mode0/encoder-fail 1A68 fallback, strict length/count/pointer guards, failure retains queue node, inbound marker independence, synthetic boundaries. 12,472,320 byte KR Tartaros.bin SHA256 9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91. T01/S00 bounded review required; not FULL-PASS/ACCEPTED. GAP-NET-0001."
+        },
+        "review": null,
+        "events": [
+          {
+            "from": null,
+            "to": "QUEUED",
+            "actor": "S00",
+            "date": "2026-10-29",
+            "note": "既有 Phase-B RR 遷入正式收件台帳；尚未由 Task Agent 認領或通知執行"
+          },
+          {
+            "from": "QUEUED",
+            "to": "CLAIMED",
+            "actor": "chatgpt-web roy",
+            "date": "2026-10-30",
+            "note": "User-authorized T02 RR-0004 claim for A02C writer/alias and 0BBB failure/plaintext fallback; independent analysis after submitted RR-0001."
+          },
+          {
+            "from": "CLAIMED",
+            "to": "IN_PROGRESS",
+            "actor": "chatgpt-web roy",
+            "date": "2026-10-30",
+            "note": "RR-0004 BIN-first E58 analysis performed; complete 1229-line original published to rr/t02/roy/rr-0004 fefcf923d9b62c6713e1009e3cdf562c5cc28253; mode constructor/reset, direct displacement xrefs, fallback guard and failure queue result checked. Formal review submission follows."
+          },
+          {
+            "from": "IN_PROGRESS",
+            "to": "SUBMITTED",
+            "actor": "chatgpt-web roy",
+            "date": "2026-10-30",
+            "note": "RR-0004 bounded native static E58: fresh Conn A02C=2, reset/reuse preservation, direct displacement + call xrefs, no evidenced indirect mode0 writer (unknown, not disproved), mode!=0 0BBB attempt, mode0/encoder-fail 1A68 fallback, strict length/count/pointer guards, failure retains queue node, inbound marker independence, synthetic boundaries. 12,472,320 byte KR Tartaros.bin SHA256 9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91. T01/S00 bounded review required; not FULL-PASS/ACCEPTED. GAP-NET-0001."
+          },
+          {
+            "from": "SUBMITTED",
+            "to": "IN_REVIEW",
+            "actor": "T01",
+            "date": "2026-10-30",
+            "note": "T01 已有 E58 對 A02C direct writer/reader 與 fallback 的限定原生 R2（t01-20261030-rr0001-rr0004-bounded-r2）；接受部分 Client 靜態證據供 S00 判定，不等於全域間接 alias 閉合。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "RR-0005",
+      "title": "KR login result to Connect slot/port handoff",
+      "owner_task": "T02",
+      "gap_ids": [
+        "GAP-NET-0002"
+      ],
+      "question": "Join T03 0x13 response and choice UI with KR 0x495610/0x4957C0 Connect call sites; derive actual conditions/order, close/retry/slot ownership and initial frame per connection. Separate legacy static port values from server deployment recommendations.",
+      "client_version": "kr",
+      "status": "RESOLVED",
+      "dispatch": {
+        "state": "ACCEPTED",
+        "priority": "P0",
+        "acceptance_criteria": "研究問題：Join T03 0x13 response and choice UI with KR 0x495610/0x4957C0 Connect call sites; derive actual conditions/order, close/retry/slot ownership and initial frame per connection. Separate legacy static port values from server deployment recommendations.\nGAP-NET-0002：Bound actual KR Client Connect/close/port roles and 0x13 login-to-choice handoff sequence including first sender/response, error/retry behavior, without inventing endpoint authority.",
+        "claim": {
+          "actor": "chatgpt-web roy",
+          "branch": "extra/roy1",
+          "base_commit": "fb70e1325069c2069b428cf01ab57b4a4d7319c2",
+          "date": "2026-10-30"
+        },
+        "submission": {
+          "report_path": "kr-extra-roy/20261030-091559-chatgpt-web-roy-E56-RR0005-bounded-static-completion-transport-owner-retry-reply.md",
+          "report_blob_sha": "843889349bb58209c02221e720800f0e9e3ff9d8",
+          "date": "2026-10-30",
+          "summary": "交付 KR Client 原生 BIN-first bounded E56 研究：連接 0x0013/0x007A→UI→key0/key2、key1 六種 caller、首送候選/recv/failed Connect/close/retry/slot ownership；限定 same-key oldConn 與 Client+BF58 仍無全域保證，原版 Server first response / wire ordering U；請 S00/T01 審查，不宣稱 ACCEPTED/FULL-PASS。來源 KR SHA256 9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91。"
+        },
+        "review": {
+          "actor": "S00",
+          "date": "2026-10-30",
+          "decision": "ACCEPTED",
+          "note": "S00：ACCEPTED 僅限 KR Client 0x13/UI→key0/1/2 Connect/close/retry/first local sender 與首回覆未知之 bounded static research；GAP-NET-0002 仍 OPEN，SPEC 仍 DRAFT/PARTIAL，不宣稱 wire/runtime、全文 FULL-PASS 或 Server 可玩。",
+          "outcome_refs": [
+            "CLM-NET-0014",
+            "CLM-NET-0015",
+            "CLM-NET-0016",
+            "CLM-NET-0017",
+            "CLM-NET-0018",
+            "CLM-NET-0019",
+            "CLM-NET-0020",
+            "SPEC-NET-0002",
+            "SPEC-AUTH-0001",
+            "SPEC-FLOW-0001",
+            "GAP-NET-0002"
+          ]
+        },
+        "events": [
+          {
+            "from": null,
+            "to": "QUEUED",
+            "actor": "S00",
+            "date": "2026-10-29",
+            "note": "既有 Phase-B RR 遷入正式收件台帳；尚未由 Task Agent 認領或通知執行"
+          },
+          {
+            "from": "QUEUED",
+            "to": "CLAIMED",
+            "actor": "chatgpt-web roy",
+            "date": "2026-10-30",
             "note": "使用者明確要求認領 KR T02 RR-0005；E52 研究線 extra/roy1；以 main fb70e1325069c2069b428cf01ab57b4a4d7319c2 為認領基準；非 SUBMITTED 或 ACCEPTED"
+          },
+          {
+            "from": "CLAIMED",
+            "to": "IN_PROGRESS",
+            "actor": "chatgpt-web roy",
+            "date": "2026-10-30",
+            "note": "已將完整 E53/E54/E55 研究原稿和有界證據矩陣推至 extra/roy1 08acd4a84d3476daa4456cd11d5a529abe91263f；same-key old Conn final release、BF58 alias writer、其他 retry state graph 仍需靜態閉合；尚不宣稱 RR 達標或 SUBMITTED"
+          },
+          {
+            "from": "IN_PROGRESS",
+            "to": "SUBMITTED",
+            "actor": "chatgpt-web roy",
+            "date": "2026-10-30",
+            "note": "交付 KR Client 原生 BIN-first bounded E56 研究：連接 0x0013/0x007A→UI→key0/key2、key1 六種 caller、首送候選/recv/failed Connect/close/retry/slot ownership；限定 same-key oldConn 與 Client+BF58 仍無全域保證，原版 Server first response / wire ordering U；請 S00/T01 審查，不宣稱 ACCEPTED/FULL-PASS。來源 KR SHA256 9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91。"
+          },
+          {
+            "from": "SUBMITTED",
+            "to": "IN_REVIEW",
+            "actor": "T01",
+            "date": "2026-10-30",
+            "note": "T01：E56 按 RR-0005 逐 clause 已核對 KR native 限定入口/分支、version/blob、主要正反證，轉正式 S00 bounded research acceptance；E56 全稿 FULL-PASS 未核准。"
+          },
+          {
+            "from": "IN_REVIEW",
+            "to": "ACCEPTED",
+            "actor": "S00",
+            "date": "2026-10-30",
+            "note": "S00：ACCEPTED 僅限 KR Client 0x13/UI→key0/1/2 Connect/close/retry/first local sender 與首回覆未知之 bounded static research；GAP-NET-0002 仍 OPEN，SPEC 仍 DRAFT/PARTIAL，不宣稱 wire/runtime、全文 FULL-PASS 或 Server 可玩。"
           }
         ]
       }
@@ -162,13 +353,23 @@
       ],
       "question": "Trace 0x807B40 parser 0x2633/0x22D7 behavior, 0x727190 and checksum mismatch into 0x807E50 and node/pool handling; specify only server-relevant error or compatibility requirements.",
       "client_version": "kr",
-      "status": "PENDING",
+      "status": "ACTIVE",
       "dispatch": {
-        "state": "QUEUED",
+        "state": "IN_REVIEW",
         "priority": "P1",
         "acceptance_criteria": "研究問題：Trace 0x807B40 parser 0x2633/0x22D7 behavior, 0x727190 and checksum mismatch into 0x807E50 and node/pool handling; specify only server-relevant error or compatibility requirements.\nGAP-NET-0003：Clarify 0x2633/0x22D7 field semantics, 727190 behavior and checksum failure node/pool handling; tie client message handlers to T03-relevant S2C and applicable state.",
-        "claim": null,
-        "submission": null,
+        "claim": {
+          "actor": "chatgpt-web roy",
+          "branch": "rr/t02/roy/rr-0006",
+          "base_commit": "057fa32ff2ef5c347e7b30d269a18a5fcba5daa8",
+          "date": "2026-10-30"
+        },
+        "submission": {
+          "report_path": "kr-extra-roy/20261030-112205-chatgpt-web-roy-E59-RR0006-compressed2633-22D7-decode-checksum-pool-IOCP.md",
+          "report_blob_sha": "c7c1474b6b3cf928b8031e17fad7761c488d9b18",
+          "date": "2026-10-30",
+          "summary": "KR T02 RR-0006 bounded BIN-first report E59: inbound 0x2633 8-byte header + 0x7C rolling XOR + 0x727190 inflate-like return/status/output cap 0x1000; 0x22D7 is 4-byte raw path also shared with unknown markers; 0x0BBB checksum mismatch vs compressed decode failure both bypass 0x807E50 and recycle zero-length node through 0x804310→0x8076F0; malformed n=0 or >0x1000 returns parser0 and follows different IOCP branch; incomplete frames are retained/compacted, valid payload can reach 0x4930E0 and conditional T03 handlers via lane2. Synthetic zlib/XOR example is not official KR wire. Original Tartaros.bin SHA256 9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91. For T01/S00 bounded review; not ACCEPTED or FULL-PASS."
+        },
         "review": null,
         "events": [
           {
@@ -177,6 +378,34 @@
             "actor": "S00",
             "date": "2026-10-29",
             "note": "既有 Phase-B RR 遷入正式收件台帳；尚未由 Task Agent 認領或通知執行"
+          },
+          {
+            "from": "QUEUED",
+            "to": "CLAIMED",
+            "actor": "chatgpt-web roy",
+            "date": "2026-10-30",
+            "note": "User-authorized T02 KR RR-0006 claim: 0x2633/0x22D7 parser, 0x727190 decompression, checksum mismatch and 0x807E50 node/pool lifetime; separate RR-0007 remains QUEUED."
+          },
+          {
+            "from": "CLAIMED",
+            "to": "IN_PROGRESS",
+            "actor": "chatgpt-web roy",
+            "date": "2026-10-30",
+            "note": "E59 original BIN-first compressed 0x2633/0x22D7, inflate 0x727190, checksum mismatch and 0x807E50 node/pool lifecycle report completed on rr/t02/roy/rr-0006 commit 6f6066e2e4612bea97f48b345aadacdbdecb02f7; report blob c7c1474b6b3cf928b8031e17fad7761c488d9b18; formal SUBMITTED status follows."
+          },
+          {
+            "from": "IN_PROGRESS",
+            "to": "SUBMITTED",
+            "actor": "chatgpt-web roy",
+            "date": "2026-10-30",
+            "note": "KR T02 RR-0006 bounded BIN-first report E59: inbound 0x2633 8-byte header + 0x7C rolling XOR + 0x727190 inflate-like return/status/output cap 0x1000; 0x22D7 is 4-byte raw path also shared with unknown markers; 0x0BBB checksum mismatch vs compressed decode failure both bypass 0x807E50 and recycle zero-length node through 0x804310→0x8076F0; malformed n=0 or >0x1000 returns parser0 and follows different IOCP branch; incomplete frames are retained/compacted, valid payload can reach 0x4930E0 and conditional T03 handlers via lane2. Synthetic zlib/XOR example is not official KR wire. Original Tartaros.bin SHA256 9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91. For T01/S00 bounded review; not ACCEPTED or FULL-PASS."
+          },
+          {
+            "from": "SUBMITTED",
+            "to": "IN_REVIEW",
+            "actor": "T01",
+            "date": "2026-10-30",
+            "note": "T01 已有 E59 parser/pool/error path 限定原生 R2（t01-20261030-multi-branch-merge-r0-r2）；只供 S00 bounded acceptance，不表示全文語義、原始壓縮 wire 已全部核實。"
           }
         ]
       }
@@ -190,13 +419,23 @@
       ],
       "question": "Using already identified 0x4930E0 channel2 and CClient/scene handlers, identify exact S2C dispatch handlers and state prerequisites for authentication response, roster command2, and selection, without exhaustively tracing all commands.",
       "client_version": "kr",
-      "status": "PENDING",
+      "status": "ACTIVE",
       "dispatch": {
-        "state": "QUEUED",
+        "state": "IN_REVIEW",
         "priority": "P1",
         "acceptance_criteria": "研究問題：Using already identified 0x4930E0 channel2 and CClient/scene handlers, identify exact S2C dispatch handlers and state prerequisites for authentication response, roster command2, and selection, without exhaustively tracing all commands.\nGAP-NET-0003：Clarify 0x2633/0x22D7 field semantics, 727190 behavior and checksum failure node/pool handling; tie client message handlers to T03-relevant S2C and applicable state.",
-        "claim": null,
-        "submission": null,
+        "claim": {
+          "actor": "chatgpt-web roy",
+          "branch": "rr/t02/roy/rr-0007",
+          "base_commit": "8a7940560c73755a29ff48af3e00109f38f2b5b4",
+          "date": "2026-10-30"
+        },
+        "submission": {
+          "report_path": "kr-extra-roy/20261030-113803-chatgpt-web-roy-E60-RR0007-KR-auth-roster-selection-scene-gated-S2C-dispatch.md",
+          "report_blob_sha": "2ca02f3870d79d3217abf39b8651c43226eb77d6",
+          "date": "2026-10-30",
+          "summary": "KR T02 RR-0007 E60 bounded BIN-first report: raw IOCP frame → FC10D0 lane2 app queue → Client+0x148 vptr 0xC05AEC → 0x4930E0 (nonnull length and lane==2) → conditional Client+B8 delegate → 0x494360/FD2CF8 first-layer table; cmd2 native handler 0x4B7F00, first-layer fallback requires active FD2CF8+5EAC scene with LOGI vtable C072FC→4C4670 second-layer cmd13 4C37A0 and cmd7A 4C3C10; base scene fallback cmd42 4B2190 and cmd43 4B1A90. Local C2S 42 4-byte selection builder does NOT prove S2C 42 or 43 are selected-approval opcodes, and actual scene/world-entry writer remains T03 RR-0002/0008 unknown. BE8C limits return-true, not every handler invocation. Source KR Tartaros.bin SHA256 9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91. Submit native bounded conditions for T01/S00 review; do not claim FULL-PASS, ACCEPTED or runtime evidence. GAP-NET-0003."
+        },
         "review": null,
         "events": [
           {
@@ -205,6 +444,34 @@
             "actor": "S00",
             "date": "2026-10-29",
             "note": "既有 Phase-B RR 遷入正式收件台帳；尚未由 Task Agent 認領或通知執行"
+          },
+          {
+            "from": "QUEUED",
+            "to": "CLAIMED",
+            "actor": "chatgpt-web roy",
+            "date": "2026-10-30",
+            "note": "User explicitly authorized RR-0007 KR T02 native inbound 0x4930E0 channel2 T03 auth/roster/selection dispatch gate analysis, dedicated research branch rr/t02/roy/rr-0007."
+          },
+          {
+            "from": "CLAIMED",
+            "to": "IN_PROGRESS",
+            "actor": "chatgpt-web roy",
+            "date": "2026-10-30",
+            "note": "Completed RR-0007 BIN-first native T02 bounded E60 analysis: lane2 0x4930E0 guard, Client+B8 dispatch, first-layer cmd2, active LOGI scene 0x13/0x7A routes, base scene 0x42 handler with no inferred selection approval. Full report pushed to rr/t02/roy/rr-0007 commit 2e13993164b5058523e6edc9ce1a3b3214ac3ff8, blob 2ca02f3870d79d3217abf39b8651c43226eb77d6. Formal submission follows."
+          },
+          {
+            "from": "IN_PROGRESS",
+            "to": "SUBMITTED",
+            "actor": "chatgpt-web roy",
+            "date": "2026-10-30",
+            "note": "KR T02 RR-0007 E60 bounded BIN-first report: raw IOCP frame → FC10D0 lane2 app queue → Client+0x148 vptr 0xC05AEC → 0x4930E0 (nonnull length and lane==2) → conditional Client+B8 delegate → 0x494360/FD2CF8 first-layer table; cmd2 native handler 0x4B7F00, first-layer fallback requires active FD2CF8+5EAC scene with LOGI vtable C072FC→4C4670 second-layer cmd13 4C37A0 and cmd7A 4C3C10; base scene fallback cmd42 4B2190 and cmd43 4B1A90. Local C2S 42 4-byte selection builder does NOT prove S2C 42 or 43 are selected-approval opcodes, and actual scene/world-entry writer remains T03 RR-0002/0008 unknown. BE8C limits return-true, not every handler invocation. Source KR Tartaros.bin SHA256 9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91. Submit native bounded conditions for T01/S00 review; do not claim FULL-PASS, ACCEPTED or runtime evidence. GAP-NET-0003."
+          },
+          {
+            "from": "SUBMITTED",
+            "to": "IN_REVIEW",
+            "actor": "T01",
+            "date": "2026-10-30",
+            "note": "T01 新增 E60 source original blob 2ca02f3870d79d3217abf39b8651c43226eb77d6 至 main，SRC-0472/CLM-NET-0029..0031；經 KR BIN 局部 gate/vtable/command42 有界 R2 檢查，原版選角批准和 T03 scene writer 仍 unknown。無全文 FULL-PASS；交 S00 審核。"
           }
         ]
       }
@@ -213,7 +480,7 @@
       "id": "RR-0008",
       "title": "Join KR 0x42 selection reply with scene key/writer/first tutorial conditions",
       "client_version": "kr",
-      "status": "PENDING",
+      "status": "ACTIVE",
       "owner_task": "T03",
       "gap_ids": [
         "GAP-SCENE-0001",
@@ -221,11 +488,21 @@
       ],
       "question": "Using extra/roy1 E06/E08/E13/E16 plus E14/E15 corrections and existing T03/T07 evidence, find the exact 0x42 S2C response consumer and whether it writes the 0x47B5C0 state object +0x248 or otherwise selects the 0x565720 (questIdx,sceneIdx) pair. Distinguish EndCutScene reuse; no assumption that 1001/1 is a wire message.",
       "dispatch": {
-        "state": "QUEUED",
+        "state": "IN_REVIEW",
         "priority": "P0",
         "acceptance_criteria": "研究問題：Using extra/roy1 E06/E08/E13/E16 plus E14/E15 corrections and existing T03/T07 evidence, find the exact 0x42 S2C response consumer and whether it writes the 0x47B5C0 state object +0x248 or otherwise selects the 0x565720 (questIdx,sceneIdx) pair. Distinguish EndCutScene reuse; no assumption that 1001/1 is a wire message.\nGAP-SCENE-0001：Identify actual 0x42 S2C handler/state and any connection to 0x47B5C0 key writer→0x565720/SceneList; separate client-side script reuse from initial login, include counterexamples and tests. No invented 1001/1 wire values.\nGAP-FLOW-0001：Supply bounded, direction-specific actual message and state ordering between auth response, server selection/handoff, roster handler, selection C2S and S2C replies; preserve failure paths and explicit UNKNOWN until proved.",
-        "claim": null,
-        "submission": null,
+        "claim": {
+          "actor": "chatgpt-web roy",
+          "branch": "extra/roy1",
+          "base_commit": "53bc569edc8e6507b8d0df99280bf09c10e40ead",
+          "date": "2026-10-30"
+        },
+        "submission": {
+          "report_path": "kr-extra-roy/20261030-chatgpt-web-roy-E68-RR0008-selection42-scenario-review-writer-endcutscene-static-closure.md",
+          "report_blob_sha": "0af10e12b2247f3cd4493086d282044fae249c31",
+          "date": "2026-10-30",
+          "summary": "KR T03 RR-0008 bounded static E68 completion for T01/S00 review, original technical file on extra/roy1 commit 163498b1ed709c6cbe09414cb4f3284ccc083856. Verified report blob 0af10e12b2247f3cd4493086d282044fae249c31, 23-assertion standalone checker blob 40df6df835338cd6a637dc803cdc4b7247d3165c. S2C app0x42 base-scene handler 0x4B2190 writes FAB2A0 20-WORD set and optional 24-byte records, same container is read by 0x47D610 ScenarioReview UI; independent RTTI CScenarioReviewSceneItem ctor/0x47B2B0 writer owns object+0x248 and path 0x47D530→0x47B5C0→0x565720; EndCutScene 0x561DB0 direct 0x561EF3 uses +0x38/+0x3C, not Review +0x248; Event.stp 1001/1→tutorial_start is resource-only. C2S0x42 actual original Server S2C success/error pairing and first tutorial selection remain UNKNOWN (RR-0002 BLOCKED), all direction-specific order claims bounded to Client gates, not observed wire. KR BIN SHA256 9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91. GAP-SCENE-0001 / GAP-FLOW-0001, SPEC-SCENE-0001 / SPEC-FLOW-0001 / SPEC-CHAR-0001. No T01 FULL-PASS/S00 ACCEPTED or actual playable validation. Evidence integrity: exact E68 report path also published as immutable identical blob in main at commit a8d6f73945829425cf8d58798199bc930d814a38, for governance/phase_b_review_preflight.py and research/dispatch/dispatch.py checkout validation; research remains authored on extra/roy1, no extra branch created."
+        },
         "review": null,
         "events": [
           {
@@ -234,6 +511,34 @@
             "actor": "S00",
             "date": "2026-10-29",
             "note": "既有 Phase-B RR 遷入正式收件台帳；尚未由 Task Agent 認領或通知執行"
+          },
+          {
+            "from": "QUEUED",
+            "to": "CLAIMED",
+            "actor": "chatgpt-web roy",
+            "date": "2026-10-30",
+            "note": "User explicit authorization RR-0008 KR/T03 native static study. Exclusive research branch extra/roy1 per latest user instruction; no additional branch. Study S2C 0x42 and genuine scene-key writer +0x248 / 0x565720 and EndCutScene differentiation; T03 pre-existing T01 NEEDS_FIX deferred by user-request scope."
+          },
+          {
+            "from": "CLAIMED",
+            "to": "IN_PROGRESS",
+            "actor": "chatgpt-web roy",
+            "date": "2026-10-30",
+            "note": "BIN-first RR-0008 E68 original full report and 23 static assertion script completed on sole extra/roy1 technical research branch commit 163498b1ed709c6cbe09414cb4f3284ccc083856. Native static source SHA 9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91. Client-side S2C42 handler/ScenarioReview key writer/EndCutScene alternative proven at bounded scope; initial-tutorial wire condition and original Server selection reply remain explicit UNKNOWN. Formal SUBMITTED review follows; RR-0002 remains BLOCKED."
+          },
+          {
+            "from": "IN_PROGRESS",
+            "to": "SUBMITTED",
+            "actor": "chatgpt-web roy",
+            "date": "2026-10-30",
+            "note": "KR T03 RR-0008 bounded static E68 completion for T01/S00 review, original technical file on extra/roy1 commit 163498b1ed709c6cbe09414cb4f3284ccc083856. Verified report blob 0af10e12b2247f3cd4493086d282044fae249c31, 23-assertion standalone checker blob 40df6df835338cd6a637dc803cdc4b7247d3165c. S2C app0x42 base-scene handler 0x4B2190 writes FAB2A0 20-WORD set and optional 24-byte records, same container is read by 0x47D610 ScenarioReview UI; independent RTTI CScenarioReviewSceneItem ctor/0x47B2B0 writer owns object+0x248 and path 0x47D530→0x47B5C0→0x565720; EndCutScene 0x561DB0 direct 0x561EF3 uses +0x38/+0x3C, not Review +0x248; Event.stp 1001/1→tutorial_start is resource-only. C2S0x42 actual original Server S2C success/error pairing and first tutorial selection remain UNKNOWN (RR-0002 BLOCKED), all direction-specific order claims bounded to Client gates, not observed wire. KR BIN SHA256 9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91. GAP-SCENE-0001 / GAP-FLOW-0001, SPEC-SCENE-0001 / SPEC-FLOW-0001 / SPEC-CHAR-0001. No T01 FULL-PASS/S00 ACCEPTED or actual playable validation."
+          },
+          {
+            "from": "SUBMITTED",
+            "to": "IN_REVIEW",
+            "actor": "T01",
+            "date": "2026-10-30",
+            "note": "T01 R0 exact E68 Git blob 0af10e12b2247f3cd4493086d282044fae249c31 already in main; independent KR BIN/RTTI/direct-call/Event.stp bounded R2, SRC-0474 and CLM-SCENE-0005/0006 PARTIAL, existing CLM-SCENE-0004 E68 additional source. Review research/handoffs/t01-20261030-rr0008-e68-bounded-r2/README.md. Not whole-report FULL-PASS, no S00 ACCEPTED; original Server selection reply, first tutorial entry unknown and RR-0002 remains BLOCKED."
           }
         ]
       }

@@ -9,6 +9,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "governance"))
 from check_s00_readiness import assess  # noqa:E402
+from s00_test_fixtures import reset_queued_fixture
 
 
 PATHS = [
@@ -30,6 +31,8 @@ class ReadinessTests(unittest.TestCase):
             f = self.root / rel
             f.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(ROOT / rel, f)
+
+        reset_queued_fixture(self.root)
 
     def overwrite(self, rel, mutate):
         path = self.root / rel

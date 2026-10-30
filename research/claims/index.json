@@ -402,7 +402,20 @@
         "SPEC-NET-0002"
       ],
       "conflicts": [],
-      "native_review_ref": null
+      "native_review_ref": null,
+      "additional_sources": [
+        {
+          "source_intake_id": "SRC-0382",
+          "source_file": "kr-temp-roy/20261028-224346-chatgpt-web-roy-T10-118-KR-selector0-category2-connect-callers.md",
+          "source_blob_sha": "8f00225b580fab47b9d7964c9bdf6511047c911f",
+          "client_version": "kr",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "evidence_level": "PARTIAL",
+          "scope_subset": "Only validated subset of CLM-NET-0007; original full-document status unchanged.",
+          "quality_inheritance": false,
+          "integration_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-163408-chatgpt-web-roy-T01-T10-116-118-R1-R2-canonical-review.md"
+        }
+      ]
     },
     {
       "id": "CLM-NET-0008",
@@ -506,7 +519,20 @@
         "SPEC-FLOW-0001"
       ],
       "conflicts": [],
-      "native_review_ref": null
+      "native_review_ref": null,
+      "additional_sources": [
+        {
+          "source_intake_id": "SRC-0474",
+          "source_file": "kr-extra-roy/20261030-chatgpt-web-roy-E68-RR0008-selection42-scenario-review-writer-endcutscene-static-closure.md",
+          "source_blob_sha": "0af10e12b2247f3cd4493086d282044fae249c31",
+          "client_version": "kr",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "evidence_level": "PARTIAL",
+          "scope_subset": "Only two direct loader callers and their differing key sources; not E68 whole-document quality inheritance.",
+          "quality_inheritance": false,
+          "integration_review_ref": "research/handoffs/t01-20261030-rr0008-e68-bounded-r2/README.md"
+        }
+      ]
     },
     {
       "id": "CLM-CLIENT-0001",
@@ -10623,7 +10649,7 @@
       "evidence_level": "PARTIAL",
       "evidence_scope": "KR Pool+0x28/+0x48 and 0x805B40 recycler (selected paths)",
       "assertion": "Connect-fail and teardown producers enqueue Conn in Pool+0x48 and clear Conn+0x14; the recycler removes Pool+0x28 tracking by +0x14==0 and only recycles Pool+0x48 entries with Conn+A0B8==0.",
-      "limitations": "No exhaustive Conn+14 writer, allocator/exception, duplicate enqueue, mutex or lifetime verification.",
+      "limitations": "No exhaustive Conn+14 writer, allocator/exception, duplicate enqueue, mutex or lifetime verification. [2026-10-30 R2] Independent KR 0x490FE0→0x4911B7→0x805B40 adds a *conditional third* Pool+48 producer; 0x805F50 reset also clears Conn+14 so zero alone is not a source-unique enqueue marker; research/handoffs/t01-20261030-extra-t16-r2/batch5/R2-REVIEW.md.",
       "conflicts": [],
       "affected_spec_ids": [],
       "additional_sources": [
@@ -10631,6 +10657,13 @@
           "source_file": "kr-extra-roy/20261030-022552-chatgpt-web-roy-E50-RR0005-map-replacement-pool48-atomic-IO-lifecycle.md",
           "source_blob_sha": "f4bd62ce69cf96cc35b566bf62721a586f4f51c7",
           "source_intake_id": "SRC-0395",
+          "subset_only": true,
+          "does_not_upgrade_quality": true
+        },
+        {
+          "source_file": "kr-extra-roy/20261030-091559-chatgpt-web-roy-E56-RR0005-bounded-static-completion-transport-owner-retry-reply.md",
+          "source_blob_sha": "843889349bb58209c02221e720800f0e9e3ff9d8",
+          "source_intake_id": "SRC-0451",
           "subset_only": true,
           "does_not_upgrade_quality": true
         }
@@ -10647,7 +10680,7 @@
       "evidence_level": "PARTIAL",
       "evidence_scope": "KR 0x806C9E/806CB3/806CC7/806CD2 manager duplicate-key mapping",
       "assertion": "Existing key map node is conditionally erased before new key-to-Conn node insertion. This is different from socket close and Pool+0x48 enqueue.",
-      "limitations": "0x7B6890 full downstream destructor unknown; old Conn lifetime and successful IOCP association not established.",
+      "limitations": "0x7B6890 full downstream destructor unknown; old Conn lifetime and successful IOCP association not established. [2026-10-30 R2] 0x7B6890 223-instruction rooted CFG and 0x89120C→HeapFree bound tree node deletion without Conn* close through inspected helper; other owners/IOCP unclosed. research/handoffs/t01-20261030-extra-t16-r2/batch5/R2-REVIEW.md.",
       "conflicts": [
         "E48 0x49B070 map detach claim corrected by E49 and E50"
       ],
@@ -10657,6 +10690,13 @@
           "source_file": "kr-extra-roy/20261030-010130-chatgpt-web-roy-E48-RR0005-close-failure-IOCP-frame-dispatch.md",
           "source_blob_sha": "39285bbf723876d58ebdd9f74e197bd0499f3d03",
           "source_intake_id": "SRC-0393",
+          "subset_only": true,
+          "does_not_upgrade_quality": true
+        },
+        {
+          "source_file": "kr-extra-roy/20261030-091559-chatgpt-web-roy-E56-RR0005-bounded-static-completion-transport-owner-retry-reply.md",
+          "source_blob_sha": "843889349bb58209c02221e720800f0e9e3ff9d8",
+          "source_intake_id": "SRC-0451",
           "subset_only": true,
           "does_not_upgrade_quality": true
         }
@@ -10683,9 +10723,1421 @@
           "source_intake_id": "SRC-0394",
           "subset_only": true,
           "does_not_upgrade_quality": true
+        },
+        {
+          "source_file": "kr-extra-roy/20261030-091559-chatgpt-web-roy-E56-RR0005-bounded-static-completion-transport-owner-retry-reply.md",
+          "source_blob_sha": "843889349bb58209c02221e720800f0e9e3ff9d8",
+          "source_intake_id": "SRC-0451",
+          "subset_only": true,
+          "does_not_upgrade_quality": true
         }
       ],
       "review_ref": "research/handoffs/t01-20261030-extra-t16-r2/batch3.md"
+    },
+    {
+      "id": "CLM-NET-0018",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/20261030-091559-chatgpt-web-roy-E56-RR0005-bounded-static-completion-transport-owner-retry-reply.md",
+      "source_blob_sha": "843889349bb58209c02221e720800f0e9e3ff9d8",
+      "source_intake_id": "SRC-0451",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 0x495610 key1 Connect helper and six native direct callers 0x6D6377/6424/6508/65C8/670C/696C",
+      "assertion": "Exactly six raw direct E8 candidate call sites were found in the inspected KR .text for 0x495610, each confirmed in known caller entry windows; their third parameter is 0/0/1/0/0/0, with two callback-only local paths and four manager-key1 local send candidates of lengths 0x38,0x68,0x2CE,0x2CE.",
+      "limitations": "Indirect callers, actual runtime ordering, complete builder payload layouts, queue acceptance and first wire unproven. 0x495610 may reuse existing BF60 when flag=0.",
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "related_claim_ids": [
+        "CLM-NET-0017"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-extra-t16-r2/batch6/R2-E56-REVIEW.md",
+      "integration_status": "R2_BOUND, NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-NET-0019",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/20261030-091559-chatgpt-web-roy-E56-RR0005-bounded-static-completion-transport-owner-retry-reply.md",
+      "source_blob_sha": "843889349bb58209c02221e720800f0e9e3ff9d8",
+      "source_intake_id": "SRC-0451",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 0x4957C0 selection Connect key0/key2 and 0x495935 0x39-byte queue then 0x49594A/958 WSARecv post, 0x49595B/962 BF aliases",
+      "assertion": "0x4957C0 invokes both key0 and key2 Connect helpers before NULL checks; when both yield non-NULL Conn it attempts key0 local queue and both receive post calls and writes BF64/BF68 then returns literal 1 without inspecting those three calls' return values.",
+      "limitations": "Return1 does not prove local send enqueue success, WSARecv post success, live socket, actual wire or server response; failure branches only show shutdown-by-key in this function.",
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "related_claim_ids": [
+        "CLM-NET-0014",
+        "CLM-NET-0017"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-extra-t16-r2/batch6/R2-E56-REVIEW.md",
+      "integration_status": "R2_BOUND, NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-NET-0020",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/20261030-091559-chatgpt-web-roy-E56-RR0005-bounded-static-completion-transport-owner-retry-reply.md",
+      "source_blob_sha": "843889349bb58209c02221e720800f0e9e3ff9d8",
+      "source_intake_id": "SRC-0451",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 0x8069A0 send-by-key → 0x8060D0 queue gate, 0x806A00 WSARecv hard-failure + 0x806FC0 close virtual, upstream BF60/BF64/BF68",
+      "assertion": "Manager send-by-key returns 0 on missing key/value; a nonzero payload can be rejected by 0x8060D0 when Conn+A0A4 exceeds 0x12C. WSARecv hard error other than IO_PENDING drives vtable+0x24 close-by-Conn and returns 0; upstream 0x495610/0x4957C0 do not gate their alias writes or helper return1 on that recv result.",
+      "limitations": "Conditional static chain only: no observed UAF/handle leak/race or guaranteed stale alias; additional indirect vtables/handlers, error ordering, overflow and cancellation remain unknown.",
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "related_claim_ids": [
+        "CLM-NET-0014",
+        "CLM-NET-0015",
+        "CLM-NET-0017"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-extra-t16-r2/batch6/R2-E56-REVIEW.md",
+      "integration_status": "R2_BOUND, NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-QUEST-0002",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261030-101735-chatgpt-web-roy-T16-123-KR-Quest16-study4-S2C-0040-0064-0065-0072-0074-state-UI-native.md",
+      "source_blob_sha": "0df4598be826c4b6fea0627278b77b3026ecd52e",
+      "source_intake_id": "SRC-0460",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "Inbound KR application index0x40 0x502270, state at pkt+4 and u16 QID at +2",
+      "assertion": "State0 builds F438B local event and modifies exclusion/candidate; state1 uses different QuestInfo text notification path.",
+      "limitations": "No actual wire/Server ACK or UI display proof.",
+      "conflicts": [],
+      "related_claim_ids": [
+        "CLM-QUEST-0005"
+      ],
+      "affected_spec_ids": [],
+      "review_ref": "research/handoffs/t01-20261030-quest16-r0-r2/README.md",
+      "integration_status": "R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-QUEST-0003",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261030-101735-chatgpt-web-roy-T16-123-KR-Quest16-study4-S2C-0040-0064-0065-0072-0074-state-UI-native.md",
+      "source_blob_sha": "0df4598be826c4b6fea0627278b77b3026ecd52e",
+      "source_intake_id": "SRC-0460",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "Inbound application 0x72/0x74, QuestOwner+5EB0/5EB4 and 0x44B4E0",
+      "assertion": "0x74 appends a 16-bit prerequisite key and recalculates candidates; 0x72 resets vector effective end. Append helper has no key-dedup scan.",
+      "limitations": "Official snapshot order, complete frame length and reset heap free unverified.",
+      "conflicts": [],
+      "related_claim_ids": [],
+      "affected_spec_ids": [],
+      "review_ref": "research/handoffs/t01-20261030-quest16-r0-r2/README.md",
+      "integration_status": "R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-QUEST-0004",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261030-101735-chatgpt-web-roy-T16-123-KR-Quest16-study4-S2C-0040-0064-0065-0072-0074-state-UI-native.md",
+      "source_blob_sha": "0df4598be826c4b6fea0627278b77b3026ecd52e",
+      "source_intake_id": "SRC-0460",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "Inbound application 0x64/0x65, QuestOwner+5ED0 20-WORD exclusions",
+      "assertion": "0x64 state0 removes one exclusion ID; 0x65 state0 clears all 20 keys; both separate from prerequisite and may rebuild candidate list.",
+      "limitations": "No automatic quest completion/reward or final UI guarantee.",
+      "conflicts": [],
+      "related_claim_ids": [],
+      "affected_spec_ids": [],
+      "review_ref": "research/handoffs/t01-20261030-quest16-r0-r2/README.md",
+      "integration_status": "R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-QUEST-0005",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261030-094522-chatgpt-web-roy-T16-121-KR-Quest16-study2-closed-NPC-event-S2C-0040-F438B-mode2-TalkBox.md",
+      "source_blob_sha": "e5d48e09ac8604ac39ce0dc584bb20308d927b54",
+      "source_intake_id": "SRC-0458",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "Local event action byte/jump lookup 0x5B8460/0x5B8394",
+      "assertion": "F438A → case0B/0x5B7FED, F438B → case0C/0x5B7FFF; separate UI handling branches.",
+      "limitations": "Event actions are not wire opcodes, all consumers and runtime queue gates not fully audited.",
+      "conflicts": [],
+      "related_claim_ids": [
+        "CLM-QUEST-0002"
+      ],
+      "affected_spec_ids": [],
+      "review_ref": "research/handoffs/t01-20261030-quest16-r0-r2/README.md",
+      "integration_status": "R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-QUEST-0006",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261030-100618-chatgpt-web-roy-T16-122-KR-Quest16-study3-NPC-C2S-001C-003F-0036-mode2-and-sender-queue.md",
+      "source_blob_sha": "d056bb2d0ff4ee136e13f2ff8c034434a61b2d87",
+      "source_intake_id": "SRC-0459",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "TalkBox 0x636B70 mode gate, F4402, 0x636E10 producer, independent 0x4B3510",
+      "assertion": "Inspected mode1 path can create F4402 and conditionally send application 0x36 plus WORD*([TalkBox+0x88]), rather than directly stored QID+0x80.",
+      "limitations": "Does not prove mode2 always/never sends 0x36, or first QuestTalk WORD equals QID16.",
+      "conflicts": [
+        "T01-RETURN-T16-117-Q16-MODE2-C2S36-001"
+      ],
+      "related_claim_ids": [
+        "CLM-QUEST-0007"
+      ],
+      "affected_spec_ids": [],
+      "review_ref": "research/handoffs/t01-20261030-quest16-r0-r2/README.md",
+      "integration_status": "R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-QUEST-0007",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261030-034517-chatgpt-web-roy-T16-117-KR-Quest14-study5-Quest16-type2-unlock-UI-C2S-S2C.md",
+      "source_blob_sha": "388b9100362ed43ec65ba1f7504f73518dce5d44",
+      "source_intake_id": "SRC-0457",
+      "evidence_level": "REFUTED",
+      "evidence_scope": "T16-117 D.1/D.3 generalized same mode1..3 F4402→0x36 QID16 producer",
+      "assertion": "The claimed generalized causal proof is contradicted by mode1-only event gate and 0x636E10 reading record through +0x88 rather than QuestID+0x80.",
+      "limitations": "Refutes this generalization, not existence of any alternative mode2 producer.",
+      "conflicts": [
+        "T01-RETURN-T16-117-Q16-MODE2-C2S36-001"
+      ],
+      "related_claim_ids": [
+        "CLM-QUEST-0006"
+      ],
+      "affected_spec_ids": [],
+      "review_ref": "research/handoffs/t01-20261030-quest16-r0-r2/README.md",
+      "integration_status": "R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-NET-0021",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/20261030-110906-chatgpt-web-roy-E58-RR0004-A02C-alias-mode-fallback-bounded-BIN-first.md",
+      "source_blob_sha": "b5c53b93ec20e056fb3f07374468a341ce4ee9c9",
+      "source_intake_id": "SRC-0462",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR new Conn constructor 0x805CA0/0x805D02, reset 0x805F50, send drain 0x806202/0x806223/0x80623A",
+      "assertion": "Constructor stores Conn+A02C=2; queue drain signed-byte checks zero/nonzero: nonzero first calls 807830 and on failure calls 807A70; mode0 directly 807A70. Reset/reuse inspected does not show this byte rewritten.",
+      "limitations": "Full indirect writer/alias closure not established, mode0 observed runtime reachability unknown; successful encode not OS send.",
+      "conflicts": [],
+      "affected_spec_ids": [
+        "SPEC-NET-0001",
+        "SPEC-NET-0003"
+      ],
+      "related_claim_ids": [
+        "CLM-NET-0001",
+        "CLM-NET-0020"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-rr0001-rr0004-bounded-r2/README.md",
+      "integration_status": "R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-NET-0022",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/20261030-103206-chatgpt-web-roy-E57-RR0001-KR-first-frame-0BBB-1A68-mode-sequencing-static-contract.md",
+      "source_blob_sha": "a379f776b9a1d7566de539daa7153f33b9b91e36",
+      "source_intake_id": "SRC-0461",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 0x807830/0x807A70 local frame encoders and 0x807D33 checksum consumer",
+      "assertion": "Under normal guarded inputs encoded 0BBB uses u16 payload len, u16 marker, u16 plaintext-byte sum and XOR-chain payload, total n+6; plain 1A68 uses len+marker+raw body total n+4. Synthetic payload 01 00 yields 02 00 BB 0B 01 00 B7 01.",
+      "limitations": "Byte-transform semantics are scoped to observed encoder/decoder, not official live packets or complete compression variants.",
+      "conflicts": [],
+      "affected_spec_ids": [
+        "SPEC-NET-0001",
+        "SPEC-NET-0003"
+      ],
+      "related_claim_ids": [
+        "CLM-NET-0021"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-rr0001-rr0004-bounded-r2/README.md",
+      "integration_status": "R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-NET-0023",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/20261030-110906-chatgpt-web-roy-E58-RR0004-A02C-alias-mode-fallback-bounded-BIN-first.md",
+      "source_blob_sha": "b5c53b93ec20e056fb3f07374468a341ce4ee9c9",
+      "source_intake_id": "SRC-0462",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 0x807830 length/TX capacity guards; 0x807A70; 0x8061A0 retain-or-recycle branch",
+      "assertion": "0BBB requires n>0 and n+6<=4096; plain n>0 and n+4<=4096; each also gates used+frame<=16384 and TX pointer. For mode nonzero, n=4091/4092 may fall back to plain when space permits; both failure leaves queue head pending in inspected branch.",
+      "limitations": "This is a synthetic/conditional threshold, not proof normal game producer emits 4091 or 4092 bytes; queue return is not WSASend.",
+      "conflicts": [],
+      "affected_spec_ids": [
+        "SPEC-NET-0001",
+        "SPEC-NET-0003"
+      ],
+      "related_claim_ids": [
+        "CLM-NET-0021",
+        "CLM-NET-0022"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-rr0001-rr0004-bounded-r2/README.md",
+      "integration_status": "R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-NET-0024",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/20261030-103206-chatgpt-web-roy-E57-RR0001-KR-first-frame-0BBB-1A68-mode-sequencing-static-contract.md",
+      "source_blob_sha": "a379f776b9a1d7566de539daa7153f33b9b91e36",
+      "source_intake_id": "SRC-0461",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 0x807B40 inbound frame parser and 0x807D66 checksum gate",
+      "assertion": "Inbound parser chooses header/processing by received marker (0x2633/0x0BBB/0x1A68/0x22D7), not by outgoing Conn+A02C. When inspected 0BBB decoded checksum differs, the normal positive payload copy path through 0x807E50 is not taken.",
+      "limitations": "Parser accepts additional/default marker branches; unknown marker is not official endorsement, 0x2633 failure chain belongs RR-0006; no official first S2C known.",
+      "conflicts": [],
+      "affected_spec_ids": [
+        "SPEC-NET-0001",
+        "SPEC-NET-0003"
+      ],
+      "related_claim_ids": [
+        "CLM-NET-0021"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-rr0001-rr0004-bounded-r2/README.md",
+      "integration_status": "R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-NET-0025",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/20261030-110906-chatgpt-web-roy-E58-RR0004-A02C-alias-mode-fallback-bounded-BIN-first.md",
+      "source_blob_sha": "b5c53b93ec20e056fb3f07374468a341ce4ee9c9",
+      "source_intake_id": "SRC-0462",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR `.text` raw displacement 2C A0 00 00 and rooted direct E8 candidate locations",
+      "assertion": "In KR .text there are exactly two raw A02C displacement occurrences at VA 0x805D04 (0x805D02 setter) and 0x806205 (0x806202 reader). Direct E8 calls to 0x807830/0x807A70 occur at 0x806223/0x80623A, and 0x8061A0 direct callers at 0x804AD6/0x805228.",
+      "limitations": "Raw byte-pattern absence does not rule out base-adjusted pointers, computed alias, whole-struct copies, indirect calls or external writes; targets confirmed only at rooted instruction boundaries.",
+      "conflicts": [],
+      "affected_spec_ids": [
+        "SPEC-NET-0001",
+        "SPEC-NET-0003"
+      ],
+      "related_claim_ids": [
+        "CLM-NET-0021"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-rr0001-rr0004-bounded-r2/README.md",
+      "integration_status": "R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-QUEST-0008",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261030-030953-chatgpt-web-roy-T16-115-KR-Quest14-study4-S2C-scenario-vs-quest-record-and-UI-client-boundary.md",
+      "source_blob_sha": "54d96de03a0c10bf954da06249d56b5b06477d11",
+      "source_intake_id": "SRC-0464",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR Scenario active + S2C application 0x4C, scenario14 map key state and Lua IsScenarioEnded",
+      "assertion": "When required Scene::CTutorial is active, 0x4C / WORD14 can write Scenario14 ended map state; Lua reader checks same scene index map. This is not QuestInfo ID14 accept/completed state.",
+      "limitations": "Scene preconditions and all other context remain; cannot turn it into quest-accept wire ACK.",
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "related_claim_ids": [
+        "CLM-QUEST-0003"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-multi-branch-merge-r0-r2/README.md",
+      "integration_status": "R1/R2_BOUNDED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-QUEST-0009",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261030-042414-chatgpt-web-roy-T16-118-KR-Quest16-study1-resource-demand14-reward50-BIN-loader-and-type2-record.md",
+      "source_blob_sha": "c8a5f75bd6295b01746e0574f7085a80d627af63",
+      "source_intake_id": "SRC-0466",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR Quest16 QuestInfo resource/record loader, Demand14 and candidate type2",
+      "assertion": "Quest16 candidate type2 record depends on loaded QuestInfo Demand14/level/town gates, and a native resource-to-record path; candidate presence not a guarantee of Quest16 acceptance.",
+      "limitations": "Reward50 schema is resource observation not Server award; complete scene/actual NPC runtime not proven.",
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "related_claim_ids": [
+        "CLM-QUEST-0003"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-multi-branch-merge-r0-r2/README.md",
+      "integration_status": "R1/R2_BOUNDED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-QUEST-0010",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261030-090619-chatgpt-web-roy-T16-119-KR-Quest16-study2-NPC-giver-selector-event-producers-and-TalkBox-bridge.md",
+      "source_blob_sha": "88fa586a1d54f8b7eae6bf27645a3784c2293f82",
+      "source_intake_id": "SRC-0467",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR NPC10027 giver type2 record lookup and local event bridge",
+      "assertion": "NPC10027 giver-related Client event may resolve type2 Quest16 candidate under required resource and candidate gates, subsequently entering local selection/TalkBox chain.",
+      "limitations": "No guarantee player runtime NPC trigger; no final mode2 C2S producer/Server acceptance proven.",
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "related_claim_ids": [
+        "CLM-QUEST-0005",
+        "CLM-QUEST-0009"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-multi-branch-merge-r0-r2/README.md",
+      "integration_status": "R1/R2_BOUNDED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-QUEST-0011",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261030-103908-chatgpt-web-roy-T16-124-KR-Quest16-study5-Q15-Demand16-town5-NPC10338-C2S-S2C-scene-bridge.md",
+      "source_blob_sha": "79d147affae5e54b688876a1a1ae9765a6edfbaa",
+      "source_intake_id": "SRC-0469",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR Quest16 prior key16→Quest15 Demand16 and town5/NPC10338 type2 candidate",
+      "assertion": "When S2C application 0x74 has installed prerequisite WORD16, Quest15 Demand16 candidate may pass additional town5/level/exclusion gates and link conditional giver10338 to local UI/TalkBox.",
+      "limitations": "This is conditional Client chain only; original Server ordering, accept-reply, true scene runtime not proven.",
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "related_claim_ids": [
+        "CLM-QUEST-0003",
+        "CLM-QUEST-0005"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-multi-branch-merge-r0-r2/README.md",
+      "integration_status": "R1/R2_BOUNDED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-QUEST-0012",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261030-112139-chatgpt-web-roy-T16-125-KR-Quest15-study1-resources-demand16-reward-schema-four-native-scenes.md",
+      "source_blob_sha": "983535d340331f03ca1e253bc1d73e26bb08dd8f",
+      "source_intake_id": "SRC-0470",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR Quest15 QuestInfo record and Scene 1–4 resource-loader linkage",
+      "assertion": "Quest15 resource record and scene references are represented in original resources and Client loader/consumer under bounded conditions; reward field schema can be localized.",
+      "limitations": "Specific actual reward amounts, completion/next quest and live scene execution not fully proven.",
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "related_claim_ids": [
+        "CLM-QUEST-0011"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-multi-branch-merge-r0-r2/README.md",
+      "integration_status": "R1/R2_BOUNDED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-NET-0026",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/20261030-112205-chatgpt-web-roy-E59-RR0006-compressed2633-22D7-decode-checksum-pool-IOCP.md",
+      "source_blob_sha": "c7c1474b6b3cf928b8031e17fad7761c488d9b18",
+      "source_intake_id": "SRC-0471",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 0x807B40 marker 0x2633 header8, 0x7C XOR decode and 0x727190 inflate-like wrapper",
+      "assertion": "Inbound 0x2633 uses 8-byte outer header, XOR seed 0x7C and conditionally calls inflate-like 0x727190; parser uses successful return to pass decoded bytes.",
+      "limitations": "Header+4..7 business meaning, actual original Server compressed payloads and all inflator internals not proven.",
+      "conflicts": [],
+      "affected_spec_ids": [
+        "SPEC-NET-0001",
+        "SPEC-NET-0003"
+      ],
+      "related_claim_ids": [
+        "CLM-NET-0024"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-multi-branch-merge-r0-r2/README.md",
+      "integration_status": "R1/R2_BOUNDED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-NET-0027",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/20261030-112205-chatgpt-web-roy-E59-RR0006-compressed2633-22D7-decode-checksum-pool-IOCP.md",
+      "source_blob_sha": "c7c1474b6b3cf928b8031e17fad7761c488d9b18",
+      "source_intake_id": "SRC-0471",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 0x807B40/0x807D66 invalid checksum, compressed failure vs invalid header len and incomplete frames",
+      "assertion": "Checksum mismatch and decompressor failure take local no-positive-payload route; invalid payload length (0 or >4096) causes parser status0; incomplete frame is retained for next receive rather than necessarily rejected.",
+      "limitations": "One bad checksum does not imply forced socket disconnect; IOCP next-post depends on other flags.",
+      "conflicts": [],
+      "affected_spec_ids": [
+        "SPEC-NET-0003"
+      ],
+      "related_claim_ids": [
+        "CLM-NET-0024",
+        "CLM-NET-0026"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-multi-branch-merge-r0-r2/README.md",
+      "integration_status": "R1/R2_BOUNDED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-NET-0028",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/20261030-112205-chatgpt-web-roy-E59-RR0006-compressed2633-22D7-decode-checksum-pool-IOCP.md",
+      "source_blob_sha": "c7c1474b6b3cf928b8031e17fad7761c488d9b18",
+      "source_intake_id": "SRC-0471",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR packet node 0x8075B0, 0x807E50 copy, 0x8076F0 pool return, Conn+A080 lane dispatch",
+      "assertion": "Decoded positive-length frames can be handed to lane-directed application dispatch; invalid decoded zero-length node is returned to pool, not sent as command; 0x22D7 and unknown marker follow local default raw/header4 branch.",
+      "limitations": "No proof all unknown markers are official, no same-session auth/roster/game state transition, no executable Client/Server test.",
+      "conflicts": [],
+      "affected_spec_ids": [
+        "SPEC-NET-0001",
+        "SPEC-NET-0003"
+      ],
+      "related_claim_ids": [
+        "CLM-NET-0024",
+        "CLM-NET-0027"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-multi-branch-merge-r0-r2/README.md",
+      "integration_status": "R1/R2_BOUNDED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-NET-0029",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/20261030-113803-chatgpt-web-roy-E60-RR0007-KR-auth-roster-selection-scene-gated-S2C-dispatch.md",
+      "source_blob_sha": "2ca02f3870d79d3217abf39b8651c43226eb77d6",
+      "source_intake_id": "SRC-0472",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR native 0x4930E0..493160, .rdata vptr C05AEC, callback lane2 and post-delegate return gate",
+      "assertion": "After a positive local length and lane 2, 0x4930E0 invokes the Client+B8 delegate; its return 0x100 plus Client+BE8C nonzero determines callback return-true, not whether the delegate is called. The first WORD read precedes its local length gate.",
+      "limitations": "Required holder/vtable identity and upstream frame assembly are conditional; a short payload danger is not a demonstrated runtime vulnerability. No original Server response pairing or whole-function FULL-PASS.",
+      "conflicts": [],
+      "affected_spec_ids": [
+        "SPEC-NET-0003",
+        "SPEC-AUTH-0001"
+      ],
+      "related_claim_ids": [
+        "CLM-NET-0028"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-rr0007-e60-bounded-r2/20261030-141913-chatgpt-web-roy-T01-RR0007-E60-review.md",
+      "integration_status": "R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-NET-0030",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/20261030-113803-chatgpt-web-roy-E60-RR0007-KR-auth-roster-selection-scene-gated-S2C-dispatch.md",
+      "source_blob_sha": "2ca02f3870d79d3217abf39b8651c43226eb77d6",
+      "source_intake_id": "SRC-0472",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 0x494360/0x4FDA30/0x4B7EC0/0x4C4670; 0x4B7DC0 command2 and 0x4C3220 scene table initializers; rdata vtables C06EB4/C072FC",
+      "assertion": "First-layer FD2CF8 command2 handler is 0x4B7F00; generic fallback forwards to an active scene, and when the LOGIN scene second-level table is installed its command13/7A routes call 0x4C37A0/0x4C3C10. Direct command2 override does not use generic scene-null gate.",
+      "limitations": "Specific dynamic Client+B8 forwarding identity, all scene types and response opcode timing not globally closed; no official server auth flow implied.",
+      "conflicts": [],
+      "affected_spec_ids": [
+        "SPEC-NET-0003",
+        "SPEC-AUTH-0001",
+        "SPEC-CHAR-0001"
+      ],
+      "related_claim_ids": [
+        "CLM-NET-0029"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-rr0007-e60-bounded-r2/20261030-141913-chatgpt-web-roy-T01-RR0007-E60-review.md",
+      "integration_status": "R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-NET-0031",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/20261030-113803-chatgpt-web-roy-E60-RR0007-KR-auth-roster-selection-scene-gated-S2C-dispatch.md",
+      "source_blob_sha": "2ca02f3870d79d3217abf39b8651c43226eb77d6",
+      "source_intake_id": "SRC-0472",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR C2S 0x4A3B80 4-byte local builder; scene base 0x4ADD50 registers S2C command42 0x4B2190 and command43 0x4B1A90; 0x4B2190 calls 0x500110",
+      "assertion": "C2S selection builder emits local WORD 0x42 + byte index + byte mode when its manager gate permits; base scene also has separately registered inbound handlers for command42 and 43. Identical numeric command42 does not establish that inbound 42 is selection approval or that it triggers a world transition.",
+      "limitations": "Actual Server reply pairing, payload meaning/success code, scene writer and runtime conditions remain owned by T03 RR-0002/0008. Verified local builder does not itself prove actual on-wire send.",
+      "conflicts": [],
+      "affected_spec_ids": [
+        "SPEC-CHAR-0001",
+        "SPEC-FLOW-0001",
+        "SPEC-NET-0003"
+      ],
+      "related_claim_ids": [
+        "CLM-NET-0030"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-rr0007-e60-bounded-r2/20261030-141913-chatgpt-web-roy-T01-RR0007-E60-review.md",
+      "integration_status": "R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-AUTH-0003",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261030-142513-chatgpt-web-roy-T03-RR0003-KR-auth-E8-000F-13-codepage-group-handoff.md",
+      "source_blob_sha": "64c8c1a3429ae6ff177a84dee0d08ad69dba0b17",
+      "source_intake_id": "SRC-0473",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR PE .data virtual-zero FBA808 plus mode entry 440790, conversion caller 4C37E7",
+      "assertion": "Global FBA808 lies beyond PE .data raw initialization in virtual-zero and supplies codepage to a native conversion branch; initial zero does not establish runtime ACP or an immutable encoding.",
+      "limitations": "Indirect alias writers and live OS ACP unknown.",
+      "conflicts": [],
+      "affected_spec_ids": [
+        "SPEC-AUTH-0001",
+        "SPEC-FLOW-0001"
+      ],
+      "related_claim_ids": [
+        "CLM-AUTH-0001"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-rr0003-t03-bounded-r2/20261030-143210-chatgpt-web-roy-T01-RR0003-auth-review.md",
+      "integration_status": "R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-AUTH-0004",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261030-142513-chatgpt-web-roy-T03-RR0003-KR-auth-E8-000F-13-codepage-group-handoff.md",
+      "source_blob_sha": "64c8c1a3429ae6ff177a84dee0d08ad69dba0b17",
+      "source_intake_id": "SRC-0473",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR active LOGIN scene second level 4C3220 handlers 4C37A0/4C3C10",
+      "assertion": "0x13 handler reads status at payload+0x16 while independent 0x7A handler reads DWORD count at payload+2 and passes payload+6 to group parser. Both rely on proper scene/lane path.",
+      "limitations": "No original Server response order, complete status enum, full length or scene lifetime guarantee.",
+      "conflicts": [],
+      "affected_spec_ids": [
+        "SPEC-AUTH-0001",
+        "SPEC-FLOW-0001"
+      ],
+      "related_claim_ids": [
+        "CLM-AUTH-0002",
+        "CLM-NET-0030"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-rr0003-t03-bounded-r2/20261030-143210-chatgpt-web-roy-T01-RR0003-auth-review.md",
+      "integration_status": "R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-AUTH-0005",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261030-142513-chatgpt-web-roy-T03-RR0003-KR-auth-E8-000F-13-codepage-group-handoff.md",
+      "source_blob_sha": "64c8c1a3429ae6ff177a84dee0d08ad69dba0b17",
+      "source_intake_id": "SRC-0473",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 4C3080 group parser count loops / zero group local event",
+      "assertion": "Group parser advances over a 3-byte group header and 10-byte child rows; row+4..7 are IP octets. No per-row remaining-payload-byte-length check is visible within this selected function, and a zero group count still reaches F4243 local notification.",
+      "limitations": "Other upstream guards may exist; this is not a proven runtime attack or Server ABI guarantee.",
+      "conflicts": [],
+      "affected_spec_ids": [
+        "SPEC-AUTH-0001"
+      ],
+      "related_claim_ids": [
+        "CLM-AUTH-0002"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-rr0003-t03-bounded-r2/20261030-143210-chatgpt-web-roy-T01-RR0003-auth-review.md",
+      "integration_status": "R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-COMBAT-0001",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261028-1843-chatgpt-web-roy-T10-101-phase-writer-consumption-and-transport.md",
+      "source_blob_sha": "388d050b133af5325424391fb5eb487922f7cf5f",
+      "source_intake_id": "SRC-0363",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR .text 0x4914A0..0x4914C0 and 0x6D1540..0x6D1640; key input dataflow entry only",
+      "assertion": "At 0x4914AC the KR Client loads ECX=0xFB8830 and directly calls input producer 0x6D1480 at 0x4914B1; this is a concrete bound input object call on the inspected update path, not proof that every physical Z press reaches combat or emits C2S.",
+      "limitations": "The bounded sample does not close every UI suppression, phase override, active bank, producer path, or 0x6D1480 full function; do not assert per-press packet count or a fixed combo/phase window.",
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "related_claim_ids": [],
+      "review_ref": "research/handoffs/t01-20261030-t08-t10-branch-merge/20261030-151422-chatgpt-web-roy-T01-T08-T10-merge-bounded-R2.md",
+      "integration_status": "R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-COMBAT-0002",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261028-213024-chatgpt-web-roy-T10-115-KR-C2S000A-builder-to-pending-transport-closure.md",
+      "source_blob_sha": "e5de0249c0fdc0b97685e68b76921510e57aea78",
+      "source_intake_id": "SRC-0379",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR .text 0x545824..0x545857,0x545B38..0x545B73,0x8069A0..0x806A00; .rdata 0xC51758",
+      "assertion": "On the inspected 0x5452C0 output branch the Client initializes an application buffer with initial len=6 and opcode WORD 0x000A, calls transport vtable+0x10 only when FE48D0>6, passes selector=0/payload FE38D0/len FE48D0; vtable C51748+0x10 points to 0x8069A0, which conditionally looks up a connection and calls 0x8060D0 for nonzero length.",
+      "limitations": "No dynamic connection selector availability, guaranteed enqueue/send or full on-wire frame, row data provenance or actual Server ACK is established by these selected native windows. T02 framing/IOCP claims remain separate.",
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "related_claim_ids": [
+        "CLM-NET-0005"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-t08-t10-branch-merge/20261030-151422-chatgpt-web-roy-T01-T08-T10-merge-bounded-R2.md",
+      "integration_status": "R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-COMBAT-0003",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261028-225025-chatgpt-web-roy-T10-119-KR-S2C-key13-nine-byte-actor-motion-consumer.md",
+      "source_blob_sha": "d44df2cf097e112ff98a78ebd918fbf9910b8952",
+      "source_intake_id": "SRC-0383",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR .text 0x4B01F0..0x4B0215, 0x4B0250..0x4B031F, 0x4B0390..0x4B03B0",
+      "assertion": "For an observed application key13 dispatch to 0x4B01C0, unsigned (L-2)/9 count and add edi,9 establish 9-byte rows, with actor key WORD at P+2+9i, BYTE at P+4+9i fed to actor vtable+0x58, WORD at P+5+9i and FLOAT32 at P+7+9i passed toward 0x4C8A90; absent actor can skip the row.",
+      "limitations": "No original Server wire capture, key13-to-000A ACK or Z/combo semantic causality; actual handler reachability remains conditional on lane, scene, selector and framing. No full attacker-controlled length audit or every actor class confirmed.",
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "related_claim_ids": [
+        "CLM-NET-0006"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-t08-t10-branch-merge/20261030-151422-chatgpt-web-roy-T01-T08-T10-merge-bounded-R2.md",
+      "integration_status": "R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-COMBAT-0004",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261028-225505-chatgpt-web-roy-T10-120-KR-actor-vtable58-state-writer-and-vtable68-effects.md",
+      "source_blob_sha": "d0efddc90c9943bbad3bc121ad9898304f11d8ea",
+      "source_intake_id": "SRC-0384",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR .rdata seven vtable candidates 0xC07554,0xC076AC,0xC07B44,0xC0C824,0xC0C8C4,0xC0C9DC,0xC0CA9C; .text 0x4C8C30..0x4C8C40",
+      "assertion": "All seven inspected KR .rdata vtable candidates have +0x58=0x4C8C30; 0x4C8C30 reads byte argument [ebp+8] and writes [ecx+0xB0], ret4, establishing a concrete state-byte writer for these table implementations, not a direct motion clip start.",
+      "limitations": "Only equal-value vtable candidates in the inspected static table scope; not exhaustive constructors, actual runtime actor vptr instances, all vtable+0x68 targets, rendered animation or original Server motion judgment.",
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "related_claim_ids": [
+        "CLM-COMBAT-0003"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-t08-t10-branch-merge/20261030-151422-chatgpt-web-roy-T01-T08-T10-merge-bounded-R2.md",
+      "integration_status": "R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-COMBAT-0005",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261028-101100-chatgpt-web-roy-T10-089-event-container-callers.md",
+      "source_blob_sha": "b9522feee0464b68ead6ff1ea09f84e09a168510",
+      "source_intake_id": "SRC-0218",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR .text 490DEF..490E05, 58A5DB..58A612, 6D4A58..6D4B0A",
+      "assertion": "The inspected reset 0x6D4A30 call at 490DFC takes mode from byte FAADFA and second argument F95CD8, whereas 58A607 uses a distinct allocated 12-byte self-linked local node; 6D4A30 clears 40 ordinary phase bytes, and these reset callers are not nonzero phase producers.",
+      "limitations": "Not an exhaustive caller/ownership audit. The previously unknown nonzero writer was later found in 6D1480/6D19F2 and separately registered under CLM-COMBAT-0001.",
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "related_claim_ids": [
+        "CLM-COMBAT-0001"
+      ],
+      "additional_sources": [
+        {
+          "source_intake_id": "SRC-0233",
+          "source_file": "kr-temp-roy/20261028-103000-chatgpt-web-roy-T10-093-reset-branch-and-parameters.md",
+          "source_blob_sha": "886c94170e3a83f5161c6df9608f2c874f6b3dee",
+          "client_version": "kr",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "evidence_level": "PARTIAL",
+          "scope_subset": "Only CLM-COMBAT-0005 source-bounded confirmation; quality not inherited",
+          "quality_inheritance": false,
+          "integration_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-1604-chatgpt-web-roy-T01-T10-late089-100-R1-R2-review.md"
+        },
+        {
+          "source_intake_id": "SRC-0236",
+          "source_file": "kr-temp-roy/20261028-103000-chatgpt-web-roy-T10-096-evidence-closure-and-next.md",
+          "source_blob_sha": "951336b952cd2bbf7bf19fa01eb6e31177027ea3",
+          "client_version": "kr",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "evidence_level": "PARTIAL",
+          "scope_subset": "Only CLM-COMBAT-0005 source-bounded confirmation; quality not inherited",
+          "quality_inheritance": false,
+          "integration_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-1604-chatgpt-web-roy-T01-T10-late089-100-R1-R2-review.md"
+        },
+        {
+          "source_intake_id": "SRC-0256",
+          "source_file": "kr-temp-roy/20261028-1102-chatgpt-web-roy-T10-100-input-dispatch-closure-matrix.md",
+          "source_blob_sha": "124e47117fee777aea6da73d9fb755fd1915fa9a",
+          "client_version": "kr",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "evidence_level": "PARTIAL",
+          "scope_subset": "Only CLM-COMBAT-0005 source-bounded confirmation; quality not inherited",
+          "quality_inheritance": false,
+          "integration_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-1604-chatgpt-web-roy-T01-T10-late089-100-R1-R2-review.md"
+        }
+      ],
+      "review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-1604-chatgpt-web-roy-T01-T10-late089-100-R1-R2-review.md",
+      "integration_status": "R1_LATE_SOURCE_REVIEW; R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-COMBAT-0006",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261028-101100-chatgpt-web-roy-T10-090-fb73e8-reader-audit.md",
+      "source_blob_sha": "d232cee52ae99734bdae7229a5c1e0e9f2451bd5",
+      "source_intake_id": "SRC-0219",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR .text 560197..560243, 59623B gate, direct-literal subset FB73E8",
+      "assertion": "560197 zeros EBX and 560239 writes EBX to DWORD[FB73E8]; multiple readers compare this global, such as 59623B and 5A4614. This proves one zero-initialization writer, not a lifetime-wide absence of nonzero writers.",
+      "limitations": "18 matched direct literal byte positions are not guaranteed instruction entry points; pointer alias, indirect/memcpy and nonzero runtime writers remain unknown.",
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "related_claim_ids": [],
+      "additional_sources": [
+        {
+          "source_intake_id": "SRC-0255",
+          "source_file": "kr-temp-roy/20261028-1102-chatgpt-web-roy-T10-099-fb73e8-direct-xrefs-and-writer-limits.md",
+          "source_blob_sha": "ecaf018a76ba0e0ab11570a629dfa99fea3aa7f3",
+          "client_version": "kr",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "evidence_level": "PARTIAL",
+          "scope_subset": "Only CLM-COMBAT-0006 source-bounded confirmation; quality not inherited",
+          "quality_inheritance": false,
+          "integration_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-1604-chatgpt-web-roy-T01-T10-late089-100-R1-R2-review.md"
+        },
+        {
+          "source_intake_id": "SRC-0236",
+          "source_file": "kr-temp-roy/20261028-103000-chatgpt-web-roy-T10-096-evidence-closure-and-next.md",
+          "source_blob_sha": "951336b952cd2bbf7bf19fa01eb6e31177027ea3",
+          "client_version": "kr",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "evidence_level": "PARTIAL",
+          "scope_subset": "Only CLM-COMBAT-0006 source-bounded confirmation; quality not inherited",
+          "quality_inheritance": false,
+          "integration_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-1604-chatgpt-web-roy-T01-T10-late089-100-R1-R2-review.md"
+        },
+        {
+          "source_intake_id": "SRC-0256",
+          "source_file": "kr-temp-roy/20261028-1102-chatgpt-web-roy-T10-100-input-dispatch-closure-matrix.md",
+          "source_blob_sha": "124e47117fee777aea6da73d9fb755fd1915fa9a",
+          "client_version": "kr",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "evidence_level": "PARTIAL",
+          "scope_subset": "Only CLM-COMBAT-0006 source-bounded confirmation; quality not inherited",
+          "quality_inheritance": false,
+          "integration_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-1604-chatgpt-web-roy-T01-T10-late089-100-R1-R2-review.md"
+        }
+      ],
+      "review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-1604-chatgpt-web-roy-T01-T10-late089-100-R1-R2-review.md",
+      "integration_status": "R1_LATE_SOURCE_REVIEW; R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-COMBAT-0007",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261028-101100-chatgpt-web-roy-T10-091-conditional-child-selector.md",
+      "source_blob_sha": "6f76c33948d04582983855a574dabe64eb185599",
+      "source_intake_id": "SRC-0220",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR .text 761010..761057",
+      "assertion": "761010 traverses owner+64/+68 linked candidates and reads each candidate object+28 DWORD. It returns node+8 candidate only if bit19==0, bit8==1 and bit12==0; otherwise iterates or returns null.",
+      "limitations": "Owner and candidate object offsets are different bases; not a universal accessor, actor subtype classifier or motion trigger.",
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "related_claim_ids": [],
+      "additional_sources": [
+        {
+          "source_intake_id": "SRC-0254",
+          "source_file": "kr-temp-roy/20261028-1102-chatgpt-web-roy-T10-098-child-selector-and-listener-buckets.md",
+          "source_blob_sha": "868aa5369cb5c062dbe13dccaaeed7cc7da71f91",
+          "client_version": "kr",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "evidence_level": "PARTIAL",
+          "scope_subset": "Only CLM-COMBAT-0007 source-bounded confirmation; quality not inherited",
+          "quality_inheritance": false,
+          "integration_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-1604-chatgpt-web-roy-T01-T10-late089-100-R1-R2-review.md"
+        },
+        {
+          "source_intake_id": "SRC-0236",
+          "source_file": "kr-temp-roy/20261028-103000-chatgpt-web-roy-T10-096-evidence-closure-and-next.md",
+          "source_blob_sha": "951336b952cd2bbf7bf19fa01eb6e31177027ea3",
+          "client_version": "kr",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "evidence_level": "PARTIAL",
+          "scope_subset": "Only CLM-COMBAT-0007 source-bounded confirmation; quality not inherited",
+          "quality_inheritance": false,
+          "integration_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-1604-chatgpt-web-roy-T01-T10-late089-100-R1-R2-review.md"
+        }
+      ],
+      "review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-1604-chatgpt-web-roy-T01-T10-late089-100-R1-R2-review.md",
+      "integration_status": "R1_LATE_SOURCE_REVIEW; R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-COMBAT-0008",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261028-101100-chatgpt-web-roy-T10-092-mapping-consumer-domain.md",
+      "source_blob_sha": "4902528ed87c5ecfc0477cb248794ea1bd937f4c",
+      "source_intake_id": "SRC-0221",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR .text 5CD67A..5CD69A, 650E80..650EA5",
+      "assertion": "Two concrete 6D4DC0 mapping query callsites use (MapButton=16,mode=2) at 5CD68A and (MapButton=10500,mode=2) at 650E96, followed by configuration/vector/formatting consumers. They do not directly establish attack/motion input behavior.",
+      "limitations": "Do not conflate mapping keys, UI formatting, logical event ID, wire opcode and original Server action.",
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "related_claim_ids": [],
+      "additional_sources": [],
+      "review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-1604-chatgpt-web-roy-T01-T10-late089-100-R1-R2-review.md",
+      "integration_status": "R1_LATE_SOURCE_REVIEW; R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-COMBAT-0009",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261028-103000-chatgpt-web-roy-T10-094-phase-dispatch-fallback.md",
+      "source_blob_sha": "f5534c77d75aab81b72a448c0901ec552a29a364",
+      "source_intake_id": "SRC-0234",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR .text 596245..5962BF and 596351..59638B",
+      "assertion": "The inspected phase1 path of 5961C0 calls selected child's virtual+EC and on failure may try 596140 listener bucket then owner+EC. The phase3 path is a different virtual+F0 listener notification; when FB73E8 gate is nonzero this local dispatch admits only IDs 13/14.",
+      "limitations": "A handled callback or event list addition is not verified attack motion/next-action combo queue; local input gate is not global disable.",
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "related_claim_ids": [
+        "CLM-COMBAT-0007"
+      ],
+      "additional_sources": [
+        {
+          "source_intake_id": "SRC-0254",
+          "source_file": "kr-temp-roy/20261028-1102-chatgpt-web-roy-T10-098-child-selector-and-listener-buckets.md",
+          "source_blob_sha": "868aa5369cb5c062dbe13dccaaeed7cc7da71f91",
+          "client_version": "kr",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "evidence_level": "PARTIAL",
+          "scope_subset": "Only CLM-COMBAT-0009 source-bounded confirmation; quality not inherited",
+          "quality_inheritance": false,
+          "integration_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-1604-chatgpt-web-roy-T01-T10-late089-100-R1-R2-review.md"
+        },
+        {
+          "source_intake_id": "SRC-0236",
+          "source_file": "kr-temp-roy/20261028-103000-chatgpt-web-roy-T10-096-evidence-closure-and-next.md",
+          "source_blob_sha": "951336b952cd2bbf7bf19fa01eb6e31177027ea3",
+          "client_version": "kr",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "evidence_level": "PARTIAL",
+          "scope_subset": "Only CLM-COMBAT-0009 source-bounded confirmation; quality not inherited",
+          "quality_inheritance": false,
+          "integration_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-1604-chatgpt-web-roy-T01-T10-late089-100-R1-R2-review.md"
+        },
+        {
+          "source_intake_id": "SRC-0256",
+          "source_file": "kr-temp-roy/20261028-1102-chatgpt-web-roy-T10-100-input-dispatch-closure-matrix.md",
+          "source_blob_sha": "124e47117fee777aea6da73d9fb755fd1915fa9a",
+          "client_version": "kr",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "evidence_level": "PARTIAL",
+          "scope_subset": "Only CLM-COMBAT-0009 source-bounded confirmation; quality not inherited",
+          "quality_inheritance": false,
+          "integration_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-1604-chatgpt-web-roy-T01-T10-late089-100-R1-R2-review.md"
+        }
+      ],
+      "review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-1604-chatgpt-web-roy-T01-T10-late089-100-R1-R2-review.md",
+      "integration_status": "R1_LATE_SOURCE_REVIEW; R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-COMBAT-0010",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261028-103000-chatgpt-web-roy-T10-095-mode-subobject-routing.md",
+      "source_blob_sha": "1049f0f0c409d202a552ef35c673051fc0527f89",
+      "source_intake_id": "SRC-0235",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR .text 5A4614..5A4658 and 5A5760..5A57D1",
+      "assertion": "Owner+158 mode==1 selects owner+140 and mode==2 selects owner+148; otherwise this child route returns. 5A57A0 calls the selected object's vtable+0xB4 with EDX value including 0x66 supplied at the 5A464A callsite.",
+      "limitations": "Unknown vtable implementation, motion semantics, runtime owner, mode producer and Server role.",
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "related_claim_ids": [],
+      "additional_sources": [
+        {
+          "source_intake_id": "SRC-0236",
+          "source_file": "kr-temp-roy/20261028-103000-chatgpt-web-roy-T10-096-evidence-closure-and-next.md",
+          "source_blob_sha": "951336b952cd2bbf7bf19fa01eb6e31177027ea3",
+          "client_version": "kr",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "evidence_level": "PARTIAL",
+          "scope_subset": "Only CLM-COMBAT-0010 source-bounded confirmation; quality not inherited",
+          "quality_inheritance": false,
+          "integration_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-1604-chatgpt-web-roy-T01-T10-late089-100-R1-R2-review.md"
+        }
+      ],
+      "review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-1604-chatgpt-web-roy-T01-T10-late089-100-R1-R2-review.md",
+      "integration_status": "R1_LATE_SOURCE_REVIEW; R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-COMBAT-0011",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261028-1102-chatgpt-web-roy-T10-097-dispatch-success-result-list.md",
+      "source_blob_sha": "4384b7604b9ece90d765978d426192585a383000",
+      "source_intake_id": "SRC-0253",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR .text 596351..59638B and 74D700..74D734",
+      "assertion": "The successful local dispatch branch appends to a caller-supplied result list through 74D700 allocation of a 12-byte node with data at +0/+4/+8; 596378 increments the result-list count and updates list links.",
+      "limitations": "Consumer/drain and failure paths are not fully audited; local handled-event result list must not be claimed as an attack combo queue.",
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "related_claim_ids": [
+        "CLM-COMBAT-0009"
+      ],
+      "additional_sources": [
+        {
+          "source_intake_id": "SRC-0256",
+          "source_file": "kr-temp-roy/20261028-1102-chatgpt-web-roy-T10-100-input-dispatch-closure-matrix.md",
+          "source_blob_sha": "124e47117fee777aea6da73d9fb755fd1915fa9a",
+          "client_version": "kr",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "evidence_level": "PARTIAL",
+          "scope_subset": "Only CLM-COMBAT-0011 source-bounded confirmation; quality not inherited",
+          "quality_inheritance": false,
+          "integration_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-1604-chatgpt-web-roy-T01-T10-late089-100-R1-R2-review.md"
+        }
+      ],
+      "review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-1604-chatgpt-web-roy-T01-T10-late089-100-R1-R2-review.md",
+      "integration_status": "R1_LATE_SOURCE_REVIEW; R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-COMBAT-0012",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261028-1855-chatgpt-web-roy-T10-102-directinput-key44-and-battle-tick-order.md",
+      "source_blob_sha": "1a034ab7112645f0996266c42ed47e5d8b52aeb1",
+      "source_intake_id": "SRC-0364",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR .text 6F38A0..6F38E0, 6F1790..6F17E0, 491530, 491CB6→4E0060; .rdata BD6994 dataformat",
+      "assertion": "Observed keyboard device path calls COM vtable+0x24 with 0x100-byte GetDeviceState buffer; physical input is indexed before logical keymapping. One outer update path invokes phase/UI handling at 0x491530 before a later 0x491CB6→0x4E0060 controller tick; Key44 is DirectInput physical scan 0x2C corresponding to Z under the documented device mapping, not Windows VK_Z.",
+      "limitations": [
+        "Current active key bank, UI interception, device failure/reacquire, alias overrides and persistent controller state are not exhaustive; no every-Z-press→C2S000A guarantee."
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "related_claim_ids": [
+        "CLM-COMBAT-0001",
+        "CLM-COMBAT-0002"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-161036-chatgpt-web-roy-T01-T10-102to107-scope-R1-R2.md",
+      "native_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-161036-chatgpt-web-roy-T01-T10-102to107-scope-R1-R2.md",
+      "integration_status": "CONFLICT_CHECKED; PARTIAL_BOUNDED; NOT_FULL_PASS",
+      "quality_inheritance": false
+    },
+    {
+      "id": "CLM-COMBAT-0013",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261028-1906-chatgpt-web-roy-T10-103-input-skill-matrix-and-tick-countdown.md",
+      "source_blob_sha": "5eda574c9d7b32c01def1cc97f0024fdb3027c2c",
+      "source_intake_id": "SRC-0365",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR .text 54F270..54F2DC,81A8E0..81A909,5462B0..546306",
+      "assertion": "The local SkillMatrix predicate prioritizes simultaneous bit0+bit1 as column4 ahead of bit0+bit2 column5; 81A8E0 reads low WORD matrix+4+2*(row*11+column) guarded by row<4,column<11. The ordinary controller forwards actor+3E8 and mode byte to 54F270; a false gate can still leave lower output bits under an actor+3E8 nonzero exception.",
+      "limitations": [
+        "No raw SkillMatrix.xml per-actor values, runtime bank, actual skill animation, fixed milliseconds/FPS, combo/cancel timing or unconditional wire suppression established."
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "related_claim_ids": [
+        "CLM-COMBAT-0002"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-161036-chatgpt-web-roy-T01-T10-102to107-scope-R1-R2.md",
+      "native_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-161036-chatgpt-web-roy-T01-T10-102to107-scope-R1-R2.md",
+      "integration_status": "CONFLICT_CHECKED; PARTIAL_BOUNDED; NOT_FULL_PASS",
+      "quality_inheritance": false
+    },
+    {
+      "id": "CLM-COMBAT-0014",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261028-1914-chatgpt-web-roy-T10-104-actor-3e8-property4-and-force-effect.md",
+      "source_blob_sha": "05dcaf39ac7a5326f2b2850b18f4f92b21e39bd2",
+      "source_intake_id": "SRC-0366",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR .text 4CD718..4CD744,4CE81B..4CE83B,4CE90A..4CE94C; .rdata [C07B44+2C]=4CE7F0, C07AEC='FORCE'",
+      "assertion": "Observed derived ctor calls base 4C7070 using the same EDI actor then writes vptr C07B44; +2C points to property dispatcher 4CE7F0. Its property4 branch MOVSX reads a signed WORD from argC and assigns DWORD actor+3E8; on new value 1 the source also describes optional actor+364 subordinate FORCE-labelled effect management.",
+      "limitations": [
+        "Not a per-key increment, universal actor implementation, guaranteed runtime property source, motion clip start, official Server state or full subordinate effect lifecycle."
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "related_claim_ids": [
+        "CLM-COMBAT-0013"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-161036-chatgpt-web-roy-T01-T10-102to107-scope-R1-R2.md",
+      "native_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-161036-chatgpt-web-roy-T01-T10-102to107-scope-R1-R2.md",
+      "integration_status": "CONFLICT_CHECKED; PARTIAL_BOUNDED; NOT_FULL_PASS",
+      "quality_inheritance": false
+    },
+    {
+      "id": "CLM-COMBAT-0015",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261028-1919-chatgpt-web-roy-T10-105-paramupdate-handler-and-property-dispatch.md",
+      "source_blob_sha": "9b12f6f3572a1f15540fa9a874a21bb8056aee52",
+      "source_intake_id": "SRC-0367",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR .text 4AFAF0..4AFB89, 4CE90A..4CE94C; existing active state dispatcher 4ADD50",
+      "assertion": "The KR ParamUpdate handler calculates floor((length-2)/6) when len>=2 via 0xAAAAAAAB multiply/shr2, iterates records of actorID/property/value as three WORDs at P+2+6i/P+4+6i/P+6+6i, looks up actor and conditionally calls actor main vtable+0x2C with property/value. Tail shorter than 6 bytes is not processed as a full row.",
+      "limitations": [
+        "Application state key0 and active vtable are conditional. No full buffer-pointer safety audit, all actor types or captured wire opcode0; property4 only under matching derived vptr."
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "related_claim_ids": [
+        "CLM-COMBAT-0014",
+        "CLM-NET-0006"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-161036-chatgpt-web-roy-T01-T10-102to107-scope-R1-R2.md",
+      "native_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-161036-chatgpt-web-roy-T01-T10-102to107-scope-R1-R2.md",
+      "integration_status": "CONFLICT_CHECKED; PARTIAL_BOUNDED; NOT_FULL_PASS",
+      "quality_inheritance": false
+    },
+    {
+      "id": "CLM-COMBAT-0016",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261028-1942-chatgpt-web-roy-T10-106-queue-header-key-and-dispatch-bases.md",
+      "source_blob_sha": "b9873d454eca75147c3251b85aed7f54929ecb5f",
+      "source_intake_id": "SRC-0368",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR .text 4930E0..49315F,48AAD0..48AB45,4FDA30..4FDA98; .rdata C05AEC slot0=4930E0,C05B04+4=48AAD0",
+      "assertion": "On the observed category==2 receive callback, 4930E0 reads initial WORD key from payload P at 4930ED, then checks zero length at 4930F6, then dispatches through callback this+B8. In the inspected root layout the outer 48AAD0 table uses 16-byte slots and low signed WORD key; subsequent active-state 4FDA30 uses a distinct 8-byte-slot table. The payload pointer is not advanced by 2 here.",
+      "limitations": [
+        "No local len>=2 guard before first read is visible in 4930E0; preceding transport/queue invariants and potential exploitability are unproven. Do not infer official Server key0 response to C2S000A."
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "related_claim_ids": [
+        "CLM-COMBAT-0015",
+        "CLM-NET-0006",
+        "CLM-COMBAT-0003"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-161036-chatgpt-web-roy-T01-T10-102to107-scope-R1-R2.md",
+      "native_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-161036-chatgpt-web-roy-T01-T10-102to107-scope-R1-R2.md",
+      "integration_status": "CONFLICT_CHECKED; PARTIAL_BOUNDED; NOT_FULL_PASS",
+      "quality_inheritance": false
+    },
+    {
+      "id": "CLM-COMBAT-0017",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261028-200349-chatgpt-web-roy-T10-101-KR-virtual-dispatch-second-domain.md",
+      "source_blob_sha": "6d456ac37490d29016b3dd9508902bc6da846f71",
+      "source_intake_id": "SRC-0369",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR .text 59624E and 59643F→6D4CE0, extra-ID event list 5963F8..596478; .rdata exact DWORD==5961C0 scan in raw 7D0600..95E800",
+      "assertion": "The 5961C0 phase dispatch has both ordinary IDs 0..39 and a second extra event ID container via FDF624, with separate 6D4CE0 readers; the inspected KR .rdata contains 29 exact DWORD pointer candidates equal to 5961C0, consistent with shared table method references but not necessarily distinct callers.",
+      "limitations": [
+        "Does not prove 29 concrete classes, actual runtime owner, physical key action, Server command or combo scheduling. 596430 is an immediate inside JMP at 59642E, not a legal independent instruction start."
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "related_claim_ids": [
+        "CLM-COMBAT-0009",
+        "CLM-COMBAT-0011"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-161036-chatgpt-web-roy-T01-T10-102to107-scope-R1-R2.md",
+      "native_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-161036-chatgpt-web-roy-T01-T10-102to107-scope-R1-R2.md",
+      "integration_status": "CONFLICT_CHECKED; PARTIAL_BOUNDED; NOT_FULL_PASS",
+      "quality_inheritance": false
+    },
+    {
+      "id": "CLM-COMBAT-0018",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261028-201500-chatgpt-web-roy-T10-102-KR-event-container-cleanup-and-caller-matrix.md",
+      "source_blob_sha": "dee434518439b49db91415ee4912d55e52c57cf1",
+      "source_intake_id": "SRC-0371",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR .text 5960F9..596115 and 596C90..596D7C; 59610E call596C90",
+      "assertion": "In the selected cleanup implementation 596C90 iterates three owner subcontainers at owner+C0,D0,E0 (EBX begins at owner+C0, +0x10 stride). It reads node+C candidate pointers; if the separate candidate object+28 bit8 is set, invokes that object's vtable+0xD4 during cleanup; node+21 checks are container navigation, not candidate flag bits.",
+      "limitations": [
+        "Not a client attack cancellation or ACK proof. No complete allocator/destructor exception CFG or cross-owner lifetime guarantee; avoid merging with result/next-action list."
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "related_claim_ids": [
+        "CLM-COMBAT-0011"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-161036-chatgpt-web-roy-T01-T10-102to107-scope-R1-R2.md",
+      "native_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-161036-chatgpt-web-roy-T01-T10-102to107-scope-R1-R2.md",
+      "integration_status": "CONFLICT_CHECKED; PARTIAL_BOUNDED; NOT_FULL_PASS",
+      "quality_inheritance": false
+    },
+    {
+      "id": "CLM-NET-0032",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261028-201546-chatgpt-web-roy-T10-108-KR-framed-receive-to-queue-producer.md",
+      "source_blob_sha": "804572ab576259cc82162f56d68379b4f0f7d940",
+      "source_intake_id": "SRC-0372",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 0x807B40..0x807E7D framed receive, length/prefix guards, record+4/+8, 0x807D7F..0x807DAD nonzero queue vs zero-record branch, 0x489920 and 0x8040A0",
+      "assertion": "On inspected KR parser paths 0x807B40 processes bounded frame lengths (nonzero <=4096), chooses 4/6/8-byte headers by discriminator, and 0x807E50 copies bounded decoded payload to record+8 with size record+4. At 0x807D7F nonzero record length uses context+A080 category and 0x489920 singleton owner for 0x8040A0 category/toggle bucket append; zero record length instead dispatches via 0x804310 to 0x8076F0 without ordinary category append.",
+      "limitations": [
+        "Source T10-108's 0x807B60 is an internal location; direct call 0x806E08 targets actual entry 0x807B40.",
+        "Zero decoded record path is not a valid wire frame length 0 or Server gameplay rejection.",
+        "No exhaustive parser full CFG, categorization runtime, compression semantics or complete queue consumer lifetime review."
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "related_claim_ids": [
+        "CLM-NET-0004",
+        "CLM-NET-0006",
+        "CLM-NET-0011"
+      ],
+      "additional_sources": [
+        {
+          "source_intake_id": "SRC-0373",
+          "source_file": "kr-temp-roy/20261028-202433-chatgpt-web-roy-T10-109-KR-queue-owner-class-event-and-empty-record.md",
+          "source_blob_sha": "dcc4609011535695f4573f5af4e729d150b146c8",
+          "client_version": "kr",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "evidence_level": "PARTIAL",
+          "scope_subset": "Only matching bounded native slice supporting CLM-NET-0032; no whole-source quality inheritance.",
+          "quality_inheritance": false,
+          "integration_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-162252-chatgpt-web-roy-T01-T10-108-114-R1-R2-merge-review.md"
+        }
+      ],
+      "review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-162252-chatgpt-web-roy-T01-T10-108-114-R1-R2-merge-review.md",
+      "native_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-162252-chatgpt-web-roy-T01-T10-108-114-R1-R2-merge-review.md",
+      "integration_status": "R1/R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-NET-0033",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261028-203129-chatgpt-web-roy-T10-110-KR-IOCP-completion-to-frame-consumer.md",
+      "source_blob_sha": "c63e65b5c3270ec3bb1b5339960668bae106ade3",
+      "source_intake_id": "SRC-0374",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 0x806A00..0x806A93 WSARecv at 806A4C, 0x806D30..0x806EE0 GetQueuedCompletionStatus and key+OVERLAPPED identity, 0x806AD0..0x806B54 category writer",
+      "assertion": "The inspected KR Client WSARecv submit uses Conn+A030 OVERLAPPED, WSABUF at Conn+A044/A048 with fixed recv capacity 4096; completion worker via GetQueuedCompletionStatus dispatches only matching Conn+A030 completion under A0AC gate to 0x807B40 parser. The distinct Conn+A050 matching completion takes a send-side path including 0x8077B0 and InterlockedDecrement(Conn+A0B8). The connection init writes Conn+A080 from its fourth stack argument, not the adjacent constant Conn+A0B4=2.",
+      "limitations": [
+        "Producer/consumer relation is conditional on a matching key, live connection and local gates, not a proof of all sockets or complete framing/wire flow.",
+        "WinSock/IOCP return values are OS-level, not Server ACK; Conn+5018 recv WSABUF and Conn+18 parser accumulation are not the same address.",
+        "Category 2 is not inferred from Conn+A0B4=2; full argument provenance/other writers and asynchronous race behavior remain unknown."
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "related_claim_ids": [
+        "CLM-NET-0006",
+        "CLM-NET-0014",
+        "CLM-NET-0017",
+        "CLM-NET-0018"
+      ],
+      "additional_sources": [
+        {
+          "source_intake_id": "SRC-0375",
+          "source_file": "kr-temp-roy/20261028-204203-chatgpt-web-roy-T10-111-KR-WSARecv-WSASend-IOCP-overlapped-and-category-writer.md",
+          "source_blob_sha": "af59cc9b4c11586b65989701d6e169d864e14876",
+          "client_version": "kr",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "evidence_level": "PARTIAL",
+          "scope_subset": "Only matching bounded native slice supporting CLM-NET-0033; no whole-source quality inheritance.",
+          "quality_inheritance": false,
+          "integration_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-162252-chatgpt-web-roy-T01-T10-108-114-R1-R2-merge-review.md"
+        }
+      ],
+      "review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-162252-chatgpt-web-roy-T01-T10-108-114-R1-R2-merge-review.md",
+      "native_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-162252-chatgpt-web-roy-T01-T10-108-114-R1-R2-merge-review.md",
+      "integration_status": "R1/R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-NET-0034",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261028-204914-chatgpt-web-roy-T10-112-KR-connection-vtable-and-outbound-buffer-lifecycle.md",
+      "source_blob_sha": "e236268d27bf0c54fa626e330cc8d84549ca883b",
+      "source_intake_id": "SRC-0376",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 0x8060D0..0x80627C pending record, Conn+A074/+A078, A02C frame construction, 0x804AC0..0x804B9B and 0x805210..0x8052D5 transport pump callers",
+      "assertion": "The inspected send-by-connection pending input can allocate record with length+4/data+8, link it into Conn+A074 and increment Conn+A078, then 0x8061A0 pumps records through guarded 0x807A70 plain frame builder or mode-dependent 0x807830 alternative. Two inspected update callers 0x804AD6 and 0x805228 invoke this pump under connection gates; when Conn+A028>0 and Conn+A0B8<=0 they invoke global FBA854 vtable+0xC using Conn, Conn+5020 and pending size.",
+      "limitations": [
+        "This is Client transport queue/pump, not a combat combo queue or evidence of a matching 000A send instance.",
+        "Two callers are distinct management paths, not proved to run simultaneously; blocked pump does not imply packet loss.",
+        "0x8060D0's >4096 copy-skip behavior, alias owners, all error/cleanup paths and actual socket submit must be interpreted with CLM-NET-0035."
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "related_claim_ids": [
+        "CLM-NET-0005",
+        "CLM-NET-0003",
+        "CLM-NET-0021",
+        "CLM-COMBAT-0002"
+      ],
+      "additional_sources": [
+        {
+          "source_intake_id": "SRC-0377",
+          "source_file": "kr-temp-roy/20261028-205943-chatgpt-web-roy-T10-113-KR-pending-send-pump-and-virtual-transport-gate.md",
+          "source_blob_sha": "c23374e904a1977e6fd3b4eafc29db953801cf89",
+          "client_version": "kr",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "evidence_level": "PARTIAL",
+          "scope_subset": "Only matching bounded native slice supporting CLM-NET-0034; no whole-source quality inheritance.",
+          "quality_inheritance": false,
+          "integration_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-162252-chatgpt-web-roy-T01-T10-108-114-R1-R2-merge-review.md"
+        }
+      ],
+      "review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-162252-chatgpt-web-roy-T01-T10-108-114-R1-R2-merge-review.md",
+      "native_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-162252-chatgpt-web-roy-T01-T10-108-114-R1-R2-merge-review.md",
+      "integration_status": "R1/R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-NET-0035",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261028-212516-chatgpt-web-roy-T10-114-KR-transport-vtable-to-WSASend-closure.md",
+      "source_blob_sha": "4c58fab0d36bcc57914c0916ec1d39ee2c6a8e63",
+      "source_intake_id": "SRC-0378",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 0x8046C0..0x804730 transport constructor, .rdata C51748+C=8068B0, 0x8068B0..0x80699B WSASend, pump 804B5A / 8052AC",
+      "assertion": "A concrete observed constructor allocates 0x5C, stores vptr 0xC51748 and publishes the object to FBA854; its vtable+0xC is 0x8068B0. Guarded global-interface virtual+C calls at two pending pump sites can therefore reach WSASend IAT 0xBD25B8 using Conn+A050 OVERLAPPED and Conn+A064/+A068 WSABUF. 0x8068B0 returns 1 on immediate API success, 2 on WSA_IO_PENDING(997), 0 on other SOCKET_ERROR and -1 on early invalid-args/gate; the success/pending paths increment Conn+A0B8.",
+      "limitations": [
+        "The existence of an initialization path does not prove FBA854/vptr are never replaced dynamically.",
+        "Both caller sites use test EAX,EAX; -1 is nonzero but is not a successful socket submission. No actual wire write completion or Server gameplay acceptance is proven.",
+        "No every-Z→000A→socket transmit guarantee, no actual payload capture, and IOCP counter balancing requires other paths reviewed by T02."
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "related_claim_ids": [
+        "CLM-NET-0005",
+        "CLM-NET-0014",
+        "CLM-NET-0017",
+        "CLM-COMBAT-0002"
+      ],
+      "additional_sources": [
+        {
+          "source_intake_id": "SRC-0375",
+          "source_file": "kr-temp-roy/20261028-204203-chatgpt-web-roy-T10-111-KR-WSARecv-WSASend-IOCP-overlapped-and-category-writer.md",
+          "source_blob_sha": "af59cc9b4c11586b65989701d6e169d864e14876",
+          "client_version": "kr",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "evidence_level": "PARTIAL",
+          "scope_subset": "Only matching bounded native slice supporting CLM-NET-0035; no whole-source quality inheritance.",
+          "quality_inheritance": false,
+          "integration_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-162252-chatgpt-web-roy-T01-T10-108-114-R1-R2-merge-review.md"
+        },
+        {
+          "source_intake_id": "SRC-0377",
+          "source_file": "kr-temp-roy/20261028-205943-chatgpt-web-roy-T10-113-KR-pending-send-pump-and-virtual-transport-gate.md",
+          "source_blob_sha": "c23374e904a1977e6fd3b4eafc29db953801cf89",
+          "client_version": "kr",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "evidence_level": "PARTIAL",
+          "scope_subset": "Only matching bounded native slice supporting CLM-NET-0035; no whole-source quality inheritance.",
+          "quality_inheritance": false,
+          "integration_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-162252-chatgpt-web-roy-T01-T10-108-114-R1-R2-merge-review.md"
+        }
+      ],
+      "review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-162252-chatgpt-web-roy-T01-T10-108-114-R1-R2-merge-review.md",
+      "native_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-162252-chatgpt-web-roy-T01-T10-108-114-R1-R2-merge-review.md",
+      "integration_status": "R1/R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-COMBAT-0019",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261028-213248-chatgpt-web-roy-T10-116-KR-000A-five-byte-row-field-provenance.md",
+      "source_blob_sha": "8da51d9e77d3d900bc73743bddc82891f6829c15",
+      "source_intake_id": "SRC-0380",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 0x545895..54593E Row A, 0x5459B7..545B1A Row B, 0x545B38..545B73 selector0 send call; exact original x86 branch and local value-flow",
+      "assertion": "Two independently gated 5-byte C2S000A rows write low WORD from R+4 and remaining 2 bytes from local high WORD; Row A writes fifth byte from stack local [esp+38] and has B0 snapshot writer only in specified owner+58!=0 branch. Row B initially writes local fifth byte from R+E4 at 545A67/70; if virtual44 succeeds and owner+58==0, it skips the 545AC8 B0 overwrite and appends R+E4; branches executing 545AC8 overwrite the local from captured R+B0 before append. Each row append requires total length+5<=4096; 000A builder sends only if final size>6 and passes selector0 to transport virtual+10.",
+      "limitations": [
+        "Original source's universal row[4]=R+B0 is positively contradicted by native RowB success/owner+58==0 path; formal NEEDS_FIX return notice.",
+        "Row A owner+58==0 stack/virtual48 retN/byte producer unresolved; cannot universally set fifth byte to B0.",
+        "High WORD affected by local/virtual+58 and possibly earlier callbacks; no official gameplay semantic names.",
+        "No guaranteed Z→000A wire submission, runtime selector0, Server reply, motion, combo window or complete whole-document R3."
+      ],
+      "conflicts": [
+        "T01-RETURN-T10-116-ROW5-PROVENANCE-001: B Row E4 branch refutes original unconditional B0 provenance."
+      ],
+      "affected_spec_ids": [],
+      "related_claim_ids": [
+        "CLM-COMBAT-0002",
+        "CLM-COMBAT-0003",
+        "CLM-COMBAT-0004"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-163408-chatgpt-web-roy-T01-T10-116-118-R1-R2-canonical-review.md",
+      "native_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-163408-chatgpt-web-roy-T01-T10-116-118-R1-R2-canonical-review.md",
+      "integration_status": "R1/R2_BOUNDED; CONFLICT_CHECKED; SOURCE_NEEDS_FIX; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-NET-0036",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261028-223848-chatgpt-web-roy-T10-117-KR-selector-registration-to-000A-transport-tree.md",
+      "source_blob_sha": "01607b45a2decdc526063081ad6020b3d8742e0e",
+      "source_intake_id": "SRC-0381",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 0x806AD0..806CD7 manager selector tree producer, 0x57EF20..57E916 node insertion, 0x8069A0..8069F6 reader, 0x495743..495817 connect caller",
+      "assertion": "The inspected KR connection constructor 806AD0 takes selector from stack arg+10 and separate category from arg+14 (written Conn+A080). Following conditional socket/IOCP setup, the manager+18 selector tree can allocate 24-byte node with key at node+C and connection at node+10 and attempt 57E850 insertion; 8069A0 reads this same tree+node+10 to choose pending Conn. Static callers 4957EA/495803/49575B pass selectors 0/2/1 with category2 respectively, but each has local failure conditions and tree duplicate insertion may fail.",
+      "limitations": [
+        "No proof all runtime sessions successfully register selector0/1/2, that duplicate replacement always succeeds, or that old Conn is closed/recycled safely.",
+        "Port 8416/8414/8415 mapping already exists in CLM-NET-0007; do not create a duplicate port fact.",
+        "Need actual Client state and network packet capture to establish a particular 000A send or S2C key13 response."
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "related_claim_ids": [
+        "CLM-NET-0007",
+        "CLM-NET-0016",
+        "CLM-NET-0019",
+        "CLM-COMBAT-0002"
+      ],
+      "additional_sources": [
+        {
+          "source_intake_id": "SRC-0382",
+          "source_file": "kr-temp-roy/20261028-224346-chatgpt-web-roy-T10-118-KR-selector0-category2-connect-callers.md",
+          "source_blob_sha": "8f00225b580fab47b9d7964c9bdf6511047c911f",
+          "client_version": "kr",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "evidence_level": "PARTIAL",
+          "scope_subset": "Only validated subset of CLM-NET-0036; original full-document status unchanged.",
+          "quality_inheritance": false,
+          "integration_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-163408-chatgpt-web-roy-T01-T10-116-118-R1-R2-canonical-review.md"
+        }
+      ],
+      "review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-163408-chatgpt-web-roy-T01-T10-116-118-R1-R2-canonical-review.md",
+      "native_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-163408-chatgpt-web-roy-T01-T10-116-118-R1-R2-canonical-review.md",
+      "integration_status": "R1/R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
+    },
+    {
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/20261030-chatgpt-web-roy-E68-RR0008-selection42-scenario-review-writer-endcutscene-static-closure.md",
+      "source_blob_sha": "0af10e12b2247f3cd4493086d282044fae249c31",
+      "source_intake_id": "SRC-0474",
+      "evidence_level": "PARTIAL",
+      "conflicts": [],
+      "review_ref": "research/handoffs/t01-20261030-rr0008-e68-bounded-r2/README.md",
+      "native_review_ref": "research/handoffs/t01-20261030-rr0008-e68-bounded-r2/README.md",
+      "integration_status": "CONFLICT_CHECKED; R1/R2_BOUNDED; NOT_FULL_PASS",
+      "quality_inheritance": false,
+      "id": "CLM-SCENE-0005",
+      "evidence_scope": "KR .text 4ADF3D base-scene command42 table; 4B2190/4B21FD..4B222C payload/len path; 500110 20-word set; 47D693→503440 Review FAB2A0 consumer",
+      "assertion": "On a valid active-scene/base-table fallback, S2C app command 0x42 may dispatch to 0x4B2190, which reads a signed WORD at payload+2 and uses 0x500110 to search/insert in the FAB2A0 20-WORD container. ScenarioReview has a separate FAB2A0 reader at 0x47D693. With length>4, its subtype path reads payload+5, so declared length=5 is locally insufficient for that access. This does not identify an ACK to C2S selection 0x42.",
+      "limitations": [
+        "Only bounded native local dataflow and table registration, conditioned on T02 scene/lane gate; not complete subtype switch semantics, full upstream length validation, runtime crash or original Server reply mapping.",
+        "C2S42 same numeric value is not S2C42 approval; FAB2A0 is separate from ReviewSceneItem+0x248."
+      ],
+      "affected_spec_ids": [
+        "SPEC-SCENE-0001",
+        "SPEC-FLOW-0001",
+        "SPEC-CHAR-0001"
+      ],
+      "related_claim_ids": [
+        "CLM-NET-0031",
+        "CLM-SCENE-0004",
+        "CLM-CHAR-0006"
+      ]
+    },
+    {
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/20261030-chatgpt-web-roy-E68-RR0008-selection42-scenario-review-writer-endcutscene-static-closure.md",
+      "source_blob_sha": "0af10e12b2247f3cd4493086d282044fae249c31",
+      "source_intake_id": "SRC-0474",
+      "evidence_level": "PARTIAL",
+      "conflicts": [],
+      "review_ref": "research/handoffs/t01-20261030-rr0008-e68-bounded-r2/README.md",
+      "native_review_ref": "research/handoffs/t01-20261030-rr0008-e68-bounded-r2/README.md",
+      "integration_status": "CONFLICT_CHECKED; R1/R2_BOUNDED; NOT_FULL_PASS",
+      "quality_inheritance": false,
+      "id": "CLM-SCENE-0006",
+      "evidence_scope": "KR .rdata C02F3C/C02D9C RTTI, .data TypeDescriptors F7D864/F7D890, .text 47B143/47B2EF/47B4C9/47D558..47D5B7/47B5EB..47B64A/561ED1..561EF3/565756..56578B; Event.stp XOR FF 522-byte resource at raw A1C010",
+      "assertion": "The bounded non-initializing +0x248 writer at 0x47B2EF belongs to RTTI-identified CScenarioReviewSceneItem, whereas CScenarioReviewChapterItem and SceneItem separately initialize their own +0x248. Under the specific Review path 0x47D530 copies source+0x248 to dest+0x120 and 0x47B5C0 conditionally calls scene loader 0x565720 with item key, except special-case 0xEA61. Separately 0x561EF3 re-enters the same loader after EndCutScene-derived +0x38/+0x3C keys and zero-key gate. Event.stp tutorial_start 1001/1 is a resource mapping, not observed wire.",
+      "limitations": [
+        "Direct E8 candidate scan is not an exhaustive indirect/callback/alias search; there is no proved network writer tying S2C 0x42 to Review Item+0x248 or initial tutorial.",
+        "Loader has +0x28 reentrancy gate; static resource presence neither proves script actually executes nor original Server scene policy."
+      ],
+      "affected_spec_ids": [
+        "SPEC-SCENE-0001",
+        "SPEC-FLOW-0001"
+      ],
+      "related_claim_ids": [
+        "CLM-SCENE-0001",
+        "CLM-SCENE-0002",
+        "CLM-SCENE-0003",
+        "CLM-SCENE-0004",
+        "CLM-NET-0031"
+      ]
     }
   ]
 }
