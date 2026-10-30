@@ -55,4 +55,8 @@ validator 只驗證索引、來源類別、連結、版本、提交的記錄路�
 
 ## Iteration 22 — 首批實際管理員需求（WEB 玩家帳號管理）
 
-使用者明確提出 WEB 後台「新增玩家帳號／停權 N 天／永久停權／解封」，已依第三來源 `PLAYER_ADMIN_REQUEST` 登記到**同一份** `index.json`：`REQ-0006`（管理員入口、權限、稽核）、`REQ-0007`（新增帳號）、`REQ-0008`（暫停／永久／解除停權），全部 **CANDIDATE**，非已批准需求或原版 Client 功能。正式原文與拆分理由見 [request record](requests/2026-10-31-admin-web-account-operations.md)；[詳細設計與25項未執行測試](../admin-web/README.md)。Server-only 技術方案 [ADR-0004/0005](../decisions/README.md) 均 PROPOSED；沒有新創的第四來源、RR、Client SPEC/TEST。
+使用者明確提出 WEB 後台「新增玩家帳號／停權 N 天／永久停權／解封」，已依第三來源 `PLAYER_ADMIN_REQUEST` 登記到**同一份** `index.json`：`REQ-0006`（管理入口存取及稽核）、`REQ-0007`（新增帳號）、`REQ-0008`（暫停／永久／解除停權），全部 **CANDIDATE**，非已批准需求或原版 Client 功能。正式原文與拆分理由見 [request record](requests/2026-10-31-admin-web-account-operations.md)；[詳細設計與30項未執行測試](../admin-web/README.md)。Server-only 技術方案 [ADR-0004/0005](../decisions/README.md) 均 PROPOSED；沒有新創的第四來源、RR、Client SPEC/TEST。
+
+### 同一管理員需求的 V1 範圍更正（2026-10-31）
+
+使用者進一步明確指定「**目前先不管權限，指定的IP與URL就能管理**」。在 **REQ-0006** 下追加第二筆 `PLAYER_ADMIN_REQUEST` discovery，修訂 REQ-0006..0008 的操作入口條件：V1 **不設管理員登入/MFA/RBAC**，以 Server-side 來源 IP allowlist 和已配置的 WEB Host/base-path 作為單一管理網路門檻，保留私網/TLS、Origin/CSRF、真實 IP 驗證、限流及來源 IP 稽核。不是單靠秘密網址；同一 IP 下的人員無法個別追溯。完整方案見 [WEB Admin V1](../admin-web/README.md)、[ADR-0004](../decisions/ADR-0004-admin-web-security-boundary.md)。此項更正是原需求的追加來源，**不是**新增 REQ、來源類型、Client RR 或正式核准。
