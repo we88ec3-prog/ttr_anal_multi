@@ -45,10 +45,14 @@ python -B governance/check_server_requirements.py --json
 python -B -m unittest discover -s governance/tests -v
 ```
 
-validator 只驗證索引、來源類別、連結、版本、提交的記錄路徑和基本完整性。它**不能驗證授權真實性、BIN 語意、玩家意願、遊戲真的啟動或 Server 相容性**。目前無 GAME_RUNTIME_OBSERVATION 或 PLAYER_ADMIN_REQUEST 實際條目，並非這兩種來源不可使用；是尚未收到具來源紀錄的實際需求。
+validator 只驗證索引、來源類別、連結、版本、提交的記錄路徑和基本完整性。它**不能驗證授權真實性、BIN 語意、玩家意願、遊戲真的啟動或 Server 相容性**。目前尚無 GAME_RUNTIME_OBSERVATION 實際條目；2026-10-31 已首次收到實際 PLAYER_ADMIN_REQUEST（WEB 後台帳號管理），以 REQ-0006..0008 保留去敏原文。來源登錄不代表方案或 Client 相容性已核准。
 
 ## 需求到 Server 實作的分段交付順序（Iteration 11）
 
 [REQ 分段目標與動態評估](../../governance/s00-requirement-slices.json) 將第一階段 `SLICE-LOBBY`（登入→選服→名單與角色畫面）與 `SLICE-CREATE`（創角入口／建立角色）及 `SLICE-ENTER-WORLD`（選角後進場）**分開驗收**。`SLICE-CREATE` 目前是 `DISCOVERY_REQUIRED`，不可擅自杜撰角色建立的 C2S/S2C 命令；它沒有獨立 REQ，是因尚無該功能的充分有界 Server 收發來源，不代表不需要研究。
 
 執行 `python -B governance/server_requirement_slices.py --check` 和 `python -B governance/server_requirement_slices.py --format markdown`。結果從唯一 REQ/RR/GAP/SPEC 索引派生，只是只讀規劃 overlay；不會改既有 `s00-roadmap.json`，也不表示原版 Client 已能進入畫面。新對話用 [S00 交接入口](../../governance/S00-NEXT-CHAT.md)。
+
+## Iteration 22 — 首批實際管理員需求（WEB 玩家帳號管理）
+
+使用者明確提出 WEB 後台「新增玩家帳號／停權 N 天／永久停權／解封」，已依第三來源 `PLAYER_ADMIN_REQUEST` 登記到**同一份** `index.json`：`REQ-0006`（管理員入口、權限、稽核）、`REQ-0007`（新增帳號）、`REQ-0008`（暫停／永久／解除停權），全部 **CANDIDATE**，非已批准需求或原版 Client 功能。正式原文與拆分理由見 [request record](requests/2026-10-31-admin-web-account-operations.md)；[詳細設計與25項未執行測試](../admin-web/README.md)。Server-only 技術方案 [ADR-0004/0005](../decisions/README.md) 均 PROPOSED；沒有新創的第四來源、RR、Client SPEC/TEST。
