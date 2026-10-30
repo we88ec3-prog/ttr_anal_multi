@@ -606,17 +606,22 @@
       "id": "RR-0010",
       "title": "KR create-character C2S/S2C positive transaction and roster initialization boundary",
       "client_version": "kr",
-      "status": "PENDING",
+      "status": "ACTIVE",
       "owner_task": "T03",
       "gap_ids": [
         "GAP-CHAR-0003"
       ],
       "question": "Independently of select-existing-character C2S 0x42, identify the real create-character C2S producer and matching KR Client S2C accepted/rejected consumer, complete bounded fields/slot/frame/encoding, and creation result to roster/initialization. Use T04 for character fields and T02 for transport boundaries, T06 UI only as prerequisite. Do not guess opcode/request+1 or official Server policy.",
       "dispatch": {
-        "state": "QUEUED",
+        "state": "CLAIMED",
         "priority": "P0",
         "acceptance_criteria": "1) Provide exact Client build SHA, bounded native builder/consumer address ranges and C2S vs S2C packet/field offsets, lengths, codepage, scene/connection state; unknown values stay UNKNOWN. 2) Show the positive request→handler→result→roster/initialization dependency and distinct rejection/retry branches, including duplicate creation and disconnect semantics only where source supports them. 3) Explain what is Client-local vs transmitted, which outcome depends on missing original Server data, and do not treat C2S select 0x42 or S2C 0x42/43 as creation acknowledgements. 4) Use existing RR-0002/RR-0007/RR-0008 as adjacent evidence only; do not change their status or scope. 5) Deliver full report, Git blob SHA, bounded tests/negative cases, impact on GAP-CHAR-0003 and SPEC-CHAR/FLOW; if no original Server pairing can be proven, report explicit unblock conditions without calling it ACCEPTED.",
-        "claim": null,
+        "claim": {
+          "actor": "chatgpt-web roy",
+          "branch": "extra/roy1",
+          "base_commit": "143287156f178e73a9b3ac8331ab0cc3c5f23dc6",
+          "date": "2026-10-31"
+        },
         "submission": null,
         "review": null,
         "events": [
@@ -626,6 +631,13 @@
             "actor": "S00",
             "date": "2026-10-31",
             "note": "Iteration 21: deduped from RR-0002 selection, RR-0007 dispatcher and RR-0008 scene transition; scoped GAP-CHAR-0003 native research, no Agent automatically claimed or awakened."
+          },
+          {
+            "from": "QUEUED",
+            "to": "CLAIMED",
+            "actor": "chatgpt-web roy",
+            "date": "2026-10-31",
+            "note": "User explicitly authorized KR T03 RR-0010. Research only on user-mandated extra/roy1 (no new branch); deferred separate T01-RETURN-T03-006-LAYOUT-001 NEEDS_FIX by specific RR request. Trace true create C2S producer/fields/guard, S2C result and roster update; preserve unknown backend policy and do not relabel C2S selection 0x42."
           }
         ]
       }
