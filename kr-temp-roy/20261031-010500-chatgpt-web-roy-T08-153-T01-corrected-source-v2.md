@@ -10,7 +10,7 @@
 
 # KR T08-153 — GameInfo 實體移除、控制器解除、批次清理與容器所有權（接續正式 T08 段號）
 
-- 研究時間：{datetime.now(ZoneInfo('Asia/Taipei')).isoformat(timespec='seconds')}（Asia/Taipei）
+- 研究時間：2026-10-28T01:38:09+08:00（舊稿原標示；修正版日期 2026-10-31）（Asia/Taipei）
 - 作者：`chatgpt-web roy`；本次獨立研究原稿，**未 Commit／Push**、未認領 GitHub Task、未修改原始遊戲。
 - 歷史段號：`T08-152` 之後恢復 `T08-153`；「整合重審-01／02」為中間研究成果，**不重新編成 T08-001/002，不冒稱正式整合驗收**。
 - 檔案：`Tartaros.bin`，SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`（實際本地 `sha256sum` 驗證）；EXE SHA256 `03771b8e1c1e66248f54585fadf9a5e926eb77228721325bb9be5febc53b3b5f`（本段不使用其位址）。
