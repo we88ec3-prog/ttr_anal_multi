@@ -173,3 +173,14 @@ E17-E original T10/T02/T04、E17-F T11/T10/T04/T02、E17-G T12/T08/T10/T11 的�
 Server 建議開工 C05-P8..P11，但**依賴**前面未實作的 C05-P1..P7（Iteration28 Encounter/Actor、Iteration29 Hit/Death）。DB SQLite C02-D v2 且新 mock Schema v3 未批准/未套；PostgreSQL current 003 下一版 004 同樣未套；現有 C00-OPS 可做 DB 備份/恢復演練但沒有替 C05 domain schema 測試。不得把局部 Client `0x004C` `map[14]` 當 official Server result 或 Quest14 completed。原 E17-H DISCOVERY_REQUIRED、E17-I PARTIAL、E17-J ADR_PENDING、E18～E20 仍 source PARTIAL；ADR-0006/0007 PROPOSED，不可自動將 Native KR/TC adapter 打開，實際原 Client 需另行授權。
 
 下一輪若繼續 S00 規劃，優先 Iteration31 W06 Quest14→Quest16→Quest15 與 W07 唯一 RewardLedger、Quest/Scenario transaction 邊界；若改要求實作，在獨立 `ttr_server_roy` 建真實程式碼 PR/測試，不在分析庫混寫 Server code。
+
+
+## 2026-10-31 — Iteration 31：W06 Quest14/16/15 + W07 RewardLedger
+
+開工核對 S00 `main=4ee57b51e600653537afaa6cecedf1cfe0551f8b`，Main Actions #41135452095 SUCCESS；獨立 Server `main=272079cc69b124870af303d711931ec20bce2229` 的 CI #41134733030 SUCCESS，但僅 C00-OPS SQLite tools、C02-D Account Moderation、C03-C Character、C04 bounded offline probe，不代表 C05 任務/獎勵已開發。**下次一定重新讀兩庫最新 main。**
+
+本輪新增 [Iteration31 詳細規劃](s00-iterations/S00-20261031-ITERATION-31-QUEST-REWARD-PLAN.md)、[S31-01～04 contract](s00-iterations/S00-ITERATION-31-QUEST-REWARD-CONTRACT.json)、[I31-T01～24 NOT_RUN](s00-iterations/S00-20261031-ITERATION-31-ACCEPTANCE.md)。S31-01 Quest14 eligibility≠TURNED_IN；S31-02 Quest16 AVAILABLE/ACCEPTED/COMPLETED/TURNED_IN 各獨立；S31-03 Quest16 原版 Reward type2/value50 映射未知，獨立 Mock RewardPolicy 封存/唯一 ledger/Outbox；S31-04 Quest15 僅 available，另與 TutorialCompleted/WorldReady 及重登入隔離。
+
+**本輪重要新風險/修正**：Iteration28～30 的不同規劃均以 SQLite v3、PostgreSQL 004 當相對下一個候選版本，並未真正開 schema。若 Server 每個 C05 工作包各自使用相同版本號會產生 collision；故 Iteration31 一律保留 SQLite v2/PG003 現有基線、後續版號 `UNALLOCATED_NOT_APPLIED`，待 Server maintainer 一次配置 Encounter/Combat/Scenario/Quest 所有 migration 的唯一順序。現有 SQLite C02-D ban 不可自動當 PostgreSQL 已具相同功能。
+
+所有新工作包只是 `SERVER_MOCK_ONLY` 的設計，24 個驗收都 `NOT_RUN`；原版 Client NPC/Quest/status/Reward/Wire 仍 E20-E24/E26 PARTIAL/UNKNOWN，沒有新正式 RR/GAP/REQ/TEST 結案、沒有任何 KR Client runtime；ADR-0006/7 仍 PROPOSED/NON-NORMATIVE，原生 adapter OFF。下一步如繼續規劃可做 Iteration32 S27-W08 Tutorial terminal/Scene Exit/WorldReady/relog；若要求 Server 實作，應到 `ttr_server_roy` 實際建 C05 code/DB PR，從最前置的 W01/Encounter 開始。
