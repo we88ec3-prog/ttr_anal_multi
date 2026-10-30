@@ -149,3 +149,16 @@ E80 是 **RR-0002 選角的研究**，不是 RR-0010 真正建立 playable-chara
 - **C05-P3**：可重現的 mock Actor spawn/AI tick/movement（fixture SHA/seed、同 EncounterId 唯一事件/版本、錯 role/actor/tick 拒絕），**不等於原版 Scenario14 敵人資料或協定**。
 
 SQLite local user_version=1、PostgreSQL 已有 migration003，任何新表都需獨立 schema/migration/recovery review；**本輪沒有在獨立 Server repo 實作/提交 migration，也沒有執行原 Client**。ADR-0006/0007 仍 PROPOSED，不可因 S00 CI PASS 自動核准、不可開原版 KR/TC codec。後續可以接續 Iteration27 W04（Attack/Skill/Hit）的細分，或由 Server 開發者在其 repo 接手 P1。
+
+
+## 2026-10-31 — Iteration 29：W04 Attack/Skill/Hit/Death + Crash/Session fencing
+
+開工 S00 `main=d1f9e174eb1e24e0589eee6605b750bc85a54215`／Actions #41130071717 SUCCESS；獨立 Server `main=9caffb75c374147b71dea51227b5c4f13b33071d`／Actions #41130449937 SUCCESS。**新對話務必重新核對當時最新 main/CI**，不能依此快照聲稱 remote head 永不變。
+
+已規劃 [Iteration29 詳細實作](s00-iterations/S00-20261031-ITERATION-29-COMBAT-IMPLEMENTATION-PLAN.md)、[S29-01～04 source-pinned machine contract](s00-iterations/S00-ITERATION-29-C05-COMBAT-CONTRACT.json)、[I29-T01～T24（24 項）NOT_RUN 測試](s00-iterations/S00-20261031-ITERATION-29-COMBAT-ACCEPTANCE.md)。S29-01 ordinary attack/atomic lease and combo; S29-02 skill availability/resource/cooldown/cast cancellation; S29-03 authoritative hit/damage/HP/death once; S29-04 cancel/relogin/ban/crash and verified ActorDeath→W05 handoff。下游 PR 候選 C05-P4..P7，依賴 Iteration28 仍未實作的 W01–W03 原子 Encounter/Actor 基礎；**本輪只有規劃，沒有下游 code/DB change**。
+
+關鍵 Server 基線修正：C02-D 已於最新 `ttr_server_roy` main 實作 SQLite local account suspend/unban，SQLite schema v2、ban 同交易 revoke Session；Iteration28 當時 SQLite v1 是**歷史真實快照**，不要修改歷史文件。下次規劃或實作新 combat migration 應從 local v2→待核准 v3；PostgreSQL 仍 003→候選004；不得自動認定 C02-D moderation 在 PG 已實作。Downstream code 必須於權威交易內重驗 exact lease、selected character/Encounter、ban/epoch 和 Actor revision，不能信任 Client damage/HP/勝利事件。
+
+E17-E original T10/T02/T04、E17-F T11/T10/T04/T02、E17-G T12/T08/T10/T11 的原 Client 技能/命中正向因果仍 SOURCE PARTIAL；原 Client 測試須另外授權。ADR-0006/0007 PROPOSED/NON-NORMATIVE；SPEC-FLOW/SCENE DRAFT/PARTIAL，native adapter OFF；S00 CI/24 `NOT_RUN` 不能當 Server 或原 Client 相容驗收。
+
+**Iteration30 建議**：W05 Objective/Scenario14 once-only Settlement/outbox；必須從已授權 ActorDeath/event 而不是固定秒數或 local S2C0x4C map flag 直接勝利。也可交由實作庫先做 C05-P1 原子入場，不因等待原 Client 而停掉 mock-domain 開發。

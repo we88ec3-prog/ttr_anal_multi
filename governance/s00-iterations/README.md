@@ -103,3 +103,11 @@ Iterations 16–17 的正式流程編號合計 **E00–E26（27 個 gate）與 4
 - [S28-01～03 機讀契約](S00-ITERATION-28-C05-W01-W03-CONTRACT.json)：完整來源 Git blob anchor（Iteration27 和獨立 Server 八個實際檔案）、SQLite/PostgreSQL 各自待核准 migration、reserved/active/terminal state、Session fencing、deterministic mock actors/AI tick。此檔**不代表 Server 已實作**。
 - [16 個 I28-T01～T16 未執行驗收案例](S00-20261031-ITERATION-28-W01-W03-ACCEPTANCE.md)：競態、斷線、新舊 Session、同請求去重、崩潰恢復、Actor tick/AI/movement 原型；全部 `PLAN_ONLY / NOT_RUN`，不等於原 Client 可玩。
 - GitHub CI 新增 `governance/check_s00_iteration28.py --check` 與 **16 項回歸測試**，只保護規劃及證據等級，不讀遠端 Server 最新 main、不升格 ADR-0006/7、RR/REQ/GAP/SPEC/TEST，也不修改 `ttr_server_roy`。
+
+
+## Iteration 29（2026-10-31）：W04 攻擊、技能、冷卻、傷害與死亡
+
+- [Iteration29 詳細 Server mock-domain 實作規劃](S00-20261031-ITERATION-29-COMBAT-IMPLEMENTATION-PLAN.md)：接續 Iteration28 的原子授權/Encounter/Actor 方案，將普通攻擊、技能預留及取消、命中傷害/死亡、斷線/崩潰恢復分四個工程 PR 切片；不把本地 Client 動畫或受限 consumer 當 Server 官方規則。
+- [S29-01～04 機讀契約](S00-ITERATION-29-C05-COMBAT-CONTRACT.json)：pin Iteration28/27/18/26 的 Git blob 和原 E17-E/F/G `evidence_state/blocking_unknown/owners`；真實 Server `main=9caffb75c374147b71dea51227b5c4f13b33071d` 的 8 個來源 blob 只為本輪觀察快照，**CI 不會重新讀遠端 Server**。最新 C02-D 已令 local SQLite 升至 v2；對照 Iteration28 v1 時應以各時點歷史快照為準。
+- [24 個 I29-T01～T24 驗收草案](S00-20261031-ITERATION-29-COMBAT-ACCEPTANCE.md)：全為 `PLAN_ONLY/NOT_RUN`，並非正式 conformance TEST；規劃 CI 以 `python -B governance/check_s00_iteration29.py --check` 和 **18 項回歸測試**保護未經證據的戰鬥成功/Client 兼容宣稱。
+- ADR-0006/0007 仍 **PROPOSED**，尚未修改獨立 Server 的 C05 程式或 migration，也未核准 KR/TC native adapter；攻擊/技能/傷害的原版 Client 研究仍由 E17-E/F/G 既有 Txx 所有者補證。

@@ -121,3 +121,10 @@ Domain mock/prototype 可採並行研究和工程化測試，但正式業務 pol
 ## Iteration28：C03 原子交易對接 C05 Mock Encounter 的重要陷阱
 
 [Iteration28 原子 W01～W03 規劃](s00-iterations/S00-20261031-ITERATION-28-W01-W03-IMPLEMENTATION-PLAN.md) 將實際 C03 `GetSelectedAsync`（只在**其自身 transaction** 內檢查 full SessionLease）與 C05 的後續 Encounter write 分離，要求**在建立 Encounter 的同一 DB transaction 再核對 exact lease/selected role/ownership**，防止重登/renew/revoke/ban 發生於兩次操作之間的授權 TOCTOU。SQLite 與 PostgreSQL 的交易、鎖順序、版本升級要分別批准與測試。Server-only mock 原型可先做，但使用者未授權原版 Client 運行、未核准 ADR、未填齊 wire/scene/Actor 正向證據時，不得使 native codec 成為可用協定。Machine checker `governance/check_s00_iteration28.py --check` 只驗規劃本身及保留的 source Git blob 身分，不是完成 C05 代碼。
+
+
+## Iteration 29 — C05 Combat domain：Client input ≠ Server authoritative damage
+
+[Iteration29](s00-iterations/S00-20261031-ITERATION-29-COMBAT-IMPLEMENTATION-PLAN.md) 延續 Iteration28 的同交易 full lease/selected-role/Encounter 授權，不許另一次 `IsCurrentAsync`/選角 check 後直接寫 Hit；攻擊/技能只是意圖，技能費用/冷卻/取消必須以 mock policy CAS 防重複，Hit/HP/Death 由 Server-authoritative event 同交易更新，ActorDeath 只交給下一個 W05 objective，不可直接改 Scenario14/Quest/TutorialCompleted。**C02-D 最新 SQLite local v2 停權及 Session revoke 也須在 combat mutation gate 被重驗**；不能推論 PG 同步實作。
+
+`python -B governance/check_s00_iteration29.py --check` 僅保護本庫 source blob、E17-E/F/G 未升格、24 個 `NOT_RUN` 與 ADR-0006/0007 原提案狀態；無遠端 Server 程式碼執行、原版 Client 啟動或 GitHub API live snapshot revalidate。正式 REQ/RR/GAP/CLM/SPEC/TEST 需原唯一台帳審查，Server domain 需其維護者核准持久化與 cooldown/refund 規則，KR/TC 原生封包需同版正向來源及另行授權的 Client runtime。
