@@ -519,7 +519,20 @@
         "SPEC-FLOW-0001"
       ],
       "conflicts": [],
-      "native_review_ref": null
+      "native_review_ref": null,
+      "additional_sources": [
+        {
+          "source_intake_id": "SRC-0474",
+          "source_file": "kr-extra-roy/20261030-chatgpt-web-roy-E68-RR0008-selection42-scenario-review-writer-endcutscene-static-closure.md",
+          "source_blob_sha": "0af10e12b2247f3cd4493086d282044fae249c31",
+          "client_version": "kr",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "evidence_level": "PARTIAL",
+          "scope_subset": "Only two direct loader callers and their differing key sources; not E68 whole-document quality inheritance.",
+          "quality_inheritance": false,
+          "integration_review_ref": "research/handoffs/t01-20261030-rr0008-e68-bounded-r2/README.md"
+        }
+      ]
     },
     {
       "id": "CLM-CLIENT-0001",
@@ -12064,6 +12077,67 @@
       "review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-163408-chatgpt-web-roy-T01-T10-116-118-R1-R2-canonical-review.md",
       "native_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-163408-chatgpt-web-roy-T01-T10-116-118-R1-R2-canonical-review.md",
       "integration_status": "R1/R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
+    },
+    {
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/20261030-chatgpt-web-roy-E68-RR0008-selection42-scenario-review-writer-endcutscene-static-closure.md",
+      "source_blob_sha": "0af10e12b2247f3cd4493086d282044fae249c31",
+      "source_intake_id": "SRC-0474",
+      "evidence_level": "PARTIAL",
+      "conflicts": [],
+      "review_ref": "research/handoffs/t01-20261030-rr0008-e68-bounded-r2/README.md",
+      "native_review_ref": "research/handoffs/t01-20261030-rr0008-e68-bounded-r2/README.md",
+      "integration_status": "CONFLICT_CHECKED; R1/R2_BOUNDED; NOT_FULL_PASS",
+      "quality_inheritance": false,
+      "id": "CLM-SCENE-0005",
+      "evidence_scope": "KR .text 4ADF3D base-scene command42 table; 4B2190/4B21FD..4B222C payload/len path; 500110 20-word set; 47D693→503440 Review FAB2A0 consumer",
+      "assertion": "On a valid active-scene/base-table fallback, S2C app command 0x42 may dispatch to 0x4B2190, which reads a signed WORD at payload+2 and uses 0x500110 to search/insert in the FAB2A0 20-WORD container. ScenarioReview has a separate FAB2A0 reader at 0x47D693. With length>4, its subtype path reads payload+5, so declared length=5 is locally insufficient for that access. This does not identify an ACK to C2S selection 0x42.",
+      "limitations": [
+        "Only bounded native local dataflow and table registration, conditioned on T02 scene/lane gate; not complete subtype switch semantics, full upstream length validation, runtime crash or original Server reply mapping.",
+        "C2S42 same numeric value is not S2C42 approval; FAB2A0 is separate from ReviewSceneItem+0x248."
+      ],
+      "affected_spec_ids": [
+        "SPEC-SCENE-0001",
+        "SPEC-FLOW-0001",
+        "SPEC-CHAR-0001"
+      ],
+      "related_claim_ids": [
+        "CLM-NET-0031",
+        "CLM-SCENE-0004",
+        "CLM-CHAR-0006"
+      ]
+    },
+    {
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/20261030-chatgpt-web-roy-E68-RR0008-selection42-scenario-review-writer-endcutscene-static-closure.md",
+      "source_blob_sha": "0af10e12b2247f3cd4493086d282044fae249c31",
+      "source_intake_id": "SRC-0474",
+      "evidence_level": "PARTIAL",
+      "conflicts": [],
+      "review_ref": "research/handoffs/t01-20261030-rr0008-e68-bounded-r2/README.md",
+      "native_review_ref": "research/handoffs/t01-20261030-rr0008-e68-bounded-r2/README.md",
+      "integration_status": "CONFLICT_CHECKED; R1/R2_BOUNDED; NOT_FULL_PASS",
+      "quality_inheritance": false,
+      "id": "CLM-SCENE-0006",
+      "evidence_scope": "KR .rdata C02F3C/C02D9C RTTI, .data TypeDescriptors F7D864/F7D890, .text 47B143/47B2EF/47B4C9/47D558..47D5B7/47B5EB..47B64A/561ED1..561EF3/565756..56578B; Event.stp XOR FF 522-byte resource at raw A1C010",
+      "assertion": "The bounded non-initializing +0x248 writer at 0x47B2EF belongs to RTTI-identified CScenarioReviewSceneItem, whereas CScenarioReviewChapterItem and SceneItem separately initialize their own +0x248. Under the specific Review path 0x47D530 copies source+0x248 to dest+0x120 and 0x47B5C0 conditionally calls scene loader 0x565720 with item key, except special-case 0xEA61. Separately 0x561EF3 re-enters the same loader after EndCutScene-derived +0x38/+0x3C keys and zero-key gate. Event.stp tutorial_start 1001/1 is a resource mapping, not observed wire.",
+      "limitations": [
+        "Direct E8 candidate scan is not an exhaustive indirect/callback/alias search; there is no proved network writer tying S2C 0x42 to Review Item+0x248 or initial tutorial.",
+        "Loader has +0x28 reentrancy gate; static resource presence neither proves script actually executes nor original Server scene policy."
+      ],
+      "affected_spec_ids": [
+        "SPEC-SCENE-0001",
+        "SPEC-FLOW-0001"
+      ],
+      "related_claim_ids": [
+        "CLM-SCENE-0001",
+        "CLM-SCENE-0002",
+        "CLM-SCENE-0003",
+        "CLM-SCENE-0004",
+        "CLM-NET-0031"
+      ]
     }
   ]
 }
