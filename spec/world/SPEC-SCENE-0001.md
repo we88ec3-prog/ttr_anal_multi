@@ -38,3 +38,15 @@
 - native Scene/Protocol adapters OFF by default；沒有正向 scene+Conn+resource+UI test 時，維持 explicit UNKNOWN，不填假座標、不指定 tutorial packet。
 
 SPEC-SCENE-0001 **DRAFT/PARTIAL**、GAP-SCENE-0001 OPEN、RR-0008 IN_REVIEW（以主台帳當時為準），無新 native FULL-PASS。
+
+
+## Iteration 26：Scenario14/Quest14–16/15 與原版 Client 場景離場缺口
+
+[Iteration26 Gate 矩陣與研究交接](../../governance/s00-iterations/S00-20261031-ITERATION-26-COMBAT-QUEST-EXIT-PLAN.md) 以既有 [Iteration17](../../governance/s00-iterations/S00-ITERATION-17-TUTORIAL-COMPLETION-GATES.json) / [Iteration18](../../governance/s00-iterations/S00-ITERATION-18-TUTORIAL-COMBAT-GATES.json) 靜態 gate 為唯一規劃源，保留各 gate 缺口。
+
+- E17-A～J：KR Scenario14 的 **Client Scene/Instance→Actor spawn→AI/移動→攻擊技能→傷害死亡→wave/objective→結算** 仍缺完整方向/時序/權威；mock encounter 的固定配置及「可執行」不證原版 Scene/Actor/Quest 已可用。
+- E18–19：S2C app0x4C→CTutorial local map[14] 與 Lua `IsScenarioEnded(14)` 只是局部 consumer；不能由其存在推斷原版 Server 在 Scenario14 會送何種欄位/帧，也不等於 Quest14 完成。
+- E20–24：Quest14/16/15 的 XML Demand/Reward/NPC/SceneList 是各自有限 source 資源；不能將 Quest15 availability 當原版 Server 自動轉場，Quest16 Reward type=2/value50 非已知 EXP/金幣。
+- E25–26：非教學世界的具體 scene、field/map、spawn position、actor/control ready 和重登反向 Client state writer 仍無完整可稽核正向鏈。需 T05/T07/T16/T15/T02 定向補證，完整 E2E 另行明確授權，不得用 `SceneList(1001,1)` 或 Quest15 Scene3 硬造 transfer packet。
+
+新 Server domain 可先依 [ADR-0007（PROPOSED）](../../design/decisions/ADR-0007-encounter-quest-settlement-boundaries.md) 隔離 Encounter/Quest/Reward/Exit 與 outbound scene adapters。**SPEC-SCENE-0001 維持 DRAFT/PARTIAL**，GAP-SCENE-0001 OPEN，原有 RR 不因 Iteration26 自動改成 ACCEPTED。

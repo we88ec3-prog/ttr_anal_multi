@@ -115,3 +115,14 @@ E80 是 **RR-0002 選角的研究**，不是 RR-0010 真正建立 playable-chara
 - 下一個真正可在獨立 Server 庫做的開發包：SR25-01 per-role Progress/revision、SR25-02 AdmissionId/SessionEpoch fencing+ban、SR25-03 首進/重登/完成 route 分歧、SR25-04 Quest/Reward/idempotency/outbox、SR25-05 adapter OFF，SR25-06 合成負例測試，SR25-07 補原 Client scene/quest 所需正向證據。**本文沒有修改 ttr_server_roy**。
 - 研究前提：原版 C2S42→Server success/失敗→S2C69 subtype7→CSquare→C2S43→tutorial scene/Quest 的因果並未證實；SceneList(1001,1) 是資源鍵、Client S2C0x4C Scenario14 map flag 非 Quest 完成；不能將 MockClient/CI PASS 當作 original client E2E。
 - Roadmap 的 C-TUTORIAL-DOMAIN 與 B-NET/B-CHAR/B-SCENE 研究可獨立開始規劃，但僅是 phase-C 候選，checker 仍應給 EXTERNAL_REVIEW_REQUIRED／BLOCKED，正式 Native/ADR/REGISTRY 不自行升格。下次要修改 Server 請直接在 ttr_server_roy 下建立實際 DEV/C05 接手任務並經維護者確認政策。
+
+
+## 2026-10-31 — Iteration 26 最新接續：Encounter → Scenario14 → Quest14/16/15 → Tutorial terminal/Exit
+
+先從真正當前 main 和其 GitHub Actions 重新確認。本輪基線 main=41a7ba739e81c4f434078025b7fad2ede9436bb1、Actions #41125898881 SUCCESS（僅離線治理，不是原版 Client E2E）。
+
+已新增 [Iteration26 完整規劃](s00-iterations/S00-20261031-ITERATION-26-COMBAT-QUEST-EXIT-PLAN.md)、[E17-A～J/E18～26 的 19 gate source-pinned matrix](s00-iterations/S00-ITERATION-26-ENCOUNTER-QUEST-EXIT-MATRIX.json)、[18 個 I26-Txx PLAN_ONLY/NOT_RUN 案例](s00-iterations/S00-20261031-ITERATION-26-ACCEPTANCE.md)、[ADR-0007 PROPOSED](../design/decisions/ADR-0007-encounter-quest-settlement-boundaries.md)、唯讀 checker 與 13 項 regression tests／CI step。**沒有原版 Client、沒有實作 ttr_server_roy**。
+
+關鍵源級邊界：local C2S40 00 0E 00 可能請求 Scenario14，另 S2C0x4C 本地 CTutorial map[14] 可表示 Lua scenario-ended，**但沒有已證原版 Server pairing**，更不等於 Quest14 complete/Quest16 complete/TutorialCompleted。Quest15 available≠accepted/completed；Quest16 Reward type2/value50 不得冒稱 EXP/金錢。E25/26 normal-world/重登仍缺真 Client→Scene→Actor/Control Ready positive proof。
+
+下一輪開工：Server-only 先做 S26-C01/C02 Encounter/Actor → C03/C04 AI/action/skill/damage → C05/C06 settlement/recovery → C08 Quest14/16/15＋reward→ C09 terminal/exit／relogin；原始 Client protocol adapter C07 只在 T02/T07/T08/T09/T10/T14/T15/T16 等同版正向證據完整後，另經授權 runtime 才考慮打開。現有 RR-0002/0010 BLOCKED、RR-0008 IN_REVIEW，GAP-SCENE OPEN，SPEC-FLOW/SCENE DRAFT/PARTIAL；ADR-0006/7 PROPOSED、沒有被主庫 CI 自動批准。
