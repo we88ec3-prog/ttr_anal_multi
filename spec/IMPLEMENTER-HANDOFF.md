@@ -43,3 +43,8 @@ Recommendation: retain DRAFT, draft new targeted RR only when not already covere
 Current policy: only `OFFLINE_SYNTHETIC` evidence-backed *locally by handcrafted data*, and no complete login→selection exchange. **Do not claim an independent implementation review was actually performed just because this worksheet exists.**
 
 Potential Server-only design proposals [ADR-0001..0003](../design/decisions/README.md) remain PROPOSED / NON-NORMATIVE. S00 roadmap and gap sources remain [here](../governance/S00-NEXT-PLAN.md).
+
+
+## Server 需求來源與優先級
+
+除了方向別協定與驗證，獨立實作者須從 [S00 統一 REQ 台帳](../design/requirements/README.md) 接收**已經維護者核准**的 Server 需求；CANDIDATE 只作研究導航。CODE_ANALYSIS 說明 Client 在限定條件下需要的收發，GAME_RUNTIME_OBSERVATION 是另行授權後實際觀察，PLAYER_ADMIN_REQUEST 包含玩家功能以及管理員權限、安全、備份和稽核。三種 discovery 可支持同一 REQ，但均不會自動讓 SPEC STABLE、RR ACCEPTED 或 ADR APPROVED。不同交付/驗收的需求需有自己的 REQ。實作瑕疵按 FB 分流。
