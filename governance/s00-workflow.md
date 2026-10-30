@@ -63,3 +63,8 @@ T01 在 [本批首次新流程來源收件](../research/handoffs/t01-20261029-ri
 ## Iteration 07: T01/S00 source review entry
 
 The [RR submission preflight](phase_b_review_preflight.py) checks current submitted report path/blob identity and produces read-only, directly scoped SPEC/GAP/COV/TEST review questions. It never judges native semantics or upgrades contracts. Run `python -B governance/phase_b_review_preflight.py --check`; on `SUBMITTED/IN_REVIEW`, have T01 inspect source confidence and S00 decide the exact RR acceptance criteria. See [Iteration 07](S00-20261029-ITERATION-07.md).
+
+
+## Iteration 10 — Server 需求從三類入口主動收件
+
+[完整來源與證據政策](S00-SERVER-REQUIREMENT-SOURCES.md) 將 `CODE_ANALYSIS`、`RUNTIME_OBSERVATION`、`USER_REQUEST` 定為三個**可單獨提出候選**的來源。T01–T16 在分析發包／收包／等待 Server 或 handler/state transition 時，即使目前沒有實際 wire trace，也可附精確 native 條件與已知 UNKNOWN 提出 Server 收發需求。只有 S00 維護 [SRQ 候選索引](../spec/server-requirements/index.json) 並先去重、對應 SPEC/GAP/RR；不修改原始研究或聲稱正式契約成立。使用者提供歷史協定／舊 Server 文件作 `USER_REQUEST.reference_materials`，不是新 origin。實機分析仍須另行授權。候選審核執行 `python -B governance/check_server_requirements.py --check`，不取代既有 RR 或 T01 審核。
