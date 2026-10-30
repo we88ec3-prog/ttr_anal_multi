@@ -11812,6 +11812,176 @@
       "native_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-161036-chatgpt-web-roy-T01-T10-102to107-scope-R1-R2.md",
       "integration_status": "CONFLICT_CHECKED; PARTIAL_BOUNDED; NOT_FULL_PASS",
       "quality_inheritance": false
+    },
+    {
+      "id": "CLM-NET-0032",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261028-201546-chatgpt-web-roy-T10-108-KR-framed-receive-to-queue-producer.md",
+      "source_blob_sha": "804572ab576259cc82162f56d68379b4f0f7d940",
+      "source_intake_id": "SRC-0372",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 0x807B40..0x807E7D framed receive, length/prefix guards, record+4/+8, 0x807D7F..0x807DAD nonzero queue vs zero-record branch, 0x489920 and 0x8040A0",
+      "assertion": "On inspected KR parser paths 0x807B40 processes bounded frame lengths (nonzero <=4096), chooses 4/6/8-byte headers by discriminator, and 0x807E50 copies bounded decoded payload to record+8 with size record+4. At 0x807D7F nonzero record length uses context+A080 category and 0x489920 singleton owner for 0x8040A0 category/toggle bucket append; zero record length instead dispatches via 0x804310 to 0x8076F0 without ordinary category append.",
+      "limitations": [
+        "Source T10-108's 0x807B60 is an internal location; direct call 0x806E08 targets actual entry 0x807B40.",
+        "Zero decoded record path is not a valid wire frame length 0 or Server gameplay rejection.",
+        "No exhaustive parser full CFG, categorization runtime, compression semantics or complete queue consumer lifetime review."
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "related_claim_ids": [
+        "CLM-NET-0004",
+        "CLM-NET-0006",
+        "CLM-NET-0011"
+      ],
+      "additional_sources": [
+        {
+          "source_intake_id": "SRC-0373",
+          "source_file": "kr-temp-roy/20261028-202433-chatgpt-web-roy-T10-109-KR-queue-owner-class-event-and-empty-record.md",
+          "source_blob_sha": "dcc4609011535695f4573f5af4e729d150b146c8",
+          "client_version": "kr",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "evidence_level": "PARTIAL",
+          "scope_subset": "Only matching bounded native slice supporting CLM-NET-0032; no whole-source quality inheritance.",
+          "quality_inheritance": false,
+          "integration_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-162252-chatgpt-web-roy-T01-T10-108-114-R1-R2-merge-review.md"
+        }
+      ],
+      "review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-162252-chatgpt-web-roy-T01-T10-108-114-R1-R2-merge-review.md",
+      "native_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-162252-chatgpt-web-roy-T01-T10-108-114-R1-R2-merge-review.md",
+      "integration_status": "R1/R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-NET-0033",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261028-203129-chatgpt-web-roy-T10-110-KR-IOCP-completion-to-frame-consumer.md",
+      "source_blob_sha": "c63e65b5c3270ec3bb1b5339960668bae106ade3",
+      "source_intake_id": "SRC-0374",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 0x806A00..0x806A93 WSARecv at 806A4C, 0x806D30..0x806EE0 GetQueuedCompletionStatus and key+OVERLAPPED identity, 0x806AD0..0x806B54 category writer",
+      "assertion": "The inspected KR Client WSARecv submit uses Conn+A030 OVERLAPPED, WSABUF at Conn+A044/A048 with fixed recv capacity 4096; completion worker via GetQueuedCompletionStatus dispatches only matching Conn+A030 completion under A0AC gate to 0x807B40 parser. The distinct Conn+A050 matching completion takes a send-side path including 0x8077B0 and InterlockedDecrement(Conn+A0B8). The connection init writes Conn+A080 from its fourth stack argument, not the adjacent constant Conn+A0B4=2.",
+      "limitations": [
+        "Producer/consumer relation is conditional on a matching key, live connection and local gates, not a proof of all sockets or complete framing/wire flow.",
+        "WinSock/IOCP return values are OS-level, not Server ACK; Conn+5018 recv WSABUF and Conn+18 parser accumulation are not the same address.",
+        "Category 2 is not inferred from Conn+A0B4=2; full argument provenance/other writers and asynchronous race behavior remain unknown."
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "related_claim_ids": [
+        "CLM-NET-0006",
+        "CLM-NET-0014",
+        "CLM-NET-0017",
+        "CLM-NET-0018"
+      ],
+      "additional_sources": [
+        {
+          "source_intake_id": "SRC-0375",
+          "source_file": "kr-temp-roy/20261028-204203-chatgpt-web-roy-T10-111-KR-WSARecv-WSASend-IOCP-overlapped-and-category-writer.md",
+          "source_blob_sha": "af59cc9b4c11586b65989701d6e169d864e14876",
+          "client_version": "kr",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "evidence_level": "PARTIAL",
+          "scope_subset": "Only matching bounded native slice supporting CLM-NET-0033; no whole-source quality inheritance.",
+          "quality_inheritance": false,
+          "integration_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-162252-chatgpt-web-roy-T01-T10-108-114-R1-R2-merge-review.md"
+        }
+      ],
+      "review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-162252-chatgpt-web-roy-T01-T10-108-114-R1-R2-merge-review.md",
+      "native_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-162252-chatgpt-web-roy-T01-T10-108-114-R1-R2-merge-review.md",
+      "integration_status": "R1/R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-NET-0034",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261028-204914-chatgpt-web-roy-T10-112-KR-connection-vtable-and-outbound-buffer-lifecycle.md",
+      "source_blob_sha": "e236268d27bf0c54fa626e330cc8d84549ca883b",
+      "source_intake_id": "SRC-0376",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 0x8060D0..0x80627C pending record, Conn+A074/+A078, A02C frame construction, 0x804AC0..0x804B9B and 0x805210..0x8052D5 transport pump callers",
+      "assertion": "The inspected send-by-connection pending input can allocate record with length+4/data+8, link it into Conn+A074 and increment Conn+A078, then 0x8061A0 pumps records through guarded 0x807A70 plain frame builder or mode-dependent 0x807830 alternative. Two inspected update callers 0x804AD6 and 0x805228 invoke this pump under connection gates; when Conn+A028>0 and Conn+A0B8<=0 they invoke global FBA854 vtable+0xC using Conn, Conn+5020 and pending size.",
+      "limitations": [
+        "This is Client transport queue/pump, not a combat combo queue or evidence of a matching 000A send instance.",
+        "Two callers are distinct management paths, not proved to run simultaneously; blocked pump does not imply packet loss.",
+        "0x8060D0's >4096 copy-skip behavior, alias owners, all error/cleanup paths and actual socket submit must be interpreted with CLM-NET-0035."
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "related_claim_ids": [
+        "CLM-NET-0005",
+        "CLM-NET-0003",
+        "CLM-NET-0021",
+        "CLM-COMBAT-0002"
+      ],
+      "additional_sources": [
+        {
+          "source_intake_id": "SRC-0377",
+          "source_file": "kr-temp-roy/20261028-205943-chatgpt-web-roy-T10-113-KR-pending-send-pump-and-virtual-transport-gate.md",
+          "source_blob_sha": "c23374e904a1977e6fd3b4eafc29db953801cf89",
+          "client_version": "kr",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "evidence_level": "PARTIAL",
+          "scope_subset": "Only matching bounded native slice supporting CLM-NET-0034; no whole-source quality inheritance.",
+          "quality_inheritance": false,
+          "integration_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-162252-chatgpt-web-roy-T01-T10-108-114-R1-R2-merge-review.md"
+        }
+      ],
+      "review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-162252-chatgpt-web-roy-T01-T10-108-114-R1-R2-merge-review.md",
+      "native_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-162252-chatgpt-web-roy-T01-T10-108-114-R1-R2-merge-review.md",
+      "integration_status": "R1/R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-NET-0035",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261028-212516-chatgpt-web-roy-T10-114-KR-transport-vtable-to-WSASend-closure.md",
+      "source_blob_sha": "4c58fab0d36bcc57914c0916ec1d39ee2c6a8e63",
+      "source_intake_id": "SRC-0378",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 0x8046C0..0x804730 transport constructor, .rdata C51748+C=8068B0, 0x8068B0..0x80699B WSASend, pump 804B5A / 8052AC",
+      "assertion": "A concrete observed constructor allocates 0x5C, stores vptr 0xC51748 and publishes the object to FBA854; its vtable+0xC is 0x8068B0. Guarded global-interface virtual+C calls at two pending pump sites can therefore reach WSASend IAT 0xBD25B8 using Conn+A050 OVERLAPPED and Conn+A064/+A068 WSABUF. 0x8068B0 returns 1 on immediate API success, 2 on WSA_IO_PENDING(997), 0 on other SOCKET_ERROR and -1 on early invalid-args/gate; the success/pending paths increment Conn+A0B8.",
+      "limitations": [
+        "The existence of an initialization path does not prove FBA854/vptr are never replaced dynamically.",
+        "Both caller sites use test EAX,EAX; -1 is nonzero but is not a successful socket submission. No actual wire write completion or Server gameplay acceptance is proven.",
+        "No every-Z→000A→socket transmit guarantee, no actual payload capture, and IOCP counter balancing requires other paths reviewed by T02."
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "related_claim_ids": [
+        "CLM-NET-0005",
+        "CLM-NET-0014",
+        "CLM-NET-0017",
+        "CLM-COMBAT-0002"
+      ],
+      "additional_sources": [
+        {
+          "source_intake_id": "SRC-0375",
+          "source_file": "kr-temp-roy/20261028-204203-chatgpt-web-roy-T10-111-KR-WSARecv-WSASend-IOCP-overlapped-and-category-writer.md",
+          "source_blob_sha": "af59cc9b4c11586b65989701d6e169d864e14876",
+          "client_version": "kr",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "evidence_level": "PARTIAL",
+          "scope_subset": "Only matching bounded native slice supporting CLM-NET-0035; no whole-source quality inheritance.",
+          "quality_inheritance": false,
+          "integration_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-162252-chatgpt-web-roy-T01-T10-108-114-R1-R2-merge-review.md"
+        },
+        {
+          "source_intake_id": "SRC-0377",
+          "source_file": "kr-temp-roy/20261028-205943-chatgpt-web-roy-T10-113-KR-pending-send-pump-and-virtual-transport-gate.md",
+          "source_blob_sha": "c23374e904a1977e6fd3b4eafc29db953801cf89",
+          "client_version": "kr",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "evidence_level": "PARTIAL",
+          "scope_subset": "Only matching bounded native slice supporting CLM-NET-0035; no whole-source quality inheritance.",
+          "quality_inheritance": false,
+          "integration_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-162252-chatgpt-web-roy-T01-T10-108-114-R1-R2-merge-review.md"
+        }
+      ],
+      "review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-162252-chatgpt-web-roy-T01-T10-108-114-R1-R2-merge-review.md",
+      "native_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-162252-chatgpt-web-roy-T01-T10-108-114-R1-R2-merge-review.md",
+      "integration_status": "R1/R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
     }
   ]
 }
