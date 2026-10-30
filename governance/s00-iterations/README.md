@@ -1,4 +1,4 @@
-# S00 Iterations 14–19 — 原稿保存與交接
+# S00 Iterations 14–20 — 原稿保存與交接
 
 這個目錄保存 2026-10-30 原先在舊 ChatGPT 對話生成的 **完整草案** 與工作矩陣。已從使用者的檔案庫恢復原始 Markdown / JSON，並非由簡短對話摘要重寫。
 
@@ -34,3 +34,9 @@ Iterations 16–17 的正式流程編號合計 **E00–E26（27 個 gate）與 4
 
 - [Iteration 19 — 新帳號至教學離場 E2E 整合與驗收](S00-20261031-ITERATION-19-END-TO-END-ACCEPTANCE.md)：在 Iteration 16–18 不變的 gate 基礎上，定義登入、創角、選角、教學戰鬥、Quest 結算、離場及重登的跨模組因果與四層驗收；列出 I19-P1～P4 和 I19-T01～T12（全部 PLANNED / NOT_RUN）。
 - Iteration 19 是**新增規劃**，未將原有 E00–E26、E17-A～J 或正式 REQ/RR/SPEC/GAP/TEST 變更、升級；無原版 Client 測試與 Server 程式變更。
+
+## Iteration 20（2026-10-31，逐 Gate 證據盤點與去重）
+
+- [Iteration 20 詳細規劃](S00-20261031-ITERATION-20-GATE-TRIAGE-AND-RR-DEDUP.md)：依 Iteration 19 的下一輪建議，依序處理登入/空角色 UI、創角、選角進教學、E17 戰鬥、Quest 結算及教學離場/重登。對現有 8 個 RR 去重、建立新證據最小交付表與 I20-T01～T12 **未執行**的測試草案。
+- [Iteration 20 全量機讀盤點](S00-ITERATION-20-GATE-EVIDENCE-TRACE.json)：E00–E26 **27 主 gate**、E17-A–J **10 子 gate**，逐列保存既有規劃狀態、owners、未解證據與 Iteration 16 草案引用的正式 ID，並附用來檢視的當時各索引 blob SHA／RR dispatch 快照。
+- 仍只有正式 RR-0001..0008：RR-0002 BLOCKED、RR-0005 研究範圍 ACCEPTED、其他 IN_REVIEW（快照，不應代替重讀唯一 RR 索引）。**沒有**本輪新正式 RR/REQ/GAP/SPEC/TEST、原 Client 動態測試、Server 開發或規格升級；建議先審核既有 Txx 結果後再決定要不要發新的狹義 RR。
