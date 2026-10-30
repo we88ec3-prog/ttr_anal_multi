@@ -10,6 +10,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "governance"))
 from phase_b_review_preflight import evaluate, markdown  # noqa: E402
+from s00_test_fixtures import reset_queued_fixture
 
 FILES = [
     "research/requests/index.json", "design/gaps/index.json",
@@ -32,6 +33,8 @@ class SubmissionPreflightTests(unittest.TestCase):
             dst = self.root / name
             dst.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(ROOT / name, dst)
+
+        reset_queued_fixture(self.root)
 
     def update(self, name, fn):
         path = self.root / name
@@ -57,8 +60,10 @@ class SubmissionPreflightTests(unittest.TestCase):
     def test_baseline_no_artifacts_or_fake_approval(self):
         result = evaluate(self.root)
         self.assertEqual(result["errors"], [])
-        self.assertEqual(result["summary"]["selected"], 8)
-        self.assertEqual(result["summary"]["not_submitted"], 8)
+        expected = len(json.loads((self.root / "research/requests/index.json").read_text(encoding="utf-8"))["items"])
+        self.assertGreaterEqual(expected, 10)  # includes the separate E05/E06 create research requests
+        self.assertEqual(result["summary"]["selected"], expected)
+        self.assertEqual(result["summary"]["not_submitted"], expected)
         self.assertEqual(result["summary"]["pending_manual_review"], 0)
         self.assertTrue(all(row["mechanical_preflight"] == "NOT_SUBMITTED" for row in result["items"]))
 

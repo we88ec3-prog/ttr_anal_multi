@@ -1,0 +1,138 @@
+{
+  "schema": "s00-requirement-slices-v1",
+  "client_version": "kr",
+  "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+  "policy": "S00 design-only slices. This is not a second RR/REQ authority, executable Client/Server sequence, normative wire contract or approval.",
+  "slices": [
+    {
+      "id": "SLICE-LOBBY",
+      "title": "登入→選服→角色清單與角色畫面",
+      "priority": 0,
+      "depends_on": [],
+      "requirement_ids": [
+        "REQ-0001",
+        "REQ-0002",
+        "REQ-0003",
+        "REQ-0004",
+        "REQ-0005"
+      ],
+      "blocking_rr_ids": [
+        "RR-0001",
+        "RR-0003",
+        "RR-0005",
+        "RR-0007"
+      ],
+      "context_rr_ids": [
+        "RR-0002",
+        "RR-0004",
+        "RR-0006"
+      ],
+      "gap_ids": [
+        "GAP-NET-0001",
+        "GAP-NET-0002",
+        "GAP-NET-0003",
+        "GAP-AUTH-0001",
+        "GAP-CHAR-0001",
+        "GAP-FLOW-0001"
+      ],
+      "spec_ids": [
+        "SPEC-NET-0001",
+        "SPEC-NET-0002",
+        "SPEC-NET-0003",
+        "SPEC-AUTH-0001",
+        "SPEC-CHAR-0001",
+        "SPEC-FLOW-0001"
+      ],
+      "goal": "先把登入至角色畫面作為獨立第一個 Server-facing 交付，不等待角色選擇成功進世界才開始研究與離線實作。",
+      "acceptance": [
+        "Client 本地 E8/000F auth request、相應 S2C consumer 與第一個實際 Server packet 的關係需以來源或獲授權運行補證；未知保持 UNKNOWN。",
+        "具來源及方向別的選服/連線 Session handoff、有效 roster command2、角色/UI 初始化及刷新必須分別有證據，不以 record+0x5C 視為畫面就緒。",
+        "有角色、零角色和錯誤路徑分別接受測試；沒有獲授權的原版 Client 運行不得宣稱原版畫面已到達。"
+      ],
+      "next_owners": [
+        "T02",
+        "T03",
+        "T04",
+        "T06",
+        "T01",
+        "S00"
+      ],
+      "notes": "RR-0002 涵蓋 roster/UI 及後續選角，被列為 context RR（目前 BLOCKED）；不是宣稱角色畫面本身已經能避開所有 RR-0002 未證的初始化前提。"
+    },
+    {
+      "id": "SLICE-CREATE",
+      "title": "創角介面、角色建立 C2S/S2C 與名單更新",
+      "priority": 1,
+      "depends_on": [
+        "SLICE-LOBBY"
+      ],
+      "requirement_ids": [],
+      "blocking_rr_ids": [],
+      "context_rr_ids": [
+        "RR-0002"
+      ],
+      "gap_ids": [],
+      "spec_ids": [
+        "SPEC-CHAR-0001",
+        "SPEC-FLOW-0001"
+      ],
+      "goal": "尚無足夠獨立來源確認創角入口、建立角色請求與回覆的完整契約；先界定研究問題，不自行把選角 0x42 當作創角 opcode。",
+      "acceptance": [
+        "精確區分 Client 角色建立入口（包括空角色／增加角色條件）與已知角色選擇 UI 事件。",
+        "找到有界 C2S 建立角色 producer、S2C 成功/錯誤 consumer、欄位、授權/名稱處理、後續 roster 更新前提；必要時向對應 Task 提出不重複 RR。",
+        "若玩家／管理者另有角色建立政策需求，使用第 3 種來源建 REQ 並經人工審核；未證 Server 行為仍 UNKNOWN。"
+      ],
+      "next_owners": [
+        "T03",
+        "T04",
+        "T06",
+        "S00"
+      ],
+      "notes": "尚不虛構已存在的創角專屬 REQ、RR、CLM、封包值或使用者需求；此階段報 DISCOVERY_REQUIRED。"
+    },
+    {
+      "id": "SLICE-ENTER-WORLD",
+      "title": "選角確認→角色初始化→場景／世界",
+      "priority": 2,
+      "depends_on": [
+        "SLICE-LOBBY"
+      ],
+      "requirement_ids": [
+        "REQ-0003",
+        "REQ-0004"
+      ],
+      "blocking_rr_ids": [
+        "RR-0002",
+        "RR-0008"
+      ],
+      "context_rr_ids": [
+        "RR-0007"
+      ],
+      "gap_ids": [
+        "GAP-CHAR-0001",
+        "GAP-FLOW-0001",
+        "GAP-SCENE-0001"
+      ],
+      "spec_ids": [
+        "SPEC-CHAR-0001",
+        "SPEC-FLOW-0001",
+        "SPEC-SCENE-0001"
+      ],
+      "goal": "將已選角色進世界列為後續獨立門檻；S2C 0x42/0x43 handler 存在不證明 C2S 0x42 獲准或新手教學開始。",
+      "acceptance": [
+        "確認 C2S 選角 0x42 之真實 S2C 成功/失敗 pairing、scene state writer 與必要狀態門檻。",
+        "避免把 Event/SceneList (1001,1) 資源映射誤用作已證 Server 封包；新手教學及 EndCutScene 分開驗證。",
+        "隔離測試與獲授權原版 Client 端對端測試須區分，且 SPEC/TEST/ADR 各自另行審查。"
+      ],
+      "next_owners": [
+        "T03",
+        "T04",
+        "T05",
+        "T16",
+        "T01",
+        "S00"
+      ],
+      "notes": "RR-0002 BLOCKED 不代表已解開選角成功配對；RR-0008 研究交付仍 IN_REVIEW。"
+    }
+  ]
+}

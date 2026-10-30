@@ -1,0 +1,238 @@
+{
+  "schema": "s00-server-requirements-v1",
+  "policy": "One S00 requirement = one record, with multiple discovery channels. Draft code findings are not original Server fact, runtime proof or approval. No public external intake.",
+  "supported_discovery_channels": [
+    "CODE_ANALYSIS",
+    "GAME_RUNTIME_OBSERVATION",
+    "PLAYER_ADMIN_REQUEST"
+  ],
+  "suggested_not_yet_enabled": [
+    "SERVER_IMPLEMENTATION_FEEDBACK"
+  ],
+  "items": [
+    {
+      "id": "REQ-0001",
+      "title": "登入請求與登入結果需要 Server 收發",
+      "category": "CLIENT_COMPATIBILITY",
+      "priority": "P0",
+      "status": "CANDIDATE",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "need": "Client 會建立 E8/000F 本地登入請求，LOGIN scene 可以消費 S2C 0x0013/0x007A；需研究確定 Server 對應回覆、錯誤欄位與合法狀態。",
+      "acceptance_criteria": [
+        "辨別 mode 0x52 E8 112B 與 0x54/其他 000F 214B 的 payload；不得混用編碼。",
+        "Server 實際回覆命令、合法欄位、狀態與 first-wire 順序完成 T01/S00 審查及方向別測試。"
+      ],
+      "discoveries": [
+        {
+          "channel": "CODE_ANALYSIS",
+          "claim_ids": [
+            "CLM-AUTH-0003",
+            "CLM-AUTH-0004",
+            "CLM-AUTH-0005"
+          ],
+          "observation": "Client 會建立 E8/000F 本地登入請求，LOGIN scene 可以消費 S2C 0x0013/0x007A；需研究確定 Server 對應回覆、錯誤欄位與合法狀態。",
+          "limitations": "有 Client 本地 producer/consumer 靜態證據，未證成同一原版 Server 端 request/reply pairing，RR-0003 仍 IN_REVIEW。"
+        }
+      ],
+      "rr_ids": [
+        "RR-0003"
+      ],
+      "gap_ids": [
+        "GAP-AUTH-0001"
+      ],
+      "spec_ids": [
+        "SPEC-AUTH-0001",
+        "SPEC-FLOW-0001"
+      ],
+      "adr_ids": [],
+      "feedback_ids": [],
+      "claim_ids": [
+        "CLM-AUTH-0003",
+        "CLM-AUTH-0004",
+        "CLM-AUTH-0005"
+      ]
+    },
+    {
+      "id": "REQ-0002",
+      "title": "登入後選服與跨連線接續",
+      "category": "CLIENT_COMPATIBILITY",
+      "priority": "P0",
+      "status": "CANDIDATE",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "need": "0x0013 的條件式 local 成功分支與選服 UI 邏輯，可到 key0/key2 Connect；Server 需提供可用選服資料並銜接身分及 Session，但原版規則未知。",
+      "acceptance_criteria": [
+        "描述 S2C 0x13/0x7A 與選服資料解析、UI 事件和 key0/key2 Connect 的各自必要前提。",
+        "隔離測試驗證選服後 Session 延續與失敗處理，記錄非原版 Server 的設計決策。"
+      ],
+      "discoveries": [
+        {
+          "channel": "CODE_ANALYSIS",
+          "claim_ids": [
+            "CLM-NET-0018",
+            "CLM-NET-0019",
+            "CLM-AUTH-0004"
+          ],
+          "observation": "0x0013 的條件式 local 成功分支與選服 UI 邏輯，可到 key0/key2 Connect；Server 需提供可用選服資料並銜接身分及 Session，但原版規則未知。",
+          "limitations": "RR-0005 的 ACCEPTED 僅代表指定靜態研究交付；真實連線時序、端點權威及 Session handoff 尚未知。"
+        }
+      ],
+      "rr_ids": [
+        "RR-0005",
+        "RR-0003"
+      ],
+      "gap_ids": [
+        "GAP-NET-0002",
+        "GAP-AUTH-0001"
+      ],
+      "spec_ids": [
+        "SPEC-NET-0002",
+        "SPEC-AUTH-0001",
+        "SPEC-FLOW-0001"
+      ],
+      "adr_ids": [],
+      "feedback_ids": [],
+      "claim_ids": [
+        "CLM-AUTH-0004",
+        "CLM-NET-0018",
+        "CLM-NET-0019"
+      ]
+    },
+    {
+      "id": "REQ-0003",
+      "title": "角色清單資料提供",
+      "category": "CLIENT_COMPATIBILITY",
+      "priority": "P0",
+      "status": "CANDIDATE",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "need": "Client 全域 command 0x0002 在有效狀態下消費 65+53*N 角色清單，將部分記錄欄位寫入 UI 資料；Server 需提供符合已證欄位與後續初始化所需的資料。",
+      "acceptance_criteria": [
+        "在已確認的方向、長度與字串條件下保守產生/驗證 65+53*N 清單。",
+        "另行驗證初始化要求與完整角色資料政策；僅有 record+5C 並不代表 UI 就緒。"
+      ],
+      "discoveries": [
+        {
+          "channel": "CODE_ANALYSIS",
+          "claim_ids": [
+            "CLM-CHAR-0001",
+            "CLM-CHAR-0002",
+            "CLM-NET-0030"
+          ],
+          "observation": "Client 全域 command 0x0002 在有效狀態下消費 65+53*N 角色清單，將部分記錄欄位寫入 UI 資料；Server 需提供符合已證欄位與後續初始化所需的資料。",
+          "limitations": "完整 65B prefix 語義、原版合法角色資料/回覆時序及 GUI 刷新門檻尚未閉合；RR-0002 BLOCKED。"
+        }
+      ],
+      "rr_ids": [
+        "RR-0002",
+        "RR-0007"
+      ],
+      "gap_ids": [
+        "GAP-CHAR-0001"
+      ],
+      "spec_ids": [
+        "SPEC-CHAR-0001",
+        "SPEC-FLOW-0001"
+      ],
+      "adr_ids": [],
+      "feedback_ids": [],
+      "claim_ids": [
+        "CLM-CHAR-0001",
+        "CLM-CHAR-0002",
+        "CLM-NET-0030"
+      ]
+    },
+    {
+      "id": "REQ-0004",
+      "title": "角色選擇畫面資料和 UI 就緒",
+      "category": "CLIENT_COMPATIBILITY",
+      "priority": "P0",
+      "status": "CANDIDATE",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "need": "Client 對角色記錄存在可用旗標與 UI 讀取路徑；收到角色清單後仍需建立 UI／事件投遞前提，才能驗證畫面真的可操作。",
+      "acceptance_criteria": [
+        "釐清 command2→記錄陣列→UI 更新/初始化鏈的實際必要事件和資源前提。",
+        "分別驗證有角色、無角色與異常清單在原版 Client 的畫面及回覆；不可透過手工注入 UI 事件冒充原始路徑。"
+      ],
+      "discoveries": [
+        {
+          "channel": "CODE_ANALYSIS",
+          "claim_ids": [
+            "CLM-CHAR-0002",
+            "CLM-NET-0030"
+          ],
+          "observation": "Client 對角色記錄存在可用旗標與 UI 讀取路徑；收到角色清單後仍需建立 UI／事件投遞前提，才能驗證畫面真的可操作。",
+          "limitations": "目前只有局部 UI record/handler 路徑，不能宣稱 command2 直接強制刷新選角 UI 或無角色必開創角畫面。"
+        }
+      ],
+      "rr_ids": [
+        "RR-0002",
+        "RR-0007"
+      ],
+      "gap_ids": [
+        "GAP-CHAR-0001",
+        "GAP-FLOW-0001"
+      ],
+      "spec_ids": [
+        "SPEC-CHAR-0001",
+        "SPEC-FLOW-0001"
+      ],
+      "adr_ids": [],
+      "feedback_ids": [],
+      "claim_ids": [
+        "CLM-CHAR-0002",
+        "CLM-NET-0030"
+      ]
+    },
+    {
+      "id": "REQ-0005",
+      "title": "Server 送出可被 Client 解碼的框架並處理接收錯誤",
+      "category": "CLIENT_COMPATIBILITY",
+      "priority": "P0",
+      "status": "CANDIDATE",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "need": "Client 觀察到 0x1A68/0x0BBB 外框，以及 0x2633 解壓和 0x22D7/raw 接收分支；Server 的輸出契約應分清 payload、frame 與拒絕/重試策略。",
+      "acceptance_criteria": [
+        "依已證局部 decoder/parser 設計正反向的合成測試且區分 marker、header、payload。",
+        "Server 封包選擇、模式、錯誤/斷線實際行為與 Client-compatible 實測另行審核。"
+      ],
+      "discoveries": [
+        {
+          "channel": "CODE_ANALYSIS",
+          "claim_ids": [
+            "CLM-NET-0022",
+            "CLM-NET-0026",
+            "CLM-NET-0027",
+            "CLM-NET-0028"
+          ],
+          "observation": "Client 觀察到 0x1A68/0x0BBB 外框，以及 0x2633 解壓和 0x22D7/raw 接收分支；Server 的輸出契約應分清 payload、frame 與拒絕/重試策略。",
+          "limitations": "可達 parser 不等於原版 Server 實際使用該 marker；RR-0001/0004/0006 IN_REVIEW。"
+        }
+      ],
+      "rr_ids": [
+        "RR-0001",
+        "RR-0004",
+        "RR-0006"
+      ],
+      "gap_ids": [
+        "GAP-NET-0001",
+        "GAP-NET-0003"
+      ],
+      "spec_ids": [
+        "SPEC-NET-0001",
+        "SPEC-NET-0003"
+      ],
+      "adr_ids": [],
+      "feedback_ids": [],
+      "claim_ids": [
+        "CLM-NET-0022",
+        "CLM-NET-0026",
+        "CLM-NET-0027",
+        "CLM-NET-0028"
+      ]
+    }
+  ]
+}

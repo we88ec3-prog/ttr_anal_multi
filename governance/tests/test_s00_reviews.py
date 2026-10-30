@@ -9,6 +9,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "governance"))
 from check_s00_reviews import evaluate
+from s00_test_fixtures import reset_queued_fixture
 
 PATHS = [
     "governance/reviews/index.json", "research/requests/index.json",
@@ -26,6 +27,8 @@ class ReviewLedgerTests(unittest.TestCase):
             target = self.root / relative
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(ROOT / relative, target)
+
+        reset_queued_fixture(self.root, empty_review_ledger=True)
 
     def edit(self, path, fn):
         file = self.root / path

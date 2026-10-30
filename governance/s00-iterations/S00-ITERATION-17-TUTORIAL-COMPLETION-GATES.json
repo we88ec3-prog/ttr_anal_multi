@@ -1,0 +1,506 @@
+{
+  "schema": "s00-tutorial-completion-extension-v1",
+  "kind": "DRAFT_PLANNING_OVERLAY_NON_NORMATIVE",
+  "date": "2026-10-30",
+  "s00_repository": "we88ec3-prog/ttr_anal_multi",
+  "s00_main_sha": "dd69ec9de353a695d25c6db8e362ff471ea0c137",
+  "server_repository": "we88ec3-prog/ttr_server_roy",
+  "server_main_sha": "2901f05eeb229ee2c3c0e9a46b6248aa555c3309",
+  "client_version": "kr",
+  "client_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+  "extends": "S00-20261030-ITERATION-16-NEW-ACCOUNT-TO-TUTORIAL-PLAN.md E00-E12",
+  "objective": "fresh zero-character account → Client creation → first tutorial → scenario14 → Quest14 → Quest16 → terminal → Quest15 available → normal playable non-tutorial state + relog",
+  "acceptance": {
+    "tutorial_completed": "Only after authorized source-supported Quest16 completion and a separately defined terminal/exit condition, NOT S2C0x4C or a UI-only checkpoint",
+    "mainline_handoff": "Quest15 is available to the rightful character; it need not be completed in this milestone",
+    "exit": "Client leaves tutorial instance and reaches a legitimate non-tutorial ready/spawn state; static Pindos scene playback is not enough",
+    "relog": "After relog progress preserved; no automatic replay/duplicate reward",
+    "original_client_test": "requires separately explicit authorization and reproducible KR exact-SHA runtime evidence"
+  },
+  "spec_evidence_note": "No new SPEC/REQ/RR/GAP/TEST registered. Synthetic tests not original Client-compatible.",
+  "gates": [
+    {
+      "id": "E13",
+      "title": "教學角色控制與基本操作",
+      "owner_tasks": [
+        "T16",
+        "T06",
+        "T09"
+      ],
+      "evidence_anchor": "TutorialMain.lua Part1，CheckPoint/ControlStatus，local Lua",
+      "research_deliverable": "開始按鍵／滑鼠／視角／領隊與 checkpoint；哪些純本地，哪些要求 Server 證據？",
+      "blocking_unknown": "本地 UI/進度 callback 不是 Server 封包；教學角色權威與復原未知",
+      "priority": "P1",
+      "evidence_state": "LOCAL_SOURCE_PARTIAL",
+      "official_status": "PLAN_ONLY",
+      "executed": false
+    },
+    {
+      "id": "E14",
+      "title": "教學角色、NPC 與場景就緒",
+      "owner_tasks": [
+        "T04",
+        "T05",
+        "T06",
+        "T07",
+        "T08"
+      ],
+      "evidence_anchor": "CTutorial 資源、NPC 10027／10016 候選、玩家 Actor 初始化",
+      "research_deliverable": "按實際 Client 消費查所需角色、NPC、spawn、資源依賴與 ready；在可操作畫面中可定位互動點",
+      "blocking_unknown": "NPC actor ID 與 scene/resource key 不等於 wire；原版場景實際 ready/出生座標未知",
+      "priority": "P1",
+      "evidence_state": "RESOURCE_AND_WIRE_GAP",
+      "official_status": "PLAN_ONLY",
+      "executed": false
+    },
+    {
+      "id": "E15",
+      "title": "教學演出與腳本協程推進",
+      "owner_tasks": [
+        "T16",
+        "T06",
+        "T07"
+      ],
+      "evidence_anchor": "TutorialMain.lua Part1/Part2；PlayAndWaitForScene(1000,8)",
+      "research_deliverable": "標示每個需要 yield/checkpoint/對話／camera 釋放的條件、失敗和 timeout",
+      "blocking_unknown": "1000/8 是 SceneList 鍵，不是 Quest14 或 S2C opcode；是否 Server 同步未知",
+      "priority": "P1",
+      "evidence_state": "LOCAL_SOURCE_PARTIAL",
+      "official_status": "PLAN_ONLY",
+      "executed": false
+    },
+    {
+      "id": "E16",
+      "title": "發起 Scenario 14",
+      "owner_tasks": [
+        "T16",
+        "T02",
+        "T07"
+      ],
+      "evidence_anchor": "Tutorial.RequestStartScenario(14) → 0x4AA4D0 local C2S 40 00 0E 00",
+      "research_deliverable": "Client 在相符 tutorial/conn gate 可以送出請求；Server 何時接受及回覆要有明確契約",
+      "blocking_unknown": "本地 4B payload 不證成功送達／原版 Server 批准；frame/slot/scene gate要分離",
+      "priority": "P0",
+      "evidence_state": "SOURCE_BACKED_PARTIAL",
+      "official_status": "PLAN_ONLY",
+      "executed": false
+    },
+    {
+      "id": "E17",
+      "title": "Scenario 14 戰鬥與目標",
+      "owner_tasks": [
+        "T07",
+        "T08",
+        "T09",
+        "T10",
+        "T14"
+      ],
+      "evidence_anchor": "T07 scene entry；T08 actor spawn；T09/T10 control/combat；T14 objective",
+      "research_deliverable": "進入合法關卡、角色／敵人實體存在、目標和勝敗條件可供 Server 驗證；失敗和重入需有策略",
+      "blocking_unknown": "不存在已核定的 Scenario14 完整 spawn/wave/掉落/勝利規則；禁止使用 0.75 秒結束等合成邏輯",
+      "priority": "P0",
+      "evidence_state": "NATIVE_DISCOVERY_REQUIRED",
+      "official_status": "PLAN_ONLY",
+      "executed": false
+    },
+    {
+      "id": "E18",
+      "title": "Scenario 14 結算並通知 Client",
+      "owner_tasks": [
+        "T14",
+        "T16",
+        "T02",
+        "T07"
+      ],
+      "evidence_anchor": "CTutorial 表 B app 0x004C → 0x4C4F20 → map[scenarioId]=1",
+      "research_deliverable": "結果只在合法 Server 結算後生效；CTutorial 活躍時有可追的 S2C handler 與 Lua reader",
+      "blocking_unknown": "0x4C key14 是 Client handler 可消費形狀，不是已捕獲原 Server result；init 可能清 map；不等於 Quest14 完成",
+      "priority": "P0",
+      "evidence_state": "SOURCE_BACKED_PARTIAL",
+      "official_status": "PLAN_ONLY",
+      "executed": false
+    },
+    {
+      "id": "E19",
+      "title": "教學 Lua 解除等待並走完後續步驟",
+      "owner_tasks": [
+        "T16",
+        "T06",
+        "T07"
+      ],
+      "evidence_anchor": "IsScenarioEnded(14) map read; Part2 PlayAndWaitForScene(1000,10/12/13/14) 等",
+      "research_deliverable": "已經合法收到 Scenario14 結束訊息時 Lua 不再永遠 yield；後續交互和對話全部有明確終點",
+      "blocking_unknown": "各個 callback、尾端關閉、reentry 和實際完成條件未整體閉合",
+      "priority": "P0",
+      "evidence_state": "LOCAL_SOURCE_PARTIAL",
+      "official_status": "PLAN_ONLY",
+      "executed": false
+    },
+    {
+      "id": "E20",
+      "title": "QuestInfo 任務 14 完成／交付",
+      "owner_tasks": [
+        "T16",
+        "T14",
+        "T15"
+      ],
+      "evidence_anchor": "QuestInfo.xml Quest14 type3／NPC10027／CompleteAction、AcceptAction；T16-111 status 缺口",
+      "research_deliverable": "找到 Quest14 狀態 record 正式 writer、NPC 交付／完成 C2S/S2C、拒絕與重複提交；持久化策略獨立",
+      "blocking_unknown": "Scenario14 ended!=QuestInfo14 completed；不可僅靠本地 script map 將任務14設完成",
+      "priority": "P0",
+      "evidence_state": "NATIVE_DISCOVERY_REQUIRED",
+      "official_status": "PLAN_ONLY",
+      "executed": false
+    },
+    {
+      "id": "E21",
+      "title": "Quest 16 解鎖、接取與 NPC 操作",
+      "owner_tasks": [
+        "T16",
+        "T06",
+        "T02"
+      ],
+      "evidence_anchor": "Quest16 <Demand id=14>, giver/finisher 10027；T16-118..123 NPC／TalkBox bounded",
+      "research_deliverable": "核對 Quest14 完成之後 Quest16 候選/對話/接取；狀態向量、town/scene 和 C2S/S2C 都獨立定位",
+      "blocking_unknown": "NPC 實際交互順序及原版 Server 狀態配對仍未知，不能從 Demand14 靜態欄位構造結果",
+      "priority": "P0",
+      "evidence_state": "SOURCE_BACKED_PARTIAL",
+      "official_status": "PLAN_ONLY",
+      "executed": false
+    },
+    {
+      "id": "E22",
+      "title": "Quest 16 完成／獎勵／交付",
+      "owner_tasks": [
+        "T16",
+        "T14",
+        "T15",
+        "T04"
+      ],
+      "evidence_anchor": "QuestInfo.xml Quest16 Reward type2 value50；T16-123 state/UI handlers",
+      "research_deliverable": "具正向 Client 回覆或 record 可證 Quest16 accepted/completed/turned-in；Server 交易一次性提交及獎勵",
+      "blocking_unknown": "Reward type=2 的經濟業務意義未證；不能自行當 EXP/金幣；Client completed UI vs Server authorized 狀態分開",
+      "priority": "P0",
+      "evidence_state": "NATIVE_DISCOVERY_REQUIRED",
+      "official_status": "PLAN_ONLY",
+      "executed": false
+    },
+    {
+      "id": "E23",
+      "title": "教學完成旗標與持久化",
+      "owner_tasks": [
+        "T15",
+        "T16",
+        "T04",
+        "S00"
+      ],
+      "evidence_anchor": "TutorialMain terminal writer 尚未知；Quest14→16 資源依賴",
+      "research_deliverable": "定義產品上「完成」必須和合法 Quest16/場景退出一致；角色層級存檔與重新登入能證明；不可重複領獎",
+      "blocking_unknown": "沒有已證原版 tutorial_complete packet/flag，也未證 account vs character scope；暫為 Server-only ADR 提案",
+      "priority": "P0",
+      "evidence_state": "SERVER_POLICY_NEEDS_ADR",
+      "official_status": "PLAN_ONLY",
+      "executed": false
+    },
+    {
+      "id": "E24",
+      "title": "Quest 15 可接與第一主線交接",
+      "owner_tasks": [
+        "T16",
+        "T06",
+        "T02"
+      ],
+      "evidence_anchor": "Quest15 <Demand id=16>; town5 field19 giver/finisher 10338；T16-124 bounded candidate/UI",
+      "research_deliverable": "Quest16 完成後，在正確 town selector/候選向量/必要 Client notification 下 Quest15 變可接",
+      "blocking_unknown": "Quest15 available != accepted/completed；0x74(16)/0x38 town selector/0x40(15) 靜態存在，不代表實際 Server 時序",
+      "priority": "P0",
+      "evidence_state": "SOURCE_BACKED_PARTIAL",
+      "official_status": "PLAN_ONLY",
+      "executed": false
+    },
+    {
+      "id": "E25",
+      "title": "教學場景退出／切到非教學區域",
+      "owner_tasks": [
+        "T07",
+        "T05",
+        "T06",
+        "T16"
+      ],
+      "evidence_anchor": "Quest15 SceneList(15,1..4)；Scene3 pindos_talkevent Lua LoadMap town001D.map",
+      "research_deliverable": "核對真實 scene leave、切線、field/world install、角色重生成與 ready；不能只看到 cutscene 地圖就宣布進村",
+      "blocking_unknown": "Quest15 Scene3 不是 Server 強制地圖指令；T07 0x005F type6 有本機修補反例",
+      "priority": "P0",
+      "evidence_state": "NATIVE_DISCOVERY_REQUIRED",
+      "official_status": "PLAN_ONLY",
+      "executed": false
+    },
+    {
+      "id": "E26",
+      "title": "正常遊戲狀態及重登驗收",
+      "owner_tasks": [
+        "T15",
+        "T05",
+        "T04",
+        "S00"
+      ],
+      "evidence_anchor": "T15 跨登入保存；T05 世界狀態；T16 quest candidate/owner",
+      "research_deliverable": "正常非教學場景可顯示／操作；logout/login 不重播已完成教學、不重複獎勵、Quest15 狀態仍一致",
+      "blocking_unknown": "原版可玩實測需另行明確授權；本方案沒有完成任何原版 Client runtime 驗收",
+      "priority": "P0",
+      "evidence_state": "ORIGINAL_CLIENT_RUNTIME_REQUIRED",
+      "official_status": "PLAN_ONLY",
+      "executed": false
+    }
+  ],
+  "test_scenarios": [
+    {
+      "id": "TUT-T17",
+      "gate_id": "E13",
+      "goal": "按鍵與滑鼠/視角 checkpoint 按 Lua 事件順序完成",
+      "kind": "LOCAL_TEST_PLANNED",
+      "executed": false,
+      "official_test_registration": false
+    },
+    {
+      "id": "TUT-T18",
+      "gate_id": "E13",
+      "goal": "checkpoint 重複通知與未初始化狀態不會錯誤推進",
+      "kind": "LOCAL_TEST_PLANNED",
+      "executed": false,
+      "official_test_registration": false
+    },
+    {
+      "id": "TUT-T19",
+      "gate_id": "E14",
+      "goal": "合法角色／NPC／場景資源缺失時採安全錯誤與追溯",
+      "kind": "SOURCE_CONTRACT_MISSING",
+      "executed": false,
+      "official_test_registration": false
+    },
+    {
+      "id": "TUT-T20",
+      "gate_id": "E15",
+      "goal": "不同 scene key 1000/8 與 Quest14 分離；Lua yield/返回可追",
+      "kind": "SOURCE_CONTRACT_MISSING",
+      "executed": false,
+      "official_test_registration": false
+    },
+    {
+      "id": "TUT-T21",
+      "gate_id": "E16",
+      "goal": "C2S local 40 00 0E 00 在 sender gate 下組出；不自動當 wire success",
+      "kind": "SYNTHETIC_PLANNED",
+      "executed": false,
+      "official_test_registration": false
+    },
+    {
+      "id": "TUT-T22",
+      "gate_id": "E16",
+      "goal": "錯誤 Connection/scene/frame 或重送時 Server 拒絕錯授權",
+      "kind": "SOURCE_CONTRACT_MISSING",
+      "executed": false,
+      "official_test_registration": false
+    },
+    {
+      "id": "TUT-T23",
+      "gate_id": "E17",
+      "goal": "Scenario14 有效角色與敵人出生、目標、傷害、失敗／勝利",
+      "kind": "NATIVE_DISCOVERY_REQUIRED",
+      "executed": false,
+      "official_test_registration": false
+    },
+    {
+      "id": "TUT-T24",
+      "gate_id": "E17",
+      "goal": "失敗後重試與中斷後復原不憑倒數計時假勝利",
+      "kind": "SERVER_INTERNAL_PLANNED",
+      "executed": false,
+      "official_test_registration": false
+    },
+    {
+      "id": "TUT-T25",
+      "gate_id": "E18",
+      "goal": "CTutorial 0x004C key14 更新與 Lua reader 同一 map",
+      "kind": "SOURCE_BACKED_SYNTHETIC_PLANNED",
+      "executed": false,
+      "official_test_registration": false
+    },
+    {
+      "id": "TUT-T26",
+      "gate_id": "E18",
+      "goal": "非 CTutorial scene 或初始化清 map 前的錯時序不被誤判完成",
+      "kind": "SOURCE_BACKED_SYNTHETIC_PLANNED",
+      "executed": false,
+      "official_test_registration": false
+    },
+    {
+      "id": "TUT-T27",
+      "gate_id": "E19",
+      "goal": "Scene1000/10/12/13/14 與其 Lua 協程／對話可達完成節點",
+      "kind": "NATIVE_DISCOVERY_REQUIRED",
+      "executed": false,
+      "official_test_registration": false
+    },
+    {
+      "id": "TUT-T28",
+      "gate_id": "E20",
+      "goal": "Scenario14 結束後但 QuestInfo14 未交付時 Quest16 仍不被誤授權",
+      "kind": "SERVER_INTERNAL_PLANNED",
+      "executed": false,
+      "official_test_registration": false
+    },
+    {
+      "id": "TUT-T29",
+      "gate_id": "E20",
+      "goal": "Quest14 成功/失敗/重複交付的 Client record 和 Server 狀態一致",
+      "kind": "SOURCE_CONTRACT_MISSING",
+      "executed": false,
+      "official_test_registration": false
+    },
+    {
+      "id": "TUT-T30",
+      "gate_id": "E21",
+      "goal": "Quest14 Demand 成立/未成立兩分支能控制 Quest16 可接性",
+      "kind": "SOURCE_BACKED_SYNTHETIC_PLANNED",
+      "executed": false,
+      "official_test_registration": false
+    },
+    {
+      "id": "TUT-T31",
+      "gate_id": "E21",
+      "goal": "NPC10027 不適當場景／控制器不能合法接取 Quest16",
+      "kind": "SOURCE_CONTRACT_MISSING",
+      "executed": false,
+      "official_test_registration": false
+    },
+    {
+      "id": "TUT-T32",
+      "gate_id": "E22",
+      "goal": "Quest16 確認完成後持久化及獎勵至多一次",
+      "kind": "SERVER_INTERNAL_PLANNED",
+      "executed": false,
+      "official_test_registration": false
+    },
+    {
+      "id": "TUT-T33",
+      "gate_id": "E22",
+      "goal": "Quest16 任務 record/通知真實 Client 可以接收及刷新",
+      "kind": "SOURCE_CONTRACT_MISSING",
+      "executed": false,
+      "official_test_registration": false
+    },
+    {
+      "id": "TUT-T34",
+      "gate_id": "E23",
+      "goal": "登出或斷線在各階段重連，完成旗標與進度保留",
+      "kind": "SERVER_INTERNAL_PLANNED",
+      "executed": false,
+      "official_test_registration": false
+    },
+    {
+      "id": "TUT-T35",
+      "gate_id": "E23",
+      "goal": "新角色/已完成角色具有不同且可重現的教學策略",
+      "kind": "SERVER_POLICY_PENDING_APPROVAL",
+      "executed": false,
+      "official_test_registration": false
+    },
+    {
+      "id": "TUT-T36",
+      "gate_id": "E24",
+      "goal": "Quest15 Demand16 和 town5/owner/candidate/0x74 更新條件一致",
+      "kind": "SOURCE_BACKED_SYNTHETIC_PLANNED",
+      "executed": false,
+      "official_test_registration": false
+    },
+    {
+      "id": "TUT-T37",
+      "gate_id": "E24",
+      "goal": "Quest15 可接但未完成、重複收 0x74/0x38 不產生獎勵",
+      "kind": "SERVER_INTERNAL_PLANNED",
+      "executed": false,
+      "official_test_registration": false
+    },
+    {
+      "id": "TUT-T38",
+      "gate_id": "E25",
+      "goal": "場景 Script scene15/3 不等同可玩世界；實際 scene ready/spawn 完成",
+      "kind": "SOURCE_CONTRACT_MISSING",
+      "executed": false,
+      "official_test_registration": false
+    },
+    {
+      "id": "TUT-T39",
+      "gate_id": "E25",
+      "goal": "切場途中斷線清理及重連不造成異常多角色／重複道具",
+      "kind": "SERVER_INTERNAL_PLANNED",
+      "executed": false,
+      "official_test_registration": false
+    },
+    {
+      "id": "TUT-T40",
+      "gate_id": "E26",
+      "goal": "原版 KR Client 完成教學／正常場景／登出重登可見且可操作",
+      "kind": "ORIGINAL_CLIENT_RUNTIME_AUTH_REQUIRED",
+      "executed": false,
+      "official_test_registration": false
+    },
+    {
+      "id": "TUT-T41",
+      "gate_id": "E26",
+      "goal": "未完成與已完成角色的原版 UI/任務狀態確實不同",
+      "kind": "ORIGINAL_CLIENT_RUNTIME_AUTH_REQUIRED",
+      "executed": false,
+      "official_test_registration": false
+    }
+  ],
+  "candidate_research_topics": [
+    {
+      "candidate_id": "CR-01",
+      "owner": "T16",
+      "scope": "TutorialMain.lua and TutorialBase.lua checkpoint/terminal callback to authoritative quest state",
+      "overlap_check": "Existing T16-108/111/118..133; avoid re-analysing bounded Scenario14 Lua or Quest16 candidate paths"
+    },
+    {
+      "candidate_id": "CR-02",
+      "owner": "T14",
+      "scope": "Scenario14 authoritative success/failure, objective, reward and proper settlement to CTutorial 0x4C",
+      "overlap_check": "T16-111 already has local Scenario14 0x40/0x4C writer/reader; do not duplicate; T07/8 handles spawn"
+    },
+    {
+      "candidate_id": "CR-03",
+      "owner": "T16",
+      "scope": "QuestInfo14 complete/turn-in → Quest16 unlock/complete → Quest15 available direction-specific Server-facing payloads",
+      "overlap_check": "T16-124 etc have partial 0x74, 0x38, 0x40 business consumer; only missing link requests; no known formal RR"
+    },
+    {
+      "candidate_id": "CR-04",
+      "owner": "T07",
+      "scope": "actual post-tutorial scene exit and non-tutorial field install/ready with T05 player spawn",
+      "overlap_check": "RR-0008 covers selection→entry, not completion→exit; S00 dedup formal request before opening"
+    },
+    {
+      "candidate_id": "CR-05",
+      "owner": "T15",
+      "scope": "character-scoped tutorial/quest persistence and relog state, Server-only ADR vs Client observable data",
+      "overlap_check": "T15 owns save/resume; do not claim historical backend DB schema"
+    }
+  ],
+  "authorizations": {
+    "create_rr": false,
+    "modify_s00_git": false,
+    "modify_server_git": false,
+    "original_client_runtime": false
+  },
+  "evidence_files": {
+    "T16-108": "kr-temp-roy/20261029-232224-chatgpt-web-roy-T16-108-KR-tutorial-quest14-quest16-quest15-to-Phindous-end-to-end.md",
+    "T16-111": "kr-temp-roy/20261030-003535-chatgpt-web-roy-T16-111-KR-Quest14-tutorial-scenario14-C2S-S2C-client-loop-and-S00-boundaries.md",
+    "T16-124": "kr-temp-roy/20261030-103908-chatgpt-web-roy-T16-124-KR-Quest16-study5-Q15-Demand16-town5-NPC10338-C2S-S2C-scene-bridge.md",
+    "T16-133": "kr-temp-roy/20261030-171913-chatgpt-web-roy-T16-133-KR-Quest15-four-Lua-qbase-bytecode-talk-prolog-phases-return-native.md",
+    "T16-41": "kr-temp-roy/20261028-085929-chatgpt-web-roy-T16-41-KR-Lua-tutorial-static-source-audit.md",
+    "T16-43": "kr-temp-roy/20261028-085929-chatgpt-web-roy-T16-43-KR-tutorial-to-mainline-evidence-edges.md",
+    "E08": "kr-extra-roy/20261029-chatgpt-web-roy-E08-tutorial-start-Lua-and-scene-index.md",
+    "T01-RR8": "research/handoffs/t01-20261030-rr0008-e68-bounded-r2/README.md"
+  }
+}

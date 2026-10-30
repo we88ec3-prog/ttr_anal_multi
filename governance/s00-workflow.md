@@ -63,3 +63,25 @@ T01 在 [本批首次新流程來源收件](../research/handoffs/t01-20261029-ri
 ## Iteration 07: T01/S00 source review entry
 
 The [RR submission preflight](phase_b_review_preflight.py) checks current submitted report path/blob identity and produces read-only, directly scoped SPEC/GAP/COV/TEST review questions. It never judges native semantics or upgrades contracts. Run `python -B governance/phase_b_review_preflight.py --check`; on `SUBMITTED/IN_REVIEW`, have T01 inspect source confidence and S00 decide the exact RR acceptance criteria. See [Iteration 07](S00-20261029-ITERATION-07.md).
+
+
+## S00：Server 需求來源與跨 Task 收件（2026-10-30）
+
+Server 需求採用 [唯一 REQ 台帳](../design/requirements/README.md)，**並行三種發現來源**：程式碼逆向分析發現 Client 需要 Server 收發或狀態資料（CODE_ANALYSIS）、已另行明確授權的遊戲運行觀察（GAME_RUNTIME_OBSERVATION）、玩家/管理員實際提出的功能與營運要求（PLAYER_ADMIN_REQUEST）。同一需求多來源只追加 discovery，不另建同義 REQ；來源不等於 Client 原生保證或批准。安全、備份、權限、GM 稽核都屬玩家/管理員需求，不另設獨立來源。可考慮的實作整合回饋新來源仍**未核准**，既有 Server bug 用 FB 流程。新 T02–T16 程式碼研究若涉及新 Server 收發，先找 REQ，按原版 SHA/CLM 附有界證據，再分流 GAP/RR/SPEC/ADR。原版 Client 執行/抓包需要獨立明確授權，不能因需求台帳存在就啟動。
+
+命令：`python -B governance/check_server_requirements.py --check`；詳見 [S00 本輪紀錄](S00-20261030-REQUIREMENTS-ORIGINS.md)。
+
+
+## Iteration 11 — 分段優先與跨對話交接
+
+以 [需求分段計畫](s00-requirement-slices.json) 和 [唯讀進度檢查](server_requirement_slices.py) 將三來源 REQ 協調成 `SLICE-LOBBY`（登入至角色畫面）、`SLICE-CREATE`（創角）、`SLICE-ENTER-WORLD`（選角後進世界）；僅是現有 B-* Roadmap 的需求分析視圖，並非新 RR 台帳或正式 B 里程碑升級。角色畫面與選角成功後轉場**不應誤當同一驗收**，但有 RR-0002 的 UI 初始化未知就保留阻塞。先問 [精確研究題單](S00-LOBBY-CREATE-RESEARCH-QUESTIONS.md) 而非猜任務／packet； [新對話交接](S00-NEXT-CHAT.md) 提供共同開工規則。`--check` 遇到 BLOCKED/DISCOVERY_REQUIRED 屬預期，只有 JSON/links/DAG 錯誤才 CI fail。
+
+
+## Iteration 12／13 — Lobby 分段契約閘門
+
+[Iteration 12 規劃](S00-20261030-ITERATION-12.md) 已按 L00–L08 拆開 Client 有界證據、未證 Server 責任及測試來源；[Iteration 13](S00-20261030-ITERATION-13.md) 使用 [同一 REQ/RR/GAP/SPEC 台帳派生的矩陣](s00-lobby-gates.json) 分別追 UI 就緒、登入跨線與創角 positive evidence。CLI `python -B governance/check_s00_lobby_gates.py --check` 僅檢查計畫內一致性，不能將原版 Client 相容或研究請求結案自動宣稱完成。12 個 L12-Txx 全部尚未執行且不建立正式 TEST 項，原版 Client runtime 仍需另行明確授權。新的共同交接入口維持 [S00-NEXT-CHAT.md](S00-NEXT-CHAT.md)。
+
+
+## Iteration 21 — 創角契約的正式缺口／去重後派工
+
+[正式分析與差異](s00-iterations/S00-20261031-ITERATION-21-CREATE-UI-WIRE-DISPATCH.md) 建立 `RR-0009`（E05：N=0/新增按鈕→Create UI 的本地 scene/dialog/event 正向入口）、`RR-0010`（E06：**Create** C2S 與匹配 S2C consumer／roster refresh），分別連至新 `GAP-CHAR-0002/0003`，研究 owner 均為 KR T03；T06/T04/T02 只提供既有職責內的跨 Task 介面。既有 `RR-0002` selection、`RR-0007` dispatcher、`RR-0008` selection→scene 不應被覆蓋或任意升級。新的 T03 inbox 由唯一 RR 台帳同步產生，只有 main 合併後供認領；沒有自動通知、沒有原 Client runtime 授權。SPEC-CHAR/FLOW 保留 DRAFT/PARTIAL。

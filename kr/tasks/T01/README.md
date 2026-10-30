@@ -126,3 +126,13 @@ T01 對 Server 設計的接收、精確主張去重、風險分流及 S00 交接
 2026-10-30 T16 第二輪：原始 Event.stp 的 TutorialBase 來源 SHA 更正 14 筆、A0A4/A078 佇列欄位 1 筆、T01 對 4AEDB0 錯誤反證撤回 1 筆；本輪新增 16 筆 RESOLVED，累計 27 RESOLVED / 16 READY_FOR_REVIEW，未提升 T16 原稿全文。完整決議及缺件請求：[第二輪驗收](../../../shared/integrations/T01-20261030-t16-resource-followup/README.md)。
 
 2026-10-30 T16 第三輪：已透過使用者上傳 phase3 ZIP + 原件 KR BIN 對 19 root、4464 native 指令、4905 CFG edges、28 問題窗口、71 舊 call/jmp 做獨立查核，**本輪新增 16 筆 appendix/CFG 限定退回 `RESOLVED`；固定 T16 退回累計 43/43 `RESOLVED`。** 這不是 T16 全稿 FULL-PASS、Quest 原生封包實證或 S00 SPEC STABLE。詳見 [完整獨立驗證與 Table.stp 解包](../../../shared/integrations/T01-20261030-t16-phase3-table-review/README.md)。
+
+2026-10-30 Quest16 T01 有界驗收整合：[T16-117／121／122／123 四來源與 R2 反證](../../../research/handoffs/t01-20261030-quest16-r0-r2/README.md)。正式新增 4 SRC、6 CLM（5 PARTIAL／1 REFUTED），針對117建立 T01-RETURN-T16-117-Q16-MODE2-C2S36-001 NEEDS_FIX；歷史43筆 RESOLVED 不變，未新增全文FULL-PASS/NATIVE_VERIFIED/SPEC_CONSUMABLE。
+
+2026-10-30 RR-0001／RR-0004 T01 限定驗收：[兩份原始來源、獨立 BIN R2、5 項新 CLM](../../../research/handoffs/t01-20261030-rr0001-rr0004-bounded-r2/README.md)。原樣補入 E57／E58 提交報告 blob 並登錄 SRC-0461/0462，補足原先 main 缺少 RR 來源導致的驗證阻塞；兩 RR 仍由 S00 判定 ACCEPTED。沒有新的全文 FULL-PASS 或 SPEC_CONSUMABLE，不改其它 Task 的原始研究、owner 或 T16 退回。
+
+2026-10-30 T01 多分支 merge／有限驗收：[完整來源、R1 主張及 BIN R2](../../../research/handoffs/t01-20261030-multi-branch-merge-r0-r2/README.md)。保留 extra/roy1、rr/t02/roy 的原始分支提交歷史，整合 T16-114/115/116/118/119/120/124/125 與 E59 共九份 SHA 限定原稿（SRC-0463～0471），新增 8 條 PARTIAL CLM；RR-0006 SUBMITTED、RR-0007 CLAIMED 沿用最新主線，不覆寫 S00 台帳；T16-117 原 NEEDS_FIX 仍有效。來源納入≠全文 FULL-PASS 或 RR/SPEC 接受。
+
+2026-10-30 RR-0008/E68 T01 有界 R0–R2：[來源身分、21 個原生 byte 位址、兩個 RTTI、5 個 direct E8 target 與 Event.stp 資源交叉驗證](../../../research/handoffs/t01-20261030-rr0008-e68-bounded-r2/README.md)。新增 SRC-0474、CLM-SCENE-0005/0006（PARTIAL），既有 CLM-SCENE-0004 追加限定來源；RR-0008 轉 IN_REVIEW 供 S00 裁決，原版選角回覆仍 UNKNOWN、RR-0002 BLOCKED；**不新增全文 FULL-PASS 或修改其它 Task 退回／SPEC／GAP**。
+
+2026-10-30 T01→S00 bounded handoff: [extra/roy1 E61–E69 and T10 93-source R0/R1 plus targeted native R2](../../../research/handoffs/t01-20261030-extra-t10-s00/README.md). Imported 8 original sources; 93 T10 early/middle sources scoped CONFLICT_CHECKED; 29 PARTIAL/UNKNOWN claims; NO FULL_PASS/RR/SPEC promotion.

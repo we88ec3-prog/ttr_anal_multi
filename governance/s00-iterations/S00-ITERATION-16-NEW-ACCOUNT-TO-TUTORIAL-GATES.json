@@ -1,0 +1,498 @@
+{
+  "schema": "s00-new-account-to-tutorial-plan-v1",
+  "kind": "NON_NORMATIVE_DRAFT",
+  "date": "2026-10-30",
+  "source_repo": "we88ec3-prog/ttr_anal_multi",
+  "source_main_sha": "dd69ec9de353a695d25c6db8e362ff471ea0c137",
+  "server_repo": "we88ec3-prog/ttr_server_roy",
+  "server_main_sha": "2901f05eeb229ee2c3c0e9a46b6248aa555c3309",
+  "client_version": "kr",
+  "client_binary_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+  "state": "PLAN_ONLY_NOT_EXECUTED",
+  "objective": "new server-provisioned account with zero characters → Client create character → select character → first visible interactive tutorial scene",
+  "source_authority": [
+    "design/requirements/index.json",
+    "research/requests/index.json",
+    "design/gaps/index.json",
+    "spec/spec-index.json",
+    "conformance/test-index.json"
+  ],
+  "policies": [
+    "Planning gates are not a second official REQ/RR/GAP/SPEC/TEST index.",
+    "Native scene resource (1001,1) tutorial_start is not established as a network packet or original new-player rule.",
+    "The user's desired target is a product requirement candidate under PLAYER_ADMIN_REQUEST; no approval was recorded.",
+    "No original Client was executed or authorized and no Server compatibility is asserted.",
+    "No GitHub repository was modified.",
+    "Unknown original create opcode/reply and selection result must remain unknown."
+  ],
+  "gates": [
+    {
+      "id": "E00",
+      "title": "建立全新測試帳號",
+      "evidence_state": "SERVER_DESIGN",
+      "owners": [
+        "S00",
+        "Server-C02"
+      ],
+      "linked_req_ids": [],
+      "linked_rr_ids": [],
+      "linked_gap_ids": [],
+      "linked_spec_ids": [],
+      "required_deliverable": "測試管理介面可建立零角色帳號；不預設原版 Client 有註冊 UI",
+      "blocking_unknown": "Server 自訂帳號身分與驗證策略需批准",
+      "native_compatibility_confirmed": false,
+      "runtime_test_executed": false
+    },
+    {
+      "id": "E01",
+      "title": "Client 送出登入請求",
+      "evidence_state": "SOURCE_BACKED_PARTIAL",
+      "owners": [
+        "T02",
+        "T03"
+      ],
+      "linked_req_ids": [
+        "REQ-0001",
+        "REQ-0005"
+      ],
+      "linked_rr_ids": [
+        "RR-0001",
+        "RR-0003",
+        "RR-0004"
+      ],
+      "linked_gap_ids": [
+        "GAP-NET-0001",
+        "GAP-AUTH-0001"
+      ],
+      "linked_spec_ids": [
+        "SPEC-NET-0001",
+        "SPEC-AUTH-0001"
+      ],
+      "required_deliverable": "區分 E8/112B、000F/214B 的本地 producer 與 mode/slot",
+      "blocking_unknown": "實際 runtime 模式、首個 wire frame、codepage／opaque bytes",
+      "native_compatibility_confirmed": false,
+      "runtime_test_executed": false
+    },
+    {
+      "id": "E02",
+      "title": "登入結果／可選伺服器",
+      "evidence_state": "SOURCE_BACKED_PARTIAL",
+      "owners": [
+        "T03",
+        "T02"
+      ],
+      "linked_req_ids": [
+        "REQ-0001"
+      ],
+      "linked_rr_ids": [
+        "RR-0003",
+        "RR-0007"
+      ],
+      "linked_gap_ids": [
+        "GAP-AUTH-0001",
+        "GAP-FLOW-0001"
+      ],
+      "linked_spec_ids": [
+        "SPEC-AUTH-0001",
+        "SPEC-FLOW-0001"
+      ],
+      "required_deliverable": "區分 S2C app 0x13 與 0x7A 的 Client handler/gates",
+      "blocking_unknown": "真實 request/reply 配對、Server 結果與完整失敗分支",
+      "native_compatibility_confirmed": false,
+      "runtime_test_executed": false
+    },
+    {
+      "id": "E03",
+      "title": "選服／跨連線 Session",
+      "evidence_state": "SOURCE_BACKED_PARTIAL",
+      "owners": [
+        "T02",
+        "T03"
+      ],
+      "linked_req_ids": [
+        "REQ-0002"
+      ],
+      "linked_rr_ids": [
+        "RR-0005",
+        "RR-0001"
+      ],
+      "linked_gap_ids": [
+        "GAP-NET-0002"
+      ],
+      "linked_spec_ids": [
+        "SPEC-NET-0002",
+        "SPEC-FLOW-0001"
+      ],
+      "required_deliverable": "key/slot 與 Connect、local F4241、Session 狀態分開",
+      "blocking_unknown": "真正跨連線順序、token/lease/續接證據",
+      "native_compatibility_confirmed": false,
+      "runtime_test_executed": false
+    },
+    {
+      "id": "E04",
+      "title": "取得零角色清單",
+      "evidence_state": "SOURCE_BACKED_PARTIAL",
+      "owners": [
+        "T03",
+        "T04"
+      ],
+      "linked_req_ids": [
+        "REQ-0003"
+      ],
+      "linked_rr_ids": [
+        "RR-0002",
+        "RR-0007"
+      ],
+      "linked_gap_ids": [
+        "GAP-CHAR-0001",
+        "GAP-FLOW-0001"
+      ],
+      "linked_spec_ids": [
+        "SPEC-CHAR-0001"
+      ],
+      "required_deliverable": "command2 65-byte prefix+53×N；N=0 仍需先通過 header/資源狀態",
+      "blocking_unknown": "完整 65-byte prefix 語義、零角色 UI 後果",
+      "native_compatibility_confirmed": false,
+      "runtime_test_executed": false
+    },
+    {
+      "id": "E05",
+      "title": "顯示建立角色 UI",
+      "evidence_state": "DISCOVERY_REQUIRED",
+      "owners": [
+        "T03",
+        "T06"
+      ],
+      "linked_req_ids": [],
+      "linked_rr_ids": [],
+      "linked_gap_ids": [
+        "GAP-CHAR-0001",
+        "GAP-FLOW-0001"
+      ],
+      "linked_spec_ids": [
+        "SPEC-CHAR-0001",
+        "SPEC-FLOW-0001"
+      ],
+      "required_deliverable": "找 N=0/新增按鈕的 scene/dialog/resource/event → create UI 正向入口",
+      "blocking_unknown": "未證原版 Client 零角色即自動開創角畫面",
+      "native_compatibility_confirmed": false,
+      "runtime_test_executed": false
+    },
+    {
+      "id": "E06",
+      "title": "建立角色 C2S／S2C",
+      "evidence_state": "DISCOVERY_REQUIRED",
+      "owners": [
+        "T03",
+        "T04",
+        "T02"
+      ],
+      "linked_req_ids": [],
+      "linked_rr_ids": [],
+      "linked_gap_ids": [
+        "GAP-CHAR-0001"
+      ],
+      "linked_spec_ids": [
+        "SPEC-CHAR-0001",
+        "SPEC-FLOW-0001"
+      ],
+      "required_deliverable": "定位 create producer/response consumer、offset/編碼/結果碼/重送",
+      "blocking_unknown": "目前沒有可支援的創角 wire opcode；選角 C2S 0x42 不可混用",
+      "native_compatibility_confirmed": false,
+      "runtime_test_executed": false
+    },
+    {
+      "id": "E07",
+      "title": "角色持久化／更新清單",
+      "evidence_state": "SOURCE_BACKED_PARTIAL",
+      "owners": [
+        "T04",
+        "T03"
+      ],
+      "linked_req_ids": [
+        "REQ-0003",
+        "REQ-0004"
+      ],
+      "linked_rr_ids": [
+        "RR-0002"
+      ],
+      "linked_gap_ids": [
+        "GAP-CHAR-0001",
+        "GAP-FLOW-0001"
+      ],
+      "linked_spec_ids": [
+        "SPEC-CHAR-0001",
+        "SPEC-FLOW-0001"
+      ],
+      "required_deliverable": "Server 交易建立單一角色後從來源權威重取清單、26+ID 相關 init 和 UI event 依原生補證",
+      "blocking_unknown": "Create 回覆與下一次 roster/初始化完整順序及 UI ready",
+      "native_compatibility_confirmed": false,
+      "runtime_test_executed": false
+    },
+    {
+      "id": "E08",
+      "title": "角色選擇請求",
+      "evidence_state": "SOURCE_BACKED_PARTIAL",
+      "owners": [
+        "T03",
+        "T02"
+      ],
+      "linked_req_ids": [],
+      "linked_rr_ids": [
+        "RR-0002"
+      ],
+      "linked_gap_ids": [
+        "GAP-CHAR-0001"
+      ],
+      "linked_spec_ids": [
+        "SPEC-CHAR-0001",
+        "SPEC-FLOW-0001"
+      ],
+      "required_deliverable": "已知 0x4A3B80 本地建構 42 00 XX YY（4B，受 gate）",
+      "blocking_unknown": "XX/YY 業務語義、Server 拒絕/允許與真實 wire pairing",
+      "native_compatibility_confirmed": false,
+      "runtime_test_executed": false
+    },
+    {
+      "id": "E09",
+      "title": "選角批准與世界狀態",
+      "evidence_state": "BLOCKED",
+      "owners": [
+        "T03",
+        "T02",
+        "T04",
+        "T07"
+      ],
+      "linked_req_ids": [],
+      "linked_rr_ids": [
+        "RR-0002",
+        "RR-0008"
+      ],
+      "linked_gap_ids": [
+        "GAP-CHAR-0001",
+        "GAP-FLOW-0001",
+        "GAP-SCENE-0001"
+      ],
+      "linked_spec_ids": [
+        "SPEC-FLOW-0001",
+        "SPEC-SCENE-0001"
+      ],
+      "required_deliverable": "找實際 success/error S2C → Client state/scene writer → 角色載入和初始資料",
+      "blocking_unknown": "S2C 0x42/0x43 不是已證 ACK；0x69/7 CSquare 路徑不能直接推為批准",
+      "native_compatibility_confirmed": false,
+      "runtime_test_executed": false
+    },
+    {
+      "id": "E10",
+      "title": "首次進入教學的政策與判定",
+      "evidence_state": "DISCOVERY_REQUIRED",
+      "owners": [
+        "S00",
+        "T03",
+        "T04",
+        "T16"
+      ],
+      "linked_req_ids": [],
+      "linked_rr_ids": [
+        "RR-0008"
+      ],
+      "linked_gap_ids": [
+        "GAP-SCENE-0001"
+      ],
+      "linked_spec_ids": [
+        "SPEC-SCENE-0001"
+      ],
+      "required_deliverable": "產品目標是首次建立角色後進教學；確定是否由 Server 保存 per-character tutorial state",
+      "blocking_unknown": "原版 account-first/character-first 規則、可跳過條件、觸發來源全未知",
+      "native_compatibility_confirmed": false,
+      "runtime_test_executed": false
+    },
+    {
+      "id": "E11",
+      "title": "教學場景鍵／腳本啟動",
+      "evidence_state": "SOURCE_BACKED_PARTIAL",
+      "owners": [
+        "T03",
+        "T06",
+        "T07",
+        "T16"
+      ],
+      "linked_req_ids": [],
+      "linked_rr_ids": [
+        "RR-0008"
+      ],
+      "linked_gap_ids": [
+        "GAP-SCENE-0001"
+      ],
+      "linked_spec_ids": [
+        "SPEC-SCENE-0001",
+        "SPEC-FLOW-0001"
+      ],
+      "required_deliverable": "已知 Event.stp SceneList (1001,1)→tutorial_start 與 0x565720 條件式 loader；校對 E68 的 Review/EndCutScene 分支",
+      "blocking_unknown": "沒有 wire→scene key、selection→tutorial、腳本實際執行的正向連結",
+      "native_compatibility_confirmed": false,
+      "runtime_test_executed": false
+    },
+    {
+      "id": "E12",
+      "title": "首個可見教學畫面／玩家初始化",
+      "evidence_state": "RUNTIME_NOT_AUTHORIZED",
+      "owners": [
+        "T04",
+        "T05",
+        "T06",
+        "T07",
+        "T16",
+        "S00"
+      ],
+      "linked_req_ids": [],
+      "linked_rr_ids": [],
+      "linked_gap_ids": [
+        "GAP-SCENE-0001"
+      ],
+      "linked_spec_ids": [
+        "SPEC-SCENE-0001"
+      ],
+      "required_deliverable": "核對玩家角色、場景資源與腳本/初始目標載入；將「進入」定義成可見可互動的首個教學畫面",
+      "blocking_unknown": "需要獨立授權 KR Client 隔離動態測試；不能以 synthetic 或曾改過的 tutorial fixture 當官方可玩證據",
+      "native_compatibility_confirmed": false,
+      "runtime_test_executed": false
+    }
+  ],
+  "tests": [
+    {
+      "id": "E2E-T01",
+      "gate_id": "E00",
+      "scenario": "新帳號無角色，驗證身分、持久化和非重複帳號",
+      "state": "SERVER_INTERNAL_PLANNED",
+      "executed": false
+    },
+    {
+      "id": "E2E-T02",
+      "gate_id": "E01",
+      "scenario": "E8／000F 各有精確 Client local builder vector，未知 mode 明拒絕",
+      "state": "OFFLINE_SYNTHETIC_PLANNED",
+      "executed": false
+    },
+    {
+      "id": "E2E-T03",
+      "gate_id": "E02",
+      "scenario": "登入成功、密碼錯誤、scene 不匹配三分支",
+      "state": "CONTRACT_MISSING",
+      "executed": false
+    },
+    {
+      "id": "E2E-T04",
+      "gate_id": "E03",
+      "scenario": "選服跨 conn、斷線、session lease、錯 socket 重放",
+      "state": "CONTRACT_MISSING",
+      "executed": false
+    },
+    {
+      "id": "E2E-T05",
+      "gate_id": "E04",
+      "scenario": "N=0 清單的正向完整 header / 前置資源",
+      "state": "CONTRACT_MISSING",
+      "executed": false
+    },
+    {
+      "id": "E2E-T06",
+      "gate_id": "E05",
+      "scenario": "零角色與既有角色 UI 分支均有正向 native entry",
+      "state": "NATIVE_DISCOVERY_REQUIRED",
+      "executed": false
+    },
+    {
+      "id": "E2E-T07",
+      "gate_id": "E06",
+      "scenario": "建立角色成功／重名／非法名稱／斷線重試",
+      "state": "NATIVE_DISCOVERY_REQUIRED",
+      "executed": false
+    },
+    {
+      "id": "E2E-T08",
+      "gate_id": "E07",
+      "scenario": "創角只持久化一次、重新取得角色清單、重連可見",
+      "state": "SERVER_INTERNAL_PLANNED",
+      "executed": false
+    },
+    {
+      "id": "E2E-T09",
+      "gate_id": "E07",
+      "scenario": "角色名單內容不等於 UI-ready；驗 local init/event subscription",
+      "state": "CONTRACT_MISSING",
+      "executed": false
+    },
+    {
+      "id": "E2E-T10",
+      "gate_id": "E08",
+      "scenario": "選角本地 42 00 XX YY 與 Server 授權、擁有權錯誤",
+      "state": "CONTRACT_MISSING",
+      "executed": false
+    },
+    {
+      "id": "E2E-T11",
+      "gate_id": "E09",
+      "scenario": "選角成功／拒絕 S2C 正向 pairing 和 scene writer",
+      "state": "NATIVE_DISCOVERY_REQUIRED",
+      "executed": false
+    },
+    {
+      "id": "E2E-T12",
+      "gate_id": "E10",
+      "scenario": "全新角色第一次進教學 vs 已進教學重登的 Server policy",
+      "state": "SERVER_POLICY_PENDING_APPROVAL",
+      "executed": false
+    },
+    {
+      "id": "E2E-T13",
+      "gate_id": "E11",
+      "scenario": "實際選角結果導致 tutorial_start key 選取，而非 Review/EndCutScene 假陽性",
+      "state": "NATIVE_DISCOVERY_REQUIRED",
+      "executed": false
+    },
+    {
+      "id": "E2E-T14",
+      "gate_id": "E12",
+      "scenario": "合法 KR Client 到教學第一個可見且可操作畫面",
+      "state": "ORIGINAL_CLIENT_RUNTIME_AUTH_REQUIRED",
+      "executed": false
+    },
+    {
+      "id": "E2E-T15",
+      "gate_id": "E12",
+      "scenario": "重連／中途斷線／故意錯誤 spawn 不可繞過權威校驗",
+      "state": "ORIGINAL_CLIENT_RUNTIME_AUTH_REQUIRED",
+      "executed": false
+    },
+    {
+      "id": "E2E-T16",
+      "gate_id": "E12",
+      "scenario": "已完成教學角色再次登入，不重播（若產品政策批准）",
+      "state": "ORIGINAL_CLIENT_RUNTIME_AUTH_REQUIRED",
+      "executed": false
+    }
+  ],
+  "blocking_critical_path": [
+    "E01",
+    "E02",
+    "E03",
+    "E04",
+    "E05",
+    "E06",
+    "E07",
+    "E08",
+    "E09",
+    "E10",
+    "E11",
+    "E12"
+  ],
+  "suggested_research_priorities": [
+    "T03 actual create-character producer and result",
+    "T03/T02 live login+slot request/reply pairing",
+    "T03 RR-0002 real selection result",
+    "T03/T07/T16 selection-to-first-tutorial state and resource",
+    "T04 per-character initial state",
+    "T06 zero-roster and create UI resources"
+  ]
+}

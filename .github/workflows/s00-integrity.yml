@@ -44,6 +44,12 @@ jobs:
         run: python3 -B governance/phase_b_worklist.py --check
       - name: Validate submitted research artifact hashes and review scope
         run: python3 -B governance/phase_b_review_preflight.py --check
+      - name: Check unified Server requirements and three authorized discovery sources
+        run: python3 -B governance/check_server_requirements.py --check
+      - name: Validate REQ-backed Server delivery slice dependency plan
+        run: python3 -B governance/server_requirement_slices.py --check
+      - name: Validate L00-L08 bounded Server lobby gate and proposed test matrix
+        run: python3 -B governance/check_s00_lobby_gates.py --check
       - name: Run registry regression tests
         run: python3 -B -m unittest discover -s governance/tests -v
       - name: Check S00 dispatch lifecycle and all Task bootstraps

@@ -8,6 +8,17 @@
 
 ## T01 驗收退回事項
 
+### T01-RETURN-T10-116-ROW5-PROVENANCE-001 — NEEDS_FIX
+
+- 原稿：`kr-temp-roy/20261028-213248-chatgpt-web-roy-T10-116-KR-000A-five-byte-row-field-provenance.md`，原始 Git blob `8da51d9e77d3d900bc73743bddc82891f6829c15`；原稿歷史、其它獨立肯定證據維持原狀。
+- 問題一（原生確定反證）：原稿將兩條 `C→S 000A` 5-byte row 第五 byte 概括為 `R+0xB0`。但 Row B 於 `545A67 mov cl,[R+E4]`、`545A70 mov [esp+30],cl` 先保存 `R+E4`；`545A97` 的 owner vtable+44 回傳非零、`545A9D cmp [owner+58],0` 得零時，`545AA1 je 545AD6` **跳過** `545AC8 mov [esp+30],bl` 的 B0 覆寫。其後 `545ADB mov cl,[esp+30]`、`545B10 mov [row+4],cl`，在其餘查找／容量 gate 通過時 Row B 第五位元組直接來源為 `R+E4`，非無條件 `R+B0`。
+- 問題二（待 source qualifier）：Row A `5458BB` 讀 `R+B0`，但 `5458CA mov [esp+20],bl` 發生於兩次 push 後；`5458FB` 實際讀 `[esp+38]`。只有 `owner+58!=0` 路徑中的 `5458E9 mov [esp+38],bl` 有直接快照 writer。請精確標示 `owner+58==0` 的 ESP/virtual+48 retN、其它 local writer，不可用名稱相似推每條路都 B0。
+- 原生／重現依據：`research/handoffs/t01-20261030-t10-canonical-continuation/20261030-163408-chatgpt-web-roy-T01-T10-116-118-R1-R2-canonical-review.md`；`research/handoffs/t01-20261030-t10-canonical-continuation/20261030-163408-chatgpt-web-roy-T01-T10-116-118-R2-audit.json`（KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`，19 個原生視窗、45 byte asserts、5 個 vtable pointers），以及 `research/handoffs/t01-20261030-t10-canonical-continuation/20261030-163408-chatgpt-web-roy-T01-T10-116-118-revalidate.py`。
+- 修正要求：**保留原稿**，提交新勘誤／修正版及精確 blob SHA；按 virtual+44 回值、owner+58、owner+6A bit15 分列每條可達 append 的最後 row[4] writer；另核對 Row A 所有實質可達的 local byte + highWORD def-use、stack ABI 與 callback；不要把 row BYTE 命名為官方技能、方向或 Server status。
+- 完成條件：T01 對新版精確 blob 的 row A/B 每個肯定 branch、關鍵指令邊界、source-to-row dataflow 複驗且完全吻合，才將退回從 NEEDS_FIX 經 READY_FOR_REVIEW 調整至 RESOLVED。此通知不使既有研究整體 Task native_complete，也不否定 B row 以外的獨立來源。
+
+
+
 <!-- T01-continuation-02-notices:start -->
 
 ### 2026-10-29 接續第02批複驗
