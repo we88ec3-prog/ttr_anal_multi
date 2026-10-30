@@ -22,3 +22,9 @@ To approve: maintainer separately verifies scope, risks, independently implement
 
 - [ADR-0006 — per-role TutorialProgress、SessionEpoch/AdmissionId、checkpoint、Quest/reward 去重及重登](ADR-0006-tutorial-progress-and-session-fencing.md)：**PROPOSED、尚未批准、NON-NORMATIVE**。對應 [Iteration25](../../governance/s00-iterations/S00-20261031-ITERATION-25-TUTORIAL-ENTRY-RECOVERY-PLAN.md)；其 per-role 首次判定／mode2／Skip／完成條件、Lua checkpoint replay、Reward ledger 交易需維護者決議，不自動寫回原版 Client 協定。
 - 現在共有 ADR-0001..0006，**皆仍是 PROPOSED**。新的 C-TUTORIAL-DOMAIN roadmap package 只是獨立 Server 測試路線，check_s00_readiness 應維持 EXTERNAL_REVIEW_REQUIRED；不代表 Main 已發展出可玩的 native Client Server。
+
+
+## Iteration 26 — Encounter／Scenario14／Quest14→16→15／Reward／教學離場
+
+- [ADR-0007 — Encounter/Scenario/Quest/Reward/Exit 自訂 Server 權威](ADR-0007-encounter-quest-settlement-boundaries.md)：**PROPOSED / NON-NORMATIVE**；不可從 Client C2S `40 00 0E 00` 或 S2C `0x4C` 當作已證原版 Server 契約，亦不得把 Scenario14 map[14]、Quest14/16 completion、Quest15 available 和教學結束混成一個布林旗標。完整細分見 [Iteration26](../../governance/s00-iterations/S00-20261031-ITERATION-26-COMBAT-QUEST-EXIT-PLAN.md)。
+- ADR-0006 是 per-role TutorialProgress/SessionEpoch policy proposal，ADR-0007 是 encounter、Quest 和一日結算的獨立 proposta；**兩者都需維護者另行核准**，不能因 Git 或 CI 合併就變 normative、也不能自動升級 SPEC／RR。
