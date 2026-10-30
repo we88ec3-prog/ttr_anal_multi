@@ -1,0 +1,105 @@
+# KR Bulk 跨 Task 集中品質檢查入口
+
+**實驗性工作分支：`extra/roy2`**；這不是 `main` 的正式 T01 FULL-PASS 審核決議，不修改任何 Task 的 owner、catalog 或正式結論。
+
+## 檢查批次
+
+1. [第一段品質基線與保存紀錄摘要](KR-BULK-CENTRAL-QA-20261029-ROUND-01-SUMMARY.md)：GitHub 封存狀態、BIN SHA、PE 映射、未審核範圍。第一段本地完整版另附於原對話；此處僅為摘要。
+2. [第二段 BIN-first 四函式入口抽查](KR-BULK-CENTRAL-QA-ROUND-02-20261029.md)：VA/raw、48-byte 機器碼入口、偽碼警告、待檢驗風險。
+3. [第二段機器可讀 JSON](KR-BULK-CENTRAL-QA-ROUND-02-20261029.json)：精確樣本地址、偏移、入口 bytes、Git blob SHA。
+
+## 使用規則
+
+- 每個 Task 可按地址直接選讀 `kr-bulk-roy/<SHA>/functions/0x<addr>.c`，但標記 `derived-unreviewed`。
+- 需要共享結論時，先核 BIN 原始指令、CFG、資料流及 raw；依 `shared/T01-FULL-PASS-UNCLASSIFIED-INTEGRATION-RULES.md` 由 T01 正式審核，不能因為這份 QA 報告上 GitHub 就視為 FULL-PASS。
+- 本批無全量 SHA/索引核對、沒有完成逐函式語意驗證、沒有驗證 Server 邏輯與玩家可玩性。
+- 本分支作為品質工作成果，不應自動合併至 `main`。
+
+## 第三段：查詢器與索引品質（2026-10-29）
+
+- [第三段完整品質報告](KR-BULK-CENTRAL-QA-ROUND-03-20261029.md)：對 `lookup.py`／`review_status.py` 靜態檢查，指出 silent JSON parse skip、重複地址未回報、Evidence 路徑驗證、`assert` 的 `-O` 限制與線性掃描成本；再次核對四個 BIN 入口 16 bytes。**均是有界原碼品質觀察，未宣稱現有完整 index 實際受損。**
+- [第三段機器可讀結果](KR-BULK-CENTRAL-QA-ROUND-03-20261029.json)。
+- 完整 `index.jsonl` 內容在這次工具環境未取得，故**全量 SHA 與 index→raw 逐筆核對仍未完成**；後續須在具完整 Git checkout 的環境實行。狀態依然是 **PARTIAL / NOT FULL-PASS**。
+
+## 第四段：完整性檢查工具（2026-10-29）
+
+- [第四段報告](KR-BULK-CENTRAL-QA-ROUND-04-20261029.md)
+- [唯讀完整性驗證器](tools/bulk_integrity_audit.py)
+- [六項 fixture 測試](tools/test_bulk_integrity_audit.py)
+
+六項本地測試通過；**正式 111,054 筆索引／raw 尚未實行全量核對**。保持 PARTIAL / NOT FULL-PASS。
+
+## 第五段：驗證器格式與例外改進（2026-10-29）
+
+- [第五段完整報告](KR-BULK-CENTRAL-QA-ROUND-05-20261029.md)：增強 SHA/地址格式、重複地址異質性、缺漏與例外截斷紀錄。
+- [更新的驗證器](tools/bulk_integrity_audit.py) 與 [11 項 fixture 測試定義](tools/test_bulk_integrity_audit.py)。**本版測試尚未在本環境執行，沒有全量 index 掃描；非 FULL-PASS。**
+
+
+## 第六段：嚴格格式檢查缺陷修正（2026-10-29）
+
+- [第六段完整報告](KR-BULK-CENTRAL-QA-ROUND-06-20261029.md)：修正驗證器 Python raw regex 的多餘反斜線，避免地址／SHA256 `fullmatch` 產生錯誤結果。
+- [更新後驗證器](tools/bulk_integrity_audit.py) 與 [14 個回歸測試定義](tools/test_bulk_integrity_audit.py)。**新版測試及全量索引仍未實行，維持 PARTIAL / NOT FULL-PASS。**
+
+
+## 第七段：14 項 fixture 首次實際執行（2026-10-29）
+
+- [第七段技術報告](KR-BULK-CENTRAL-QA-ROUND-07-20261029.md)
+- [測試輸出紀錄](KR-BULK-CENTRAL-QA-ROUND-07-20261029-tests.txt)
+- 在本地依遠端程式邏輯重建測試副本，實際執行 14 項 unittest：**14/14 通過**。本地副本並非 Git blob byte-identical；**未對正式 111,054 筆索引進行全量驗證**，維持 PARTIAL / NOT FULL-PASS。
+
+
+## 第八段：真實資料前置檢查（2026-10-29）
+
+- [第八段報告](KR-BULK-CENTRAL-QA-ROUND-08-20261029.md)
+- [前置檢查工具](tools/kr_bulk_preflight.py) 與 [四項測試](tools/test_kr_bulk_preflight.py)：**4/4 通過**，測試副本與 GitHub 遠端 Git blob SHA 完全一致。
+- 實際容器檢查回傳 `BLOCKED_NO_COMPLETE_INDEX`，代表此容器缺資料，**不代表倉庫索引不存在**；未執行 111,054 筆全量 hash。
+
+
+## 第九段：JSONL 結構與筆數前置驗證（2026-10-29）
+
+- [第九段報告](KR-BULK-CENTRAL-QA-ROUND-09-20261029.md)
+- [v2 前置檢查](tools/kr_bulk_preflight.py) 及 [9 項測試定義](tools/test_kr_bulk_preflight.py)：增加逐行 JSON、來源 SHA、地址、重複與預期筆數檢查。
+- 本地同邏輯 fixture 測試 9/9 通過；**正式 GitHub 版本與全量索引仍待在完整 checkout 執行**。維持 PARTIAL / NOT FULL-PASS。
+
+
+## 第十段：真實索引存取阻塞核對（2026-10-29）
+
+- [第十段技術報告](KR-BULK-CENTRAL-QA-ROUND-10-20261029.md)：確認 index Git blob `89c8d6a75fea00b668df7d96945eadd30b561a97` 可讀 metadata，但限定行內容仍為空；本地 Git DNS 無法解析。另整理全量驗證的版本鎖定與可驗收執行程序。
+- **本段沒有取得 111,054 筆實測結果，維持 BLOCKED-FULL-DATA / PARTIAL / NOT FULL-PASS**。不可把 GitHub API 回傳空正文解讀成檔案為空。
+
+
+## 第十一段：原始 BIN 直接複驗（2026-10-29）
+
+- [第十一段技術報告](KR-BULK-CENTRAL-QA-ROUND-11-20261029.md)：以當次本地原始 BIN 直接對照第二段 GitHub 報告記錄，四個函式入口各 48 bytes，共 **192/192 bytes 完全一致**。
+- **僅證實指定入口機器碼與既有報告的一致性**；未取得 111,054 個函式的全量 hash，維持 PARTIAL / NOT FULL-PASS。
+
+
+## 第十二段：BIN-first 重複呼叫序列驗證（2026-10-29）
+
+- [第十二段完整技術報告](KR-BULK-CENTRAL-QA-ROUND-12-20261029.md)：原始 BIN 直接解碼 `FUN_0055D7E0` 的 `E8 rel32`，確認對 `0x006F55B0` 與 `0x006F5790` **各 72 次 direct CALL**，72 個不同的 `EDI` 立即數，以及末端 `0x0055E410`、`0x0055E4F0` 的直接呼叫。
+- 這是有界原生程式碼證據，**尚未驗證上述 callee 的功能語意／完整資料流，也不代表 bulk 全量 QA 完成**。維持 PARTIAL / NOT FULL-PASS。
+
+
+## 第十三段：Closure-like 值與字串鍵寫入鏈（2026-10-29）
+
+- [第十三段 BIN-first 完整原稿](KR-BULK-CENTRAL-QA-ROUND-13-20261029.md)：追查 `0x006F55B0` 的 16-byte stack slot／type 6 記錄配置、`0x006F5790` 的 EDI 字串 key 消費、`0x0055E410`／`0x0055E4F0` 的全域 writer 與 callback 交接。
+- 可用結論：先前 72 組重複呼叫具有 closure-like value 與字串 key 表寫入的有界原生資料流；尚未命名所有函式及完整 script runtime，維持 PARTIAL / NOT FULL-PASS。
+
+
+## 第十四段：72 個原生 script 字串鍵與共同 stub（2026-10-29）
+
+- [完整 BIN-first 技術報告](KR-BULK-CENTRAL-QA-ROUND-14-20261029.md)
+- [可按名稱／VA 查詢的 72 筆 JSON](KR-BULK-CENTRAL-QA-ROUND-14-20261029-keys.json)
+- 原始 `.rdata` 解析取得 72 個不同 NUL 字串名稱，並在 `.text` 確認共同 callback `0x008DC2F0` 是 `xor eax,eax; ret`；72 個名稱共享同一零回傳 stub，不能視為 72 個功能均已實作／逆向完成。維持 PARTIAL / NOT FULL-PASS。
+
+
+## 第十五段：Rebind／DeleteAllObject 原生 callback 與全域 writer（2026-10-29）
+
+- [第十五段完整 BIN-first 技術報告](KR-BULK-CENTRAL-QA-ROUND-15-20261029.md)：確認原生 `0x0055E590` (GitHub 同名偽碼檔案未收錄) 寫入 `0x00FE1F24`，以及 `0x0055E620` 經 `0x00FE1F28` 間接呼叫；初始 handler `0x005F5D10` 僅 `ret`。
+- **重要限制**：`Rebind` 不等於已證明替 72 個 script key 重新綁定，其他 writer/xref 尚未窮盡；維持 PARTIAL / NOT FULL-PASS。
+
+
+## 第十六段：第一條 T01 FULL-PASS 候選主張（2026-10-29）
+
+- [完整 BIN-first 候選審核證據](KR-BULK-CENTRAL-QA-ROUND-16-20261029.md)：原生 `0x008DC2F0` 的完整單區塊 CFG `33 C0; C3`；正常返回 `EAX=0` 且無額外 call／顯式 memory write，並實測上游 72 次 `push 0x008DC2F0`。
+- **狀態為 FULL-PASS CANDIDATE / T01 PENDING REVIEW，正式 FULL-PASS 仍是 0**；不得擅自加入 `shared/verified-knowledge/`。
