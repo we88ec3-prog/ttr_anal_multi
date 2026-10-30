@@ -277,7 +277,7 @@
       "client_version": "kr",
       "status": "ACTIVE",
       "dispatch": {
-        "state": "IN_PROGRESS",
+        "state": "SUBMITTED",
         "priority": "P1",
         "acceptance_criteria": "研究問題：Trace 0x807B40 parser 0x2633/0x22D7 behavior, 0x727190 and checksum mismatch into 0x807E50 and node/pool handling; specify only server-relevant error or compatibility requirements.\nGAP-NET-0003：Clarify 0x2633/0x22D7 field semantics, 727190 behavior and checksum failure node/pool handling; tie client message handlers to T03-relevant S2C and applicable state.",
         "claim": {
@@ -286,7 +286,12 @@
           "base_commit": "057fa32ff2ef5c347e7b30d269a18a5fcba5daa8",
           "date": "2026-10-30"
         },
-        "submission": null,
+        "submission": {
+          "report_path": "kr-extra-roy/20261030-112205-chatgpt-web-roy-E59-RR0006-compressed2633-22D7-decode-checksum-pool-IOCP.md",
+          "report_blob_sha": "c7c1474b6b3cf928b8031e17fad7761c488d9b18",
+          "date": "2026-10-30",
+          "summary": "KR T02 RR-0006 bounded BIN-first report E59: inbound 0x2633 8-byte header + 0x7C rolling XOR + 0x727190 inflate-like return/status/output cap 0x1000; 0x22D7 is 4-byte raw path also shared with unknown markers; 0x0BBB checksum mismatch vs compressed decode failure both bypass 0x807E50 and recycle zero-length node through 0x804310→0x8076F0; malformed n=0 or >0x1000 returns parser0 and follows different IOCP branch; incomplete frames are retained/compacted, valid payload can reach 0x4930E0 and conditional T03 handlers via lane2. Synthetic zlib/XOR example is not official KR wire. Original Tartaros.bin SHA256 9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91. For T01/S00 bounded review; not ACCEPTED or FULL-PASS."
+        },
         "review": null,
         "events": [
           {
@@ -309,6 +314,13 @@
             "actor": "chatgpt-web roy",
             "date": "2026-10-30",
             "note": "E59 original BIN-first compressed 0x2633/0x22D7, inflate 0x727190, checksum mismatch and 0x807E50 node/pool lifecycle report completed on rr/t02/roy/rr-0006 commit 6f6066e2e4612bea97f48b345aadacdbdecb02f7; report blob c7c1474b6b3cf928b8031e17fad7761c488d9b18; formal SUBMITTED status follows."
+          },
+          {
+            "from": "IN_PROGRESS",
+            "to": "SUBMITTED",
+            "actor": "chatgpt-web roy",
+            "date": "2026-10-30",
+            "note": "KR T02 RR-0006 bounded BIN-first report E59: inbound 0x2633 8-byte header + 0x7C rolling XOR + 0x727190 inflate-like return/status/output cap 0x1000; 0x22D7 is 4-byte raw path also shared with unknown markers; 0x0BBB checksum mismatch vs compressed decode failure both bypass 0x807E50 and recycle zero-length node through 0x804310→0x8076F0; malformed n=0 or >0x1000 returns parser0 and follows different IOCP branch; incomplete frames are retained/compacted, valid payload can reach 0x4930E0 and conditional T03 handlers via lane2. Synthetic zlib/XOR example is not official KR wire. Original Tartaros.bin SHA256 9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91. For T01/S00 bounded review; not ACCEPTED or FULL-PASS."
           }
         ]
       }
