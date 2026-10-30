@@ -55,6 +55,10 @@ class ServerRequirementTests(unittest.TestCase):
         self.edit(lambda d: d["items"][0]["discoveries"][0].update(claim_ids=["CLM-FAKE"]))
         self.assertTrue(any("unknown claim" in s for s in evaluate(self.root)["errors"]))
 
+    def test_code_claim_must_be_consistent_with_top_level_requirement(self):
+        self.edit(lambda d: d["items"][0].update(claim_ids=[]))
+        self.assertTrue(any("discovery claim missing" in x for x in evaluate(self.root)["errors"]))
+
     def test_mutated_cross_version_requirement_is_rejected(self):
         self.edit(lambda d: d["items"][0].update(client_version="tc"))
         errors = evaluate(self.root)["errors"]
