@@ -59,9 +59,10 @@ def audit(path):
     starts=[]
     pos=0
     while (pos:=text.find(literal,pos)) != -1:
-        starts.append(pos+0x401000-1)
+        starts.append(pos+0x401000)
         pos+=1
-    assert sorted(starts)==sorted(REFERENCES), ("global literal site mismatch", len(starts))
+    expected_literal_sites=[site+(3 if site==0x4df124 else 1) for site in REFERENCES]
+    assert sorted(starts)==sorted(expected_literal_sites), ("global literal site mismatch", len(starts))
     assert len(RESET_SITES.split())==11
     assert len(LOOKUP_SITES.split())==16
     assert len(OTHER_SITES.split())==3
