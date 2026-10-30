@@ -45,3 +45,14 @@
 ## Iteration 12／13 — 登入至角色畫面逐項交付（2026-10-30）
 
 前次未提交的 Iteration 12 草案現在以 [完整規劃](S00-20261030-ITERATION-12.md) 與 [12 個尚未執行的設計測試](s00-iteration12-lobby-test-plan.json) 整合進 main；接續 [Iteration 13 工作優先順序](S00-20261030-ITERATION-13.md)、[9 個 L00–L08 檢查點](s00-lobby-gates.json) 和 [唯讀檢查器](check_s00_lobby_gates.py)。新對話**先看當時最新 main**，跑 `python -B governance/check_s00_lobby_gates.py --check` 及 `--json`。此矩陣目前全部 BLOCKED，是因為正式 REQ/RR/GAP/SPEC 和原版實測仍不足，不是 CI 錯誤。優先 **P13-1：T03 roster→UI event/dialog（T06 只負責同版本資源協查）**；再做 **P13-2：T02/T03 登入/選服/跨 conn 的方向別前提**；再 **P13-3：T03/T04/T06 創角的真正 C2S/S2C positive evidence**。本節是追加交接快照，不更動前面的 Git 提交授權、原版 Client 禁止執行及唯一 REQ/RR 台帳規則。
+
+## Iteration 20 — 全旅程逐 Gate 去重與研究候選（2026-10-31）
+
+本次接續 [Iteration 19 的整合驗收計畫](s00-iterations/S00-20261031-ITERATION-19-END-TO-END-ACCEPTANCE.md)，新增 [Iteration 20 完整分析](s00-iterations/S00-20261031-ITERATION-20-GATE-TRIAGE-AND-RR-DEDUP.md) 與 [37 Gate source-linked 快照](s00-iterations/S00-ITERATION-20-GATE-EVIDENCE-TRACE.json)。新對話請先核對**當時最新** main 和唯一權威索引，而非延用文件內的快照狀態：
+
+1. **P0**：E04 空角色清單 → E05 創角 UI → E06 C2S/S2C Create 真正 producer/consumer（不能把 selection `0x42` 當 creation）；核對 T03/T04/T06，與 RR-0002/0007 去重後才可能建立新 RR。
+2. **P0**：E08–E12 selection → scene → tutorial first interaction；RR-0002 仍受原版 Server 正向 success/error pairing 限制，RR-0008 已有範圍，不重複要求相同研究。
+3. **P1**：E17-B/F/G/H 的 monster spawn、技能施放、傷害/死亡、勝負目標需要同一 scene/instance 的 bounded native 因果證據；迭代 18 的 CR18-01..06 是候選，尚非正式 RR。
+4. **P1**：E18–E26 將 Scenario14 settlement、QuestInfo14、Quest16、Quest15 可接、教學離場和重登持久化分開驗收。Server 自訂冪等／fencing 如要採用先經 ADR，不能寫成原版 protocol。
+
+Iteration 20 沒有修改正式台帳、原 Client/BIN 或 Server 程式。JSON `linked_existing_*_ids_from_plan` 是 **Iteration 16 規劃的引用**，絕非新增的精確 native proof；新提案需沿用現有 S00/RR 註冊與 T01 review 流程。I20-T01..T12 尚未執行、未註冊正式 TEST，Original Client E2E 仍需要另外明確授權。
