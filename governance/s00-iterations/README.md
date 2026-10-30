@@ -87,3 +87,11 @@ Iterations 16–17 的正式流程編號合計 **E00–E26（27 個 gate）與 4
 - [Iteration26 19-gate JSON matrix](S00-ITERATION-26-ENCOUNTER-QUEST-EXIT-MATRIX.json)：逐 gate 保存原始 Iteration17/18 evidence_state、blocking_unknown、source Git blob、research owner、native missing proof、Server 端 proposed domain；非正式 RR/GAP/TEST 台帳或官方 Server 時序。
 - [18 項 I26-T01～T18 未執行測試](S00-20261031-ITERATION-26-ACCEPTANCE.md)：DOMAIN/NEGATIVE/CONCURRENCY/RECOVERY/STATIC/E2E，全部 PLAN_ONLY/NOT_RUN。CI 以 `python -B governance/check_s00_iteration26.py --check` 和 13 項回歸測試保護原始 source evidence level 不被假升格。
 - [ADR-0007](../../design/decisions/ADR-0007-encounter-quest-settlement-boundaries.md) PROPOSED/NON-NORMATIVE，保持既有 7 個 roadmap 工作包，不動研究 RR/CLM/REQ/TEST、Task owner 或獨立 Server 實作庫；原版 Client 未執行。
+
+
+## Iteration 27（2026-10-31）：以真實 Server C03/C04 基線規劃 C05 可接手任務
+
+- [Iteration27 完整開發交接](S00-20261031-ITERATION-27-C05-DELIVERY-PLAN.md)：比對 `ttr_server_roy main=c17a986fc66caca8af0efb72e2b42d1188e2a584` 的 C03-C `IAtomicCharacterActions`／`ISessionLeaseRegistry`、本地 SQLite 與獨立 PostgreSQL migrations、C04-A/B/C bounded offline 實際進度，避免重做既有交易、錯當 C05 已開發。
+- [9 個 S27-W01～W09 工作包機讀矩陣](S00-ITERATION-27-C05-DELIVERY-MATRIX.json)：八個 `DOMAIN_OFFLINE_PROTOTYPE` 與一個 `SOURCE_GATED_NO_IMPLEMENTATION` 原 Client adapter；記錄上游 Iteration26 來源 Git blob SHA 與 5 個已核對 Server Git blob。CI 本身**不會連線自動重新驗證遠端 Server 庫**，Server snapshot 只是這一輪的固定基準。
+- [I27-T01～T18（18 項）未執行驗收草案](S00-20261031-ITERATION-27-C05-ACCEPTANCE.md)：角色/Session ownership、Encounter/Actor/AI/Skill/Scenario 結算、Quest/Reward/Outbox、退出重登、原生 no-go；全部 `PLAN_ONLY / NOT_RUN`，不是正式 conformance TEST。
+- [read-only checker](../check_s00_iteration27.py) 及 15 項單元回歸測試護欄接入 GitHub CI；**不新增重複正式 RR/REQ/CLM/TEST、不可核准 ADR-0006/0007、不修改獨立 Server 程式庫或 spec pin**。C-TUTORIAL-DOMAIN 仍 Phase C / EXTERNAL_REVIEW_REQUIRED。
