@@ -110,6 +110,9 @@
 
 ### T01-RETURN-T08-LEGACY-MAPPING-001 — NEEDS_FIX（來源映射已定位）
 
+> **2026-10-31 03:09～03:15：CDoll/CModel分型與真Node→Model virtual caller補證，LEGACY仍NEEDS_FIX**：完整工作索引 [T01 legacy](../../../kr-temp-roy/T01-legacy-pe-crosswalk/README.md)，blob **ca363f6d468e99221c81160aab895b4839202010**，新增三份KR BIN-first原生研究：CModel虛表+8真7D3470具有兩段直接global bucket store及另一7D3601→79A3C0 helper（blob **005ee32ca6fdd3fe201d5b8c83df35b641e710f3**）；CItemNodeSimple primary vtable+0x2C真7FC360依Node+34轉送CModel vtable+8（blob **a5b43035c9906b4ba737a35d232ab266758b9b40**）；真owner呼叫鏈7EF912→7F07B0→7F0810→7FC380由同一個Node配置CModel、寫Node+34並交給後置7B31F0 list dispatcher（blob **80471c49eadbddbae5446b97a0debaf73024e4c8**）。RTTI CHD證CDoll/CModel皆繼承IRenderable但彼此不繼承，因此CDoll slot+8 7A63C0入B queue與CModel slot+8 7D3470寫bucket**不得混成同一方法**。同一全域bucket指標可由 FB76A8+98 = FB7740 精確證實。**尚需**真正scene loop/Node slot+2C caller、CDoll B→CModel/bucket的跨物件dataflow、釋放時序及全部24篇來源之T01全文驗證；不宣告B→22桶已閉合，不更動原FAILED及T01審核狀態。
+
+
 > **2026-10-31 T08-152 真PE／RTTI針對性勘誤已提交；整體仍NEEDS_FIX**：新完整有界技術來源 [T08-152 native PE/RTTI](../../../kr-temp-roy/20261031-025103-chatgpt-web-roy-T08-152-native-PE-RTTI-vtable-and-producer-xref-corrections-FULL.md)，Git blob **14813f82c72673a0ffe271dcdc23ad6abcb106f3**；[T01 legacy索引](../../../kr-temp-roy/T01-legacy-pe-crosswalk/README.md) blob **8b6bd1bb76ec949c43aa75ff3041bb858fcd377b**。由KR原BIN再核：原152將.text全檔raw0映射錯高0x400，造成7A8310、7A8E10、7A3920、4CA660被誤判為指令中段；它們在真PE均是有效入口。**復用T08-201已核CDoll多vfptr／RTTI配置**並補上更完整COL表界及一手static引用：CDoll主vptr C4F67C +0x08 = **7A63C0 B producer**，B子vptr C4F6C0 +4=7A8310/+8=7A8E10，C4F6CC是下個Ref_count<ModelReleaseSpec>的COL，**不是B-entry+0x0C方法**。仍未驗主vptr+8真正間接caller、動態vptr、B→22桶因果及24篇舊來源的完整肯定主張。保留T01歷史，**不標READY_FOR_REVIEW／RESOLVED**。
 
 
