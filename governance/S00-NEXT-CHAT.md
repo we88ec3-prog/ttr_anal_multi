@@ -126,3 +126,14 @@ E80 是 **RR-0002 選角的研究**，不是 RR-0010 真正建立 playable-chara
 關鍵源級邊界：local C2S40 00 0E 00 可能請求 Scenario14，另 S2C0x4C 本地 CTutorial map[14] 可表示 Lua scenario-ended，**但沒有已證原版 Server pairing**，更不等於 Quest14 complete/Quest16 complete/TutorialCompleted。Quest15 available≠accepted/completed；Quest16 Reward type2/value50 不得冒稱 EXP/金錢。E25/26 normal-world/重登仍缺真 Client→Scene→Actor/Control Ready positive proof。
 
 下一輪開工：Server-only 先做 S26-C01/C02 Encounter/Actor → C03/C04 AI/action/skill/damage → C05/C06 settlement/recovery → C08 Quest14/16/15＋reward→ C09 terminal/exit／relogin；原始 Client protocol adapter C07 只在 T02/T07/T08/T09/T10/T14/T15/T16 等同版正向證據完整後，另經授權 runtime 才考慮打開。現有 RR-0002/0010 BLOCKED、RR-0008 IN_REVIEW，GAP-SCENE OPEN，SPEC-FLOW/SCENE DRAFT/PARTIAL；ADR-0006/7 PROPOSED、沒有被主庫 CI 自動批准。
+
+
+## 2026-10-31 — Iteration 27：C05 實際可接手規劃（先確認新 main）
+
+本輪先核對 `ttr_anal_multi main=5c1aac53faf4638c72a000f673ee04750fdcdf4c` CI #41127783472 **SUCCESS**，再讀 `ttr_server_roy main=c17a986fc66caca8af0efb72e2b42d1188e2a584` 的 C02/C03 transactional APIs、C04 offline probes、原來源 pin `dd69ec9...` 仍未升正式 Client wire。未做 Server 實作/原 Client 運行。
+
+已新增 [Iteration27 C05 工程交接](s00-iterations/S00-20261031-ITERATION-27-C05-DELIVERY-PLAN.md)、[S27-W01～W09 9 工作包 JSON](s00-iterations/S00-ITERATION-27-C05-DELIVERY-MATRIX.json)、[I27-T01～T18 驗收計畫](s00-iterations/S00-20261031-ITERATION-27-C05-ACCEPTANCE.md)。W01 C03 lease/selected-role seam → W02 Encounter Admission → W03 Actor/AI → W04 Attack/Skill/Hit → W05 Scenario Settlement → W06 Quest14/16/15 → W07 Reward/Outbox → W08 tutorial terminal/exit/relog；W09 原 Client adapter **維持 OFF** 及獨立 source/runtime gate。全部工作包尚待正式 Server owner 接手，並非在 `ttr_server_roy` 有實作結果。
+
+與 Iteration26 19-gate source overlay 精確連結；整合後的 S00 CI 會驗證工作包 DAG、現有原始 gate refs、ADR-0006/0007 仍 PROPOSED、18 個 `NOT_RUN`、native adapter 不可自動開啟。**這只驗規劃不驗 Client 可玩**。下次如果使用者明確要 Server 開發，應改在 `ttr_server_roy` 開實作 PR 並跑 .NET/SQLite/PostgreSQL 測試、保留原始 `contracts/spec-revision.json` 原來源 pin 的版本審查，不可以因為新 S00 main 就把 proposed ADR 認為 approved。
+
+此時正式 RR-0002/0010 BLOCKED、RR-0008 IN_REVIEW、SPEC-FLOW/SCENE DRAFT/PARTIAL；如有人更新主分支，優先重讀 registry，不用此快照代替當前唯一權威。
