@@ -37,15 +37,22 @@ class PhaseBWorklistTests(unittest.TestCase):
         operation(j)
         dest.write_text(json.dumps(j, ensure_ascii=False), encoding="utf-8")
 
-    def test_baseline_eight_queued_no_submissions(self):
+    def test_baseline_canonical_queued_requests_no_submissions(self):
         result = evaluate(self.root)
         self.assertEqual(result["errors"], [])
-        self.assertEqual(result["summary"]["selected_requests"], 8)
+        registry = json.loads((self.root / "research/requests/index.json").read_text(encoding="utf-8"))
+        expected_ids = {r["id"] for r in registry["items"]}
+        self.assertTrue({"RR-0009", "RR-0010"}.issubset(expected_ids))
+        self.assertEqual(result["summary"]["selected_requests"], len(expected_ids))
         self.assertEqual(result["summary"]["new_submissions"], 0)
-        self.assertEqual(result["summary"]["ready_to_be_claimed"], 8)
+        self.assertEqual(result["summary"]["ready_to_be_claimed"], len(expected_ids))
         self.assertEqual(result["summary"]["blocked_phase_b_packages"], 5)
-        self.assertEqual({x["rr_id"] for x in result["requests"]},
-                         {f"RR-{n:04}" for n in range(1, 9)})
+        self.assertEqual({x["rr_id"] for x in result["requests"]}, expected_ids)
+        for rid in ("RR-0009", "RR-0010"):
+            row = next(x for x in result["requests"] if x["rr_id"] == rid)
+            self.assertEqual(row["dispatch_state"], "QUEUED")
+            self.assertEqual(row["delivery_mapping"], "MILESTONE")
+            self.assertIn("B-CHAR", row["milestone_ids"])
         self.assertTrue(all(not x["has_submission"] for x in result["requests"]))
         self.assertEqual(result["summary"]["research_backlog_without_milestone"], 1)
         self.assertEqual(next(x for x in result["requests"] if x["rr_id"] == "RR-0006")["delivery_mapping"],
@@ -61,7 +68,7 @@ class PhaseBWorklistTests(unittest.TestCase):
         self.assertEqual({x["rr_id"] for x in t02["requests"]},
                          {"RR-0001", "RR-0004", "RR-0005", "RR-0006", "RR-0007"})
         self.assertEqual({x["rr_id"] for x in t03["requests"]},
-                         {"RR-0002", "RR-0003", "RR-0008"})
+                         {"RR-0002", "RR-0003", "RR-0008", "RR-0009", "RR-0010"})
         self.assertTrue(all(x["client_version"] == "kr" for x in t03["requests"]))
         self.assertTrue(all("COV-" in ",".join(x["coverage_ids"]) for x in t02["requests"]))
 
