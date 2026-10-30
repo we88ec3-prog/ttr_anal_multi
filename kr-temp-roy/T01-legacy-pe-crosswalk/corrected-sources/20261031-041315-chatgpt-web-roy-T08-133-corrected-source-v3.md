@@ -13,7 +13,7 @@
 
 原舊0x7E8640→真0x7E8240 keyed registry；真0x7E86E0→0x7E8A00為查找支線，0x7BB350為通用append helper，不能把所有append都視為同一record owner。
 
-**原生詳細核對**：[`20261031-020700-chatgpt-web-roy-T08-133-LEGACY-MAPPING-PE-registry-revision.md`](../20261031-020700-chatgpt-web-roy-T08-133-LEGACY-MAPPING-PE-registry-revision.md)。該source提供真PE入口附近機器碼、根CFG／vtable owner，對本篇主張的影響不應用「整篇直平移」取代；同類交叉補證在 [134～151交付索引](../20261031-023700-chatgpt-web-roy-T08-T01-legacy-134-151-BIN-correction-delivery-index.md)、[T08-152 RTTI](../20261031-025103-chatgpt-web-roy-T08-152-native-PE-RTTI-vtable-and-producer-xref-corrections-FULL.md)。
+**原生詳細核對**：[`20261031-020700-chatgpt-web-roy-T08-133-LEGACY-MAPPING-PE-registry-revision.md`](../../20261031-020700-chatgpt-web-roy-T08-133-LEGACY-MAPPING-PE-registry-revision.md)。該source提供真PE入口附近機器碼、根CFG／vtable owner，對本篇主張的影響不應用「整篇直平移」取代；同類交叉補證在 [134～151交付索引](../../20261031-023700-chatgpt-web-roy-T08-T01-legacy-134-151-BIN-correction-delivery-index.md)、[T08-152 RTTI](../../20261031-025103-chatgpt-web-roy-T08-152-native-PE-RTTI-vtable-and-producer-xref-corrections-FULL.md)。
 
 **否證／剩餘邊界**：record registry建立與B entry fn4在所有分支必然調用尚未證明。
 
