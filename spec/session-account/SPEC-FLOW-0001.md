@@ -6,14 +6,24 @@
 
 | Client 階段 | 可觀察且有來源的事實 | Server 開發需要但仍未知的部分 | 關聯 |
 |---|---|---|---|
-| 1. C→S 認證請求 | Client 可產生 E8/112-byte 或 000F/214-byte 兩種不同的本地 payload，不能互用 | 依 launcher/mode 的完整入口、選擇哪種命令的先後時序、E8 opaque bytes、Server 官方驗證方式 | [SPEC-AUTH-0001](SPEC-AUTH-0001.md) |
-| 2. S→C 登入結果 | `0x4C37A0` 在 status=0 且 +2 wide 名稱非空時進資料更新；status5 為不同非成功分支；群組/頻道資料有 3+10 bytes 消費格式 | 完整 response opcode、欄位/長度/有效值、token/租約、各分支後的下一則訊息；此處**不假定**一個回覆必然導致切線 | SPEC-AUTH-0001 |
-| 3. 連線/選服 | 三個有界 KR Connect callsite 指向 port 8415(slot1)、8416(slot0)、8414(slot2)，其 pipeline 參數皆為2；這是**靜態 Client 路徑** | 是否在同一條 runtime 路徑依次連三個埠、真正選服觸發點、endpoint 權威、Session handoff/重連時序 | [SPEC-NET-0002](../protocol/SPEC-NET-0002.md) |
+| 1. C→S 認證請求 | Client mode `0x52` 產生 E8/112-byte、mode `0x54`／其他產生 000F/214-byte 本地 payload，queue slot1；E8 輸出轉碼 CP_ACP 與前置 FBA808 global 路徑不同，不能互用 | launcher 何時選某 mode、E8 `+104..109` 局部未直接賦值六 bytes 的真實值／Server 政策、整條傳輸與 first-response 時序 | [SPEC-AUTH-0001](SPEC-AUTH-0001.md) |
+| 2. S→C 登入結果 | 有效 LOGIN scene 二層表有 S2C app `0x0013→0x4C37A0`、`0x007A→0x4C3C10`；`0x13` status 在 `+0x16`（0+非空 UTF-16 名稱才局部成功；5 專用失敗），群組游標 `+0x92`；`0x7A` group count `+2`、游標 `+6`；group/child 消費 3+10n | 真實原版 Server 是否送這些 handler、回覆的完整 byte extent 與先後、token/租約、短包／無 NUL 行為及後續必要 C2S；**不假定** 0x13 成功就切線 | SPEC-AUTH-0001 |
+| 3. 連線/選服 | 三個有界 KR Connect callsite 指向 port 8415(slot1)、8416(slot0)、8414(slot2)，其 pipeline 參數皆為2；`0x13` success+`+0x90==0` 先透過 `0x4C3170` 發 **本地** F4241，UI selection 需滿足額外 gate 才到 `0x4957C0`；均為**靜態 Client 路徑** | 是否在同一條 runtime 路徑依次連三個埠、真正選服觸發點、endpoint 權威、Session handoff/重連時序 | [SPEC-NET-0002](../protocol/SPEC-NET-0002.md) |
 | 4. S→C 角色清單 | handler index2 使用有效路徑上的 `65+53*N` payload；選定 record 欄位可寫入 UI 資料 | 65-byte prefix 業務值、帳號授權、有效資源與 UI 更新、完整角色初始化回覆鏈 | [SPEC-CHAR-0001](SPEC-CHAR-0001.md) |
 | 5. C→S 角色選擇 | T03 現有研究觀察到 command 42 的 4-byte 候選請求 | 42 的完整權威欄位、成功/失敗 S2C response pairing、角色初始化/切線狀態 | SPEC-CHAR-0001 |
 | 6. Client 場景/教學資源 | `Event/SceneList.xml` 包含 `(1001,1)→tutorial_start` 靜態列；Client 有雙鍵 reader 組 `Event/Sequences/<funcName>.seq` 載入路徑 | **尚無原生關係證明**選角 `0x42` 回覆、首登旗標或任何 S2C payload 觸發 `(1001,1)`；也無法宣稱每個新角色必入教學 | [SPEC-SCENE-0001](../world/SPEC-SCENE-0001.md) |
 
 **重要：**上表是不同研究覆蓋的相鄰功能，**不是已驗證的一條完整時序**。不得將表格的行順序寫成已觀察的原版 Client packet trace。
+
+## 2026-10-30 RR-0003／RR-0005 有界交叉核對
+
+- **S2C app opcode 可識別不等於真實回覆配對**：`0x0013`、`0x007A` 在 LOGIN 場景有 Native handler（`CLM-AUTH-0004`；T02 `CLM-NET-0030`），但 C2S E8/000F 與原始 Server 實際先回哪一包、用了哪個 frame marker、怎麼分 socket，沒有同一條觀測的 wire trace。
+- **文字轉換有兩個層次**：`FBA808` 是 PE zero-tail 初始0之全域 codepage（runtime alias 未證）；E8 local payload builder 的輸出文字 WCTMB 直接使用 CodePage=0（CP_ACP），見 `CLM-AUTH-0003/0006`，不能把這兩條路徑偷換成固定 CP949/UTF8。
+- **群組資料長度是 Producer 最低可讀 extent，不是原生安全核准**：`0x13` count `+0x1C`、cursor `+0x92`；`0x7A` count `+2`、cursor `+6`；group 3 bytes、child 10 bytes，缺少本地每筆 remaining-length guard（`CLM-AUTH-0005`）。
+- **先有本地事件，不必立即建立 key0/key2**：`0x4C3170` 受 `+0x90==0` gate，通知 `F4241` 不等於網路 packet；選服 UI 還要有 record/mapping 和指標前提。T02 `RR-0005=ACCEPTED` 僅限已提交的局部 Client static handoff，`GAP-NET-0002` 仍 OPEN；T03 `RR-0003=IN_REVIEW`，`GAP-AUTH-0001` 尚未結案。
+- **選角與教學不能借 AUTH 的成功分支補完**：`RR-0002=BLOCKED`、`RR-0008=IN_REVIEW`（截至本次核對）；既有場景資源 `(1001,1)` 及 S2C app `0x42` handler 不是已證的「選角成功即播放教學」規則。
+
+此處是 [SPEC-AUTH-0001](SPEC-AUTH-0001.md) 和 [Phase B matrix](phase-b-message-matrix.md) 的有界交叉整理，不是新執行原始 Client、原版 Server 測試或 `RR-0003` 正式 `ACCEPTED`。
 
 ## 客戶端界面與 Server 設計分層
 
@@ -25,4 +35,4 @@
 
 可以分別實作 T02 framing 子集、E8/000F payload 解析、command2 roster 資料幾何，並於實作庫分開管理自己的帳號 Session；但**不能只依本文件完成原版 Client 的登入/選角/教學端到端運行**。
 
-開發前的阻塞：`GAP-AUTH-0001`、`GAP-CHAR-0001`、`GAP-NET-0002`、`GAP-FLOW-0001`、`GAP-SCENE-0001`；研究請求 `RR-0002`、`RR-0003`、`RR-0005`、`RR-0008`。來源 `CLM-AUTH-0001/0002`、`CLM-NET-0007`、`CLM-CHAR-0001/0002`、`CLM-SCENE-0001..0004`，全部 PARTIAL。**本規格沒有新增 wire conformance fixture 或運行證據，不可升 STABLE。**
+開發前的阻塞：`GAP-AUTH-0001`、`GAP-CHAR-0001`、`GAP-NET-0002`、`GAP-FLOW-0001`、`GAP-SCENE-0001`；研究請求 `RR-0002`、`RR-0003`、`RR-0005`、`RR-0008`。來源 `CLM-AUTH-0001..0006`、`CLM-NET-0007/0018..0020/0030`、`CLM-CHAR-0001/0002`、`CLM-SCENE-0001..0004`，全部 PARTIAL。**本規格沒有新增 wire conformance fixture 或運行證據，不可升 STABLE。**
