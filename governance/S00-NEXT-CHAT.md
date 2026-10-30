@@ -137,3 +137,15 @@ E80 是 **RR-0002 選角的研究**，不是 RR-0010 真正建立 playable-chara
 與 Iteration26 19-gate source overlay 精確連結；整合後的 S00 CI 會驗證工作包 DAG、現有原始 gate refs、ADR-0006/0007 仍 PROPOSED、18 個 `NOT_RUN`、native adapter 不可自動開啟。**這只驗規劃不驗 Client 可玩**。下次如果使用者明確要 Server 開發，應改在 `ttr_server_roy` 開實作 PR 並跑 .NET/SQLite/PostgreSQL 測試、保留原始 `contracts/spec-revision.json` 原來源 pin 的版本審查，不可以因為新 S00 main 就把 proposed ADR 認為 approved。
 
 此時正式 RR-0002/0010 BLOCKED、RR-0008 IN_REVIEW、SPEC-FLOW/SCENE DRAFT/PARTIAL；如有人更新主分支，優先重讀 registry，不用此快照代替當前唯一權威。
+
+
+## 2026-10-31 — Iteration 28：C05 W01～W03 第一組可實作契約
+
+開工已核對 S00 `main=97e019c603bea79a7774631e82195b13be207fc4`，其 Actions #41129086650 SUCCESS；Server `ttr_server_roy main=c17a986fc66caca8af0efb72e2b42d1188e2a584` 的 `IAtomicCharacterActions`、`ISessionLeaseRegistry`、`SessionLease`、SQLite/PostgreSQL 選角存儲與 schema。**下次要先重讀最新 main，不可把本快照當最新**。
+
+[Iteration28 詳細設計](s00-iterations/S00-20261031-ITERATION-28-W01-W03-IMPLEMENTATION-PLAN.md)、[S28-01/02/03 機讀契約](s00-iterations/S00-ITERATION-28-C05-W01-W03-CONTRACT.json)、[16 個 I28-Txx NOT_RUN 測試](s00-iterations/S00-20261031-ITERATION-28-W01-W03-ACCEPTANCE.md) 已把 W01～W03 拆成三個預定下游 Server PR：
+- **C05-P1**：新原子 persistence contract 在同資料交易查 exact SessionLease/selected-role ownership 並 ReserveEncounter，絕不能只信任另一 transaction 讀到的 `GetSelectedAsync` 結果；SQLite writer/PG Session row FOR UPDATE 鎖序要對齊既有 C03。
+- **C05-P2**：Encounter RESERVE→ACTIVE→終局、CAS、Session renew/revoke/relog fencing、crash 後 idempotent reconcile。Resume/abort policy 未批准只能 mock。
+- **C05-P3**：可重現的 mock Actor spawn/AI tick/movement（fixture SHA/seed、同 EncounterId 唯一事件/版本、錯 role/actor/tick 拒絕），**不等於原版 Scenario14 敵人資料或協定**。
+
+SQLite local user_version=1、PostgreSQL 已有 migration003，任何新表都需獨立 schema/migration/recovery review；**本輪沒有在獨立 Server repo 實作/提交 migration，也沒有執行原 Client**。ADR-0006/0007 仍 PROPOSED，不可因 S00 CI PASS 自動核准、不可開原版 KR/TC codec。後續可以接續 Iteration27 W04（Attack/Skill/Hit）的細分，或由 Server 開發者在其 repo 接手 P1。
