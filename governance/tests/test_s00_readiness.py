@@ -45,8 +45,12 @@ class ReadinessTests(unittest.TestCase):
         self.assertEqual(data["errors"], [], data["errors"])
         self.assertEqual(len(data["packages"]), 6)
         self.assertEqual(data["summary"]["specs"], 7)
-        self.assertEqual(data["summary"]["gaps_open"], 7)
-        self.assertEqual(data["summary"]["requests_queued"], 8)
+        gaps = json.loads((self.root / "design/gaps/index.json").read_text(encoding="utf-8"))["items"]
+        requests = json.loads((self.root / "research/requests/index.json").read_text(encoding="utf-8"))["items"]
+        self.assertTrue({"GAP-CHAR-0002", "GAP-CHAR-0003"}.issubset({g["id"] for g in gaps}))
+        self.assertTrue({"RR-0009", "RR-0010"}.issubset({r["id"] for r in requests}))
+        self.assertEqual(data["summary"]["gaps_open"], sum(g["status"] != "RESOLVED" for g in gaps))
+        self.assertEqual(data["summary"]["requests_queued"], len(requests))
         self.assertEqual(data["summary"]["tests_offline_synthetic"], 6)
         self.assertTrue(all(x["status"] == "BLOCKED" for x in data["packages"]))
         self.assertTrue(any("OFFLINE_SYNTHETIC_ONLY" in b for b in data["packages"][0]["blockers"]))

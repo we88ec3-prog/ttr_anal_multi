@@ -80,3 +80,8 @@ Server 需求採用 [唯一 REQ 台帳](../design/requirements/README.md)，**�
 ## Iteration 12／13 — Lobby 分段契約閘門
 
 [Iteration 12 規劃](S00-20261030-ITERATION-12.md) 已按 L00–L08 拆開 Client 有界證據、未證 Server 責任及測試來源；[Iteration 13](S00-20261030-ITERATION-13.md) 使用 [同一 REQ/RR/GAP/SPEC 台帳派生的矩陣](s00-lobby-gates.json) 分別追 UI 就緒、登入跨線與創角 positive evidence。CLI `python -B governance/check_s00_lobby_gates.py --check` 僅檢查計畫內一致性，不能將原版 Client 相容或研究請求結案自動宣稱完成。12 個 L12-Txx 全部尚未執行且不建立正式 TEST 項，原版 Client runtime 仍需另行明確授權。新的共同交接入口維持 [S00-NEXT-CHAT.md](S00-NEXT-CHAT.md)。
+
+
+## Iteration 21 — 創角契約的正式缺口／去重後派工
+
+[正式分析與差異](s00-iterations/S00-20261031-ITERATION-21-CREATE-UI-WIRE-DISPATCH.md) 建立 `RR-0009`（E05：N=0/新增按鈕→Create UI 的本地 scene/dialog/event 正向入口）、`RR-0010`（E06：**Create** C2S 與匹配 S2C consumer／roster refresh），分別連至新 `GAP-CHAR-0002/0003`，研究 owner 均為 KR T03；T06/T04/T02 只提供既有職責內的跨 Task 介面。既有 `RR-0002` selection、`RR-0007` dispatcher、`RR-0008` selection→scene 不應被覆蓋或任意升級。新的 T03 inbox 由唯一 RR 台帳同步產生，只有 main 合併後供認領；沒有自動通知、沒有原 Client runtime 授權。SPEC-CHAR/FLOW 保留 DRAFT/PARTIAL。
