@@ -55,7 +55,7 @@
 
 ## 4. 復現及靜態核驗分級
 
-- 使用[`verify_legacy_corrected_sources.py`](T01-legacy-pe-crosswalk/verify_legacy_corrected_sources.py)（blob `028546a2f713d59ab658ac936a9f7abee56b69ad`）可在完整Git checkout＋本地原始KR BIN執行：
+- 使用[`verify_legacy_corrected_sources.py`](T01-legacy-pe-crosswalk/verify_legacy_corrected_sources.py)（blob `9307472bde8ca61972a8cb3312f1283ce4a1407d`）可在完整Git checkout＋本地原始KR BIN執行：
 
 ```sh
 python -B kr-temp-roy/T01-legacy-pe-crosswalk/verify_legacy_corrected_sources.py --repo . --bin /path/to/Tartaros.bin
