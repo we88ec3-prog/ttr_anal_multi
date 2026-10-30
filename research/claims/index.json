@@ -10707,6 +10707,66 @@
         }
       ],
       "review_ref": "research/handoffs/t01-20261030-extra-t16-r2/batch3.md"
+    },
+    {
+      "id": "CLM-NET-0018",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/20261030-091559-chatgpt-web-roy-E56-RR0005-bounded-static-completion-transport-owner-retry-reply.md",
+      "source_blob_sha": "843889349bb58209c02221e720800f0e9e3ff9d8",
+      "source_intake_id": "SRC-0451",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 0x495610 key1 Connect helper and six native direct callers 0x6D6377/6424/6508/65C8/670C/696C",
+      "assertion": "Exactly six raw direct E8 candidate call sites were found in the inspected KR .text for 0x495610, each confirmed in known caller entry windows; their third parameter is 0/0/1/0/0/0, with two callback-only local paths and four manager-key1 local send candidates of lengths 0x38,0x68,0x2CE,0x2CE.",
+      "limitations": "Indirect callers, actual runtime ordering, complete builder payload layouts, queue acceptance and first wire unproven. 0x495610 may reuse existing BF60 when flag=0.",
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "related_claim_ids": [
+        "CLM-NET-0017"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-extra-t16-r2/batch6/R2-E56-REVIEW.md",
+      "integration_status": "R2_BOUND, NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-NET-0019",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/20261030-091559-chatgpt-web-roy-E56-RR0005-bounded-static-completion-transport-owner-retry-reply.md",
+      "source_blob_sha": "843889349bb58209c02221e720800f0e9e3ff9d8",
+      "source_intake_id": "SRC-0451",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 0x4957C0 selection Connect key0/key2 and 0x495935 0x39-byte queue then 0x49594A/958 WSARecv post, 0x49595B/962 BF aliases",
+      "assertion": "0x4957C0 invokes both key0 and key2 Connect helpers before NULL checks; when both yield non-NULL Conn it attempts key0 local queue and both receive post calls and writes BF64/BF68 then returns literal 1 without inspecting those three calls' return values.",
+      "limitations": "Return1 does not prove local send enqueue success, WSARecv post success, live socket, actual wire or server response; failure branches only show shutdown-by-key in this function.",
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "related_claim_ids": [
+        "CLM-NET-0014",
+        "CLM-NET-0017"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-extra-t16-r2/batch6/R2-E56-REVIEW.md",
+      "integration_status": "R2_BOUND, NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-NET-0020",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/20261030-091559-chatgpt-web-roy-E56-RR0005-bounded-static-completion-transport-owner-retry-reply.md",
+      "source_blob_sha": "843889349bb58209c02221e720800f0e9e3ff9d8",
+      "source_intake_id": "SRC-0451",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 0x8069A0 send-by-key → 0x8060D0 queue gate, 0x806A00 WSARecv hard-failure + 0x806FC0 close virtual, upstream BF60/BF64/BF68",
+      "assertion": "Manager send-by-key returns 0 on missing key/value; a nonzero payload can be rejected by 0x8060D0 when Conn+A0A4 exceeds 0x12C. WSARecv hard error other than IO_PENDING drives vtable+0x24 close-by-Conn and returns 0; upstream 0x495610/0x4957C0 do not gate their alias writes or helper return1 on that recv result.",
+      "limitations": "Conditional static chain only: no observed UAF/handle leak/race or guaranteed stale alias; additional indirect vtables/handlers, error ordering, overflow and cancellation remain unknown.",
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "related_claim_ids": [
+        "CLM-NET-0014",
+        "CLM-NET-0015",
+        "CLM-NET-0017"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-extra-t16-r2/batch6/R2-E56-REVIEW.md",
+      "integration_status": "R2_BOUND, NOT_FULL_PASS"
     }
   ]
 }
