@@ -60,8 +60,10 @@ class SubmissionPreflightTests(unittest.TestCase):
     def test_baseline_no_artifacts_or_fake_approval(self):
         result = evaluate(self.root)
         self.assertEqual(result["errors"], [])
-        self.assertEqual(result["summary"]["selected"], 8)
-        self.assertEqual(result["summary"]["not_submitted"], 8)
+        expected = len(json.loads((self.root / "research/requests/index.json").read_text(encoding="utf-8"))["items"])
+        self.assertGreaterEqual(expected, 10)  # includes the separate E05/E06 create research requests
+        self.assertEqual(result["summary"]["selected"], expected)
+        self.assertEqual(result["summary"]["not_submitted"], expected)
         self.assertEqual(result["summary"]["pending_manual_review"], 0)
         self.assertTrue(all(row["mechanical_preflight"] == "NOT_SUBMITTED" for row in result["items"]))
 
