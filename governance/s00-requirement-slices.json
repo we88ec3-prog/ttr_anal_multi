@@ -61,34 +61,44 @@
     },
     {
       "id": "SLICE-CREATE",
-      "title": "創角介面、角色建立 C2S/S2C 與名單更新",
+      "title": "空角色／遠征隊建名／可操作角色建立與 Full/Delta roster/UI",
       "priority": 1,
       "depends_on": [
         "SLICE-LOBBY"
       ],
       "requirement_ids": [],
-      "blocking_rr_ids": [],
+      "blocking_rr_ids": [
+        "RR-0009",
+        "RR-0010"
+      ],
       "context_rr_ids": [
         "RR-0002"
       ],
-      "gap_ids": [],
+      "gap_ids": [
+        "GAP-CHAR-0002",
+        "GAP-CHAR-0003"
+      ],
       "spec_ids": [
         "SPEC-CHAR-0001",
         "SPEC-FLOW-0001"
       ],
-      "goal": "尚無足夠獨立來源確認創角入口、建立角色請求與回覆的完整契約；先界定研究問題，不自行把選角 0x42 當作創角 opcode。",
+      "goal": "以 E73～E79 將 Expedition identity name 和 playable-character availability 拆開，先驗 Client C2S0x3E/候選S2C0x4A UI、app2完整／app2B增量共同角色紀錄與 B6 local UI gate，再追真正新可操作角色的 C2S/S2C 與進教學前提；先做 Domain 合成資料，不假定原版官方封包時序。",
       "acceptance": [
-        "精確區分 Client 角色建立入口（包括空角色／增加角色條件）與已知角色選擇 UI 事件。",
-        "找到有界 C2S 建立角色 producer、S2C 成功/錯誤 consumer、欄位、授權/名稱處理、後續 roster 更新前提；必要時向對應 Task 提出不重複 RR。",
-        "若玩家／管理者另有角色建立政策需求，使用第 3 種來源建 REQ 並經人工審核；未證 Server 行為仍 UNKNOWN。"
+        "RR-0009 正向研究：零角色或未命名後是否可到達建名頁/選角頁，scene/GUI/resource/queue predicate 實際連接，不能只靠 local name/flag 取代畫面證據。",
+        "RR-0010 有界研究：C2S0x3E(48B, UTF16 +6, +2..5 UNKNOWN)、候選 S2C0x4A(signed+2) 與 C2S0x33的不同角色分類；官方配對與真正 playable-character 建立不能假造。",
+        "E79 對 app2=65+53N vs app2B=2+53N 的同一 F94304 role array 給出來源證據，Server domain 保持 FullSnapshot/Delta 同一份角色權威資料、不得臆造 delete/status。",
+        "E76/E77 區別 F938F2+page144 NameReady、record+5C 可用、S2C0xB6→local F4278/placeholder 與 C2S0x42選角；不得將局部 UI event當 wire 或宣稱登入後一定依序收到所有事件。",
+        "在未獲實機授權與有效原版 Server trace 前只提供原生靜態有界契約與合成測試；24 項 I23 規劃測試尚未執行，RR-0010/GAP-CHAR-0003 繼續阻塞。"
       ],
       "next_owners": [
         "T03",
         "T04",
         "T06",
+        "T02",
+        "T01",
         "S00"
       ],
-      "notes": "尚不虛構已存在的創角專屬 REQ、RR、CLM、封包值或使用者需求；此階段報 DISCOVERY_REQUIRED。"
+      "notes": "2026-10-31 Iteration23 原 PR #65 研究 E76–E79 與新的設計規格。正式 requirement_ids 仍是 []，因目前未建立有新 T01-reviewed scoped CLM 的 Expedition-specific REQ；狀態應維持 DISCOVERY_REQUIRED（且此 slice blocking RR-0009/0010、GAP-CHAR-0002/0003 尚未完）。詳 governance/s00-iterations/S00-20261031-ITERATION-23-EXPEDITION-ROSTER-PLAN.md，不能以已確認 handler 冒稱 original Server 交易。"
     },
     {
       "id": "SLICE-ENTER-WORLD",
