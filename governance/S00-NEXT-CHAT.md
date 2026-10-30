@@ -86,3 +86,12 @@ Iteration 20 沒有修改正式台帳、原 Client/BIN 或 Server 程式。JSON 
 - 真正新事實是 **CExpeditionCreateDialog 名稱 sender `C2S0x003E`（48B，UTF-16 at +6，+2..5 UNKNOWN）**、LOGIN scene **S2C `0x004A` signed status+2 → 本地 F4245 → name UI**，以及 app2 header name +0x0C 寫共享 `F938F2`、per-row C2S `0x26`/post `0x24`；它們**不是**已證同一原版 Server 交易或 playable-character 創建。
 - RR-0010 繼續 **BLOCKED**，GAP-CHAR-0003 **OPEN**，SPEC-CHAR/FLOW **DRAFT/PARTIAL**；先從 Client 靜態 `0x3E+2..5`、LOGIN scene/狀態、N0 create UI、`0x4A→app2` 必要橋樑、E75 `F4261` subscriber 研究下去，不要以「無原版 Server」中止可進行的 BIN-first 工作。與 RR-0002/0009 去重。
 - **CI 注意：**在此研究來源合併之前的 main `afc0b1fe` 已有 [CLM-CLIENT-0063 原生證據來源缺失的 CI failure](https://github.com/we88ec3-prog/ttr_anal_multi/actions/runs/41110975506)；不能為了使 CI 變綠而捏造 CLM proof 或自動降級別人原生主張。請交其 owner/T01 修正，不當作 RR-0010 已通過。
+
+
+## 2026-10-31 Iteration 23 — 最新 extra/roy1 E76～E79 與 RR-0010 應用
+
+`extra/roy1` 相對上次 PR #63 又新增 **E76～E79 八份研究/驗證器**，已由 [PR #65](https://github.com/we88ec3-prog/ttr_anal_multi/pull/65) 合併到 `main`（merge `9df86e629d19b688850d5cad4dfda50691513c4e`）。完整驗證／規劃見 [Iteration 23](s00-iterations/S00-20261031-ITERATION-23-EXPEDITION-ROSTER-PLAN.md) 與 [24 項未執行測試](s00-iterations/S00-20261031-ITERATION-23-ACCEPTANCE.md)。
+
+**下一輪先引用的確切成果：** E76 `F938F2` nonempty→Expedition Page+0x144 ready→三個 UI controls；E77 `S2C B6→local F4278(0)→0x672F00` 條件式 role record/placeholder UI；E78 `C2S3E+2..5` 仍 UNKNOWN，`F4278` 有額外本地來源；**E79 正向 trace S2C app `0x002B` network+singleton→2+53N row writer，與 app2 65+53N 共用 `F94304` 同一角色 array**，明確修正 E72 曾稱 destination 不同的說法。這些不等於原版 Server 已證 `3E↔4A`、`33↔2B`、`4A→app2/2B/B6`，更不等於已可建立 playable-character。
+
+已在 DRAFT `SPEC-CHAR/FLOW`、`GAP-CHAR-0003`、`s00-requirement-slices.json` 納入。**RR-0010 BLOCKED**、**GAP-CHAR-0003 OPEN**、SPEC DRAFT/PARTIAL；正式 REQ 未追加未審核 CODE_ANALYSIS discovery（缺新的同版正式 CLM）。開發可先做 `ExpeditionProfile` 和 `FullRosterSnapshot/ApplyRosterDelta` **同一 source-of-truth**、合成0/1/10角色／異常/重放/錯序測試；native framing/scene 必須交 T02/T03/T04/T06 繼續研究。沒有獲獨立授權不執行/連線原 Client；本 S00 回合也未取得原始 Tartaros.bin 重跑 T03 verifier。CI 若沿舊的 `CLM-CLIENT-0063` 報錯，不可擅自偽造原生 evidence 讓其變綠。

@@ -58,3 +58,10 @@ Iterations 16–17 的正式流程編號合計 **E00–E26（27 個 gate）與 4
 
 - [S00 逐條驗證與 Server 交接](S00-20261031-RR0010-EXTRA-ROY1-REVIEW.md)：在 [PR #63](https://github.com/we88ec3-prog/ttr_anal_multi/pull/63) 合併 E71–E75 研究後，核對 Git blobs、E73/E74 的 Client 建名 sender/result/shared-name、和已保存同版 Ghidra 偽碼；本環境沒有原始 KR BIN，不宣稱親自重跑作者 58/81 項 source-byte checker。
 - [SPEC-CHAR](../../spec/session-account/SPEC-CHAR-0001.md)、[SPEC-FLOW](../../spec/session-account/SPEC-FLOW-0001.md) 及 `GAP-CHAR-0003` 只新增「有界證據／未知」註記，`RR-0010=BLOCKED`、`GAP-CHAR-0003=OPEN`、SPEC `DRAFT/PARTIAL`；**無原版 Server 0x3E↔0x4A 配對、角色建立→roster 因果，沒有新增 accepted claim/full pass**。E75 屬 RR-0002 的相鄰補證，不能冒稱 RR-0010 閉合。
+
+
+## Iteration 23（2026-10-31，extra/roy1 E76–E79 研究整合與新手前段交接）
+
+- [Iteration 23 — 遠征隊建名、角色 Full/Delta 同址、UI gate 與 Server 分階段計畫](S00-20261031-ITERATION-23-EXPEDITION-ROSTER-PLAN.md)。本輪 [PR #65](https://github.com/we88ec3-prog/ttr_anal_multi/pull/65) 合併 E76～E79 八個新研究檔案；E79 更正 E72「不同角色 record destination」，證明 S2C app2（65+53N）與 app2B（2+53N）寫入相同 `F94304` pointer cell；E76 有 name ready flag/UI gate；E77 有條件 S2C B6→F4278→角色記錄 UI。
+- [Iteration 23 — 24 項規劃測試](S00-20261031-ITERATION-23-ACCEPTANCE.md)：DOMAIN / STATIC / NEGATIVE / E2E 等級與原版 Client gate 明確分離，全部 `PLAN_ONLY / NOT_RUN`。另更新 `SPEC-CHAR-0001`／`SPEC-FLOW-0001`、`GAP-CHAR-0003`、`SLICE-CREATE` 的 RR9/RR10及 GAP 對照。
+- **未改**正式 REQ/RR/CLM 或原生 TEST index；無 T01 正式新增 CLM（所以不以舊 CLM 假裝 E79 已正式來源驗收）。`RR-0010 BLOCKED`、`GAP-CHAR-0003 OPEN`、SPEC `DRAFT/PARTIAL`；原件 BIN 未在本次環境重跑。完整 Server 可開始做 **ExpeditionProfile/FullRoster+Delta 單一模型與合成測試**，但 Client native adapter 必須等待 T02/T03/T04 條件。

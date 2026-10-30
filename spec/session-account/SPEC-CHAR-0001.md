@@ -36,3 +36,19 @@
 - **清單共用名稱**：S→C `app2` header `+0x0C` 的 name copy 到**同一個** `F938F2`，名單 65B prefix + 53B/row；逐 row 可能送 C→S `0x26` 3B，結尾 `0x24` 2B。shared global 不等於 `0x004A→app2` 時序、創角成功或世界初始化。E75（RR-0002）找到的 S→C `0x26` 另是 4+5N consumer，**不能**將 C2S/S2C 的同值 opcode 視為已配對。
 - **不同事件不可混淆**：`CEmployNewCharacter` 的 C2S `0x33` 僅2B、不含創角姓名；C2S `0x42` 是已存在角色 selection。既有 RR-0009 UI 入口、RR-0002 選角與 RR-0010 真正建角→roster 因果分離。
 - **狀態不提升**：截至本次驗證 RR-0010 **BLOCKED**（非 ACCEPTED）、GAP-CHAR-0003 **OPEN**；本規格 **DRAFT/PARTIAL**。本節可供 Server-side 模型/合成向量設計，但不得硬填 `0x3E+2..5`、錯誤碼、初始數值或推定原版 request/reply/可遊玩。
+
+
+## Iteration 23（E76–E79）— 共同 role array、UI ready、增量回覆（仍 DRAFT/PARTIAL）
+
+**有界新證據及服務端設計門檻：** [Iteration 23 完整規劃](../../governance/s00-iterations/S00-20261031-ITERATION-23-EXPEDITION-ROSTER-PLAN.md)、[24 項未執行測試](../../governance/s00-iterations/S00-20261031-ITERATION-23-ACCEPTANCE.md)。KR SHA 同前；來源 E76～E79 是 T03 原始 BIN source-first 作者報告與可重跑 checker，本 S00 工作環境未獨立重新跑原始 BIN，採同版保存 Ghidra 偽碼交叉查證。**本節更新 E72 的「不同 destination」錯誤，保留舊稿作歷史，不覆寫來源。**
+
+| S2C incoming | Client 有界資料形狀／寫入 | 原生前提與限制 |
+| --- | --- | --- |
+| `app 0x0002`（full） | `65 + 53*N`；name at `header+0x0C` 20 UTF-16 code units → `F938F2`；53B rows→`0x4D4150`→`[F94304]+slot*0x210` 的 role record `+0x5C=1`；per-row C2S `0x26` 3B、final C2S `0x24` 2B | 先有其他 header 讀取，row count 的 `len>=65` 不代表短 header 無風險；有效 slot `<=9` 是本地上界，不代表官方可用角色 ID |
+| **`app 0x002B`（incremental）** | E79：network callback index2B `0x4943B0`→singleton `0xF8D9E0`→內層 table index2B `0x4E2730`；`2 + 53*N`、row from +2，row+0x2E slot<=9→**同一個** role record array／`0x4D4150`，N=0 仍到 `0x4E5FB0` | `[this+0x6924]` 當 `this=0xF8D9E0` 等於 **`[0xF94304]`**；不同 header、不代表兩個 DB 名單；不含已證 create status，也沒有已證 delete/clear、original Server 觸發/時序 |
+
+**畫面事件是第三個獨立邊界**：E76 `CExpeditionPage 0x5A6510` 讀非空 `F938F2` 設 `page+0x144=1`，`0x5A65A0` 依 flag 控三個控制狀態；E73 的 `S2C0x4A` 成功狀態1經 `F4245` 也可獨立設 same ready flag。E77 `S2C0xB6` 在有效 base scene → `0x4B5DD0` → **local** `F4278(0)`，`CExpeditionPage 0x5A67D0` 條件滿足時 `0x672F00` 按 child index 從 `F94304` 讀 usable `+0x5C`，有資料走 UI，否則 placeholder；B6 無原生已證角色 ID payload，`F4278` 也有 `CPhaseSlot` 本地來源。E76 的 `F4261` 對 Expedition Page 是 default branch，不能混成 ready event。
+
+**重要否決**：`CEmployNewCharacter→C2S0x0033` 2B ≠ `CExpeditionCreateDialog→C2S0x003E` 48B；`0x004A` signed outcome ≠ 已證 original Server 建角 ACK；`0x002B` 更新同一資料陣列 ≠ 建立/刪除 playable role 的正式 Server 動作；`C2S0x0042` 仍是選既有角色。Original `0x3E↔0x4A`、`0x33↔0x2B`、`0x4A→app2/2B/B6` 的跨 wire 因果、角色數初值、連線與失敗碼語意均 **UNKNOWN**。
+
+**Server 相容性規劃**：建立 `FullRosterSnapshot` / `ApplyRosterDelta` **同一 RoleStore**，另外 `ExpeditionProfile` 存名字，保留 `NameReady`／`RosterHydrated`／`RoleUiReady` 三個不同 gate；只在 T02/T03/T04 證明欄位與封包前提後才啟用 native encoder。狀態仍 `SPEC-CHAR-0001 DRAFT/PARTIAL`、`GAP-CHAR-0003 OPEN`、`RR-0010 BLOCKED`。
