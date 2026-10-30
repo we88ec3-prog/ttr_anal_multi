@@ -183,8 +183,15 @@ def validate(root: Path) -> list[str]:
             proof = objpath(row.get("native_review_ref"), item_id)
             if proof and row.get("target_sha256") != targets.get(row.get("client_version"), {}).get("sha256"):
                 fail(item_id, "NATIVE_VERIFIED needs exact original target SHA")
-            if not row.get("evidence_refs"):
+            evidence_refs = row.get("evidence_refs")
+            if (not isinstance(evidence_refs, list) or not evidence_refs or
+                not all(isinstance(ref, str) and ref.strip() for ref in evidence_refs)):
                 fail(item_id, "NATIVE_VERIFIED requires scoped native evidence references")
+            else:
+                if len(set(evidence_refs)) != len(evidence_refs):
+                    fail(item_id, "NATIVE_VERIFIED evidence_refs must not contain duplicates")
+                for evidence_ref in evidence_refs:
+                    objpath(evidence_ref, item_id)
         refs(row, "affected_spec_ids", "SPEC", item_id)
         src_id = row.get("source_intake_id")
         intake = tables["SRC"].get(src_id)
