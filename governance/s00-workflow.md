@@ -94,3 +94,8 @@ Server 需求採用 [唯一 REQ 台帳](../design/requirements/README.md)，**�
 ## 2026-10-31 RR-0010 研究來源合併與有限驗證
 
 `extra/roy1` 透過 [PR #63](https://github.com/we88ec3-prog/ttr_anal_multi/pull/63) 合併來源研究 E71–E75，並由 S00 在 [RR-0010 逐條審查](s00-iterations/S00-20261031-RR0010-EXTRA-ROY1-REVIEW.md) 核對有界 Client 路徑與已保存同版偽碼。**研究來源 Git merge ≠ RR SUBMITTED / S00 ACCEPTED / T01 FULL-PASS**。建名本地 producer `C2S0x3E`、候選 `S2C0x4A` local result、app2 共享名稱是可供 DRAFT 及 Server-only 模型的進展；原始 Server 配對與 playable-character roster 仍未閉合，故 `RR-0010 BLOCKED`／`GAP-CHAR-0003 OPEN`，完整開工仍依研究派工唯一台帳，不因 report 存在自動喚醒 Agent。本 S00 審查未執行原始 BIN 或 Client。
+
+
+## 2026-10-31 Iteration 24：新證據→Spec 與 Server 實作邊界
+
+E80 RR-0002 研究 [PR #67](https://github.com/we88ec3-prog/ttr_anal_multi/pull/67) 可幫助 [Iteration 24 開發交接](s00-iterations/S00-20261031-ITERATION-24-SELECTION-SQUARE-HANDOFF.md) 增補 C2S42(index/mode)/Square candidate，有真正 source-limited Client positive subchains；但 **RR-0002/0010 的原版 Server request-reply pairing 均未達完整驗收**。應先把新的 selection DTO、Session lease 與 stale/retry/error rollback 置於獨立 Server 模組的**設計假設／合成測試**，角色建立與選角各自保留正式 RR/GAP。任何新的 CODE_ANALYSIS REQ/CLM 需重新核對同版 source、T01 scope；目前不替換原始派工事件、不以 Git 合併驗收原版行為，也不強迫舊帳號重新做 Expedition create。
