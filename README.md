@@ -9,6 +9,8 @@
 - [S00 → T01–T16 收件、認領、回報與審查（正式）](research/dispatch/README.md)
 - [S00 Phase B 收斂與 Phase C 工作包計畫](governance/S00-NEXT-PLAN.md)
 - [S00 Iteration 11 — 登入／創角／世界分段需求與交接](governance/S00-20261030-ITERATION-11.md)
+- [S00 Iteration 12 — 登入至角色畫面 L00–L08 及測試設計](governance/S00-20261030-ITERATION-12.md)
+- [S00 Iteration 13 — L00–L08 研究契約閘門與優先順序](governance/S00-20261030-ITERATION-13.md)
 - [S00 新對話接續（S00-NEXT-CHAT）](governance/S00-NEXT-CHAT.md)
 - [角色畫面／創角入口待補原生研究題單](governance/S00-LOBBY-CREATE-RESEARCH-QUESTIONS.md)
 - [S00 Iteration 05 — 契約來源與審查狀態防誤升](governance/S00-20261029-ITERATION-05.md)

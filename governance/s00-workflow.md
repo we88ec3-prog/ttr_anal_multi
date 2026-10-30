@@ -75,3 +75,8 @@ Server 需求採用 [唯一 REQ 台帳](../design/requirements/README.md)，**�
 ## Iteration 11 — 分段優先與跨對話交接
 
 以 [需求分段計畫](s00-requirement-slices.json) 和 [唯讀進度檢查](server_requirement_slices.py) 將三來源 REQ 協調成 `SLICE-LOBBY`（登入至角色畫面）、`SLICE-CREATE`（創角）、`SLICE-ENTER-WORLD`（選角後進世界）；僅是現有 B-* Roadmap 的需求分析視圖，並非新 RR 台帳或正式 B 里程碑升級。角色畫面與選角成功後轉場**不應誤當同一驗收**，但有 RR-0002 的 UI 初始化未知就保留阻塞。先問 [精確研究題單](S00-LOBBY-CREATE-RESEARCH-QUESTIONS.md) 而非猜任務／packet； [新對話交接](S00-NEXT-CHAT.md) 提供共同開工規則。`--check` 遇到 BLOCKED/DISCOVERY_REQUIRED 屬預期，只有 JSON/links/DAG 錯誤才 CI fail。
+
+
+## Iteration 12／13 — Lobby 分段契約閘門
+
+[Iteration 12 規劃](S00-20261030-ITERATION-12.md) 已按 L00–L08 拆開 Client 有界證據、未證 Server 責任及測試來源；[Iteration 13](S00-20261030-ITERATION-13.md) 使用 [同一 REQ/RR/GAP/SPEC 台帳派生的矩陣](s00-lobby-gates.json) 分別追 UI 就緒、登入跨線與創角 positive evidence。CLI `python -B governance/check_s00_lobby_gates.py --check` 僅檢查計畫內一致性，不能將原版 Client 相容或研究請求結案自動宣稱完成。12 個 L12-Txx 全部尚未執行且不建立正式 TEST 項，原版 Client runtime 仍需另行明確授權。新的共同交接入口維持 [S00-NEXT-CHAT.md](S00-NEXT-CHAT.md)。

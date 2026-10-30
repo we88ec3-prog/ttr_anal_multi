@@ -1,0 +1,296 @@
+{
+  "schema": "s00-lobby-gates-v1",
+  "client_version": "kr",
+  "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+  "source_of_truth": [
+    "design/requirements/index.json",
+    "research/requests/index.json",
+    "design/gaps/index.json",
+    "spec/spec-index.json",
+    "conformance/test-index.json"
+  ],
+  "kind": "NON_NORMATIVE_DESIGN_OVERLAY",
+  "note": "L00–L08 labels are analysis checkpoints, NOT demonstrated original Client/Server protocol order; status is derived from canonical indices.",
+  "gates": [
+    {
+      "id": "L00",
+      "title": "連線與第一筆實際收發",
+      "priority": 0,
+      "owners": [
+        "T02",
+        "S00"
+      ],
+      "requirement_ids": [
+        "REQ-0002",
+        "REQ-0005"
+      ],
+      "rr_ids": [
+        "RR-0001",
+        "RR-0004",
+        "RR-0005"
+      ],
+      "gap_ids": [
+        "GAP-NET-0001",
+        "GAP-NET-0002"
+      ],
+      "spec_ids": [
+        "SPEC-NET-0001",
+        "SPEC-NET-0002",
+        "SPEC-NET-0003"
+      ],
+      "test_case_ids": [],
+      "known": "Local key/slot Connect、WSASend/IOCP 路徑有局部靜態依據，不構成實際第一個 Server wire exchange。",
+      "unproven": "首個 wire frame、mode/slot、connection ownership、close/retry、Session 連續性。",
+      "next_action": "T02 依既有 RR 對齊 sender→socket、receiver→scene 與首包；將不能證明的原 Server 行為列 UNKNOWN。"
+    },
+    {
+      "id": "L01",
+      "title": "本地認證請求形狀",
+      "priority": 1,
+      "owners": [
+        "T03",
+        "T02",
+        "S00"
+      ],
+      "requirement_ids": [
+        "REQ-0001"
+      ],
+      "rr_ids": [
+        "RR-0003"
+      ],
+      "gap_ids": [
+        "GAP-AUTH-0001"
+      ],
+      "spec_ids": [
+        "SPEC-AUTH-0001"
+      ],
+      "test_case_ids": [
+        "L12-T01",
+        "L12-T02"
+      ],
+      "known": "本地 mode 0x52 C2S E8/112B；mode 0x54/default 000F/214B，兩者編碼/欄位不同。",
+      "unproven": "運行入口、opaque E8 bytes、實際第一個線上請求、原 Server credential policy。",
+      "next_action": "T03 指定 launcher/mode 分支及 opaque bytes 的可證範圍；不預設 CP949 或 UTF8。"
+    },
+    {
+      "id": "L02",
+      "title": "LOGIN scene 的 S2C 結果消費",
+      "priority": 2,
+      "owners": [
+        "T03",
+        "T02",
+        "S00"
+      ],
+      "requirement_ids": [
+        "REQ-0001"
+      ],
+      "rr_ids": [
+        "RR-0003",
+        "RR-0007"
+      ],
+      "gap_ids": [
+        "GAP-AUTH-0001",
+        "GAP-FLOW-0001"
+      ],
+      "spec_ids": [
+        "SPEC-AUTH-0001",
+        "SPEC-FLOW-0001"
+      ],
+      "test_case_ids": [
+        "L12-T03"
+      ],
+      "known": "S2C app 0x13 +0x16 status、group +0x1C/count 和 +0x92 cursor；0x7A +2 count/+6 cursor 皆依 active LOGIN scene gate。",
+      "unproven": "真實原 Server 回覆 pairing、合法完整 packet extent、sequence、業務 fail code 含義。",
+      "next_action": "T03/T02 串出確切 S2C handler gate 和 source-backed payload，阻塞性缺失保持 GAP OPEN。"
+    },
+    {
+      "id": "L03",
+      "title": "選服資料與跨連線 Session",
+      "priority": 3,
+      "owners": [
+        "T02",
+        "T03",
+        "S00"
+      ],
+      "requirement_ids": [
+        "REQ-0002"
+      ],
+      "rr_ids": [
+        "RR-0003",
+        "RR-0005"
+      ],
+      "gap_ids": [
+        "GAP-NET-0002",
+        "GAP-AUTH-0001"
+      ],
+      "spec_ids": [
+        "SPEC-NET-0002",
+        "SPEC-FLOW-0001"
+      ],
+      "test_case_ids": [],
+      "known": "F4241 是局部通知，UI 分支受額外條件才呼叫 key0/key2 Connect。",
+      "unproven": "Server endpoint 來源、token/lease/Session 維持、失敗重試和真正的切線順序。",
+      "next_action": "T02/T03 做 local event、Connect、socket 生命週期的有界對應，不把 F4241 寫成網路訊息。"
+    },
+    {
+      "id": "L04",
+      "title": "Frame 解碼與有效應用分派",
+      "priority": 4,
+      "owners": [
+        "T02",
+        "S00"
+      ],
+      "requirement_ids": [
+        "REQ-0005"
+      ],
+      "rr_ids": [
+        "RR-0001",
+        "RR-0006",
+        "RR-0007"
+      ],
+      "gap_ids": [
+        "GAP-NET-0001",
+        "GAP-NET-0003"
+      ],
+      "spec_ids": [
+        "SPEC-NET-0001",
+        "SPEC-NET-0003"
+      ],
+      "test_case_ids": [
+        "L12-T04",
+        "L12-T05"
+      ],
+      "known": "局部 0x0BBB checksum、0x2633 decode、0x22D7/default branch，以及 lane2/first-layer/LOGIN scene dispatch。",
+      "unproven": "哪個 framing marker 在實際登入路徑會使用、原 Server malformed-frame policy。",
+      "next_action": "T02 提供每種 decode/error 的 send/recv/queue gate 正反例；測試助手拒絕行為不能歸因原 Client。"
+    },
+    {
+      "id": "L05",
+      "title": "角色清單有效資料",
+      "priority": 5,
+      "owners": [
+        "T03",
+        "T04",
+        "S00"
+      ],
+      "requirement_ids": [
+        "REQ-0003"
+      ],
+      "rr_ids": [
+        "RR-0002",
+        "RR-0007"
+      ],
+      "gap_ids": [
+        "GAP-CHAR-0001"
+      ],
+      "spec_ids": [
+        "SPEC-CHAR-0001"
+      ],
+      "test_case_ids": [
+        "L12-T06",
+        "L12-T07",
+        "L12-T08"
+      ],
+      "known": "S2C app 0x0002 global consumer、65B prefix+53B records、record+0x2E ID、0x4D4150→UI record+0x5C 局部寫入。",
+      "unproven": "prefix 全語義、真正角色資料來源、ID/UTF-16 限制與 Client 是否接受/顯示零角色。",
+      "next_action": "T03/T04 驗證 N=0/N=1 與不合法記錄的有界處理；不可用 LocalHero 當官方資料。"
+    },
+    {
+      "id": "L06",
+      "title": "清單後初始化請求與回覆",
+      "priority": 6,
+      "owners": [
+        "T03",
+        "T04",
+        "T02",
+        "S00"
+      ],
+      "requirement_ids": [
+        "REQ-0003",
+        "REQ-0004"
+      ],
+      "rr_ids": [
+        "RR-0002",
+        "RR-0007"
+      ],
+      "gap_ids": [
+        "GAP-CHAR-0001",
+        "GAP-FLOW-0001"
+      ],
+      "spec_ids": [
+        "SPEC-CHAR-0001",
+        "SPEC-FLOW-0001"
+      ],
+      "test_case_ids": [
+        "L12-T09"
+      ],
+      "known": "既有 T03 局部研究指出含 26+ID 的初始化請求及狀態 gate。",
+      "unproven": "真實 Server reply identity、時序與 client 必要初始化結果；RR-0002 選角配對仍 BLOCKED。",
+      "next_action": "T03 分離 roster-after-init 與 selection-to-world，沿合法的本地 request→handler 追正向/反向證據。"
+    },
+    {
+      "id": "L07",
+      "title": "角色 UI 生命週期和可操作性",
+      "priority": 7,
+      "owners": [
+        "T03",
+        "T06",
+        "T04",
+        "S00"
+      ],
+      "requirement_ids": [
+        "REQ-0004"
+      ],
+      "rr_ids": [
+        "RR-0002",
+        "RR-0007"
+      ],
+      "gap_ids": [
+        "GAP-CHAR-0001",
+        "GAP-FLOW-0001"
+      ],
+      "spec_ids": [
+        "SPEC-CHAR-0001",
+        "SPEC-FLOW-0001"
+      ],
+      "test_case_ids": [
+        "L12-T10"
+      ],
+      "known": "0x672F00 消費角色 UI 記錄，F4246/F4247/F4278 有局部 producer/consumer、dialog virtual 更新。",
+      "unproven": "完整 producer→event publish→subscriber→dialog/resource 和畫面 render/可操作；0x5C 旗標≠可見 UI。",
+      "next_action": "T03 定向補正事件生產與投遞；T06 在原責任內核對 dialog/control 資源版本與存在前提。"
+    },
+    {
+      "id": "L08",
+      "title": "原版 Client 畫面實際到達",
+      "priority": 8,
+      "owners": [
+        "S00"
+      ],
+      "requirement_ids": [
+        "REQ-0001",
+        "REQ-0002",
+        "REQ-0003",
+        "REQ-0004"
+      ],
+      "rr_ids": [],
+      "gap_ids": [
+        "GAP-AUTH-0001",
+        "GAP-CHAR-0001",
+        "GAP-FLOW-0001"
+      ],
+      "spec_ids": [
+        "SPEC-AUTH-0001",
+        "SPEC-CHAR-0001",
+        "SPEC-FLOW-0001"
+      ],
+      "test_case_ids": [
+        "L12-T11",
+        "L12-T12"
+      ],
+      "known": "尚無原版 Client 實際運行或畫面可見的已授權觀察。",
+      "unproven": "有角色／零角色、登入失敗、資料錯誤、斷線重試是否真的到達正確畫面。",
+      "next_action": "需要使用者另外明確授權，且有隔離 Server、版本、frame/scene/UI trace 和去敏化結果；之前只可寫計畫。"
+    }
+  ]
+}

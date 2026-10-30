@@ -40,3 +40,8 @@
 交接文件是**一份** S00 共同交接入口；新增本次工作的已驗證狀態可精簡更新本檔，詳細原稿、來源 SHA 和未解問題留在各 Iteration/Task 文件，不把所有研究原稿複製進交接。
 
 後續對話若明確要求 GitHub Commit/Push，請建獨立工作分支，驗證並開 PR；合併 main 後核對 GitHub Actions main CI，回報實際 PR/commit。若**沒要求推送**，只交付工作檔/完整文字，不偷偷改 main。
+
+
+## Iteration 12／13 — 登入至角色畫面逐項交付（2026-10-30）
+
+前次未提交的 Iteration 12 草案現在以 [完整規劃](S00-20261030-ITERATION-12.md) 與 [12 個尚未執行的設計測試](s00-iteration12-lobby-test-plan.json) 整合進 main；接續 [Iteration 13 工作優先順序](S00-20261030-ITERATION-13.md)、[9 個 L00–L08 檢查點](s00-lobby-gates.json) 和 [唯讀檢查器](check_s00_lobby_gates.py)。新對話**先看當時最新 main**，跑 `python -B governance/check_s00_lobby_gates.py --check` 及 `--json`。此矩陣目前全部 BLOCKED，是因為正式 REQ/RR/GAP/SPEC 和原版實測仍不足，不是 CI 錯誤。優先 **P13-1：T03 roster→UI event/dialog（T06 只負責同版本資源協查）**；再做 **P13-2：T02/T03 登入/選服/跨 conn 的方向別前提**；再 **P13-3：T03/T04/T06 創角的真正 C2S/S2C positive evidence**。本節是追加交接快照，不更動前面的 Git 提交授權、原版 Client 禁止執行及唯一 REQ/RR 台帳規則。
