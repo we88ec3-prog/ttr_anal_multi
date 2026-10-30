@@ -43,3 +43,8 @@ Recommendation: retain DRAFT, draft new targeted RR only when not already covere
 Current policy: only `OFFLINE_SYNTHETIC` evidence-backed *locally by handcrafted data*, and no complete login→selection exchange. **Do not claim an independent implementation review was actually performed just because this worksheet exists.**
 
 Potential Server-only design proposals [ADR-0001..0003](../design/decisions/README.md) remain PROPOSED / NON-NORMATIVE. S00 roadmap and gap sources remain [here](../governance/S00-NEXT-PLAN.md).
+
+
+## 2026-10-30 S00 RR-0003 integration addendum (not a released AUTH contract)
+
+The source-scoped [SPEC-AUTH-0001](session-account/SPEC-AUTH-0001.md) now documents conditional LOGIN-scene S2C app `0x0013` and separate `0x007A` group cursors, and the distinction between FBA808 virtual-zero codepage and E8 builder outgoing CP_ACP. These are bounded Client facts, not a proven original Server login reply order or required backend policy. A separate synthetic `TEST-AUTH-0002` checks byte extent and conservative malformed input rejection *in a fixture model only*. **Do not implement a live auth reply contract from these offsets alone**; cross-socket pairing, first S2C, status enum, E8 six bytes and request/selection consequences remain open. See [Iteration 08](../governance/S00-20261030-ITERATION-08.md).
