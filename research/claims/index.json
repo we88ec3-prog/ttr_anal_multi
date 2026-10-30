@@ -10623,7 +10623,7 @@
       "evidence_level": "PARTIAL",
       "evidence_scope": "KR Pool+0x28/+0x48 and 0x805B40 recycler (selected paths)",
       "assertion": "Connect-fail and teardown producers enqueue Conn in Pool+0x48 and clear Conn+0x14; the recycler removes Pool+0x28 tracking by +0x14==0 and only recycles Pool+0x48 entries with Conn+A0B8==0.",
-      "limitations": "No exhaustive Conn+14 writer, allocator/exception, duplicate enqueue, mutex or lifetime verification.",
+      "limitations": "No exhaustive Conn+14 writer, allocator/exception, duplicate enqueue, mutex or lifetime verification. [2026-10-30 R2] Independent KR 0x490FE0→0x4911B7→0x805B40 adds a *conditional third* Pool+48 producer; 0x805F50 reset also clears Conn+14 so zero alone is not a source-unique enqueue marker; research/handoffs/t01-20261030-extra-t16-r2/batch5/R2-REVIEW.md.",
       "conflicts": [],
       "affected_spec_ids": [],
       "additional_sources": [
@@ -10647,7 +10647,7 @@
       "evidence_level": "PARTIAL",
       "evidence_scope": "KR 0x806C9E/806CB3/806CC7/806CD2 manager duplicate-key mapping",
       "assertion": "Existing key map node is conditionally erased before new key-to-Conn node insertion. This is different from socket close and Pool+0x48 enqueue.",
-      "limitations": "0x7B6890 full downstream destructor unknown; old Conn lifetime and successful IOCP association not established.",
+      "limitations": "0x7B6890 full downstream destructor unknown; old Conn lifetime and successful IOCP association not established. [2026-10-30 R2] 0x7B6890 223-instruction rooted CFG and 0x89120C→HeapFree bound tree node deletion without Conn* close through inspected helper; other owners/IOCP unclosed. research/handoffs/t01-20261030-extra-t16-r2/batch5/R2-REVIEW.md.",
       "conflicts": [
         "E48 0x49B070 map detach claim corrected by E49 and E50"
       ],
