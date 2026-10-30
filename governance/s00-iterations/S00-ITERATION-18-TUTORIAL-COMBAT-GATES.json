@@ -1,0 +1,388 @@
+{
+  "schema": "s00-tutorial-combat-overlay-v1",
+  "kind": "DRAFT_NON_NORMATIVE_NO_RR_OR_SPEC_MUTATION",
+  "authored_date": "2026-10-30",
+  "repository": "we88ec3-prog/ttr_anal_multi",
+  "main_sha_at_review": "833f3b8a6a290fffe5eab8b047f93d58c36c3ac9",
+  "extends": "governance/s00-iterations/S00-ITERATION-17-TUTORIAL-COMPLETION-GATES.json E17",
+  "client_version": "kr",
+  "client_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+  "scope": "Scenario14 native evidence vs server-internal proposal: spawn, monster behavior, player attack, skill cast, damage, settlement",
+  "gates": [
+    {
+      "id": "E17-A",
+      "title": "進場與 encounter 識別",
+      "owners": [
+        "T07",
+        "T16",
+        "T04"
+      ],
+      "evidence_state": "DISCOVERY_REQUIRED",
+      "blocking_unknown": "Scene / instance / encounter 間的 KR 實際映射與權威來源",
+      "native_compatibility_confirmed": false,
+      "runtime_test_executed": false
+    },
+    {
+      "id": "E17-B",
+      "title": "敵人出生與移除",
+      "owners": [
+        "T08",
+        "T07",
+        "T04"
+      ],
+      "evidence_state": "NATIVE_STATIC_PARTIAL",
+      "blocking_unknown": "Scenario14 生成配置、時間/波次、類型、座標及對應 S2C 尚未閉合",
+      "native_compatibility_confirmed": false,
+      "runtime_test_executed": false
+    },
+    {
+      "id": "E17-C",
+      "title": "怪物 AI 控制權",
+      "owners": [
+        "T13",
+        "T02",
+        "T09",
+        "T11"
+      ],
+      "evidence_state": "DISCOVERY_REQUIRED",
+      "blocking_unknown": "Server、Client 本地 AI、P2P owner 與動作來源未定",
+      "native_compatibility_confirmed": false,
+      "runtime_test_executed": false
+    },
+    {
+      "id": "E17-D",
+      "title": "怪物移動與同步",
+      "owners": [
+        "T09",
+        "T13",
+        "T02"
+      ],
+      "evidence_state": "NATIVE_STATIC_PARTIAL",
+      "blocking_unknown": "原生移動主導與碰撞/校正完整協定未知",
+      "native_compatibility_confirmed": false,
+      "runtime_test_executed": false
+    },
+    {
+      "id": "E17-E",
+      "title": "玩家普通攻擊",
+      "owners": [
+        "T10",
+        "T02",
+        "T04"
+      ],
+      "evidence_state": "NATIVE_STATIC_PARTIAL",
+      "blocking_unknown": "攻擊起手、連段、取消完整時窗與 C2S/S2C 因果鏈未知",
+      "native_compatibility_confirmed": false,
+      "runtime_test_executed": false
+    },
+    {
+      "id": "E17-F",
+      "title": "玩家技能施放",
+      "owners": [
+        "T11",
+        "T10",
+        "T04",
+        "T02"
+      ],
+      "evidence_state": "NATIVE_STATIC_PARTIAL",
+      "blocking_unknown": "初始可用技能、起手/取消、冷卻/消耗裁決及結果封包未知",
+      "native_compatibility_confirmed": false,
+      "runtime_test_executed": false
+    },
+    {
+      "id": "E17-G",
+      "title": "傷害與死亡",
+      "owners": [
+        "T12",
+        "T08",
+        "T10",
+        "T11"
+      ],
+      "evidence_state": "NATIVE_STATIC_PARTIAL",
+      "blocking_unknown": "戰鬥結果消費端存在但計算權威、命中/死亡責任未閉合",
+      "native_compatibility_confirmed": false,
+      "runtime_test_executed": false
+    },
+    {
+      "id": "E17-H",
+      "title": "勝負目標與波次",
+      "owners": [
+        "T14",
+        "T07",
+        "T08",
+        "T16"
+      ],
+      "evidence_state": "DISCOVERY_REQUIRED",
+      "blocking_unknown": "Scenario14 真正的 wave、objective 與勝敗觸發未知",
+      "native_compatibility_confirmed": false,
+      "runtime_test_executed": false
+    },
+    {
+      "id": "E17-I",
+      "title": "結算並推進 Lua/Quest",
+      "owners": [
+        "T14",
+        "T16",
+        "T02",
+        "T07"
+      ],
+      "evidence_state": "NATIVE_STATIC_PARTIAL",
+      "blocking_unknown": "CTutorial 0x4C 消費局部成立但完整 Server result/QuestInfo14 writer 未閉合",
+      "native_compatibility_confirmed": false,
+      "runtime_test_executed": false
+    },
+    {
+      "id": "E17-J",
+      "title": "例外、斷線與冪等",
+      "owners": [
+        "T15",
+        "T02",
+        "T07",
+        "T14"
+      ],
+      "evidence_state": "SERVER_POLICY_PENDING_ADR",
+      "blocking_unknown": "重試/重送/跨 scene/斷線復原與交易邊界待 ADR",
+      "native_compatibility_confirmed": false,
+      "runtime_test_executed": false
+    }
+  ],
+  "test_scenarios": [
+    {
+      "id": "C18-T01",
+      "gate_id": "E17-A",
+      "goal": "場景、身分與 scenario 隔離",
+      "state": "PLANNED_NOT_EXECUTED",
+      "executed": false,
+      "official_test_registration": false
+    },
+    {
+      "id": "C18-T02",
+      "gate_id": "E17-B",
+      "goal": "怪物生成 idempotency",
+      "state": "PLANNED_NOT_EXECUTED",
+      "executed": false,
+      "official_test_registration": false
+    },
+    {
+      "id": "C18-T03",
+      "gate_id": "E17-B",
+      "goal": "actor type/消費端支援",
+      "state": "PLANNED_NOT_EXECUTED",
+      "executed": false,
+      "official_test_registration": false
+    },
+    {
+      "id": "C18-T04",
+      "gate_id": "E17-C",
+      "goal": "AI 無目標與死亡失控",
+      "state": "PLANNED_NOT_EXECUTED",
+      "executed": false,
+      "official_test_registration": false
+    },
+    {
+      "id": "C18-T05",
+      "gate_id": "E17-C",
+      "goal": "owner 切換與雙重控制",
+      "state": "PLANNED_NOT_EXECUTED",
+      "executed": false,
+      "official_test_registration": false
+    },
+    {
+      "id": "C18-T06",
+      "gate_id": "E17-D",
+      "goal": "非法位移與位置同步",
+      "state": "PLANNED_NOT_EXECUTED",
+      "executed": false,
+      "official_test_registration": false
+    },
+    {
+      "id": "C18-T07",
+      "gate_id": "E17-E",
+      "goal": "普通攻擊權限與起手",
+      "state": "PLANNED_NOT_EXECUTED",
+      "executed": false,
+      "official_test_registration": false
+    },
+    {
+      "id": "C18-T08",
+      "gate_id": "E17-E",
+      "goal": "連段取消時窗不得引用 fixture",
+      "state": "PLANNED_NOT_EXECUTED",
+      "executed": false,
+      "official_test_registration": false
+    },
+    {
+      "id": "C18-T09",
+      "gate_id": "E17-F",
+      "goal": "技能合法性與資源/冷卻",
+      "state": "PLANNED_NOT_EXECUTED",
+      "executed": false,
+      "official_test_registration": false
+    },
+    {
+      "id": "C18-T10",
+      "gate_id": "E17-F",
+      "goal": "無技能/錯場景/已死拒絕",
+      "state": "PLANNED_NOT_EXECUTED",
+      "executed": false,
+      "official_test_registration": false
+    },
+    {
+      "id": "C18-T11",
+      "gate_id": "E17-F",
+      "goal": "技能中斷重送防二次消耗",
+      "state": "PLANNED_NOT_EXECUTED",
+      "executed": false,
+      "official_test_registration": false
+    },
+    {
+      "id": "C18-T12",
+      "gate_id": "E17-G",
+      "goal": "怪物命中玩家",
+      "state": "PLANNED_NOT_EXECUTED",
+      "executed": false,
+      "official_test_registration": false
+    },
+    {
+      "id": "C18-T13",
+      "gate_id": "E17-G",
+      "goal": "玩家命中怪物",
+      "state": "PLANNED_NOT_EXECUTED",
+      "executed": false,
+      "official_test_registration": false
+    },
+    {
+      "id": "C18-T14",
+      "gate_id": "E17-G",
+      "goal": "怪物死亡/移除 once",
+      "state": "PLANNED_NOT_EXECUTED",
+      "executed": false,
+      "official_test_registration": false
+    },
+    {
+      "id": "C18-T15",
+      "gate_id": "E17-H",
+      "goal": "波次完成需原生目標證據",
+      "state": "PLANNED_NOT_EXECUTED",
+      "executed": false,
+      "official_test_registration": false
+    },
+    {
+      "id": "C18-T16",
+      "gate_id": "E17-H",
+      "goal": "scenario 結算唯一性",
+      "state": "PLANNED_NOT_EXECUTED",
+      "executed": false,
+      "official_test_registration": false
+    },
+    {
+      "id": "C18-T17",
+      "gate_id": "E17-I",
+      "goal": "0x4C 更新不等於 Quest14 完成",
+      "state": "PLANNED_NOT_EXECUTED",
+      "executed": false,
+      "official_test_registration": false
+    },
+    {
+      "id": "C18-T18",
+      "gate_id": "E17-I",
+      "goal": "Quest14 正確交付後才解鎖 Quest16",
+      "state": "PLANNED_NOT_EXECUTED",
+      "executed": false,
+      "official_test_registration": false
+    },
+    {
+      "id": "C18-T19",
+      "gate_id": "E17-J",
+      "goal": "重登/retry/replay 不得重刷",
+      "state": "PLANNED_NOT_EXECUTED",
+      "executed": false,
+      "official_test_registration": false
+    },
+    {
+      "id": "C18-T20",
+      "gate_id": "E17-J",
+      "goal": "原版 KR Client E2E 需明確授權",
+      "state": "RUNTIME_AUTHORIZATION_REQUIRED",
+      "executed": false,
+      "official_test_registration": false
+    }
+  ],
+  "candidate_requests": [
+    {
+      "id": "CR18-01",
+      "lead_task": "T08",
+      "support_tasks": [
+        "T07"
+      ],
+      "goal": "Scenario14 spawn plan, wave, timing and entity lifetime"
+    },
+    {
+      "id": "CR18-02",
+      "lead_task": "T13",
+      "support_tasks": [
+        "T09",
+        "T02"
+      ],
+      "goal": "monster AI decision source, owner/control authority"
+    },
+    {
+      "id": "CR18-03",
+      "lead_task": "T11",
+      "support_tasks": [
+        "T10",
+        "T04",
+        "T02"
+      ],
+      "goal": "tutorial initial skills and cast lifecycle"
+    },
+    {
+      "id": "CR18-04",
+      "lead_task": "T12",
+      "support_tasks": [
+        "T10",
+        "T11",
+        "T13"
+      ],
+      "goal": "attack→hit→damage/death native consumption"
+    },
+    {
+      "id": "CR18-05",
+      "lead_task": "T14",
+      "support_tasks": [
+        "T07",
+        "T16"
+      ],
+      "goal": "Scenario14 win/fail completion, dedupe with prior CR-02"
+    },
+    {
+      "id": "CR18-06",
+      "lead_task": "T15",
+      "support_tasks": [
+        "S00"
+      ],
+      "goal": "resume/idempotency, server-only ADR"
+    }
+  ],
+  "guardrails": {
+    "rr_created": false,
+    "formal_req_spec_gap_test_mutated": false,
+    "server_repo_modified": false,
+    "s00_repo_modified": false,
+    "original_client_runtime_authorized": false,
+    "original_client_runtime_executed": false,
+    "native_binary_reverified": false
+  },
+  "evidence_paths": [
+    "governance/s00-iterations/S00-20261030-ITERATION-17-TUTORIAL-COMPLETION-PLAN.md",
+    "kr/tasks/T07/README.md",
+    "kr/tasks/T08/README.md",
+    "kr/tasks/T09/README.md",
+    "kr/tasks/T10/README.md",
+    "kr/tasks/T11/README.md",
+    "kr/tasks/T12/README.md",
+    "kr/tasks/T13/README.md",
+    "kr/tasks/T14/README.md",
+    "research/requests/index.json"
+  ]
+}
