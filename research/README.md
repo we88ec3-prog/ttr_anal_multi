@@ -25,3 +25,5 @@ T02–T16 研究原稿應繼續保留完整技術證據，對 S00 交付 bounded
 
 
 2026-10-30：[extra/roy1 × T16 跨 Task 三批 T01 R0–R2 實質整合](handoffs/t01-20261030-extra-t16-r2/README.md)。保留59份完整來源身份草案及14項有界主張草案；8份高優先來源已具SHA256正式SRC收件，新增4項PARTIAL CLM。第三批對Conn池重用／key-map替換／IOCP completion key再作47條定點指令及15條直接分支驗證。RR-0005仍由T02 CLAIMED、51份來源待正式收件；沒有新R3 FULL-PASS、S00 SPEC STABLE或RR ACCEPTED。
+
+2026-10-30：[T01 extra/roy1 × T16 第四、五批 R2 有界整合](handoffs/t01-20261030-extra-t16-r2/batch4/RECEIPT.md)；完整 [Batch4 原生分析](handoffs/t01-20261030-extra-t16-r2/batch4/T01-20261030-R2-BATCH4-FULL-REPORT.md) 與 [Batch5 對 RR-0005 E56 的限定初審](handoffs/t01-20261030-extra-t16-r2/batch5/R2-REVIEW.md)。51 份補登 SRC-0400～0450 仍僅 REGISTERED；E56 新登 SRC-0451，CLM-NET-0015/0016 保留 PARTIAL 且補充第三類 Pool+48 producer、Conn+14 reset 非唯一 marker 反證。RR-0005 已由 T02 SUBMITTED，T01 不代 S00 ACCEPTED；沒有新 FULL-PASS 或 SPEC STABLE。
