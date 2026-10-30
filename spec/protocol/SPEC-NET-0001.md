@@ -26,3 +26,15 @@ LE16 payload length 允許 1..4096（與 local sender 限制不同）。marker �
 T02 舊研究另外確認了有界 `WSASend`、`WSARecv/IOCP` 與後續 CClient 命令分派路徑，參見 [SPEC-NET-0002](SPEC-NET-0002.md) 與 [SPEC-NET-0003](SPEC-NET-0003.md)。因此「socket API 或收包 dispatcher 尚未定位」不再是正確的整體狀態。**仍未知的是 Client 何時/以哪種 frame 送出首筆消息、模式實際轉換、跨階段連線與異常語意。**
 
 較早研究的 `conn+A02C` 直接存取掃描發現初始化以值 `2` 寫入（`0x805D02`），但該掃描未排除間接/alias writer，故不能由此宣稱原版全部時間都使用 XOR 外框。舊 T16-70 的標頭、stream/connection offset 混淆另見 [證據勘誤](T02-EVIDENCE-INVENTORY.md)，不將錯誤搬入此規格。
+
+## 2026-10-30 T02 RR-0001/0004/0006 source-scoped revision
+
+T02 E57/E58/E59 reports have been published as bounded native-static research, but RR-0001, RR-0004 and RR-0006 are still **IN_REVIEW**. The local outbound and inbound modes remain different kinds of information.
+
+- Inbound **0x2633** has an observed 8-byte header: LE16 encoded-input length 1..0x1000, LE16 marker, **4 header bytes of unproven meaning**, then input bytes. Unlike 0x0BBB, its transformation first reverses a rolling XOR with first byte xor **0x7C** and subsequent byte xor previous decoded byte; `0x727190` then performs an inflate-like decode, success when return=0, with decoded output capacity at most `0x1000`. Do not call the four opaque header bytes official length/checksum fields or presume original Server chooses this marker. Native evidence is scoped to the Client parser.
+- Inbound **0x22D7** and otherwise unrecognized markers take the observed default **4-byte/raw** parser branch. This is a local parser branch, **not** proof of a permissive official Server protocol, safe malformed-data handling, or successful app dispatch.
+- **0x0BBB checksum mismatch** (16-bit plaintext sum) and **0x2633 decode error** both skip the decoded-payload copy, retain a zero-length pool node, then recycle it without sending a business command to the decoded app queue. The parsed wire frame can nevertheless be consumed; this is not proof the socket is closed.
+- Outer LE16 payload length **zero or >0x1000** returns parser status 0 and follows a *different* IOCP branch; incomplete header/body is compacted and preserved for the next WSARecv. Do not conflate invalid length, bad checksum and partial frames.
+- New-Conn `Conn+A02C` has a direct observed initializer `2`; same-Conn reset/reuse and aliases prevent any blanket claim that *every* connection uses only XOR framing or that indirect mode-zero writers cannot exist. Nonzero mode attempts 0x0BBB and may fall back to 0x1A68 under writer-guard failure. The first actual original-Server S2C packet and complete cross-socket ordering remain **UNKNOWN**.
+
+Scoped registered evidence: `CLM-NET-0021..0028`, `SRC-0461/0462/0471` (PARTIAL); author reports E57/E58/E59 under `kr-extra-roy/` (RR-0001/0004/0006). This section **does not** confer T01 FULL-PASS, promote any CLM to NATIVE_VERIFIED, approve synthetic example packets as captured wire, or close `GAP-NET-0001/0003`.
