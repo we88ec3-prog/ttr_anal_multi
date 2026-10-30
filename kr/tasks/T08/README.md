@@ -1,5 +1,14 @@
 # T08 實體生成與移除
 
+## T08-202 — 2026-10-31 03:23～03:32 續行勘誤／出站封包結構（研究仍未完成）
+
+> 原始KR Tartaros.bin SHA256 **9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91**；本輪以真PE .text 映射與RTTI、有效E8/virtual caller、KERNEL32/WS2_32 Import Table直接核對，而不是從T08-202的舊段落假設補齊。工作於 T08 研究分支，尚未經T01全文或S00/Server驗收。
+
+- [T08-202 CIocpNetwork身分與第一段出站佇列](../../../kr-temp-roy/20261031-033042-chatgpt-web-roy-T08-202-CIocpNetwork-vtable-outbound-buffer-IOCP-queue-PE-BIN-correction.md)，Git blob **9336f7fd3d1515ea9ee7fe185c0f8772d19c4fe3**：Controller 0x545B71的[0xFBA854]已由原始MSVC RTTI確定CIocpNetwork（ctor 0x8046D7 alloc 0x5C，0x8046F7 write vptr C51748）；其vtable+0x10=0x8069A0，查connId0後0x8060D0把本地6-byte頭+每pair 5-byte entries之payload複製進packetNode，0x806060將其加入conn+0xA074佇列；另一vtable+0x0C=0x8068B0內真call WS2_32!WSASend，但不是直接從0x545B71進它。
+- [T08-202 queue drain→mode0 framing及nonzero XOR/checksum](../../../kr-temp-roy/20261031-033209-chatgpt-web-roy-T08-202-IOCP-queue-drain-length-magic-XOR-frame-BIN-correction.md)，**最終Git blob 0da7938fc496735c29df384303ae496e9c1e67a6**：0x8061A0從相同conn+0xA074取queueEntry→packetNode+4 len/+8 bytes；mode0/fallback 0x807A70在6+5N前另加u16原長＋u16常數0x1A68，寫入conn+0x501C output ring；非零mode 0x807830採len+6及XOR/累加變換，成功才卸queue entry；由真E8 0x804AD6、0x805228證實global connection vector reader的兩個上游caller。模式0本地length允許4096但framer只許length+4<=4096，N=818若成立會在framer失敗，未證實runtime可達818個合格pair。
+- **仍未完成，不得把T08-202標FINISHED**：connection output ring→**相同封包**WSABUF→WSASend caller/async完成、nonzero-mode完整轉換、P+4/P+8所有alias writers、命令26／81與record/owner清理一致性、實際Client資料來源及scene效果。也未證原版Server內部規則；T02 wire、T06/T07場景與S00相容設計各有主責。
+- **獨立T01退回仍有效**：LEGACY-MAPPING-001依T01原件24篇原始FAILED→仍NEEDS_FIX，不能把本輪局部BIN-first發現自動提升FULL-PASS或替T01改結案狀態。保留歷史及既有五項READY_FOR_REVIEW、兩項RESOLVED。
+
 <!-- S00-DISPATCH-BOOTSTRAP:v1 -->
 ## S00 研究請求開工檢查（正式）
 
