@@ -77,3 +77,12 @@ Iteration 20 沒有修改正式台帳、原 Client/BIN 或 Server 程式。JSON 
 ## Admin WEB V1 後續更新：IP / URL 免登入（2026-10-31）
 
 使用者指定：**「目前先不管權限，指定的IP與URL就能管理」**。以 `REQ-0006` 第二筆 `PLAYER_ADMIN_REQUEST` 記錄修訂同一需求，未新增 REQ/Client RR。最新應以 [Admin WEB V1 設計](../design/admin-web/ADMIN-WEB-V1-PLAN.md)、[ADR-0004](../design/decisions/ADR-0004-admin-web-security-boundary.md) 為準：不做管理員帳號/登入/MFA/RBAC；配置**來源客戶端 IP/CIDR allowlist** 和**確切 WEB Host/port/base path** 進入後台，預設拒絕，私網/VPN/TLS、可信代理、POST Origin/CSRF、稽核來源 IP/理由/事件仍必要。同 IP 可能多人，不能假稱可辨識個別操作者；URL 不是憑證。新增帳號、N 天/永久停權、解封及 Session fencing 不變。無具體 IP/URL 時不要猜；未授權曝露公網或改 C00/Server，整體仍 CANDIDATE/PROPOSED、無執行測試。
+
+
+## 2026-10-31 — extra/roy1 merge + RR-0010 新來源驗證
+
+- 研究原稿 `extra/roy1` 已透過 [PR #63](https://github.com/we88ec3-prog/ttr_anal_multi/pull/63) 合併 `main`，merge `3ccbee4a78346b0c8751984555fc43157db5f723`；相對當時 main 新增 13 個研究報告與 BIN-byte verifier，不覆寫原研究台帳或其他作者文件。
+- 正式 [S00 有界審查全文](s00-iterations/S00-20261031-RR0010-EXTRA-ROY1-REVIEW.md) 已核對 E71–E74 的報告 SHA／類別區分與 5 份 KR 同版既存 Ghidra 偽碼。**無原始 BIN 可在此 ChatGPT 工作環境重跑作者的 native checker**，不得冒稱 T01 FULL-PASS、原版 Server 封包實測或 Client runtime。
+- 真正新事實是 **CExpeditionCreateDialog 名稱 sender `C2S0x003E`（48B，UTF-16 at +6，+2..5 UNKNOWN）**、LOGIN scene **S2C `0x004A` signed status+2 → 本地 F4245 → name UI**，以及 app2 header name +0x0C 寫共享 `F938F2`、per-row C2S `0x26`/post `0x24`；它們**不是**已證同一原版 Server 交易或 playable-character 創建。
+- RR-0010 繼續 **BLOCKED**，GAP-CHAR-0003 **OPEN**，SPEC-CHAR/FLOW **DRAFT/PARTIAL**；先從 Client 靜態 `0x3E+2..5`、LOGIN scene/狀態、N0 create UI、`0x4A→app2` 必要橋樑、E75 `F4261` subscriber 研究下去，不要以「無原版 Server」中止可進行的 BIN-first 工作。與 RR-0002/0009 去重。
+- **CI 注意：**在此研究來源合併之前的 main `afc0b1fe` 已有 [CLM-CLIENT-0063 原生證據來源缺失的 CI failure](https://github.com/we88ec3-prog/ttr_anal_multi/actions/runs/41110975506)；不能為了使 CI 變綠而捏造 CLM proof 或自動降級別人原生主張。請交其 owner/T01 修正，不當作 RR-0010 已通過。

@@ -89,3 +89,8 @@ Server 需求採用 [唯一 REQ 台帳](../design/requirements/README.md)，**�
 ## Iteration 22 — 管理員 WEB 後台以第三來源直接建 REQ（非 Client RR）
 
 [WEB Admin V1／Iteration 22](s00-iterations/S00-20261031-ITERATION-22-ADMIN-WEB-V1.md)：使用者實際要求管理頁面新增玩家帳號、N 天／永久停權與解封。以 `PLAYER_ADMIN_REQUEST` 與去敏 [request record](../design/requirements/requests/2026-10-31-admin-web-account-operations.md) 寫入**唯一正式** REQ-0006～0008（CANDIDATE）；這是不同於 REQ-0001～0005 的 Server 管理產品需求。無 Client native source 就**不建 RR/CLM/原生 SPEC**；Server-only 的隔離 Admin 身分/RBAC/audit 與停權/fencing 決策編入 PROPOSED ADR-0004/0005。完整 API、DB、UI、25項 NOT_RUN 驗收於 `design/admin-web/`；未正式批准時只能作非規範設計，不可推論遊戲 Client 可登入、Server 已上線或 S00 相容性障礙已解除。
+
+
+## 2026-10-31 RR-0010 研究來源合併與有限驗證
+
+`extra/roy1` 透過 [PR #63](https://github.com/we88ec3-prog/ttr_anal_multi/pull/63) 合併來源研究 E71–E75，並由 S00 在 [RR-0010 逐條審查](s00-iterations/S00-20261031-RR0010-EXTRA-ROY1-REVIEW.md) 核對有界 Client 路徑與已保存同版偽碼。**研究來源 Git merge ≠ RR SUBMITTED / S00 ACCEPTED / T01 FULL-PASS**。建名本地 producer `C2S0x3E`、候選 `S2C0x4A` local result、app2 共享名稱是可供 DRAFT 及 Server-only 模型的進展；原始 Server 配對與 playable-character roster 仍未閉合，故 `RR-0010 BLOCKED`／`GAP-CHAR-0003 OPEN`，完整開工仍依研究派工唯一台帳，不因 report 存在自動喚醒 Agent。本 S00 審查未執行原始 BIN 或 Client。
