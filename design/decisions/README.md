@@ -16,3 +16,9 @@ To approve: maintainer separately verifies scope, risks, independently implement
 - [ADR-0005 — 管理停權的 UTC 期限、資料持久化、Session revocation/fencing](ADR-0005-account-sanctions.md)：支援 REQ-0008；**不共用** C02 failed-password `locked_until`。
 
 二者皆為版本中立、`PROPOSED`、`client_version=null`，不與 KR/TC wire 綁定；未來要核准必須經維護者明確批准安全／資料／故障策略，不能只因 Git merge 就自動變成 normative。
+
+
+## Iteration 25 — 首次教程狀態與重登之 Server policy（2026-10-31）
+
+- [ADR-0006 — per-role TutorialProgress、SessionEpoch/AdmissionId、checkpoint、Quest/reward 去重及重登](ADR-0006-tutorial-progress-and-session-fencing.md)：**PROPOSED、尚未批准、NON-NORMATIVE**。對應 [Iteration25](../../governance/s00-iterations/S00-20261031-ITERATION-25-TUTORIAL-ENTRY-RECOVERY-PLAN.md)；其 per-role 首次判定／mode2／Skip／完成條件、Lua checkpoint replay、Reward ledger 交易需維護者決議，不自動寫回原版 Client 協定。
+- 現在共有 ADR-0001..0006，**皆仍是 PROPOSED**。新的 C-TUTORIAL-DOMAIN roadmap package 只是獨立 Server 測試路線，check_s00_readiness 應維持 EXTERNAL_REVIEW_REQUIRED；不代表 Main 已發展出可玩的 native Client Server。

@@ -43,7 +43,12 @@ class ReadinessTests(unittest.TestCase):
     def test_current_roadmap_is_structurally_consistent_but_not_ready(self):
         data = assess(self.root)
         self.assertEqual(data["errors"], [], data["errors"])
-        self.assertEqual(len(data["packages"]), 6)
+        plan = json.loads((self.root / "governance/s00-roadmap.json").read_text(encoding="utf-8"))
+        self.assertEqual(len(data["packages"]), len(plan["milestones"]))
+        tutorial = next(x for x in data["packages"] if x["id"] == "C-TUTORIAL-DOMAIN")
+        self.assertEqual(tutorial["phase"], "C")
+        self.assertEqual(tutorial["status"], "BLOCKED")
+        self.assertIn("EXTERNAL_REVIEW_REQUIRED", tutorial["blockers"])
         self.assertEqual(data["summary"]["specs"], 7)
         gaps = json.loads((self.root / "design/gaps/index.json").read_text(encoding="utf-8"))["items"]
         requests = json.loads((self.root / "research/requests/index.json").read_text(encoding="utf-8"))["items"]
@@ -90,7 +95,7 @@ class ReadinessTests(unittest.TestCase):
         self.assertTrue(any("UNREVIEWED_TEST_PROVENANCE" in reason
                             for pkg in report["packages"]
                             for reason in pkg["blockers"]))
-        self.assertEqual(report["summary"]["packages_blocked"], 6)
+        self.assertEqual(report["summary"]["packages_blocked"], len(report["packages"]))
 
 if __name__ == "__main__":
     unittest.main()

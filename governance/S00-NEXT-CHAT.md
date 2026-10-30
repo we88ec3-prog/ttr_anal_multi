@@ -106,3 +106,12 @@ E80 是 **RR-0002 選角的研究**，不是 RR-0010 真正建立 playable-chara
 - Iteration23 的 **S2C2 full 65+53N 與 S2C2B delta 2+53N 共用 F94304 role data** 繼續有效；app2 的 ID0 role mask shift 有潛在不一致，Server 初期若採 role1..9 是自訂保守策略，並非官方規則。
 - **角色建立與選擇分開**：RR-0010 BLOCKED（playable-character create→reply→roster 未閉合），RR-0002 BLOCKED（selection response pairing/拒絕 UI 不明），RR-0008 IN_REVIEW、RR-0009 SUBMITTED，GAP-CHAR-0001/0003 OPEN，SPEC-CHAR/FLOW DRAFT/PARTIAL。不要把源碼研究上 Git 或 synthetic Domain test 視為 ACCEPTED/T01 FULL-PASS。
 - 開發次序：Iteration23 SR23-01/02 Expedition/RoleStore → Iteration24 SR24-01/02 RoleOwnership/SelectionAttempt→ SR24-03 bounded C2S42 parser→SR24-04 Square candidate **feature off by default**；另交 T02/T03/T04/T05/T06/T16 查正向場景/錯誤/教學。當前未在設計 repo 開發 Server。
+
+
+## 2026-10-31 — Iteration 25 已提交的後續規劃（新對話先核對最新 main）
+
+前一階段 main=e9ec313b3d2cf0693134606d1e58f818c2f557ca CI 在 Actions #41124285391 成功（修正 CLM-CLIENT-0063 native evidence refs）；這個 CI **不證 Client 可玩**。接續 Iteration23/24 的 RoleStore/SelectionAttempt/Square 有界研究，新建 [Iteration25 完整教學首次入場與復原設計](s00-iterations/S00-20261031-ITERATION-25-TUTORIAL-ENTRY-RECOVERY-PLAN.md) + [I25-T01～T16 未執行測試](s00-iterations/S00-20261031-ITERATION-25-ACCEPTANCE.md)，以及 [ADR-0006](../design/decisions/ADR-0006-tutorial-progress-and-session-fencing.md)（**PROPOSED、不具 normative 效力**）。
+
+- 下一個真正可在獨立 Server 庫做的開發包：SR25-01 per-role Progress/revision、SR25-02 AdmissionId/SessionEpoch fencing+ban、SR25-03 首進/重登/完成 route 分歧、SR25-04 Quest/Reward/idempotency/outbox、SR25-05 adapter OFF，SR25-06 合成負例測試，SR25-07 補原 Client scene/quest 所需正向證據。**本文沒有修改 ttr_server_roy**。
+- 研究前提：原版 C2S42→Server success/失敗→S2C69 subtype7→CSquare→C2S43→tutorial scene/Quest 的因果並未證實；SceneList(1001,1) 是資源鍵、Client S2C0x4C Scenario14 map flag 非 Quest 完成；不能將 MockClient/CI PASS 當作 original client E2E。
+- Roadmap 的 C-TUTORIAL-DOMAIN 與 B-NET/B-CHAR/B-SCENE 研究可獨立開始規劃，但僅是 phase-C 候選，checker 仍應給 EXTERNAL_REVIEW_REQUIRED／BLOCKED，正式 Native/ADR/REGISTRY 不自行升格。下次要修改 Server 請直接在 ttr_server_roy 下建立實際 DEV/C05 接手任務並經維護者確認政策。
