@@ -85,3 +85,14 @@ python -B -m unittest discover -s governance/tests -v
 ```
 
 [可核對的分段計畫](s00-requirement-slices.json) / [交接](S00-NEXT-CHAT.md)：由唯一 REQ/RR/GAP/SPEC 來源即時推導 `BLOCKED`、`DISCOVERY_REQUIRED` 等**設計狀態**，不是已測原始 Client，也不改變原生證據及 T01/Txx 責任。GitHub Actions 只對錯誤引用／無效 DAG 失敗，不能把 CI 成功當成 Server 真正可玩。
+
+
+## Iteration 12/13 — L00–L08 Server 契約研究檢查
+
+```powershell
+python -B governance/check_s00_lobby_gates.py --check
+python -B governance/check_s00_lobby_gates.py --json
+python -B -m unittest discover -s governance/tests -v
+```
+
+交叉核對 [9 個 L00–L08 逐項檢查點](s00-lobby-gates.json)、[12 個未執行測試案例](s00-iteration12-lobby-test-plan.json) 和 REQ/RR/GAP/SPEC/TEST。所有驗收標示均為**分析規劃**，`--check` 只檢查結構與引用，仍有未解阻塞並非 CI 失敗，也不驗證真實畫面或 Server 相容性。新的 [Iteration 13 分工](S00-20261030-ITERATION-13.md) 和 [新對話交接](S00-NEXT-CHAT.md) 僅供接續。
