@@ -27,6 +27,23 @@
 
 上述是進一步原生勘誤，但**不是T01對24份原稿的全文FULL-PASS，也不授權把整項LEGACY-MAPPING-001改RESOLVED**。舊來源／原審核歷史均維持。其後優先查Host→virtual slot+8實際caller與T08-202未完別名writer。
 
+## 2026-10-31 03:09～03:15：T08-152上游可達性與 CModel/CItemNodeSimple 分桶勘誤
+
+承接前文已提交的T08-152 truePE/MSVC RTTI原生修正版（blob **14813f82c72673a0ffe271dcdc23ad6abcb106f3**），本輪直接從同SHA的原始Tartaros.bin新建三份完整有界證據（以下blob均為推送後讀回）：
+
+|新增證據|Git blob SHA|功能鏈／限制|
+|---|---|---|
+|[CDoll vs CModel IRenderable RTTI及全域bucket雙寫入者](../20261031-030908-chatgpt-web-roy-T08-LEGACY-152-followup-IRenderable-CDoll-CModel-bucket-producer-BIN-first-FULL.md)|**005ee32ca6fdd3fe201d5b8c83df35b641e710f3**|CModel主vptr C500D4+8=7D3470；直接bucket store 7D3515/7D35A4，另7D3601→79A3C0；manager FB76A8+98就是[FB7740]之同一bucket pointer。CDoll與CModel的CHD都含IRenderable但不是彼此的派生類。|
+|[CItemNodeSimple→CModel virtual+8 forwarder](../20261031-031253-chatgpt-web-roy-T08-CItemNodeSimple-CModel-virtual-forwarder-native-ABI-and-two-constructors.md)|**a5b43035c9906b4ba737a35d232ab266758b9b40**|RTTI CItemNodeSimple primary vptr C51020 +2C=7FC360：Node+34→CModel*，jmp [CModel.vptr+8]，正常vptr C500D4時到真7D3470；B0/Model其他配置另分。|
+|[同Node建構/持有者真正xref與後置dispatcher](../20261031-031454-chatgpt-web-roy-T08-CItemNodeSimple-node-construction-to-CModel-initialization-and-dispatcher.md)|**80471c49eadbddbae5446b97a0debaf73024e4c8**|7EF8D2建立Node vptr；7EF912→7F07B0→7F0810→7FC380同Node參數，配置B8 bytes CModel、7FC3DD寫Node+34；後續7B31F0是list compare/virtual dispatch，非直接bucket store。|
+
+### 本輪更正的舊假設及審核界限
+
+1. **不能再說所有0xFB7740全域bucket writer都不明／只有79A3C0**：真7D3470的兩條直接bucket寫入已核；79A3C0是同一CModel實作下直接call的一條補充writer，並由owner指標等式證實同一base。
+2. **不能把CDoll的primary slot+8和CModel的primary slot+8當同一方法**：前者7A63C0入[0xFBA838]之B queue、後者7D3470寫[0xFB7740] bucket。雖二者RTTI皆含IRenderable，仍沒有B→CModel/bucket之獨立指標與執行因果。
+3. **CItemNodeSimple的Node+34來源現在已找到有界真正caller鏈**：7EF912→7F07B0→7F0810→7FC380。但其scene loop如何觸發Node.vtable+2C仍待原生CFG研究；不因存在virtual forwarder就宣稱每幀執行。
+4. 依T01程序，這是修復T08-152遺留的可達性／型別界線並擴展P1渲染資料流，**不是24篇來源全文FULL-PASS，LEGACY-MAPPING-001仍NEEDS_FIX**。沒有更動原始FAILED、RR台帳或共享NATIVE_VERIFIED。T08-202整體未完成，不能擅跳203。
+
 ## 18篇／1263條 T01 已核 code-row 對照表
 
 以下每一表**只是復用T01原始`mapping-findings.json`已核的行對照，非本輪獨立逐條二次驗證，更不是已修復整份來源**。逐條表提供舊VA、真PE VA、原始bytes、實際不同bytes以及E8真目的地候選。
