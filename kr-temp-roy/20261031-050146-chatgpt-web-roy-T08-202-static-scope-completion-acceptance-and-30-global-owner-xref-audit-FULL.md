@@ -39,7 +39,7 @@
 ## 2. 可重現原始BIN核驗（與研究結論不是同一層次）
 
 同輪在本機原始BIN執行過**兩個獨立審核程序**：
-1. `t08_202_verify.py` 原生 code：58個指定code byte anchors **PASS**；CController/CEmpty/CMission/CSingle/CTutorial/CTag的vptr+44六個DWORD均546EF0及CDoll offset+8子vptr C4F6B0+8 DWORD 7A57C0，共7個 **PASS**；三個E8 signed rel32真目標 **PASS**。特別檢出並修正 `545A93`不是`FF D2`，正確虛擬call是`545A97 FF D2`。
+1. `t08_202_verify.py` 原生 code：58個指定code byte anchors **PASS**，另外獨立核對錯位反例`545A93`，新Git驗證腳本合計**59個code byte anchors**；CController/CEmpty/CMission/CSingle/CTutorial/CTag的vptr+44六個DWORD均546EF0及CDoll offset+8子vptr C4F6B0+8 DWORD 7A57C0，共7個 **PASS**；三個E8 signed rel32真目標 **PASS**。特別檢出並修正 `545A93`不是`FF D2`，正確虛擬call是`545A97 FF D2`。
 2. 獨立實作依 `.text` bytes查 `0xFAB148` 小端即時值：**30/30真指令即時數址PASS**，其中11 reset、16 lookup、3 other；已排除 `4DF124`立即數+3誤映射。
 
 可在有相同SHA完整原件的工作站重跑已提交 [T08-202-native-final-reference-audit.py](T08-202-native-final-reference-audit.py)，精確檢查hash、30直接引用、58bytes、7 vtable slots、3 direct E8 edges。**新提交的本Python腳本作者側通過等價獨立本機Python測試組合；遠端GitHub/CI目前沒有執行該腳本的驗證結果，不寫「CI已PASS」。** 任何match只證當處bytes與直接指標，不能取代T01對整篇CFG/ABI語義FULL-PASS或遊玩。
@@ -77,7 +77,7 @@
 - [四Actor RTTI/六Controller真正析構](20261031-044016-chatgpt-web-roy-T08-202-four-native-Actor-RTTI-virtual-cleanup-and-Controller-H-tree-destructor-evidence.md)。
 - [Scene::CDuelDecision P+4 consumer](20261031-044536-chatgpt-web-roy-T08-202-Scene-CDuelDecision-actual-P4-numeric-Actor-consumer-and-fallback-native-chain.md)。
 - [**本輪新pair/slot44/CDoll/負面P writers完整原生稿**](20261031-045459-chatgpt-web-roy-T08-202-pair-consumer-vtable-CDoll-P-field-BIN-final-evidence.md)，初次Git blob `240f947bd2fd9af66f9b1ba07d8cc298af0422c0`。
-- [**原生驗證腳本**](T08-202-native-final-reference-audit.py)（腳本最新實際blob應以GitHub遠端讀回為準）。
+- [**原生驗證腳本**](T08-202-native-final-reference-audit.py)（本輪遠端讀回Git blob `447629a9375f9b3627e53ae64408b538182ecfed`；其中`4DF124`立即常數自+3起，其餘29處自+1起）。
 - 既有202出站RX/TX更正如`20261031-035954` XOR 0BBB checksum，CIocpNetwork 034400/034500 WSASend/GQCS各有原生有界來源。
 
 **最終裁決**：以原始04交接的202問題集為固定完成條件、以上BIN root/CFG/owner/consumer和反例已足夠封閉的**有界靜態研究**；新進一步全局 alias/indirect target、跨T02/S00與runtime不得冒充已完成，亦不得因非當前202範圍之其它資源行為未知就無限延遲本段完稿。
