@@ -56,3 +56,14 @@
 4. **P1**：E18–E26 將 Scenario14 settlement、QuestInfo14、Quest16、Quest15 可接、教學離場和重登持久化分開驗收。Server 自訂冪等／fencing 如要採用先經 ADR，不能寫成原版 protocol。
 
 Iteration 20 沒有修改正式台帳、原 Client/BIN 或 Server 程式。JSON `linked_existing_*_ids_from_plan` 是 **Iteration 16 規劃的引用**，絕非新增的精確 native proof；新提案需沿用現有 S00/RR 註冊與 T01 review 流程。I20-T01..T12 尚未執行、未註冊正式 TEST，Original Client E2E 仍需要另外明確授權。
+
+## Iteration 21 — 創角原生缺口已正式派工（2026-10-31）
+
+[Iteration 21 完整派工與反證規則](s00-iterations/S00-20261031-ITERATION-21-CREATE-UI-WIRE-DISPATCH.md)。當次在 main `4ab3ce9a8a635d0b6862d6b552bf0b1098097b88` 基礎上做有限範圍去重，正式發布時請以**最新** `research/requests/index.json` 取代快照。
+
+- **新 RR-0009／GAP-CHAR-0002，P0 QUEUED**：T03 主責，T06 僅資源協查；E05 零角色或「新增」控制到真正 Create dialog 的 **Client local UI** 正向路徑。禁止把 65+53N、F42EF 或 0x665150 當 UI-ready。
+- **新 RR-0010／GAP-CHAR-0003，P0 QUEUED**：T03 主責，T04/T02 提供初始欄位/transport 介面；E06 真正 create C2S producer → S2C result consumer → roster/init。**選角 C2S 0x42 不是創角**，未知官方 Server pairing 仍 UNKNOWN。
+- 已更新 `spec/spec-index.json` 與 SPEC-CHAR/FLOW DRAFT 內的未解阻塞；研究者須先確認 T03 T01 NEEDS_FIX，再按使用者明確優先與 `research/dispatch/inbox/T03.md` 依法認領。**GitHub 合併不是 Agent 已開始研究**。
+- E08–E12 持續受 RR-0002 BLOCKED、RR-0008 IN_REVIEW 制約；E17 戰鬥證據以及 E18–E26 任務/離場尚未閉合。沒有新原生 BIN 研究或 Client runtime 授權，沒有更新 ttr_server_roy。
+
+下一次 S00 請先審這兩個 RR 是否被認領／交件，再判斷 E07 應否獨立開研究；不應直接再重複建立同義 Create RR。
