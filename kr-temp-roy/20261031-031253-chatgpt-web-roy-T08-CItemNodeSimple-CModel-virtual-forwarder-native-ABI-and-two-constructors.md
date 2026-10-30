@@ -137,3 +137,8 @@ CItemNodeSimple.vtable+0x2C = 7FC360
 |CDoll B vector vs Model bucket|兩種物件皆屬IRenderable派生，但CDoll primary+8=7A63C0，CModel primary+8=7D3470，不能混為同一實作|CDoll B→CModel/Node bridge仍缺正確pointer identity|需由已證Client wire/SPec及S00獨立定義相容設計|T01原生FULL-PASS未完成|
 
 **T01退回**：保留全部舊源，LEGACY-MAPPING-001仍 NEEDS_FIX；本稿是獨立原生證據而非T01審核決議。雖本輪已找到 CModel上游確切virtual tailcall，CDoll B→bucket的相應跨物件橋仍缺，故研究目標尚未完全達成，應延續。
+
+
+## 事後補證（同次分析 03:14:54）
+
+原稿中「7FC380的EBX=[EBP+8]仍需從caller確定是否同一Node」已在獨立新原生證據 [7EF912→7F07B0→7F0810→7FC380同一Node資料流](20261031-031454-chatgpt-web-roy-T08-CItemNodeSimple-node-construction-to-CModel-initialization-and-dispatcher.md)（blob **80471c49eadbddbae5446b97a0debaf73024e4c8**）解決：7EF8D2寫CItemNodeSimple vptr後同一ESI Node由7EF912 push並在7F07D5成為EBX、7F080D再push EBX傳7FC380。**限制：成功路受owner+0x128與多型呼叫/配置結果制約；真正scene loop呼叫Node slot+0x2C仍待證。**
