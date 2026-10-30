@@ -141,6 +141,20 @@ def evaluate(root: Path = ROOT):
                     errors.append(f"{label}: feature request needs actual request content")
                 if not _safe_path(root, o.get("request_record_ref")):
                     errors.append(f"{label}: feature request needs a public-safe internal request record")
+                # Historical protocol documents and operations/security notes
+                # supplied by a player/admin are USER REQUEST attachments,
+                # not separate origins or automatically native Client proof.
+                materials = o.get("reference_materials", [])
+                if not isinstance(materials, list):
+                    errors.append(f"{label}: reference_materials must be a list")
+                else:
+                    for material in materials:
+                        if (not isinstance(material, dict)
+                                or not all(isinstance(material.get(key), str) and
+                                           material[key].strip()
+                                           for key in ("description", "location", "provenance_note"))):
+                            errors.append(f"{label}: user reference material requires "
+                                          "description/location/provenance_note")
                 # Never elevate a product request to historical Client behavior.
     return {
         "schema": "s00-server-requirement-check-v1",

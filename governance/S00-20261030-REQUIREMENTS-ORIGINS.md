@@ -26,3 +26,8 @@
 將上述需求分類加入 [S00 開工流程](s00-workflow.md)、[SPEC 實作者交接](../spec/IMPLEMENTER-HANDOFF.md)。後續每一段研究分析（T02–T16）若找到新的 Server 收發依賴，即可提交同 ID discovery，或提出不同驗收目標的新 REQ。若之後獲准原版 Client 運行，研究員按真實環境/重現紀錄補 REQ；玩家及管理員的實際要求則由維護者內部收件，當前仍不開放外部 Issues。任何 REQ 的 `APPROVED` 必須另有維護者決議，不由索引/CI 自動發生。
 
 無新增原版 Server 行為、原版 Client runtime 驗證、正式 SPEC 進階、Server 程式或新的研究認領。
+
+
+## 使用者修正：第 5 類併入第 3 類使用者需求
+
+若玩家／管理員提供舊 Server 紀錄、歷史協定文件或運營／安全需求，統一由 `PLAYER_ADMIN_REQUEST` 收件，材料列入 `discoveries[].reference_materials`（原始描述、位置、來源可信度）。這些資料是需求背景，不自動形成新的第四／第五種發現來源，也不自動核准 Client-compatible wire。使用者的三個必要來源仍為 `CODE_ANALYSIS`、`GAME_RUNTIME_OBSERVATION` 與 `PLAYER_ADMIN_REQUEST`，三者任一均可單獨發現需求；真實遊戲執行依然需另行授權。
