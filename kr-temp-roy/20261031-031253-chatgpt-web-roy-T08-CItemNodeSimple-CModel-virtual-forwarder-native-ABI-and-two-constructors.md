@@ -112,7 +112,7 @@ ClassHierarchyDescriptor C80CFC的原始DWORD為 [0,0,2,C80D0C]，解析baseArra
 ~~~text
 7EF89E allocate 0x50 Node
  -> 7EF8D2 Node.vptr = C51020; Node+0x34 = 0
-7FC380 Node-associated init (callerまだ需定位)
+7FC380 Node-associated init (caller仍待定位)
  -> 7FC3AA alloc 0xB8
  -> 7FC3CA E8 7D2DB0 : CModel ctor / vptr C500D4
  -> 7FC3DD Node+0x34 = CModel*
