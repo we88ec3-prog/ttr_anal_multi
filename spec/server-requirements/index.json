@@ -1,0 +1,135 @@
+{
+  "schema": "s00-server-requirement-candidates-v1",
+  "version": "2026-10-30",
+  "policy": "CANDIDATE only. CODE_ANALYSIS/RUNTIME_OBSERVATION/USER_REQUEST are independent requirement-discovery origins; never require a second origin. Historical artifacts supplied by user are USER_REQUEST reference_materials, never a fourth origin. This ledger is not an approved SPEC or RR registry.",
+  "items": [
+    {
+      "id": "SRQ-0001",
+      "origin": "CODE_ANALYSIS",
+      "title": "KR Client E8/000F outbound authentication creates a Server receive requirement candidate",
+      "direction": "SERVER_RECEIVE",
+      "status": "CANDIDATE",
+      "evidence_status": "CLIENT_STATIC_BOUNDED",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_claim_ids": [
+        "CLM-AUTH-0001",
+        "CLM-AUTH-0006"
+      ],
+      "source_path": "kr-extra-roy/20261030-chatgpt-web-roy-E69-RR0003-E8-tail-uninitialized-CPACP-and-13-handoff-native.md",
+      "rr_ids": [
+        "RR-0003"
+      ],
+      "spec_ids": [
+        "SPEC-AUTH-0001"
+      ],
+      "gap_ids": [
+        "GAP-AUTH-0001"
+      ],
+      "requirement": "An independently designed Server needs to consider how to receive and parse two different Client-local C2S auth variants, E8/112B on mode52 versus 000F/214B on mode54/other, where the builder queues via key1.",
+      "unknowns": [
+        "No observed complete real wire transaction",
+        "E8 +104..109 has no direct initializing writer in inspected builder; do not assign a fixed value",
+        "Official authentication policy and startup mode selection remain unknown"
+      ],
+      "reference_materials": []
+    },
+    {
+      "id": "SRQ-0002",
+      "origin": "CODE_ANALYSIS",
+      "title": "Conditional LOGIN 0x0013/0x007A handlers expose possible Server send shapes",
+      "direction": "SERVER_SEND",
+      "status": "CANDIDATE",
+      "evidence_status": "CLIENT_STATIC_BOUNDED",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_claim_ids": [
+        "CLM-AUTH-0004",
+        "CLM-AUTH-0005",
+        "CLM-NET-0030"
+      ],
+      "source_path": "kr-temp-roy/20261030-142513-chatgpt-web-roy-T03-RR0003-KR-auth-E8-000F-13-codepage-group-handoff.md",
+      "rr_ids": [
+        "RR-0003",
+        "RR-0007"
+      ],
+      "spec_ids": [
+        "SPEC-AUTH-0001",
+        "SPEC-FLOW-0001"
+      ],
+      "gap_ids": [
+        "GAP-AUTH-0001",
+        "GAP-FLOW-0001"
+      ],
+      "requirement": "Server may need to produce a valid S2C application 0x0013 or separate 0x007A for the appropriate LOGIN scene/state: 0x13 status+0x16, groupCount+0x1C/cursor+0x92; 0x7A groupCount+2/cursor+6.",
+      "unknowns": [
+        "Handler registration does not prove original Server sent these messages or their order",
+        "Status enum, full length, packet framing, socket and C2S pairing unknown"
+      ],
+      "reference_materials": []
+    },
+    {
+      "id": "SRQ-0003",
+      "origin": "CODE_ANALYSIS",
+      "title": "Frame handling and scene delivery constraints for Server-sent responses",
+      "direction": "SERVER_SEND",
+      "status": "CANDIDATE",
+      "evidence_status": "CLIENT_STATIC_BOUNDED",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_claim_ids": [
+        "CLM-NET-0026",
+        "CLM-NET-0027",
+        "CLM-NET-0029"
+      ],
+      "source_path": "kr-extra-roy/20261030-112205-chatgpt-web-roy-E59-RR0006-compressed2633-22D7-decode-checksum-pool-IOCP.md",
+      "rr_ids": [
+        "RR-0006",
+        "RR-0007"
+      ],
+      "spec_ids": [
+        "SPEC-NET-0001",
+        "SPEC-NET-0003"
+      ],
+      "gap_ids": [
+        "GAP-NET-0003"
+      ],
+      "requirement": "If sending frames to original Client, the independent Server design must respect frame parsing, length, checksum/decode and lane2/scene reachability gates. Invalid checksum or inflate can suppress app delivery.",
+      "unknowns": [
+        "Which frame marker is sent first in an original session",
+        "Original Server retry policy and complete receive sequence"
+      ],
+      "reference_materials": []
+    },
+    {
+      "id": "SRQ-0004",
+      "origin": "USER_REQUEST",
+      "title": "Independent Server should restore playable login, character selection and entry to gameplay",
+      "direction": "STATE_OR_POLICY",
+      "status": "CANDIDATE",
+      "evidence_status": "USER_INTENT_ONLY",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_claim_ids": [],
+      "source_path": "AGENTS.md",
+      "rr_ids": [
+        "RR-0002",
+        "RR-0003",
+        "RR-0005",
+        "RR-0008"
+      ],
+      "spec_ids": [
+        "SPEC-FLOW-0001"
+      ],
+      "gap_ids": [
+        "GAP-FLOW-0001"
+      ],
+      "requirement": "The explicitly stated project goal is restoring a playable flow while keeping Server design and code implementation in different repositories. This feature request does not prove original Server wire behavior.",
+      "unknowns": [
+        "Original selection success/error pairing remains blocked",
+        "Backend policies require separately approved decisions"
+      ],
+      "reference_materials": []
+    }
+  ]
+}
