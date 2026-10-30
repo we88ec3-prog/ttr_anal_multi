@@ -67,3 +67,10 @@ validator 只驗證索引、來源類別、連結、版本、提交的記錄路�
 [Iteration 23 遠征隊名稱與共同角色紀錄計畫](../../governance/s00-iterations/S00-20261031-ITERATION-23-EXPEDITION-ROSTER-PLAN.md) 已比對 T03 E76–E79 新的原件研究報告。**REQ-0003**（完整角色清單）及 **REQ-0004**（UI 就緒）仍是現有需求，app2B 增量資料與 B6 局部通知應先映射到它們的需求/驗收，**不另建同義需求**；「Expedition identity 建名」與 playable-character recruit 是可能獨立的 Server-facing 用例，但目前仍是**待來源審查的候選拆分**，沒有在正式索引加入 REQ-0009 或假造既有 CLM。
 
 理由：`governance/check_server_requirements.py` 的 `CODE_ANALYSIS` 必須精確關聯**已登錄的同版 CLM**。E76–E79 目前只有 T03 原稿與 verifier，S00 此輪沒有重新驗原始 KR BIN／T01 建立新 native CLM，故不把這些報告硬掛到舊的 `CLM-CHAR-0002` 冒充 E79 證據。後續 T01/T03 完成限定 CLM 納入後，才分別在 REQ-0003/4 追加相應 `CODE_ANALYSIS` discovery；若經去重確認獨立的 Expedition identity 可驗收成果，再正式提出新的 CANDIDATE REQ。這不阻止 Server 開發者**先依設計提案**做內部 Domain model／合成測試，不能誤認為已批准的 original Client wire。
+
+
+## Iteration 24 — E80 選角研究與新 Server 需求分流
+
+[Iteration24](../../governance/s00-iterations/S00-20261031-ITERATION-24-SELECTION-SQUARE-HANDOFF.md) 應用 E80 RR-0002：S00 可先在獨立 Server 實作 **RoleSelectable / SelectionAttempt / SquareBootstrap** 的 domain model 與合成測試，對照現有 REQ-0003（角色清單權威）和 REQ-0004（角色選擇畫面/就緒），不要把選擇既存角色誤當 RR-0010 的建立角色。
+
+正式 CODE_ANALYSIS discovery 必須依 validator 綁已登錄的**同版本原生 CLM**；E80 本次只有原稿/verifier、S00 未重新執行原始 KR BIN 或建立獨立 scoped CLM，因此**不假填** E80 新字段（mode0/2、S2C69/7→C2S43）至舊 CLM、不擅加正式 REQ。待 T01/T03 交付正式限定來源，再評估是否沿 REQ-0004 擴充，或因選角的 Server-side authorization 不同驗收成果而新增獨立 CANDIDATE REQ。版本、Server policy 與 original Client evidence 必須分開。

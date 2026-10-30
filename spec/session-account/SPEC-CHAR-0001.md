@@ -52,3 +52,15 @@
 **重要否決**：`CEmployNewCharacter→C2S0x0033` 2B ≠ `CExpeditionCreateDialog→C2S0x003E` 48B；`0x004A` signed outcome ≠ 已證 original Server 建角 ACK；`0x002B` 更新同一資料陣列 ≠ 建立/刪除 playable role 的正式 Server 動作；`C2S0x0042` 仍是選既有角色。Original `0x3E↔0x4A`、`0x33↔0x2B`、`0x4A→app2/2B/B6` 的跨 wire 因果、角色數初值、連線與失敗碼語意均 **UNKNOWN**。
 
 **Server 相容性規劃**：建立 `FullRosterSnapshot` / `ApplyRosterDelta` **同一 RoleStore**，另外 `ExpeditionProfile` 存名字，保留 `NameReady`／`RosterHydrated`／`RoleUiReady` 三個不同 gate；只在 T02/T03/T04 證明欄位與封包前提後才啟用 native encoder。狀態仍 `SPEC-CHAR-0001 DRAFT/PARTIAL`、`GAP-CHAR-0003 OPEN`、`RR-0010 BLOCKED`。
+
+
+## Iteration 24（E80／RR-0002）— 選角 C2S42 欄位／角色資料安全界線
+
+來源：[E80 原始研究](../../kr-extra-roy/20261031-0414-chatgpt-web-roy-E80-RR0002-selection-UI-roster-square-new-server-contract.md) 與 [S00 Iteration 24](../../governance/s00-iterations/S00-20261031-ITERATION-24-SELECTION-SQUARE-HANDOFF.md)。E80 屬 RR-0002（選擇已存在角色），**不是 RR-0010 建立角色或遠征隊建名 ACK**。本 S00 回合核對 E80 原稿與同版 KR Ghidra 偽碼；無原始 Tartaros.bin 重新執行作者 117 項原生及合成檢查。
+
+- **C2S 0x0042**：0x4A3B80 有條件在 slot0 queue 4B inner body：u16LE cmd=0x0042，offset+2 roleIndex u8，offset+3 mode u8。ExpeditionScene 事件 0x70A 的 child index+1 在部分 UI 分支需角色記錄 +0x5C 可用且索引<=9；另有 button mode0/mode2 和 ExpeditionDialog 選角入口，UI guard 不是完全一致。
+- **Client local pending 不是已送封包**：部分 ExpeditionScene 按鈕 caller 在 builder 返回後設 scene+0xCC=1，但 FBA798!=0 時根本不會 queue；Server 必須用自己的 Session/lease/timeout/idempotency，不以此 flag 推算 ACK。
+- **full roster header/角色0風險**：S2C app2 使用 65B prefix +53N record，row count gate 之前已讀 header +2/+0x0C/+0x36..+0x40；record index 原生上界是<=9，但後續 mask 用 1<<(ID-1)，ID0 有不一致風險。Server 初期提出僅輸出 ID1..9 是防呆規則、**不是 KR 官方角色合法範圍**。
+- **共用角色資料不是官方建立交易**：E79 S2C app2（完整）與 app2B（增量）寫同一 F94304 角色陣列；E80 C2S42 僅選已存在角色。C2S3E 建名、C2S33 招募候選、S2C2B 更新、S2CB6 UI、C2S42 選角是不同子流程；不擅寫 Server 一定把它們串在同一交易。
+
+未知：官方 C2S42 accepted/rejected S2C、mode2 業務語意、失敗重試 UI、Square world 初始化；RR-0010 的「創建角色→roster」因果仍未證。狀態 **DRAFT/PARTIAL**、RR-0002/0010 **BLOCKED**、相應 GAP **OPEN**。
