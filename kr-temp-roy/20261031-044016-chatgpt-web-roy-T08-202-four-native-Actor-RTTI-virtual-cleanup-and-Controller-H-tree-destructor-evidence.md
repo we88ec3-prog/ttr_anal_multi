@@ -182,3 +182,15 @@ Common subcleanup \`0x4C8360\`:
 **Client已證**為上述函式與有條件副作用；**Client待逆向**為1–3與其他缺乏原生caller的靜態邊；**Server待開發**為相容Server應如何決定Actor建立、位置、死亡／移除、關卡波次（不是本地handler能反推的官方邏輯）；**跨功能**為T02封包、T06/T07/T14場景與S00規格設計；**待遊玩驗證**為動態執行/封包觀察。T01限定FULL-PASS和S00是否接受由專責獨立處理。
 
 **T08-202進度裁決**：本次取得進一步真正的新原生靜態證據，但本段原本的Owner alias writer和不同場景刪除一致性仍有可進一步查的Client BIN路徑，**不得標整體202 FINISHED**，不新增203。
+
+
+## 5. 同批追加：Tag和Single Controller最終也呼叫同一base H-tree析構，修訂§3限定
+
+初次提交本稿時尚保留「Tag/Single destructor是否進0x544E80」未知。隨後從原生PE進一步進行完整有效入口→E8直接邊查驗，**此細項已閉合**；保留原§3問題的歷史文字以便比較，但下述新驗證覆蓋該局部未知：
+
+- **CTagController primary vptr 0xBFB5A4+0 → 0x4442D0**。0x4442D6 push ESI（this）→0x4442D7 call 0x444300；後者在0x444327暫設Tag vptr，先處理自身+0xB8和+0xB4資源；**0x444381 mov ecx,edi，0x44438A call 0x544E80**（E8 F1 0A 10 00），進入base Controller cleanup。若0x4442DC判delete bit，外層再free這個Controller*。故Tag的H-tree+48和另一+88 tree在**真正Tag析構**條件下也會走base清理，並非永不釋放。
+- **CSingleController primary vptr 0xC0FAC4+0 → 0x548600**。0x548606 push ESI→0x548607 call 0x548630；本體先釋放自己+0xB8與+0xB4（0x548664..0x5486AE），再在**0x5486B1 mov ecx,edi，0x5486BA call 0x544E80**（E8 C1 C7 FF FF）。因此Single也有同一base H-tree析構。
+- **CEmptyController vptr 0xC0F99C+0 → 0x547200**：0x547206先重設子vptr，再於**0x54720C call 0x544E80**（E8 6F DC FF FF）；與Tag/Single相似，H-tree最終由base cleanup釋放。
+- **CController / MissionRoom / Tutorial** 的已知vptr+0 多數為 \`0x544E50\`，它一開始於 \`0x544E56 call 0x544E80\`，故在此已知類別表下有共同的base H-tree析構終點。
+
+這是**至少六張已知Controller主vtable的真正生命週期共通點**：除slot14重置以外，型別的deleting destructor終會處理+48 H-tree、+88另一tree和+30 pair vector配置。**但這不證明Actor命令26/81即時析構Controller**，因它們只是對現有Controller呼叫slot14（26條件性），不是vptr+0 deleting destructor。未核所有外部Plugin或動態vptr替換，也不能由此證明Actor與Controller的跨owner引用安全性。
