@@ -52,3 +52,15 @@
 **必須保留的斷點**：N0 roster→建名視窗（RR-0009）；`C2S0x3E` `+2..5` unknown / framing / Conn；原版 Server 是否 `3E→4A`、非1結果實際意義、`4A→app2` 時序；建立 Expedition 名稱與招募/建立 playable-character 的不同業務步驟；其後的選角 `0x42`、tutorial scene activation。未知的原始 Server side policy 不妨礙先做獨立內部模型／合成錯誤測試，但**不能寫成已確認的 Client↔Server 原始完整時序**。
 
 狀態維持 `SPEC-FLOW-0001 DRAFT/PARTIAL`，`GAP-CHAR-0003 OPEN`，`RR-0010 BLOCKED`；此次 S00 未重跑原始 BIN、未執行原 Client，也不是 T01 FULL-PASS。
+
+
+## Iteration 23（E76–E79）：新手教學前 Expedition / Role 流程不再混成一次創角
+
+[Iteration 23 詳細規劃及 E05/E06 拆解](../../governance/s00-iterations/S00-20261031-ITERATION-23-EXPEDITION-ROSTER-PLAN.md)（來源 [PR #65](https://github.com/we88ec3-prog/ttr_anal_multi/pull/65)，純設計，非官方 wire 時序）。
+
+- **名字／帳號／角色三者分離：** Admin WEB 建立帳號後仍可能沒有 ExpeditionName 或 playable role。E73/78 bounded sender 是 `C2S0x003E` 的 Expedition 名稱，不是自由角色外觀；有條件 S2C`0x004A`→local F4245(status1) 更新名稱及 `CExpeditionPage+0x144`，未證 original Server 必然回 4A。
+- **完整與增量兩個 ingress：** E79 將 `S2C0x002B` 的 callback/second-table route 接至 `2+53N` row consumer，且**證實與 `S2C0x0002` 的 `65+53N` roster 寫同一 `F94304` role array**；絕不把 2B 當建角結果 status 或從同 source 夾帶完整 prefix。
+- **另一條 UI 入口：** `S2C0x00B6`→local F4278(0)→`CExpeditionPage`→現有 record `+0x5C` 或 placeholder（必要 scene/child/UI gate）；`F4278` 並非專屬該網路訊息，`F4261` 不是 Expedition Page ready。這不保證任何 full/delta roster 後 Server 會發 B6。
+- **E05/E06 子階段（只是計畫，不改原 gate IDs）**：E05-A Expedition identity 空值/命名 UI、E05-B 名稱結果/ready；E06-A Full/Delta RosterHydrated；E06-B 可用角色 UI/placeholder；E07+ 仍需既有 `C2S0x0042` selection→world→tutorial 的獨立 source chain。不得由共享名稱或 role-record flag 推成 `3E→4A→2→2B→B6→42` 是官方順序。
+
+**上線/驗收門檻**：合成 Server Domain/DTO 可先建立並寫 24 項未執行規劃測試；native wire adapter 必須待 T02 frame/Conn + T03/T04 欄位/scene + 另行授權的原 Client 相容驗證。此流程 SPEC 仍 `DRAFT/PARTIAL`、GAP-CHAR-0003 `OPEN`、RR-0010 `BLOCKED`。
