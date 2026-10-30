@@ -402,7 +402,20 @@
         "SPEC-NET-0002"
       ],
       "conflicts": [],
-      "native_review_ref": null
+      "native_review_ref": null,
+      "additional_sources": [
+        {
+          "source_intake_id": "SRC-0382",
+          "source_file": "kr-temp-roy/20261028-224346-chatgpt-web-roy-T10-118-KR-selector0-category2-connect-callers.md",
+          "source_blob_sha": "8f00225b580fab47b9d7964c9bdf6511047c911f",
+          "client_version": "kr",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "evidence_level": "PARTIAL",
+          "scope_subset": "Only validated subset of CLM-NET-0007; original full-document status unchanged.",
+          "quality_inheritance": false,
+          "integration_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-163408-chatgpt-web-roy-T01-T10-116-118-R1-R2-canonical-review.md"
+        }
+      ]
     },
     {
       "id": "CLM-NET-0008",
@@ -11981,6 +11994,75 @@
       ],
       "review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-162252-chatgpt-web-roy-T01-T10-108-114-R1-R2-merge-review.md",
       "native_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-162252-chatgpt-web-roy-T01-T10-108-114-R1-R2-merge-review.md",
+      "integration_status": "R1/R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-COMBAT-0019",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261028-213248-chatgpt-web-roy-T10-116-KR-000A-five-byte-row-field-provenance.md",
+      "source_blob_sha": "8da51d9e77d3d900bc73743bddc82891f6829c15",
+      "source_intake_id": "SRC-0380",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 0x545895..54593E Row A, 0x5459B7..545B1A Row B, 0x545B38..545B73 selector0 send call; exact original x86 branch and local value-flow",
+      "assertion": "Two independently gated 5-byte C2S000A rows write low WORD from R+4 and remaining 2 bytes from local high WORD; Row A writes fifth byte from stack local [esp+38] and has B0 snapshot writer only in specified owner+58!=0 branch. Row B initially writes local fifth byte from R+E4 at 545A67/70; if virtual44 succeeds and owner+58==0, it skips the 545AC8 B0 overwrite and appends R+E4; branches executing 545AC8 overwrite the local from captured R+B0 before append. Each row append requires total length+5<=4096; 000A builder sends only if final size>6 and passes selector0 to transport virtual+10.",
+      "limitations": [
+        "Original source's universal row[4]=R+B0 is positively contradicted by native RowB success/owner+58==0 path; formal NEEDS_FIX return notice.",
+        "Row A owner+58==0 stack/virtual48 retN/byte producer unresolved; cannot universally set fifth byte to B0.",
+        "High WORD affected by local/virtual+58 and possibly earlier callbacks; no official gameplay semantic names.",
+        "No guaranteed Z→000A wire submission, runtime selector0, Server reply, motion, combo window or complete whole-document R3."
+      ],
+      "conflicts": [
+        "T01-RETURN-T10-116-ROW5-PROVENANCE-001: B Row E4 branch refutes original unconditional B0 provenance."
+      ],
+      "affected_spec_ids": [],
+      "related_claim_ids": [
+        "CLM-COMBAT-0002",
+        "CLM-COMBAT-0003",
+        "CLM-COMBAT-0004"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-163408-chatgpt-web-roy-T01-T10-116-118-R1-R2-canonical-review.md",
+      "native_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-163408-chatgpt-web-roy-T01-T10-116-118-R1-R2-canonical-review.md",
+      "integration_status": "R1/R2_BOUNDED; CONFLICT_CHECKED; SOURCE_NEEDS_FIX; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-NET-0036",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261028-223848-chatgpt-web-roy-T10-117-KR-selector-registration-to-000A-transport-tree.md",
+      "source_blob_sha": "01607b45a2decdc526063081ad6020b3d8742e0e",
+      "source_intake_id": "SRC-0381",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 0x806AD0..806CD7 manager selector tree producer, 0x57EF20..57E916 node insertion, 0x8069A0..8069F6 reader, 0x495743..495817 connect caller",
+      "assertion": "The inspected KR connection constructor 806AD0 takes selector from stack arg+10 and separate category from arg+14 (written Conn+A080). Following conditional socket/IOCP setup, the manager+18 selector tree can allocate 24-byte node with key at node+C and connection at node+10 and attempt 57E850 insertion; 8069A0 reads this same tree+node+10 to choose pending Conn. Static callers 4957EA/495803/49575B pass selectors 0/2/1 with category2 respectively, but each has local failure conditions and tree duplicate insertion may fail.",
+      "limitations": [
+        "No proof all runtime sessions successfully register selector0/1/2, that duplicate replacement always succeeds, or that old Conn is closed/recycled safely.",
+        "Port 8416/8414/8415 mapping already exists in CLM-NET-0007; do not create a duplicate port fact.",
+        "Need actual Client state and network packet capture to establish a particular 000A send or S2C key13 response."
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "related_claim_ids": [
+        "CLM-NET-0007",
+        "CLM-NET-0016",
+        "CLM-NET-0019",
+        "CLM-COMBAT-0002"
+      ],
+      "additional_sources": [
+        {
+          "source_intake_id": "SRC-0382",
+          "source_file": "kr-temp-roy/20261028-224346-chatgpt-web-roy-T10-118-KR-selector0-category2-connect-callers.md",
+          "source_blob_sha": "8f00225b580fab47b9d7964c9bdf6511047c911f",
+          "client_version": "kr",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "evidence_level": "PARTIAL",
+          "scope_subset": "Only validated subset of CLM-NET-0036; original full-document status unchanged.",
+          "quality_inheritance": false,
+          "integration_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-163408-chatgpt-web-roy-T01-T10-116-118-R1-R2-canonical-review.md"
+        }
+      ],
+      "review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-163408-chatgpt-web-roy-T01-T10-116-118-R1-R2-canonical-review.md",
+      "native_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-163408-chatgpt-web-roy-T01-T10-116-118-R1-R2-canonical-review.md",
       "integration_status": "R1/R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
     }
   ]
