@@ -47,7 +47,7 @@ class ReadinessTests(unittest.TestCase):
         self.assertEqual(data["summary"]["specs"], 7)
         self.assertEqual(data["summary"]["gaps_open"], 7)
         self.assertEqual(data["summary"]["requests_queued"], 8)
-        self.assertEqual(data["summary"]["tests_offline_synthetic"], 5)
+        self.assertEqual(data["summary"]["tests_offline_synthetic"], 6)
         self.assertTrue(all(x["status"] == "BLOCKED" for x in data["packages"]))
         self.assertTrue(any("OFFLINE_SYNTHETIC_ONLY" in b for b in data["packages"][0]["blockers"]))
 
