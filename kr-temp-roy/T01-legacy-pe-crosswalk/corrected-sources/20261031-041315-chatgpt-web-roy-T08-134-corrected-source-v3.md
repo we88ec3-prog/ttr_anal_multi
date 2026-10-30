@@ -13,7 +13,7 @@
 
 新根入口0x7E86E0處理name-key tree，call0x7E8A00比較／查找；owner與registry不同指標來源需分別追溯，不因offset相同併成單一容器。
 
-**原生詳細核對**：[`20261031-023000-chatgpt-web-roy-T08-134-name-key-tree-PE-CFG-corrected-source.md`](../20261031-023000-chatgpt-web-roy-T08-134-name-key-tree-PE-CFG-corrected-source.md)。該source提供真PE入口附近機器碼、根CFG／vtable owner，對本篇主張的影響不應用「整篇直平移」取代；同類交叉補證在 [134～151交付索引](../20261031-023700-chatgpt-web-roy-T08-T01-legacy-134-151-BIN-correction-delivery-index.md)、[T08-152 RTTI](../20261031-025103-chatgpt-web-roy-T08-152-native-PE-RTTI-vtable-and-producer-xref-corrections-FULL.md)。
+**原生詳細核對**：[`20261031-023000-chatgpt-web-roy-T08-134-name-key-tree-PE-CFG-corrected-source.md`](../../20261031-023000-chatgpt-web-roy-T08-134-name-key-tree-PE-CFG-corrected-source.md)。該source提供真PE入口附近機器碼、根CFG／vtable owner，對本篇主張的影響不應用「整篇直平移」取代；同類交叉補證在 [134～151交付索引](../../20261031-023700-chatgpt-web-roy-T08-T01-legacy-134-151-BIN-correction-delivery-index.md)、[T08-152 RTTI](../../20261031-025103-chatgpt-web-roy-T08-152-native-PE-RTTI-vtable-and-producer-xref-corrections-FULL.md)。
 
 **否證／剩餘邊界**：lookup是否找到及插入副作用要以成功條件判定。
 
