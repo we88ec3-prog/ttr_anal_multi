@@ -102,7 +102,7 @@ return (float)(dx*dx + dy*dy + dz*dz); // x87 ST(0), ret 4
 7A8376 8D 73 F4                lea esi,[ebx-0x0C]  ; B-entry→Host*
 7A8385 E8 76 ED FF FF          call 0x7A7100
 ...
-7A85CD 83 BB 50 01 00 00 00  cmp dword [ebx+0x150],0
+7A85CE 83 BB 50 01 00 00 00  cmp dword [ebx+0x150],0
 7A85D5 75 2A                   jne 0x7A8601
 7A85DD 8B 15 38 A8 FB 00      mov edx,[0xFBA838]
 7A85F6 E8 85 24 01 00         call 0x7BAA80     ; candidate record creation
@@ -117,7 +117,7 @@ return (float)(dx*dx + dy*dy + dz*dz); // x87 ST(0), ret 4
 7A8618 E8 23 FC 03 00         call 0x7E8240      ; T08-133 record registry
 ```
 
-於 `Host` B-entry+0x150 的record pointer null且走到上述條件路徑時，函式會先呼叫候選建構器 `0x7BAA80` 並儲存指標；若最終record指標非null，則從全域owner+0x8C取得registry owner，**以原生直接E8呼叫真 `0x7E8240`**。已知 `0x7E8240` 的下游記錄名稱查找使用 `0x7E86E0→0x7E8A00`（T08-133/134修正版），並在其命中/建構分支可能向record+0x20 vector append（真 `0x7BB350`）。
+由真PE rooted CFG另見 `7A856A..7A85B4` 比較既存record的xyz及+0x40浮點欄位；未通過比較時在 `7A85B6 call 7D7300;7A85BC call 89120C;7A85C4 mov [ebx+150],0` 先釋放舊record並清零，**正確條件指令地址為7A85CE，非半指令7A85CD**。在 `Host` B-entry+0x150 的record pointer最終為null且走到上述條件路徑時，函式會先呼叫候選建構器 `0x7BAA80` 並儲存指標；若最終record指標非null，則從全域owner+0x8C取得registry owner，**以原生直接E8呼叫真 `0x7E8240`**。已知 `0x7E8240` 的下游記錄名稱查找使用 `0x7E86E0→0x7E8A00`（T08-133/134修正版），並在其命中/建構分支可能向record+0x20 vector append（真 `0x7BB350`）。
 
 **新閉合的有界功能鏈**：
 
