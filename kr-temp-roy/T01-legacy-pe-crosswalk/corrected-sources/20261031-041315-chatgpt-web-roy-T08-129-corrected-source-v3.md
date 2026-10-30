@@ -13,7 +13,7 @@
 
 原稿dispatcher指令標籤0x79A320是錯高0x400的code；真0x799F20。兩個caller舊0x4931FD/0x6DD3EB真0x492DFD/0x6DCFEB；callback vtable DWORD 0xC4FF8C+0x0C=0x7D1310為已正確的絕對指標，不作位移。
 
-**原生詳細核對**：[`20261031-020700-chatgpt-web-roy-T08-129-LEGACY-MAPPING-PE-callback-revision.md`](../20261031-020700-chatgpt-web-roy-T08-129-LEGACY-MAPPING-PE-callback-revision.md)。該source提供真PE入口附近機器碼、根CFG／vtable owner，對本篇主張的影響不應用「整篇直平移」取代；同類交叉補證在 [134～151交付索引](../20261031-023700-chatgpt-web-roy-T08-T01-legacy-134-151-BIN-correction-delivery-index.md)、[T08-152 RTTI](../20261031-025103-chatgpt-web-roy-T08-152-native-PE-RTTI-vtable-and-producer-xref-corrections-FULL.md)。
+**原生詳細核對**：[`20261031-020700-chatgpt-web-roy-T08-129-LEGACY-MAPPING-PE-callback-revision.md`](../../20261031-020700-chatgpt-web-roy-T08-129-LEGACY-MAPPING-PE-callback-revision.md)。該source提供真PE入口附近機器碼、根CFG／vtable owner，對本篇主張的影響不應用「整篇直平移」取代；同類交叉補證在 [134～151交付索引](../../20261031-023700-chatgpt-web-roy-T08-T01-legacy-134-151-BIN-correction-delivery-index.md)、[T08-152 RTTI](../../20261031-025103-chatgpt-web-roy-T08-152-native-PE-RTTI-vtable-and-producer-xref-corrections-FULL.md)。
 
 **否證／剩餘邊界**：callback確實存在conditional dispatch，但B→22桶物件因果和所有bucket讀取尚未閉合。
 
