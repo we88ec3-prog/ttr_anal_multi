@@ -95,3 +95,14 @@ Iteration 20 沒有修改正式台帳、原 Client/BIN 或 Server 程式。JSON 
 **下一輪先引用的確切成果：** E76 `F938F2` nonempty→Expedition Page+0x144 ready→三個 UI controls；E77 `S2C B6→local F4278(0)→0x672F00` 條件式 role record/placeholder UI；E78 `C2S3E+2..5` 仍 UNKNOWN，`F4278` 有額外本地來源；**E79 正向 trace S2C app `0x002B` network+singleton→2+53N row writer，與 app2 65+53N 共用 `F94304` 同一角色 array**，明確修正 E72 曾稱 destination 不同的說法。這些不等於原版 Server 已證 `3E↔4A`、`33↔2B`、`4A→app2/2B/B6`，更不等於已可建立 playable-character。
 
 已在 DRAFT `SPEC-CHAR/FLOW`、`GAP-CHAR-0003`、`s00-requirement-slices.json` 納入。**RR-0010 BLOCKED**、**GAP-CHAR-0003 OPEN**、SPEC DRAFT/PARTIAL；正式 REQ 未追加未審核 CODE_ANALYSIS discovery（缺新的同版正式 CLM）。開發可先做 `ExpeditionProfile` 和 `FullRosterSnapshot/ApplyRosterDelta` **同一 source-of-truth**、合成0/1/10角色／異常/重放/錯序測試；native framing/scene 必須交 T02/T03/T04/T06 繼續研究。沒有獲獨立授權不執行/連線原 Client；本 S00 回合也未取得原始 Tartaros.bin 重跑 T03 verifier。CI 若沿舊的 `CLM-CLIENT-0063` 報錯，不可擅自偽造原生 evidence 讓其變綠。
+
+
+## 2026-10-31 — 最新 extra/roy1 E80 / Iteration 24 規劃
+
+E80 是 **RR-0002 選角的研究**，不是 RR-0010 真正建立 playable-character。已透過 [PR #67](https://github.com/we88ec3-prog/ttr_anal_multi/pull/67) 合併來源（merge ba5f2795a047b01d861ad470b424a555d7554353），S00 詳細審查和可實作切片：[Iteration 24](s00-iterations/S00-20261031-ITERATION-24-SELECTION-SQUARE-HANDOFF.md)、[20 項測試草案](s00-iterations/S00-20261031-ITERATION-24-ACCEPTANCE.md)。E80 來源/verify blob、同版 Ghidra 0x4a3b80/0x5f46d0/0x673da0/0x4b7f00 交叉讀取記錄見規劃；未獨立重跑原始 KR BIN 或 Client。
+
+- 可引用的有限新證據：C2S42 4B slot0（角色 index u8 at+2、mode u8 at+3；UI 見 mode0/2）、部分 ExpeditionScene UI index=child+1 / role+0x5C guard，部分按鈕在 manager gate 擋住 queue 時仍設 local scene+0xCC pending=1；**pending 不等於 Server 收到/ACK**。
+- 另一個有條件 Client subchain 是 **S2C0x69 subtype7→CSquare/ChannelState +3/+4 → C2S0x43 UserData+18 u8、常量0A**。UserData 與 ChannelState 是兩個不同 object，這不是 original Server 對 C2S42 的已證 ACK；S2C42/43 也不是已證選角回覆。
+- Iteration23 的 **S2C2 full 65+53N 與 S2C2B delta 2+53N 共用 F94304 role data** 繼續有效；app2 的 ID0 role mask shift 有潛在不一致，Server 初期若採 role1..9 是自訂保守策略，並非官方規則。
+- **角色建立與選擇分開**：RR-0010 BLOCKED（playable-character create→reply→roster 未閉合），RR-0002 BLOCKED（selection response pairing/拒絕 UI 不明），RR-0008 IN_REVIEW、RR-0009 SUBMITTED，GAP-CHAR-0001/0003 OPEN，SPEC-CHAR/FLOW DRAFT/PARTIAL。不要把源碼研究上 Git 或 synthetic Domain test 視為 ACCEPTED/T01 FULL-PASS。
+- 開發次序：Iteration23 SR23-01/02 Expedition/RoleStore → Iteration24 SR24-01/02 RoleOwnership/SelectionAttempt→ SR24-03 bounded C2S42 parser→SR24-04 Square candidate **feature off by default**；另交 T02/T03/T04/T05/T06/T16 查正向場景/錯誤/教學。當前未在設計 repo 開發 Server。

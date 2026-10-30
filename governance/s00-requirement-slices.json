@@ -128,21 +128,25 @@
         "SPEC-FLOW-0001",
         "SPEC-SCENE-0001"
       ],
-      "goal": "將已選角色進世界列為後續獨立門檻；S2C 0x42/0x43 handler 存在不證明 C2S 0x42 獲准或新手教學開始。",
+      "goal": "持有既有可操作角色的帳號可直接選角，無須強制通過 SLICE-CREATE；由 E80 將已證 C2S0x42(roleIndex,mode) 與獨立 S2C0x69 subtype7→CSquare→C2S0x43 候選路徑分層，保留真正 original Server ACK/拒絕、世界初始化和新手教學未知。",
       "acceptance": [
-        "確認 C2S 選角 0x42 之真實 S2C 成功/失敗 pairing、scene state writer 與必要狀態門檻。",
-        "避免把 Event/SceneList (1001,1) 資源映射誤用作已證 Server 封包；新手教學及 EndCutScene 分開驗證。",
-        "隔離測試與獲授權原版 Client 端對端測試須區分，且 SPEC/TEST/ADR 各自另行審查。"
+        "從有效 full/delta roster 的角色 source-of-truth 識別可選 role；審查 E80 C2S0x42 4B(slot0) roleIndex u8 / mode u8(已見0/2)，各 UI 入口 guard 不一致，角色0 bitmask 風險與安全輸出策略不能假裝官方規則。",
+        "Server 自訂角色權威、Session lease、single-flight 選角/重送/斷線恢復，明確區分 Client scene+CC pending flag 和實際 queue/Server ACK；不拿角色 local +5C 欄位當 Server 授權。",
+        "驗證 S2C0x69 subtype7 的 scene/resource/Conn+payload+3/+4 與 CSquare UserData/ChannelState、可能 C2S0x43 的有界路徑；仍不得宣稱 0x69/7 必然是 C2S42 官方成功回覆或 S2C42/43 是 ACK。",
+        "與 RR-0008/T05/T16 相容地另驗世界 spawn 與 tutorial (1001,1) 引導；沒有原版可觀測正向鏈時保留 UNKNOWN，合成測試與 Client runtime 需分開授權/記錄。",
+        "Iteration24 I24-T01..T20 全部 PLAN_ONLY/NOT_RUN，native adapter feature-gated；成熟度維持 DRAFT/PARTIAL。"
       ],
       "next_owners": [
         "T03",
         "T04",
         "T05",
+        "T02",
+        "T06",
         "T16",
         "T01",
         "S00"
       ],
-      "notes": "RR-0002 BLOCKED 不代表已解開選角成功配對；RR-0008 研究交付仍 IN_REVIEW。"
+      "notes": "Iteration24 E80 RR-0002 selection field and Square candidate source; original Server C2S42 response pairing & reject UI unproven, RR-0002 BLOCKED, RR-0008 IN_REVIEW. RR-0010 BLOCKED is create upstream but not prerequisite for old account with usable role; keep SLICE-ENTER-WORLD dependent only on SLICE-LOBBY. S00 handoff governance/s00-iterations/S00-20261031-ITERATION-24-SELECTION-SQUARE-HANDOFF.md."
     }
   ]
 }
