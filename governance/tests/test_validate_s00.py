@@ -25,6 +25,8 @@ class S00IndexTests(unittest.TestCase):
                 for key in ("spec_path","source_file","fixture_path","test_path","native_review_ref","path"):
                     if row.get(key):paths.add(row[key])
                 for s in row.get("source_refs",[]):paths.add(s)
+                for evidence_ref in row.get("evidence_refs", []):
+                    paths.add(evidence_ref)
         for path in paths:
             dest=self.root/path
             dest.parent.mkdir(parents=True,exist_ok=True)
@@ -72,6 +74,30 @@ class S00IndexTests(unittest.TestCase):
             d["items"][0]["adr_ids"] = ["ADR-0001"]
         self.edit("spec/spec-index.json", mutate)
         self.assertTrue(any("unapproved ADR" in x for x in validate(self.root)))
+
+    def test_native_verified_claim_requires_scoped_evidence(self):
+        def remove_proof(doc):
+            claim = next(r for r in doc["items"] if r["id"] == "CLM-CLIENT-0063")
+            self.assertEqual(claim["evidence_level"], "NATIVE_VERIFIED")
+            claim.pop("evidence_refs", None)
+        self.edit("research/claims/index.json", remove_proof)
+        self.assertTrue(any("CLM-CLIENT-0063: NATIVE_VERIFIED requires scoped native evidence references"
+                            in err for err in validate(self.root)))
+
+    def test_native_verified_claim_missing_reference_is_rejected(self):
+        def break_proof(doc):
+            claim = next(r for r in doc["items"] if r["id"] == "CLM-CLIENT-0063")
+            claim["evidence_refs"] = ["research/handoffs/missing-native-proof.json"]
+        self.edit("research/claims/index.json", break_proof)
+        self.assertTrue(any("CLM-CLIENT-0063: missing/unsafe file" in err for err in validate(self.root)))
+
+    def test_native_verified_claim_duplicate_reference_is_rejected(self):
+        def duplicate_proof(doc):
+            claim = next(r for r in doc["items"] if r["id"] == "CLM-CLIENT-0063")
+            claim["evidence_refs"] = [claim["evidence_refs"][0]] * 2
+        self.edit("research/claims/index.json", duplicate_proof)
+        self.assertTrue(any("CLM-CLIENT-0063: NATIVE_VERIFIED evidence_refs must not contain duplicates"
+                            in err for err in validate(self.root)))
 
     def test_wrong_client_target_is_rejected(self):
         self.edit("spec/spec-index.json",lambda d:d["items"][0].update({"client_version":"tc"}))
