@@ -1,4 +1,4 @@
-# S00 Iterations 14–20 — 原稿保存與交接
+# S00 Iterations 14–21 — 原稿保存與交接
 
 這個目錄保存 2026-10-30 原先在舊 ChatGPT 對話生成的 **完整草案** 與工作矩陣。已從使用者的檔案庫恢復原始 Markdown / JSON，並非由簡短對話摘要重寫。
 
@@ -40,3 +40,9 @@ Iterations 16–17 的正式流程編號合計 **E00–E26（27 個 gate）與 4
 - [Iteration 20 詳細規劃](S00-20261031-ITERATION-20-GATE-TRIAGE-AND-RR-DEDUP.md)：依 Iteration 19 的下一輪建議，依序處理登入/空角色 UI、創角、選角進教學、E17 戰鬥、Quest 結算及教學離場/重登。對現有 8 個 RR 去重、建立新證據最小交付表與 I20-T01～T12 **未執行**的測試草案。
 - [Iteration 20 全量機讀盤點](S00-ITERATION-20-GATE-EVIDENCE-TRACE.json)：E00–E26 **27 主 gate**、E17-A–J **10 子 gate**，逐列保存既有規劃狀態、owners、未解證據與 Iteration 16 草案引用的正式 ID，並附用來檢視的當時各索引 blob SHA／RR dispatch 快照。
 - 仍只有正式 RR-0001..0008：RR-0002 BLOCKED、RR-0005 研究範圍 ACCEPTED、其他 IN_REVIEW（快照，不應代替重讀唯一 RR 索引）。**沒有**本輪新正式 RR/REQ/GAP/SPEC/TEST、原 Client 動態測試、Server 開發或規格升級；建議先審核既有 Txx 結果後再決定要不要發新的狹義 RR。
+
+## Iteration 21（2026-10-31，正式 E05／E06 派工）
+
+- [Iteration 21 詳細分析與正式派工](S00-20261031-ITERATION-21-CREATE-UI-WIRE-DISPATCH.md)：從 Iteration20 Gate Trace 的 E04→E05→E06 開始；在對照既有 RR-0002（選角，BLOCKED）、RR-0007（入站 dispatcher）、RR-0008（選角→場景）後，**新增** `GAP-CHAR-0002/0003` 與 `RR-0009`（零角色／創角 UI 正向入口）、`RR-0010`（真正創角 C2S/S2C 正向交易）。
+- 兩個研究請求均 **P0 / QUEUED / 未認領**，T03 主責、T06 資源與 T04 欄位為定向協查。T03 生成收件箱已更新，唯一正式 RR 台帳從 8 增至 10；既有 8 個 RR 不變。
+- `SPEC-CHAR-0001`／`SPEC-FLOW-0001` 仍 DRAFT/PARTIAL，僅加明確 blocker，不新增 Client 封包、Server 跨任務實作、原 Client runtime 或任何 FULL-PASS／SPEC STABLE。Git 合併不自動喚醒其他 Agent。
