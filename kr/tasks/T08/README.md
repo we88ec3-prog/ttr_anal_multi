@@ -123,7 +123,11 @@
 - T08 修復：拆開主樹／次級樹、actor+0x88 條件與 key 移除、不同 payload 清理的全部相關結論；附完整 CFG 與修正版 Git SHA。
 - 來源：T01-026、T01-030 有界核對。
 
-### T01-RETURN-T08-LEGACY-MAPPING-001 — NEEDS_FIX（來源映射已定位）
+### T01-RETURN-T08-LEGACY-MAPPING-001 — READY_FOR_REVIEW（T08作者24篇替代source已交齊；T01正式複驗未完成）
+
+> **2026-10-31 04:20 作者側勘誤修復24/24來源已完成、正式退回送複驗**：原T01主審 main 的 `shared/integrations/T01-20261029-semantic-review/t08-early/mapping-reviews.json` 及 `return-notices.json` 仍記載**原24篇FAILED／LEGACY-MAPPING-001 NEEDS_FIX**，T08作者沒有權限修改T01審核、FULL-PASS或RESOLVED。本**T08工作分支**的 `READY_FOR_REVIEW` 僅表示作者已交付全部24份獨立v3替代source、逐一撤回無支持的原稿主張並建立每份可追溯的raw證據與T01再驗門檻，**不是T01已PASS**。完整[24篇原稿/新blob/1263列交付清單](../../../kr-temp-roy/20261031-042008-chatgpt-web-roy-T08-T01-LEGACY-24-corrected-source-delivery-and-review-manifest.md)，blob **0ff1798c1b7f53d76e5bc5d2f73c69b1e1b010a4**；[更新索引](../../../kr-temp-roy/T01-legacy-pe-crosswalk/README.md)；[可重跑本地BIN核對](../../../kr-temp-roy/T01-legacy-pe-crosswalk/verify_legacy_corrected_sources.py)，blob **028546a2f713d59ab658ac936a9f7abee56b69ad**，**本次未在GitHub checkout自動執行**。其中18篇含T01先前已核的1263/1263原始code列（真PE VA+exact bytes及E8/E9目標），另6篇提供BIN-first真函式入口/RTTI/CFG修正版。舊失效source不覆寫；其他原稿無法成立的肯定主張已在新source明確撤回為UNKNOWN。153/155/157/183/187五筆個別來源此前已READY_FOR_REVIEW，其中153修掉未展開日期模板並更新blob **5ac19f9003a104a174bb534bb6a8d57ea90d0c79**。**下一責任方為T01審查新source逐主張／原生CFG並判定是否准入，僅T01可RESOLVED**。T08-202新分析仍未完成，本輪遵使用者指令暫停擴展。
+
+
 
 > **2026-10-31 03:09～03:15：CDoll/CModel分型與真Node→Model virtual caller補證，LEGACY仍NEEDS_FIX**：完整工作索引 [T01 legacy](../../../kr-temp-roy/T01-legacy-pe-crosswalk/README.md)，blob **ca363f6d468e99221c81160aab895b4839202010**，新增三份KR BIN-first原生研究：CModel虛表+8真7D3470具有兩段直接global bucket store及另一7D3601→79A3C0 helper（blob **005ee32ca6fdd3fe201d5b8c83df35b641e710f3**）；CItemNodeSimple primary vtable+0x2C真7FC360依Node+34轉送CModel vtable+8（blob **a5b43035c9906b4ba737a35d232ab266758b9b40**）；真owner呼叫鏈7EF912→7F07B0→7F0810→7FC380由同一個Node配置CModel、寫Node+34並交給後置7B31F0 list dispatcher（blob **80471c49eadbddbae5446b97a0debaf73024e4c8**）。RTTI CHD證CDoll/CModel皆繼承IRenderable但彼此不繼承，因此CDoll slot+8 7A63C0入B queue與CModel slot+8 7D3470寫bucket**不得混成同一方法**。同一全域bucket指標可由 FB76A8+98 = FB7740 精確證實。**尚需**真正scene loop/Node slot+2C caller、CDoll B→CModel/bucket的跨物件dataflow、釋放時序及全部24篇來源之T01全文驗證；不宣告B→22桶已閉合，不更動原FAILED及T01審核狀態。
 
