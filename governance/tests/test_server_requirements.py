@@ -135,7 +135,7 @@ class ServerRequirementTests(unittest.TestCase):
         self.edit(edit)
         r = evaluate(self.root)
         self.assertEqual(r["errors"], [])
-        self.assertEqual(r["summary"]["requirements"], 5)
+        self.assertEqual(r["summary"]["requirements"], 8)
         self.assertEqual(r["summary"]["discovery_counts"]["PLAYER_ADMIN_REQUEST"], 5)
 
     def test_historical_protocol_and_ops_safety_are_user_request_material(self):
