@@ -73,3 +73,15 @@ python -B governance/phase_b_review_preflight.py --rr RR-0003 --format json
 ```
 
 When a formal RR is `SUBMITTED` or `IN_REVIEW`, the preflight compares the submitted report's current repository bytes with the declared Git blob SHA and displays the *direct* SPEC/GAP/COV/TEST review scope. `NOT_SUBMITTED` is expected on existing QUEUED requests and is **not** a failed CI. `ARTIFACT_PRESENT_FOR_MANUAL_REVIEW` is **not** an evidence or compatibility verdict. See [Iteration 07](S00-20261029-ITERATION-07.md).
+
+
+## Iteration 11 — REQ 分段交付與新對話交接
+
+```powershell
+python -B governance/server_requirement_slices.py --check
+python -B governance/server_requirement_slices.py --slice SLICE-LOBBY --format markdown
+python -B governance/server_requirement_slices.py --slice SLICE-CREATE --format json
+python -B -m unittest discover -s governance/tests -v
+```
+
+[可核對的分段計畫](s00-requirement-slices.json) / [交接](S00-NEXT-CHAT.md)：由唯一 REQ/RR/GAP/SPEC 來源即時推導 `BLOCKED`、`DISCOVERY_REQUIRED` 等**設計狀態**，不是已測原始 Client，也不改變原生證據及 T01/Txx 責任。GitHub Actions 只對錯誤引用／無效 DAG 失敗，不能把 CI 成功當成 Server 真正可玩。
