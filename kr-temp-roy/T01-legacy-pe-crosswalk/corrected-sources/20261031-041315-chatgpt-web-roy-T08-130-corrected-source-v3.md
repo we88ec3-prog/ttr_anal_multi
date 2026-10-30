@@ -13,7 +13,7 @@
 
 指令地址舊0x7BB640需以真0x7BB240按入口重新建CFG；與全域22桶的0x799F20分離；B consumer可在條件下選priority entries及per-entry slot，而不能從程式碼相鄰推B→22桶生效。
 
-**原生詳細核對**：[`20261031-020700-chatgpt-web-roy-T08-130-LEGACY-MAPPING-PE-dispatcher-vector-revision.md`](../20261031-020700-chatgpt-web-roy-T08-130-LEGACY-MAPPING-PE-dispatcher-vector-revision.md)。該source提供真PE入口附近機器碼、根CFG／vtable owner，對本篇主張的影響不應用「整篇直平移」取代；同類交叉補證在 [134～151交付索引](../20261031-023700-chatgpt-web-roy-T08-T01-legacy-134-151-BIN-correction-delivery-index.md)、[T08-152 RTTI](../20261031-025103-chatgpt-web-roy-T08-152-native-PE-RTTI-vtable-and-producer-xref-corrections-FULL.md)。
+**原生詳細核對**：[`20261031-020700-chatgpt-web-roy-T08-130-LEGACY-MAPPING-PE-dispatcher-vector-revision.md`](../../20261031-020700-chatgpt-web-roy-T08-130-LEGACY-MAPPING-PE-dispatcher-vector-revision.md)。該source提供真PE入口附近機器碼、根CFG／vtable owner，對本篇主張的影響不應用「整篇直平移」取代；同類交叉補證在 [134～151交付索引](../../20261031-023700-chatgpt-web-roy-T08-T01-legacy-134-151-BIN-correction-delivery-index.md)、[T08-152 RTTI](../../20261031-025103-chatgpt-web-roy-T08-152-native-PE-RTTI-vtable-and-producer-xref-corrections-FULL.md)。
 
 **否證／剩餘邊界**：producer必然在同一幀進全域bucket未證；A/B兩向量不是同一field。
 
