@@ -67,3 +67,9 @@ Iteration 20 沒有修改正式台帳、原 Client/BIN 或 Server 程式。JSON 
 - E08–E12 持續受 RR-0002 BLOCKED、RR-0008 IN_REVIEW 制約；E17 戰鬥證據以及 E18–E26 任務/離場尚未閉合。沒有新原生 BIN 研究或 Client runtime 授權，沒有更新 ttr_server_roy。
 
 下一次 S00 請先審這兩個 RR 是否被認領／交件，再判斷 E07 應否獨立開研究；不應直接再重複建立同義 Create RR。
+
+## Iteration 22 — WEB 管理後台正式需求（2026-10-31）
+
+本次使用者**首次實際提出管理員需求**：「WEB端後台，新增玩家帳號／停權 N 天／永久／解封」。已將去敏來源保存在 [使用者需求登記](../design/requirements/requests/2026-10-31-admin-web-account-operations.md)、唯一 REQ 台帳新增 `REQ-0006..0008` **CANDIDATE**；[Iteration 22 導航](s00-iterations/S00-20261031-ITERATION-22-ADMIN-WEB-V1.md)、[Admin WEB V1 功能設計](../design/admin-web/ADMIN-WEB-V1-PLAN.md)、[25 個計畫測試](../design/admin-web/ADMIN-WEB-V1-ACCEPTANCE.md)。
+
+本輪只設計，未部署、未開管理網路端口或修改 Server repo；`ADR-0004/0005` **PROPOSED**。新對話先核對最新 main、REQ 與 ADR 狀態，再視使用者指示將 Admin WEB V1 分別交付 `ttr_server_roy` 的 Tartaros.Admin／Account／Session／Persistence／獨立 Admin Host。**管理員建立玩家帳號 != 原 Client 創角**（T03 RR-0010），`locked_until` 仍是密碼失敗暫時鎖定，不能充當 N 天/永久停權。需要審查並決策 MFA/後台權限、正整數 N 的政策、UTC 到期/立即撤銷 Session、資料庫交易/audit、部署/備份才可上線；不要用本次需求去假造原版 Client opcode 或冒充原版遊戲登入已可玩。
