@@ -110,6 +110,9 @@
 
 ### T01-RETURN-T08-LEGACY-MAPPING-001 — NEEDS_FIX（來源映射已定位）
 
+> **2026-10-31 T08 勘誤補充（仍 NEEDS_FIX；不得自行結案）**：已在獨立分支上將T08-134～151（含重疊136/137/140等）原生PE錯位與衍生ABI／vtable／record資料流拆成七份BIN-first勘誤。完整交付索引：[`T08-134～151 BIN-correction-delivery-index`](../../../kr-temp-roy/20261031-023700-chatgpt-web-roy-T08-T01-legacy-134-151-BIN-correction-delivery-index.md)，Git blob `c65530704ffde0106a47a98f4f585dc8da6cebb4`。主成果：真B producer `0x7A63C0` append `Host+0x0C`；真Host子物件vptr `0xC4F6C0` 的 `+0x08 = 0x7A8E10` 經x87計算3D平方距離，`+0x04 = 0x7A8310` 有條件呼叫真record registry `0x7E8240`；Host 0x170 allocation、0x10 control及兩階段引用釋放也按PE重新核實。原24篇FAILED歷史及T01審核要求保留。**仍待**其他未覆核來源、完整入口CFG、Host→B→22桶因果、動態型別及runtime/Server責任；不將有界新bytes視為全文FULL-PASS，不標READY_FOR_REVIEW／RESOLVED。
+
+
 > **2026-10-31 T08 部分勘誤已上分支（仍 NEEDS_FIX）**：T08-129/130/131/132/133 的真PE入口、直接E8與資料結構界線，已各出獨立有界修訂稿，詳 [逐篇索引](../../../kr-temp-roy/T01-legacy-pe-crosswalk/README.md)（blob `a6b19c86e77971d1a9a0d942288648cf946045ac`）。另有18篇共1263條由T01原本已核code-row建立逐篇座標修復表，這些表**不是**全文來源修訂，也不是T08自己重新驗完1263處。24篇舊來源保持FAILED，另4篇148～151等仍需真PE完整CFG／型別／ABI重審。暫不變更成READY_FOR_REVIEW或RESOLVED；須完成全部受影響來源的實質語義修訂並由T01裁決。不得將vtable真正絕對目標整批減0x400。
 - 範圍：T08-140～152 等較早原稿使用 BIN offset=VA-0x401000 的線性映射；此處是「群組來源調和」提醒，不把每篇都斷言相同錯誤。
 - 具體例子：在 VA 0x7A507F 舊線性映射讀到 c7 46 04 4c f6 c4 00，但目前 KR PE .text VA 0x401000/raw 0x400 的對應 bytes 不同。可能是來源檔格式／攤平 image 類型不同；不可直接將兩種檔案等同。
