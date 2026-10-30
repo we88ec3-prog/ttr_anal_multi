@@ -116,3 +116,8 @@ E80 RR-0002 研究 [PR #67](https://github.com/we88ec3-prog/ttr_anal_multi/pull/
 [Iteration27 C05 handoff](s00-iterations/S00-20261031-ITERATION-27-C05-DELIVERY-PLAN.md) 與 [9-pack machine matrix](s00-iterations/S00-ITERATION-27-C05-DELIVERY-MATRIX.json) 直接 pin 實際 `ttr_server_roy` 的 `IAtomicCharacterActions/ISessionLeaseRegistry/SqliteLocalDatabase/contracts/spec-revision.json` Git blob 與 Server main 快照，確保不再重新規劃已完成的 C03 transaction/Session 類型。CI checker `python -B governance/check_s00_iteration27.py --check` **只在本庫驗證**來源/blob 字串、工作包依賴、18 個 NOT_RUN case/no-go 與 ADR 未批准地位；遠端 Server main 若變化，下輪應人工重新讀取，不能冒稱本次 CI 已同步。
 
 Domain mock/prototype 可採並行研究和工程化測試，但正式業務 policy/migration 要獲 Server 維護者和 ADR-0006/7 批准；W09 native adapter 對未證 KR/TC protocol remains Unsupported/feature OFF，runtime 原 Client 測試另行授權。真 Server bug 走修復/FB/SFD 流程，S00 純設計不得改他人的部署庫或偽造已完成 Wxx。
+
+
+## Iteration28：C03 原子交易對接 C05 Mock Encounter 的重要陷阱
+
+[Iteration28 原子 W01～W03 規劃](s00-iterations/S00-20261031-ITERATION-28-W01-W03-IMPLEMENTATION-PLAN.md) 將實際 C03 `GetSelectedAsync`（只在**其自身 transaction** 內檢查 full SessionLease）與 C05 的後續 Encounter write 分離，要求**在建立 Encounter 的同一 DB transaction 再核對 exact lease/selected role/ownership**，防止重登/renew/revoke/ban 發生於兩次操作之間的授權 TOCTOU。SQLite 與 PostgreSQL 的交易、鎖順序、版本升級要分別批准與測試。Server-only mock 原型可先做，但使用者未授權原版 Client 運行、未核准 ADR、未填齊 wire/scene/Actor 正向證據時，不得使 native codec 成為可用協定。Machine checker `governance/check_s00_iteration28.py --check` 只驗規劃本身及保留的 source Git blob 身分，不是完成 C05 代碼。

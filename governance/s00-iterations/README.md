@@ -95,3 +95,11 @@ Iterations 16–17 的正式流程編號合計 **E00–E26（27 個 gate）與 4
 - [9 個 S27-W01～W09 工作包機讀矩陣](S00-ITERATION-27-C05-DELIVERY-MATRIX.json)：八個 `DOMAIN_OFFLINE_PROTOTYPE` 與一個 `SOURCE_GATED_NO_IMPLEMENTATION` 原 Client adapter；記錄上游 Iteration26 來源 Git blob SHA 與 5 個已核對 Server Git blob。CI 本身**不會連線自動重新驗證遠端 Server 庫**，Server snapshot 只是這一輪的固定基準。
 - [I27-T01～T18（18 項）未執行驗收草案](S00-20261031-ITERATION-27-C05-ACCEPTANCE.md)：角色/Session ownership、Encounter/Actor/AI/Skill/Scenario 結算、Quest/Reward/Outbox、退出重登、原生 no-go；全部 `PLAN_ONLY / NOT_RUN`，不是正式 conformance TEST。
 - [read-only checker](../check_s00_iteration27.py) 及 15 項單元回歸測試護欄接入 GitHub CI；**不新增重複正式 RR/REQ/CLM/TEST、不可核准 ADR-0006/0007、不修改獨立 Server 程式庫或 spec pin**。C-TUTORIAL-DOMAIN 仍 Phase C / EXTERNAL_REVIEW_REQUIRED。
+
+
+## Iteration 28（2026-10-31）：C05 W01～W03 原子選角、Encounter、Actor／AI 實作準備
+
+- [完整開發契約與下游 3 個 Server PR 切片](S00-20261031-ITERATION-28-W01-W03-IMPLEMENTATION-PLAN.md)：依真實 C03-C `IAtomicCharacterActions`、`SessionLease` 和 PostgreSQL `selected_revision`／SQLite local v1 的已存在程式，指出**先 GetSelectedAsync 再跨交易寫 Encounter** 之 TOCTOU，要求在 Encounter 交易內重新核對 exact lease/owned selected role。
+- [S28-01～03 機讀契約](S00-ITERATION-28-C05-W01-W03-CONTRACT.json)：完整來源 Git blob anchor（Iteration27 和獨立 Server 八個實際檔案）、SQLite/PostgreSQL 各自待核准 migration、reserved/active/terminal state、Session fencing、deterministic mock actors/AI tick。此檔**不代表 Server 已實作**。
+- [16 個 I28-T01～T16 未執行驗收案例](S00-20261031-ITERATION-28-W01-W03-ACCEPTANCE.md)：競態、斷線、新舊 Session、同請求去重、崩潰恢復、Actor tick/AI/movement 原型；全部 `PLAN_ONLY / NOT_RUN`，不等於原 Client 可玩。
+- GitHub CI 新增 `governance/check_s00_iteration28.py --check` 與 **16 項回歸測試**，只保護規劃及證據等級，不讀遠端 Server 最新 main、不升格 ADR-0006/7、RR/REQ/GAP/SPEC/TEST，也不修改 `ttr_server_roy`。
