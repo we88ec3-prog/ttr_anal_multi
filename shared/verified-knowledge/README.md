@@ -4,12 +4,14 @@
 
 ## 正式已驗證條目
 
-已收錄 **7 筆**經有界逐項審核的 KR Client 原生結論（不代表來源 Task 整體完成）：
+已收錄 **8 筆**經有界逐項審核的 KR Client 原生結論（不代表來源 Task 整體完成）：
 
 - [CK-SCENARIO-MAP-READ-NATIVE-01 — Native Map reader 正常返回路徑](client-scenario-map-native-reader-and-clear.md#ck-scenario-map-read-native-01--full-pass限定正常返回)：`0x4AA510` 在有效 owner/key 及 accessor 正常返回時，從 `ECX+4` 容器讀 DWORD。
 - [CK-SCENARIO-MAP-CLEAR-STATE-01 — Map clear 正常返回後的 sentinel/count](client-scenario-map-native-reader-and-clear.md#ck-scenario-map-clear-state-01--full-pass限定正常返回)：`0x823850` 在有效容器及節點處理正常返回時重設 sentinel links 並將 count 清零。
 
 上述兩筆是**限定條件的局部 FULL-PASS**；整體 Lua 綁定生命週期、其他全域 writer、完整 TUTO／Scenario 流程仍未准入。原稿與歷史狀態不變。
+
+- [CK-CLIENT-SCRIPT-REGISTRATION-ZERO-STUB-01 — 原生短函式 0x008DC2F0 零回傳](client-script-registration-zero-return-stub.md)：KR 精確 3-byte `xor eax,eax; ret` 的正常返回行為於 2026-10-31 經 T01 有界 FULL-PASS；72 個 Script 名稱註冊與實際函式功能不因此通過。
 
 ## 索引條目必要欄位
 

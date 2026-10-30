@@ -15693,6 +15693,120 @@
       "review_ref": "research/handoffs/t01-20261030-t16-quest15-quest16-bounded/README.md",
       "native_review_ref": "research/handoffs/t01-20261030-t16-quest15-quest16-bounded/README.md",
       "integration_status": "CONFLICT_CHECKED; selected R2; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-CLIENT-0063",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "shared/reviews/KR-BULK-CENTRAL-QA-ROUND-16-20261029.md",
+      "source_blob_sha": "a23bb7078fbe7d617f95f3f1a3d5efda3982e5c2",
+      "source_intake_id": "SRC-0508",
+      "evidence_level": "NATIVE_VERIFIED",
+      "evidence_scope": "PE .text VA0x008DC2F0 raw0x004DB6F0 complete entry 33 C0 C3",
+      "assertion": "In this KR BIN, when entered at 0x008DC2F0 under normal 32-bit x86 execution, xor eax,eax; ret results in EAX=0 and no explicit data memory write or other call. RET reads stack return address and changes ESP. The three-byte body has one basic block and no other reachable instruction path.",
+      "limitations": [
+        "Limited to exact unmodified entry and normal return; says nothing about caller effects, 72 names implementing APIs, VM lifetimes, hooks, runtime or Server."
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "related_claim_ids": [
+        "CLM-CLIENT-0064"
+      ],
+      "review_ref": "research/handoffs/t01-20261031-extra-roy2-qa/README.md",
+      "native_review_ref": "research/handoffs/t01-20261031-extra-roy2-qa/README.md",
+      "integration_status": "T01 R3 exact-entry-only FULL_PASS, independently verified PE/bytes/CFG/caller refs",
+      "additional_sources": [
+        {
+          "source_intake_id": "SRC-0506",
+          "source_file": "shared/reviews/KR-BULK-CENTRAL-QA-ROUND-14-20261029.md",
+          "source_blob_sha": "22f64d0845e6b73c56b6212c641c98c4de4a64cc",
+          "client_version": "kr",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "evidence_level": "PARTIAL",
+          "scope_subset": "Round14 documents independent xrefs, not independent FULL_PASS of any other function",
+          "quality_inheritance": false,
+          "integration_review_ref": "research/handoffs/t01-20261031-extra-roy2-qa/README.md"
+        }
+      ]
+    },
+    {
+      "id": "CLM-CLIENT-0064",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "shared/reviews/KR-BULK-CENTRAL-QA-ROUND-14-20261029.md",
+      "source_blob_sha": "22f64d0845e6b73c56b6212c641c98c4de4a64cc",
+      "source_intake_id": "SRC-0506",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "55D7E0..55E410 registration-region push/call and 72 MOV EDI immediate .rdata name pointers",
+      "assertion": "In original BIN, 72 distinct MOV EDI string-pointer instructions match 72 NUL-terminated .rdata labels, and the region has 72 push 0; push 0x8DC2F0 pairs. This establishes a shared initial pointer at those source sites, not that the labels are working game script APIs.",
+      "limitations": [
+        "No complete table/closure runtime dispatch, callback replacement or functional binding confirmed."
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "related_claim_ids": [
+        "CLM-CLIENT-0063"
+      ],
+      "review_ref": "research/handoffs/t01-20261031-extra-roy2-qa/README.md",
+      "native_review_ref": "research/handoffs/t01-20261031-extra-roy2-qa/README.md",
+      "integration_status": "R1/R2 bounded CONFLICT_CHECKED; no original document FULL_PASS",
+      "additional_sources": [
+        {
+          "source_intake_id": "SRC-0504",
+          "source_file": "shared/reviews/KR-BULK-CENTRAL-QA-ROUND-12-20261029.md",
+          "source_blob_sha": "f22988bbf3e430677ba86b5df13a20ff995dcd9b",
+          "client_version": "kr",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "evidence_level": "PARTIAL",
+          "scope_subset": "Earlier registration-region source, not full runtime semantics",
+          "quality_inheritance": false,
+          "integration_review_ref": "research/handoffs/t01-20261031-extra-roy2-qa/README.md"
+        },
+        {
+          "source_intake_id": "SRC-0505",
+          "source_file": "shared/reviews/KR-BULK-CENTRAL-QA-ROUND-13-20261029.md",
+          "source_blob_sha": "a5eeefa8607700ee4c3230a6815e07df28b0987a",
+          "client_version": "kr",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "evidence_level": "PARTIAL",
+          "scope_subset": "Earlier registration-region source, not full runtime semantics",
+          "quality_inheritance": false,
+          "integration_review_ref": "research/handoffs/t01-20261031-extra-roy2-qa/README.md"
+        },
+        {
+          "source_intake_id": "SRC-0508",
+          "source_file": "shared/reviews/KR-BULK-CENTRAL-QA-ROUND-16-20261029.md",
+          "source_blob_sha": "a23bb7078fbe7d617f95f3f1a3d5efda3982e5c2",
+          "client_version": "kr",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "evidence_level": "PARTIAL",
+          "scope_subset": "Earlier registration-region source, not full runtime semantics",
+          "quality_inheritance": false,
+          "integration_review_ref": "research/handoffs/t01-20261031-extra-roy2-qa/README.md"
+        }
+      ]
+    },
+    {
+      "id": "CLM-CLIENT-0065",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "shared/reviews/KR-BULK-CENTRAL-QA-ROUND-15-20261029.md",
+      "source_blob_sha": "cd5e14f4488bfd0cf3f656956876865a0bda0a82",
+      "source_intake_id": "SRC-0507",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "55E590 Rebind; 55E4F0 init of FE1F28; 55E620 indirect call; 5F5D10 ret stub",
+      "assertion": "The original BIN Rebind callback at 55E590 reads FE1F20, calls 4A2BB0, stores returned EAX in FE1F24, then returns 0; 55E4F0 assigns 5F5D10 to FE1F28, 55E620 calls [FE1F28] and returns 1; original 5F5D10 consists of ret.",
+      "limitations": [
+        "Other FE1F28 writers, all program callsites, runtime reassignment and script deletion side effects remain unresolved; do not claim DeleteAllObject globally does nothing."
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "related_claim_ids": [
+        "CLM-CLIENT-0064"
+      ],
+      "review_ref": "research/handoffs/t01-20261031-extra-roy2-qa/README.md",
+      "native_review_ref": "research/handoffs/t01-20261031-extra-roy2-qa/README.md",
+      "integration_status": "R1/R2 bounded CONFLICT_CHECKED; no original document FULL_PASS"
     }
   ]
 }
