@@ -36,3 +36,8 @@
 - [離線測試](../conformance/README.md) 只驗證研究派生的局部格式與靜態邊界映射，**沒有 Client 封包實測或 Server 連線驗收**。
 
 目前不受理外部 Issues；Server 程式碼、運行、資料庫及部署獨立於本設計庫。未證實的官方 Server 內部規則不能轉為此處的 Client 原生事實。
+
+
+## Server 需求清單（與原生證據分開）
+
+[統一 REQ 來源與規則](../design/requirements/README.md) 收錄程式碼分析所見 Client↔Server 交互候選、**已獲授權的**遊戲運行觀察，以及玩家/管理員功能需求（含安全、GM 稽核與營運）。同一項需求可累積三種來源，只有明確核准才是實作要求。起始五條均為 CANDIDATE；不得因此自行變更原版封包或宣稱已運行測試。驗證：`python -B governance/check_server_requirements.py --check`。
