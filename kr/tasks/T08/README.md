@@ -20,21 +20,27 @@
 
 [本批總台帳](../../../shared/integrations/T01-20261029-semantic-review/README.md)；[機器可讀退回紀錄](../../../shared/integrations/T01-20261029-semantic-review/return-notices.json)。
 
-#### T01-RETURN-T08-153-ABI-001 — NEEDS_FIX
+#### T01-RETURN-T08-153-ABI-001 — READY_FOR_REVIEW
+
+> **2026-10-31 T08 來源修復提交（待T01全文複驗，非 RESOLVED）**：保留原稿 FAILED；獨立修正版 `kr-temp-roy/20261031-010500-chatgpt-web-roy-T08-153-T01-corrected-source-v2.md`，Git blob `d1e62c090ec344a1460151561114ece977f592d2`。已直接替換指定錯誤文字／ASM／ABI，附原件定位與剩餘限制。此變更只將修正版送審，**不改 T01 舊來源裁決、FULL-PASS 或 S00 RR**；必須由 T01 核准後才可 RESOLVED。
 - 原稿：`kr-temp-roy/20261028-013809-chatgpt-web-roy-T08-153-GameInfo-actor-erase-bulk-cleanup.md`；Git blob `10bb0608cd1dbc9cf944eab51c74d4a2fa205e1a`；SHA256 `acc9fd34490b2f97293c0eae349c2d203a34c0830e4983bb41b1497a7490bfec`。
 - 問題：Search-key storage and erase output iterator storage are conflated in A1.5/C.
 - 原生反證：Caller pushes &stack key slot, not key value; callee [ebp+0xc] is output iterator pointer and writes successor to it at7B6AE6. The slot originally held key but is now an out-slot. Distinguish search-key pointer passed to82EF00 from iterator out pointer passed to7B6890.
 - 修正及複驗條件：Use erase(tree, &next_iterator, node), describe stack-slot reuse and successor-before-free. Preserve old source and supply separate corrected version for revalidation.
 - 驗收紀錄：[本項證據](../../../shared/integrations/T01-20261029-semantic-review/t08-early/actor-reviews.json)。
 
-#### T01-RETURN-T08-155-ASM-001 — NEEDS_FIX
+#### T01-RETURN-T08-155-ASM-001 — READY_FOR_REVIEW
+
+> **2026-10-31 T08 來源修復提交（待T01全文複驗，非 RESOLVED）**：保留原稿 FAILED；獨立修正版 `kr-temp-roy/20261031-010500-chatgpt-web-roy-T08-155-T01-corrected-source-v2.md`，Git blob `6f96b1996d57e14f8a438f0cd48f309d08ac50f2`。已直接替換指定錯誤文字／ASM／ABI，附原件定位與剩餘限制。此變更只將修正版送審，**不改 T01 舊來源裁決、FULL-PASS 或 S00 RR**；必須由 T01 核准後才可 RESOLVED。
 - 原稿：`kr-temp-roy/20261028-014315-chatgpt-web-roy-T08-155-tree-erase-node-and-container-invariants.md`；Git blob `45a6d797b4c33eabc24daf85292cdb005da39558`；SHA256 `099881b4a44e8c79188bd374f49b2cd46c560b25e8369538e9a3afe06bbf00cf`。
 - 問題：Appendix restarts in the middle of instruction7B698E and invents instructions7B698F/90/92.
 - 原生反證：Caller pushes &stack key slot, not key value; callee [ebp+0xc] is output iterator pointer and writes successor to it at7B6AE6. The slot originally held key but is now an out-slot. Distinguish search-key pointer passed to82EF00 from iterator out pointer passed to7B6890.
 - 修正及複驗條件：Replace the erroneous excerpt with entry-rooted CFG decode; include7B698E and7B6991, and recheck two-child relocation control flow. T01 provides full corrected native CFG.
 - 驗收紀錄：[本項證據](../../../shared/integrations/T01-20261029-semantic-review/t08-early/actor-reviews.json)。
 
-#### T01-RETURN-T08-183-001 — NEEDS_FIX
+#### T01-RETURN-T08-183-001 — READY_FOR_REVIEW
+
+> **2026-10-31 T08 來源修復提交（待T01全文複驗，非 RESOLVED）**：保留原稿 FAILED；獨立修正版 `kr-temp-roy/20261031-010500-chatgpt-web-roy-T08-183-T01-corrected-source-v2.md`，Git blob `29a337462476697cc1c83615031caa46d1cb314a`。已直接替換指定錯誤文字／ASM／ABI，附原件定位與剩餘限制。此變更只將修正版送審，**不改 T01 舊來源裁決、FULL-PASS 或 S00 RR**；必須由 T01 核准後才可 RESOLVED。
 - 原稿：`kr-temp-roy/20261028-100222-chatgpt-web-roy-T08-183-manager-last-release-and-container-destruction.md`；Git blob `ecbec611a9d99a7640ae4fad9668dcc3c06ad4be`；SHA256 `dd3dafebe38b5aa265a46da752269edfe890dbfd5d79451316800a9017a4fc3d`。
 - 問題：0x007B8680 用於樹節點移除／調整
 - 原生反證：7B868B..7B86AC computes string hash/mask and an8-byte bucket; 7B86DE EDI=&index+4 then719B20 unlinks two list links and frees node, without ordered-tree rotations.
@@ -51,7 +57,9 @@
 
 本節是 T01 對 T08 分析者的正式 GitHub README 通知；不使用 GitHub Issue。開始下一段工作前請先處理 NEEDS_FIX / FIXING，或明確記錄繼續研究與修正工作的優先序。T01 僅維護本退回專區，T08 保留原稿並產生修正版/勘誤。來源 Task 標記 READY_FOR_REVIEW 後，由 T01 複驗才標記 RESOLVED；已解決紀錄不刪。
 
-### T01-RETURN-T08-157-001 — NEEDS_FIX
+### T01-RETURN-T08-157-001 — READY_FOR_REVIEW
+
+> **2026-10-31 T08 來源修復提交（待T01全文複驗，非 RESOLVED）**：保留原稿 FAILED；獨立修正版 `kr-temp-roy/20261031-010500-chatgpt-web-roy-T08-157-T01-corrected-source-v2.md`，Git blob `bee44d5019ce224821a1ef1391d1337227f37130`。已直接替換指定錯誤文字／ASM／ABI，附原件定位與剩餘限制。此變更只將修正版送審，**不改 T01 舊來源裁決、FULL-PASS 或 S00 RR**；必須由 T01 核准後才可 RESOLVED。
 
 <!-- T01-RETURN-T08-157-001-20261029-update -->
 2026-10-29 複驗補充：原稿blob `b67b6c415c63034607fadef59b0e4fc2892237e2`，SHA256 `b04539973e1056beea42dd4feefca905dc5b76a359cc5f6a5e24a475042d5164`。Caller pushes &stack key slot, not key value; callee [ebp+0xc] is output iterator pointer and writes successor to it at7B6AE6. The slot originally held key but is now an out-slot. Distinguish search-key pointer passed to82EF00 from iterator out pointer passed to7B6890. 修正／複驗：Update existing return with complete rooted CFG and affected dataflow; retain NEEDS_FIX until a new source version is revalidated. [本輪證據](../../../shared/integrations/T01-20261029-semantic-review/t08-early/actor-reviews.json)。
@@ -75,7 +83,9 @@
 - T08 修復：更正 +0x44 enable／disable 的 writer 描述，重驗本函式數值來源與所有受影響論點，提交修正版及 Git blob SHA。
 - 來源：T01-026/027 驗收界線。
 
-### T01-RETURN-T08-187-001 — NEEDS_FIX
+### T01-RETURN-T08-187-001 — READY_FOR_REVIEW
+
+> **2026-10-31 T08 來源修復提交（待T01全文複驗，非 RESOLVED）**：保留原稿 FAILED；獨立修正版 `kr-temp-roy/20261031-010500-chatgpt-web-roy-T08-187-T01-corrected-source-v2.md`，Git blob `1b35f545975e93901722326ccecacf01e3789ab9`。已直接替換指定錯誤文字／ASM／ABI，附原件定位與剩餘限制。此變更只將修正版送審，**不改 T01 舊來源裁決、FULL-PASS 或 S00 RR**；必須由 T01 核准後才可 RESOLVED。
 
 <!-- T01-RETURN-T08-187-001-20261029-update -->
 2026-10-29 複驗補充：原稿blob `cf2b5d3fc74b6d0199837c957a214765ac14866f`，SHA256 `bc0e9037d4e8a9a3108e395837e583096ed68f6d25230db9d6577488c06e978c`。0x7F6FBF=6a30 push0x30; 0x7F6FC1=8bf8 mov edi,eax. The latter saves manager before allocation. 修正／複驗：Correct instruction address and recheck manager provenance, allocation/null edge, acquire and wrapper+2C storage; source version remains FAILED. [本輪證據](../../../shared/integrations/T01-20261029-semantic-review/t08-new/return-items.json)。
