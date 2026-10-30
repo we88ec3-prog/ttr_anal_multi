@@ -233,6 +233,112 @@
         "CLM-NET-0027",
         "CLM-NET-0028"
       ]
+    },
+    {
+      "client_version": null,
+      "target_sha256": null,
+      "status": "CANDIDATE",
+      "priority": "P0",
+      "rr_ids": [],
+      "gap_ids": [],
+      "spec_ids": [],
+      "feedback_ids": [],
+      "claim_ids": [],
+      "id": "REQ-0006",
+      "title": "WEB 後台 V1 固定網址與來源 IP 白名單存取、操作稽核",
+      "category": "OPERATIONS",
+      "need": "V1 依使用者補充要求，不開發管理員帳號登入/MFA/RBAC；僅從指定來源 IP（server-side allowlist）連到配置的 WEB Host/base URL 才可查詢並執行帳號管理。維持必要的網路邊界與防跨站操作、可靠稽核；無法由 IP 判定實際操作者。",
+      "acceptance_criteria": [
+        "配置來源 IP/CIDR allowlist 與管理 WEB 的 scheme/Host/port/base-path；只有來源 IP 命中且 Host/路徑符合的請求可使用所有 V1 帳號管理功能。預設無 allowlist 時拒絕；未允許來源或錯誤 Host/路徑不能讀取或修改資料。",
+        "V1 不顯示管理員登入頁、無管理員帳號/MFA/角色/細部 RBAC；遊戲玩家登入不能產生後台權限。網址不是驗證秘密，反向代理只信任受控 trusted proxy 提供的真實客戶端 IP，不相信任意 X-Forwarded-For。",
+        "所有異動以不可偽稱身分的 IP_ONLY_OPERATOR、實際來源 IP、帳號 UUID、動作、UTC 時間、原因、結果與 correlation ID 記錄可靠稽核；不得聲稱知道具體操作者或記錄憑證、token/hash。",
+        "管理端只可配置於受控私網/VPN/本機邊界；跨主機需 TLS；POST 必須驗 Origin/CSRF、防跨站及請求節流。未核准不得公開到 Internet；此版本簡化存取控管，不代表 IP+URL 能替代正式身分驗證。"
+      ],
+      "discoveries": [
+        {
+          "channel": "PLAYER_ADMIN_REQUEST",
+          "requester_role": "ADMINISTRATOR",
+          "request_text": "使用者需求幫我規劃WEB端後台，目前第一個後臺需求是新增玩家帳號/停權帳號N天/永久/解封，規劃完後請幫我上git",
+          "request_record_ref": "design/requirements/requests/2026-10-31-admin-web-account-operations.md",
+          "scope_note": "由 WEB 管理後台需求導出的必要權限、驗證、稽核和部署安全設計；具體方案尚需 ADR 批准。"
+        },
+        {
+          "channel": "PLAYER_ADMIN_REQUEST",
+          "requester_role": "ADMINISTRATOR",
+          "request_text": "目前先不管權限，指定的IP與URL就能管理",
+          "request_record_ref": "design/requirements/requests/2026-10-31-admin-web-account-operations.md",
+          "scope_note": "同一 WEB 後台需求的 V1 更正：不做 admin login/MFA/RBAC，使用配置的來源 IP allowlist 與固定 WEB URL；保留最小安全及可歸因至來源 IP 的操作記錄，不主張識別自然人。"
+        }
+      ],
+      "adr_ids": [
+        "ADR-0004"
+      ]
+    },
+    {
+      "client_version": null,
+      "target_sha256": null,
+      "status": "CANDIDATE",
+      "priority": "P0",
+      "rr_ids": [],
+      "gap_ids": [],
+      "spec_ids": [],
+      "feedback_ids": [],
+      "claim_ids": [],
+      "id": "REQ-0007",
+      "title": "WEB 後台新增玩家帳號",
+      "category": "PRODUCT_FEATURE",
+      "need": "管理員可透過 WEB 後台建立新玩家帳號，使用既有 Server-owned account persistence，不需啟用原 Client 自行註冊或自動建立遊戲角色。",
+      "acceptance_criteria": [
+        "從已允許來源 IP 且符合 WEB URL 的管理頁面可輸入符合既有或未來核准政策的帳號名稱與初始憑證；Server 原子儲存新的唯一玩家 AccountId，初始不含角色。",
+        "標準化名稱相同的並發/重試創建只能成功一次；非法名稱、重複名稱、來源 IP/Host 拒絕、DB/audit 寫入失敗均返回可區分的安全錯誤，不得部分建立。",
+        "新建帳號能被 Server-owned 帳號查詢尋得；不顯示或記錄明文憑證/雜湊；成功操作含原因/操作來源 IP（非可識別的操作者）的稽核與冪等追蹤，不能因此宣稱 KR/TC Client 已可登入。"
+      ],
+      "discoveries": [
+        {
+          "channel": "PLAYER_ADMIN_REQUEST",
+          "requester_role": "ADMINISTRATOR",
+          "request_text": "使用者需求幫我規劃WEB端後台，目前第一個後臺需求是新增玩家帳號/停權帳號N天/永久/解封，規劃完後請幫我上git",
+          "request_record_ref": "design/requirements/requests/2026-10-31-admin-web-account-operations.md",
+          "scope_note": "使用者明確提出新增玩家帳號；帳號憑證交付、角色預設空值、唯一性與稽核為待核准的驗收/安全設計。 KR 專用 ADR-0002 僅作設計背景參考，不做版本中立 REQ 的正式 ADR 連結。"
+        }
+      ],
+      "adr_ids": [
+        "ADR-0004"
+      ]
+    },
+    {
+      "client_version": null,
+      "target_sha256": null,
+      "status": "CANDIDATE",
+      "priority": "P0",
+      "rr_ids": [],
+      "gap_ids": [],
+      "spec_ids": [],
+      "feedback_ids": [],
+      "claim_ids": [],
+      "id": "REQ-0008",
+      "title": "WEB 後台停權 N 天／永久停權／解封玩家帳號",
+      "category": "OPERATIONS",
+      "need": "在配置的 WEB Host/base URL、來源 IP allowlist 均符合時，可對既有玩家帳號施加正整數 N 天停權、永久停權或提前解封；必須阻止新登入及既有遊戲 Session，不能只改 UI 狀態。V1 不使用管理員帳號登入或角色權限。",
+      "acceptance_criteria": [
+        "TEMPORARY 模式保存 Server UTC 生效和到期時間；N 必須正整數且接受配置上限/溢位驗證。PERMANENT 不設定到期時間；UTC 到期後自然不阻擋登入，永久停權只可授權解封。",
+        "停權後新登入/Session lease 與舊 Session/舊 generation 的操作被拒；多節點、重試、故障恢復及同時登入/停權競態不能繞過有效停權。",
+        "解封保留全部處置與稽核歷史、不可恢復舊 Session；不清除既有 C02 密碼失敗鎖定 locked_until，並保護 against stale version/重送導致重複變更。",
+        "每次停權與解封需驗證來源 IP allowlist、管理 WEB Host/路徑、目標 AccountId 與原因，並持久保存不可任意改寫的稽核事件；DB 或稽核失敗不可聲稱成功。"
+      ],
+      "discoveries": [
+        {
+          "channel": "PLAYER_ADMIN_REQUEST",
+          "requester_role": "ADMINISTRATOR",
+          "request_text": "使用者需求幫我規劃WEB端後台，目前第一個後臺需求是新增玩家帳號/停權帳號N天/永久/解封，規劃完後請幫我上git",
+          "request_record_ref": "design/requirements/requests/2026-10-31-admin-web-account-operations.md",
+          "scope_note": "使用者明確提出 N 天、永久、解封三種操作。N×24h、UTC、重新停權衝突規則、Session 同步踢線與稽核粒度均是 ADR-0005 候選，尚未核准。"
+        }
+      ],
+      "adr_ids": [
+        "ADR-0004",
+        "ADR-0005"
+      ]
     }
   ]
 }

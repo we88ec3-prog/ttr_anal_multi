@@ -1,4 +1,4 @@
-# S00 Iterations 14–21 — 原稿保存與交接
+# S00 Iterations 14–22 — 原稿保存與交接
 
 這個目錄保存 2026-10-30 原先在舊 ChatGPT 對話生成的 **完整草案** 與工作矩陣。已從使用者的檔案庫恢復原始 Markdown / JSON，並非由簡短對話摘要重寫。
 
@@ -46,3 +46,9 @@ Iterations 16–17 的正式流程編號合計 **E00–E26（27 個 gate）與 4
 - [Iteration 21 詳細分析與正式派工](S00-20261031-ITERATION-21-CREATE-UI-WIRE-DISPATCH.md)：從 Iteration20 Gate Trace 的 E04→E05→E06 開始；在對照既有 RR-0002（選角，BLOCKED）、RR-0007（入站 dispatcher）、RR-0008（選角→場景）後，**新增** `GAP-CHAR-0002/0003` 與 `RR-0009`（零角色／創角 UI 正向入口）、`RR-0010`（真正創角 C2S/S2C 正向交易）。
 - 兩個研究請求均 **P0 / QUEUED / 未認領**，T03 主責、T06 資源與 T04 欄位為定向協查。T03 生成收件箱已更新，唯一正式 RR 台帳從 8 增至 10；既有 8 個 RR 不變。
 - `SPEC-CHAR-0001`／`SPEC-FLOW-0001` 仍 DRAFT/PARTIAL，僅加明確 blocker，不新增 Client 封包、Server 跨任務實作、原 Client runtime 或任何 FULL-PASS／SPEC STABLE。Git 合併不自動喚醒其他 Agent。
+
+## Iteration 22（2026-10-31，WEB 玩家帳號後台第一版）
+
+- [Iteration 22 正式管理員需求與實作交接](S00-20261031-ITERATION-22-ADMIN-WEB-V1.md)；[WEB Admin V1 功能設計](../../design/admin-web/ADMIN-WEB-V1-PLAN.md)；[25 項未執行驗收草案](../../design/admin-web/ADMIN-WEB-V1-ACCEPTANCE.md)。
+- REQ-0006 管理員權限稽核、REQ-0007 新增玩家帳號、REQ-0008 停權 N 天／永久／解封，以**真實** `PLAYER_ADMIN_REQUEST` 去敏登錄；不污染原有 CODE_ANALYSIS 需求。
+- ADR-0004/0005 提供 Server-only 安全、停權與 Session 整合提案，全部 **PROPOSED**。此輪沒有修改 `ttr_server_roy`、沒有新 Client RR/GAP/SPEC/TEST/CLM，亦沒有部署 WEB 或測試執行。

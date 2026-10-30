@@ -15,6 +15,7 @@ PATHS = [
     "spec/spec-index.json", "research/requests/index.json",
     "design/gaps/index.json", "design/decisions/index.json",
     "design/feedback/index.json", "shared/targets.json",
+    "design/requirements/requests/2026-10-31-admin-web-account-operations.md",
 ]
 
 
@@ -42,10 +43,42 @@ class ServerRequirementTests(unittest.TestCase):
     def test_canonical_code_findings_not_approved(self):
         r = evaluate(self.root)
         self.assertEqual(r["errors"], [])
-        self.assertEqual(r["summary"]["requirements"], 5)
+        self.assertEqual(r["summary"]["requirements"], 8)
         self.assertEqual(r["summary"]["approved"], 0)
         self.assertEqual(r["summary"]["discovery_counts"],
-                         {"CODE_ANALYSIS": 5, "GAME_RUNTIME_OBSERVATION": 0, "PLAYER_ADMIN_REQUEST": 0})
+                         {"CODE_ANALYSIS": 5, "GAME_RUNTIME_OBSERVATION": 0, "PLAYER_ADMIN_REQUEST": 4})
+
+
+    def test_admin_web_v1_three_requests_trace_to_actual_user_request(self):
+        records = json.loads((self.root / PATHS[0]).read_text(encoding="utf-8"))["items"]
+        found = {r["id"]: r for r in records}
+        for rid in ("REQ-0006", "REQ-0007", "REQ-0008"):
+            req = found[rid]
+            self.assertEqual(req["client_version"], None)
+            self.assertEqual(req["status"], "CANDIDATE")
+            self.assertEqual(req["discoveries"][0]["channel"], "PLAYER_ADMIN_REQUEST")
+            self.assertEqual(req["discoveries"][0]["requester_role"], "ADMINISTRATOR")
+            self.assertEqual(req["discoveries"][0]["request_record_ref"],
+                             "design/requirements/requests/2026-10-31-admin-web-account-operations.md")
+            self.assertEqual(req["rr_ids"], [])
+            self.assertEqual(req["claim_ids"], [])
+        self.assertEqual(set(found["REQ-0008"]["adr_ids"]), {"ADR-0004", "ADR-0005"})
+        access = found["REQ-0006"]
+        self.assertEqual(len(access["discoveries"]), 2)
+        self.assertEqual(access["discoveries"][1]["request_text"],
+                         "目前先不管權限，指定的IP與URL就能管理")
+        self.assertIn("來源 IP/CIDR allowlist", access["acceptance_criteria"][0])
+        self.assertTrue(any("不顯示管理員登入頁" in x for x in access["acceptance_criteria"]))
+        self.assertEqual(found["REQ-0007"]["adr_ids"], ["ADR-0004"])
+        self.assertNotIn("ADR-0002", access["adr_ids"])
+        self.assertEqual(evaluate(self.root)["errors"], [])
+
+    def test_admin_web_request_record_missing_fails_closed(self):
+        path = self.root / "design/requirements/requests/2026-10-31-admin-web-account-operations.md"
+        path.unlink()
+        errors = evaluate(self.root)["errors"]
+        self.assertTrue(any("feature request needs a public-safe internal request record" in e
+                            for e in errors))
 
     def test_duplicate_requirements_rejected(self):
         self.edit(lambda d: d["items"].append(d["items"][0].copy()))
@@ -110,8 +143,8 @@ class ServerRequirementTests(unittest.TestCase):
         self.edit(edit)
         r = evaluate(self.root)
         self.assertEqual(r["errors"], [])
-        self.assertEqual(r["summary"]["requirements"], 5)
-        self.assertEqual(r["summary"]["discovery_counts"]["PLAYER_ADMIN_REQUEST"], 2)
+        self.assertEqual(r["summary"]["requirements"], 8)
+        self.assertEqual(r["summary"]["discovery_counts"]["PLAYER_ADMIN_REQUEST"], 6)
 
     def test_historical_protocol_and_ops_safety_are_user_request_material(self):
         # Test-only player/admin discovery: not a real user submission.

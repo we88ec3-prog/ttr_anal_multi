@@ -85,3 +85,7 @@ Server 需求採用 [唯一 REQ 台帳](../design/requirements/README.md)，**�
 ## Iteration 21 — 創角契約的正式缺口／去重後派工
 
 [正式分析與差異](s00-iterations/S00-20261031-ITERATION-21-CREATE-UI-WIRE-DISPATCH.md) 建立 `RR-0009`（E05：N=0/新增按鈕→Create UI 的本地 scene/dialog/event 正向入口）、`RR-0010`（E06：**Create** C2S 與匹配 S2C consumer／roster refresh），分別連至新 `GAP-CHAR-0002/0003`，研究 owner 均為 KR T03；T06/T04/T02 只提供既有職責內的跨 Task 介面。既有 `RR-0002` selection、`RR-0007` dispatcher、`RR-0008` selection→scene 不應被覆蓋或任意升級。新的 T03 inbox 由唯一 RR 台帳同步產生，只有 main 合併後供認領；沒有自動通知、沒有原 Client runtime 授權。SPEC-CHAR/FLOW 保留 DRAFT/PARTIAL。
+
+## Iteration 22 — 管理員 WEB 後台以第三來源直接建 REQ（非 Client RR）
+
+[WEB Admin V1／Iteration 22](s00-iterations/S00-20261031-ITERATION-22-ADMIN-WEB-V1.md)：使用者實際要求管理頁面新增玩家帳號、N 天／永久停權與解封。以 `PLAYER_ADMIN_REQUEST` 與去敏 [request record](../design/requirements/requests/2026-10-31-admin-web-account-operations.md) 寫入**唯一正式** REQ-0006～0008（CANDIDATE）；這是不同於 REQ-0001～0005 的 Server 管理產品需求。無 Client native source 就**不建 RR/CLM/原生 SPEC**；Server-only 的隔離 Admin 身分/RBAC/audit 與停權/fencing 決策編入 PROPOSED ADR-0004/0005。完整 API、DB、UI、25項 NOT_RUN 驗收於 `design/admin-web/`；未正式批准時只能作非規範設計，不可推論遊戲 Client 可登入、Server 已上線或 S00 相容性障礙已解除。

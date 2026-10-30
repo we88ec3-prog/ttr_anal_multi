@@ -606,14 +606,14 @@
       "id": "RR-0010",
       "title": "KR create-character C2S/S2C positive transaction and roster initialization boundary",
       "client_version": "kr",
-      "status": "ACTIVE",
+      "status": "BLOCKED",
       "owner_task": "T03",
       "gap_ids": [
         "GAP-CHAR-0003"
       ],
       "question": "Independently of select-existing-character C2S 0x42, identify the real create-character C2S producer and matching KR Client S2C accepted/rejected consumer, complete bounded fields/slot/frame/encoding, and creation result to roster/initialization. Use T04 for character fields and T02 for transport boundaries, T06 UI only as prerequisite. Do not guess opcode/request+1 or official Server policy.",
       "dispatch": {
-        "state": "CLAIMED",
+        "state": "BLOCKED",
         "priority": "P0",
         "acceptance_criteria": "1) Provide exact Client build SHA, bounded native builder/consumer address ranges and C2S vs S2C packet/field offsets, lengths, codepage, scene/connection state; unknown values stay UNKNOWN. 2) Show the positive request→handler→result→roster/initialization dependency and distinct rejection/retry branches, including duplicate creation and disconnect semantics only where source supports them. 3) Explain what is Client-local vs transmitted, which outcome depends on missing original Server data, and do not treat C2S select 0x42 or S2C 0x42/43 as creation acknowledgements. 4) Use existing RR-0002/RR-0007/RR-0008 as adjacent evidence only; do not change their status or scope. 5) Deliver full report, Git blob SHA, bounded tests/negative cases, impact on GAP-CHAR-0003 and SPEC-CHAR/FLOW; if no original Server pairing can be proven, report explicit unblock conditions without calling it ACCEPTED.",
         "claim": {
@@ -638,6 +638,20 @@
             "actor": "chatgpt-web roy",
             "date": "2026-10-31",
             "note": "User explicitly authorized KR T03 RR-0010. Research only on user-mandated extra/roy1 (no new branch); deferred separate T01-RETURN-T03-006-LAYOUT-001 NEEDS_FIX by specific RR request. Trace true create C2S producer/fields/guard, S2C result and roster update; preserve unknown backend policy and do not relabel C2S selection 0x42."
+          },
+          {
+            "from": "CLAIMED",
+            "to": "IN_PROGRESS",
+            "actor": "chatgpt-web roy",
+            "date": "2026-10-31",
+            "note": "RR-0010 E71 exact BIN-first bounded study authored and published on sole extra/roy1 commit dfb65ff9f7941cae2e2771e79706bac74074b5c9. Report kr-extra-roy/20261031-010931-chatgpt-web-roy-E71-RR0010-create-C2S-candidates-S2C-roster-blocker.md blob 57f809809e28d24cd9779549d95e9b269db4870b; 34-assertion checker blob 96a51b86fa5066eaf8646ad1133a50b611632cbb. Candidate CEmployNewCharacter event 0x6BF2A0→C2S0x0033 2 bytes; alt 0x21 and 0x27 builder researched. Exact creation request→S2C accept/reject→roster still unproven; proper blocker transition follows."
+          },
+          {
+            "from": "IN_PROGRESS",
+            "to": "BLOCKED",
+            "actor": "chatgpt-web roy",
+            "date": "2026-10-31",
+            "note": "RR-0010 core positive build transaction cannot be closed from verified KR Client static evidence. E71 original native report on extra/roy1 commit dfb65ff9f7941cae2e2771e79706bac74074b5c9: kr-extra-roy/20261031-010931-chatgpt-web-roy-E71-RR0010-create-C2S-candidates-S2C-roster-blocker.md Git blob 57f809809e28d24cd9779549d95e9b269db4870b; exact 34 assertion checker kr-extra-roy/20261031-010823-chatgpt-web-roy-E71-RR0010-verify.py Git blob 96a51b86fa5066eaf8646ad1133a50b611632cbb. Native N: CEmployNewCharacter vtable+0x15C/0x6BF2A0 gated UI event0x578 may call C2S 0x4A38D0 with app 33 00 len2 and no name/appearance payload; 0x21 variable subitem and 0x27 8B producer alternatives have distinct callers and no confirmed create UI; 0x65D550/F4350 event shared with CCharChangeDialog; S2C app0x33 no first-level dedicated override and requires active-scene fallback, not a create ACK; global cmd2 65+53N roster may update record+0x5C, but no positive request→S2C accepted/rejected→roster relation. No original Server policy/packet capture or client runtime test; do not invent success/error/duplicate/retry/disconnect semantics. Concrete unblock: same-version GUI control/name/attribute→C2S positive origin plus matching result handler and roster writer, trusted KR live multi-Conn original Server capture or Server source, or bounded dynamic Client+synthetic Server observations strictly labeled compatibility. GAP-CHAR-0003 stays OPEN, affected SPEC-CHAR-0001/SPEC-FLOW-0001 not STABLE; RR-0002/RR-0009 unchanged. BLOCKED is NOT SUBMITTED, ACCEPTED or T01 FULL-PASS."
           }
         ]
       }
