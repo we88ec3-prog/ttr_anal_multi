@@ -162,3 +162,14 @@ SQLite local user_version=1、PostgreSQL 已有 migration003，任何新表都�
 E17-E original T10/T02/T04、E17-F T11/T10/T04/T02、E17-G T12/T08/T10/T11 的原 Client 技能/命中正向因果仍 SOURCE PARTIAL；原 Client 測試須另外授權。ADR-0006/0007 PROPOSED/NON-NORMATIVE；SPEC-FLOW/SCENE DRAFT/PARTIAL，native adapter OFF；S00 CI/24 `NOT_RUN` 不能當 Server 或原 Client 相容驗收。
 
 **Iteration30 建議**：W05 Objective/Scenario14 once-only Settlement/outbox；必須從已授權 ActorDeath/event 而不是固定秒數或 local S2C0x4C map flag 直接勝利。也可交由實作庫先做 C05-P1 原子入場，不因等待原 Client 而停掉 mock-domain 開發。
+
+
+## 2026-10-31 — Iteration 30：Scenario14 mock objective/wave/terminal/outbox/Quest14 eligibility
+
+核對開工 S00 `main=295b53b003f93e41d7281f94b98d158f06302bb1`，Actions #41134506321 **SUCCESS**（只代表規劃/離線測試）。Server `ttr_server_roy main=272079cc69b124870af303d711931ec20bce2229` 的最新提交新增 **C00-OPS SQLite 維運工具**，C05 Gameplay/Scenario14 **未實作**，其當次 Actions 在查核時 **IN_PROGRESS**。新對話應重讀兩庫最新 main 和 workflow，不能把這份快照當永久最新或把 C00-OPS 當 C05。
+
+本輪 [Iteration30 完整開發交接](s00-iterations/S00-20261031-ITERATION-30-OBJECTIVE-SETTLEMENT-PLAN.md)、[S30-01～04 machine contract](s00-iterations/S00-ITERATION-30-OBJECTIVE-SETTLEMENT-CONTRACT.json)、[I30-T01～24](s00-iterations/S00-20261031-ITERATION-30-ACCEPTANCE.md) 都是 **PLAN_ONLY/NOT_RUN**。S30-01 僅接收 S29 Hit/Death 同 Encounter/ActorGeneration 的 verified death event，S30-02 才計 mock wave 和 objective，S30-03 一次性 terminal CAS/audit，S30-04 Outbox 重送與獨立 Quest14 eligibility（**不完成 Quest14**）。
+
+Server 建議開工 C05-P8..P11，但**依賴**前面未實作的 C05-P1..P7（Iteration28 Encounter/Actor、Iteration29 Hit/Death）。DB SQLite C02-D v2 且新 mock Schema v3 未批准/未套；PostgreSQL current 003 下一版 004 同樣未套；現有 C00-OPS 可做 DB 備份/恢復演練但沒有替 C05 domain schema 測試。不得把局部 Client `0x004C` `map[14]` 當 official Server result 或 Quest14 completed。原 E17-H DISCOVERY_REQUIRED、E17-I PARTIAL、E17-J ADR_PENDING、E18～E20 仍 source PARTIAL；ADR-0006/0007 PROPOSED，不可自動將 Native KR/TC adapter 打開，實際原 Client 需另行授權。
+
+下一輪若繼續 S00 規劃，優先 Iteration31 W06 Quest14→Quest16→Quest15 與 W07 唯一 RewardLedger、Quest/Scenario transaction 邊界；若改要求實作，在獨立 `ttr_server_roy` 建真實程式碼 PR/測試，不在分析庫混寫 Server code。
