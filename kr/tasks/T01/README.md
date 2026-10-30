@@ -128,3 +128,5 @@ T01 對 Server 設計的接收、精確主張去重、風險分流及 S00 交接
 2026-10-30 T16 第三輪：已透過使用者上傳 phase3 ZIP + 原件 KR BIN 對 19 root、4464 native 指令、4905 CFG edges、28 問題窗口、71 舊 call/jmp 做獨立查核，**本輪新增 16 筆 appendix/CFG 限定退回 `RESOLVED`；固定 T16 退回累計 43/43 `RESOLVED`。** 這不是 T16 全稿 FULL-PASS、Quest 原生封包實證或 S00 SPEC STABLE。詳見 [完整獨立驗證與 Table.stp 解包](../../../shared/integrations/T01-20261030-t16-phase3-table-review/README.md)。
 
 2026-10-30 Quest16 T01 有界驗收整合：[T16-117／121／122／123 四來源與 R2 反證](../../../research/handoffs/t01-20261030-quest16-r0-r2/README.md)。正式新增 4 SRC、6 CLM（5 PARTIAL／1 REFUTED），針對117建立 T01-RETURN-T16-117-Q16-MODE2-C2S36-001 NEEDS_FIX；歷史43筆 RESOLVED 不變，未新增全文FULL-PASS/NATIVE_VERIFIED/SPEC_CONSUMABLE。
+
+2026-10-30 RR-0001／RR-0004 T01 限定驗收：[兩份原始來源、獨立 BIN R2、5 項新 CLM](../../../research/handoffs/t01-20261030-rr0001-rr0004-bounded-r2/README.md)。原樣補入 E57／E58 提交報告 blob 並登錄 SRC-0461/0462，補足原先 main 缺少 RR 來源導致的驗證阻塞；兩 RR 仍由 S00 判定 ACCEPTED。沒有新的全文 FULL-PASS 或 SPEC_CONSUMABLE，不改其它 Task 的原始研究、owner 或 T16 退回。

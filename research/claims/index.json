@@ -10881,6 +10881,118 @@
       "affected_spec_ids": [],
       "review_ref": "research/handoffs/t01-20261030-quest16-r0-r2/README.md",
       "integration_status": "R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-NET-0021",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/20261030-110906-chatgpt-web-roy-E58-RR0004-A02C-alias-mode-fallback-bounded-BIN-first.md",
+      "source_blob_sha": "b5c53b93ec20e056fb3f07374468a341ce4ee9c9",
+      "source_intake_id": "SRC-0462",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR new Conn constructor 0x805CA0/0x805D02, reset 0x805F50, send drain 0x806202/0x806223/0x80623A",
+      "assertion": "Constructor stores Conn+A02C=2; queue drain signed-byte checks zero/nonzero: nonzero first calls 807830 and on failure calls 807A70; mode0 directly 807A70. Reset/reuse inspected does not show this byte rewritten.",
+      "limitations": "Full indirect writer/alias closure not established, mode0 observed runtime reachability unknown; successful encode not OS send.",
+      "conflicts": [],
+      "affected_spec_ids": [
+        "SPEC-NET-0001",
+        "SPEC-NET-0003"
+      ],
+      "related_claim_ids": [
+        "CLM-NET-0001",
+        "CLM-NET-0020"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-rr0001-rr0004-bounded-r2/README.md",
+      "integration_status": "R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-NET-0022",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/20261030-103206-chatgpt-web-roy-E57-RR0001-KR-first-frame-0BBB-1A68-mode-sequencing-static-contract.md",
+      "source_blob_sha": "a379f776b9a1d7566de539daa7153f33b9b91e36",
+      "source_intake_id": "SRC-0461",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 0x807830/0x807A70 local frame encoders and 0x807D33 checksum consumer",
+      "assertion": "Under normal guarded inputs encoded 0BBB uses u16 payload len, u16 marker, u16 plaintext-byte sum and XOR-chain payload, total n+6; plain 1A68 uses len+marker+raw body total n+4. Synthetic payload 01 00 yields 02 00 BB 0B 01 00 B7 01.",
+      "limitations": "Byte-transform semantics are scoped to observed encoder/decoder, not official live packets or complete compression variants.",
+      "conflicts": [],
+      "affected_spec_ids": [
+        "SPEC-NET-0001",
+        "SPEC-NET-0003"
+      ],
+      "related_claim_ids": [
+        "CLM-NET-0021"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-rr0001-rr0004-bounded-r2/README.md",
+      "integration_status": "R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-NET-0023",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/20261030-110906-chatgpt-web-roy-E58-RR0004-A02C-alias-mode-fallback-bounded-BIN-first.md",
+      "source_blob_sha": "b5c53b93ec20e056fb3f07374468a341ce4ee9c9",
+      "source_intake_id": "SRC-0462",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 0x807830 length/TX capacity guards; 0x807A70; 0x8061A0 retain-or-recycle branch",
+      "assertion": "0BBB requires n>0 and n+6<=4096; plain n>0 and n+4<=4096; each also gates used+frame<=16384 and TX pointer. For mode nonzero, n=4091/4092 may fall back to plain when space permits; both failure leaves queue head pending in inspected branch.",
+      "limitations": "This is a synthetic/conditional threshold, not proof normal game producer emits 4091 or 4092 bytes; queue return is not WSASend.",
+      "conflicts": [],
+      "affected_spec_ids": [
+        "SPEC-NET-0001",
+        "SPEC-NET-0003"
+      ],
+      "related_claim_ids": [
+        "CLM-NET-0021",
+        "CLM-NET-0022"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-rr0001-rr0004-bounded-r2/README.md",
+      "integration_status": "R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-NET-0024",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/20261030-103206-chatgpt-web-roy-E57-RR0001-KR-first-frame-0BBB-1A68-mode-sequencing-static-contract.md",
+      "source_blob_sha": "a379f776b9a1d7566de539daa7153f33b9b91e36",
+      "source_intake_id": "SRC-0461",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 0x807B40 inbound frame parser and 0x807D66 checksum gate",
+      "assertion": "Inbound parser chooses header/processing by received marker (0x2633/0x0BBB/0x1A68/0x22D7), not by outgoing Conn+A02C. When inspected 0BBB decoded checksum differs, the normal positive payload copy path through 0x807E50 is not taken.",
+      "limitations": "Parser accepts additional/default marker branches; unknown marker is not official endorsement, 0x2633 failure chain belongs RR-0006; no official first S2C known.",
+      "conflicts": [],
+      "affected_spec_ids": [
+        "SPEC-NET-0001",
+        "SPEC-NET-0003"
+      ],
+      "related_claim_ids": [
+        "CLM-NET-0021"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-rr0001-rr0004-bounded-r2/README.md",
+      "integration_status": "R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-NET-0025",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/20261030-110906-chatgpt-web-roy-E58-RR0004-A02C-alias-mode-fallback-bounded-BIN-first.md",
+      "source_blob_sha": "b5c53b93ec20e056fb3f07374468a341ce4ee9c9",
+      "source_intake_id": "SRC-0462",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR `.text` raw displacement 2C A0 00 00 and rooted direct E8 candidate locations",
+      "assertion": "In KR .text there are exactly two raw A02C displacement occurrences at VA 0x805D04 (0x805D02 setter) and 0x806205 (0x806202 reader). Direct E8 calls to 0x807830/0x807A70 occur at 0x806223/0x80623A, and 0x8061A0 direct callers at 0x804AD6/0x805228.",
+      "limitations": "Raw byte-pattern absence does not rule out base-adjusted pointers, computed alias, whole-struct copies, indirect calls or external writes; targets confirmed only at rooted instruction boundaries.",
+      "conflicts": [],
+      "affected_spec_ids": [
+        "SPEC-NET-0001",
+        "SPEC-NET-0003"
+      ],
+      "related_claim_ids": [
+        "CLM-NET-0021"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-rr0001-rr0004-bounded-r2/README.md",
+      "integration_status": "R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
     }
   ]
 }
