@@ -104,3 +104,8 @@ E80 RR-0002 研究 [PR #67](https://github.com/we88ec3-prog/ttr_anal_multi/pull/
 ## Iteration 25：原版 Client 未閉合時仍可分層推進 Server 的 tutorial domain
 
 [Iteration25](s00-iterations/S00-20261031-ITERATION-25-TUTORIAL-ENTRY-RECOVERY-PLAN.md) 為 E10–E26 建立兩條獨立出入口：一條是 Server-owned per-role TutorialProgress、Session admission、checkpoint/Quest/reward 一致性，另一條是需要 T02/T03/T05/T06/T07/T14/T16/原版 Client 相容證據的 scene/Conn/控制可操作測試。前者以 [ADR-0006（PROPOSED）](../design/decisions/ADR-0006-tutorial-progress-and-session-fencing.md) 提案、MockClient 合成測試可先做；後者 native adapter OFF、未知處不得臆填。每次回報須分 DomainSynthetic、NativeStatic、CompatibleClientRuntime 與 OriginalServerCapture；CI 成功不影響 RR/GAP/SPEC maturity。
+
+
+## Iteration 26：教學戰鬥與 Quest/Exit 的 source-locked 規劃驗證
+
+承接 Iteration25，使用 [Iteration26 規劃矩陣](s00-iterations/S00-ITERATION-26-ENCOUNTER-QUEST-EXIT-MATRIX.json) 作**非規範 planning overlay**，對原始 E17-A～J、E18–E26 保存一一對應的 evidence_state、blocking_unknown 與來源 Git blob；只加 proposed Server actor/encounter/Quest/reward/exit action。新增 `python -B governance/check_s00_iteration26.py --check` 與 CI/unit regression，不替代原版 BIN/Client 驗證。更動正式 RR/CLM/REQ/SPEC/TEST 仍須原始唯一台帳的 review/dispatch，且原版 Client runtime 另需使用者授權；ADR-0007 仍 PROPOSED。

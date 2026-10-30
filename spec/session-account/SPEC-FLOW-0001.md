@@ -89,3 +89,15 @@
 - 原版 Client runtime 與 Server mock 必須獨立測；Iteration25 [16 案例](../../governance/s00-iterations/S00-20261031-ITERATION-25-ACCEPTANCE.md) 全部 PLAN_ONLY／NOT_RUN。
 
 此更新不升格 SPEC-FLOW-0001：仍 **DRAFT / PARTIAL**，與 RR-0002/0010 BLOCKED、RR-0008 IN_REVIEW、GAP-FLOW-0001 OPEN 並存；ADR-0006 不加入正式規範性 adr_ids。
+
+
+## Iteration 26（E17-A～J / E18～E26）— Scenario / Quest / Reward / Tutorial terminal 非同一筆事件
+
+來源：[Iteration26 詳細規劃](../../governance/s00-iterations/S00-20261031-ITERATION-26-COMBAT-QUEST-EXIT-PLAN.md)、[原件保留的 19-gate source-pinned matrix](../../governance/s00-iterations/S00-ITERATION-26-ENCOUNTER-QUEST-EXIT-MATRIX.json)、[ADR-0007（PROPOSED）](../../design/decisions/ADR-0007-encounter-quest-settlement-boundaries.md)。**非原版 Server 證據或已發布 Client wire。**
+
+- E16 本地 C2S `40 00 0E 00` Scenario14 request builder 不證實原版 request-reply；E18 的 S2C `0x004C` `CTutorial` consumer `map[scenarioId]=1` 不證 Server 已結算合法勝利，更不證 Quest14、Quest16 或 TutorialCompleted。
+- 原始 QuestInfo.xml Quest16 依賴 Quest14、Quest15 依賴 Quest16 是**候選靜態資源/前置**；新 Server 提案需將 Scenario14 encounter、Quest14 turn-in、Quest16 unlock/accept/complete、Quest15 available、RewardLedger、教學 terminal/exit 分開版本與 transaction。Reward type=2/value50 真正業務意義仍 UNKNOWN。
+- Server-only 可規劃 Actor/Movement/Attack/Skill/Damage/Win authority、EncounterSettlement CAS、outbox、unique event/reward key、SessionEpoch fence、Scene exit/relog，而**不得**藉假設波次/傷害公式或合成動畫稱原版 Client compatible。
+- E17-A～J 是 E17 戰鬥**子 gate**，不可增加為 E00–E26 之外新的 10 個主流程；E18–E26 正式 scene/quest/wire positive chain 仍有斷點。機器矩陣與 [18 項 I26 NOT_RUN 案例](../../governance/s00-iterations/S00-20261031-ITERATION-26-ACCEPTANCE.md) 是**規劃工件**，不是正式 TEST index。
+
+`SPEC-FLOW-0001` 依然 DRAFT/PARTIAL；ADR-0007 = PROPOSED/NON-NORMATIVE、不列 normative adr_ids；相關選角與場景 RR/GAP 原有狀態不變，Client/Server runtime 未執行。
