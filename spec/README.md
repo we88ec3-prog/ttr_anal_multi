@@ -36,3 +36,8 @@
 - [離線測試](../conformance/README.md) 只驗證研究派生的局部格式與靜態邊界映射，**沒有 Client 封包實測或 Server 連線驗收**。
 
 目前不受理外部 Issues；Server 程式碼、運行、資料庫及部署獨立於本設計庫。未證實的官方 Server 內部規則不能轉為此處的 Client 原生事實。
+
+
+## Server 需求發現：不必等待兩個獨立證據來源
+
+[Server 需求候選索引](server-requirements/index.json) 與 [來源分類政策](../governance/S00-SERVER-REQUIREMENT-SOURCES.md) 現在承接三種需求來源：程式碼分析、另行授權的遊戲運行觀察，以及玩家／管理員／維護者需求。程式碼中出現需要 Server 收發封包或維持狀態的情境，就能列出有來源的 **Server 候選需求**；即使原版 Server 的實際發送時序尚未知也可以登記。使用者提供的歷史協定／舊 Server 資料歸 USER_REQUEST 參考附件，**不是第四種已驗證 Client 證據**。提案和正式 `MUST`／相容性驗收仍分開。
