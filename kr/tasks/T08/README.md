@@ -1,5 +1,17 @@
 # T08 實體生成與移除
 
+## T08-202 — 2026-10-31 05:01 最終有界原生靜態分析 **FINISHED（BOUNDED_STATIC_ANALYSIS）**
+
+> **本段完工裁決優先於下列歷史 IN_PROGRESS 條目，但不塗改它們的時間性**。完成範圍是原T08-202接棒明列的000A owner/Actor關聯、Controller actor/8-byte pair與其真消費、26/81與reset清理、P+4/P+8數值的已知寫入與場景讀者，以及Client條件性5-byte輸出鏈。**T08整體Task native_complete不變；T01嚴格 FULL-PASS、S00 RR ACCEPTED、原版Server實作及遊玩驗收均不是本欄FINISHED。**
+>
+> 原始BIN `Tartaros.bin` 12,472,320 bytes，SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`；PE code raw=VA−0x400C00。本輪從原BIN確認58個code anchors、7個vtable DWORD、3處E8 rel32，另查 `0xFAB148` 常數在 `.text` **30/30直接引用**（11整樹reset、16 lookup、3其他）；已提交可重跑原生驗證腳本。**這不證明所有indirect aliases不存在**。
+>
+> - **[T08-202 正式完整完成矩陣、30處P tree原生引用、Client/Server/S00邊界](../../../kr-temp-roy/20261031-050146-chatgpt-web-roy-T08-202-static-scope-completion-acceptance-and-30-global-owner-xref-audit-FULL.md)**，Git blob **`c3373cbce6143417991d5b99cb15a9c2639f2e3a`**：以最初202交接的固定問題為研究終點，逐項列出已證主流程與尚非本段全域排他證明的未知；本次**T08-202正式段號FINISHED（bounded native static）**。
+> - **[真正 pair 第二輪消費與Controller slot+44、CDoll child清理、P數值reader與假writer排除](../../../kr-temp-roy/20261031-045459-chatgpt-web-roy-T08-202-pair-consumer-vtable-CDoll-P-field-BIN-final-evidence.md)**，Git blob **`240f947bd2fd9af66f9b1ba07d8cc298af0422c0`**：`5451D0→4FC620`將firstWORD Actor+4和secondWORD caller ID寫8-byte pair；`5452C0` second pass `5459B7..545A97`以firstWORD查Actor，secondWORD走六類Controller共同`vptr+44=546EF0`位置/狀態判斷→`545B0E/545B10` 5-byte entry→`545B71`網路enqueue。CMonster `4C8360 child+8 vptr+8=7A57C0`，無法將此誤認Controller槽清理。
+> - **[原始BIN可重跑審計](../../../kr-temp-roy/T08-202-native-final-reference-audit.py)**：原始SHA、30個直接owner-tree literal sites、58個字節錨點、六種Controller slot+44／CDoll介面+8、三個E8真target。**本機曾用等價兩組Python獨立測試PASS，GitHub CI未宣告執行；最新blob以GitHub實際讀回為準**。
+> - **保留待後續專題／跨Task的未知（不得說已不存在）**：完整全程間接P+4/P+8 alias writer全集（包含不直接引用全域P樹者）、CDoll/其它Actor子資源virtual callback在全體動態型別的副作用、Controller H-tree其餘局部erase/rebind、其它Scene真正玩家畫面消費與時序；T02 framing到本地業務index完整映射、S00 Server生成與波次政策及可玩驗收。這些與**本202已明確完成的指定功能鏈**區分，不將沒有原版Server或runtime當Client已核scope的阻塞。新增研究應另開合法後續題，不倒稱202任何未知已被證偽。
+> - **T01 legacy** 24份作者端改正source仍 `READY_FOR_REVIEW`（主審main仍 `NEEDS_FIX`）；本次202完成不代替T01審核或修改其它Task／RR。舊錯位來源與本段前期IN_PROGRESS記錄保留追溯。
+
 ## T08-202 — 2026-10-31 04:35～04:44 大型批次 BIN-first 深化（**仍IN_PROGRESS；未准跳203**）
 
 > 原件：KR `Tartaros.bin` 12,472,320 bytes，SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`；.text VA0x401000/raw0x400，code raw=VA−0x400C00。本次先核 `main@dd8d487316ea2bfb1de3e0b3851f14c398303a68` 並合入T08非強制雙親branch；開工T08 S00收件箱無新RR。**T01 24篇legacy作者側勘誤已交、只READY_FOR_REVIEW；主審NEEDS_FIX，不等於本202整段已完成。**
