@@ -10,6 +10,8 @@
 | `GAME_RUNTIME_OBSERVATION` | 經**另行明確授權**直接執行遊戲、在允許的環境中確認畫面、收發、事件或錯誤處理 | Client 版本和 SHA、測試環境、重現步驟、實際觀察、去敏報告位置及授權記錄 | 靜態研究等於成功實測；單次測試足以證明所有版本或原版 Server 規則 |
 | `PLAYER_ADMIN_REQUEST` | 玩家或管理員提出功能、管理及營運需求 | 來源角色 PLAYER/ADMINISTRATOR、原始具體需求、去敏的內部紀錄 | 原版 Client 一定支援、已通過批准或能直接添加未確認的 wire opcode |
 
+歷史封包、舊版 Server 設定／日誌與協定文件若是玩家／管理員／維護者提供來要求研究、還原或改進功能，依使用者指示屬 **第 3 類 `PLAYER_ADMIN_REQUEST` 的 `discoveries[].reference_materials` 附件**（說明 `description`、`location`、`provenance_note`），**不是獨立第 5 類 origin**。文件可供之後的研究交叉核對，**不會自動證明原 Client 或 Server 的協定、封包順序或 byte layout**。現有台帳不虛構任何玩家曾提供的歷史附件。
+
 安全、登入權限、帳號處置、管理員稽核、備份還原、營運監控與資料一致性等**均歸 PLAYER_ADMIN_REQUEST 中的管理員需求**（可在 category 使用 OPERATIONS / SERVER_DESIGN），**不新增第四類安全審查來源**。若是系統內部實作 bug，先走既有 FB；若玩家/管理員要求修正體驗或增設功能，才是產品需求。
 
 另外建議可考慮將 `SERVER_IMPLEMENTATION_FEEDBACK`（Server 實作/整合測試中的新需求）作為**待使用者核准的第四種來源**，目前不在可用枚舉中；現有實作缺陷／規格回饋仍使用 [FB](../feedback/README.md) 進行分流，不暗中建立新來源。
