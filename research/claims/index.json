@@ -11157,6 +11157,74 @@
       ],
       "review_ref": "research/handoffs/t01-20261030-multi-branch-merge-r0-r2/README.md",
       "integration_status": "R1/R2_BOUNDED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-NET-0029",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/20261030-113803-chatgpt-web-roy-E60-RR0007-KR-auth-roster-selection-scene-gated-S2C-dispatch.md",
+      "source_blob_sha": "2ca02f3870d79d3217abf39b8651c43226eb77d6",
+      "source_intake_id": "SRC-0472",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR native 0x4930E0..493160, .rdata vptr C05AEC, callback lane2 and post-delegate return gate",
+      "assertion": "After a positive local length and lane 2, 0x4930E0 invokes the Client+B8 delegate; its return 0x100 plus Client+BE8C nonzero determines callback return-true, not whether the delegate is called. The first WORD read precedes its local length gate.",
+      "limitations": "Required holder/vtable identity and upstream frame assembly are conditional; a short payload danger is not a demonstrated runtime vulnerability. No original Server response pairing or whole-function FULL-PASS.",
+      "conflicts": [],
+      "affected_spec_ids": [
+        "SPEC-NET-0003",
+        "SPEC-AUTH-0001"
+      ],
+      "related_claim_ids": [
+        "CLM-NET-0028"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-rr0007-e60-bounded-r2/20261030-141913-chatgpt-web-roy-T01-RR0007-E60-review.md",
+      "integration_status": "R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-NET-0030",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/20261030-113803-chatgpt-web-roy-E60-RR0007-KR-auth-roster-selection-scene-gated-S2C-dispatch.md",
+      "source_blob_sha": "2ca02f3870d79d3217abf39b8651c43226eb77d6",
+      "source_intake_id": "SRC-0472",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 0x494360/0x4FDA30/0x4B7EC0/0x4C4670; 0x4B7DC0 command2 and 0x4C3220 scene table initializers; rdata vtables C06EB4/C072FC",
+      "assertion": "First-layer FD2CF8 command2 handler is 0x4B7F00; generic fallback forwards to an active scene, and when the LOGIN scene second-level table is installed its command13/7A routes call 0x4C37A0/0x4C3C10. Direct command2 override does not use generic scene-null gate.",
+      "limitations": "Specific dynamic Client+B8 forwarding identity, all scene types and response opcode timing not globally closed; no official server auth flow implied.",
+      "conflicts": [],
+      "affected_spec_ids": [
+        "SPEC-NET-0003",
+        "SPEC-AUTH-0001",
+        "SPEC-CHAR-0001"
+      ],
+      "related_claim_ids": [
+        "CLM-NET-0029"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-rr0007-e60-bounded-r2/20261030-141913-chatgpt-web-roy-T01-RR0007-E60-review.md",
+      "integration_status": "R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-NET-0031",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/20261030-113803-chatgpt-web-roy-E60-RR0007-KR-auth-roster-selection-scene-gated-S2C-dispatch.md",
+      "source_blob_sha": "2ca02f3870d79d3217abf39b8651c43226eb77d6",
+      "source_intake_id": "SRC-0472",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR C2S 0x4A3B80 4-byte local builder; scene base 0x4ADD50 registers S2C command42 0x4B2190 and command43 0x4B1A90; 0x4B2190 calls 0x500110",
+      "assertion": "C2S selection builder emits local WORD 0x42 + byte index + byte mode when its manager gate permits; base scene also has separately registered inbound handlers for command42 and 43. Identical numeric command42 does not establish that inbound 42 is selection approval or that it triggers a world transition.",
+      "limitations": "Actual Server reply pairing, payload meaning/success code, scene writer and runtime conditions remain owned by T03 RR-0002/0008. Verified local builder does not itself prove actual on-wire send.",
+      "conflicts": [],
+      "affected_spec_ids": [
+        "SPEC-CHAR-0001",
+        "SPEC-FLOW-0001",
+        "SPEC-NET-0003"
+      ],
+      "related_claim_ids": [
+        "CLM-NET-0030"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-rr0007-e60-bounded-r2/20261030-141913-chatgpt-web-roy-T01-RR0007-E60-review.md",
+      "integration_status": "R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
     }
   ]
 }

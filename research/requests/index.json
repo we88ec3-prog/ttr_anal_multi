@@ -12,7 +12,7 @@
       ],
       "question": "With 0x8068B0 WSASend, 0x806CF0 WSARecv/IOCP and 0x4930E0 downstream dispatch already mapped, determine actual first outgoing/incoming frame type, mode A02C conditional switch, and connection-specific message sequencing; do not re-discover mapped functions.",
       "dispatch": {
-        "state": "SUBMITTED",
+        "state": "IN_REVIEW",
         "priority": "P0",
         "acceptance_criteria": "研究問題：With 0x8068B0 WSASend, 0x806CF0 WSARecv/IOCP and 0x4930E0 downstream dispatch already mapped, determine actual first outgoing/incoming frame type, mode A02C conditional switch, and connection-specific message sequencing; do not re-discover mapped functions.\nGAP-NET-0001：Known local frame writers/receiver and WSASend/WSARecv static API paths are already documented; resolve selected S2C frame type, A02C writer/aliases and first-message sequencing using bounded data, not repeat discovery of known functions.",
         "claim": {
@@ -56,6 +56,13 @@
             "actor": "chatgpt-web roy",
             "date": "2026-10-30",
             "note": "提交 KR T02 RR-0001 有界 BIN-first 靜態 Client E57：0x0BBB/0x1A68 逐 byte header、XOR-chain/16-bit checksum 及 fallback、Conn+A02C direct writer/reader 搜尋界線、S2C 0x2633/0x0BBB/0x1A68/0x22D7 marker parser、key0/1/2 首批 C2S local queue 與 IOCP/send pump 條件。原版 Server first S2C marker/opcode 和跨 socket wire order 不能由 Client 原件決定，標 U；RR-0004 A02C alias 全域專查維持 QUEUED。KR Tartaros.bin SHA256 9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91。供 T01/S00 bounded review，非 ACCEPTED/FULL-PASS。"
+          },
+          {
+            "from": "SUBMITTED",
+            "to": "IN_REVIEW",
+            "actor": "T01",
+            "date": "2026-10-30",
+            "note": "T01 已有 E57 限定原生 R0–R2 複核與 R1/衝突去重（t01-20261030-rr0001-rr0004-bounded-r2）；進入正式 S00 審查。非全文 FULL-PASS；未知首個實際遠端 S2C 與 alias 不推定。"
           }
         ]
       }
@@ -139,7 +146,7 @@
       "client_version": "kr",
       "status": "ACTIVE",
       "dispatch": {
-        "state": "SUBMITTED",
+        "state": "IN_REVIEW",
         "priority": "P0",
         "acceptance_criteria": "研究問題：Trace KR conn+A02C initializer 0x805D02 and possible indirect alias writes; identify conditions under which 0x8061A0 0BBB fails and plaintext fallback actually executes.\nGAP-NET-0001：Known local frame writers/receiver and WSASend/WSARecv static API paths are already documented; resolve selected S2C frame type, A02C writer/aliases and first-message sequencing using bounded data, not repeat discovery of known functions.",
         "claim": {
@@ -183,6 +190,13 @@
             "actor": "chatgpt-web roy",
             "date": "2026-10-30",
             "note": "RR-0004 bounded native static E58: fresh Conn A02C=2, reset/reuse preservation, direct displacement + call xrefs, no evidenced indirect mode0 writer (unknown, not disproved), mode!=0 0BBB attempt, mode0/encoder-fail 1A68 fallback, strict length/count/pointer guards, failure retains queue node, inbound marker independence, synthetic boundaries. 12,472,320 byte KR Tartaros.bin SHA256 9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91. T01/S00 bounded review required; not FULL-PASS/ACCEPTED. GAP-NET-0001."
+          },
+          {
+            "from": "SUBMITTED",
+            "to": "IN_REVIEW",
+            "actor": "T01",
+            "date": "2026-10-30",
+            "note": "T01 已有 E58 對 A02C direct writer/reader 與 fallback 的限定原生 R2（t01-20261030-rr0001-rr0004-bounded-r2）；接受部分 Client 靜態證據供 S00 判定，不等於全域間接 alias 閉合。"
           }
         ]
       }
@@ -289,7 +303,7 @@
       "client_version": "kr",
       "status": "ACTIVE",
       "dispatch": {
-        "state": "SUBMITTED",
+        "state": "IN_REVIEW",
         "priority": "P1",
         "acceptance_criteria": "研究問題：Trace 0x807B40 parser 0x2633/0x22D7 behavior, 0x727190 and checksum mismatch into 0x807E50 and node/pool handling; specify only server-relevant error or compatibility requirements.\nGAP-NET-0003：Clarify 0x2633/0x22D7 field semantics, 727190 behavior and checksum failure node/pool handling; tie client message handlers to T03-relevant S2C and applicable state.",
         "claim": {
@@ -333,6 +347,13 @@
             "actor": "chatgpt-web roy",
             "date": "2026-10-30",
             "note": "KR T02 RR-0006 bounded BIN-first report E59: inbound 0x2633 8-byte header + 0x7C rolling XOR + 0x727190 inflate-like return/status/output cap 0x1000; 0x22D7 is 4-byte raw path also shared with unknown markers; 0x0BBB checksum mismatch vs compressed decode failure both bypass 0x807E50 and recycle zero-length node through 0x804310→0x8076F0; malformed n=0 or >0x1000 returns parser0 and follows different IOCP branch; incomplete frames are retained/compacted, valid payload can reach 0x4930E0 and conditional T03 handlers via lane2. Synthetic zlib/XOR example is not official KR wire. Original Tartaros.bin SHA256 9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91. For T01/S00 bounded review; not ACCEPTED or FULL-PASS."
+          },
+          {
+            "from": "SUBMITTED",
+            "to": "IN_REVIEW",
+            "actor": "T01",
+            "date": "2026-10-30",
+            "note": "T01 已有 E59 parser/pool/error path 限定原生 R2（t01-20261030-multi-branch-merge-r0-r2）；只供 S00 bounded acceptance，不表示全文語義、原始壓縮 wire 已全部核實。"
           }
         ]
       }
@@ -348,7 +369,7 @@
       "client_version": "kr",
       "status": "ACTIVE",
       "dispatch": {
-        "state": "SUBMITTED",
+        "state": "IN_REVIEW",
         "priority": "P1",
         "acceptance_criteria": "研究問題：Using already identified 0x4930E0 channel2 and CClient/scene handlers, identify exact S2C dispatch handlers and state prerequisites for authentication response, roster command2, and selection, without exhaustively tracing all commands.\nGAP-NET-0003：Clarify 0x2633/0x22D7 field semantics, 727190 behavior and checksum failure node/pool handling; tie client message handlers to T03-relevant S2C and applicable state.",
         "claim": {
@@ -392,6 +413,13 @@
             "actor": "chatgpt-web roy",
             "date": "2026-10-30",
             "note": "KR T02 RR-0007 E60 bounded BIN-first report: raw IOCP frame → FC10D0 lane2 app queue → Client+0x148 vptr 0xC05AEC → 0x4930E0 (nonnull length and lane==2) → conditional Client+B8 delegate → 0x494360/FD2CF8 first-layer table; cmd2 native handler 0x4B7F00, first-layer fallback requires active FD2CF8+5EAC scene with LOGI vtable C072FC→4C4670 second-layer cmd13 4C37A0 and cmd7A 4C3C10; base scene fallback cmd42 4B2190 and cmd43 4B1A90. Local C2S 42 4-byte selection builder does NOT prove S2C 42 or 43 are selected-approval opcodes, and actual scene/world-entry writer remains T03 RR-0002/0008 unknown. BE8C limits return-true, not every handler invocation. Source KR Tartaros.bin SHA256 9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91. Submit native bounded conditions for T01/S00 review; do not claim FULL-PASS, ACCEPTED or runtime evidence. GAP-NET-0003."
+          },
+          {
+            "from": "SUBMITTED",
+            "to": "IN_REVIEW",
+            "actor": "T01",
+            "date": "2026-10-30",
+            "note": "T01 新增 E60 source original blob 2ca02f3870d79d3217abf39b8651c43226eb77d6 至 main，SRC-0472/CLM-NET-0029..0031；經 KR BIN 局部 gate/vtable/command42 有界 R2 檢查，原版選角批准和 T03 scene writer 仍 unknown。無全文 FULL-PASS；交 S00 審核。"
           }
         ]
       }
