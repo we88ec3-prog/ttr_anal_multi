@@ -11291,6 +11291,80 @@
       ],
       "review_ref": "research/handoffs/t01-20261030-rr0003-t03-bounded-r2/20261030-143210-chatgpt-web-roy-T01-RR0003-auth-review.md",
       "integration_status": "R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-COMBAT-0001",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261028-1843-chatgpt-web-roy-T10-101-phase-writer-consumption-and-transport.md",
+      "source_blob_sha": "388d050b133af5325424391fb5eb487922f7cf5f",
+      "source_intake_id": "SRC-0363",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR .text 0x4914A0..0x4914C0 and 0x6D1540..0x6D1640; key input dataflow entry only",
+      "assertion": "At 0x4914AC the KR Client loads ECX=0xFB8830 and directly calls input producer 0x6D1480 at 0x4914B1; this is a concrete bound input object call on the inspected update path, not proof that every physical Z press reaches combat or emits C2S.",
+      "limitations": "The bounded sample does not close every UI suppression, phase override, active bank, producer path, or 0x6D1480 full function; do not assert per-press packet count or a fixed combo/phase window.",
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "related_claim_ids": [],
+      "review_ref": "research/handoffs/t01-20261030-t08-t10-branch-merge/20261030-151422-chatgpt-web-roy-T01-T08-T10-merge-bounded-R2.md",
+      "integration_status": "R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-COMBAT-0002",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261028-213024-chatgpt-web-roy-T10-115-KR-C2S000A-builder-to-pending-transport-closure.md",
+      "source_blob_sha": "e5de0249c0fdc0b97685e68b76921510e57aea78",
+      "source_intake_id": "SRC-0379",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR .text 0x545824..0x545857,0x545B38..0x545B73,0x8069A0..0x806A00; .rdata 0xC51758",
+      "assertion": "On the inspected 0x5452C0 output branch the Client initializes an application buffer with initial len=6 and opcode WORD 0x000A, calls transport vtable+0x10 only when FE48D0>6, passes selector=0/payload FE38D0/len FE48D0; vtable C51748+0x10 points to 0x8069A0, which conditionally looks up a connection and calls 0x8060D0 for nonzero length.",
+      "limitations": "No dynamic connection selector availability, guaranteed enqueue/send or full on-wire frame, row data provenance or actual Server ACK is established by these selected native windows. T02 framing/IOCP claims remain separate.",
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "related_claim_ids": [
+        "CLM-NET-0005"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-t08-t10-branch-merge/20261030-151422-chatgpt-web-roy-T01-T08-T10-merge-bounded-R2.md",
+      "integration_status": "R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-COMBAT-0003",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261028-225025-chatgpt-web-roy-T10-119-KR-S2C-key13-nine-byte-actor-motion-consumer.md",
+      "source_blob_sha": "d44df2cf097e112ff98a78ebd918fbf9910b8952",
+      "source_intake_id": "SRC-0383",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR .text 0x4B01F0..0x4B0215, 0x4B0250..0x4B031F, 0x4B0390..0x4B03B0",
+      "assertion": "For an observed application key13 dispatch to 0x4B01C0, unsigned (L-2)/9 count and add edi,9 establish 9-byte rows, with actor key WORD at P+2+9i, BYTE at P+4+9i fed to actor vtable+0x58, WORD at P+5+9i and FLOAT32 at P+7+9i passed toward 0x4C8A90; absent actor can skip the row.",
+      "limitations": "No original Server wire capture, key13-to-000A ACK or Z/combo semantic causality; actual handler reachability remains conditional on lane, scene, selector and framing. No full attacker-controlled length audit or every actor class confirmed.",
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "related_claim_ids": [
+        "CLM-NET-0006"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-t08-t10-branch-merge/20261030-151422-chatgpt-web-roy-T01-T08-T10-merge-bounded-R2.md",
+      "integration_status": "R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-COMBAT-0004",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261028-225505-chatgpt-web-roy-T10-120-KR-actor-vtable58-state-writer-and-vtable68-effects.md",
+      "source_blob_sha": "d0efddc90c9943bbad3bc121ad9898304f11d8ea",
+      "source_intake_id": "SRC-0384",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR .rdata seven vtable candidates 0xC07554,0xC076AC,0xC07B44,0xC0C824,0xC0C8C4,0xC0C9DC,0xC0CA9C; .text 0x4C8C30..0x4C8C40",
+      "assertion": "All seven inspected KR .rdata vtable candidates have +0x58=0x4C8C30; 0x4C8C30 reads byte argument [ebp+8] and writes [ecx+0xB0], ret4, establishing a concrete state-byte writer for these table implementations, not a direct motion clip start.",
+      "limitations": "Only equal-value vtable candidates in the inspected static table scope; not exhaustive constructors, actual runtime actor vptr instances, all vtable+0x68 targets, rendered animation or original Server motion judgment.",
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "related_claim_ids": [
+        "CLM-COMBAT-0003"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-t08-t10-branch-merge/20261030-151422-chatgpt-web-roy-T01-T08-T10-merge-bounded-R2.md",
+      "integration_status": "R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
     }
   ]
 }
