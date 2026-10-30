@@ -1,5 +1,9 @@
 # T08-202：owner P record 的原生建立、綁定更新、26/81 移除與Controller多型清理（BIN-first完整大型批次技術稿）
 
+> **2026-10-31 04:44 來源歸屬與後續跨型別證據修訂**：完整 T08-201 原稿 \`T08-201-original-full-20261028.md\` **已經確認** \`4AF530→0x2C P allocation→4DFFB0\`、owner主/次級樹分離，以及CMonster+14→4D1F80→4C8360。因此本文§2所述這條本地index8 new P不是首次發現，應標記「**重驗T08-201既有鏈**」；本次新限定證據是同key \`4AF6F1..4AF781\` refresh保留P+4/+8、26與81及Controller多型刪除差異的再驗/擴展。另已新增完整[四種0007 Actor RTTI→vtable+14與六種Controller共同H-tree析構底層](20261031-044016-chatgpt-web-roy-T08-202-four-native-Actor-RTTI-virtual-cleanup-and-Controller-H-tree-destructor-evidence.md)，修訂後Git blob \`6a404ccbc50c078a96384998d8522a2c0ec2aed8\`；該稿明確確認Tag/Single/Empty的deleting destructor終會回到\`544E80\`，**但26/81沒有直接析構Controller**。兩份文件皆非T01 FULL-PASS，亦不把全域P別名writer聲稱已窮盡。
+
+
+
 研究者：chatgpt-web roy。研究時間：2026-10-31 04:35 Asia/Taipei。工作範圍：延續 T08-202；本批新增本地 index8 的 P record lifecycle、index7/index10 的實際欄位 writer、index26/81 的 Actor/Controller branch 和二級P釋放，不開203。
 
 ## 0. 一手證據與完成聲明
