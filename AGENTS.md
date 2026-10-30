@@ -51,3 +51,8 @@ T01 對完全通過原生驗證的**精確結論／子流程**，依 [FULL-PASS 
 **同一對話的後續段落／復工／交接**：沿用首次已核對的 main SHA、Task README、T01 退回、RR 台帳、收件箱及共用驗證索引，不要例行再次連線 GitHub、不必每段查 SHA 或重讀全套文件。只有使用者明確要求 GitHub 查詢／更新／同步／Commit／Push、研究需要首次取得尚未讀取的精確 Git 來源，或有可驗證的分支競爭／來源變更訊號時，才按需存取相關檔案；**進行實際寫入前仍必須核對當前目標分支與檔案 SHA，避免覆寫他人提交**。例外不代表要重做完整開工檢查。沿用舊快照的研究須註明其基準，不能聲稱本段已核對最新 main；收到新對話時再次完整核對。
 
 **優先順序與授權**：既有 T01 NEEDS_FIX／FIXING 退回依原規則優先；本次使用者明確任務另列優先；S00 P0→P1 隨之排程。未經明確授權不得提交/推送研究原稿；只在 main 上已公開的 RR CLAIMED 才具跨 Agent 認領效力。提交原始研究成果後需 `SUBMITTED` 附報告檔與 Git blob SHA；T01 來源查核與 S00 規格接受分開，只有 S00 可結案。**GitHub 更新不會自動喚醒其他 ChatGPT Agent。** 不採 GitHub Issues，不更動原有 task.json／owner／historical FULL-PASS/FAILED 認定。
+
+
+## S00 Server 需求三種來源（2026-10-30）
+
+所有 Task 發現 Client 在程式碼中**需要 Server 收取 C2S、送出 S2C、維持狀態或處理錯誤**時，應於原作者分析原稿標示「Server需求候選」（版本、Native VA/raw、前提、分支、方向、已證與 UNKNOWN）；**不必等實機觀察或使用者另外提出需求，也不必先新建 RR**。其餘正式來源：經另行授權的遊戲實機觀察、使用者（玩家／管理員／維護者）要求。第 5 項舊協定／歷史 Server 資料按使用者指示歸於 USER_REQUEST 的參考附件，而非獨立來源。S00 維護 [來源政策](governance/S00-SERVER-REQUIREMENT-SOURCES.md) 和 [候選索引](spec/server-requirements/index.json)；原 Task 僅回報，不改他人研究，不把候選當原版 wire、SPEC STABLE 或准許執行 Client。
