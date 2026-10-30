@@ -9,6 +9,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "governance"))
 from check_contract_coverage import evaluate  # noqa: E402
+from s00_test_fixtures import reset_queued_fixture
 
 FILES = [
     "conformance/contract-coverage.json", "spec/spec-index.json",
@@ -26,6 +27,8 @@ class ContractCoverageTests(unittest.TestCase):
             p = self.root / rel
             p.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(ROOT / rel, p)
+
+        reset_queued_fixture(self.root)
 
     def mutate(self, operation):
         p = self.root / FILES[0]

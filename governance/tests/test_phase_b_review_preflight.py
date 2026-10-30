@@ -10,6 +10,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "governance"))
 from phase_b_review_preflight import evaluate, markdown  # noqa: E402
+from s00_test_fixtures import reset_queued_fixture
 
 FILES = [
     "research/requests/index.json", "design/gaps/index.json",
@@ -32,6 +33,8 @@ class SubmissionPreflightTests(unittest.TestCase):
             dst = self.root / name
             dst.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(ROOT / name, dst)
+
+        reset_queued_fixture(self.root)
 
     def update(self, name, fn):
         path = self.root / name
