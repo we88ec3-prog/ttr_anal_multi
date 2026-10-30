@@ -1,5 +1,13 @@
 # T08 實體生成與移除
 
+## T08-202 — 2026-10-31 04:35～04:44 大型批次 BIN-first 深化（**仍IN_PROGRESS；未准跳203**）
+
+> 原件：KR `Tartaros.bin` 12,472,320 bytes，SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`；.text VA0x401000/raw0x400，code raw=VA−0x400C00。本次先核 `main@dd8d487316ea2bfb1de3e0b3851f14c398303a68` 並合入T08非強制雙親branch；開工T08 S00收件箱無新RR。**T01 24篇legacy作者側勘誤已交、只READY_FOR_REVIEW；主審NEEDS_FIX，不等於本202整段已完成。**
+
+- [**202本批P／Actor／Controller原生大稿**](../../../kr-temp-roy/20261031-043540-chatgpt-web-roy-T08-202-native-owner-record-0008-0007-000A-and-26-81-lifecycle-analysis.md)，最新Git blob **5e9c3d89f982a47f9b65cd158737dd95eba6a52f**：回查本地index8 `4AF530` 0x2C P初始化、index7 `4AEC83→4C6E50`僅P+4為0時綁定、index10 `4AF920`一般首列覆寫P+4/+8且特殊local pair不改；同key index8 refresh `4AF6F1..4AF781`**保留P+4/+8**。命令26匹配三個raw Actor槽才先controller.slot14再主Actor tree erase，81用Actor+88 composite查找、走Actor自身vptr+14→deleting destructor→主樹erase。指定P delete `4BBAE0→4DFC30` invalidate owner+F8/釋放P，reset16刪type0 Actor後清槽與全P。**來源歸屬修正：4AF530→0x2C→4DFFB0新P這條在T08-201完整原稿已證，不冒充本次首次發現。**
+- [**四種0007 Actor RTTI及六種Controller析構 H-tree底層補證**](../../../kr-temp-roy/20261031-044016-chatgpt-web-roy-T08-202-four-native-Actor-RTTI-virtual-cleanup-and-Controller-H-tree-destructor-evidence.md)，最新Git blob **6a404ccbc50c078a96384998d8522a2c0ec2aed8**：原件MSVC RTTI COL+constructor+vtable證本地0007 type0 CCharacter vfptr C07B44 slot14=4CEBF0；type1 CMonster C0C9DC→4D1F80（**此條201已證，202重驗**）；type6 CNPC C0CA9C→4D2860；type7 CEventObject C0C8C4→4D16A0。這四種Actor slot14可直接到0x4C8360共用resource cleanup，**不是Controller slot14**。Controller vptr+0 true deleting destructor：CController/Mission/Tutorial 544E50→544E80；CEmpty 547200→544E80；CTag 4442D0→444300→544E80；CSingle 548600→548630→544E80。0x544E80真正釋放controller+48 H-tree、+88另一tree、+30 pair buffer；與slot14 545210/444910只清raw槽及pair logical end不同。這**不表示**26／81會同步析構Controller，亦不證明所有child+8 indirect callback沒有額外副作用。
+- **202必須完成的Client靜態缺口，仍有可追**：① owner P+4/P+8全可達alias writer（owner+F8 cache、owner+18二級tree及間接callback/bulk copy）排他性尚未取得；② 4C8360的 child+8 virtual+8 callbacks對Controller與owner關聯的實際回寫尚未全部完成；③ Controller H-tree在非deleting destructor的所有erase/rebind及其有效性（已證最終destructor能清，**不是每次Actor remove必清**）。此三項不能推成Server-only或僅因缺實機停止，故**本輪不能宣告202 FINISHED**。其餘wire/domain交由T02、相容Server規則交S00、遊玩驗證另算。**不要建立T08-203或更改Task native_complete**。
+
 ## T08-202 — 2026-10-31 03:23～03:32 續行勘誤／出站封包結構（研究仍未完成）
 
 > 原始KR Tartaros.bin SHA256 **9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91**；本輪以真PE .text 映射與RTTI、有效E8/virtual caller、KERNEL32/WS2_32 Import Table直接核對，而不是從T08-202的舊段落假設補齊。工作於 T08 研究分支，尚未經T01全文或S00/Server驗收。
