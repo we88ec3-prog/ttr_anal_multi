@@ -109,3 +109,10 @@ E80 RR-0002 研究 [PR #67](https://github.com/we88ec3-prog/ttr_anal_multi/pull/
 ## Iteration 26：教學戰鬥與 Quest/Exit 的 source-locked 規劃驗證
 
 承接 Iteration25，使用 [Iteration26 規劃矩陣](s00-iterations/S00-ITERATION-26-ENCOUNTER-QUEST-EXIT-MATRIX.json) 作**非規範 planning overlay**，對原始 E17-A～J、E18–E26 保存一一對應的 evidence_state、blocking_unknown 與來源 Git blob；只加 proposed Server actor/encounter/Quest/reward/exit action。新增 `python -B governance/check_s00_iteration26.py --check` 與 CI/unit regression，不替代原版 BIN/Client 驗證。更動正式 RR/CLM/REQ/SPEC/TEST 仍須原始唯一台帳的 review/dispatch，且原版 Client runtime 另需使用者授權；ADR-0007 仍 PROPOSED。
+
+
+## Iteration 27：從 S00 設計庫移交到獨立 Server C05 的「先讀真實程式」約束
+
+[Iteration27 C05 handoff](s00-iterations/S00-20261031-ITERATION-27-C05-DELIVERY-PLAN.md) 與 [9-pack machine matrix](s00-iterations/S00-ITERATION-27-C05-DELIVERY-MATRIX.json) 直接 pin 實際 `ttr_server_roy` 的 `IAtomicCharacterActions/ISessionLeaseRegistry/SqliteLocalDatabase/contracts/spec-revision.json` Git blob 與 Server main 快照，確保不再重新規劃已完成的 C03 transaction/Session 類型。CI checker `python -B governance/check_s00_iteration27.py --check` **只在本庫驗證**來源/blob 字串、工作包依賴、18 個 NOT_RUN case/no-go 與 ADR 未批准地位；遠端 Server main 若變化，下輪應人工重新讀取，不能冒稱本次 CI 已同步。
+
+Domain mock/prototype 可採並行研究和工程化測試，但正式業務 policy/migration 要獲 Server 維護者和 ADR-0006/7 批准；W09 native adapter 對未證 KR/TC protocol remains Unsupported/feature OFF，runtime 原 Client 測試另行授權。真 Server bug 走修復/FB/SFD 流程，S00 純設計不得改他人的部署庫或偽造已完成 Wxx。
