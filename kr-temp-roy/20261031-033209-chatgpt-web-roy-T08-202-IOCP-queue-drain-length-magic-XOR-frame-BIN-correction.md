@@ -173,3 +173,52 @@ Controller在0x545AFC只檢查OriginalLen=6+5N<=0x1000；queue的mode0 frame還�
 |網路系統錯誤／backpressure|mode0兩層尺寸guard 4096 vs 4092，輸出ring occupancy≤0x4000，queue framer失敗有保留分支|何時重試及高水位時序、Node生命週期/緩衝覆蓋|重試規則可依Client相容性由S00設計，但非本稿獨立證實的原版Server邏輯|跨Agent補證|
 
 **完成裁決：T08-202不能標完成。LEGACY-MAPPING-001仍NEEDS_FIX，舊source的T01 FAILED審核未由本稿變更。**
+
+
+## VI. 再沿queue reader的兩個實際caller查到連線調度及backpressure
+
+由真PE機器碼，0x804A40本地入口保存EDI作loop owner，透過全域 [0xFBA858] pointer-vector 依 begin/end 逐連線取ESI；0x8051B0函式內則以同一 [0xFBA858] pointer-vector，但用[EBX+4] index選擇起始連線、只迭代後續範圍。兩路都有相同[conn+0xA0AC] guard和直接E8至8061A0：
+
+~~~asm
+; call site A: 0x804A40... (global connection vector + len/timing guard)
+804A75 8B 35 58 A8 FB 00   mov esi,[0xFBA858]
+804AA2 8B 7E 04            mov edi,[esi+4]
+804AA5 2B 3E               sub edi,[esi] ; byte count
+804AA9 C1 FF 02            sar edi,2    ; count of connection pointers
+804AC3 8B 16               mov edx,[esi]
+804AC5 8B 34 82            mov esi,[edx+eax*4] ; connection*
+804AC8 83 BE AC A0 00 00 00 cmp dword [esi+0xA0AC],0
+804ACF 0F 84 76 01 00 00  je 0x804C4B
+804AD5 56                  push esi
+804AD6 E8 C5 16 00 00      call 0x8061A0
+804ADB 85 C0               test eax,eax
+804ADF 8B 86 A4 A0 00 00   mov eax,[esi+0xA0A4]
+804AEB 83 F8 05            cmp eax,5
+804AFC 83 C0 FB            add eax,-5    ; on branch A, countdown decrement
+804B07 83 7D FC 00         cmp dword [ebp-4],0
+804B13 83 86 A4 A0 00 00 05 add dword [esi+0xA0A4],5 ; on other branch
+
+; call site B: 0x8051B0... (different owner/index)
+8051EE 8B 0D 58 A8 FB 00   mov ecx,[0xFBA858]
+8051F4 8B 41 04            mov eax,[ecx+4]
+8051F7 2B 01               sub eax,[ecx]
+8051FC C1 F8 02            sar eax,2
+8051FF 89 4D F8            mov [ebp-8],ecx
+805202 89 45 08            mov [ebp+8],eax
+805215 8B 09               mov ecx,[ecx]
+805217 8B 34 B9            mov esi,[ecx+edi*4]  ; conn indexed by EDI
+80521A 83 BE AC A0 00 00 00 cmp dword [esi+0xA0AC],0
+805221 0F 84 85 01 00 00   je 0x8053AC
+805227 56                  push esi
+805228 E8 73 0F 00 00      call 0x8061A0
+80522D 85 C0               test eax,eax
+805231 8B 86 A4 A0 00 00   mov eax,[esi+0xA0A4]
+80523D 83 F8 05            cmp eax,5
+80524E 83 C0 FB            add eax,-5   ; countdown normal branch
+805259 80 7B 10 00         cmp byte [ebx+0x10],0
+805265 83 86 A4 A0 00 00 05 add dword [esi+0xA0A4],5 ; alternate failure
+~~~
+
+**新已確立的關係**：queue reader確有上層**global connection vector**的兩個直接caller；不需要再將queue reader視為完全沒有調度者。但哪個outer thread/tick使804A40、8051B0運作、[conn+A0AC]為何被置為有效、A0A4累加/遞減的精確時間單位及跨連線競態，尚須繼續反向查owner及callers，不能據此稱所有connection都已成功觸發WSASend。
+
+**修訂限制**：本篇trace完整證據只覆蓋queue->output ring與兩個reader直接caller，不宣稱已取得由ring到WSABUF的一一對應或實際Server收到資料。T08-202因此仍未完成；其出站部分的實質進度記入本README/交接，不能用完成一份報告冒充研究目標完成。
