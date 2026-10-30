@@ -60,3 +60,10 @@ validator 只驗證索引、來源類別、連結、版本、提交的記錄路�
 ### 同一管理員需求的 V1 範圍更正（2026-10-31）
 
 使用者進一步明確指定「**目前先不管權限，指定的IP與URL就能管理**」。在 **REQ-0006** 下追加第二筆 `PLAYER_ADMIN_REQUEST` discovery，修訂 REQ-0006..0008 的操作入口條件：V1 **不設管理員登入/MFA/RBAC**，以 Server-side 來源 IP allowlist 和已配置的 WEB Host/base-path 作為單一管理網路門檻，保留私網/TLS、Origin/CSRF、真實 IP 驗證、限流及來源 IP 稽核。不是單靠秘密網址；同一 IP 下的人員無法個別追溯。完整方案見 [WEB Admin V1](../admin-web/README.md)、[ADR-0004](../decisions/ADR-0004-admin-web-security-boundary.md)。此項更正是原需求的追加來源，**不是**新增 REQ、來源類型、Client RR 或正式核准。
+
+
+## Iteration 23 — RR-0010 成果如何進入需求（仍須精確 CLM）
+
+[Iteration 23 遠征隊名稱與共同角色紀錄計畫](../../governance/s00-iterations/S00-20261031-ITERATION-23-EXPEDITION-ROSTER-PLAN.md) 已比對 T03 E76–E79 新的原件研究報告。**REQ-0003**（完整角色清單）及 **REQ-0004**（UI 就緒）仍是現有需求，app2B 增量資料與 B6 局部通知應先映射到它們的需求/驗收，**不另建同義需求**；「Expedition identity 建名」與 playable-character recruit 是可能獨立的 Server-facing 用例，但目前仍是**待來源審查的候選拆分**，沒有在正式索引加入 REQ-0009 或假造既有 CLM。
+
+理由：`governance/check_server_requirements.py` 的 `CODE_ANALYSIS` 必須精確關聯**已登錄的同版 CLM**。E76–E79 目前只有 T03 原稿與 verifier，S00 此輪沒有重新驗原始 KR BIN／T01 建立新 native CLM，故不把這些報告硬掛到舊的 `CLM-CHAR-0002` 冒充 E79 證據。後續 T01/T03 完成限定 CLM 納入後，才分別在 REQ-0003/4 追加相應 `CODE_ANALYSIS` discovery；若經去重確認獨立的 Expedition identity 可驗收成果，再正式提出新的 CANDIDATE REQ。這不阻止 Server 開發者**先依設計提案**做內部 Domain model／合成測試，不能誤認為已批准的 original Client wire。
