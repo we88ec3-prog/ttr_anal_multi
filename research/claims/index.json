@@ -11646,6 +11646,172 @@
       ],
       "review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-1604-chatgpt-web-roy-T01-T10-late089-100-R1-R2-review.md",
       "integration_status": "R1_LATE_SOURCE_REVIEW; R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-COMBAT-0012",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261028-1855-chatgpt-web-roy-T10-102-directinput-key44-and-battle-tick-order.md",
+      "source_blob_sha": "1a034ab7112645f0996266c42ed47e5d8b52aeb1",
+      "source_intake_id": "SRC-0364",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR .text 6F38A0..6F38E0, 6F1790..6F17E0, 491530, 491CB6→4E0060; .rdata BD6994 dataformat",
+      "assertion": "Observed keyboard device path calls COM vtable+0x24 with 0x100-byte GetDeviceState buffer; physical input is indexed before logical keymapping. One outer update path invokes phase/UI handling at 0x491530 before a later 0x491CB6→0x4E0060 controller tick; Key44 is DirectInput physical scan 0x2C corresponding to Z under the documented device mapping, not Windows VK_Z.",
+      "limitations": [
+        "Current active key bank, UI interception, device failure/reacquire, alias overrides and persistent controller state are not exhaustive; no every-Z-press→C2S000A guarantee."
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "related_claim_ids": [
+        "CLM-COMBAT-0001",
+        "CLM-COMBAT-0002"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-161036-chatgpt-web-roy-T01-T10-102to107-scope-R1-R2.md",
+      "native_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-161036-chatgpt-web-roy-T01-T10-102to107-scope-R1-R2.md",
+      "integration_status": "CONFLICT_CHECKED; PARTIAL_BOUNDED; NOT_FULL_PASS",
+      "quality_inheritance": false
+    },
+    {
+      "id": "CLM-COMBAT-0013",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261028-1906-chatgpt-web-roy-T10-103-input-skill-matrix-and-tick-countdown.md",
+      "source_blob_sha": "5eda574c9d7b32c01def1cc97f0024fdb3027c2c",
+      "source_intake_id": "SRC-0365",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR .text 54F270..54F2DC,81A8E0..81A909,5462B0..546306",
+      "assertion": "The local SkillMatrix predicate prioritizes simultaneous bit0+bit1 as column4 ahead of bit0+bit2 column5; 81A8E0 reads low WORD matrix+4+2*(row*11+column) guarded by row<4,column<11. The ordinary controller forwards actor+3E8 and mode byte to 54F270; a false gate can still leave lower output bits under an actor+3E8 nonzero exception.",
+      "limitations": [
+        "No raw SkillMatrix.xml per-actor values, runtime bank, actual skill animation, fixed milliseconds/FPS, combo/cancel timing or unconditional wire suppression established."
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "related_claim_ids": [
+        "CLM-COMBAT-0002"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-161036-chatgpt-web-roy-T01-T10-102to107-scope-R1-R2.md",
+      "native_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-161036-chatgpt-web-roy-T01-T10-102to107-scope-R1-R2.md",
+      "integration_status": "CONFLICT_CHECKED; PARTIAL_BOUNDED; NOT_FULL_PASS",
+      "quality_inheritance": false
+    },
+    {
+      "id": "CLM-COMBAT-0014",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261028-1914-chatgpt-web-roy-T10-104-actor-3e8-property4-and-force-effect.md",
+      "source_blob_sha": "05dcaf39ac7a5326f2b2850b18f4f92b21e39bd2",
+      "source_intake_id": "SRC-0366",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR .text 4CD718..4CD744,4CE81B..4CE83B,4CE90A..4CE94C; .rdata [C07B44+2C]=4CE7F0, C07AEC='FORCE'",
+      "assertion": "Observed derived ctor calls base 4C7070 using the same EDI actor then writes vptr C07B44; +2C points to property dispatcher 4CE7F0. Its property4 branch MOVSX reads a signed WORD from argC and assigns DWORD actor+3E8; on new value 1 the source also describes optional actor+364 subordinate FORCE-labelled effect management.",
+      "limitations": [
+        "Not a per-key increment, universal actor implementation, guaranteed runtime property source, motion clip start, official Server state or full subordinate effect lifecycle."
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "related_claim_ids": [
+        "CLM-COMBAT-0013"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-161036-chatgpt-web-roy-T01-T10-102to107-scope-R1-R2.md",
+      "native_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-161036-chatgpt-web-roy-T01-T10-102to107-scope-R1-R2.md",
+      "integration_status": "CONFLICT_CHECKED; PARTIAL_BOUNDED; NOT_FULL_PASS",
+      "quality_inheritance": false
+    },
+    {
+      "id": "CLM-COMBAT-0015",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261028-1919-chatgpt-web-roy-T10-105-paramupdate-handler-and-property-dispatch.md",
+      "source_blob_sha": "9b12f6f3572a1f15540fa9a874a21bb8056aee52",
+      "source_intake_id": "SRC-0367",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR .text 4AFAF0..4AFB89, 4CE90A..4CE94C; existing active state dispatcher 4ADD50",
+      "assertion": "The KR ParamUpdate handler calculates floor((length-2)/6) when len>=2 via 0xAAAAAAAB multiply/shr2, iterates records of actorID/property/value as three WORDs at P+2+6i/P+4+6i/P+6+6i, looks up actor and conditionally calls actor main vtable+0x2C with property/value. Tail shorter than 6 bytes is not processed as a full row.",
+      "limitations": [
+        "Application state key0 and active vtable are conditional. No full buffer-pointer safety audit, all actor types or captured wire opcode0; property4 only under matching derived vptr."
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "related_claim_ids": [
+        "CLM-COMBAT-0014",
+        "CLM-NET-0006"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-161036-chatgpt-web-roy-T01-T10-102to107-scope-R1-R2.md",
+      "native_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-161036-chatgpt-web-roy-T01-T10-102to107-scope-R1-R2.md",
+      "integration_status": "CONFLICT_CHECKED; PARTIAL_BOUNDED; NOT_FULL_PASS",
+      "quality_inheritance": false
+    },
+    {
+      "id": "CLM-COMBAT-0016",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261028-1942-chatgpt-web-roy-T10-106-queue-header-key-and-dispatch-bases.md",
+      "source_blob_sha": "b9873d454eca75147c3251b85aed7f54929ecb5f",
+      "source_intake_id": "SRC-0368",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR .text 4930E0..49315F,48AAD0..48AB45,4FDA30..4FDA98; .rdata C05AEC slot0=4930E0,C05B04+4=48AAD0",
+      "assertion": "On the observed category==2 receive callback, 4930E0 reads initial WORD key from payload P at 4930ED, then checks zero length at 4930F6, then dispatches through callback this+B8. In the inspected root layout the outer 48AAD0 table uses 16-byte slots and low signed WORD key; subsequent active-state 4FDA30 uses a distinct 8-byte-slot table. The payload pointer is not advanced by 2 here.",
+      "limitations": [
+        "No local len>=2 guard before first read is visible in 4930E0; preceding transport/queue invariants and potential exploitability are unproven. Do not infer official Server key0 response to C2S000A."
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "related_claim_ids": [
+        "CLM-COMBAT-0015",
+        "CLM-NET-0006",
+        "CLM-COMBAT-0003"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-161036-chatgpt-web-roy-T01-T10-102to107-scope-R1-R2.md",
+      "native_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-161036-chatgpt-web-roy-T01-T10-102to107-scope-R1-R2.md",
+      "integration_status": "CONFLICT_CHECKED; PARTIAL_BOUNDED; NOT_FULL_PASS",
+      "quality_inheritance": false
+    },
+    {
+      "id": "CLM-COMBAT-0017",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261028-200349-chatgpt-web-roy-T10-101-KR-virtual-dispatch-second-domain.md",
+      "source_blob_sha": "6d456ac37490d29016b3dd9508902bc6da846f71",
+      "source_intake_id": "SRC-0369",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR .text 59624E and 59643F→6D4CE0, extra-ID event list 5963F8..596478; .rdata exact DWORD==5961C0 scan in raw 7D0600..95E800",
+      "assertion": "The 5961C0 phase dispatch has both ordinary IDs 0..39 and a second extra event ID container via FDF624, with separate 6D4CE0 readers; the inspected KR .rdata contains 29 exact DWORD pointer candidates equal to 5961C0, consistent with shared table method references but not necessarily distinct callers.",
+      "limitations": [
+        "Does not prove 29 concrete classes, actual runtime owner, physical key action, Server command or combo scheduling. 596430 is an immediate inside JMP at 59642E, not a legal independent instruction start."
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "related_claim_ids": [
+        "CLM-COMBAT-0009",
+        "CLM-COMBAT-0011"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-161036-chatgpt-web-roy-T01-T10-102to107-scope-R1-R2.md",
+      "native_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-161036-chatgpt-web-roy-T01-T10-102to107-scope-R1-R2.md",
+      "integration_status": "CONFLICT_CHECKED; PARTIAL_BOUNDED; NOT_FULL_PASS",
+      "quality_inheritance": false
+    },
+    {
+      "id": "CLM-COMBAT-0018",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261028-201500-chatgpt-web-roy-T10-102-KR-event-container-cleanup-and-caller-matrix.md",
+      "source_blob_sha": "dee434518439b49db91415ee4912d55e52c57cf1",
+      "source_intake_id": "SRC-0371",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR .text 5960F9..596115 and 596C90..596D7C; 59610E call596C90",
+      "assertion": "In the selected cleanup implementation 596C90 iterates three owner subcontainers at owner+C0,D0,E0 (EBX begins at owner+C0, +0x10 stride). It reads node+C candidate pointers; if the separate candidate object+28 bit8 is set, invokes that object's vtable+0xD4 during cleanup; node+21 checks are container navigation, not candidate flag bits.",
+      "limitations": [
+        "Not a client attack cancellation or ACK proof. No complete allocator/destructor exception CFG or cross-owner lifetime guarantee; avoid merging with result/next-action list."
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [],
+      "related_claim_ids": [
+        "CLM-COMBAT-0011"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-161036-chatgpt-web-roy-T01-T10-102to107-scope-R1-R2.md",
+      "native_review_ref": "research/handoffs/t01-20261030-t10-canonical-continuation/20261030-161036-chatgpt-web-roy-T01-T10-102to107-scope-R1-R2.md",
+      "integration_status": "CONFLICT_CHECKED; PARTIAL_BOUNDED; NOT_FULL_PASS",
+      "quality_inheritance": false
     }
   ]
 }
