@@ -43,3 +43,8 @@ Recommendation: retain DRAFT, draft new targeted RR only when not already covere
 Current policy: only `OFFLINE_SYNTHETIC` evidence-backed *locally by handcrafted data*, and no complete login→selection exchange. **Do not claim an independent implementation review was actually performed just because this worksheet exists.**
 
 Potential Server-only design proposals [ADR-0001..0003](../design/decisions/README.md) remain PROPOSED / NON-NORMATIVE. S00 roadmap and gap sources remain [here](../governance/S00-NEXT-PLAN.md).
+
+
+## S00 Server 需求來源與候選（不代表發布契約）
+
+Server 實作者可閱讀 [三種需求來源與分類](../governance/S00-SERVER-REQUIREMENT-SOURCES.md)、[SRQ 候選索引](server-requirements/index.json) 作**需求盤點**。CODE_ANALYSIS 來源能直接提出有界 Server_SEND / SERVER_RECEIVE 候選；RUNTIME_OBSERVATION 必須在另行授權下有實際記錄；USER_REQUEST 包括玩家／管理員功能及其提供的舊協定／歷史 Server 附件。來源是收件入口，不是必須同時具備的三份原生證據。SRQ CANDIDATE 不等於已核准 wire MUST、Client 相容性、原版 Server 業務政策或可直接實作的完成規格。
