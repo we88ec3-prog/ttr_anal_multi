@@ -66,6 +66,6 @@ T02 inbound frame 解包、lane2、有效 LOGIN scene 與二層 handler table �
 - T03 RR3 主報告：`CLM-AUTH-0003/0004/0005`（SRC-0473；`kr-temp-roy/20261030-142513-chatgpt-web-roy-T03-RR0003-KR-auth-E8-000F-13-codepage-group-handoff.md`；Git blob `64c8c1a3429ae6ff177a84dee0d08ad69dba0b17`）。
 - E69 更正與加強：`CLM-AUTH-0006`（SRC-0482；`kr-extra-roy/20261030-chatgpt-web-roy-E69-RR0003-E8-tail-uninitialized-CPACP-and-13-handoff-native.md`，PARTIAL）。
 - T02 交叉：`CLM-NET-0018..0020`（RR-0005，限有界 Client static path）。T02 `CLM-NET-0029/0030` 支援 LOGIN scene/lane gate 條件，皆非 real wire trace。
-- 本稿為 S00 **規格整理**，非重新執行原 BIN 的 T01 審核；RR3 仍 IN_REVIEW、`GAP-AUTH-0001` OPEN、TEST 只 `OFFLINE_SYNTHETIC`、無任何正式 Client/server compatibility verdict。
+- 本稿為 S00 **規格整理**，非重新執行原 BIN 的 T01 審核；RR3 仍 IN_REVIEW、`GAP-AUTH-0001` OPEN。新增 `TEST-AUTH-0002` 僅用手工合成的 3+10n group cursor 與保守短包拒絕邏輯檢查本地測試模型，**不代表原版 Client 有逐筆長度 guard**。`TEST-AUTH-0001/0002` 均仍為 `OFFLINE_SYNTHETIC`，無任何正式 Client/server compatibility verdict。
 
 相關 [SPEC-FLOW-0001](SPEC-FLOW-0001.md) 與 [Phase B 訊息矩陣](phase-b-message-matrix.md)。
