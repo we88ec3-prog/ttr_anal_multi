@@ -11225,6 +11225,72 @@
       ],
       "review_ref": "research/handoffs/t01-20261030-rr0007-e60-bounded-r2/20261030-141913-chatgpt-web-roy-T01-RR0007-E60-review.md",
       "integration_status": "R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-AUTH-0003",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261030-142513-chatgpt-web-roy-T03-RR0003-KR-auth-E8-000F-13-codepage-group-handoff.md",
+      "source_blob_sha": "64c8c1a3429ae6ff177a84dee0d08ad69dba0b17",
+      "source_intake_id": "SRC-0473",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR PE .data virtual-zero FBA808 plus mode entry 440790, conversion caller 4C37E7",
+      "assertion": "Global FBA808 lies beyond PE .data raw initialization in virtual-zero and supplies codepage to a native conversion branch; initial zero does not establish runtime ACP or an immutable encoding.",
+      "limitations": "Indirect alias writers and live OS ACP unknown.",
+      "conflicts": [],
+      "affected_spec_ids": [
+        "SPEC-AUTH-0001",
+        "SPEC-FLOW-0001"
+      ],
+      "related_claim_ids": [
+        "CLM-AUTH-0001"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-rr0003-t03-bounded-r2/20261030-143210-chatgpt-web-roy-T01-RR0003-auth-review.md",
+      "integration_status": "R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-AUTH-0004",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261030-142513-chatgpt-web-roy-T03-RR0003-KR-auth-E8-000F-13-codepage-group-handoff.md",
+      "source_blob_sha": "64c8c1a3429ae6ff177a84dee0d08ad69dba0b17",
+      "source_intake_id": "SRC-0473",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR active LOGIN scene second level 4C3220 handlers 4C37A0/4C3C10",
+      "assertion": "0x13 handler reads status at payload+0x16 while independent 0x7A handler reads DWORD count at payload+2 and passes payload+6 to group parser. Both rely on proper scene/lane path.",
+      "limitations": "No original Server response order, complete status enum, full length or scene lifetime guarantee.",
+      "conflicts": [],
+      "affected_spec_ids": [
+        "SPEC-AUTH-0001",
+        "SPEC-FLOW-0001"
+      ],
+      "related_claim_ids": [
+        "CLM-AUTH-0002",
+        "CLM-NET-0030"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-rr0003-t03-bounded-r2/20261030-143210-chatgpt-web-roy-T01-RR0003-auth-review.md",
+      "integration_status": "R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
+    },
+    {
+      "id": "CLM-AUTH-0005",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-temp-roy/20261030-142513-chatgpt-web-roy-T03-RR0003-KR-auth-E8-000F-13-codepage-group-handoff.md",
+      "source_blob_sha": "64c8c1a3429ae6ff177a84dee0d08ad69dba0b17",
+      "source_intake_id": "SRC-0473",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "KR 4C3080 group parser count loops / zero group local event",
+      "assertion": "Group parser advances over a 3-byte group header and 10-byte child rows; row+4..7 are IP octets. No per-row remaining-payload-byte-length check is visible within this selected function, and a zero group count still reaches F4243 local notification.",
+      "limitations": "Other upstream guards may exist; this is not a proven runtime attack or Server ABI guarantee.",
+      "conflicts": [],
+      "affected_spec_ids": [
+        "SPEC-AUTH-0001"
+      ],
+      "related_claim_ids": [
+        "CLM-AUTH-0002"
+      ],
+      "review_ref": "research/handoffs/t01-20261030-rr0003-t03-bounded-r2/20261030-143210-chatgpt-web-roy-T01-RR0003-auth-review.md",
+      "integration_status": "R2_BOUNDED; CONFLICT_CHECKED; NOT_FULL_PASS"
     }
   ]
 }
