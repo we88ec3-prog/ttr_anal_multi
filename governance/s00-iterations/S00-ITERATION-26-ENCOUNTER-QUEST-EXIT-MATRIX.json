@@ -1,0 +1,588 @@
+{
+  "schema": "s00-iteration26-encounter-quest-exit-overlay-v1",
+  "kind": "NON_NORMATIVE_PLANNING_OVERLAY",
+  "authored_date": "2026-10-31",
+  "source_repository": "we88ec3-prog/ttr_anal_multi",
+  "source_main_sha_at_start": "41a7ba739e81c4f434078025b7fad2ede9436bb1",
+  "client_version": "kr",
+  "client_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+  "source_gate_blobs": {
+    "governance/s00-iterations/S00-ITERATION-17-TUTORIAL-COMPLETION-GATES.json": "e5179650c54589630cae094fab4846d3584eb607",
+    "governance/s00-iterations/S00-ITERATION-18-TUTORIAL-COMBAT-GATES.json": "1f2a7bc63e6bed56c6d5f63a5a2d248f100ea71e"
+  },
+  "policy_notes": [
+    "Planning dependency is not proven original Client/Server packet order; E17-A..J are siblings under E17.",
+    "Only keys from existing RR/GAP/SPEC registries; no new official claims, tests, or RR dispatch.",
+    "Source evidence states copied from source gate files, never reclassified into NATIVE_VERIFIED.",
+    "Client-compatible wire adapters are OFF until original-client-bounded proof and explicit runtime authorization.",
+    "All work packages and test cases remain proposals, not commits or approvals in the Server code repo."
+  ],
+  "gates": [
+    {
+      "id": "E17-A",
+      "source_gate_file": "governance/s00-iterations/S00-ITERATION-18-TUTORIAL-COMBAT-GATES.json",
+      "original_evidence_state": "DISCOVERY_REQUIRED",
+      "source_anchor": "See source gate evidence and blocking_unknown",
+      "source_blocker": "Scene / instance / encounter 間的 KR 實際映射與權威來源",
+      "proposed_domain_action": "EncounterAdmission",
+      "proposed_domain_policy": "ScenarioId and InstanceId scoped to current RoleAdmission; reject mismatched instance",
+      "required_native_proof": "T07/T02 field-scene/scene-instance direction-specific dispatch",
+      "research_owners": [
+        "T07",
+        "T02"
+      ],
+      "existing_rr_refs": [
+        "RR-0008"
+      ],
+      "existing_gap_refs": [
+        "GAP-SCENE-0001"
+      ],
+      "existing_spec_refs": [
+        "SPEC-FLOW-0001"
+      ],
+      "planning_dependencies": [
+        "E16"
+      ],
+      "policy_status": "PROPOSED_NON_NORMATIVE",
+      "native_compatibility_confirmed": false,
+      "original_client_runtime_executed": false,
+      "domain_test_executed": false,
+      "evidence_class": "SOURCE_LIMITED_OR_DISCOVERY_REQUIRED",
+      "handoff": "SERVER_DOMAIN_MOCK_FIRST_NATIVE_ADAPTER_OFF"
+    },
+    {
+      "id": "E17-B",
+      "source_gate_file": "governance/s00-iterations/S00-ITERATION-18-TUTORIAL-COMBAT-GATES.json",
+      "original_evidence_state": "NATIVE_STATIC_PARTIAL",
+      "source_anchor": "See source gate evidence and blocking_unknown",
+      "source_blocker": "Scenario14 生成配置、時間/波次、類型、座標及對應 S2C 尚未閉合",
+      "proposed_domain_action": "SpawnBudgetAndRoster",
+      "proposed_domain_policy": "Spawn only Server-approved actor definitions from explicit encounter config; no synthetic wave treated as original",
+      "required_native_proof": "T08 original spawn producer/consumer and Scenario14 resources, wave/order",
+      "research_owners": [
+        "T08",
+        "T07"
+      ],
+      "existing_rr_refs": [],
+      "existing_gap_refs": [],
+      "existing_spec_refs": [
+        "SPEC-FLOW-0001"
+      ],
+      "planning_dependencies": [
+        "E17-A"
+      ],
+      "policy_status": "PROPOSED_NON_NORMATIVE",
+      "native_compatibility_confirmed": false,
+      "original_client_runtime_executed": false,
+      "domain_test_executed": false,
+      "evidence_class": "SOURCE_LIMITED_OR_DISCOVERY_REQUIRED",
+      "handoff": "SERVER_DOMAIN_MOCK_FIRST_NATIVE_ADAPTER_OFF"
+    },
+    {
+      "id": "E17-C",
+      "source_gate_file": "governance/s00-iterations/S00-ITERATION-18-TUTORIAL-COMBAT-GATES.json",
+      "original_evidence_state": "DISCOVERY_REQUIRED",
+      "source_anchor": "See source gate evidence and blocking_unknown",
+      "source_blocker": "Server、Client 本地 AI、P2P owner 與動作來源未定",
+      "proposed_domain_action": "NpcAiAuthority",
+      "proposed_domain_policy": "Select exactly one Server-authoritative AI owner policy per actor and do not trust unverified Client AI results",
+      "required_native_proof": "T08/T09 ownership, original AI inputs and authoritative side",
+      "research_owners": [
+        "T08",
+        "T09"
+      ],
+      "existing_rr_refs": [],
+      "existing_gap_refs": [],
+      "existing_spec_refs": [
+        "SPEC-FLOW-0001"
+      ],
+      "planning_dependencies": [
+        "E17-A"
+      ],
+      "policy_status": "PROPOSED_NON_NORMATIVE",
+      "native_compatibility_confirmed": false,
+      "original_client_runtime_executed": false,
+      "domain_test_executed": false,
+      "evidence_class": "SOURCE_LIMITED_OR_DISCOVERY_REQUIRED",
+      "handoff": "SERVER_DOMAIN_MOCK_FIRST_NATIVE_ADAPTER_OFF"
+    },
+    {
+      "id": "E17-D",
+      "source_gate_file": "governance/s00-iterations/S00-ITERATION-18-TUTORIAL-COMBAT-GATES.json",
+      "original_evidence_state": "NATIVE_STATIC_PARTIAL",
+      "source_anchor": "See source gate evidence and blocking_unknown",
+      "source_blocker": "原生移動主導與碰撞/校正完整協定未知",
+      "proposed_domain_action": "MovementReconcile",
+      "proposed_domain_policy": "Validate actor ownership, monotonic tick and scene revision before broadcasting movement",
+      "required_native_proof": "T05/T09 movement C2S/S2C scene/owner frames",
+      "research_owners": [
+        "T05",
+        "T09"
+      ],
+      "existing_rr_refs": [],
+      "existing_gap_refs": [],
+      "existing_spec_refs": [
+        "SPEC-FLOW-0001"
+      ],
+      "planning_dependencies": [
+        "E17-A"
+      ],
+      "policy_status": "PROPOSED_NON_NORMATIVE",
+      "native_compatibility_confirmed": false,
+      "original_client_runtime_executed": false,
+      "domain_test_executed": false,
+      "evidence_class": "SOURCE_LIMITED_OR_DISCOVERY_REQUIRED",
+      "handoff": "SERVER_DOMAIN_MOCK_FIRST_NATIVE_ADAPTER_OFF"
+    },
+    {
+      "id": "E17-E",
+      "source_gate_file": "governance/s00-iterations/S00-ITERATION-18-TUTORIAL-COMBAT-GATES.json",
+      "original_evidence_state": "NATIVE_STATIC_PARTIAL",
+      "source_anchor": "See source gate evidence and blocking_unknown",
+      "source_blocker": "攻擊起手、連段、取消完整時窗與 C2S/S2C 因果鏈未知",
+      "proposed_domain_action": "BasicAttackIntent",
+      "proposed_domain_policy": "Authorize attack actor/target/action based on current encounter and replay fence",
+      "required_native_proof": "T09/T10 real combo/cancel timing and authoritative result",
+      "research_owners": [
+        "T09",
+        "T10"
+      ],
+      "existing_rr_refs": [],
+      "existing_gap_refs": [],
+      "existing_spec_refs": [
+        "SPEC-FLOW-0001"
+      ],
+      "planning_dependencies": [
+        "E17-A"
+      ],
+      "policy_status": "PROPOSED_NON_NORMATIVE",
+      "native_compatibility_confirmed": false,
+      "original_client_runtime_executed": false,
+      "domain_test_executed": false,
+      "evidence_class": "SOURCE_LIMITED_OR_DISCOVERY_REQUIRED",
+      "handoff": "SERVER_DOMAIN_MOCK_FIRST_NATIVE_ADAPTER_OFF"
+    },
+    {
+      "id": "E17-F",
+      "source_gate_file": "governance/s00-iterations/S00-ITERATION-18-TUTORIAL-COMBAT-GATES.json",
+      "original_evidence_state": "NATIVE_STATIC_PARTIAL",
+      "source_anchor": "See source gate evidence and blocking_unknown",
+      "source_blocker": "初始可用技能、起手/取消、冷卻/消耗裁決及結果封包未知",
+      "proposed_domain_action": "SkillCastIntent",
+      "proposed_domain_policy": "Validate current skill availability, cooldown and cast id before changing resources",
+      "required_native_proof": "T09/T10 skill request/result and original cooldown/state windows",
+      "research_owners": [
+        "T09",
+        "T10"
+      ],
+      "existing_rr_refs": [],
+      "existing_gap_refs": [],
+      "existing_spec_refs": [
+        "SPEC-FLOW-0001"
+      ],
+      "planning_dependencies": [
+        "E17-A"
+      ],
+      "policy_status": "PROPOSED_NON_NORMATIVE",
+      "native_compatibility_confirmed": false,
+      "original_client_runtime_executed": false,
+      "domain_test_executed": false,
+      "evidence_class": "SOURCE_LIMITED_OR_DISCOVERY_REQUIRED",
+      "handoff": "SERVER_DOMAIN_MOCK_FIRST_NATIVE_ADAPTER_OFF"
+    },
+    {
+      "id": "E17-G",
+      "source_gate_file": "governance/s00-iterations/S00-ITERATION-18-TUTORIAL-COMBAT-GATES.json",
+      "original_evidence_state": "NATIVE_STATIC_PARTIAL",
+      "source_anchor": "See source gate evidence and blocking_unknown",
+      "source_blocker": "戰鬥結果消費端存在但計算權威、命中/死亡責任未閉合",
+      "proposed_domain_action": "DamageAndDeathResolution",
+      "proposed_domain_policy": "Apply damage/death exactly once from authoritative hit; disallow client-selected success",
+      "required_native_proof": "T09/T10/T08 hit and death authority/packet confirmation",
+      "research_owners": [
+        "T09",
+        "T10",
+        "T08"
+      ],
+      "existing_rr_refs": [],
+      "existing_gap_refs": [],
+      "existing_spec_refs": [
+        "SPEC-FLOW-0001"
+      ],
+      "planning_dependencies": [
+        "E17-A"
+      ],
+      "policy_status": "PROPOSED_NON_NORMATIVE",
+      "native_compatibility_confirmed": false,
+      "original_client_runtime_executed": false,
+      "domain_test_executed": false,
+      "evidence_class": "SOURCE_LIMITED_OR_DISCOVERY_REQUIRED",
+      "handoff": "SERVER_DOMAIN_MOCK_FIRST_NATIVE_ADAPTER_OFF"
+    },
+    {
+      "id": "E17-H",
+      "source_gate_file": "governance/s00-iterations/S00-ITERATION-18-TUTORIAL-COMBAT-GATES.json",
+      "original_evidence_state": "DISCOVERY_REQUIRED",
+      "source_anchor": "See source gate evidence and blocking_unknown",
+      "source_blocker": "Scenario14 真正的 wave、objective 與勝敗觸發未知",
+      "proposed_domain_action": "ObjectiveAndWaveState",
+      "proposed_domain_policy": "Advance objective only from verified encounter state; do not auto-win on timers",
+      "required_native_proof": "T14 actual Scenario14 wave, objective, win/lose predicate",
+      "research_owners": [
+        "T14",
+        "T07"
+      ],
+      "existing_rr_refs": [],
+      "existing_gap_refs": [],
+      "existing_spec_refs": [
+        "SPEC-FLOW-0001"
+      ],
+      "planning_dependencies": [
+        "E17-A"
+      ],
+      "policy_status": "PROPOSED_NON_NORMATIVE",
+      "native_compatibility_confirmed": false,
+      "original_client_runtime_executed": false,
+      "domain_test_executed": false,
+      "evidence_class": "SOURCE_LIMITED_OR_DISCOVERY_REQUIRED",
+      "handoff": "SERVER_DOMAIN_MOCK_FIRST_NATIVE_ADAPTER_OFF"
+    },
+    {
+      "id": "E17-I",
+      "source_gate_file": "governance/s00-iterations/S00-ITERATION-18-TUTORIAL-COMBAT-GATES.json",
+      "original_evidence_state": "NATIVE_STATIC_PARTIAL",
+      "source_anchor": "See source gate evidence and blocking_unknown",
+      "source_blocker": "CTutorial 0x4C 消費局部成立但完整 Server result/QuestInfo14 writer 未閉合",
+      "proposed_domain_action": "ScenarioSettlement",
+      "proposed_domain_policy": "Commit terminal outcome once, produce optional bounded Client notification via outbox",
+      "required_native_proof": "T14/T16 source-backed completion result, S2C0x4C conditions and source role",
+      "research_owners": [
+        "T14",
+        "T16",
+        "T07"
+      ],
+      "existing_rr_refs": [],
+      "existing_gap_refs": [],
+      "existing_spec_refs": [
+        "SPEC-FLOW-0001"
+      ],
+      "planning_dependencies": [
+        "E17-A"
+      ],
+      "policy_status": "PROPOSED_NON_NORMATIVE",
+      "native_compatibility_confirmed": false,
+      "original_client_runtime_executed": false,
+      "domain_test_executed": false,
+      "evidence_class": "SOURCE_LIMITED_OR_DISCOVERY_REQUIRED",
+      "handoff": "SERVER_DOMAIN_MOCK_FIRST_NATIVE_ADAPTER_OFF"
+    },
+    {
+      "id": "E17-J",
+      "source_gate_file": "governance/s00-iterations/S00-ITERATION-18-TUTORIAL-COMBAT-GATES.json",
+      "original_evidence_state": "SERVER_POLICY_PENDING_ADR",
+      "source_anchor": "See source gate evidence and blocking_unknown",
+      "source_blocker": "重試/重送/跨 scene/斷線復原與交易邊界待 ADR",
+      "proposed_domain_action": "EncounterRecovery",
+      "proposed_domain_policy": "Recover or cancel stale encounter/leases across disconnect/crash, no duplicate reward",
+      "required_native_proof": "T07/T15 original reconnect/reset and Client coroutine continuity",
+      "research_owners": [
+        "T15",
+        "T07"
+      ],
+      "existing_rr_refs": [],
+      "existing_gap_refs": [],
+      "existing_spec_refs": [
+        "SPEC-FLOW-0001"
+      ],
+      "planning_dependencies": [
+        "E17-A"
+      ],
+      "policy_status": "PROPOSED_NON_NORMATIVE",
+      "native_compatibility_confirmed": false,
+      "original_client_runtime_executed": false,
+      "domain_test_executed": false,
+      "evidence_class": "SOURCE_LIMITED_OR_DISCOVERY_REQUIRED",
+      "handoff": "SERVER_DOMAIN_MOCK_FIRST_NATIVE_ADAPTER_OFF"
+    },
+    {
+      "id": "E18",
+      "source_gate_file": "governance/s00-iterations/S00-ITERATION-17-TUTORIAL-COMPLETION-GATES.json",
+      "original_evidence_state": "SOURCE_BACKED_PARTIAL",
+      "source_anchor": "CTutorial 表 B app 0x004C → 0x4C4F20 → map[scenarioId]=1",
+      "source_blocker": "0x4C key14 是 Client handler 可消費形狀，不是已捕獲原 Server result；init 可能清 map；不等於 Quest14 完成",
+      "proposed_domain_action": "ClientScenarioResultDelivery",
+      "proposed_domain_policy": "Send only version-pinned, positively validated Client result adapter; domain settlement remains separate",
+      "required_native_proof": "T16 original 0x004C handler packet scope and scenario14 settlement cause",
+      "research_owners": [
+        "T14",
+        "T16",
+        "T02",
+        "T07"
+      ],
+      "existing_rr_refs": [],
+      "existing_gap_refs": [],
+      "existing_spec_refs": [
+        "SPEC-FLOW-0001"
+      ],
+      "planning_dependencies": [
+        "E17-I",
+        "E17-J"
+      ],
+      "policy_status": "PROPOSED_NON_NORMATIVE",
+      "native_compatibility_confirmed": false,
+      "original_client_runtime_executed": false,
+      "domain_test_executed": false,
+      "evidence_class": "SOURCE_LIMITED_OR_DISCOVERY_REQUIRED",
+      "handoff": "SERVER_DOMAIN_MOCK_FIRST_NATIVE_ADAPTER_OFF"
+    },
+    {
+      "id": "E19",
+      "source_gate_file": "governance/s00-iterations/S00-ITERATION-17-TUTORIAL-COMPLETION-GATES.json",
+      "original_evidence_state": "LOCAL_SOURCE_PARTIAL",
+      "source_anchor": "IsScenarioEnded(14) map read; Part2 PlayAndWaitForScene(1000,10/12/13/14) 等",
+      "source_blocker": "各個 callback、尾端關閉、reentry 和實際完成條件未整體閉合",
+      "proposed_domain_action": "LuaWaitRecovery",
+      "proposed_domain_policy": "Track separately observed Lua wait release/Client scene observation and Server domain settle",
+      "required_native_proof": "T16 Lua script wake/read branches and reset behavior",
+      "research_owners": [
+        "T16",
+        "T06",
+        "T07"
+      ],
+      "existing_rr_refs": [],
+      "existing_gap_refs": [],
+      "existing_spec_refs": [
+        "SPEC-FLOW-0001"
+      ],
+      "planning_dependencies": [
+        "E18"
+      ],
+      "policy_status": "PROPOSED_NON_NORMATIVE",
+      "native_compatibility_confirmed": false,
+      "original_client_runtime_executed": false,
+      "domain_test_executed": false,
+      "evidence_class": "SOURCE_LIMITED_OR_DISCOVERY_REQUIRED",
+      "handoff": "SERVER_DOMAIN_MOCK_FIRST_NATIVE_ADAPTER_OFF"
+    },
+    {
+      "id": "E20",
+      "source_gate_file": "governance/s00-iterations/S00-ITERATION-17-TUTORIAL-COMPLETION-GATES.json",
+      "original_evidence_state": "NATIVE_DISCOVERY_REQUIRED",
+      "source_anchor": "QuestInfo.xml Quest14 type3／NPC10027／CompleteAction、AcceptAction；T16-111 status 缺口",
+      "source_blocker": "Scenario14 ended!=QuestInfo14 completed；不可僅靠本地 script map 將任務14設完成",
+      "proposed_domain_action": "Quest14TurnIn",
+      "proposed_domain_policy": "Require authoritative scenario completion and explicit quest hand-in policy before Quest14 completion",
+      "required_native_proof": "T14/T15/T16 Quest14 completion/turn-in direction-specific original Client fields",
+      "research_owners": [
+        "T16",
+        "T14",
+        "T15"
+      ],
+      "existing_rr_refs": [],
+      "existing_gap_refs": [],
+      "existing_spec_refs": [
+        "SPEC-FLOW-0001"
+      ],
+      "planning_dependencies": [
+        "E19"
+      ],
+      "policy_status": "PROPOSED_NON_NORMATIVE",
+      "native_compatibility_confirmed": false,
+      "original_client_runtime_executed": false,
+      "domain_test_executed": false,
+      "evidence_class": "SOURCE_LIMITED_OR_DISCOVERY_REQUIRED",
+      "handoff": "SERVER_DOMAIN_MOCK_FIRST_NATIVE_ADAPTER_OFF"
+    },
+    {
+      "id": "E21",
+      "source_gate_file": "governance/s00-iterations/S00-ITERATION-17-TUTORIAL-COMPLETION-GATES.json",
+      "original_evidence_state": "SOURCE_BACKED_PARTIAL",
+      "source_anchor": "Quest16 <Demand id=14>, giver/finisher 10027；T16-118..123 NPC／TalkBox bounded",
+      "source_blocker": "NPC 實際交互順序及原版 Server 狀態配對仍未知，不能從 Demand14 靜態欄位構造結果",
+      "proposed_domain_action": "Quest16Activation",
+      "proposed_domain_policy": "Check Quest14 quest-state prerequisite and authorized NPC context; separate unlock from accept",
+      "required_native_proof": "T16 Quest16 NPC/TalkBox handler and Server-facing success/errors",
+      "research_owners": [
+        "T16",
+        "T06",
+        "T02"
+      ],
+      "existing_rr_refs": [],
+      "existing_gap_refs": [],
+      "existing_spec_refs": [
+        "SPEC-FLOW-0001"
+      ],
+      "planning_dependencies": [
+        "E20"
+      ],
+      "policy_status": "PROPOSED_NON_NORMATIVE",
+      "native_compatibility_confirmed": false,
+      "original_client_runtime_executed": false,
+      "domain_test_executed": false,
+      "evidence_class": "SOURCE_LIMITED_OR_DISCOVERY_REQUIRED",
+      "handoff": "SERVER_DOMAIN_MOCK_FIRST_NATIVE_ADAPTER_OFF"
+    },
+    {
+      "id": "E22",
+      "source_gate_file": "governance/s00-iterations/S00-ITERATION-17-TUTORIAL-COMPLETION-GATES.json",
+      "original_evidence_state": "NATIVE_DISCOVERY_REQUIRED",
+      "source_anchor": "QuestInfo.xml Quest16 Reward type2 value50；T16-123 state/UI handlers",
+      "source_blocker": "Reward type=2 的經濟業務意義未證；不能自行當 EXP/金幣；Client completed UI vs Server authorized 狀態分開",
+      "proposed_domain_action": "Quest16RewardCommit",
+      "proposed_domain_policy": "Idempotent Quest16 completion and payout ledger with policy-verified reward mapping",
+      "required_native_proof": "T14/T15/T16 Quest16 reward type semantics and outcome response",
+      "research_owners": [
+        "T16",
+        "T14",
+        "T15",
+        "T04"
+      ],
+      "existing_rr_refs": [],
+      "existing_gap_refs": [],
+      "existing_spec_refs": [
+        "SPEC-FLOW-0001"
+      ],
+      "planning_dependencies": [
+        "E21"
+      ],
+      "policy_status": "PROPOSED_NON_NORMATIVE",
+      "native_compatibility_confirmed": false,
+      "original_client_runtime_executed": false,
+      "domain_test_executed": false,
+      "evidence_class": "SOURCE_LIMITED_OR_DISCOVERY_REQUIRED",
+      "handoff": "SERVER_DOMAIN_MOCK_FIRST_NATIVE_ADAPTER_OFF"
+    },
+    {
+      "id": "E23",
+      "source_gate_file": "governance/s00-iterations/S00-ITERATION-17-TUTORIAL-COMPLETION-GATES.json",
+      "original_evidence_state": "SERVER_POLICY_NEEDS_ADR",
+      "source_anchor": "TutorialMain terminal writer 尚未知；Quest14→16 資源依賴",
+      "source_blocker": "沒有已證原版 tutorial_complete packet/flag，也未證 account vs character scope；暫為 Server-only ADR 提案",
+      "proposed_domain_action": "TutorialTerminalCommit",
+      "proposed_domain_policy": "Mark tutorial complete only after approved terminal + quest + exit criteria, not UI-only callback",
+      "required_native_proof": "T16/T15 verified terminal writer and scope",
+      "research_owners": [
+        "T15",
+        "T16",
+        "T04",
+        "S00"
+      ],
+      "existing_rr_refs": [],
+      "existing_gap_refs": [],
+      "existing_spec_refs": [
+        "SPEC-FLOW-0001"
+      ],
+      "planning_dependencies": [
+        "E22"
+      ],
+      "policy_status": "PROPOSED_NON_NORMATIVE",
+      "native_compatibility_confirmed": false,
+      "original_client_runtime_executed": false,
+      "domain_test_executed": false,
+      "evidence_class": "SOURCE_LIMITED_OR_DISCOVERY_REQUIRED",
+      "handoff": "SERVER_DOMAIN_MOCK_FIRST_NATIVE_ADAPTER_OFF"
+    },
+    {
+      "id": "E24",
+      "source_gate_file": "governance/s00-iterations/S00-ITERATION-17-TUTORIAL-COMPLETION-GATES.json",
+      "original_evidence_state": "SOURCE_BACKED_PARTIAL",
+      "source_anchor": "Quest15 <Demand id=16>; town5 field19 giver/finisher 10338；T16-124 bounded candidate/UI",
+      "source_blocker": "Quest15 available != accepted/completed；0x74(16)/0x38 town selector/0x40(15) 靜態存在，不代表實際 Server 時序",
+      "proposed_domain_action": "Quest15Availability",
+      "proposed_domain_policy": "Make Quest15 available only under actual approved Quest16 completion policy; not auto-accepted",
+      "required_native_proof": "T16/T14 Quest15 state transitions, NPC and origin fields",
+      "research_owners": [
+        "T16",
+        "T06",
+        "T02"
+      ],
+      "existing_rr_refs": [],
+      "existing_gap_refs": [],
+      "existing_spec_refs": [
+        "SPEC-FLOW-0001"
+      ],
+      "planning_dependencies": [
+        "E23"
+      ],
+      "policy_status": "PROPOSED_NON_NORMATIVE",
+      "native_compatibility_confirmed": false,
+      "original_client_runtime_executed": false,
+      "domain_test_executed": false,
+      "evidence_class": "SOURCE_LIMITED_OR_DISCOVERY_REQUIRED",
+      "handoff": "SERVER_DOMAIN_MOCK_FIRST_NATIVE_ADAPTER_OFF"
+    },
+    {
+      "id": "E25",
+      "source_gate_file": "governance/s00-iterations/S00-ITERATION-17-TUTORIAL-COMPLETION-GATES.json",
+      "original_evidence_state": "NATIVE_DISCOVERY_REQUIRED",
+      "source_anchor": "Quest15 SceneList(15,1..4)；Scene3 pindos_talkevent Lua LoadMap town001D.map",
+      "source_blocker": "Quest15 Scene3 不是 Server 強制地圖指令；T07 0x005F type6 有本機修補反例",
+      "proposed_domain_action": "WorldExitAdmission",
+      "proposed_domain_policy": "Authorize explicit transition to non-tutorial scene with correct role/session and field bootstrap",
+      "required_native_proof": "T07/T05/T06 actual exit scene/field/actor-ready payload",
+      "research_owners": [
+        "T07",
+        "T05",
+        "T06",
+        "T16"
+      ],
+      "existing_rr_refs": [
+        "RR-0008"
+      ],
+      "existing_gap_refs": [
+        "GAP-SCENE-0001"
+      ],
+      "existing_spec_refs": [
+        "SPEC-SCENE-0001",
+        "SPEC-FLOW-0001"
+      ],
+      "planning_dependencies": [
+        "E24"
+      ],
+      "policy_status": "PROPOSED_NON_NORMATIVE",
+      "native_compatibility_confirmed": false,
+      "original_client_runtime_executed": false,
+      "domain_test_executed": false,
+      "evidence_class": "SOURCE_LIMITED_OR_DISCOVERY_REQUIRED",
+      "handoff": "SERVER_DOMAIN_MOCK_FIRST_NATIVE_ADAPTER_OFF"
+    },
+    {
+      "id": "E26",
+      "source_gate_file": "governance/s00-iterations/S00-ITERATION-17-TUTORIAL-COMPLETION-GATES.json",
+      "original_evidence_state": "ORIGINAL_CLIENT_RUNTIME_REQUIRED",
+      "source_anchor": "T15 跨登入保存；T05 世界狀態；T16 quest candidate/owner",
+      "source_blocker": "原版可玩實測需另行明確授權；本方案沒有完成任何原版 Client runtime 驗收",
+      "proposed_domain_action": "ReLoginContinuity",
+      "proposed_domain_policy": "On new session epoch restore durable role/quest/encounter/terminal state; no replaying rewards",
+      "required_native_proof": "T15/T05 original relog Client consumable state and same-version runtime trace",
+      "research_owners": [
+        "T15",
+        "T05",
+        "T04",
+        "S00"
+      ],
+      "existing_rr_refs": [],
+      "existing_gap_refs": [],
+      "existing_spec_refs": [
+        "SPEC-FLOW-0001"
+      ],
+      "planning_dependencies": [
+        "E25"
+      ],
+      "policy_status": "PROPOSED_NON_NORMATIVE",
+      "native_compatibility_confirmed": false,
+      "original_client_runtime_executed": false,
+      "domain_test_executed": false,
+      "evidence_class": "SOURCE_LIMITED_OR_DISCOVERY_REQUIRED",
+      "handoff": "SERVER_DOMAIN_MOCK_FIRST_NATIVE_ADAPTER_OFF"
+    }
+  ],
+  "validation": {
+    "expected_gate_count": 19,
+    "expected_test_case_count": 18,
+    "formal_rr_modified": false,
+    "formal_claim_modified": false,
+    "original_binary_rerun": false,
+    "original_client_runtime_authorized": false
+  }
+}
