@@ -25,3 +25,15 @@
 - 唯一正式需求：`design/requirements/index.json` 的 `REQ-0006..0008`，目前預定 `CANDIDATE`。
 - 完整功能與邊界：[WEB 管理後台 V1 設計草案](../../admin-web/ADMIN-WEB-V1-PLAN.md)。
 - 技術決策以 `ADR-0004/0005` 的 **PROPOSED** 紀錄與未來 Server 實作庫審查為準；本記錄不構成設計批准。
+
+## 補充需求（同一對話，2026-10-31）
+
+> 目前先不管權限，指定的IP與URL就能管理
+
+**依使用者的新限定更新 V1 存取方式**：本階段不做管理員帳號、登入、MFA、角色或細部 RBAC；改為**固定 WEB base URL／Host 加上 Server-side 來源 IP allowlist** 的單一全功能管理介面。此為 `REQ-0006` 同一需求的**第二筆 PLAYER_ADMIN_REQUEST discovery**，不是新 REQ，也不代表 IP+URL 具備與使用者認證等價的安全性。
+
+- 來源 IP 是實際請求的**客戶端來源位址**，非 Server 自己的 IP；URL 是管理入口的配置位置，**不是**保密憑證。未指定具體 IP、網域、埠或路徑，不能自行填入真正可對外存取的值。
+- 入口限私有網路/VPN/本機或安全邊界內；來源 IP 在共用 NAT/VPN 後可能代表多人，不能辨認個別操作者。
+- 仍保留：伺服器端 IP/Host/path 驗證、預設拒絕、TLS（跨主機）、CSRF/Origin 防護、請求節流、操作確認及可靠稽核（稽核 actor 可記 `IP_ONLY_OPERATOR` + 來源 IP，**不冒稱特定管理員身分**）。
+- 不改變 REQ-0007／0008 的新增帳號、N天／永久停權與解封功能驗收；它們改由 V1 受允許來源的管理操作執行，不要求管理員登入。
+- 正式規劃見 [WEB Admin V1](../../admin-web/ADMIN-WEB-V1-PLAN.md)、[ADR-0004](../../decisions/ADR-0004-admin-web-security-boundary.md)。未授權開放公網部署或自動修改現有 Server Host。

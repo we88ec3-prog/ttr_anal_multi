@@ -8,7 +8,7 @@ Admins need N-day and permanent account suspension plus unban. Current `tartaros
 
 ## Proposed design decision
 
-- Store independently versioned moderation sanctions with `TEMPORARY` (`starts_at_utc`, `expires_at_utc`), `PERMANENT` (`expires_at_utc=NULL`), moderation reason, creator, timestamps, end actor/reason and immutable audit history. Only one effective sanction at a time per account; immutable historical records remain.
+- Store independently versioned moderation sanctions with `TEMPORARY` (`starts_at_utc`, `expires_at_utc`), `PERMANENT` (`expires_at_utc=NULL`), reason, creation/end timestamps, **V1 observed source IP (operator_kind=IP_ONLY_OPERATOR, not an identified administrator)** and immutable audit history. Only one effective sanction at a time per account; immutable historical records remain. Future identified actors can be modeled separately if login/RBAC is introduced.
 - A day = 24 hours; for positive integer N, UTC expiration = Server authoritative `now + N*24h`; numeric ceiling, overflow guard and local display timezone policy to be approved. No scheduler required to restore a naturally expired suspension.
 - Enforce ban in the authoritative authenticated Session admission/lease issuance **and** at existing Session/actor action boundaries; use account generation/epoch fencing and durable/acknowledged revocation across nodes. Rollback-safe sanction write+audit; outbox/retry for post-commit notifications; fail closed when sanction status cannot be determined.
 - Unban ends current sanction but does **not** clear password-failure lockout, reset credentials or restore old sessions.
@@ -25,3 +25,7 @@ Admins need N-day and permanent account suspension plus unban. Current `tartaros
 ## Approval gates
 
 Approve data migration plan with uniqueness/CAS, revocation idempotency and crash-recovery tests, fail-closed behavior, privacy, backup/restore, read-path performance and admin permission guard. Keep original KR/TC protocol status untouched; this proposal is not an RR, not native SPEC evidence and not approved production policy.
+
+## V1 access clarification (2026-10-31)
+
+User narrowed the WEB Admin entry to a configured URL and client source IP allowlist, **without admin login or RBAC**; see [ADR-0004](ADR-0004-admin-web-security-boundary.md). This affects only the management **entry/audit actor label**, not the game-account suspension or Session fencing semantics. V1 audit cannot identify an individual person behind a shared IP; it records source IP, event, target, reason, UTC and result. Still PROPOSED, not approved or implemented.

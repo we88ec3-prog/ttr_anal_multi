@@ -4,46 +4,51 @@
 
 ## 1. 範圍、目標與實作現況
 
-**目標：**在非公開管理後台，授權管理員可查詢玩家帳號、建立帳號、停權正整數 N 天、永久停權、提前解封，並追查誰、何時、為何操作；停權後對新登入和既有 Session 都有效。
+**目標：**在指定來源 IP 與配置的管理網址均通過 Server-side 存取檢查時，可直接查詢／建立玩家帳號、停權 N 天／永久與解封；V1 不設管理員登入和角色權限。操作紀錄只能追溯來源 IP/請求，不能聲稱辨認真人操作者；停權對新登入與既有 Session 都有效。
 
 與 [`ttr_server_roy`](https://github.com/we88ec3-prog/ttr_server_roy) 2026-10-31 main `b8efc6b09c0595cea058593addfc779ae09759b4` 核對：
 
 - **已存在但僅限離線 Server:** `src/Tartaros.Account/InMemoryAccountDirectory.cs` 可測試建立帳號／密碼查驗；`Tartaros.Persistence` 的 PostgreSQL C02 migration 001 有 `tartaros_accounts`；`LocalLoginCoordinator` 與 `ISessionLeaseRegistry.RevokeAccountAsync` 有內部 Session 所有權／撤銷介面。**不代表公開的 WEB API 已存在，也不證原 Client 可以成功登入。**
-- **尚缺：** `Tartaros.Admin/IAdministrativeAuditSink.cs` 目前僅有 `RecordAsync(actionName)` 介面，沒有管理身分、後台 API、完整稽核資料、持久化停權、跨登入 Session 禁止登入機制、操作 UI 或測試。
+- **尚缺：** `Tartaros.Admin/IAdministrativeAuditSink.cs` 目前僅有 `RecordAsync(actionName)` 介面，沒有 WEB 後台入口/來源 IP 限制、後台 API、完整稽核資料、持久化停權、跨登入 Session 禁止登入機制、操作 UI 或測試。
 - 現有 C02 `locked_until` 是**密碼驗證失敗的暫時鎖定**，不是人工停權欄位；**禁止將兩者共用**。
 - 本 S00 repo **只設計**；Server Code／DB migration 應由實作庫獨立 PR、測試、正式資料庫部署審查。
 - Client KR／TC wire 分立，角色創建 `RR-0010` 與本次**管理員建立玩家帳號**完全不同；本需求不設原 Client C2S/S2C RR。
 
-## 2. 畫面與操作
+## 2. V1 存取方式、頁面與操作（使用者已簡化）
 
-| 頁面 | 最小欄位與動作 | 權限／操作防護 |
+**免登入版本：**不設管理員帳密、登入頁、MFA、角色/RBAC、管理 Session；只需配置 `ADMIN_ALLOWED_CLIENT_CIDRS` 與 `ADMIN_BASE_URL`（名稱與 env schema 為候選，具體 IP／URL 尚未提供）。預設空 allowlist = 全部拒絕。管理 URL 是**入口**，不是密碼；不能只靠隱藏路徑保護。
+
+```text
+Browser ──> private VPN/LAN / TLS reverse proxy [來源 IP allowlist]
+         └─> 管理 Host+port+base-path (Server 驗證 Host/path)
+                   └─> Admin API / WEB UI (所有允許 IP 功能相同)
+                            └─> Account / Session / Persistence
+```
+
+| 頁面 | 最小欄位與動作 | 保留保護 |
 | --- | --- | --- |
-| 管理員登入 | 管理員帳號、憑證、MFA（採用方式待審） | 與玩家帳號獨立身分領域；限許可網段／安全代理，短期 Session |
-| 帳號清單 | 完整或遮罩帳號名稱（依角色）、帳號 ID、建立時間、有效停權狀態、停權到期、分頁/搜尋 | `accounts.read`；避免大量列出/枚舉 |
-| 新增帳號 | 玩家帳號名稱、一次性初始憑證輸入或安全生成（選一，待批准） | `accounts.create`；表單防重送；成功僅顯示必要資訊 |
-| 帳號詳情 | 玩家帳號 ID、目前停權與登入鎖定兩個獨立狀態、最近管理處置 | `accounts.read`；禁止顯示任何密碼／hash／token |
-| 停權操作 | 二選一：**N 天** 或 **永久**；顯示生效與到期（UTC 與管理端在地時區），管理原因、最終確認 | `accounts.suspend`；二次確認及併發保護 |
-| 解除停權 | 當前處置、停權原因（適當權限可閱）、解除原因、結果確認 | `accounts.unsuspend`；防重送；不可刪除歷史 |
-| 稽核查詢 | 操作人、目標帳號 ID、動作、原因、UTC 時間、成功/拒絕、追蹤 ID | `audit.read`，分頁，唯讀 |
+| 管理入口 | 指定 URL 直接進入帳號列表；**不顯示管理員登入頁** | 僅允許配置的 client IP/CIDR，指定 Host/port/base path |
+| 帳號清單/詳情 | 搜尋、分頁、帳號 ID、建立時間、停權狀態、到期、登入失敗鎖定 | IP/Host gate、必要資料、不顯示憑證/hash |
+| 新增帳號 | 玩家帳號名稱、初始密碼或安全產生（待決策） | 二次確認、去重、冪等、操作紀錄 |
+| 停權 | N 天或永久、原因、開始/到期 UTC、確認 | 版號 CAS、持久化、撤銷 Session |
+| 解封 | 結束停權、解除原因、確認 | 不復活舊 Session、不刪除歷史 |
+| 稽核查詢 | `IP_ONLY_OPERATOR` + 來源 IP、操作、對象 UUID、原因、時間、結果 | 只能稱為**來源網路辨識**，無法識別真人操作者 |
 
-為日後手機管理可做響應式布局，但 V1 以桌面管理為主。這是界面資訊架構，不含 Figma/前端程式或已生成畫面。
+## 3. 網路邊界與安全限制（ADR-0004，PROPOSED）
 
-## 3. 權限與安全邊界（ADR-0004，PROPOSED）
-
-- **權限採 Server 驗證，不靠隱藏按鈕：** `accounts.read`、`accounts.create`、`accounts.suspend`、`accounts.unsuspend`、`audit.read`。建議角色 `SUPER_ADMIN`、`ACCOUNT_OPERATOR`、`AUDITOR` 作配置範例；角色授權清單與自我停權／最後一位管理者保護待正式批准。
-- 管理員識別與玩家帳號**隔離**；不允許用遊戲密碼直接呼叫 Admin API。初版僅 private network/VPN + TLS 代理，禁將目前 C00 loopback `/health` 直接改成公開管理入口。
-- 生產型管理員登入需安全的憑證策略及 MFA、速率限制、Session idle/absolute expiry、撤銷與稽核；Cookie 使用 `Secure`、`HttpOnly`、合適的 `SameSite`，有狀態操作需 CSRF 防護；禁止 cross-origin 任意呼叫。
-- 每個管理 mutation 後端再驗 `actor`、scope/permission、`target`、CSRF、nonce/idempotency key 與預期版號；對存取拒絕與驗證失敗做節流、可稽核但不記錄秘密。
-- 使用參數化 SQL/ORM，回應不洩漏 password hash、salt、token、原始憑證；所有操作於受控 TLS 通道，敏感輸入不得入 URL、URL query、log、埋點、Error trace；前端禁將管理登入 token 存 localStorage。
-- **管理 API 不經 KR/TC 遊戲封包**；由內部 application service 呼叫 `Account`、`Session`、`Persistence`，避免管理員以虛構 opcode 操作遊戲。
+1. **來源 IP 必須在 Server 可信邊界比對**。管理端若經反向代理，僅信任明確設定的 trusted proxy；禁止直接相信來訪者自己提供的 `X-Forwarded-For`。反向代理與 backend 要防直接繞過，管理 Host/路徑不匹配立即拒絕。
+2. **指定 URL 不是身分驗證**，同 NAT/VPN 來源 IP 的其他使用者也可能取得全部管理功能。只限本機、私有網段或 VPN 上使用；不可視為適合公開 Internet 的正式無登入後台。跨主機使用 TLS。
+3. 無管理員 Cookie/角色，但**仍需防 CSRF**：所有異動使用 POST 而非 GET，驗證可信 `Origin`／預期的 Host（必要時 `Referer`）、禁止任意 CORS、拒絕未預期內容型別，前端要求確認且不得允許跨站自動異動。
+4. 每次異動必須經來源 IP + URL gate、原因及目標驗證、`idempotency-key` 和 `expectedVersion`；拒絕、不合法/超量、衝突也須可稽核，並避免帳密/雜湊/Session token 暴露。
+5. 管理登入與細部權限為**未來可選階段**；本 V1 不應強迫實作者開發。URL/IP 配置不寫入公開 repo 的真實值，不授權調整現有 C00 `/health` 對外 bind。
 
 ## 4. 帳號建立的業務契約（REQ-0007）
 
-**資料欄位（提案）：** `account_id: UUID`（Server 產生），`normalized_name`（沿用 C02 暫行規則，後續可配置並版本化），`credential_format/version`（沿用既有 Server-owned KDF、部署前另審），`created_at_utc`、`created_by_admin_id`、`row_version`。
+**資料欄位（提案）：** `account_id: UUID`（Server 產生），`normalized_name`（沿用 C02 暫行規則，後續可配置並版本化），`credential_format/version`（沿用既有 Server-owned KDF、部署前另審），`created_at_utc`、`created_via=IP_ONLY_ADMIN`、`created_source_ip`、`row_version`。V1 不捏造 `created_by_admin_id`。
 
-**成功條件：**管理員有 `accounts.create`，名稱/憑證符合當前 Server 政策；在資料庫事務內插入單一玩家帳號並完整記錄 audit；新帳號預設**沒有遊戲角色、沒有停權**；若 Session、遊戲 Client wire 尚未完成，成功只代表帳號在 Server-owned store 存在。
+**成功條件：**請求來源 IP 在 allowlist 且命中管理 Host/base-path，名稱/憑證符合當前 Server 政策；在資料庫事務內插入單一玩家帳號並完整記錄 audit；新帳號預設**沒有遊戲角色、沒有停權**；若 Session、遊戲 Client wire 尚未完成，成功只代表帳號在 Server-owned store 存在。
 
-**拒絕／併發：**名稱標準化後重複（含大小寫混用）回衝突而不新增、非法名稱或不符合政策拒絕、不同管理員併行創建同名只可成功一次；相同冪等鍵重送回相同結果，**不能產生第二個帳號**。資料庫或稽核寫入失敗不得報成功／產生無稽核的管理修改。
+**拒絕／併發：**名稱標準化後重複（含大小寫混用）回衝突而不新增、非法名稱或不符合政策拒絕、不同允許來源併行創建同名只可成功一次；相同冪等鍵重送回相同結果，**不能產生第二個帳號**。資料庫或稽核寫入失敗不得報成功／產生無稽核的管理修改。
 
 **憑證選擇待核准：**V1 可採由管理員在受限表單設定初始密碼且**僅暫時在記憶體持有**，服務端 hash、不顯示／不保存明文；較佳選項為一次性設定流程，但如果沒有經驗證的 Client 密碼更換介面不能假定遊戲支援首次強迫修改。暫時不要求寄送 Email 或玩家自行註冊。
 
@@ -59,8 +64,8 @@
 | `kind` | `TEMPORARY` / `PERMANENT` |
 | `starts_at_utc` | Server 可信時計；不採瀏覽器時間 |
 | `expires_at_utc` | TEMPORARY 必填；PERMANENT 必須 NULL |
-| `ended_at_utc` / `ended_by` / `end_reason` | 提前解封／自然到期的保存與顯示（自然到期可由時間衍生，是否產生記錄待決策） |
-| `reason` / `created_by` / `created_at_utc` | 具權限限制的稽核責任資訊 |
+| `ended_at_utc` / `ended_source_ip` / `end_reason` | 提前解封／自然到期的保存與顯示（自然到期可由時間衍生） |
+| `reason` / `created_source_ip` / `created_at_utc` | 操作來源與原因；V1 無管理員身分，不可偽造 created_by 管理員 ID |
 | `account_policy_version` | 防止停權、解封、舊 Session 併行覆寫 |
 | `correlation_id` / `idempotency_key` | 一次 mutation 的可查追蹤／冪等 |
 
@@ -73,8 +78,8 @@ SUSPENDED_TEMP ── now >= expires_at_utc ──> ACTIVE (按時間衍生)
 SUSPENDED_TEMP / PERMANENT ── unsuspend(reason) ──> ACTIVE
 ```
 
-- **N 天**定義為從**Server 端 UTC 生效時刻起 N×24 小時**（提案，非自然日終止）；`N` 為正整數，有上限與 overflow 檢查（上限數字尚未批准）；畫面按管理員指定 IANA 時區顯示 UTC 起訖。不得使用瀏覽器所在地午夜當有效期限。
-- **永久**沒有自動到期，只有有權限的解封動作可以終止。
+- **N 天**定義為從**Server 端 UTC 生效時刻起 N×24 小時**（提案，非自然日終止）；`N` 為正整數，有上限與 overflow 檢查（上限數字尚未批准）；畫面按管理頁配置的顯示時區顯示 UTC 起訖。不得使用瀏覽器所在地午夜當有效期限。
+- **永久**沒有自動到期，只有通過 IP/URL 存取邊界的解封操作可以終止。
 - **到期自然生效**：驗證及 Session 發放每次依可信時間計算，**不依賴排程器一定準時運行**。背景任務可整理歷史，但不可成為停止封禁的唯一依據。
 - **重複停權／再次解封**：V1 建議舊封禁仍有效時第二次不同請求以 `409 CONFLICT` 拒絕，改期限/轉永久列未來獨立需求；相同 idempotency key 則回原結果。沒有 active sanction 的解封也回狀態衝突（經審核後可改為 no-op）。
 - **停權 vs 密碼錯誤鎖定**：現有 `tartaros_accounts.locked_until` 僅是登入失敗鎖定；管理員解封**不清除**該欄，也不重置失敗次數。
@@ -90,46 +95,45 @@ SUSPENDED_TEMP / PERMANENT ── unsuspend(reason) ──> ACTIVE
 4. **明確的完成語意**：停權 API 只有在不可逆持久化成功後才回成功；回應列出 `session_revocation: APPLIED | PENDING_RETRY`（若仍待跨節點通知則不得宣稱已踢下線）。若需求是「立刻強制斷線」，上線前必須選定同步阻斷/ack timeout 策略並通過多節點測試。所有策略在 ADR-0005 正式決議前僅是建議。
 5. **解封不自動登入**：清除有效 sanction 不等於解除密碼輸錯鎖定、不恢復已被撤銷的 Session；玩家需重新通過一般認證。
 
-## 6. 建議內部 WEB API 草案（版本候選；不是已公開的 endpoint）
+## 6. 建議內部 WEB API 草案（僅設計，未開放）
 
-Base path `/admin/api/v1`；所有請求限具認證的 Admin session、TLS、CSRF/權限檢查、`X-Request-Id` / `Idempotency-Key`、不可在 URL 夾帶敏感資料。下列路徑與 JSON 欄位只是交付實作者的**非規範提案**。
+管理入口例如 `https://<PRIVATE-ADMIN-HOST>:<PORT>/admin/`（佔位格式，**不是實際位址**），API base path `/admin/api/v1`。所有 API 先通過 client-IP allowlist、受控 reverse proxy/可信 forwarded headers、Host/port/base path 比對；不要求管理員 login、session、RBAC header 或 bearer token。跨主機 TLS、Mutation POST 的 Origin/CSRF、冪等與版本檢查仍適用。
 
-| 方法／路徑 | 權限 | 輸入核心 | 回傳（語意） |
-| --- | --- | --- | --- |
-| `GET /accounts?query=&cursor=&limit=` | accounts.read | 已授權的搜尋／分頁 | 帳號摘要，不含憑證或秘密 |
-| `GET /accounts/{id}` | accounts.read | account UUID | 帳號與**停權／登入鎖定分欄** |
-| `POST /accounts` | accounts.create | `name`, `initialCredential`, `idempotencyKey`（body/header 版本待決） | `201`＋ID；名稱衝突 `409` |
-| `POST /accounts/{id}/suspensions` | accounts.suspend | `kind: TEMPORARY/PERMANENT`，TEMPORARY `days: N`，`reason`，`expectedVersion` | 新 sanction，UTC 起訖，Session revocation 狀態 |
-| `POST /accounts/{id}/unsuspend` | accounts.unsuspend | `reason`, `expectedVersion`, `idempotencyKey` | `200` 且新狀態為 ACTIVE；不復活舊 Session |
-| `GET /audit?accountId=&cursor=` | audit.read | 授權範圍＋分頁 | 稽核事件列表（已去敏） |
+| 方法／路徑 | 輸入核心 | 回傳 |
+| --- | --- | --- |
+| `GET /accounts?query=&cursor=&limit=` | 搜尋、分頁 | 帳號摘要與停權/登入錯誤鎖定兩種獨立狀態 |
+| `GET /accounts/{id}` | account UUID | 詳細資料，不含憑證 |
+| `POST /accounts` | `name`, `initialCredential`, `idempotencyKey` | `201`＋ID；同名 `409` |
+| `POST /accounts/{id}/suspensions` | `kind: TEMPORARY/PERMANENT`, `days: N`（僅 temporary）, `reason`, `expectedVersion` | sanction、UTC 起訖、Session revocation 狀態 |
+| `POST /accounts/{id}/unsuspend` | `reason`, `expectedVersion`, `idempotencyKey` | 解封結果；不恢復舊 Session |
+| `GET /audit?accountId=&cursor=` | 查詢、分頁 | 來源 IP/原因/動作/時間等去敏稽核 |
 
-一致錯誤代碼：`400/422` 欄位規則、`401` 未登入、`403` 無權限、`404` 不存在或依法隱匿、`409` 重複／版本衝突、`429` 超量、`503` 無法安全確認資料庫/權威狀態。審查前不以這份草案承諾正式 REST 相容格式。
+拒絕規則：未在白名單、錯誤 Host/path 或不可確認來源 = `403`（在路由前也可由 proxy 拒絕），欄位 `400/422`、不存在 `404`、狀態衝突 `409`、節流 `429`、DB/權威狀態不可用 `503`。本 V1 **沒有**以「未登入」為理由回 `401` 的流程。
 
-## 7. 稽核、不可否認與儲存策略
+## 7. 稽核與持久化
 
-每次 `CREATE_ACCOUNT / SUSPEND_TEMP / SUSPEND_PERMANENT / UNSUSPEND`，以及許可拒絕、無效參數、衝突等安全事件，記錄 `audit_event_id`、管理員主體、目標 account UUID（必要時遮罩）、`action`、`at_utc`、`reason`、前後狀態摘要、request correlation/idempotency、結果與 policy version。成功 mutation 的持久化與 audit **必須同一 transaction 或具有明確的可靠提交協議**，不可成功卻沒有稽核；拒絕事件可獨立持久化。資料保留/匯出/存取權限待決議。
+每次 CREATE_ACCOUNT / SUSPEND_TEMP / SUSPEND_PERMANENT / UNSUSPEND 與拒絕事件都記錄 `audit_event_id`, `operator_kind=IP_ONLY_OPERATOR`, `source_client_ip`, `target_account_id`, `action`, `at_utc`, `reason`, `before/after_status`, `correlation_id`, `outcome`, `policy_version`。這**不是**個人身分稽核：同 IP 可能多人共用。不得保存密碼/Hash/Token/敏感內容。
 
-對帳號的每次 mutation 要檢查預期 `row_version`（樂觀鎖）與資料庫唯一/active-sanction constraint；同一請求的重試應冪等，不同請求競爭需有確定先後次序。紀錄不可暴露初始密碼、雜湊、Cookie、權杖、未必要的 IP 與個資。
+資料庫 mutation 與成功稽核必須同一交易或具可靠 outbox；不可成功但無 audit。符合預期 `row_version`，並行不同請求由 DB unique/active sanction constraint 序列化，同一冪等鍵不可重複建立／封禁。完整稽核保留和備份期限仍須批准。
 
 ## 8. Server 實作拆分與分階段交付（未開工）
 
 | 階段 | 模組／交付 | 完成門檻 |
 | --- | --- | --- |
-| ADM-00 | 核定 ADR-0004/5、部署網段、管理員身份/MFA、權限矩陣 | 能在未開公開端口的環境測試拒絕未授權請求 |
-| ADM-01 | `Tartaros.Admin` 管理 commands+auditor、獨立 Admin HTTP Host、頁面框架 | 管理 API 只透過 Server application services，審計/權限拒絕測試通過 |
-| ADM-02 | `Tartaros.Account/Persistence` 帳號建立、冪等、帳號表唯一性 | 建帳並重登一致、重試不重複、稽核持久化 |
-| ADM-03 | `Tartaros.Persistence/Session` sanction policy＋DB migration＋lease fencing | N天/永久/解除/期滿/多節點/崩潰恢復測試通過 |
-| ADM-04 | 前端清單、詳情、建立、停權、解封、稽核頁 | 最小權限、二次確認、錯誤明確、無敏感資訊洩漏 |
-| ADM-05 | 經審核的測試環境安全/備份/部署檢查 | 才評估部署，**不是**自動對外開放 |
+| ADM-00 | 配置 IP/CIDR allowlist、WEB Host/URL、private bind/TLS trusted proxy 和 ADR-0004/5 | 未允許 IP、未設定 allowlist、錯誤 Host/path、偽造 forwarding headers 全部拒絕 |
+| ADM-01 | `Tartaros.Admin` Admin API、WEB UI、來源 IP/URL gate、操作稽核 | **無登入頁**；所有管理頁/API 由同一 Server-side gate 保護，CSRF/Origin 測試通過 |
+| ADM-02 | `Tartaros.Account/Persistence` 建立帳號＋冪等 | 正規化名稱唯一性、成功持久化、來源 IP 稽核 |
+| ADM-03 | `Tartaros.Persistence/Session` sanction store + migration + lease fencing | N天/永久/解封、過期/競態/崩潰恢復及重連限制 |
+| ADM-04 | WEB 清單、詳情、建立、停權、解封、稽核介面 | 無角色權限流程，操作確認，無敏感資訊暴露 |
+| ADM-05 | 私網隔離測試、備份/恢復、部署演練 | 規劃的測試逐項執行、環境/風險核准才部署 |
 
-不與 C00 `/health` 直接共享外部網路；規劃採同一模組化單體中的**分離 Admin Host/路由與存取政策**，而非必須另起微服務。若未來要整合原 KR Client，需繼續受 S00 原本的 AUTH/NET REQ/GAP/RR 限制，**不因 Admin V1 達標而聲稱遊戲 Client 登入完成**。
+與現有 C00 /health 和 KR/TC wire 分離。管理後台不使原版 Client 可玩能力自動成熟。
 
-## 9. 未決事項與維護者審核（不阻礙形成候選規格）
+## 9. 待配置／需核對的環境值（尚未提供）
 
-- 管理員登入是否接企業 IdP／本地 MFA；只有內網或需公開 Internet？（建議先 VPN/private）
-- 帳號名稱規則是否沿用目前 C02 的暫行 ASCII 3–32；初始化密碼如何安全交付，以及要不要另開帳號重設功能？
-- N 天有效範圍與時長定義（建議 N×24h，UTC）；管理介面顯示之預設時區；改期與重複停權是否允許？
-- 停權是否需要在 API 成功回傳前確認跨節點斷線，及不可用時的處置；audit retention/隱私政策、權限分層/需不需要雙人覆核？
-- DB migration/備份/回滾策略需另行安全審核。以上在 `ADR-0004/5` **PROPOSED** 階段不能當已批准生產設定。
+- 要允許的**使用者設備來源 IP/CIDR**（不是 Server IP）、WEB URL 的 scheme/domain/IP/port/base path；例如 `https://<private-host>/admin/` 僅為佔位示意。配置來源不得信任任意 `X-Forwarded-For`。
+- Server 實際部署拓樸：本機、同 LAN、VPN、或 reverse proxy；私網以外使用需要重新評估無登入危險。
+- 初始玩家密碼如何交付、名稱政策、N 天上限、顯示時區、何時要求 Session 強制斷線；這些是與 V1 **IP/URL 簡化**獨立的決策。
+- **已確定不需本階段開發**：管理員帳號登入、管理員角色、MFA、按功能劃分權限。若未來要求公開 Internet，必須再決定正式管理員認證機制。
 
-**驗收情境見** [ADMIN-WEB-V1-ACCEPTANCE.md](ADMIN-WEB-V1-ACCEPTANCE.md)，全部 `PLANNED / NOT_RUN`，不登錄為 Client conformance `TEST-*`。
+**驗收情境見** [ADMIN-WEB-V1-ACCEPTANCE.md](ADMIN-WEB-V1-ACCEPTANCE.md)，全部 PLANNED / NOT_RUN。

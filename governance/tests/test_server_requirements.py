@@ -46,7 +46,7 @@ class ServerRequirementTests(unittest.TestCase):
         self.assertEqual(r["summary"]["requirements"], 8)
         self.assertEqual(r["summary"]["approved"], 0)
         self.assertEqual(r["summary"]["discovery_counts"],
-                         {"CODE_ANALYSIS": 5, "GAME_RUNTIME_OBSERVATION": 0, "PLAYER_ADMIN_REQUEST": 3})
+                         {"CODE_ANALYSIS": 5, "GAME_RUNTIME_OBSERVATION": 0, "PLAYER_ADMIN_REQUEST": 4})
 
 
     def test_admin_web_v1_three_requests_trace_to_actual_user_request(self):
@@ -63,6 +63,14 @@ class ServerRequirementTests(unittest.TestCase):
             self.assertEqual(req["rr_ids"], [])
             self.assertEqual(req["claim_ids"], [])
         self.assertEqual(set(found["REQ-0008"]["adr_ids"]), {"ADR-0004", "ADR-0005"})
+        access = found["REQ-0006"]
+        self.assertEqual(len(access["discoveries"]), 2)
+        self.assertEqual(access["discoveries"][1]["request_text"],
+                         "目前先不管權限，指定的IP與URL就能管理")
+        self.assertIn("來源 IP/CIDR allowlist", access["acceptance_criteria"][0])
+        self.assertTrue(any("不顯示管理員登入頁" in x for x in access["acceptance_criteria"]))
+        self.assertEqual(found["REQ-0007"]["adr_ids"], ["ADR-0004"])
+        self.assertNotIn("ADR-0002", access["adr_ids"])
         self.assertEqual(evaluate(self.root)["errors"], [])
 
     def test_admin_web_request_record_missing_fails_closed(self):
@@ -136,7 +144,7 @@ class ServerRequirementTests(unittest.TestCase):
         r = evaluate(self.root)
         self.assertEqual(r["errors"], [])
         self.assertEqual(r["summary"]["requirements"], 8)
-        self.assertEqual(r["summary"]["discovery_counts"]["PLAYER_ADMIN_REQUEST"], 5)
+        self.assertEqual(r["summary"]["discovery_counts"]["PLAYER_ADMIN_REQUEST"], 6)
 
     def test_historical_protocol_and_ops_safety_are_user_request_material(self):
         # Test-only player/admin discovery: not a real user submission.
