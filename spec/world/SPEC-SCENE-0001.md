@@ -26,3 +26,15 @@
 原稿來源分支頭：`extra/roy1@44a610968a228d4104e39457891e4fc565a3790c`。研究原稿完整保存於 `kr-extra-roy/`（E01–E16 16 篇），未作修訂；目前只把 E06/E08/E13/E16 登錄為四個有界來源 SRC，E14/E15 為修正依據。它們均屬 **PARTIAL（S00 尚未獨立驗證原始 BIN/資源的完整語意）**；不代表 T01 FULL-PASS 或已正式核定相容封包。
 
 缺口 `GAP-SCENE-0001`；請求 `RR-0008`；若需實際啟動狀態研究，與 T03、T05、T06、T07 協作，首要查 `0x42` receive result 與 `0x47B5C0` 上游 gate/writer。無任何 Client runtime 相容性 TEST。
+
+
+## Iteration 25（E10–E26）：教學場景進場與 Server 狀態的證據隔離
+
+[Iteration25 規劃](../../governance/s00-iterations/S00-20261031-ITERATION-25-TUTORIAL-ENTRY-RECOVERY-PLAN.md) 將首次／重登與已完成角色的 Server 路由策略視為 [ADR-0006 PROPOSED](../../design/decisions/ADR-0006-tutorial-progress-and-session-fencing.md)，**非 Client 原生或 Server official policy**。
+
+- Event.stp SceneList (1001,1)→tutorial_start 是有界靜態 resource locator；0x565720 不只有首次角色建立 caller。**沒有**經驗證的 C2S42→S2C reply→SceneList(1001,1) 因果，也不能把(1001,1)當要送的兩個 network 欄位。
+- E80 的 S2C0x69 subtype7/CSquare handler 與 C2S43 LocalUserData path，只能作候選 Source/Scene 研究，不能當作選角成功回覆。Session admission、world spawn、actor/entity visible、control ready、quest initial state 分別驗收。
+- Scenario14 局部 Client C2S40 00 0E 00、S2C0x4C 與 CTutorial map[14] 為相鄰局部資料，**不能合併成**新手教學及 Quest14/16/15 完成的原版 Server 時序。Server Progress/Quest/Reward/Exit 先走合成 domain，實際 KR Client scene 仍需 T03/T05/T06/T07/T14/T16 source 補證與另行授權 runtime 測試。
+- native Scene/Protocol adapters OFF by default；沒有正向 scene+Conn+resource+UI test 時，維持 explicit UNKNOWN，不填假座標、不指定 tutorial packet。
+
+SPEC-SCENE-0001 **DRAFT/PARTIAL**、GAP-SCENE-0001 OPEN、RR-0008 IN_REVIEW（以主台帳當時為準），無新 native FULL-PASS。
