@@ -118,13 +118,12 @@ def evaluate(root: Path = ROOT):
                     errors.append(f"{label}: code analysis requires bounded observation and limitations")
                 for claim in claims:
                     c = links["claim_ids"].get(claim)
-                    if c is None or claim not in r.get("claim_ids", []) and "claim_ids" in r:
-                        # A requirement's own direct links can be optional;
-                        # the discovery links themselves must exist.
-                        if c is None:
-                            errors.append(f"{label}: unknown claim {claim}")
-                    if c is not None and c.get("client_version") != v:
+                    if c is None:
+                        errors.append(f"{label}: unknown claim {claim}")
+                    elif c.get("client_version") != v:
                         errors.append(f"{label}: code claim is from a different Client build")
+                    if claim not in r.get("claim_ids", []):
+                        errors.append(f"{label}: discovery claim missing from requirement-level claim_ids {claim}")
             elif channel == "GAME_RUNTIME_OBSERVATION":
                 # An actual gameplay observation needs explicit prior authorization.
                 for name in ("observation_ref", "authorization_ref"):
