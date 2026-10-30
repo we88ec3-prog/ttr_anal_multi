@@ -1,12 +1,12 @@
 # T08-202 BIN-first 根本勘誤：非零模式的 6-byte frame 真正為 [len, 0x0BBB, checksum]，不是完整 0x7D810BBB 常數
 
-**來源及版本**：T08，KR Tartaros.bin，12,472,320 bytes，SHA256 \`9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91\`（2026-10-31原始檔實際重新hash）；PE32 .text VA 0x401000 raw 0x400；**raw=VA−0x400C00**。原始PE節直接GNU objdump -d -M intel在 0x807830..0x807A6C、0x8061F6..0x80624F、0x807A70..0x807B19解碼；下面地址都是真VA。作者 chatgpt-web roy，2026-10-31 03:59:54 Asia/Taipei。僅Client靜態，沒有原版Server／動態封包。
+**來源及版本**：T08，KR Tartaros.bin，12,472,320 bytes，SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`（2026-10-31原始檔實際重新hash）；PE32 .text VA 0x401000 raw 0x400；**raw=VA−0x400C00**。原始PE節直接GNU objdump -d -M intel在 0x807830..0x807A6C、0x8061F6..0x80624F、0x807A70..0x807B19解碼；下面地址都是真VA。作者 chatgpt-web roy，2026-10-31 03:59:54 Asia/Taipei。僅Client靜態，沒有原版Server／動態封包。
 
-**被修正的原稿**：\`kr-temp-roy/20261031-033209-chatgpt-web-roy-T08-202-IOCP-queue-drain-length-magic-XOR-frame-BIN-correction.md\`（Git blob \`0da7938fc496735c29df384303ae496e9c1e67a6\`）已確認模式非零時採0x807830、總長len+6並出現 \`0x7D810BBB\` 暫存立即值，但尚未解其被覆寫的字段與全部變換；其「6-byte + XOR/checksum」雖方向正確，**不能把立即數0x7D810BBB當作完整的發送frame固定DWORD**。本稿依實際write CFG精確更正；舊來源不刪不改，T01 FULL-PASS及T08-202整體完成狀態仍獨立。
+**被修正的原稿**：`kr-temp-roy/20261031-033209-chatgpt-web-roy-T08-202-IOCP-queue-drain-length-magic-XOR-frame-BIN-correction.md`（Git blob `0da7938fc496735c29df384303ae496e9c1e67a6`）已確認模式非零時採0x807830、總長len+6並出現 `0x7D810BBB` 暫存立即值，但尚未解其被覆寫的字段與全部變換；其「6-byte + XOR/checksum」雖方向正確，**不能把立即數0x7D810BBB當作完整的發送frame固定DWORD**。本稿依實際write CFG精確更正；舊來源不刪不改，T01 FULL-PASS及T08-202整體完成狀態仍獨立。
 
 ## 1. 一手 0x807830 的輸入、長度、ring 擁有者
 
-入口：this \`ECX\` 為 **RingView=Connection+0x501C**，\`[EBP+8]\`=指向原始payload的指標，\`[EBP+0xC]\`=原始payload byte長度 \`L\`；由已核 0x8061A0同一connection queue reader呼叫，且Connection建構於0x805D02把mode byte \`+0xA02C\` 初始化為 **2**。模式零直接入0x807A70；模式非零先進此函式，失敗回退0x807A70。
+入口：this `ECX` 為 **RingView=Connection+0x501C**，`[EBP+8]`=指向原始payload的指標，`[EBP+0xC]`=原始payload byte長度 `L`；由已核 0x8061A0同一connection queue reader呼叫，且Connection建構於0x805D02把mode byte `+0xA02C` 初始化為 **2**。模式零直接入0x807A70；模式非零先進此函式，失敗回退0x807A70。
 
 ~~~asm
 807848 8B 5D 08                    mov ebx,[ebp+8]           ; source
@@ -37,7 +37,7 @@
 8078ED 73 BB                       jae 8078AA
 ~~~
 
-**重要邊界**：RingView的 \`+500C\` 就是物理 \`Connection+A028\` (queued byte count)；RingView+4物理Connection+5020。L+6=4096仍可能因cursor末端嚴格 \`end<base+0x5004\` 或ring使用量被拒；只有通過上列多個guard才會寫出frame。這不同於mode0 0x807A70的 L+4 guard。
+**重要邊界**：RingView的 `+500C` 就是物理 `Connection+A028` (queued byte count)；RingView+4物理Connection+5020。L+6=4096仍可能因cursor末端嚴格 `end<base+0x5004` 或ring使用量被拒；只有通過上列多個guard才會寫出frame。這不同於mode0 0x807A70的 L+4 guard。
 
 ## 2. 核心勘誤：0x7D810BBB 是先寫入stack scratch的 **過渡 DWORD**，高16 bits隨即被checksum覆蓋
 
@@ -68,7 +68,7 @@
 - frame[4:6] = LE16(sum(source[i]) mod 65536)
 - frame[6:6+L] = below XOR transformed bytes
 
-原先常數0x7D810BBB的內存高二字節\`81 7D\`在本段存在於stack scratch，但**沒有**由本次成功分支按原樣輸出成任何frame header的一部分；因只有 \`mov edx,[ebp-101C]\`讀出含 \`L/0x0BBB\` 的前4 bytes，然後checksum寫後兩bytes。\`0x7D81\` **不是這份frame固定marker**。這個更正對相容Server解析尤為重要。
+原先常數0x7D810BBB的內存高二字節`81 7D`在本段存在於stack scratch，但**沒有**由本次成功分支按原樣輸出成任何frame header的一部分；因只有 `mov edx,[ebp-101C]`讀出含 `L/0x0BBB` 的前4 bytes，然後checksum寫後兩bytes。`0x7D81` **不是這份frame固定marker**。這個更正對相容Server解析尤為重要。
 
 ## 3. 每個位元組的原生 XOR 與 checksum，非僅「有做某種XOR」
 
@@ -103,7 +103,7 @@ Loop pair:
 80799C 75 C3                       jne 807961
 ~~~
 
-尾數1 byte：\`8079BD\`讀source[index]、\`8079C0\`讀source[index-1]、\`8079C4 xor bl,dl\`、\`8079C9 add word [ebp-1008],dx\`、\`8079D0\`寫dst[index]。最後\`8079D7–8079E3\`把兩個pairs的unsigned source byte累加與初始/尾項合併；16-bit frame checksum取低16 bits。
+尾數1 byte：`8079BD`讀source[index]、`8079C0`讀source[index-1]、`8079C4 xor bl,dl`、`8079C9 add word [ebp-1008],dx`、`8079D0`寫dst[index]。最後`8079D7–8079E3`把兩個pairs的unsigned source byte累加與初始/尾項合併；16-bit frame checksum取低16 bits。
 
 對**可通過guards、L>=1** 的原始src，邏輯等價：
 
@@ -117,17 +117,17 @@ checksum = sum(src) & 0xFFFF
 frame = LE16(len(src)) + LE16(0x0BBB) + LE16(checksum) + bytes(dst)
 ~~~
 
-本伪碼是按x86寫入值重建的**靜態數學等價模型**，未在Client內執行，不聲稱是官方source。奇偶pair及tail處理被分開優化，但不改上述逐byte轉換。反向解碼（方便Server契約測試）在數學上為\`src[0]=dst[0]^0xB6\`、\`src[i]=dst[i]^src[i-1]\`，然後核對 \`sum(src)&0xFFFF\`，**是否要reject checksum錯誤需由T02確認原Client接收端行為與相容Server政策，不能自行冒稱官方Server規則**。
+本伪碼是按x86寫入值重建的**靜態數學等價模型**，未在Client內執行，不聲稱是官方source。奇偶pair及tail處理被分開優化，但不改上述逐byte轉換。反向解碼（方便Server契約測試）在數學上為`src[0]=dst[0]^0xB6`、`src[i]=dst[i]^src[i-1]`，然後核對 `sum(src)&0xFFFF`，**是否要reject checksum錯誤需由T02確認原Client接收端行為與相容Server政策，不能自行冒稱官方Server規則**。
 
 ## 4. 具體可重現測試向量（數學模型，非抓包）
 
 |輸入src bytes|L|前綴6 bytes|XOR output bytes|完整frame|
 |---|---:|---|---|---|
-|\`10\`|1|\`01 00 BB 0B 10 00\`|\`A6\`|\`01 00 BB 0B 10 00 A6\`|
-|\`10 20\`|2|\`02 00 BB 0B 30 00\`|\`A6 30\`|\`02 00 BB 0B 30 00 A6 30\`|
-|\`0A 00 44 33 22 11\`|6|\`06 00 BB 0B B4 00\`|\`BC 0A 44 77 11 33\`|\`06 00 BB 0B B4 00 BC 0A 44 77 11 33\`|
+|`10`|1|`01 00 BB 0B 10 00`|`A6`|`01 00 BB 0B 10 00 A6`|
+|`10 20`|2|`02 00 BB 0B 30 00`|`A6 30`|`02 00 BB 0B 30 00 A6 30`|
+|`0A 00 44 33 22 11`|6|`06 00 BB 0B B4 00`|`BC 0A 44 77 11 33`|`06 00 BB 0B B4 00 BC 0A 44 77 11 33`|
 
-這些向量使用本地獨立Python運算\`struct.pack('<HHH',L,0xBBB,sum(src)&0xffff)\`和逐byte XOR，比對機器碼所推等價關係；它們**是預期靜態fixture，不是從Server或Client socket抓到的實際wire capture**。
+這些向量使用本地獨立Python運算`struct.pack('<HHH',L,0xBBB,sum(src)&0xffff)`和逐byte XOR，比對機器碼所推等價關係；它們**是預期靜態fixture，不是從Server或Client socket抓到的實際wire capture**。
 
 ## 5. 失敗與回退：原先把mode!=0當「必用轉換」亦需修正
 
@@ -150,9 +150,9 @@ frame = LE16(len(src)) + LE16(0x0BBB) + LE16(checksum) + bytes(dst)
 80624F 8B 0B                       mov ecx,[ebx] ; success -> unlink queueEntry
 ~~~
 
-所以 mode!=0 **也可以**寫出plain \`[LE16 L][LE16 0x1A68][raw data]\`，只要transform先失敗而plain writer成功。
+所以 mode!=0 **也可以**寫出plain `[LE16 L][LE16 0x1A68][raw data]`，只要transform先失敗而plain writer成功。
 
-對T08 Controller給定payload \`L=6+5N\`，只比較靜態size gate（仍有ring occupancy、actor count等其他限制）：
+對T08 Controller給定payload `L=6+5N`，只比較靜態size gate（仍有ring occupancy、actor count等其他限制）：
 
 |合格entries N|原始L|mode!=0 轉換size L+6|fallback plain size L+4|由size單獨推得|
 |---:|---:|---:|---:|---|
