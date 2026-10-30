@@ -79,3 +79,11 @@ Iterations 16–17 的正式流程編號合計 **E00–E26（27 個 gate）與 4
 - [Iteration25 — 教學首次入場、Progress/Session lease、Scenario/Quest/Reward、離場重登的完整交接](S00-20261031-ITERATION-25-TUTORIAL-ENTRY-RECOVERY-PLAN.md)：承接 Iteration23 Account/Expedition/Role、Iteration24 SelectionAttempt/Square 候選；把 E10–E26 的進度與 Client 場景可操作證據分層。**沒有原版 Client 遊玩、沒有完整官方 Client↔Server 因果鏈**。
 - [Iteration25 — I25-T01～T16 計畫測試](S00-20261031-ITERATION-25-ACCEPTANCE.md)：16 項全部 PLAN_ONLY/NOT_RUN，重點在 per-role State、SessionEpoch fencing、outbox/reward idempotency、ban/unban、scene/Conn/Quest 誤判反例。沒有註冊正式 native TEST。
 - [ADR-0006](../../design/decisions/ADR-0006-tutorial-progress-and-session-fencing.md) 正式列入 ADR 台帳，狀態 PROPOSED、非規範；路線圖增列與 Client 研究可並行但**需維護者批准後才能作正式業務政策**的 C-TUTORIAL-DOMAIN。維持 RR-0002/0010 BLOCKED、RR-0008 IN_REVIEW（當時 main）、SPEC-FLOW/SCENE DRAFT/PARTIAL，native adapters OFF。
+
+
+## Iteration 26（2026-10-31）— 教學戰鬥到任務結算及退出的 source-pinned 工作矩陣
+
+- [Iteration26 完整 Server 規劃與研究交接](S00-20261031-ITERATION-26-COMBAT-QUEST-EXIT-PLAN.md)：接續 Iteration25，處理 E17-A～J 戰鬥子 gate、E18–E26 Scenario14→Quest14/16→Quest15可用→教學 terminal→離場/重登，分成 Encounter、ScenarioSettlement、QuestProgress、RewardLedger、TutorialProgress、WorldExit 五個獨立權威。
+- [Iteration26 19-gate JSON matrix](S00-ITERATION-26-ENCOUNTER-QUEST-EXIT-MATRIX.json)：逐 gate 保存原始 Iteration17/18 evidence_state、blocking_unknown、source Git blob、research owner、native missing proof、Server 端 proposed domain；非正式 RR/GAP/TEST 台帳或官方 Server 時序。
+- [18 項 I26-T01～T18 未執行測試](S00-20261031-ITERATION-26-ACCEPTANCE.md)：DOMAIN/NEGATIVE/CONCURRENCY/RECOVERY/STATIC/E2E，全部 PLAN_ONLY/NOT_RUN。CI 以 `python -B governance/check_s00_iteration26.py --check` 和 13 項回歸測試保護原始 source evidence level 不被假升格。
+- [ADR-0007](../../design/decisions/ADR-0007-encounter-quest-settlement-boundaries.md) PROPOSED/NON-NORMATIVE，保持既有 7 個 roadmap 工作包，不動研究 RR/CLM/REQ/TEST、Task owner 或獨立 Server 實作庫；原版 Client 未執行。
