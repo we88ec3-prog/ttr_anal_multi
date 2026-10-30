@@ -11,6 +11,15 @@
 **T16 作者送審更新（2026-10-29）：下列 43 筆已依 `AGENTS.md` 提交獨立勘誤及原生補證，全部置為 `READY_FOR_REVIEW` 供 T01 審查；此舉不代表驗收成功。** [查看 43 筆送審表](T01-RETURNS-READY-FOR-REVIEW-20261029.md)。
 
 
+#### T01-RETURN-T16-117-Q16-MODE2-C2S36-001 — READY_FOR_REVIEW
+- 原稿：`kr-temp-roy/20261030-034517-chatgpt-web-roy-T16-117-KR-Quest14-study5-Quest16-type2-unlock-UI-C2S-S2C.md`；Git blob `388b9100362ed43ec65ba1f7504f73518dce5d44`；KR BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`；保留原文。
+- 誤主張：T16-117 D.1/D.3 將 mode1～3 的 UI 動作一概視為 F4402→0x636E10→0x36,QID16，並以 TalkBox+0x88 當 QuestID。
+- 原始反證：0x636BD6 `cmp eax,1` 才沿 mode1 寫 0x636BFF action F4402；0x636DF8 的 action==F4402 gate 才 call 0x636E10；0x636E82 使用 `WORD*([TalkBox+0x88])`，QuestID +0x80 是另一欄位。0x4B3510 為獨立 0x36 producer，不得推論 mode2 永遠不發 0x36。
+- 後續更正來源：T16-121 blob `e5d48e09ac8604ac39ce0dc584bb20308d927b54`、T16-122 blob `d056bb2d0ff4ee136e13f2ff8c034434a61b2d87` 已明示合理的限定路徑，但未成作者針對117的正式 erratum。
+- 修復與完成條件：**作者端已修復並提交 `READY_FOR_REVIEW`**；保留 T16-117 舊稿、逐段勘誤 D.1/D.3 與 A/D.2/D.4/E/F/G/H、八組 KR BIN 原始片段、下游引用查核。T01 需在本分支材料正式發布與獨立複驗後才可改 `RESOLVED`；不得因本次提交升格 FULL-PASS。
+- T01 來源：[正式整合報告](../../../research/handoffs/t01-20261030-quest16-r0-r2/README.md)；僅針對本精確主張，非整篇 FULL-PASS 或 RR/S00 接受。
+- **T16 作者勘誤（2026-10-30）**：[獨立勘誤](../../../kr-temp-roy/T16-T01-returns-20261030/errata/T16-117-Q16-MODE2-C2S36-T01-erratum.md)；repo path `kr-temp-roy/T16-T01-returns-20261030/errata/T16-117-Q16-MODE2-C2S36-T01-erratum.md`；Git blob `1c5efb4a0bfd07c7fbdf2bb1fcc48c4386c4f2ba`，原稿 Git blob `388b9100362ed43ec65ba1f7504f73518dce5d44` 未改；BIN SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。**此狀態僅為 T16 工作分支作者送審，main 目前仍 NEEDS_FIX；待正式合入 main 和 T01 複驗，不是已結案。**
+
 <!-- T01-continuation-02-notices:start -->
 
 ### 2026-10-29 接續第02批複驗
