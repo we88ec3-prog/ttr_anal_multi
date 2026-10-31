@@ -127,3 +127,11 @@ Iterations 16–17 的正式流程編號合計 **E00–E26（27 個 gate）與 4
 - [S31-01～04 機讀契約](S00-ITERATION-31-QUEST-REWARD-CONTRACT.json)：固定 Iteration30/27/17/26 來源 Git blob、E20-E24/E26 原始 gate 的 evidence/owner/blocker、8 個真 Server 來源 blob；最新 Server C00-OPS/C02-D/C03 尚無 C05 Quest/Reward code。Server 快照僅為本輪 GitHub 唯讀觀察，不在 S00 CI 自動再次驗證。
 - [24 個 I31-T01～24 驗收草案](S00-20261031-ITERATION-31-ACCEPTANCE.md)：全部 `PLAN_ONLY / NOT_RUN`；新規劃 CI 執行 `governance/check_s00_iteration31.py --check` 與 **18 項回歸測試**，不執行任何 .NET/原版 KR Client。
 - **新的整合要求**：Iterations28～30 各自提過 SQLite 候選 v3／PG004；Iteration31 不會再重複佔用這些版本，要求 Server maintainer 統一配置 C05 全模組 migration 序列，當前一切下一版號 `UNALLOCATED_NOT_APPLIED`。ADR-0006/0007 仍 PROPOSED，Native adapter OFF。
+
+
+## Iteration 32（2026-10-31）：教學終局、出場、WorldReady 與重登恢復
+
+- [Iteration32 完整工程交接](S00-20261031-ITERATION-32-TUTORIAL-EXIT-RELOG-PLAN.md)：延續 Iteration31 的 Quest/RewardLedger，分別審核角色教學終局資格、SceneExitAdmission、Mock world state、真實 Client scene/control 觀測及重登後復原，**不能把 Quest15 AVAILABLE 或出場寫入成功當作原 Client 已可玩**。
+- [S32-01～04 JSON 契約](S00-ITERATION-32-TUTORIAL-EXIT-RELOG-CONTRACT.json)：固定 Iteration31/27/17/18/26 五份來源 Git blob，E23/E24/E25/E26/E17-J 原 evidence/owner/blocker，與獨立 Server 八個 source blob；不在 S00 CI 重新驗遠端 Server。
+- [I32-T01～24 驗收草案](S00-20261031-ITERATION-32-ACCEPTANCE.md)：全部 `PLAN_ONLY / NOT_RUN`；增加 `governance/check_s00_iteration32.py --check` 和 **18 項規劃回歸測試**，不執行任何新 C05/.NET 或原版 Client。
+- 對應下游 Server C05-P16～P19 提案；SQLite local v2／PostgreSQL 003，後續 migration 仍 `UNALLOCATED_NOT_APPLIED`、需統一 C05 序列，ADR-0006/7 PROPOSED，Native adapter S27-W09 維持 OFF。

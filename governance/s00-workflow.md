@@ -140,3 +140,8 @@ Domain mock/prototype 可採並行研究和工程化測試，但正式業務 pol
 [Iteration31 設計](s00-iterations/S00-20261031-ITERATION-31-QUEST-REWARD-PLAN.md) 承接 Iteration30 durable ScenarioTerminal，而**不**把 `map[14]`／S2C0x004C 或 QuestInfo.xml `Demand` 本地資源直接當 Server Quest writer。Quest14 eligibility/completed/turned-in、Quest16 available/accepted/completed/turned-in、Quest15 available、TutorialCompleted、WorldReady 全部是獨立權威，需 source 和 policy 分開審。Reward type2/value50 的經濟語意未證，不可自選 EXP/金幣；Mock payout 只有維護者核准 definition 才能同交易與唯一 reward ledger/outbox commit，重登/重送不得二次入帳。
 
 C05 模組的 SQLite v3/PG004 是 Iterations28～30 **互相可能衝突的候選版本**，新 Server PR 必須以當時 latest schema 全模組配置唯一 migration 順序，不能各個子團隊重用版本。CI 新增 `python -B governance/check_s00_iteration31.py --check` 只驗本庫 4 上游 Git blob pin、6 原始 gate/owner/blocker、24 NOT_RUN 與 ADR/Client no-go，**不是 Server/原 Client runtime 成功**。正式 spec/research RR/GAP 或 Server policy 批准仍按既有流程，由 owner 审查，不能自動升級。
+
+
+## Iteration32：Quest 完成與實際世界可操作不可互相代替
+
+[Iteration32 設計](s00-iterations/S00-20261031-ITERATION-32-TUTORIAL-EXIT-RELOG-PLAN.md) 將每角色 durable TutorialProgress、SceneExitAdmission/SceneLease、原版 KR Client SceneLoaded/ControlReady 視為三條不同狀態；`Quest15 AVAILABLE` 不意味 `TutorialCompleted`，Server Mock 世界入場不意味原版 Client 能移動。SceneList、town Lua、C2S0x42/S2C0x69/C2S0x43、`scene+0xCC` 或本地 S2C0x004C map 均不可當正向 Client 實測。每次權威寫入須同一交易再確認 full SessionLease、selected role、SQLite C02-D 停權、admission/version/CAS；重登及轉場 crash 不可重複 RewardLedger/Quest。新 `governance/check_s00_iteration32.py --check` CI 僅驗 source blob、E23/24/25/26/E17-J 原生 source blocker 和 24 個 NOT_RUN，不會執行 Server 或原版 Client、核准 ADR-0006/7 或改動正式台帳。
