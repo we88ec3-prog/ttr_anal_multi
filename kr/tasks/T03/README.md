@@ -186,3 +186,13 @@ parser/auth、角色UI與選服呼叫介面的有限審核已整合；較早段�
 - **W11**：key1/port 8415→`Client+BF60`；key0/port8416→`+BF64`；key2/port8414→`+BF68`。兩次 Connect 返回有效後，可能清原 key1，再對 key0 本地 enqueue 0x39B app0x0001；不能宣稱原版 Server 已接收。
 - **W12**：zero group / row8=0 / NULL mapping / 控件不符 / key0或key2失敗時的本地分支與成功側 Conn cleanup；**此 helper 沒有 timer auto-retry**，全域 retry/取消/回登入 UI 沒有完整閉合，保留 Client 待補查。
 - 本次 C 為既定 T03 計畫的有界研究交付，**沒有新增/變更正式 RR 台帳、S00 SPEC 或 GAP**；原主線 `RR-0003=IN_REVIEW`、`RR-0002=BLOCKED`，T01 FULL-PASS 與 Server 可玩仍為獨立驗收。T02 transport與T06 layout維持原 owner。
+
+## T03-D W13～W16 — 遠征隊命名／Account/Expedition/Role 分離（2026-10-31）
+
+- [完整 D BIN-first 研究原稿](../../../kr-temp-roy/20261031-184654-chatgpt-web-roy-T03-D-W13-W16-expedition-native.md)；Git blob `dbbf1537a8d1c784c80b4b7b9a8bba7a6e686e01`，KR `Tartaros.bin` SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。本次在原件唯讀重新核對 **121/121 個 native 指令起點**、4 個 vtable slots、3 個 RTTI identity、4 個 direct-E8 caller sets；靜態驗證不等於 T01 FULL-PASS。
+- [自足 121-checkpoint 原生驗證器](../../../kr-temp-roy/20261031-184654-chatgpt-web-roy-T03-D-verify.py)；blob `411b1fe354d15f9625201cc4745b3e150344301a`。[S00/T03 交接 JSON](../../../kr-temp-roy/20261031-184654-chatgpt-web-roy-T03-D-handoff.json)；blob `cbd1a949a387446b63dbd1ffd70447143985d04b`。
+- **W13：有界部分研究與明確 blocker。** S2C app0x0002 (65+53N) N=0 僅跳 role loop；header+0x0C 的 UTF-16 name 可寫 `F938F2`，非空時 `CExpeditionPage::5A6510` 有條件設 page+0x144 ready；`5A65A0` 更新三個控件。**N=0→真正可見 CExpeditionCreateDialog open/control/scene/resource 正向鏈仍未閉合**，交 T03/T06 繼續；不得稱已驗 GUI 自動開啟。
+- **W14：Client 本地建名 sender。** `CExpeditionCreateDialog` vtable slot87 `0x671FD0`、event0x578/button identity/local F4244/0x6A7→name validation→`C2S app0x003E` **48B slot0**，name UTF-16LE+6（容量21 WCHAR）、`+2..5 UNKNOWN`、`FBA798==0` queue gate；不是外框完整 TCP bytes。
+- **W15：scene-specific 結果 consumer。** `S2C app0x004A→0x4C21D0` 的 signed WORD+2→local `F4245`→`CExpeditionPage` 和 `0x672570`，status1 寫 `F938F2` / page ready，-1/-2/-3 錯誤各有分支。**原版 Server C2S3E↔S2C4A 交易配對仍 UNKNOWN**，不得推定官方 error enum。
+- **W16：三層身份界線。** Account auth、Expedition 名稱 `F938F2`、可操作 Role 陣列 `F94304+slot*0x210` 互不等同；S2C app2 與 app2B 共享 RoleStore，`CEmployNewCharacter→C2S0x33` 是另一類 UI／請求，既有角色選角 `C2S0x42` 也不是建名 ACK。
+- 主線正式 RR-0009 仍 `SUBMITTED`、RR-0010 `BLOCKED`；T01、S00、GAP-CHAR-0002/0003、其他 owner 狀態均未因本次作者提交而更改。未執行 Client，未推送 main。下個 E W17～W20 才追 roster 全量/增量/角色 UI；F 工作包追可操作角色的真正建立／招募。

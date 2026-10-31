@@ -1,0 +1,101 @@
+{
+  "schema": "t03-d-expedition-research-handoff-v1",
+  "timestamp_taipei": "2026-10-31T18:46:54+08:00",
+  "branch": "t03/roy/chatgpt-web",
+  "client_version": "KR",
+  "bin_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+  "static_verified": {
+    "native_instruction_starts": 121,
+    "verified": 121,
+    "vtable_slots": 4,
+    "msvc_rtti_strings": 3,
+    "bounded_direct_e8_target_sets": 4,
+    "client_runtime": "NOT_RUN",
+    "original_server_capture": "UNAVAILABLE",
+    "t01_full_pass": false
+  },
+  "work": [
+    {
+      "id": "W13",
+      "state": "BOUNDED_PARTIAL_UI_ENTRY_BLOCKED",
+      "sources": [
+        "0x4B7F00",
+        "0x4B8075",
+        "0x4B894C",
+        "0x5A6510",
+        "0x5A65A0"
+      ],
+      "confirmed": "S2C2 header+0x0C copies 20-WCHAR name into F938F2 independently of N; N=0 skips role loop; nonempty F938F2 can set CExpeditionPage+0x144; 3 controls virtual+0x94 handle ready/nonready",
+      "unknown": "N=0 -> actual modal creation/show with resource identity; same-version GUI pack unavailable",
+      "unblock": [
+        "native callback-owner→dialog open chain",
+        "T06 matching KR GUI layout and resource hash",
+        "separate authorized N=0/N>0 runtime"
+      ]
+    },
+    {
+      "id": "W14",
+      "state": "BOUNDED_CLIENT_STATIC_COMPLETE",
+      "sources": [
+        "0x671FD0",
+        "0x672180",
+        "0x672505",
+        "0x892E4D"
+      ],
+      "confirmed": "CExpeditionCreateDialog slot87 local event0x578/button, F4244+0x6A7 confirmation, name-validation, inner C2S0x003E length48 slot0, UTF16LE+6 capacity21 WCHAR, FBA798 queue gate",
+      "unknown": "payload+2..5 and actual socket/wire/Server acceptance"
+    },
+    {
+      "id": "W15",
+      "state": "BOUNDED_CLIENT_STATIC_COMPLETE_WITH_ORIGINAL_PAIR_UNKNOWN",
+      "sources": [
+        "0x4C14BE",
+        "0x4C14E1",
+        "0x4C21D0",
+        "0x5A6886",
+        "0x672570"
+      ],
+      "confirmed": "scene table 0x4A -> signed word app+2 -> F4245 local event -> success=1 F938F2/page ready and differentiated negative branches -1,-2,-3",
+      "unknown": "original Server C2S3E↔S2C4A causal pairing and official enum meanings"
+    },
+    {
+      "id": "W16",
+      "state": "BOUNDED_CLIENT_STATE_BOUNDARY_COMPLETE",
+      "sources": [
+        "0x4B8075",
+        "0x5A6510",
+        "0x672621",
+        "0x4D4150",
+        "0x4E2730"
+      ],
+      "confirmed": "account auth, Expedition name F938F2, playable role F94304+index*0x210 are distinct; S2C2 and S2C2B share role-store authority",
+      "unknown": "new playable role creation accepted/rejected transaction belongs RR0010/F"
+    }
+  ],
+  "formal_status_snapshot": {
+    "RR0009": "SUBMITTED",
+    "RR0010": "BLOCKED",
+    "T01_RETURN_T03_006": "T03 branch READY_FOR_REVIEW; only T01 may RESOLVE"
+  },
+  "affected_specs": [
+    "SPEC-AUTH-0001",
+    "SPEC-CHAR-0001",
+    "SPEC-FLOW-0001"
+  ],
+  "affected_gaps": [
+    "GAP-CHAR-0002",
+    "GAP-CHAR-0003"
+  ],
+  "dependencies": [
+    "T02 transport and scene dispatcher",
+    "T04 role data and initialization",
+    "T06 same-build GUI resources",
+    "S00 server specification"
+  ],
+  "server_candidate_requirements": [
+    "EXPEDITION_NAME_CREATE_OR_LOAD",
+    "ZERO_ROSTER_UI_GATE_NOT_ASSUMED",
+    "ACCOUNT_EXPEDITION_ROLE_STATE_SEPARATION"
+  ],
+  "no_official_packet_pair_claim": true
+}
