@@ -177,3 +177,12 @@ parser/auth、角色UI與選服呼叫介面的有限審核已整合；較早段�
 - W07：LOGIN scene S2C13 status5／0+非空名稱／其它三種結果、S2C7A group cursor 的獨立布局、group 3+10N、local F4243。
 - W08：0x13 達局部狀態更新，+90=0 才 F4241，本地事件非 wire；另需 UI gate 才有條件 key0/key2 Connect，**不證官方原版 first S2C/實際配對**。
 - 此研究不重複提交 RR-0003（主線正式台帳 `IN_REVIEW`），不變更 `GAP-AUTH-0001 OPEN` 或 `SPEC-AUTH-0001 / SPEC-FLOW-0001 DRAFT/PARTIAL`；T01 FULL-PASS 和 S00 acceptance 尚未取得。完整 Client 靜態研究交付與原版 Server 動態未知明確分流。
+
+## T03-C W09～W12 選服、頻道與多 Conn（2026-10-31）
+
+- **完整 KR BIN-first 研究**：[C W09～W12](../../../kr-temp-roy/20261031-183619-chatgpt-web-roy-T03-C-W09-W12-server-channel-native.md)（原稿 Git blob `499da1dad76d213ce79a938f17ead817d3f0ee00`）；原始 `Tartaros.bin` SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。原件唯讀核對 113 個指令起點，均 PASS；同目錄另附具代表性 72 處指令的 [驗證器](../../../kr-temp-roy/20261031-183619-chatgpt-web-roy-T03-C-verify.py) 與 [Server handoff JSON](../../../kr-temp-roy/20261031-183619-chatgpt-web-roy-T03-C-handoff.json)。
+- **W09**：`S2C13 +1C/+92` 與 `S2C7A +2/+6` 共享 `4C3080`，每 group 3B、每 row 10B；IPv4 `row+4..7`、`row+8` append gate、`row+9` 有效參數、`507610` composite lookup、`507750/5078C0` 0x60 本地 child record。`66B910` 局部 UI 刷新功能可見，但 `F4243` 所有 event listeners 未正向窮盡。
+- **W10**：`66C620` 以 local `0x709` (f0 refresh)、`0x70A` (f4 record→`66C090`)、`0x578` (f8 alternative resolver) 各比 control identity；`66C090` 兩次映射與 `F94294` gate，條件符合才可能呼叫 `4957C0`，不是必發 C2S 專用 command。
+- **W11**：key1/port 8415→`Client+BF60`；key0/port8416→`+BF64`；key2/port8414→`+BF68`。兩次 Connect 返回有效後，可能清原 key1，再對 key0 本地 enqueue 0x39B app0x0001；不能宣稱原版 Server 已接收。
+- **W12**：zero group / row8=0 / NULL mapping / 控件不符 / key0或key2失敗時的本地分支與成功側 Conn cleanup；**此 helper 沒有 timer auto-retry**，全域 retry/取消/回登入 UI 沒有完整閉合，保留 Client 待補查。
+- 本次 C 為既定 T03 計畫的有界研究交付，**沒有新增/變更正式 RR 台帳、S00 SPEC 或 GAP**；原主線 `RR-0003=IN_REVIEW`、`RR-0002=BLOCKED`，T01 FULL-PASS 與 Server 可玩仍為獨立驗收。T02 transport與T06 layout維持原 owner。
