@@ -1,0 +1,716 @@
+{
+  "schema": "KR-T10-W07-S00-COMBAT-HANDOFF-MATRIX-v1",
+  "created_taipei": "2026-10-31T19:12:17+08:00",
+  "provenance": {
+    "repository": "we88ec3-prog/ttr_anal_multi",
+    "main_baseline": "ad1fda170734767c67dd0f62066a34ece34e118a",
+    "t10_w06_head": "f0b2fafa9a88a8fdfdfcab3656ca40559e17e359",
+    "original_bin_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+    "client_version": "kr",
+    "source_paths": {
+      "w02": "kr-temp-roy/T10/W02-20261031/20261031-163141-chatgpt-web-roy-T10-W02-basic-attack-as-skill-native-difference.md",
+      "w03": "kr-temp-roy/T10/W03-20261031/20261031-170644-chatgpt-web-roy-T10-W03-combo-mask-row-producer-closure.md",
+      "w03c": "kr-temp-roy/T10/W03-20261031/20261031-165757-chatgpt-web-roy-T10-W03-action-transport-native.md",
+      "w04": "kr-temp-roy/T10/W04-20261031/20261031-172536-chatgpt-web-roy-T10-W04-S2C-receive-actor-motion-native.md",
+      "w05": "kr-temp-roy/T10/W05-20261031/20261031-182635-chatgpt-web-roy-T10-W05-skillmatrix-resource-timing-T11-handoff.md",
+      "w06": "kr-temp-roy/T10/W06-20261031/20261031-184010-chatgpt-web-roy-T10-W06-hit-result-death-T12-boundary.md"
+    },
+    "iteration29_contract": "governance/s00-iterations/S00-ITERATION-29-C05-COMBAT-CONTRACT.json",
+    "iteration29_gate_e17": "governance/s00-iterations/S00-ITERATION-18-TUTORIAL-COMBAT-GATES.json"
+  },
+  "policy": {
+    "native_adapter_enabled": false,
+    "server_mock_is_original_protocol": false,
+    "tests_all_not_run": true,
+    "t01_full_pass_claimed": false,
+    "rr_accepted_claimed": false,
+    "spec_stable_claimed": false,
+    "client_runtime_executed": false,
+    "server_domain_plans_not_spec_contracts": true,
+    "do_not_create_duplicate_rr_or_req": true
+  },
+  "e17_gates": [
+    {
+      "id": "E17-E",
+      "focus": "ordinary attack/combos/cancel",
+      "source_evidence_state": "NATIVE_STATIC_PARTIAL",
+      "s00_package": "S29-01",
+      "compatibility_confirmed": false
+    },
+    {
+      "id": "E17-F",
+      "focus": "skill/cost/cooldown",
+      "source_evidence_state": "NATIVE_STATIC_PARTIAL",
+      "s00_package": "S29-02",
+      "compatibility_confirmed": false
+    },
+    {
+      "id": "E17-G",
+      "focus": "hit/hp/death",
+      "source_evidence_state": "NATIVE_STATIC_PARTIAL",
+      "s00_package": "S29-03",
+      "compatibility_confirmed": false
+    }
+  ],
+  "client_contracts": [
+    {
+      "key": "KR-C2S-app-000A",
+      "direction": "C2S",
+      "app_opcode_hex": "0x000A",
+      "shape": "u16 opcode + u32 runtime[F93944] + N*5-byte Row; 6+5N",
+      "gate": "only if at least one append, 0x545B38 len>6, controller/actor/slot/virtual/matrix/connection/queue/socket conditional",
+      "scope": "verified local builder & selected selector0 route; row semantics incomplete, not final TCP frame",
+      "sources": [
+        "kr-temp-roy/T10/W03-20261031/20261031-170644-chatgpt-web-roy-T10-W03-combo-mask-row-producer-closure.md",
+        "kr-temp-roy/T10/W03-20261031/20261031-165757-chatgpt-web-roy-T10-W03-action-transport-native.md",
+        "kr-temp-roy/T10/W05-20261031/20261031-182635-chatgpt-web-roy-T10-W05-skillmatrix-resource-timing-T11-handoff.md"
+      ],
+      "unknown": [
+        "u32 F93944 meaning",
+        "full row[2..4] meaning across vtables",
+        "player skill name & target ownership",
+        "C2S to S2C causality",
+        "wire frame exact mode",
+        "actual socket arrival"
+      ],
+      "status": "CLIENT_STATIC_SCOPED_NOT_FULL_PASS"
+    },
+    {
+      "key": "KR-S2C-app-0000",
+      "direction": "S2C",
+      "app_opcode_hex": "0x0000",
+      "shape": "u16 opcode + N*6-byte actor property rows; 2+6N",
+      "gate": "category2 active state, actor lookup, concrete actor vtable property4 can write actor+3E8",
+      "scope": "conditional Client property consumer; no cast ACK proven",
+      "sources": [
+        "kr-temp-roy/T10/W04-20261031/20261031-172536-chatgpt-web-roy-T10-W04-S2C-receive-actor-motion-native.md"
+      ],
+      "unknown": [
+        "Server event trigger",
+        "all actor subclass semantics"
+      ],
+      "status": "CLIENT_STATIC_SCOPED_NOT_FULL_PASS"
+    },
+    {
+      "key": "KR-S2C-app-000B",
+      "direction": "S2C",
+      "app_opcode_hex": "0x000B",
+      "shape": "u16 opcode + N*8-byte actor state/position rows; 2+8N",
+      "gate": "actor lookup and conditional local-controlled actor pointer identity",
+      "scope": "writes actor+E0/E4; later C2S Row B may read; not a confirmed movement ACK",
+      "sources": [
+        "kr-temp-roy/T10/W04-20261031/20261031-172536-chatgpt-web-roy-T10-W04-S2C-receive-actor-motion-native.md"
+      ],
+      "unknown": [
+        "Server movement policy",
+        "isolation from attack ACK",
+        "full actor subtype semantics"
+      ],
+      "status": "CLIENT_STATIC_SCOPED_NOT_FULL_PASS"
+    },
+    {
+      "key": "KR-S2C-app-000C",
+      "direction": "S2C",
+      "app_opcode_hex": "0x000C",
+      "shape": "u16 opcode + N*3-byte actor subobject rows; 2+3N",
+      "gate": "actor lookup; actor+F0 vtable+8",
+      "scope": "subobject signed byte event; not identified as attack cancel or animation clip",
+      "sources": [
+        "kr-temp-roy/T10/W04-20261031/20261031-172536-chatgpt-web-roy-T10-W04-S2C-receive-actor-motion-native.md"
+      ],
+      "unknown": [
+        "event byte enum",
+        "concrete method animation effects"
+      ],
+      "status": "CLIENT_STATIC_SCOPED_NOT_FULL_PASS"
+    },
+    {
+      "key": "KR-S2C-app-000D",
+      "direction": "S2C",
+      "app_opcode_hex": "0x000D",
+      "shape": "u16 opcode + N*9-byte actor state/effect rows; 2+9N",
+      "gate": "actor lookup and concrete vtables; state byte, u16 word & f32 passed to effects",
+      "scope": "actor+ B0 state, position and attached effect resource lookup, not per-000A ACK",
+      "sources": [
+        "kr-temp-roy/T10/W04-20261031/20261031-172536-chatgpt-web-roy-T10-W04-S2C-receive-actor-motion-native.md"
+      ],
+      "unknown": [
+        "clip start",
+        "native accept/refuse match",
+        "all actor subclass"
+      ],
+      "status": "CLIENT_STATIC_SCOPED_NOT_FULL_PASS"
+    },
+    {
+      "key": "KR-S2C-app-000E",
+      "direction": "S2C",
+      "app_opcode_hex": "0x000E",
+      "shape": "u16 opcode + N*13-byte result rows; 2+13N",
+      "gate": "field vtable+0x28, double actor lookup, subtype 0..8 (7 has no Mission-case effect)",
+      "scope": "result/visual consumer, not hit/damage algorithm; some branch negates row+6 before UI",
+      "sources": [
+        "kr-temp-roy/T10/W06-20261031/20261031-184010-chatgpt-web-roy-T10-W06-hit-result-death-T12-boundary.md"
+      ],
+      "unknown": [
+        "field row +10/+11 meaning",
+        "official hit/damage formula",
+        "health/death writer",
+        "specific 000A correlation"
+      ],
+      "status": "CLIENT_STATIC_SCOPED_NOT_FULL_PASS"
+    },
+    {
+      "key": "KR-S2C-app-000F",
+      "direction": "S2C",
+      "app_opcode_hex": "0x000F",
+      "shape": "key exists; consumer may access payload byte+7/+8; total length/fields not established",
+      "gate": "controller vtable+0x3C and local context; CANNOT_USE_SKILL branch",
+      "scope": "cannot-use-skill UI/audio warning; do not classify as definitive cast ACK",
+      "sources": [
+        "kr-temp-roy/T10/W06-20261031/20261031-184010-chatgpt-web-roy-T10-W06-hit-result-death-T12-boundary.md"
+      ],
+      "unknown": [
+        "payload min length and +2..6",
+        "error enum and correlation",
+        "which skills rejected"
+      ],
+      "status": "CLIENT_STATIC_SCOPED_NOT_FULL_PASS"
+    },
+    {
+      "key": "KR-S2C-app-001A",
+      "direction": "S2C",
+      "app_opcode_hex": "0x001A",
+      "shape": "u16 opcode + additional u16 header + N*u16 actor IDs; 4+2N",
+      "gate": "actor tree lookup and type/effect/controller branch before registry removal",
+      "scope": "actor removed from Client registry; cannot assert death/revival cause",
+      "sources": [
+        "kr-temp-roy/T10/W06-20261031/20261031-184010-chatgpt-web-roy-T10-W06-hit-result-death-T12-boundary.md"
+      ],
+      "unknown": [
+        "reason for removal",
+        "death state",
+        "respawn & quest effect"
+      ],
+      "status": "CLIENT_STATIC_SCOPED_NOT_FULL_PASS"
+    },
+    {
+      "key": "KR-local-timer-input",
+      "direction": "LOCAL_BUFFER_OR_UNKNOWN",
+      "app_opcode_hex": null,
+      "shape": "8-byte prefix + N*6-byte {u16 key,i32 quantity}; 8+6N",
+      "gate": "0x545E20 slot key, P+4==0 branch; per-row signed /33 updates timer+0/+4",
+      "scope": "Client internal ABI, not proven Server packet; cannot advertise S2C opcode",
+      "sources": [
+        "kr-temp-roy/T10/W05-20261031/20261031-182635-chatgpt-web-roy-T10-W05-skillmatrix-resource-timing-T11-handoff.md"
+      ],
+      "unknown": [
+        "caller / true buffer origin",
+        "time unit",
+        "skill ID naming",
+        "server authority"
+      ],
+      "status": "CLIENT_STATIC_SCOPED_NOT_FULL_PASS"
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "A01",
+      "operation": "Type0 Z短按",
+      "client_gate": "phase1 logical13 -> mask 0x01; SkillMatrix col1 and row/actor gates",
+      "c2s": "000A may append (N>=1); not guaranteed per press",
+      "s2c": "specific ACK UNKNOWN",
+      "effect": "local preview/remote motion UNKNOWN",
+      "owners": [
+        "T10",
+        "T11",
+        "T02"
+      ],
+      "e17_gates": [
+        "E17-E"
+      ],
+      "native_evidence_status": "SCOPED_PARTIAL",
+      "runtime_status": "NOT_RUN"
+    },
+    {
+      "id": "A02",
+      "operation": "Z連按",
+      "client_gate": "phase1 events and local action/timing state; actual chain progression UNKNOWN",
+      "c2s": "how many rows/packets and order UNKNOWN",
+      "s2c": "no matching ACK proven",
+      "effect": "combo stage and cancel window UNKNOWN",
+      "owners": [
+        "T10",
+        "T09",
+        "T11"
+      ],
+      "e17_gates": [
+        "E17-E"
+      ],
+      "native_evidence_status": "SCOPED_PARTIAL",
+      "runtime_status": "NOT_RUN"
+    },
+    {
+      "id": "A03",
+      "operation": "Z持按／放開",
+      "client_gate": "phase2 also OR 0x01; phase3 not a bit0 writer on checked producer",
+      "c2s": "held send cadence UNKNOWN; release no-write only on scoped producer",
+      "s2c": "UNKNOWN",
+      "effect": "stop/continue chain UNKNOWN; V 500ms not Z timing",
+      "owners": [
+        "T10",
+        "T09"
+      ],
+      "e17_gates": [
+        "E17-E"
+      ],
+      "native_evidence_status": "SCOPED_PARTIAL",
+      "runtime_status": "NOT_RUN"
+    },
+    {
+      "id": "A04",
+      "operation": "X/C及Z+X/Z+C/X+C",
+      "client_gate": "single 2/4, combo 3/5/6; matrix columns2/3/4/5/6 respectively",
+      "c2s": "one Row A can carry combo in high WORD; no two-row equivalence",
+      "s2c": "UNKNOWN",
+      "effect": "skill identity/animation UNKNOWN",
+      "owners": [
+        "T10",
+        "T11"
+      ],
+      "e17_gates": [
+        "E17-F"
+      ],
+      "native_evidence_status": "SCOPED_PARTIAL",
+      "runtime_status": "NOT_RUN"
+    },
+    {
+      "id": "A05",
+      "operation": "普攻中按技能或技能中按Z",
+      "client_gate": "actor state and matrix/callback gates apply; phase overlap unknown",
+      "c2s": "immediate/queued/dropped unknown",
+      "s2c": "UNKNOWN",
+      "effect": "interrupt/cancel UNKNOWN",
+      "owners": [
+        "T10",
+        "T11",
+        "T09"
+      ],
+      "e17_gates": [
+        "E17-E",
+        "E17-F"
+      ],
+      "native_evidence_status": "SCOPED_PARTIAL",
+      "runtime_status": "NOT_RUN"
+    },
+    {
+      "id": "A06",
+      "operation": "技能起手／施放中／後搖連按",
+      "client_gate": "phase and local timer availability known; specific cast phase writer incomplete",
+      "c2s": "repeat/cast protocol UNKNOWN",
+      "s2c": "UNKNOWN",
+      "effect": "action window and rollback UNKNOWN",
+      "owners": [
+        "T10",
+        "T11",
+        "T09"
+      ],
+      "e17_gates": [
+        "E17-F"
+      ],
+      "native_evidence_status": "SCOPED_PARTIAL",
+      "runtime_status": "NOT_RUN"
+    },
+    {
+      "id": "A07",
+      "operation": "施放中鍵盤移動",
+      "client_gate": "keyboard direction mapping present; movement C2S producer at cast boundary UNKNOWN",
+      "c2s": "opcode/sequence UNKNOWN",
+      "s2c": "000B exists, not linked as immediate response",
+      "effect": "move/interruption UNKNOWN",
+      "owners": [
+        "T09",
+        "T10",
+        "T02"
+      ],
+      "e17_gates": [
+        "E17-E",
+        "E17-F"
+      ],
+      "native_evidence_status": "SCOPED_PARTIAL",
+      "runtime_status": "NOT_RUN"
+    },
+    {
+      "id": "A08",
+      "operation": "施放中滑鼠移動",
+      "client_gate": "separate mouse DirectInput state; actor intent/movement source UNKNOWN",
+      "c2s": "opcode/sequence UNKNOWN",
+      "s2c": "unknown",
+      "effect": "move/interruption UNKNOWN",
+      "owners": [
+        "T09",
+        "T10",
+        "T02"
+      ],
+      "e17_gates": [
+        "E17-E",
+        "E17-F"
+      ],
+      "native_evidence_status": "SCOPED_PARTIAL",
+      "runtime_status": "NOT_RUN"
+    },
+    {
+      "id": "A09",
+      "operation": "不足資源或冷卻中",
+      "client_gate": "SubAI 3 current+delta nonnegative checks; matrix value and entry+4 countdown; not per-player cast proven",
+      "c2s": "blocked/appended row UNKNOWN",
+      "s2c": "000F cannot-use-skill consumer exists but no causation",
+      "effect": "warning may be consumed; exact rejection UI unknown",
+      "owners": [
+        "T11",
+        "T10"
+      ],
+      "e17_gates": [
+        "E17-F"
+      ],
+      "native_evidence_status": "SCOPED_PARTIAL",
+      "runtime_status": "NOT_RUN"
+    },
+    {
+      "id": "A10",
+      "operation": "其他玩家/怪物動作",
+      "client_gate": "actor tree lookup and subtype vtables",
+      "c2s": "not required for local S2C consumer",
+      "s2c": "000B/000C/000D state & effect rows conditional",
+      "effect": "actor+B0/attached resources and subobject event; exact clip unknown",
+      "owners": [
+        "T08",
+        "T09",
+        "T10"
+      ],
+      "e17_gates": [
+        "E17-E",
+        "E17-G"
+      ],
+      "native_evidence_status": "SCOPED_PARTIAL",
+      "runtime_status": "NOT_RUN"
+    },
+    {
+      "id": "A11",
+      "operation": "普攻/技能打中怪物",
+      "client_gate": "source/target actor key lookup in result consumer",
+      "c2s": "000A action candidate; hit request+cost still UNKNOWN",
+      "s2c": "000E 2+13N, nine cases; no direct 000A correlation",
+      "effect": "visual/effect handlers; HP/death authority UNKNOWN",
+      "owners": [
+        "T12",
+        "T08",
+        "T10",
+        "T11"
+      ],
+      "e17_gates": [
+        "E17-G"
+      ],
+      "native_evidence_status": "SCOPED_PARTIAL",
+      "runtime_status": "NOT_RUN"
+    },
+    {
+      "id": "A12",
+      "operation": "受擊／取消／斷線／重登",
+      "client_gate": "separate actor state, scene, queue/connection gates; Server lease mock is separate",
+      "c2s": "cancel opcode and stale action replay UNKNOWN",
+      "s2c": "000F warning/001A deletion do not prove cancellation or death",
+      "effect": "state recovery and reconnection visuals UNKNOWN",
+      "owners": [
+        "T02",
+        "T09",
+        "T10",
+        "T11",
+        "T12"
+      ],
+      "e17_gates": [
+        "E17-E",
+        "E17-F",
+        "E17-G"
+      ],
+      "native_evidence_status": "SCOPED_PARTIAL",
+      "runtime_status": "NOT_RUN"
+    }
+  ],
+  "iteration29_tests": [
+    {
+      "test_id": "I29-T01",
+      "package": "S29-01",
+      "scenario": "attack authorized once without auto hit",
+      "expected_domain_mock": "same transaction + lease & role guard",
+      "status": "PLAN_ONLY_NOT_RUN",
+      "evidence_class": "SERVER_DOMAIN_SYNTHETIC_PLAN_NOT_NATIVE",
+      "native_client_pass": false,
+      "source": "governance/s00-iterations/S00-20261031-ITERATION-29-COMBAT-ACCEPTANCE.md"
+    },
+    {
+      "test_id": "I29-T02",
+      "package": "S29-01",
+      "scenario": "lease revoked during attack race",
+      "expected_domain_mock": "reject stale lease without side effects",
+      "status": "PLAN_ONLY_NOT_RUN",
+      "evidence_class": "SERVER_DOMAIN_SYNTHETIC_PLAN_NOT_NATIVE",
+      "native_client_pass": false,
+      "source": "governance/s00-iterations/S00-20261031-ITERATION-29-COMBAT-ACCEPTANCE.md"
+    },
+    {
+      "test_id": "I29-T03",
+      "package": "S29-01",
+      "scenario": "cross actor/encounter",
+      "expected_domain_mock": "deny before state/cost changes",
+      "status": "PLAN_ONLY_NOT_RUN",
+      "evidence_class": "SERVER_DOMAIN_SYNTHETIC_PLAN_NOT_NATIVE",
+      "native_client_pass": false,
+      "source": "governance/s00-iterations/S00-20261031-ITERATION-29-COMBAT-ACCEPTANCE.md"
+    },
+    {
+      "test_id": "I29-T04",
+      "package": "S29-01",
+      "scenario": "duplicate ActionId identical payload",
+      "expected_domain_mock": "single durable result, no second attack",
+      "status": "PLAN_ONLY_NOT_RUN",
+      "evidence_class": "SERVER_DOMAIN_SYNTHETIC_PLAN_NOT_NATIVE",
+      "native_client_pass": false,
+      "source": "governance/s00-iterations/S00-20261031-ITERATION-29-COMBAT-ACCEPTANCE.md"
+    },
+    {
+      "test_id": "I29-T05",
+      "package": "S29-01",
+      "scenario": "same ActionId altered payload",
+      "expected_domain_mock": "conflict, no mutation",
+      "status": "PLAN_ONLY_NOT_RUN",
+      "evidence_class": "SERVER_DOMAIN_SYNTHETIC_PLAN_NOT_NATIVE",
+      "native_client_pass": false,
+      "source": "governance/s00-iterations/S00-20261031-ITERATION-29-COMBAT-ACCEPTANCE.md"
+    },
+    {
+      "test_id": "I29-T06",
+      "package": "S29-01",
+      "scenario": "combo early/late/stale client time",
+      "expected_domain_mock": "server-mock window fail-closed",
+      "status": "PLAN_ONLY_NOT_RUN",
+      "evidence_class": "SERVER_DOMAIN_SYNTHETIC_PLAN_NOT_NATIVE",
+      "native_client_pass": false,
+      "source": "governance/s00-iterations/S00-20261031-ITERATION-29-COMBAT-ACCEPTANCE.md"
+    },
+    {
+      "test_id": "I29-T07",
+      "package": "S29-02",
+      "scenario": "available mock skill sufficient resources",
+      "expected_domain_mock": "reserve CastId once on server tick",
+      "status": "PLAN_ONLY_NOT_RUN",
+      "evidence_class": "SERVER_DOMAIN_SYNTHETIC_PLAN_NOT_NATIVE",
+      "native_client_pass": false,
+      "source": "governance/s00-iterations/S00-20261031-ITERATION-29-COMBAT-ACCEPTANCE.md"
+    },
+    {
+      "test_id": "I29-T08",
+      "package": "S29-02",
+      "scenario": "two CastIds resource race",
+      "expected_domain_mock": "only one if insufficent balance",
+      "status": "PLAN_ONLY_NOT_RUN",
+      "evidence_class": "SERVER_DOMAIN_SYNTHETIC_PLAN_NOT_NATIVE",
+      "native_client_pass": false,
+      "source": "governance/s00-iterations/S00-20261031-ITERATION-29-COMBAT-ACCEPTANCE.md"
+    },
+    {
+      "test_id": "I29-T09",
+      "package": "S29-02",
+      "scenario": "cooldown and tampered Client clock",
+      "expected_domain_mock": "server mock tick authority",
+      "status": "PLAN_ONLY_NOT_RUN",
+      "evidence_class": "SERVER_DOMAIN_SYNTHETIC_PLAN_NOT_NATIVE",
+      "native_client_pass": false,
+      "source": "governance/s00-iterations/S00-20261031-ITERATION-29-COMBAT-ACCEPTANCE.md"
+    },
+    {
+      "test_id": "I29-T10",
+      "package": "S29-02",
+      "scenario": "cancel before commit & replay",
+      "expected_domain_mock": "once cancel; refund policy unapproved",
+      "status": "PLAN_ONLY_NOT_RUN",
+      "evidence_class": "SERVER_DOMAIN_SYNTHETIC_PLAN_NOT_NATIVE",
+      "native_client_pass": false,
+      "source": "governance/s00-iterations/S00-20261031-ITERATION-29-COMBAT-ACCEPTANCE.md"
+    },
+    {
+      "test_id": "I29-T11",
+      "package": "S29-02",
+      "scenario": "unknown skill/stolen actor/wrong encounter",
+      "expected_domain_mock": "fail closed",
+      "status": "PLAN_ONLY_NOT_RUN",
+      "evidence_class": "SERVER_DOMAIN_SYNTHETIC_PLAN_NOT_NATIVE",
+      "native_client_pass": false,
+      "source": "governance/s00-iterations/S00-20261031-ITERATION-29-COMBAT-ACCEPTANCE.md"
+    },
+    {
+      "test_id": "I29-T12",
+      "package": "S29-02",
+      "scenario": "CastId replay or edited payload across lease",
+      "expected_domain_mock": "new lease verify; conflict if changed",
+      "status": "PLAN_ONLY_NOT_RUN",
+      "evidence_class": "SERVER_DOMAIN_SYNTHETIC_PLAN_NOT_NATIVE",
+      "native_client_pass": false,
+      "source": "governance/s00-iterations/S00-20261031-ITERATION-29-COMBAT-ACCEPTANCE.md"
+    },
+    {
+      "test_id": "I29-T13",
+      "package": "S29-03",
+      "scenario": "committed authorized action hits",
+      "expected_domain_mock": "one mock HP delta and revision",
+      "status": "PLAN_ONLY_NOT_RUN",
+      "evidence_class": "SERVER_DOMAIN_SYNTHETIC_PLAN_NOT_NATIVE",
+      "native_client_pass": false,
+      "source": "governance/s00-iterations/S00-20261031-ITERATION-29-COMBAT-ACCEPTANCE.md"
+    },
+    {
+      "test_id": "I29-T14",
+      "package": "S29-03",
+      "scenario": "forged Client damage/death",
+      "expected_domain_mock": "ignore as authority",
+      "status": "PLAN_ONLY_NOT_RUN",
+      "evidence_class": "SERVER_DOMAIN_SYNTHETIC_PLAN_NOT_NATIVE",
+      "native_client_pass": false,
+      "source": "governance/s00-iterations/S00-20261031-ITERATION-29-COMBAT-ACCEPTANCE.md"
+    },
+    {
+      "test_id": "I29-T15",
+      "package": "S29-03",
+      "scenario": "damage overflow and invalid HP bounds",
+      "expected_domain_mock": "reject atomically",
+      "status": "PLAN_ONLY_NOT_RUN",
+      "evidence_class": "SERVER_DOMAIN_SYNTHETIC_PLAN_NOT_NATIVE",
+      "native_client_pass": false,
+      "source": "governance/s00-iterations/S00-20261031-ITERATION-29-COMBAT-ACCEPTANCE.md"
+    },
+    {
+      "test_id": "I29-T16",
+      "package": "S29-03",
+      "scenario": "double HitId two workers",
+      "expected_domain_mock": "once-only hit and death",
+      "status": "PLAN_ONLY_NOT_RUN",
+      "evidence_class": "SERVER_DOMAIN_SYNTHETIC_PLAN_NOT_NATIVE",
+      "native_client_pass": false,
+      "source": "governance/s00-iterations/S00-20261031-ITERATION-29-COMBAT-ACCEPTANCE.md"
+    },
+    {
+      "test_id": "I29-T17",
+      "package": "S29-03",
+      "scenario": "cross encounter/already dead/out of range",
+      "expected_domain_mock": "fail closed; leave HP stable",
+      "status": "PLAN_ONLY_NOT_RUN",
+      "evidence_class": "SERVER_DOMAIN_SYNTHETIC_PLAN_NOT_NATIVE",
+      "native_client_pass": false,
+      "source": "governance/s00-iterations/S00-20261031-ITERATION-29-COMBAT-ACCEPTANCE.md"
+    },
+    {
+      "test_id": "I29-T18",
+      "package": "S29-03",
+      "scenario": "final legal hit causes zero HP",
+      "expected_domain_mock": "once-only ActorDeath; not objective complete",
+      "status": "PLAN_ONLY_NOT_RUN",
+      "evidence_class": "SERVER_DOMAIN_SYNTHETIC_PLAN_NOT_NATIVE",
+      "native_client_pass": false,
+      "source": "governance/s00-iterations/S00-20261031-ITERATION-29-COMBAT-ACCEPTANCE.md"
+    },
+    {
+      "test_id": "I29-T19",
+      "package": "S29-04",
+      "scenario": "cancel races hit commit",
+      "expected_domain_mock": "one serializable outcome",
+      "status": "PLAN_ONLY_NOT_RUN",
+      "evidence_class": "SERVER_DOMAIN_SYNTHETIC_PLAN_NOT_NATIVE",
+      "native_client_pass": false,
+      "source": "governance/s00-iterations/S00-20261031-ITERATION-29-COMBAT-ACCEPTANCE.md"
+    },
+    {
+      "test_id": "I29-T20",
+      "package": "S29-04",
+      "scenario": "ban/relogin stale worker",
+      "expected_domain_mock": "old lease cannot commit",
+      "status": "PLAN_ONLY_NOT_RUN",
+      "evidence_class": "SERVER_DOMAIN_SYNTHETIC_PLAN_NOT_NATIVE",
+      "native_client_pass": false,
+      "source": "governance/s00-iterations/S00-20261031-ITERATION-29-COMBAT-ACCEPTANCE.md"
+    },
+    {
+      "test_id": "I29-T21",
+      "package": "S29-04",
+      "scenario": "crash after resource reserved",
+      "expected_domain_mock": "reconcile by durable CastId once",
+      "status": "PLAN_ONLY_NOT_RUN",
+      "evidence_class": "SERVER_DOMAIN_SYNTHETIC_PLAN_NOT_NATIVE",
+      "native_client_pass": false,
+      "source": "governance/s00-iterations/S00-20261031-ITERATION-29-COMBAT-ACCEPTANCE.md"
+    },
+    {
+      "test_id": "I29-T22",
+      "package": "S29-04",
+      "scenario": "crash after HP commit before outbox",
+      "expected_domain_mock": "unique hit; dedup delivery",
+      "status": "PLAN_ONLY_NOT_RUN",
+      "evidence_class": "SERVER_DOMAIN_SYNTHETIC_PLAN_NOT_NATIVE",
+      "native_client_pass": false,
+      "source": "governance/s00-iterations/S00-20261031-ITERATION-29-COMBAT-ACCEPTANCE.md"
+    },
+    {
+      "test_id": "I29-T23",
+      "package": "S29-04",
+      "scenario": "duplicated ActorDeath to objective",
+      "expected_domain_mock": "forward unique fact only",
+      "status": "PLAN_ONLY_NOT_RUN",
+      "evidence_class": "SERVER_DOMAIN_SYNTHETIC_PLAN_NOT_NATIVE",
+      "native_client_pass": false,
+      "source": "governance/s00-iterations/S00-20261031-ITERATION-29-COMBAT-ACCEPTANCE.md"
+    },
+    {
+      "test_id": "I29-T24",
+      "package": "S29-04",
+      "scenario": "original Client combat packet E2E",
+      "expected_domain_mock": "native adapter remains OFF; NOT_RUN",
+      "status": "PLAN_ONLY_NOT_RUN",
+      "evidence_class": "SERVER_DOMAIN_SYNTHETIC_PLAN_NOT_NATIVE",
+      "native_client_pass": false,
+      "source": "governance/s00-iterations/S00-20261031-ITERATION-29-COMBAT-ACCEPTANCE.md"
+    }
+  ],
+  "handoff_categories": {
+    "client_to_reverse": [
+      "C2S 000A row identities and F93944 meaning",
+      "cast cancel/repeat/window and keyboard vs mouse movement C2S",
+      "000F response correlation and payload full schema",
+      "000E row+10..11 and HP/death runtime writer",
+      "545E20 buffer S2C caller and true timing units",
+      "scene/actor local vs remote animation clips",
+      "wire framing exact mode and ordering"
+    ],
+    "server_to_implement": [
+      "server owned session/lease/role/scene checks",
+      "abstract action/cast/hit/death idempotency under own schema",
+      "cooldown/resource policy with maintainer-approved ADR",
+      "authoritative mock hit/HP/death with explicit no-original-formula labeling"
+    ],
+    "cross_task": [
+      "T02 framing and delivery",
+      "T04 actor ownership",
+      "T08 entities and spawn",
+      "T09 motion",
+      "T10 input/combos",
+      "T11 cost/CD",
+      "T12 result and death",
+      "T14/T16 scenario/quest",
+      "S00 spec and mock handoff"
+    ],
+    "runtime_not_run": [
+      "original Client attack",
+      "keyboard/mouse interruption",
+      "other actor motion",
+      "damage/death/respawn",
+      "Server mock 24 I29 planned tests"
+    ]
+  }
+}
