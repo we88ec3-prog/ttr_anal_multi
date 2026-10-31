@@ -1,5 +1,16 @@
 # T08 實體生成與移除
 
+## T08-205 — 2026-10-31 19:09：Actor／CDoll 與 B-vector 借用 entry 的清理生命期 FINISHED（BOUNDED_CLIENT_STATIC_LIFETIME）
+
+> **正式有界靜態完成**：本輪以相同 KR 原始 Tartaros.bin（12,472,320 bytes；SHA256 9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91）唯讀重核，已真實 Merge main ad1fda170734767c67dd0f62066a34ece34e118a → t08/roy/chatgpt-web，Merge commit 85cc358b6624e857f9167d45a29e39d9d50c7716，behind=0。無新的 T08 S00 RR；T01 legacy 退回仍待獨立複驗，不因205主張而改狀態。
+
+- **[T08-205 完整 BIN-first 原生研究稿](../../../kr-temp-roy/20261031-190457-chatgpt-web-roy-T08-205-Actor-CDoll-B-vector-borrowed-lifetime-and-26-81-reset-BIN-FULL.md)**；Git blob **e42d1a5c0ad5e1a9a193e71ddb102ca2cb019af0**。Monster primary C0C9DC、NPC C0CA9C 的 Actor slot14/slot0 走 4C8360/4C7B90；Actor+15C/+160 的 CDoll shared holder 於 4C7C19～4C7C58 clear/atomic strong-release，最後強 owner 由 control vptr C0760C+0=4CA660→CDoll primary+0=7A4FF0→7A51C0 清理；Actor delete **未必**立即 free CDoll（其它 strong owner 未窮盡）。
+- **B-vector 的關鍵生命期界線**：7A65E5 將 CDoll* 改為 **CDoll+0x0C raw embedded interface***，7A664F/7A6651 append至 [FBA838] manager+B4/B8/BC；沒有增加 CDoll control strong count。7BB240（已核真direct callers 799F94及7BA879）在7BB2F6～7BB2FE直接間接派送 C4F6C0+4=7A8310，7BB330 最後 logical clear end←begin；manager destructor 7B8CB0 free vector storage 並清 B4/B8/BC，非每筆CDoll release。
+- **命令及清場時序差異**：本地命令26（4B28D0→4DFBC0）有視覺狀態條件處置、Controller符合ID的slot14、三個slot1C回呼，再Actor slot14/slot0/tree erase；81（4B3710→4DFC90）用複合ID查 Actor+88、Actor slot14/slot0/tree erase，未在本函式見26前置Controller迴圈；全Actor tree reset 4DFE90在逐Actor刪完/清樹後才執行 Controller slot14。owner P(0x2C record)與B queue、Controller raw槽是不同結構，並非Actor erase必然同時清除。
+- **[T08-205 可重跑離線核驗腳本](../../../kr-temp-roy/T08-205-native-lifetime-verifier.py)**，Git blob **40dc14b4adc62f925a965bc82302c6e514d6eb0e**。已對本輪實體 BIN 執行並取得 **47/47 code anchors、10/10 vtable目標、8/8 E8 rel32、SHA/PE PASS**；不是T01 FULL-PASS，也不是CI或遊玩驗收。
+- **風險/交接**：佇列持有 borrowed pointer + Actor最後強參照可被釋放，說明**特定 delete-before-consume 時序可能形成懸空風險**；但真實spawn→enqueue→delete→consume先後、間接取消、別名強持有與Scene同步未證，不能聲稱遊戲已確實 UAF/crash。Client待補：T02真正socket wire命令domain/接收lane、T07場景render/callback時序、T06資產/額外持有者及7A51C0 indirect清理；Server待開發：生成/移除判定政策供S00另行整合；待實機：Monster/NPC封包刪除與B queue交錯。T08整體native_complete、owner、T01/S00驗收狀態均不更動。
+- **下一靜態題目T08-206**：在去重既有T02/T07證據後，深入 799F94／7BA879 上游frame與 7A51C0 可能接觸B entry的indirect alias，閉合真正的render/刪除先後；不得把本205靜態終點之外未證時序冒稱安全證明。
+
 ## T08-204 — 2026-10-31 17:15：Monster／NPC 的 CDoll／顯示候選消費鏈 FINISHED（BOUNDED_CLIENT_STATIC_SCENE_STAGE）
 
 > **研究完成範圍限定為本地Client靜態：不代表實機GPU已顯示畫面。** 原件KR Tartaros.bin 12,472,320bytes，SHA256 9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91；真PE code raw=VA−0x400C00。本段已依既定204-01～05完成 type1 CMonster和type6 CNPC各自Actor vptr+30→同一4C7DF0（Monster mode0／NPC mode1）→0x170 CDoll及Actor+15C shared holder→7A6EA0數值鍵控registry→各自Actor vptr+20/+24視覺更新→4C87D0/7A5C50→CDoll primary+8=7A63C0資源與狀態guard→FBA838 B-vector追加CDoll+C*→7BB240透過embedded vptr+4=7A8310的scene/image consumer。**這是在成功分支有界的圖像/顯示介面路徑，不是完整Scene dispatcher每幀調用、資產名或GPU呈現已證。**
