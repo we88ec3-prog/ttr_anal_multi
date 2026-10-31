@@ -1,5 +1,14 @@
 # T08 實體生成與移除
 
+## T08-204 — 2026-10-31 17:15：Monster／NPC 的 CDoll／顯示候選消費鏈 FINISHED（BOUNDED_CLIENT_STATIC_SCENE_STAGE）
+
+> **研究完成範圍限定為本地Client靜態：不代表實機GPU已顯示畫面。** 原件KR Tartaros.bin 12,472,320bytes，SHA256 9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91；真PE code raw=VA−0x400C00。本段已依既定204-01～05完成 type1 CMonster和type6 CNPC各自Actor vptr+30→同一4C7DF0（Monster mode0／NPC mode1）→0x170 CDoll及Actor+15C shared holder→7A6EA0數值鍵控registry→各自Actor vptr+20/+24視覺更新→4C87D0/7A5C50→CDoll primary+8=7A63C0資源與狀態guard→FBA838 B-vector追加CDoll+C*→7BB240透過embedded vptr+4=7A8310的scene/image consumer。**這是在成功分支有界的圖像/顯示介面路徑，不是完整Scene dispatcher每幀調用、資產名或GPU呈現已證。**
+>
+> - **完整原生204研究/驗收/失敗及跨Task交接**：[T08-204 Monster／NPC CDoll、render queue與scene consumer](../../../kr-temp-roy/20261031-171502-chatgpt-web-roy-T08-204-Monster-NPC-CDoll-render-queue-scene-consumer-native-BIN-FULL.md)，Git blob **632166645d0e3692e979a81000c2af35d40691a0**。CMonster constructor vptr C0C9DC+30→4D1910→4C7DF0(mode0)；CNPC C0CA9C+30→4D2820→4C7DF0(mode1)。CDoll+1C ctor為0，須後期resource activation（7A91B5）；+28受7A6EA0 registry gate，+124由7A5C50 visual stage帶入，7A63C0另查+8C。任意gate未滿足時不能聲稱進B-vector。B-vector不是CModel另有的FB7740全域22 buckets，**不得沿用已退回的B→22桶必然因果**。
+> - **本機原始BIN重跑工具**：[T08-204-native-pe-verifier.py](../../../kr-temp-roy/T08-204-native-pe-verifier.py)，Git blob **935aa187e060f8a436357bc434ac6d4dd1c0b277**。作者本輪已用同一內容的本機腳本對原BIN實際驗證：**58/58原生code anchors，10/10 vtable目標、9/9 E8 rel32及1/1 E9 rel32 PASS**。GitHub CI檢查來源/規格一致性，不代表GitHub Actions已執行此本地BIN腳本或T01 FULL-PASS。
+> - **交T06**：從Actor+8C（為0則+88）經低16bit→CDoll+18→FC0E90/515790 lookup；T06應以真resource資料、必要依賴DLL、7A90F0 caller補key→model/mesh/motion名稱及handle。**交T07**：本地Actor/Controller/Scene root與CDoll primary+8、7BB240 frame consumer的真Scene Ready和tick頻率；此部分及第一次實際可見GPU像素尚未有靜態完整根鏈，不能誤當完成。**交T08-205**：Actor被26/81刪除與CDoll+C borrowed B-vector entry生存期、跨幀引用清理。
+> - **四種責任分界**：Client已證上述帶guard且動態vptr正確的有界scene/image consumer；Client其他scene/render root及資源key→檔名仍需相應Task/本地進一步查；Server待開發生成時機/波次/場景政策，不由Client猜原版；跨T02/T06/T07/S00需另整合；待遊玩驗證仍未執行。**T08整體native_complete仍false；T01歷史退回仍待主審獨立複驗；沒有修改其他Task、主RR台帳或已登錄的SRC-0589。**
+
 ## T08-203 — 2026-10-31 16:56：KR 0007 / 2+26N Actor 建立／登記完整有界靜態分析 **FINISHED（BOUNDED_CLIENT_STATIC）**
 
 > **本段明確完成範圍**：按前次203規劃203-01～05，使用相同KR Tartaros.bin（12,472,320 bytes，SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`）BIN-first核對：本地index7 receiver→`4AE4D0`、2-byte前置+26byte/row、4種Actor配置與constructor、各原生vtable共同setter與類別特有+30、ID/composite/位置/float/狀態實際寫入、主Actor樹插入、新ID/duplicate/invalid/OOM/owner P缺失分支。**T02 wire/framing→local index7的外層真正opcode/domain仍待跨Task證實，不擅自稱官方Server封包編號7**。整體T08 `native_complete`、T01 FULL-PASS、S00 RR/Server/遊玩驗收均未因此通過。
