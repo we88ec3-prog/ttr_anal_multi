@@ -82,6 +82,7 @@ CHECKS = {
     0x80623A:'e8 31 18 00 00',
 }
 DIRECT_CALLS = {
+    0x66DE20:[0x66E23B,0x66E257,0x66E3E0],
     0x440790:[], # no immediate direct E8 in .text; not absence of indirect calls
     0x4A3360:[0x4407C2],
     0x4A31B0:[0x4407F7,0x440822],
@@ -122,6 +123,8 @@ def verify(path):
     assert data[offset(0xBFAFC0):offset(0xBFAFC0)+13]==b'serverIp.ini\0'
     assert data[offset(0xBFAFD0):offset(0xBFAFD0)+6]==b'Rlyeh\0'
     assert data[offset(0xBF2375)]==0 # E8 mode compare target is NUL, not a named enum
+    assert struct.unpack_from('<I',data,offset(0xBFB04C))[0]==0x440790 # ctor vtable+0x30
+    assert data[offset(0xBFAFD8):offset(0xBFAFD8)+33]==b'81F91496CFC348A89F5AF83CBCDCEAE8\0'
     # Builder DTO canonical extent; synthetic-only and not a captured packet.
     assert (2+51+51+6+2)==112
     assert (2+51*2+51*2+4+2+2)==214
