@@ -262,3 +262,16 @@ S2C LOGIN Scene 二級命令表 0x4C3220–0x4C3265：decoded app command 0x0013
 - T03 E83：kr-temp-roy/20261101-chatgpt-web-roy-RR0003-E83-login-result-to-key0-identity-provenance.md（blob f479ab85b123779e4674161bcc71030389cbd623）與 E82 修訂 blob 02618e3d79f38092e39f1970e2b4977a2503e21f。
 - T02 E56：kr-extra-roy/20261030-091559-chatgpt-web-roy-E56-RR0005-bounded-static-completion-transport-owner-retry-reply.md（blob 843889349bb58209c02221e720800f0e9e3ff9d8）；E58：kr-extra-roy/20261030-110906-chatgpt-web-roy-E58-RR0004-A02C-alias-mode-fallback-bounded-BIN-first.md（blob b5c53b93ec20e056fb3f07374468a341ce4ee9c9）。
 - S00 C04-NATIVE-LOGIN-EXECUTION-READY-HANDOFF / Iteration39/40；T01 T03 README 的既有 READY_FOR_REVIEW 退回項保持不變。**本次只上傳新的 Markdown/驗證器到 T03 分支，不更動 main 或正式 RR/審核狀態。**
+
+
+## 7. 新到貨 T02 E85 跨 Task 原生交叉核對（本分支再次同步 main 後）
+
+在本次 T03 提交進行中，T02 的新版 E85 已進入 main：kr-extra-roy/20261101-chatgpt-web-roy-E85-C04-E2b-KR-login-C2S-transport-frame-contract.md，Git blob SHA **b779d6f10e3619a52381764bcaa2a08552013ef5**。本 T03 分支已再次將該 main commit 含入，合併 Commit **f4af810ed1e093208ce1b58dd1ffb2623be214ef**；這一節只引用 **T02 主責** transport 成果，不代它改 status。
+
+- T02 獨立證實 Manager vtable 0xC51748：+0x10=0x8069A0（lookup+enqueue），+0x14=0x806A00（post WSARecv），+0x18=0x806AD0（Connect），+0x0C=0x8068B0（WSASend），+0x24=0x806FC0（CloseByConn），+0x04=0x806CF0（IOCP）。這為本稿 4A3505/4A32C4 slot1 → T02 Transport 提供精確 callable interface 身分。
+- 0x495610 使用 Client+BF60 key1，mode helper 的第三參數=0 於 0x6D641B。**若 BF60 已持有 key1 Conn，某條成功路徑可能不重新 Connect**，因此本稿所稱「通過 key1 Connect gate」是 local helper nonzero，不暗示每次 UI 提交一定新建 socket。
+- 0x8069A0 用 key=1 尋找 Conn；0x8069EB→0x8060D0 以本地 payload node enqueue。其有界長度上限 0x1000；0x804AD6 與 0x805228 都有 pump→0x8061A0 呼叫；有效 Conn/lifecycle/throttle/Tx buffer 另有 gate。即使 112/214 bytes 合法，不能在沒有 OS completion 的前提下保證 wire 送達。
+- E85 的**出站**原生 C2S marker writer 有 0x0BBB（0x807830）以及 raw fallback 0x1A68（0x807A70）；0x2633 與 0x22D7 是先前查到的 Client **入站 S2C parser** 形式，不能據此允許其作原生 C2S LOGIN marker。這是 Server C04-E1b/E2b 安全 parser 的方向邊界。
+- E85 同樣**沒有**實際原版 Server/同 session first wire、原版 C2S/S2C reply pairing 的 runtime capture；不能因兩個獨立 Task 的靜態資料流已合起來，就直接啟用 C04-E3b native bridge 或宣稱 M1/M2/M3 遊玩驗收。
+
+T01 請分別核對本稿 T03 登入/UI 模式 producer 和 E85 T02 frame/transport evidence 的版本、SHA 與指令範圍；S00 對 C04-E2b/ F0 的 source Gate 後續合併應保持這兩種責任來源可回溯。
