@@ -126,3 +126,83 @@ E80 是 **RR-0002 選角的研究**，不是 RR-0010 真正建立 playable-chara
 關鍵源級邊界：local C2S40 00 0E 00 可能請求 Scenario14，另 S2C0x4C 本地 CTutorial map[14] 可表示 Lua scenario-ended，**但沒有已證原版 Server pairing**，更不等於 Quest14 complete/Quest16 complete/TutorialCompleted。Quest15 available≠accepted/completed；Quest16 Reward type2/value50 不得冒稱 EXP/金錢。E25/26 normal-world/重登仍缺真 Client→Scene→Actor/Control Ready positive proof。
 
 下一輪開工：Server-only 先做 S26-C01/C02 Encounter/Actor → C03/C04 AI/action/skill/damage → C05/C06 settlement/recovery → C08 Quest14/16/15＋reward→ C09 terminal/exit／relogin；原始 Client protocol adapter C07 只在 T02/T07/T08/T09/T10/T14/T15/T16 等同版正向證據完整後，另經授權 runtime 才考慮打開。現有 RR-0002/0010 BLOCKED、RR-0008 IN_REVIEW，GAP-SCENE OPEN，SPEC-FLOW/SCENE DRAFT/PARTIAL；ADR-0006/7 PROPOSED、沒有被主庫 CI 自動批准。
+
+
+## 2026-10-31 — Iteration 27：C05 實際可接手規劃（先確認新 main）
+
+本輪先核對 `ttr_anal_multi main=5c1aac53faf4638c72a000f673ee04750fdcdf4c` CI #41127783472 **SUCCESS**，再讀 `ttr_server_roy main=c17a986fc66caca8af0efb72e2b42d1188e2a584` 的 C02/C03 transactional APIs、C04 offline probes、原來源 pin `dd69ec9...` 仍未升正式 Client wire。未做 Server 實作/原 Client 運行。
+
+已新增 [Iteration27 C05 工程交接](s00-iterations/S00-20261031-ITERATION-27-C05-DELIVERY-PLAN.md)、[S27-W01～W09 9 工作包 JSON](s00-iterations/S00-ITERATION-27-C05-DELIVERY-MATRIX.json)、[I27-T01～T18 驗收計畫](s00-iterations/S00-20261031-ITERATION-27-C05-ACCEPTANCE.md)。W01 C03 lease/selected-role seam → W02 Encounter Admission → W03 Actor/AI → W04 Attack/Skill/Hit → W05 Scenario Settlement → W06 Quest14/16/15 → W07 Reward/Outbox → W08 tutorial terminal/exit/relog；W09 原 Client adapter **維持 OFF** 及獨立 source/runtime gate。全部工作包尚待正式 Server owner 接手，並非在 `ttr_server_roy` 有實作結果。
+
+與 Iteration26 19-gate source overlay 精確連結；整合後的 S00 CI 會驗證工作包 DAG、現有原始 gate refs、ADR-0006/0007 仍 PROPOSED、18 個 `NOT_RUN`、native adapter 不可自動開啟。**這只驗規劃不驗 Client 可玩**。下次如果使用者明確要 Server 開發，應改在 `ttr_server_roy` 開實作 PR 並跑 .NET/SQLite/PostgreSQL 測試、保留原始 `contracts/spec-revision.json` 原來源 pin 的版本審查，不可以因為新 S00 main 就把 proposed ADR 認為 approved。
+
+此時正式 RR-0002/0010 BLOCKED、RR-0008 IN_REVIEW、SPEC-FLOW/SCENE DRAFT/PARTIAL；如有人更新主分支，優先重讀 registry，不用此快照代替當前唯一權威。
+
+
+## 2026-10-31 — Iteration 28：C05 W01～W03 第一組可實作契約
+
+開工已核對 S00 `main=97e019c603bea79a7774631e82195b13be207fc4`，其 Actions #41129086650 SUCCESS；Server `ttr_server_roy main=c17a986fc66caca8af0efb72e2b42d1188e2a584` 的 `IAtomicCharacterActions`、`ISessionLeaseRegistry`、`SessionLease`、SQLite/PostgreSQL 選角存儲與 schema。**下次要先重讀最新 main，不可把本快照當最新**。
+
+[Iteration28 詳細設計](s00-iterations/S00-20261031-ITERATION-28-W01-W03-IMPLEMENTATION-PLAN.md)、[S28-01/02/03 機讀契約](s00-iterations/S00-ITERATION-28-C05-W01-W03-CONTRACT.json)、[16 個 I28-Txx NOT_RUN 測試](s00-iterations/S00-20261031-ITERATION-28-W01-W03-ACCEPTANCE.md) 已把 W01～W03 拆成三個預定下游 Server PR：
+- **C05-P1**：新原子 persistence contract 在同資料交易查 exact SessionLease/selected-role ownership 並 ReserveEncounter，絕不能只信任另一 transaction 讀到的 `GetSelectedAsync` 結果；SQLite writer/PG Session row FOR UPDATE 鎖序要對齊既有 C03。
+- **C05-P2**：Encounter RESERVE→ACTIVE→終局、CAS、Session renew/revoke/relog fencing、crash 後 idempotent reconcile。Resume/abort policy 未批准只能 mock。
+- **C05-P3**：可重現的 mock Actor spawn/AI tick/movement（fixture SHA/seed、同 EncounterId 唯一事件/版本、錯 role/actor/tick 拒絕），**不等於原版 Scenario14 敵人資料或協定**。
+
+SQLite local user_version=1、PostgreSQL 已有 migration003，任何新表都需獨立 schema/migration/recovery review；**本輪沒有在獨立 Server repo 實作/提交 migration，也沒有執行原 Client**。ADR-0006/0007 仍 PROPOSED，不可因 S00 CI PASS 自動核准、不可開原版 KR/TC codec。後續可以接續 Iteration27 W04（Attack/Skill/Hit）的細分，或由 Server 開發者在其 repo 接手 P1。
+
+
+## 2026-10-31 — Iteration 29：W04 Attack/Skill/Hit/Death + Crash/Session fencing
+
+開工 S00 `main=d1f9e174eb1e24e0589eee6605b750bc85a54215`／Actions #41130071717 SUCCESS；獨立 Server `main=9caffb75c374147b71dea51227b5c4f13b33071d`／Actions #41130449937 SUCCESS。**新對話務必重新核對當時最新 main/CI**，不能依此快照聲稱 remote head 永不變。
+
+已規劃 [Iteration29 詳細實作](s00-iterations/S00-20261031-ITERATION-29-COMBAT-IMPLEMENTATION-PLAN.md)、[S29-01～04 source-pinned machine contract](s00-iterations/S00-ITERATION-29-C05-COMBAT-CONTRACT.json)、[I29-T01～T24（24 項）NOT_RUN 測試](s00-iterations/S00-20261031-ITERATION-29-COMBAT-ACCEPTANCE.md)。S29-01 ordinary attack/atomic lease and combo; S29-02 skill availability/resource/cooldown/cast cancellation; S29-03 authoritative hit/damage/HP/death once; S29-04 cancel/relogin/ban/crash and verified ActorDeath→W05 handoff。下游 PR 候選 C05-P4..P7，依賴 Iteration28 仍未實作的 W01–W03 原子 Encounter/Actor 基礎；**本輪只有規劃，沒有下游 code/DB change**。
+
+關鍵 Server 基線修正：C02-D 已於最新 `ttr_server_roy` main 實作 SQLite local account suspend/unban，SQLite schema v2、ban 同交易 revoke Session；Iteration28 當時 SQLite v1 是**歷史真實快照**，不要修改歷史文件。下次規劃或實作新 combat migration 應從 local v2→待核准 v3；PostgreSQL 仍 003→候選004；不得自動認定 C02-D moderation 在 PG 已實作。Downstream code 必須於權威交易內重驗 exact lease、selected character/Encounter、ban/epoch 和 Actor revision，不能信任 Client damage/HP/勝利事件。
+
+E17-E original T10/T02/T04、E17-F T11/T10/T04/T02、E17-G T12/T08/T10/T11 的原 Client 技能/命中正向因果仍 SOURCE PARTIAL；原 Client 測試須另外授權。ADR-0006/0007 PROPOSED/NON-NORMATIVE；SPEC-FLOW/SCENE DRAFT/PARTIAL，native adapter OFF；S00 CI/24 `NOT_RUN` 不能當 Server 或原 Client 相容驗收。
+
+**Iteration30 建議**：W05 Objective/Scenario14 once-only Settlement/outbox；必須從已授權 ActorDeath/event 而不是固定秒數或 local S2C0x4C map flag 直接勝利。也可交由實作庫先做 C05-P1 原子入場，不因等待原 Client 而停掉 mock-domain 開發。
+
+
+## 2026-10-31 — Iteration 30：Scenario14 mock objective/wave/terminal/outbox/Quest14 eligibility
+
+核對開工 S00 `main=295b53b003f93e41d7281f94b98d158f06302bb1`，Actions #41134506321 **SUCCESS**（只代表規劃/離線測試）。Server `ttr_server_roy main=272079cc69b124870af303d711931ec20bce2229` 的最新提交新增 **C00-OPS SQLite 維運工具**，C05 Gameplay/Scenario14 **未實作**，其當次 Actions 在查核時 **IN_PROGRESS**。新對話應重讀兩庫最新 main 和 workflow，不能把這份快照當永久最新或把 C00-OPS 當 C05。
+
+本輪 [Iteration30 完整開發交接](s00-iterations/S00-20261031-ITERATION-30-OBJECTIVE-SETTLEMENT-PLAN.md)、[S30-01～04 machine contract](s00-iterations/S00-ITERATION-30-OBJECTIVE-SETTLEMENT-CONTRACT.json)、[I30-T01～24](s00-iterations/S00-20261031-ITERATION-30-ACCEPTANCE.md) 都是 **PLAN_ONLY/NOT_RUN**。S30-01 僅接收 S29 Hit/Death 同 Encounter/ActorGeneration 的 verified death event，S30-02 才計 mock wave 和 objective，S30-03 一次性 terminal CAS/audit，S30-04 Outbox 重送與獨立 Quest14 eligibility（**不完成 Quest14**）。
+
+Server 建議開工 C05-P8..P11，但**依賴**前面未實作的 C05-P1..P7（Iteration28 Encounter/Actor、Iteration29 Hit/Death）。DB SQLite C02-D v2 且新 mock Schema v3 未批准/未套；PostgreSQL current 003 下一版 004 同樣未套；現有 C00-OPS 可做 DB 備份/恢復演練但沒有替 C05 domain schema 測試。不得把局部 Client `0x004C` `map[14]` 當 official Server result 或 Quest14 completed。原 E17-H DISCOVERY_REQUIRED、E17-I PARTIAL、E17-J ADR_PENDING、E18～E20 仍 source PARTIAL；ADR-0006/0007 PROPOSED，不可自動將 Native KR/TC adapter 打開，實際原 Client 需另行授權。
+
+下一輪若繼續 S00 規劃，優先 Iteration31 W06 Quest14→Quest16→Quest15 與 W07 唯一 RewardLedger、Quest/Scenario transaction 邊界；若改要求實作，在獨立 `ttr_server_roy` 建真實程式碼 PR/測試，不在分析庫混寫 Server code。
+
+
+## 2026-10-31 — Iteration 31：W06 Quest14/16/15 + W07 RewardLedger
+
+開工核對 S00 `main=4ee57b51e600653537afaa6cecedf1cfe0551f8b`，Main Actions #41135452095 SUCCESS；獨立 Server `main=272079cc69b124870af303d711931ec20bce2229` 的 CI #41134733030 SUCCESS，但僅 C00-OPS SQLite tools、C02-D Account Moderation、C03-C Character、C04 bounded offline probe，不代表 C05 任務/獎勵已開發。**下次一定重新讀兩庫最新 main。**
+
+本輪新增 [Iteration31 詳細規劃](s00-iterations/S00-20261031-ITERATION-31-QUEST-REWARD-PLAN.md)、[S31-01～04 contract](s00-iterations/S00-ITERATION-31-QUEST-REWARD-CONTRACT.json)、[I31-T01～24 NOT_RUN](s00-iterations/S00-20261031-ITERATION-31-ACCEPTANCE.md)。S31-01 Quest14 eligibility≠TURNED_IN；S31-02 Quest16 AVAILABLE/ACCEPTED/COMPLETED/TURNED_IN 各獨立；S31-03 Quest16 原版 Reward type2/value50 映射未知，獨立 Mock RewardPolicy 封存/唯一 ledger/Outbox；S31-04 Quest15 僅 available，另與 TutorialCompleted/WorldReady 及重登入隔離。
+
+**本輪重要新風險/修正**：Iteration28～30 的不同規劃均以 SQLite v3、PostgreSQL 004 當相對下一個候選版本，並未真正開 schema。若 Server 每個 C05 工作包各自使用相同版本號會產生 collision；故 Iteration31 一律保留 SQLite v2/PG003 現有基線、後續版號 `UNALLOCATED_NOT_APPLIED`，待 Server maintainer 一次配置 Encounter/Combat/Scenario/Quest 所有 migration 的唯一順序。現有 SQLite C02-D ban 不可自動當 PostgreSQL 已具相同功能。
+
+所有新工作包只是 `SERVER_MOCK_ONLY` 的設計，24 個驗收都 `NOT_RUN`；原版 Client NPC/Quest/status/Reward/Wire 仍 E20-E24/E26 PARTIAL/UNKNOWN，沒有新正式 RR/GAP/REQ/TEST 結案、沒有任何 KR Client runtime；ADR-0006/7 仍 PROPOSED/NON-NORMATIVE，原生 adapter OFF。下一步如繼續規劃可做 Iteration32 S27-W08 Tutorial terminal/Scene Exit/WorldReady/relog；若要求 Server 實作，應到 `ttr_server_roy` 實際建 C05 code/DB PR，從最前置的 W01/Encounter 開始。
+
+
+## 2026-10-31 — Iteration 32：S27-W08 TutorialComplete、SceneExit、WorldReady、ReLogin
+
+已核對 S00 `main=dcbb7f9d41b50bdf563ff849ae1442f56d9c40c4`／CI #41136854759 SUCCESS；Server `ttr_server_roy main=272079cc69b124870af303d711931ec20bce2229`／CI #41134733030 SUCCESS，仍只有 C00-OPS、C02-D local moderation、C03 offline Character、C04 bounded evidence，**C05 尚未實作**。下次開工必須重新查最新 main，不可長期沿用歷史快照。
+
+本輪新 [完整開發規劃](s00-iterations/S00-20261031-ITERATION-32-TUTORIAL-EXIT-RELOG-PLAN.md)、[S32-01..04 機讀契約](s00-iterations/S00-ITERATION-32-TUTORIAL-EXIT-RELOG-CONTRACT.json)、[24 項 I32-T01～24 皆 NOT_RUN](s00-iterations/S00-20261031-ITERATION-32-ACCEPTANCE.md)：S32-01 每角色 checkpoint 完成資格（Quest15 available 不是 completed），S32-02 獨立 SceneExitAdmission/CAS/lease/ban，S32-03 Server mock world admitted 與真實原版 Client scene/control ready 觀測隔離（native OFF），S32-04 new SessionLease、Quest/RewardLedger、crash/outbox/provider 恢復。S32 仍依賴未在 Server main 落地的 Iteration28～31 C05 模組，**沒有直接可跑原版 Client 的新程式**。
+
+E23 SERVER_POLICY_NEEDS_ADR、E24 SOURCE_BACKED_PARTIAL、E25 NATIVE_DISCOVERY_REQUIRED、E26 ORIGINAL_CLIENT_RUNTIME_REQUIRED、E17-J SERVER_POLICY_PENDING_ADR；研究 owner、阻塞與正式 RR/GAP/SPEC/TEST 未因 S00 CI 而改。原 Client 實跑需要另行明確授權；ADR-0006/0007 仍 PROPOSED。SQLite v2 / PostgreSQL 003 是現行已觀察 schema；下一版維持 `UNALLOCATED_NOT_APPLIED`，由 Server 專案統一配置模組 migration，避免不同 Iteration 方案互相佔用 v3/004。
+
+下輪若繼續規劃，建議 Iteration33 統整 C05-P1～P19 真實開發順序、統一 migration 版本、未決 policy 决策以及原版 Client native release gate。若使用者要「開發」而非「規劃」，須在 `ttr_server_roy` 實際寫 domain code/測試/PR，而不是在 S00 看見規劃就宣稱 gameplay 已完成。
+
+
+## 2026-10-31 — Iteration33：C05-P01～P19 整體開工順序／DB Schema 及 native release
+
+本輪查核 S00 `main=e1a3c383a046a0514f7eee983bc2fc3173c3a113`、[main CI #41179316444](https://github.com/we88ec3-prog/ttr_anal_multi/actions/runs/41179316444) SUCCESS；Server `ttr_server_roy main=272079cc69b124870af303d711931ec20bce2229`、CI #41134733030 SUCCESS，仍只有 C00-OPS、C02-D SQLite local suspension/Session revocation、C03 character offline、C04 scoped static checks，**C05 實作不存在**。下次應重查兩個 main、Server schema/CI、ADR policy；這裡是當時 read-only snapshot。
+
+新 [Iteration33 完整整合規劃](s00-iterations/S00-20261031-ITERATION-33-C05-INTEGRATED-DELIVERY-PLAN.md)、[19-PR DAG/7 release gates/8 decisions/來源 pin JSON](s00-iterations/S00-ITERATION-33-C05-INTEGRATION-CONTRACT.json)、[I33-T01～24 整合驗收](s00-iterations/S00-20261031-ITERATION-33-ACCEPTANCE.md) 已定義，但全為 `PLAN_ONLY/NOT_RUN`，**並非 19 個已建立的 GitHub Server PR**。順序：R0 Schema/ADR/source→R1 P01～03 Encounter/Actor→R2 P04～07 combat→R3 P08～11 objective/terminal/outbox→R4 P12～15 Quest/Reward→R5 P16～19 tutorial exit/relog；R6 原生 Client adapter 額外與獨立授權。
+
+重大前置：**唯一 C05 migration manifest / owner**，SQLite current v2、PG current migrations003；Iteration28～30 所說的 SQLite v3/PG004 都是歷史候選，禁止各模組重用版號，下一版 `UNALLOCATED_NOT_APPLIED`。PostgreSQL 是否等同 SQLite C02-D 的停權能力未驗證，不得默認跨 Provider parity。產品八個未決決策 D33-01～08 要經維護者批准，不可因 mock 完成便自動核准 ADR-0006/0007。
+
+原版 Client `CTutorial 0x4C` local map、Quest15 AVAILABLE、Lua town LoadMap、C2S0x42/S2C0x69/C2S0x43、Server Mock WorldAdmitted 都不能推論原版 KR Client ready。E17-A/J/E23～E26 的源證據、原 RR/GAP/CLAIM/TEST 及 ADR 狀態均未被更改，R6 `BLOCKED_BY_EVIDENCE`。如使用者改要求「開發」，應直接在獨立 `ttr_server_roy` 先落實 R0 schema/policy guard 與 P01 transactional Admission，然後逐步 commit/測試各 PR；原版 Client 證據不足不能成為停止所有 mock domain 工程的理由。

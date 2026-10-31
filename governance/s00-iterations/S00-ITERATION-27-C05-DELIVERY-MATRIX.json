@@ -1,0 +1,373 @@
+{
+  "schema": "s00-iteration27-c05-implementation-handoff-v1",
+  "kind": "NON_NORMATIVE_PLANNING_OVERLAY",
+  "authored_date": "2026-10-31",
+  "s00_repo": "we88ec3-prog/ttr_anal_multi",
+  "s00_base_commit": "5c1aac53faf4638c72a000f673ee04750fdcdf4c",
+  "client_build": "kr",
+  "client_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+  "source_matrix": {
+    "path": "governance/s00-iterations/S00-ITERATION-26-ENCOUNTER-QUEST-EXIT-MATRIX.json",
+    "git_blob_sha": "6655e480f3cedb8556d2700a89ef6e9cbb3bd208"
+  },
+  "server_snapshot": {
+    "repository": "we88ec3-prog/ttr_server_roy",
+    "commit": "c17a986fc66caca8af0efb72e2b42d1188e2a584",
+    "file_blobs": [
+      {
+        "path": "src/Tartaros.Character/IAtomicCharacterActions.cs",
+        "blob_sha": "3700c6987b346decc3d59e51be853daca7c0cb78"
+      },
+      {
+        "path": "src/Tartaros.Session/ISessionLeaseRegistry.cs",
+        "blob_sha": "40512cc33e6e8ec6c90224d5a53ffdd8881fa929"
+      },
+      {
+        "path": "src/Tartaros.Persistence/SqliteLocalDatabase.cs",
+        "blob_sha": "80e1005756edaf27b4e2198962f690d306fba37a"
+      },
+      {
+        "path": "contracts/spec-revision.json",
+        "blob_sha": "a296c8dd101872c5e5c0b99fe03642fab0fd7c1a"
+      },
+      {
+        "path": "docs/DEVELOPMENT-PLAN.md",
+        "blob_sha": "174b787d29b64325890d5343b4189e83824a6a21"
+      }
+    ],
+    "verified_main_actions": "41122572516",
+    "source_access": "READ_ONLY_GITHUB_SNAPSHOT_NOT_CI_REMOTE_VALIDATED"
+  },
+  "observed_server_state": {
+    "C00": "VERIFIED_OFFLINE",
+    "C01": "VERIFIED_OFFLINE",
+    "C02": "VERIFIED_OFFLINE_CORE",
+    "C03": "VERIFIED_OFFLINE_CHARACTER_AND_SELECTION",
+    "C04": "SOURCE_BOUNDED_OFFLINE_ONLY",
+    "C05": "NOT_IMPLEMENTED_EVIDENCE_BLOCKED"
+  },
+  "governance": {
+    "adr_ids": [
+      "ADR-0006",
+      "ADR-0007"
+    ],
+    "required_adr_status": "PROPOSED",
+    "normative": false,
+    "client_adapter_default_enabled": false,
+    "implemented_wire_contracts": false,
+    "original_client_run_authorized": false,
+    "test_status": "PLAN_ONLY_NOT_RUN",
+    "phase_c_status": "EXTERNAL_REVIEW_REQUIRED",
+    "formal_rr_claim_req_test_changes": false
+  },
+  "packages": [
+    {
+      "id": "S27-W01",
+      "title": "C03 transactional auth/selection seam reuse",
+      "priority": 0,
+      "depends_on": [],
+      "mode": "DOMAIN_OFFLINE_PROTOTYPE",
+      "stage": "C05-PREP",
+      "existing_server_anchors": [
+        "src/Tartaros.Character/IAtomicCharacterActions.cs",
+        "src/Tartaros.Session/ISessionLeaseRegistry.cs"
+      ],
+      "existing_gate_ids": [
+        "E17-A"
+      ],
+      "interfaces": [
+        "ValidateCurrentLeaseAndSelectedRole"
+      ],
+      "persistence": "NO_NEW_TABLE_REQUIRED_FOR_SEAM",
+      "acceptance": [
+        "Check exact C03-C lease and selected role in the same authoritative transaction boundary; legacy LocalCharacterService pre-check is not a production security gate",
+        "Keep AccountId, RoleId/CharacterId, Client slot, SessionLease and SceneInstance distinct; ban/expiry fences all downstream writes",
+        "Document that existing selection does not prove a valid original Client world entry"
+      ],
+      "synthetic_cases": [
+        "I27-T01",
+        "I27-T02"
+      ],
+      "blocked_native": "Original C2S42 accepted/error reply, route and Client scene frame remain UNKNOWN"
+    },
+    {
+      "id": "S27-W02",
+      "title": "Encounter aggregate and scene admission",
+      "priority": 1,
+      "depends_on": [
+        "S27-W01"
+      ],
+      "mode": "DOMAIN_OFFLINE_PROTOTYPE",
+      "stage": "C05-DOMAIN",
+      "existing_server_anchors": [
+        "src/Tartaros.Character/IAtomicCharacterActions.cs"
+      ],
+      "existing_gate_ids": [
+        "E17-A",
+        "E17-J"
+      ],
+      "interfaces": [
+        "ReserveEncounter",
+        "CancelOrRecoverEncounter"
+      ],
+      "persistence": "NEW_VERSIONED_AGGREGATE_CANDIDATE_SCHEMA_REVIEW_REQUIRED",
+      "acceptance": [
+        "Use EncounterId/RoleId/SceneInstance/SessionEpoch and config revision; do not bind Scenario14 to guessed map opcode or coordinate",
+        "Ensure no double instance and fail-closed admission after old epoch, disconnect, ban or invalid ownership",
+        "Persist terminal/abort policy only after proposed ADR review; mock fixtures carry a clear MOCK namespace"
+      ],
+      "synthetic_cases": [
+        "I27-T03",
+        "I27-T04"
+      ],
+      "blocked_native": "Scenario14 original scene/instance actor admission and valid world-state writer unproven"
+    },
+    {
+      "id": "S27-W03",
+      "title": "Actor spawn/AI/movement deterministic mock simulation",
+      "priority": 2,
+      "depends_on": [
+        "S27-W02"
+      ],
+      "mode": "DOMAIN_OFFLINE_PROTOTYPE",
+      "stage": "C05-DOMAIN",
+      "existing_server_anchors": [],
+      "existing_gate_ids": [
+        "E17-B",
+        "E17-C",
+        "E17-D"
+      ],
+      "interfaces": [
+        "MaterializeMockActorSet",
+        "StepMockNpcAi",
+        "ApplyAuthorizedMovement"
+      ],
+      "persistence": "MOCK_ACTOR_STATE_PLUS_FENCED_ENCOUNTER_REVISION",
+      "acceptance": [
+        "Use explicit configurable fixture for Spawn/AI; original Scenario14 spawn count/HP/waves are not supplied by this plan",
+        "Restrict Actor and movement updates by Encounter ownership, tick monotonicity and bounded actions",
+        "Demonstrate reproducibility with fixed mock seed and distinct authoritative actor ID namespace"
+      ],
+      "synthetic_cases": [
+        "I27-T05",
+        "I27-T06"
+      ],
+      "blocked_native": "Original Actor spawn/movement/AI authority and frame layout unproved"
+    },
+    {
+      "id": "S27-W04",
+      "title": "Player attack/skill/hit/death domain authority",
+      "priority": 3,
+      "depends_on": [
+        "S27-W02",
+        "S27-W03"
+      ],
+      "mode": "DOMAIN_OFFLINE_PROTOTYPE",
+      "stage": "C05-DOMAIN",
+      "existing_server_anchors": [],
+      "existing_gate_ids": [
+        "E17-E",
+        "E17-F",
+        "E17-G"
+      ],
+      "interfaces": [
+        "AuthorizeAttackIntent",
+        "AuthorizeSkillCastIntent",
+        "ResolveMockHit"
+      ],
+      "persistence": "ACTION_AND_COOLDOWN_IN_ENCOUNTER_REVISION",
+      "acceptance": [
+        "Do not accept Client-chosen damage, hit success, monster death or arbitrary target ownership",
+        "Single consumption of resources/cooldown per unique action with validated owner and revision",
+        "No original KR skill list, formula, cancel window or opcode hardcoded in mock"
+      ],
+      "synthetic_cases": [
+        "I27-T07",
+        "I27-T08"
+      ],
+      "blocked_native": "T09/T10 source-backed skill/action/hit direction and timing required"
+    },
+    {
+      "id": "S27-W05",
+      "title": "Objective predicate and once-only Scenario settlement",
+      "priority": 4,
+      "depends_on": [
+        "S27-W04"
+      ],
+      "mode": "DOMAIN_OFFLINE_PROTOTYPE",
+      "stage": "C05-SETTLEMENT",
+      "existing_server_anchors": [],
+      "existing_gate_ids": [
+        "E17-H",
+        "E17-I",
+        "E18",
+        "E19"
+      ],
+      "interfaces": [
+        "EvaluateObjective",
+        "CommitScenarioTerminal"
+      ],
+      "persistence": "TERMINAL_CAS_AND_SETTLEMENT_KEY_UNIQUE",
+      "acceptance": [
+        "Only explicit mock predicate can yield success, never elapsed-time hardcode or Client scenario-complete message",
+        "Commit terminal once with separate durable outbox intent; settlement event and Client S2C0x4C are not synonymous",
+        "On crash between commit/delivery, recover outbox without committing outcome again"
+      ],
+      "synthetic_cases": [
+        "I27-T09",
+        "I27-T10"
+      ],
+      "blocked_native": "Original Scenario14 objective and Client result handler/source pairing unknown"
+    },
+    {
+      "id": "S27-W06",
+      "title": "Quest14/Quest16/Quest15 versioned state machine",
+      "priority": 5,
+      "depends_on": [
+        "S27-W05"
+      ],
+      "mode": "DOMAIN_OFFLINE_PROTOTYPE",
+      "stage": "C05-QUEST",
+      "existing_server_anchors": [],
+      "existing_gate_ids": [
+        "E20",
+        "E21",
+        "E22",
+        "E24"
+      ],
+      "interfaces": [
+        "CompleteQuest14",
+        "AcceptQuest16",
+        "CompleteQuest16",
+        "OfferQuest15"
+      ],
+      "persistence": "PER_ROLE_QUEST_ROW_AND_REVISION_WITH_PRECONDITION",
+      "acceptance": [
+        "Separate AVAILABLE,ACCEPTED,COMPLETED and TURNED_IN as product policy candidates, not original official Quest wire fields",
+        "Quest14 turn-in not auto-completed by Scenario14 terminal; Quest16 dependency and Quest15 offer require explicit predicates",
+        "Cross-role, missing prerequisite and retry do not advance state"
+      ],
+      "synthetic_cases": [
+        "I27-T11",
+        "I27-T12"
+      ],
+      "blocked_native": "T14/T15/T16 positive quest UI/wire and NPC action chain unproven"
+    },
+    {
+      "id": "S27-W07",
+      "title": "Reward ledger and transactional outbox",
+      "priority": 6,
+      "depends_on": [
+        "S27-W05",
+        "S27-W06"
+      ],
+      "mode": "DOMAIN_OFFLINE_PROTOTYPE",
+      "stage": "C05-QUEST",
+      "existing_server_anchors": [],
+      "existing_gate_ids": [
+        "E22",
+        "E23"
+      ],
+      "interfaces": [
+        "GrantMockRewardOnce",
+        "RecordOutgoingDomainEvent"
+      ],
+      "persistence": "PER_ROLE_REWARD_UNIQUE_AND_OUTBOX_TRANSACTION",
+      "acceptance": [
+        "Exactly-once durable effect for event/reward keys, at-least-once transport delivery with dedup and retry",
+        "Do not interpret Quest16 Reward type2 value50 as EXP/currency",
+        "SQLite single-writer and PostgreSQL transactional tests must be specified independently; no production schema claim"
+      ],
+      "synthetic_cases": [
+        "I27-T13",
+        "I27-T14"
+      ],
+      "blocked_native": "Actual reward type/status semantics and Client notification bytes remain UNKNOWN"
+    },
+    {
+      "id": "S27-W08",
+      "title": "Tutorial terminal, normal-world exit and relog reconciliation",
+      "priority": 7,
+      "depends_on": [
+        "S27-W06",
+        "S27-W07"
+      ],
+      "mode": "DOMAIN_OFFLINE_PROTOTYPE",
+      "stage": "C05-RECOVERY",
+      "existing_server_anchors": [
+        "src/Tartaros.Session/ISessionLeaseRegistry.cs"
+      ],
+      "existing_gate_ids": [
+        "E23",
+        "E25",
+        "E26",
+        "E17-J"
+      ],
+      "interfaces": [
+        "CommitTutorialTerminal",
+        "RequestNormalWorldExit",
+        "ReLoginReconcile"
+      ],
+      "persistence": "TUTORIAL_PROGRESS_PLUS_SCENE_LEASE_FENCING",
+      "acceptance": [
+        "Completion depends on distinct approved terminal, quest and exit preconditions, never local Scenario14 map or Quest15 availability alone",
+        "Keep Progress durable through disconnect, account ban/unban and fail-closed Client scene adapter",
+        "New SessionEpoch invalidates old admission/actions; no stale retry, double reward or duplicate spawn"
+      ],
+      "synthetic_cases": [
+        "I27-T15",
+        "I27-T16"
+      ],
+      "blocked_native": "Real KR normal-world field/scene/control readiness and relog path unproven"
+    },
+    {
+      "id": "S27-W09",
+      "title": "Native Client protocol adapter quarantine and future admission",
+      "priority": 8,
+      "depends_on": [
+        "S27-W02",
+        "S27-W05",
+        "S27-W08"
+      ],
+      "mode": "SOURCE_GATED_NO_IMPLEMENTATION",
+      "stage": "C05-NATIVE",
+      "existing_server_anchors": [
+        "contracts/spec-revision.json"
+      ],
+      "existing_gate_ids": [
+        "E17-A",
+        "E18",
+        "E25",
+        "E26"
+      ],
+      "interfaces": [
+        "ValidateNativeAdapterAdmission"
+      ],
+      "persistence": "NO_NATIVE_WIRE_WRITE_UNTIL_APPROVED",
+      "acceptance": [
+        "Keep original KR/TC codec unsupported until exact SHA, direction/frame/Conn/scene/fields/errors and original Client runtime authorization are individually documented",
+        "No change to implemented_wire_contracts, C04 offline geometry evidence, or server pin by this S00 planning PR",
+        "Record implementation build/revision and source provenance per future adapter; never equate CI with original Client E2E success"
+      ],
+      "synthetic_cases": [
+        "I27-T17",
+        "I27-T18"
+      ],
+      "blocked_native": "Original Client runtime/complete official scene/quest/transport contract not available"
+    }
+  ],
+  "global_no_go": [
+    "NO_ORIGINAL_CLIENT_RUN",
+    "NO_NORMATIVE_ADR_PROMOTION",
+    "NO_NATIVE_KR_WIRE_ADAPTER",
+    "NO_REWARD_TYPE_GUESS",
+    "NO_AUTOMATIC_TUTORIAL_COMPLETION",
+    "NO_SERVER_REPOSITORY_MUTATION",
+    "NO_OFFICIAL_RR_STATUS_CHANGE"
+  ],
+  "suggested_routing": [
+    "Server C05 can independently prototype domain via MockClient, after maintainer reviews Server policy and durable schema.",
+    "T01/T02/T03/T05/T07/T08/T09/T10/T14/T15/T16 fill existing narrow native evidence gaps; no duplicate RR until dedup.",
+    "Sync spec pin in independent server repo only after implementation owner explicitly chooses a reviewed commit and tests. S00 planning does not auto-update upstream pinned SHA."
+  ]
+}

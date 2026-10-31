@@ -1,0 +1,323 @@
+{
+  "schema": "s00-iteration29-c05-combat-domain-v1",
+  "kind": "NON_NORMATIVE_DOMAIN_DESIGN",
+  "authored_date": "2026-10-31",
+  "s00_main_at_review": "d1f9e174eb1e24e0589eee6605b750bc85a54215",
+  "client_build": "kr",
+  "client_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+  "source_files": [
+    {
+      "path": "governance/s00-iterations/S00-ITERATION-28-C05-W01-W03-CONTRACT.json",
+      "git_blob_sha": "ff75e523cdd57601a983466afc28a59f7290aa19"
+    },
+    {
+      "path": "governance/s00-iterations/S00-ITERATION-27-C05-DELIVERY-MATRIX.json",
+      "git_blob_sha": "5d2d814ec73e51d8d49a06b2305dfa9dd0877d78"
+    },
+    {
+      "path": "governance/s00-iterations/S00-ITERATION-18-TUTORIAL-COMBAT-GATES.json",
+      "git_blob_sha": "1f2a7bc63e6bed56c6d5f63a5a2d248f100ea71e"
+    },
+    {
+      "path": "governance/s00-iterations/S00-ITERATION-26-ENCOUNTER-QUEST-EXIT-MATRIX.json",
+      "git_blob_sha": "6655e480f3cedb8556d2700a89ef6e9cbb3bd208"
+    }
+  ],
+  "gate_evidence_snapshot": [
+    {
+      "gate_id": "E17-E",
+      "source_evidence_state": "NATIVE_STATIC_PARTIAL",
+      "source_blocking_unknown": "攻擊起手、連段、取消完整時窗與 C2S/S2C 因果鏈未知",
+      "native_compatibility_confirmed": false,
+      "owners": [
+        "T10",
+        "T02",
+        "T04"
+      ]
+    },
+    {
+      "gate_id": "E17-F",
+      "source_evidence_state": "NATIVE_STATIC_PARTIAL",
+      "source_blocking_unknown": "初始可用技能、起手/取消、冷卻/消耗裁決及結果封包未知",
+      "native_compatibility_confirmed": false,
+      "owners": [
+        "T11",
+        "T10",
+        "T04",
+        "T02"
+      ]
+    },
+    {
+      "gate_id": "E17-G",
+      "source_evidence_state": "NATIVE_STATIC_PARTIAL",
+      "source_blocking_unknown": "戰鬥結果消費端存在但計算權威、命中/死亡責任未閉合",
+      "native_compatibility_confirmed": false,
+      "owners": [
+        "T12",
+        "T08",
+        "T10",
+        "T11"
+      ]
+    }
+  ],
+  "server_snapshot": {
+    "repo": "we88ec3-prog/ttr_server_roy",
+    "main_sha": "9caffb75c374147b71dea51227b5c4f13b33071d",
+    "git_blobs": [
+      {
+        "path": "src/Tartaros.Session/InMemorySessionRegistry.cs",
+        "git_blob_sha": "e1b2d09778156cc58e4b67ffc230ed991a8bc9f6"
+      },
+      {
+        "path": "src/Tartaros.Session/ISessionLeaseRegistry.cs",
+        "git_blob_sha": "40512cc33e6e8ec6c90224d5a53ffdd8881fa929"
+      },
+      {
+        "path": "src/Tartaros.Character/IAtomicCharacterActions.cs",
+        "git_blob_sha": "3700c6987b346decc3d59e51be853daca7c0cb78"
+      },
+      {
+        "path": "src/Tartaros.Persistence/SqliteLocalDatabase.cs",
+        "git_blob_sha": "c38f647521f5e3f1e897f8a6d9331e8eecdbbb9b"
+      },
+      {
+        "path": "src/Tartaros.Persistence/SqliteCharacterStore.cs",
+        "git_blob_sha": "6d423cf3b14627b89dc28912518b531aa0560f4e"
+      },
+      {
+        "path": "src/Tartaros.Persistence/PostgresCharacterActions.cs",
+        "git_blob_sha": "7447176fc781b2dfbb3f88e1866e8ceba0b7dccc"
+      },
+      {
+        "path": "docs/C02-D-LOCAL-ACCOUNT-ADMIN.md",
+        "git_blob_sha": "f1d3023234523c64087d980238e277d5296ef947"
+      },
+      {
+        "path": "contracts/spec-revision.json",
+        "git_blob_sha": "a296c8dd101872c5e5c0b99fe03642fab0fd7c1a"
+      }
+    ],
+    "ci_current_head_verified_at_review": true,
+    "ci_run_id": 41130449937,
+    "ci_checks_source_snapshot_against_remote": false,
+    "status": "C02_D_LOCAL_SQLITE_MODERATION_C03_OFFLINE_C04_BOUND_ONLY_C05_NOT_IMPLEMENTED"
+  },
+  "migration_proposal": {
+    "sqlite_current_schema_version": 2,
+    "sqlite_v1_document_snapshot_superseded": true,
+    "sqlite_next": "PROPOSED_V3_NOT_APPLIED",
+    "postgres_current_migration": 3,
+    "postgres_next": "PROPOSED_V4_NOT_APPLIED",
+    "proposed_tables": [
+      "mock_action_intent",
+      "mock_skill_cast",
+      "mock_actor_combat_state",
+      "mock_hit_ledger",
+      "mock_combat_dedup"
+    ],
+    "rules": [
+      "Existing selected-character, session and ban state must be read/locked with combat state mutation in the same durable authority transaction or an explicitly proven equivalent serialized consistency model",
+      "No automatic migration in Host and no production schema or DDL claim",
+      "SQLite single writer and PostgreSQL lock order must be reviewed and tested independently, with source and restored DB CI"
+    ]
+  },
+  "domain_model": {
+    "action_state": [
+      "REQUESTED",
+      "AUTHORIZED",
+      "COMMITTED",
+      "CANCELED",
+      "EXPIRED"
+    ],
+    "cast_state": [
+      "RESERVED",
+      "CASTING",
+      "COMMITTED",
+      "INTERRUPTED",
+      "CANCELED",
+      "EXPIRED"
+    ],
+    "combat_result": [
+      "REJECTED",
+      "ACCEPTED",
+      "REPLAY",
+      "CONFLICT",
+      "STALE_LEASE",
+      "INVALID_ACTOR",
+      "INVALID_TARGET",
+      "UNAVAILABLE_SKILL",
+      "COOLDOWN_ACTIVE",
+      "RESOURCE_INSUFFICIENT",
+      "OUT_OF_WINDOW"
+    ],
+    "units": "FIXTURE_ONLY_SERVER_INTERNAL_TICKS_AND_FIXED_POINT",
+    "client_authority": "INTENT_ONLY",
+    "same_transaction_requirement": true,
+    "action_idempotency": "EncounterId+ActorId+ActionId or CastId with exact payload fingerprint",
+    "hit_idempotency": "EncounterId+HitId / TargetId+DeathKey, CAS and unique DB constraint",
+    "damage_authority": "MOCK_SERVER_RULES_ONLY",
+    "objective_handoff": "S27-W05_ONLY_VERIFIED_DOMAIN_EVENTS"
+  },
+  "work_packages": [
+    {
+      "id": "S29-01",
+      "title": "普通攻擊意圖、連段窗與雙層權限",
+      "parent_id": "S27-W04",
+      "depends_on": [],
+      "mode": "DOMAIN_MOCK_PROPOSED",
+      "gate_ids": [
+        "E17-E"
+      ],
+      "interfaces": [
+        "AuthorizeBasicAttackAsync(SessionLease, EncounterId, ActorId, TargetId, ActionId, ExpectedRevision, CancellationToken)",
+        "CommitBasicAttackAsync(SessionLease, EncounterId, ActionId, ExpectedRevision, CancellationToken)"
+      ],
+      "acceptance": [
+        "Transactional lease/selected-role/ban validity and Encounter ownership revalidated at the authoritative write boundary, not a pre-flight IsCurrentAsync snapshot",
+        "Actor and target must share ACTIVE Encounter and current mock revision; Client never supplies a success, combo proof, damage number or privileged tick",
+        "Server-owned config pins valid action/combo windows; a deterministic internal clock/tick and bounded history prevent stale/early/future input",
+        "Idempotency identity scoped to encounter/actor/action; duplicate same payload returns unchanged result only after fresh authorization; collision differing payload rejects",
+        "An ActionRequested does not cause damage or mission completion; accepted action vs committed animation/hit separate"
+      ],
+      "tests": [
+        "I29-T01",
+        "I29-T02",
+        "I29-T03",
+        "I29-T04",
+        "I29-T05",
+        "I29-T06"
+      ],
+      "native_evidence_required": "T10/T02/T04 direction-specific Client attack producer, combo/cancel temporal windows, Server event/accept/reject and hit attribution"
+    },
+    {
+      "id": "S29-02",
+      "title": "技能施放與資源冷卻原子預留/定案",
+      "parent_id": "S27-W04",
+      "depends_on": [
+        "S29-01"
+      ],
+      "mode": "DOMAIN_MOCK_PROPOSED",
+      "gate_ids": [
+        "E17-F"
+      ],
+      "interfaces": [
+        "ReserveSkillCastAsync(SessionLease, EncounterId, SkillKeyMock, CastId, ExpectedRevision, CancellationToken)",
+        "CommitOrCancelMockCastAsync(SessionLease, EncounterId, CastId, Resolution, ExpectedRevision, CancellationToken)"
+      ],
+      "acceptance": [
+        "Skill availability, actor/owner, current simulated skill-state, cooldown and resource are checked under one aggregate revision with exact current lease and account moderation",
+        "Reserve/commit/cancel lifecycle is specified, including interrupted cast, expiry, disconnect, stale cast, reorder; resource refund policy is PROPOSED and needs maintainer approval",
+        "Repeated CastId cannot double deduct costs, cooldown or spawn hit; same key with changed parameters is conflict, not success",
+        "Use Server mock monotonic tick for cooldown; wall clock and Client timestamp never determine ready/expiry or reveal cross-session bypass",
+        "No actual KR skill ID, effect, cost, cooldown/cast milliseconds or error/opcode derived from these fixtures"
+      ],
+      "tests": [
+        "I29-T07",
+        "I29-T08",
+        "I29-T09",
+        "I29-T10",
+        "I29-T11",
+        "I29-T12"
+      ],
+      "native_evidence_required": "T11/T10/T04/T02 skill identity, input/cancel, exact available skills, resource/cooldown and result consumer with connection/state"
+    },
+    {
+      "id": "S29-03",
+      "title": "命中/傷害/死亡唯一提交與計算權威",
+      "parent_id": "S27-W04",
+      "depends_on": [
+        "S29-01",
+        "S29-02"
+      ],
+      "mode": "DOMAIN_MOCK_PROPOSED",
+      "gate_ids": [
+        "E17-G"
+      ],
+      "interfaces": [
+        "ResolveMockHitAsync(EncounterId, ActionOrCastId, HitId, ActorId, TargetId, ExpectedRevision, CancellationToken)",
+        "CommitMockDeathOnceAsync(EncounterId, TargetId, TerminalHitId, ExpectedRevision, CancellationToken)"
+      ],
+      "acceptance": [
+        "Only authoritative accepted action/cast and validated mock hit predicate can propose damage; no Client-submitted HP/death/victory trusted",
+        "Validate both actors same encounter, alive, distance/range, phase, collision/target eligibility, action timing and no friendly-fire assumptions without configured fixture",
+        "Use bounded, checked integer fixed-point damage rules, clamp health within 0..maxHealth and reject invalid/overflow; mock formula is explicitly NOT original Tartaros",
+        "HitId and death key unique across retries/workers; one atomic transaction updates HP, death-state, target/encounter revisions and dedup record",
+        "ActorDeath is a domain fact passed to later S27-W05 objectives; does not directly mark Scenario14, Quest14 or tutorial completed"
+      ],
+      "tests": [
+        "I29-T13",
+        "I29-T14",
+        "I29-T15",
+        "I29-T16",
+        "I29-T17",
+        "I29-T18"
+      ],
+      "native_evidence_required": "T12/T08/T10/T11 real damage/result consumers, authority, hit/death sequencing, actual numbers and actor ownership"
+    },
+    {
+      "id": "S29-04",
+      "title": "取消/斷線/重放/崩潰恢復及 W05 接口邊界",
+      "parent_id": "S27-W04",
+      "depends_on": [
+        "S29-01",
+        "S29-02",
+        "S29-03"
+      ],
+      "mode": "DOMAIN_MOCK_PROPOSED",
+      "gate_ids": [
+        "E17-E",
+        "E17-F",
+        "E17-G"
+      ],
+      "interfaces": [
+        "CancelOrExpireMockActionAsync(SessionLease, EncounterId, ActionOrCastId, Reason, ExpectedRevision, CancellationToken)",
+        "ReconcilePendingMockActionsAsync(EncounterId, ServerTick, CancellationToken)",
+        "EmitVerifiedActorDeathForObjectiveAsync(EncounterId, DeathKey, CancellationToken)"
+      ],
+      "acceptance": [
+        "Cancel vs committed hit must have a single deterministic winner under CAS; late cancel cannot restore already committed damage or double refund",
+        "Reconnect/ban/unban/renew revokes previous lease-authorized action mutation; no background worker may bypass account/Session/Encounter fencing when committing a player-owned action",
+        "Crash after cost reservation, before hit, after hit-before-outbox must reconcile exactly once with persisted action/cast/hit/death event keys",
+        "Separate domain at-most-once state mutation from at-least-once Outbox notification and original Client compatibility, no claim of exactly-once TCP",
+        "Handoff only a verified ActorDeath or combat event to S27-W05 objective; do not auto-settle Scenario14/Quest14/Quest16 from Combat"
+      ],
+      "tests": [
+        "I29-T19",
+        "I29-T20",
+        "I29-T21",
+        "I29-T22",
+        "I29-T23",
+        "I29-T24"
+      ],
+      "native_evidence_required": "T10/T11/T12/T14/T16 action cancellation, death/hit notification and Scenario14 objective crossing requires verified original Client/Server association"
+    }
+  ],
+  "acceptance_file": "governance/s00-iterations/S00-20261031-ITERATION-29-COMBAT-ACCEPTANCE.md",
+  "expected_case_count": 24,
+  "governance": {
+    "adr_ids": [
+      "ADR-0006",
+      "ADR-0007"
+    ],
+    "adr_status": "PROPOSED_NOT_APPROVED",
+    "server_implementation_executed": false,
+    "domain_test_executed": false,
+    "original_client_executed": false,
+    "original_server_trace": false,
+    "native_compatibility_confirmed": false,
+    "native_adapter_enabled": false,
+    "policy_approved": false,
+    "formal_registers_modified": false
+  },
+  "no_go": [
+    "NO_NATIVE_KR_TC_OPCODE_GUESS",
+    "NO_CLIENT_REPORTED_DAMAGE_OR_VICTORY",
+    "NO_EARLY_COMBAT_SUCCESS_CLAIM",
+    "NO_ASSUME_ORIGINAL_COOLDOWN",
+    "NO_STALE_LEASE_HIT",
+    "NO_DOUBLE_SPEND_OR_REWARD",
+    "NO_AUTOMATIC_QUEST_OR_SCENARIO_TERMINAL",
+    "NO_ADR_AUTO_APPROVAL",
+    "NO_REMOTE_SERVER_REVALIDATION_BY_S00_CI"
+  ]
+}

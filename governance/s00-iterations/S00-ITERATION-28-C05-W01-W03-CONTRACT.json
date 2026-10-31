@@ -1,0 +1,281 @@
+{
+  "schema": "s00-iteration28-c05-w01-w03-contract-v1",
+  "kind": "NON_NORMATIVE_DOMAIN_DESIGN",
+  "date": "2026-10-31",
+  "client_build": "kr",
+  "client_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+  "s00_base_main_sha": "97e019c603bea79a7774631e82195b13be207fc4",
+  "parent": {
+    "path": "governance/s00-iterations/S00-ITERATION-27-C05-DELIVERY-MATRIX.json",
+    "git_blob_sha": "5d2d814ec73e51d8d49a06b2305dfa9dd0877d78",
+    "work_ids": [
+      "S27-W01",
+      "S27-W02",
+      "S27-W03"
+    ]
+  },
+  "server_snapshot": {
+    "repo": "we88ec3-prog/ttr_server_roy",
+    "main_sha": "c17a986fc66caca8af0efb72e2b42d1188e2a584",
+    "state": "C03_VERIFIED_OFFLINE_C04_BOUNDED_C05_NOT_IMPLEMENTED",
+    "git_blobs": [
+      {
+        "path": "src/Tartaros.Character/IAtomicCharacterActions.cs",
+        "git_blob_sha": "3700c6987b346decc3d59e51be853daca7c0cb78"
+      },
+      {
+        "path": "src/Tartaros.Character/ICharacterStore.cs",
+        "git_blob_sha": "2f0a35db0e04369c00077ce05a883f105c7409eb"
+      },
+      {
+        "path": "src/Tartaros.Session/ISessionLeaseRegistry.cs",
+        "git_blob_sha": "40512cc33e6e8ec6c90224d5a53ffdd8881fa929"
+      },
+      {
+        "path": "src/Tartaros.Session/InMemorySessionRegistry.cs",
+        "git_blob_sha": "e1b2d09778156cc58e4b67ffc230ed991a8bc9f6"
+      },
+      {
+        "path": "src/Tartaros.Persistence/SqliteCharacterStore.cs",
+        "git_blob_sha": "bbc2642daf0797182a546bf65dd65ca80afa46e9"
+      },
+      {
+        "path": "src/Tartaros.Persistence/PostgresCharacterActions.cs",
+        "git_blob_sha": "7447176fc781b2dfbb3f88e1866e8ceba0b7dccc"
+      },
+      {
+        "path": "src/Tartaros.Persistence/SqliteLocalDatabase.cs",
+        "git_blob_sha": "80e1005756edaf27b4e2198962f690d306fba37a"
+      },
+      {
+        "path": "db/migrations/003_c03_selection.sql",
+        "git_blob_sha": "51fdf00130b86738b8eb4f74006abcde653ccd84"
+      }
+    ],
+    "ci_revalidates_remote_repo": false
+  },
+  "policy": {
+    "adr_ids": [
+      "ADR-0006",
+      "ADR-0007"
+    ],
+    "status": "PROPOSED_NOT_APPROVED",
+    "original_client_runtime_authorized": false,
+    "wire_adapter_enabled": false,
+    "server_impl_completed": false,
+    "domain_tests_executed": false,
+    "proposed_mock_only": true,
+    "formal_registry_promoted": false,
+    "exactly_once_network_claim": false
+  },
+  "storage_proposals": {
+    "sqlite": {
+      "existing_user_version": 1,
+      "next_version": "REVIEW_REQUIRED_PROPOSED_V2_NOT_APPLIED",
+      "atomicity": "Explicit write transaction with session selected-role validation and encounter insert under same writer lock; race with Claim/Renew/Revoke must serialize",
+      "migration_notes": [
+        "Keep C02/C03 accounts/sessions/characters values intact, no Host automatic migration",
+        "Additive mock namespace only; safe rollback/reopen and data preservation tests required"
+      ]
+    },
+    "postgresql": {
+      "existing_migration_through": 3,
+      "next_version": "REVIEW_REQUIRED_PROPOSED_V4_NOT_APPLIED",
+      "atomicity": "Lock exact tartaros_session_leases row FOR UPDATE before owned selected role and encounter insert, use unique keys and consistent lock order",
+      "migration_notes": [
+        "Verify C03-C selected_revision on session row and account/role owner in same transaction",
+        "Use migration version verifier, restore tests and no production/real-account data"
+      ]
+    },
+    "tables": [
+      {
+        "name": "mock_encounter",
+        "primary_key": "encounter_id",
+        "columns": [
+          "role_id",
+          "account_id",
+          "session_id",
+          "connection_id",
+          "session_revision",
+          "scene_key_mock",
+          "config_digest",
+          "state",
+          "aggregate_revision",
+          "expires_at_utc",
+          "request_id"
+        ],
+        "unique": [
+          "scope(valid account/session revision + request_id)",
+          "one live encounter per selected RoleId and SceneKey"
+        ],
+        "note": "Design only, no DDL executed; revision token acts as session epoch for current Server type"
+      },
+      {
+        "name": "mock_actor",
+        "primary_key": "(encounter_id,actor_id)",
+        "columns": [
+          "spawn_key",
+          "mock_template_key",
+          "position_mock",
+          "ai_state_mock",
+          "last_tick",
+          "revision"
+        ],
+        "unique": [
+          "(encounter_id,spawn_key)"
+        ],
+        "note": "Server-internal synthetic identifiers, never original KR scene/NPC IDs"
+      },
+      {
+        "name": "mock_event_dedup",
+        "primary_key": "(encounter_id,event_kind,event_id)",
+        "columns": [
+          "result_ref",
+          "created_at_utc"
+        ],
+        "unique": [
+          "(encounter_id,event_kind,event_id)"
+        ],
+        "note": "Idempotent aggregate mutation only; network delivery at-least-once and separate from domain commit"
+      }
+    ]
+  },
+  "types": {
+    "lease": "SessionLease(SessionId, AccountId, ConnectionId, Revision, ExpiresAt) exists in Tartaros.Session/InMemorySessionRegistry.cs",
+    "selected_role": "CharacterId(Guid Value) and CharacterSummary from ICharacterStore.cs; do NOT invent a Client slot or RoleId field",
+    "mock_scene": "Opaque MockSceneKey fixture label, NOT original SceneList key nor opcode",
+    "config": "MockConfigDigest SHA-256 over canonical fixture+version; never authentic Scenario14 config",
+    "actor": "Opaque MockActorId namespaced by EncounterId; no native actor identifier",
+    "result_codes": [
+      "Accepted",
+      "Replay",
+      "AccessDenied",
+      "MissingSelection",
+      "UnsupportedPolicy",
+      "InvalidMockConfig",
+      "Conflict",
+      "Expired",
+      "CapacityExceeded"
+    ]
+  },
+  "packages": [
+    {
+      "id": "S28-01",
+      "source": "S27-W01",
+      "title": "Atomic selected-character authorization and encounter reservation",
+      "mode": "DOMAIN_MOCK_PROPOSED",
+      "depends_on": [],
+      "source_native_gates": [
+        "E17-A"
+      ],
+      "api": [
+        "ReserveEncounterForCurrentSelectedAsync(SessionLease, MockSceneKey, ConfigDigest, RequestId, CancellationToken)",
+        "ReadCurrentEncounterAsync(SessionLease, EncounterId, CancellationToken)"
+      ],
+      "invariants": [
+        "Validate full SessionLease SessionId/AccountId/ConnectionId/Revision/ExpiresAt, selected CharacterId and Account ownership in same transaction that creates an encounter admission",
+        "No separate GetSelectedAsync then SaveEncounterAsync check-then-act; any earlier read is only display/candidate context",
+        "Stale epoch, disconnected, banned, cross-account or reselected character does not commit encounter row",
+        "Use unique intent key scoped to valid role and lease; stale session cannot receive success replay from an old idempotency key"
+      ],
+      "storage": [
+        "mock_encounter",
+        "mock_request_dedup"
+      ],
+      "cases": [
+        "I28-T01",
+        "I28-T02",
+        "I28-T03",
+        "I28-T04",
+        "I28-T05"
+      ],
+      "native_blocker": "Actual KR Client C2S0x42 request/server accept-response/scene bootstrap and character slot semantics unknown"
+    },
+    {
+      "id": "S28-02",
+      "source": "S27-W02",
+      "title": "Encounter aggregate, lease fencing and restart recovery",
+      "mode": "DOMAIN_MOCK_PROPOSED",
+      "depends_on": [
+        "S28-01"
+      ],
+      "source_native_gates": [
+        "E17-A",
+        "E17-J"
+      ],
+      "api": [
+        "ActivateMockEncounterAsync(SessionLease, EncounterId, ExpectedRevision, CancellationToken)",
+        "FenceOrAbortEncounterAsync(SessionLease, EncounterId, Reason, CancellationToken)",
+        "ReconcileMockEncountersAfterRestartAsync(TimeProvider, CancellationToken)"
+      ],
+      "invariants": [
+        "RESERVED -> ACTIVE only with valid owner/scene/lease and optimistic revision",
+        "Old lease cannot activate/advance an ACTIVE encounter after new login, renewal, revoke or ban",
+        "Terminal or aborted outcomes are monotone; never reactivate on retry",
+        "Crash after commit must reconcile from persisted state, not allocate second EncounterId; no claimed original Client behavior"
+      ],
+      "storage": [
+        "mock_encounter",
+        "mock_request_dedup"
+      ],
+      "cases": [
+        "I28-T06",
+        "I28-T07",
+        "I28-T08",
+        "I28-T09"
+      ],
+      "native_blocker": "Native tutorial scene/instance transition and how original Client handles reconnect/abort not yet established"
+    },
+    {
+      "id": "S28-03",
+      "source": "S27-W03",
+      "title": "Deterministic mock actors, AI tick, movement and event dedup",
+      "mode": "DOMAIN_MOCK_PROPOSED",
+      "depends_on": [
+        "S28-02"
+      ],
+      "source_native_gates": [
+        "E17-B",
+        "E17-C",
+        "E17-D"
+      ],
+      "api": [
+        "MaterializeMockActorsAsync(SessionLease, EncounterId, ConfigDigest, SpawnEventId, CancellationToken)",
+        "StepMockAiAsync(EncounterId, ExpectedRevision, TickId, CancellationToken)",
+        "ApplyAuthorizedMockMoveAsync(SessionLease, EncounterId, ActorId, ExpectedRevision, MoveIntent, CancellationToken)"
+      ],
+      "invariants": [
+        "ActorId is scoped to EncounterId and derives from mock fixture spawn ordinal plus internal namespace, never a KR native NPC/Actor packet identifier",
+        "Deterministic fixture checksum+seed produce identical actor list after retry/restart; spawn event key unique",
+        "AI has one explicitly Server-owned mock authority, tick monotonic, deterministic tie-break and bounded movement inside fixture world",
+        "Reject stale tick, cross-encounter/actor/role owner, wrong ConfigDigest, duplicate spawn, forged Client AI and invalid move without changing aggregate revision"
+      ],
+      "storage": [
+        "mock_actor",
+        "mock_event_dedup"
+      ],
+      "cases": [
+        "I28-T10",
+        "I28-T11",
+        "I28-T12",
+        "I28-T13",
+        "I28-T14",
+        "I28-T15",
+        "I28-T16"
+      ],
+      "native_blocker": "Original Scenario14 spawn/AI/movement C2S/S2C, coordinates, waves, actor owner and rules not established"
+    }
+  ],
+  "test_plan_file": "governance/s00-iterations/S00-20261031-ITERATION-28-W01-W03-ACCEPTANCE.md",
+  "expected_case_count": 16,
+  "source_provenance": "GitHub connector read-only at exact main commit; CI checks pinned string/blob identity in this repo, not that remote Server stays unchanged",
+  "no_go": [
+    "NO_CLIENT_WIRE",
+    "NO_ORIGINAL_SCENELIST_TO_NETWORK",
+    "NO_FAKE_NPC_IDS",
+    "NO_C03_CHECK_THEN_ACT",
+    "NO_MIGRATION_AUTO_APPLY",
+    "NO_ADR_AUTO_APPROVAL",
+    "NO_NATIVE_RUNTIME_CLAIM"
+  ]
+}

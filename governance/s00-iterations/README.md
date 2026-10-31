@@ -87,3 +87,76 @@ Iterations 16–17 的正式流程編號合計 **E00–E26（27 個 gate）與 4
 - [Iteration26 19-gate JSON matrix](S00-ITERATION-26-ENCOUNTER-QUEST-EXIT-MATRIX.json)：逐 gate 保存原始 Iteration17/18 evidence_state、blocking_unknown、source Git blob、research owner、native missing proof、Server 端 proposed domain；非正式 RR/GAP/TEST 台帳或官方 Server 時序。
 - [18 項 I26-T01～T18 未執行測試](S00-20261031-ITERATION-26-ACCEPTANCE.md)：DOMAIN/NEGATIVE/CONCURRENCY/RECOVERY/STATIC/E2E，全部 PLAN_ONLY/NOT_RUN。CI 以 `python -B governance/check_s00_iteration26.py --check` 和 13 項回歸測試保護原始 source evidence level 不被假升格。
 - [ADR-0007](../../design/decisions/ADR-0007-encounter-quest-settlement-boundaries.md) PROPOSED/NON-NORMATIVE，保持既有 7 個 roadmap 工作包，不動研究 RR/CLM/REQ/TEST、Task owner 或獨立 Server 實作庫；原版 Client 未執行。
+
+
+## Iteration 27（2026-10-31）：以真實 Server C03/C04 基線規劃 C05 可接手任務
+
+- [Iteration27 完整開發交接](S00-20261031-ITERATION-27-C05-DELIVERY-PLAN.md)：比對 `ttr_server_roy main=c17a986fc66caca8af0efb72e2b42d1188e2a584` 的 C03-C `IAtomicCharacterActions`／`ISessionLeaseRegistry`、本地 SQLite 與獨立 PostgreSQL migrations、C04-A/B/C bounded offline 實際進度，避免重做既有交易、錯當 C05 已開發。
+- [9 個 S27-W01～W09 工作包機讀矩陣](S00-ITERATION-27-C05-DELIVERY-MATRIX.json)：八個 `DOMAIN_OFFLINE_PROTOTYPE` 與一個 `SOURCE_GATED_NO_IMPLEMENTATION` 原 Client adapter；記錄上游 Iteration26 來源 Git blob SHA 與 5 個已核對 Server Git blob。CI 本身**不會連線自動重新驗證遠端 Server 庫**，Server snapshot 只是這一輪的固定基準。
+- [I27-T01～T18（18 項）未執行驗收草案](S00-20261031-ITERATION-27-C05-ACCEPTANCE.md)：角色/Session ownership、Encounter/Actor/AI/Skill/Scenario 結算、Quest/Reward/Outbox、退出重登、原生 no-go；全部 `PLAN_ONLY / NOT_RUN`，不是正式 conformance TEST。
+- [read-only checker](../check_s00_iteration27.py) 及 15 項單元回歸測試護欄接入 GitHub CI；**不新增重複正式 RR/REQ/CLM/TEST、不可核准 ADR-0006/0007、不修改獨立 Server 程式庫或 spec pin**。C-TUTORIAL-DOMAIN 仍 Phase C / EXTERNAL_REVIEW_REQUIRED。
+
+
+## Iteration 28（2026-10-31）：C05 W01～W03 原子選角、Encounter、Actor／AI 實作準備
+
+- [完整開發契約與下游 3 個 Server PR 切片](S00-20261031-ITERATION-28-W01-W03-IMPLEMENTATION-PLAN.md)：依真實 C03-C `IAtomicCharacterActions`、`SessionLease` 和 PostgreSQL `selected_revision`／SQLite local v1 的已存在程式，指出**先 GetSelectedAsync 再跨交易寫 Encounter** 之 TOCTOU，要求在 Encounter 交易內重新核對 exact lease/owned selected role。
+- [S28-01～03 機讀契約](S00-ITERATION-28-C05-W01-W03-CONTRACT.json)：完整來源 Git blob anchor（Iteration27 和獨立 Server 八個實際檔案）、SQLite/PostgreSQL 各自待核准 migration、reserved/active/terminal state、Session fencing、deterministic mock actors/AI tick。此檔**不代表 Server 已實作**。
+- [16 個 I28-T01～T16 未執行驗收案例](S00-20261031-ITERATION-28-W01-W03-ACCEPTANCE.md)：競態、斷線、新舊 Session、同請求去重、崩潰恢復、Actor tick/AI/movement 原型；全部 `PLAN_ONLY / NOT_RUN`，不等於原 Client 可玩。
+- GitHub CI 新增 `governance/check_s00_iteration28.py --check` 與 **16 項回歸測試**，只保護規劃及證據等級，不讀遠端 Server 最新 main、不升格 ADR-0006/7、RR/REQ/GAP/SPEC/TEST，也不修改 `ttr_server_roy`。
+
+
+## Iteration 29（2026-10-31）：W04 攻擊、技能、冷卻、傷害與死亡
+
+- [Iteration29 詳細 Server mock-domain 實作規劃](S00-20261031-ITERATION-29-COMBAT-IMPLEMENTATION-PLAN.md)：接續 Iteration28 的原子授權/Encounter/Actor 方案，將普通攻擊、技能預留及取消、命中傷害/死亡、斷線/崩潰恢復分四個工程 PR 切片；不把本地 Client 動畫或受限 consumer 當 Server 官方規則。
+- [S29-01～04 機讀契約](S00-ITERATION-29-C05-COMBAT-CONTRACT.json)：pin Iteration28/27/18/26 的 Git blob 和原 E17-E/F/G `evidence_state/blocking_unknown/owners`；真實 Server `main=9caffb75c374147b71dea51227b5c4f13b33071d` 的 8 個來源 blob 只為本輪觀察快照，**CI 不會重新讀遠端 Server**。最新 C02-D 已令 local SQLite 升至 v2；對照 Iteration28 v1 時應以各時點歷史快照為準。
+- [24 個 I29-T01～T24 驗收草案](S00-20261031-ITERATION-29-COMBAT-ACCEPTANCE.md)：全為 `PLAN_ONLY/NOT_RUN`，並非正式 conformance TEST；規劃 CI 以 `python -B governance/check_s00_iteration29.py --check` 和 **18 項回歸測試**保護未經證據的戰鬥成功/Client 兼容宣稱。
+- ADR-0006/0007 仍 **PROPOSED**，尚未修改獨立 Server 的 C05 程式或 migration，也未核准 KR/TC native adapter；攻擊/技能/傷害的原版 Client 研究仍由 E17-E/F/G 既有 Txx 所有者補證。
+
+
+## Iteration 30（2026-10-31）：S27-W05 Scenario14 勝負、波次、唯一結算與 Quest14 交界
+
+- [Iteration30 完整設計／下游 Server PR 切片](S00-20261031-ITERATION-30-OBJECTIVE-SETTLEMENT-PLAN.md)：把 verified ActorDeath、波次/Objective、terminal CAS、Outbox→Quest14 eligibility 分為四個**新 Server mock-only 提案**，不把 Client 局部 `0x004C` map flag 或 timer 當原生勝利證據。
+- [S30-01～04 JSON 契約](S00-ITERATION-30-OBJECTIVE-SETTLEMENT-CONTRACT.json)：pin Iteration29/27/18/17/26 五份來源 Git blob，保存 E17-G/H/I/J 與 E18/19/20 七個原 evidence/owner/blocker；最新 Server `272079cc` 的 C00-OPS 離線 SQLite 維運檔只是快照，當時該提交 CI 尚在執行，不能誤宣稱 C05 已完成或 CI pass。
+- [I30-T01～T24 驗收計畫](S00-20261031-ITERATION-30-ACCEPTANCE.md)：24 個皆 `PLAN_ONLY/NOT_RUN`，並非正式 conformance TEST。新 CI 執行 `python -B governance/check_s00_iteration30.py --check` 與 18 個 regression；只驗本庫規劃/來源未被誤升格，不做獨立 Server 或原版 Client 測試。
+- 接續 Iteration29 W04，後續可規劃 Iteration31 W06/W07 Quest14/16/15 及 RewardLedger；ADR-0006/7 仍 PROPOSED，`SPEC-FLOW/SCENE` 仍 DRAFT/PARTIAL，Native adapter OFF。
+
+
+## Iteration 31（2026-10-31）：Quest14→16→15 及唯一獎勵帳本
+
+- [Iteration31 完整 Server 設計交接](S00-20261031-ITERATION-31-QUEST-REWARD-PLAN.md)：從 Iteration30 ScenarioTerminal 的 durable proof 才進 Quest14 eligibility／交付，再以獨立 NPC/mock policy 進 Quest16，Reward type2/value50 語意未證時**絕不入帳**，Quest15 AVAILABLE 不等於 accepted 或 WorldReady。
+- [S31-01～04 機讀契約](S00-ITERATION-31-QUEST-REWARD-CONTRACT.json)：固定 Iteration30/27/17/26 來源 Git blob、E20-E24/E26 原始 gate 的 evidence/owner/blocker、8 個真 Server 來源 blob；最新 Server C00-OPS/C02-D/C03 尚無 C05 Quest/Reward code。Server 快照僅為本輪 GitHub 唯讀觀察，不在 S00 CI 自動再次驗證。
+- [24 個 I31-T01～24 驗收草案](S00-20261031-ITERATION-31-ACCEPTANCE.md)：全部 `PLAN_ONLY / NOT_RUN`；新規劃 CI 執行 `governance/check_s00_iteration31.py --check` 與 **18 項回歸測試**，不執行任何 .NET/原版 KR Client。
+- **新的整合要求**：Iterations28～30 各自提過 SQLite 候選 v3／PG004；Iteration31 不會再重複佔用這些版本，要求 Server maintainer 統一配置 C05 全模組 migration 序列，當前一切下一版號 `UNALLOCATED_NOT_APPLIED`。ADR-0006/0007 仍 PROPOSED，Native adapter OFF。
+
+
+## Iteration 32（2026-10-31）：教學終局、出場、WorldReady 與重登恢復
+
+- [Iteration32 完整工程交接](S00-20261031-ITERATION-32-TUTORIAL-EXIT-RELOG-PLAN.md)：延續 Iteration31 的 Quest/RewardLedger，分別審核角色教學終局資格、SceneExitAdmission、Mock world state、真實 Client scene/control 觀測及重登後復原，**不能把 Quest15 AVAILABLE 或出場寫入成功當作原 Client 已可玩**。
+- [S32-01～04 JSON 契約](S00-ITERATION-32-TUTORIAL-EXIT-RELOG-CONTRACT.json)：固定 Iteration31/27/17/18/26 五份來源 Git blob，E23/E24/E25/E26/E17-J 原 evidence/owner/blocker，與獨立 Server 八個 source blob；不在 S00 CI 重新驗遠端 Server。
+- [I32-T01～24 驗收草案](S00-20261031-ITERATION-32-ACCEPTANCE.md)：全部 `PLAN_ONLY / NOT_RUN`；增加 `governance/check_s00_iteration32.py --check` 和 **18 項規劃回歸測試**，不執行任何新 C05/.NET 或原版 Client。
+- 對應下游 Server C05-P16～P19 提案；SQLite local v2／PostgreSQL 003，後續 migration 仍 `UNALLOCATED_NOT_APPLIED`、需統一 C05 序列，ADR-0006/7 PROPOSED，Native adapter S27-W09 維持 OFF。
+
+
+## Iteration 33（2026-10-31）：C05-P01～P19 統一開發 DAG／migration／policy／native gate
+
+- [Iteration33 完整整合規劃](S00-20261031-ITERATION-33-C05-INTEGRATED-DELIVERY-PLAN.md)：把 Iterations28～32 的 19 個 mock Server 工程切片接成具正確前置依賴的 **C05-P01～P19**，R0 policy/source/migration、R1 Encounter、R2 Combat、R3 Scenario、R4 Quest/Reward、R5 TutorialExit，以及獨立 R6 原版 Client native gate。**此 19 個編號只是候選 Server PR，尚未在 Server repo 實作。**
+- [S33 機讀 19-PR DAG](S00-ITERATION-33-C05-INTEGRATION-CONTRACT.json)：來源 Git blob pin Iterations27～32 六份契約及 E17-A/J/E23～E26 兩份 native gate、八份 Server 實際來源 blob，保存八個產品/DB/Native 決策清單；Server CI 僅為既存離線測試，不能當 original Client 相容性。
+- [24 個 I33-T01～T24 整合驗收](S00-20261031-ITERATION-33-ACCEPTANCE.md)：全部 `PLAN_ONLY/NOT_RUN`，加上 `python -B governance/check_s00_iteration33.py --check` 和 **18 個反升格回歸測試**。
+- 中央 C05 migration manifest 需由 Server owner 配號：SQLite local v2、PostgreSQL 003 已觀察，下一版均 `UNALLOCATED_NOT_APPLIED`，不可將 Iterations28～30 各自提過的候選 v3/004 直接套入不同 C05 模組。ADR-0006/0007 仍 PROPOSED，原 Client adapter OFF。
+
+
+## Iteration 34（2026-10-31）：真實 Server 21-commit Delta 收件與 C05 R0/P01 預檢
+
+- [Iteration34 完整 R0/P01 交付與 WEB Admin 回饋分類](S00-20261031-ITERATION-34-C05-R0-SERVER-DELTA-PREFLIGHT.md)：在 Iteration33 後，實際核對獨立 `ttr_server_roy` `272079cc→3e0b7e3` 的 21 個新提交／14 個變更檔案、最新四個 CI SUCCESS（均為原本離線／source-scoped 範圍）；確認新增 SQLite v2 本機 WEB Admin，但非 PostgreSQL／可配置遠端 IP，且 C05 仍未實作、`implemented_wire_contracts=[]`。
+- [S34 機讀差異與前置契約](S00-ITERATION-34-C05-R0-SERVER-DELTA-CONTRACT.json)：鎖定原 Iteration33 source blobs 和真 Server 7 個 Git blob、8 項 R0 未完成 gate、C05-P01 的單交易 Admission 及無 Native wire 的 domain 建議。**是一次快照，CI 不會 live 重新驗遠端 Server**。
+- [I34-T01～16 驗收草案](S00-20261031-ITERATION-34-ACCEPTANCE.md)：全部 `PLAN_ONLY/NOT_RUN`，新增 `python -B governance/check_s00_iteration34.py --check`、20 項 regression；它們只檢查本庫文件與證據身分，**不執行 Server .NET 或原版 Client**。
+- 不重開同義 REQ／RR，不推進 ADR-0004/5/6/7、正式 SPEC/GAP/CLM/TEST，亦不覆寫獨立 Server 庫。下一輪需 Server 真正提交 R0 policy/migration allocator 或 C05-P01 的實作／測試收據；不能再只畫同一份 19 PR DAG。
+
+
+## Iteration 35（2026-10-31）：C05 R0／P01 證據收件 CLI 與 fail-closed gate
+
+- [Iteration35 完整規範](S00-20261031-ITERATION-35-R0-P01-EVIDENCE-INTAKE-PLAN.md)：對照 Iteration34 和獨立 Server main `3e0b7e3`，確認沒有新的 C05-P01 code/政策/migration 實際交付；因此不重畫第三份 C05-P01～P19 DAG，而建立真正可使用的開發成果收件與拒收工具。
+- [五槽空收件狀態](S00-ITERATION-35-C05-EVIDENCE-INTAKE.json)：R0 policy／SQLite+PG migration／P01 SQLite+PG 均 `NO_RECEIPT`；D33-01～08 尚未核准、12 個 I35-T01～T12 下游驗收全 `PLAN_ONLY/NOT_RUN`；原版 Client/native adapter OFF。
+- `python -B governance/check_s00_iteration35.py --check` 只驗源 Git blob、空收件狀態、未批准邊界。新 `--candidate receipt.json` 可對未來真 Server PR/CI/政策簽核的證據形狀做**離線**拒收，格式通過只輸出 `STRUCTURALLY_REVIEWABLE_NOT_APPROVED`，還要人員遠端重新核對 SHA、Actions、schema、trace 與批准。
+- [22 項檢查器單元測試](../tests/test_s00_iteration35.py) 涵蓋假 SHA、CI head 不符、path traversal、Migration 重複版本、無備份還原、錯誤 provider、P01 少同交易/租約/重試負例、假政策批准及 Native 偽升格。這是測試驗證器，不是執行任何 I35-Txx Server 測試。
+- 不新增正式 RR/REQ/GAP/CLM/SPEC/TEST/ADR，不動 `ttr_server_roy` 或原版 Client；下一階段只在有實際 R0 設計核准／migration 或 C05-P01 Server PR 附 CI 收據時繼續實質審核。
