@@ -206,3 +206,12 @@ parser/auth、角色UI與選服呼叫介面的有限審核已整合；較早段�
 - **W19 UI**：S2C B6→local F4278(0)→具條件 CExpeditionPage→`672F00` 讀 role flag，有資料/placeholder 分叉；另 local F42EF→`665150` 的回傳1可只代表 list-hit，**不保證 detail 已填、Client已允許該 role**。
 - **W20 選角 gate**：record+0x5C、full mask F94240、列表 hit 與 UI 選角 index 各為不同狀態。玩家控件正確且 index<=9、record flag1 才可達 `4A3B80` C2S0x42；**Server S2C 結果／場景切換另屬 G/T05**。
 - **正式 S00 狀態同步**：在研究期間主線 `ac3aa886e9fd20be93b6f841ada66fe22e587aa1` 限定 `RR-0009=ACCEPTED`（只接受 E70 提出的第5條原生 blocker/解除條件，**N0→創角 GUI 仍未證**）；`RR-0010=BLOCKED`、`GAP-CHAR-0002/0003 OPEN`，SPEC仍 DRAFT/PARTIAL，T01 原生 FULL-PASS未授予。本次只同步 main 後提交 T03 分支，不更動 RR/T01/S00 主責或原版 Client。
+
+## T03-F W21～W24 — 可操作角色招募候選、多入口 C2S33、F431F 與結果缺環（2026-11-01）
+
+- [完整本批 BIN-first 研究 Markdown](../../../kr-temp-roy/20261101-014512-chatgpt-web-roy-T03-F-W21-W24-native.md)；原稿 Git blob `51e4ff7a267ffe64a8ed67a4453d1672f3018d63`；同 KR `Tartaros.bin` SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。本地從原件核507/507個已定位 native指令起點，**不是T01 FULL-PASS**。
+- [重跑 verifier（15個exact native code-range SHA + 32個關鍵指令 slices）](../../../kr-temp-roy/20261101-014512-chatgpt-web-roy-T03-F-verify.py)；blob `04daf13a1f38deb245a144f22b01266847819b49`。[Server/T03機器交接 JSON](../../../kr-temp-roy/20261101-014512-chatgpt-web-roy-T03-F-handoff.json)；blob `233bc053cddadae0ec0920b7f3db783ba4b548a0`。未執行Client/Server。
+- **W21 重要新正向：C2S app0x0033共有至少三個本地 sender**：`CEmployNewCharacter event0x578 + control identity + Client+5F4C!=1 → 6BF2FA→4A38D0`；`F431F result0 → 5AAE80 inline 33`；`6BA730 param0x0D → 6BA360 inline 33`。三條 payload同為 `33 00`／2B／slot0，受`FBA798==0` manager queue gate；不是已證新人可玩角色建立語意，也不是完整wire frame。`Client+5F4C==1` 原 Employ入口走`6BFAE0` local UI，不走此`4A38D0` sender。
+- **W21 本地事件**：`F431F` 至少由`4A98D0`和`6BA2C0`產生，後者讀`[FE18F8]+0x29` 作local result；`5AAE80`消費它。**producer/consumer 的實際scene/listener binding仍缺正向鏈**，F431F不是Server ACK。`6BF310` 角色詳細資料需index<=9、RoleStore`record+5C !=0`及resource/控件有效。
+- **W22／W23 仍未閉合**：S2C33初始first-level default、S2C2 full及2B delta共用RoleStore、S2CB6→F4278 UI、S2C4A遠征隊命名結果都已分域核對，**缺可證的同筆C2S新角色建立→專用S2C接受/拒絕→角色record初始化**。重複/取消/斷線/重試完整Client流程未知，不可推原版Server規則。
+- **W24 blocker交接**：繼續查F431F事件註冊、FE18F8+29及Client+5F4C writer、6BA730資源/0x0D回呼、S2C33 active scene次級handler、RoleStore revoke/lifecycle；T02/T04/T05/T06按各自owner合作；可靠同KR原官服multiConn trace/verified原服source才能確認官方交易順序。`RR-0010=BLOCKED`、`GAP-CHAR-0003 OPEN`，`RR-0009=ACCEPTED`僅限精確GUI blocker研究；T01/S00正式品質與可玩驗收未提升。
