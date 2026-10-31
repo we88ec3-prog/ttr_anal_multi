@@ -23,7 +23,7 @@ SHA = re.compile(r"^[0-9a-f]{40}$")
 
 
 def blob(data):
-    return hashlib.sha1(b"blob " + str(len(data)).encode() + b"\\0" + data).hexdigest()
+    return hashlib.sha1(b"blob " + str(len(data)).encode() + b"\0" + data).hexdigest()
 
 
 def read_json(root, path):
