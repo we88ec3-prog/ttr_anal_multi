@@ -195,3 +195,14 @@ Server 建議開工 C05-P8..P11，但**依賴**前面未實作的 C05-P1..P7（I
 E23 SERVER_POLICY_NEEDS_ADR、E24 SOURCE_BACKED_PARTIAL、E25 NATIVE_DISCOVERY_REQUIRED、E26 ORIGINAL_CLIENT_RUNTIME_REQUIRED、E17-J SERVER_POLICY_PENDING_ADR；研究 owner、阻塞與正式 RR/GAP/SPEC/TEST 未因 S00 CI 而改。原 Client 實跑需要另行明確授權；ADR-0006/0007 仍 PROPOSED。SQLite v2 / PostgreSQL 003 是現行已觀察 schema；下一版維持 `UNALLOCATED_NOT_APPLIED`，由 Server 專案統一配置模組 migration，避免不同 Iteration 方案互相佔用 v3/004。
 
 下輪若繼續規劃，建議 Iteration33 統整 C05-P1～P19 真實開發順序、統一 migration 版本、未決 policy 决策以及原版 Client native release gate。若使用者要「開發」而非「規劃」，須在 `ttr_server_roy` 實際寫 domain code/測試/PR，而不是在 S00 看見規劃就宣稱 gameplay 已完成。
+
+
+## 2026-10-31 — Iteration33：C05-P01～P19 整體開工順序／DB Schema 及 native release
+
+本輪查核 S00 `main=e1a3c383a046a0514f7eee983bc2fc3173c3a113`、[main CI #41179316444](https://github.com/we88ec3-prog/ttr_anal_multi/actions/runs/41179316444) SUCCESS；Server `ttr_server_roy main=272079cc69b124870af303d711931ec20bce2229`、CI #41134733030 SUCCESS，仍只有 C00-OPS、C02-D SQLite local suspension/Session revocation、C03 character offline、C04 scoped static checks，**C05 實作不存在**。下次應重查兩個 main、Server schema/CI、ADR policy；這裡是當時 read-only snapshot。
+
+新 [Iteration33 完整整合規劃](s00-iterations/S00-20261031-ITERATION-33-C05-INTEGRATED-DELIVERY-PLAN.md)、[19-PR DAG/7 release gates/8 decisions/來源 pin JSON](s00-iterations/S00-ITERATION-33-C05-INTEGRATION-CONTRACT.json)、[I33-T01～24 整合驗收](s00-iterations/S00-20261031-ITERATION-33-ACCEPTANCE.md) 已定義，但全為 `PLAN_ONLY/NOT_RUN`，**並非 19 個已建立的 GitHub Server PR**。順序：R0 Schema/ADR/source→R1 P01～03 Encounter/Actor→R2 P04～07 combat→R3 P08～11 objective/terminal/outbox→R4 P12～15 Quest/Reward→R5 P16～19 tutorial exit/relog；R6 原生 Client adapter 額外與獨立授權。
+
+重大前置：**唯一 C05 migration manifest / owner**，SQLite current v2、PG current migrations003；Iteration28～30 所說的 SQLite v3/PG004 都是歷史候選，禁止各模組重用版號，下一版 `UNALLOCATED_NOT_APPLIED`。PostgreSQL 是否等同 SQLite C02-D 的停權能力未驗證，不得默認跨 Provider parity。產品八個未決決策 D33-01～08 要經維護者批准，不可因 mock 完成便自動核准 ADR-0006/0007。
+
+原版 Client `CTutorial 0x4C` local map、Quest15 AVAILABLE、Lua town LoadMap、C2S0x42/S2C0x69/C2S0x43、Server Mock WorldAdmitted 都不能推論原版 KR Client ready。E17-A/J/E23～E26 的源證據、原 RR/GAP/CLAIM/TEST 及 ADR 狀態均未被更改，R6 `BLOCKED_BY_EVIDENCE`。如使用者改要求「開發」，應直接在獨立 `ttr_server_roy` 先落實 R0 schema/policy guard 與 P01 transactional Admission，然後逐步 commit/測試各 PR；原版 Client 證據不足不能成為停止所有 mock domain 工程的理由。

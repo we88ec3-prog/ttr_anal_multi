@@ -135,3 +135,11 @@ Iterations 16–17 的正式流程編號合計 **E00–E26（27 個 gate）與 4
 - [S32-01～04 JSON 契約](S00-ITERATION-32-TUTORIAL-EXIT-RELOG-CONTRACT.json)：固定 Iteration31/27/17/18/26 五份來源 Git blob，E23/E24/E25/E26/E17-J 原 evidence/owner/blocker，與獨立 Server 八個 source blob；不在 S00 CI 重新驗遠端 Server。
 - [I32-T01～24 驗收草案](S00-20261031-ITERATION-32-ACCEPTANCE.md)：全部 `PLAN_ONLY / NOT_RUN`；增加 `governance/check_s00_iteration32.py --check` 和 **18 項規劃回歸測試**，不執行任何新 C05/.NET 或原版 Client。
 - 對應下游 Server C05-P16～P19 提案；SQLite local v2／PostgreSQL 003，後續 migration 仍 `UNALLOCATED_NOT_APPLIED`、需統一 C05 序列，ADR-0006/7 PROPOSED，Native adapter S27-W09 維持 OFF。
+
+
+## Iteration 33（2026-10-31）：C05-P01～P19 統一開發 DAG／migration／policy／native gate
+
+- [Iteration33 完整整合規劃](S00-20261031-ITERATION-33-C05-INTEGRATED-DELIVERY-PLAN.md)：把 Iterations28～32 的 19 個 mock Server 工程切片接成具正確前置依賴的 **C05-P01～P19**，R0 policy/source/migration、R1 Encounter、R2 Combat、R3 Scenario、R4 Quest/Reward、R5 TutorialExit，以及獨立 R6 原版 Client native gate。**此 19 個編號只是候選 Server PR，尚未在 Server repo 實作。**
+- [S33 機讀 19-PR DAG](S00-ITERATION-33-C05-INTEGRATION-CONTRACT.json)：來源 Git blob pin Iterations27～32 六份契約及 E17-A/J/E23～E26 兩份 native gate、八份 Server 實際來源 blob，保存八個產品/DB/Native 決策清單；Server CI 僅為既存離線測試，不能當 original Client 相容性。
+- [24 個 I33-T01～T24 整合驗收](S00-20261031-ITERATION-33-ACCEPTANCE.md)：全部 `PLAN_ONLY/NOT_RUN`，加上 `python -B governance/check_s00_iteration33.py --check` 和 **18 個反升格回歸測試**。
+- 中央 C05 migration manifest 需由 Server owner 配號：SQLite local v2、PostgreSQL 003 已觀察，下一版均 `UNALLOCATED_NOT_APPLIED`，不可將 Iterations28～30 各自提過的候選 v3/004 直接套入不同 C05 模組。ADR-0006/0007 仍 PROPOSED，原 Client adapter OFF。

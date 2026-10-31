@@ -145,3 +145,10 @@ C05 模組的 SQLite v3/PG004 是 Iterations28～30 **互相可能衝突的候�
 ## Iteration32：Quest 完成與實際世界可操作不可互相代替
 
 [Iteration32 設計](s00-iterations/S00-20261031-ITERATION-32-TUTORIAL-EXIT-RELOG-PLAN.md) 將每角色 durable TutorialProgress、SceneExitAdmission/SceneLease、原版 KR Client SceneLoaded/ControlReady 視為三條不同狀態；`Quest15 AVAILABLE` 不意味 `TutorialCompleted`，Server Mock 世界入場不意味原版 Client 能移動。SceneList、town Lua、C2S0x42/S2C0x69/C2S0x43、`scene+0xCC` 或本地 S2C0x004C map 均不可當正向 Client 實測。每次權威寫入須同一交易再確認 full SessionLease、selected role、SQLite C02-D 停權、admission/version/CAS；重登及轉場 crash 不可重複 RewardLedger/Quest。新 `governance/check_s00_iteration32.py --check` CI 僅驗 source blob、E23/24/25/26/E17-J 原生 source blocker 和 24 個 NOT_RUN，不會執行 Server 或原版 Client、核准 ADR-0006/7 或改動正式台帳。
+
+
+## Iteration33：C05 交付的單一 PR DAG、Migration Allocator 與 Release Gate
+
+[Iteration33 整合規劃](s00-iterations/S00-20261031-ITERATION-33-C05-INTEGRATED-DELIVERY-PLAN.md) 僅為規劃：R0 review/source/DB allocator，R1～R5 為彼此依賴的 Server-only mock C05-P01～P19，R6 才是原版 Client 原生功能 per-feature admission（需同版 frame/Conn/scene/producer/consumer/Error/Runtime 正負證據）。**R5 mock pass 不等於 R6 Client 相容**。先確定 SQLite local v2 / PG migrations003 事實，因舊規劃多處同時把 v3/004 當候選，新 Server repo 必須設單一 C05 migration manifest 與 owner 逐 provider 唯一配號，備份/還原/DB 失敗中斷獨立測； PostgreSQL C02-D suspend policy 仍需另行證實。
+
+`python -B governance/check_s00_iteration33.py --check` 驗 19-PR DAG/唯一來源 workpack、Release R0～R6、D33-01～08 policy、24 個 `NOT_RUN` test、來源 Git blob/原 E17-A/J/E23～E26 status、ADR-0006/7 提案與 Native OFF。CI 只是 S00 規劃完整性，不能替代獨立 Server .NET CI、原版 KR Client Runtime 或政策核准，不能擅更改原正式 RR/REQ/GAP/CLM/TEST。
