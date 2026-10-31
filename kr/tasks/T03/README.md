@@ -2,13 +2,16 @@
 
 ## T01 驗收退回事項
 
-### T01-RETURN-T03-006-LAYOUT-001 — NEEDS_FIX
+### T01-RETURN-T03-006-LAYOUT-001 — READY_FOR_REVIEW
 
 - 原稿：`kr-temp-roy/20261028-223919-chatgpt-web-roy-T03-6-wsasend-completion-boundary.md`；Git blob `28dc1c2e3e962c85e0187d75d219b9da5ec253aa`；SHA256 `81d1bedd74633751c874d571a45ba99ed7eced38081dd31f217debba41eb2e72`，已原樣保存。
 - 問題：第78行把 `channel+0xA050` 稱為 WSABUF 位置、`+0xA0B8` 稱為 overlapped context，混淆 API 引數與計數器位置。
 - 原始反證：`8068DE lea eax,[esi+A050]`、`8068F3 push eax` 提供 OVERLAPPED；`8068F7 lea ecx,[eax+14]`、`806909 push ecx` 提供 WSABUF 指標，即 connection+A064。`806961/80697A` 計算 +A0B8，`806968/806981` 呼叫 IAT `BD2284=InterlockedIncrement`，並非把 +A0B8 傳給 WSASend 的 OVERLAPPED 引數。
 - 修復要求：保留原稿，提供勘誤／新版本與新 blob／SHA；分離 OVERLAPPED、WSABUF 與 atomic-counter 地址，查對第78、124、145、198行等沿用命名，維持 frame-relative 與 connection-relative 基準區別。原稿獨立成立的 return/pending、completion 及業務未知界線保留，不把全部內容判為錯誤。
 - 完成條件：T01 對新版本及全部受影響的引數／基準／completion 描述定向複驗後才 RESOLVED；本批只建立精確 R2 退回，不宣稱原稿全文已驗收。
+
+- **2026-10-31 T03 作者勘誤已提交，請 T01 定向複驗（READY_FOR_REVIEW，非 RESOLVED）**：完整修訂版 [T03-6 corrected](../../../kr-temp-roy/20261031-172247-chatgpt-web-roy-T03-A-W01-T03-6-corrected.md)；新 Git blob `a6dd610f285786906915306eec072b7042821399`；23 處 KR 原始 BIN bytes／PE32 靜態檢查 PASS，驗證器 [verify](../../../kr-temp-roy/20261031-172247-chatgpt-web-roy-T03-A-verify-wsasend.py)（blob `bd6e98f76b172912e1244f5f77796d8e1b351927`），W01～W04 含逐行修正、來源索引、審核與 Client/Server 界線的 [完整 A 報告](../../../kr-temp-roy/20261031-172247-chatgpt-web-roy-T03-A-W01-W04-evidence-review.md)（blob `b552078d504daf169f0c08b027f7751fed25eb0a`）。原始報告 `28dc1c2e3e962c85e0187d75d219b9da5ec253aa` 不變。原始 send OVERLAPPED=connection+A050，WSABUF=+A064，InterlockedIncrement counter=+A0B8；recv OVERLAPPED=+A030，WSABUF=+A044。T01 須複驗第78/102/124/145/149/198行、pointer 基準與 completion/dataflow；**只有 T01 可改 RESOLVED**，本次不宣稱 FULL-PASS。
+
 - 驗收來源：[原件 PE import、既有 REA/Ghidra CFG 與 bytes 定向核對](../../../research/handoffs/t01-t03-roy-20261029/r2-evidence.json)；[重現腳本](../../../research/handoffs/t01-t03-roy-20261029/check_r2.py)。
 
 ### 2026-10-29 T01 新通道收件（不等於全文通過）
@@ -163,3 +166,52 @@ parser/auth、角色UI與選服呼叫介面的有限審核已整合；較早段�
 2026-10-29：參照 `extra/roy1` 的 E01–E16 SceneList/Lua/教學場景研究，原始 Git blob 完整保留於 `kr-extra-roy/`。S00 只抽取 E06/E08/E13/E16 的有限來源主張，將其與已存在的 T03 登入/選角證據分開；見 [來源整合說明](../../../governance/PHASE-B-T03-EXTRA-ROY1.md)、[跨流程草案](../../../spec/session-account/SPEC-FLOW-0001.md) 與 [場景依賴草案](../../../spec/world/SPEC-SCENE-0001.md)。
 
 **未證明**選角 C2S `0x42` 對應的 S2C 回覆會設定 `(questIdx=1001,sceneIdx=1)`，亦未證首次登入必進教學；E16 對 `0x565720` 的 EndCutScene 重入提供反證。下一項 T03 定向補證為 [RR-0008](../../../governance/T03-S00-AGENT-REQUESTS.md)，不用重新執行整批 E01–E16。這個註記不改 Task owner、原稿、過去 T01 裁定或正式 FULL-PASS 准入。
+
+## T03-B 登入認證工作包 W05～W08（2026-10-31，Client bounded static）
+
+- 完整 KR BIN-first 技術原稿：[T03-B W05～W08](../../../kr-temp-roy/20261031-182406-chatgpt-web-roy-T03-B-W05-W08-auth-BIN-first.md)；Git blob `e5463936b7b48421219c0e0c83d5d4bf9b07b09f`。
+- 64 項原始機器碼位置及 PE、vtable、direct-xref、zero-tail 的唯讀驗證器：[T03-B verify.py](../../../kr-temp-roy/20261031-182406-chatgpt-web-roy-T03-B-verify.py)；Git blob `d7f83bb2b8d71e3bcc3d39e2b7ed481cd5773f88`；本輪同版 BIN 實測 PASS。
+- 方向／狀態／UNKNOWN 機器交接：[T03-B handoff.json](../../../kr-temp-roy/20261031-182406-chatgpt-web-roy-T03-B-handoff.json)；Git blob `e59efc2d202665c28b285ad1159d009591d96521`。
+- W05：`0x6D6300` 物件 constructor 設 mode+8=0x52，vtable+0x30 指向 `0x440790`；本地 0x52→E8/112B，0x54 或其他→000F/214B；**不代表 launcher 總是選此 mode**。
+- W06：E8+104..109 仍無直接初始化 writer；全域 FBA808 在 .data virtual-zero tail、7 個直接位址 xref 為讀取；E8 WCTMB CodePage=0。實際六 bytes／執行時 setter/ACP 未閉合。
+- W07：LOGIN scene S2C13 status5／0+非空名稱／其它三種結果、S2C7A group cursor 的獨立布局、group 3+10N、local F4243。
+- W08：0x13 達局部狀態更新，+90=0 才 F4241，本地事件非 wire；另需 UI gate 才有條件 key0/key2 Connect，**不證官方原版 first S2C/實際配對**。
+- 此研究不重複提交 RR-0003（主線正式台帳 `IN_REVIEW`），不變更 `GAP-AUTH-0001 OPEN` 或 `SPEC-AUTH-0001 / SPEC-FLOW-0001 DRAFT/PARTIAL`；T01 FULL-PASS 和 S00 acceptance 尚未取得。完整 Client 靜態研究交付與原版 Server 動態未知明確分流。
+
+## T03-C W09～W12 選服、頻道與多 Conn（2026-10-31）
+
+- **完整 KR BIN-first 研究**：[C W09～W12](../../../kr-temp-roy/20261031-183619-chatgpt-web-roy-T03-C-W09-W12-server-channel-native.md)（原稿 Git blob `499da1dad76d213ce79a938f17ead817d3f0ee00`）；原始 `Tartaros.bin` SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。原件唯讀核對 113 個指令起點，均 PASS；同目錄另附具代表性 72 處指令的 [驗證器](../../../kr-temp-roy/20261031-183619-chatgpt-web-roy-T03-C-verify.py) 與 [Server handoff JSON](../../../kr-temp-roy/20261031-183619-chatgpt-web-roy-T03-C-handoff.json)。
+- **W09**：`S2C13 +1C/+92` 與 `S2C7A +2/+6` 共享 `4C3080`，每 group 3B、每 row 10B；IPv4 `row+4..7`、`row+8` append gate、`row+9` 有效參數、`507610` composite lookup、`507750/5078C0` 0x60 本地 child record。`66B910` 局部 UI 刷新功能可見，但 `F4243` 所有 event listeners 未正向窮盡。
+- **W10**：`66C620` 以 local `0x709` (f0 refresh)、`0x70A` (f4 record→`66C090`)、`0x578` (f8 alternative resolver) 各比 control identity；`66C090` 兩次映射與 `F94294` gate，條件符合才可能呼叫 `4957C0`，不是必發 C2S 專用 command。
+- **W11**：key1/port 8415→`Client+BF60`；key0/port8416→`+BF64`；key2/port8414→`+BF68`。兩次 Connect 返回有效後，可能清原 key1，再對 key0 本地 enqueue 0x39B app0x0001；不能宣稱原版 Server 已接收。
+- **W12**：zero group / row8=0 / NULL mapping / 控件不符 / key0或key2失敗時的本地分支與成功側 Conn cleanup；**此 helper 沒有 timer auto-retry**，全域 retry/取消/回登入 UI 沒有完整閉合，保留 Client 待補查。
+- 本次 C 為既定 T03 計畫的有界研究交付，**沒有新增/變更正式 RR 台帳、S00 SPEC 或 GAP**；原主線 `RR-0003=IN_REVIEW`、`RR-0002=BLOCKED`，T01 FULL-PASS 與 Server 可玩仍為獨立驗收。T02 transport與T06 layout維持原 owner。
+
+## T03-D W13～W16 — 遠征隊命名／Account/Expedition/Role 分離（2026-10-31）
+
+- [完整 D BIN-first 研究原稿](../../../kr-temp-roy/20261031-184654-chatgpt-web-roy-T03-D-W13-W16-expedition-native.md)；Git blob `dbbf1537a8d1c784c80b4b7b9a8bba7a6e686e01`，KR `Tartaros.bin` SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。本次在原件唯讀重新核對 **121/121 個 native 指令起點**、4 個 vtable slots、3 個 RTTI identity、4 個 direct-E8 caller sets；靜態驗證不等於 T01 FULL-PASS。
+- [自足 121-checkpoint 原生驗證器](../../../kr-temp-roy/20261031-184654-chatgpt-web-roy-T03-D-verify.py)；blob `411b1fe354d15f9625201cc4745b3e150344301a`。[S00/T03 交接 JSON](../../../kr-temp-roy/20261031-184654-chatgpt-web-roy-T03-D-handoff.json)；blob `cbd1a949a387446b63dbd1ffd70447143985d04b`。
+- **W13：有界部分研究與明確 blocker。** S2C app0x0002 (65+53N) N=0 僅跳 role loop；header+0x0C 的 UTF-16 name 可寫 `F938F2`，非空時 `CExpeditionPage::5A6510` 有條件設 page+0x144 ready；`5A65A0` 更新三個控件。**N=0→真正可見 CExpeditionCreateDialog open/control/scene/resource 正向鏈仍未閉合**，交 T03/T06 繼續；不得稱已驗 GUI 自動開啟。
+- **W14：Client 本地建名 sender。** `CExpeditionCreateDialog` vtable slot87 `0x671FD0`、event0x578/button identity/local F4244/0x6A7→name validation→`C2S app0x003E` **48B slot0**，name UTF-16LE+6（容量21 WCHAR）、`+2..5 UNKNOWN`、`FBA798==0` queue gate；不是外框完整 TCP bytes。
+- **W15：scene-specific 結果 consumer。** `S2C app0x004A→0x4C21D0` 的 signed WORD+2→local `F4245`→`CExpeditionPage` 和 `0x672570`，status1 寫 `F938F2` / page ready，-1/-2/-3 錯誤各有分支。**原版 Server C2S3E↔S2C4A 交易配對仍 UNKNOWN**，不得推定官方 error enum。
+- **W16：三層身份界線。** Account auth、Expedition 名稱 `F938F2`、可操作 Role 陣列 `F94304+slot*0x210` 互不等同；S2C app2 與 app2B 共享 RoleStore，`CEmployNewCharacter→C2S0x33` 是另一類 UI／請求，既有角色選角 `C2S0x42` 也不是建名 ACK。
+- 主線正式 RR-0009 仍 `SUBMITTED`、RR-0010 `BLOCKED`；T01、S00、GAP-CHAR-0002/0003、其他 owner 狀態均未因本次作者提交而更改。未執行 Client，未推送 main。下個 E W17～W20 才追 roster 全量/增量/角色 UI；F 工作包追可操作角色的真正建立／招募。
+
+## T03-E W17～W20 — KR 全量／增量角色清單與 UI（2026-10-31）
+
+- **完整本次 BIN-first 原生證據**：[T03-E W17～W20](../../../kr-temp-roy/20261031-T03-E-W17-W20-roster-ui-native.md)；Git blob `5bf17fd8078344bb41a26e8de956b2ec23843731`。原始 KR `Tartaros.bin` SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`，本輪自原件核對 485/485 個已定位 native instruction bytes；**不是 485 個語意 FULL-PASS 或 Client runtime**。
+- [485 項自足原生 verifier](../../../kr-temp-roy/20261031-T03-E-verify.py)；Git blob `f3e8e73a93cb10ea920474ccacd563a3598a0230`。[機器可讀 handoff JSON](../../../kr-temp-roy/20261031-T03-E-handoff.json)；Git blob `eedf0b418e08feef69ef0c2ba307a48d0536fb7f`。
+- **W17 full S2C app0x0002**：65B prefix+53N，除 +0x0C Expedition name 外另有多個來源未命名欄位；53B row+0x2E ID<=9 才 `4D4150` 寫 `[F94304]+ID*0x210`（+0x5C=1）；但 full loop **即使 ID>9 仍可能因 gate queue 每筆 C2S0x26(3B)**，最後另可 queue C2S0x24(2B)，並寫本地 `F94240` 16-bit mask。
+- **W18 delta S2C app0x002B**：已循 16B network table→singleton vptr→8B業務 table→`4E2730` 正向定位；2B+53N，寫同一 `F94304`（`F8D9E0+0x6924`）角色記錄，但此 handler 不重發 full 的 per-row 26/post24/mask；RoleStore ctor 初始10×0x210、+0x5C=0，writer令1，**兩個 handler 沒有省略 slot 就清全部舊角色的保證**。
+- **W19 UI**：S2C B6→local F4278(0)→具條件 CExpeditionPage→`672F00` 讀 role flag，有資料/placeholder 分叉；另 local F42EF→`665150` 的回傳1可只代表 list-hit，**不保證 detail 已填、Client已允許該 role**。
+- **W20 選角 gate**：record+0x5C、full mask F94240、列表 hit 與 UI 選角 index 各為不同狀態。玩家控件正確且 index<=9、record flag1 才可達 `4A3B80` C2S0x42；**Server S2C 結果／場景切換另屬 G/T05**。
+- **正式 S00 狀態同步**：在研究期間主線 `ac3aa886e9fd20be93b6f841ada66fe22e587aa1` 限定 `RR-0009=ACCEPTED`（只接受 E70 提出的第5條原生 blocker/解除條件，**N0→創角 GUI 仍未證**）；`RR-0010=BLOCKED`、`GAP-CHAR-0002/0003 OPEN`，SPEC仍 DRAFT/PARTIAL，T01 原生 FULL-PASS未授予。本次只同步 main 後提交 T03 分支，不更動 RR/T01/S00 主責或原版 Client。
+
+## T03-F W21～W24 — 可操作角色招募候選、多入口 C2S33、F431F 與結果缺環（2026-11-01）
+
+- [完整本批 BIN-first 研究 Markdown](../../../kr-temp-roy/20261101-014512-chatgpt-web-roy-T03-F-W21-W24-native.md)；原稿 Git blob `51e4ff7a267ffe64a8ed67a4453d1672f3018d63`；同 KR `Tartaros.bin` SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。本地從原件核507/507個已定位 native指令起點，**不是T01 FULL-PASS**。
+- [重跑 verifier（15個exact native code-range SHA + 32個關鍵指令 slices）](../../../kr-temp-roy/20261101-014512-chatgpt-web-roy-T03-F-verify.py)；blob `04daf13a1f38deb245a144f22b01266847819b49`。[Server/T03機器交接 JSON](../../../kr-temp-roy/20261101-014512-chatgpt-web-roy-T03-F-handoff.json)；blob `233bc053cddadae0ec0920b7f3db783ba4b548a0`。未執行Client/Server。
+- **W21 重要新正向：C2S app0x0033共有至少三個本地 sender**：`CEmployNewCharacter event0x578 + control identity + Client+5F4C!=1 → 6BF2FA→4A38D0`；`F431F result0 → 5AAE80 inline 33`；`6BA730 param0x0D → 6BA360 inline 33`。三條 payload同為 `33 00`／2B／slot0，受`FBA798==0` manager queue gate；不是已證新人可玩角色建立語意，也不是完整wire frame。`Client+5F4C==1` 原 Employ入口走`6BFAE0` local UI，不走此`4A38D0` sender。
+- **W21 本地事件**：`F431F` 至少由`4A98D0`和`6BA2C0`產生，後者讀`[FE18F8]+0x29` 作local result；`5AAE80`消費它。**producer/consumer 的實際scene/listener binding仍缺正向鏈**，F431F不是Server ACK。`6BF310` 角色詳細資料需index<=9、RoleStore`record+5C !=0`及resource/控件有效。
+- **W22／W23 仍未閉合**：S2C33初始first-level default、S2C2 full及2B delta共用RoleStore、S2CB6→F4278 UI、S2C4A遠征隊命名結果都已分域核對，**缺可證的同筆C2S新角色建立→專用S2C接受/拒絕→角色record初始化**。重複/取消/斷線/重試完整Client流程未知，不可推原版Server規則。
+- **W24 blocker交接**：繼續查F431F事件註冊、FE18F8+29及Client+5F4C writer、6BA730資源/0x0D回呼、S2C33 active scene次級handler、RoleStore revoke/lifecycle；T02/T04/T05/T06按各自owner合作；可靠同KR原官服multiConn trace/verified原服source才能確認官方交易順序。`RR-0010=BLOCKED`、`GAP-CHAR-0003 OPEN`，`RR-0009=ACCEPTED`僅限精確GUI blocker研究；T01/S00正式品質與可玩驗收未提升。
