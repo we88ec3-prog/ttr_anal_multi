@@ -1,0 +1,341 @@
+{
+  "schema": "s00-iteration34-c05-r0-server-delta-v1",
+  "kind": "NON_NORMATIVE_PLANNING_OVERLAY",
+  "date": "2026-10-31",
+  "client_version": "kr",
+  "client_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+  "s00_baseline": {
+    "main_sha": "e80b06d8cc7160b5624fa057c8635198fee9df29",
+    "iteration33_plan": {
+      "path": "governance/s00-iterations/S00-20261031-ITERATION-33-C05-INTEGRATED-DELIVERY-PLAN.md",
+      "git_blob_sha": "b38622d4ef17c1cc02f50d25dfed55ea19cd63a8"
+    },
+    "iteration33_contract": {
+      "path": "governance/s00-iterations/S00-ITERATION-33-C05-INTEGRATION-CONTRACT.json",
+      "git_blob_sha": "1a590898812f5a400edddf4f03b6479ac74fc94d"
+    }
+  },
+  "server_delta": {
+    "repo": "we88ec3-prog/ttr_server_roy",
+    "base_sha": "272079cc69b124870af303d711931ec20bce2229",
+    "head_sha": "3e0b7e3a8666f363f747dbf68c2fd462a8777b09",
+    "compare_ahead": 21,
+    "compare_behind": 0,
+    "changed_paths": 14,
+    "observed_paths": [
+      {
+        "path": "docs/DEVELOPMENT-PLAN.md",
+        "git_blob_sha": "dfaacd923e9e8f504803af6a510ff720bd808670"
+      },
+      {
+        "path": "docs/WEB-ADMIN-LOCAL.md",
+        "git_blob_sha": "46beebb2f3dd7dee6486aee041a14899ff1ca14f"
+      },
+      {
+        "path": "src/Tartaros.Admin.Web/Program.cs",
+        "git_blob_sha": "f4d04c869a69b70abe3771034d111a42d3973d61"
+      },
+      {
+        "path": "src/Tartaros.Admin.Web/AdminDatabasePath.cs",
+        "git_blob_sha": "d3d77ed4a803b42061e60f3edf45b210273e76f7"
+      },
+      {
+        "path": "src/Tartaros.Persistence/SqliteWebAdminReader.cs",
+        "git_blob_sha": "66d83bf42660407e4dea5446a62b6c8e39672b49"
+      },
+      {
+        "path": "contracts/spec-revision.json",
+        "git_blob_sha": "a296c8dd101872c5e5c0b99fe03642fab0fd7c1a"
+      },
+      {
+        "path": "src/Tartaros.Persistence/SqliteLocalDatabase.cs",
+        "git_blob_sha": "c38f647521f5e3f1e897f8a6d9331e8eecdbbb9b"
+      }
+    ],
+    "ci_results": [
+      {
+        "name": "C00 validation",
+        "run_id": 41183934552,
+        "conclusion": "SUCCESS",
+        "scope": "OFFLINE_OR_SOURCE_SCOPED",
+        "url": "https://github.com/we88ec3-prog/ttr_server_roy/actions/runs/41183934552"
+      },
+      {
+        "name": "C00 .NET build, unit and protocol tests",
+        "run_id": 41183934606,
+        "conclusion": "SUCCESS",
+        "scope": "OFFLINE_OR_SOURCE_SCOPED",
+        "url": "https://github.com/we88ec3-prog/ttr_server_roy/actions/runs/41183934606"
+      },
+      {
+        "name": "C01 transport and codec validation",
+        "run_id": 41183934657,
+        "conclusion": "SUCCESS",
+        "scope": "OFFLINE_OR_SOURCE_SCOPED",
+        "url": "https://github.com/we88ec3-prog/ttr_server_roy/actions/runs/41183934657"
+      },
+      {
+        "name": "C02-C03 PostgreSQL persistence validation",
+        "run_id": 41183934579,
+        "conclusion": "SUCCESS",
+        "scope": "OFFLINE_OR_SOURCE_SCOPED",
+        "url": "https://github.com/we88ec3-prog/ttr_server_roy/actions/runs/41183934579"
+      }
+    ],
+    "snapshot_only": true,
+    "ci_live_revalidates_remote": false,
+    "web_admin_provider": "SQLITE_LOCAL_V2_ONLY",
+    "web_admin_binding": "127.0.0.1_ONLY",
+    "postgres_web_admin_implemented": false,
+    "remote_ip_cidr_implemented": false,
+    "game_tcp_exposed_by_web_admin": false,
+    "implemented_wire_contracts": [],
+    "c05_implemented": false,
+    "native_client_compatibility_verified": false
+  },
+  "alignment": [
+    {
+      "id": "REQ-0006",
+      "observed": "PARTIAL_LOCAL_ONLY",
+      "unmet": "CONFIGURABLE_REMOTE_IP_CIDR_AND_APPROVED_NETWORK_SECURITY"
+    },
+    {
+      "id": "REQ-0007",
+      "observed": "OFFLINE_LOCAL_IMPLEMENTED_SCOPE",
+      "unmet": "POSTGRES_AND_FORMAL_ACCEPTANCE"
+    },
+    {
+      "id": "REQ-0008",
+      "observed": "OFFLINE_LOCAL_IMPLEMENTED_SCOPE",
+      "unmet": "POSTGRES_AND_CROSS_INSTANCE_LEASE_PARITY"
+    }
+  ],
+  "r0_preflight": [
+    {
+      "id": "R0-34-01",
+      "gate": "UNIQUE_SQLITE_PG_MIGRATION_ALLOCATOR",
+      "state": "NOT_VERIFIED",
+      "blocking": true,
+      "required_evidence": "Server repo source-pinned migration manifest + provider schema digest"
+    },
+    {
+      "id": "R0-34-02",
+      "gate": "POLICY_D33_APPROVAL_RECORDS",
+      "state": "NOT_VERIFIED",
+      "blocking": true,
+      "required_evidence": "D33-01..08 owner decisions and explicit policy revision"
+    },
+    {
+      "id": "R0-34-03",
+      "gate": "C03_ROLE_SESSION_TRANSACTION_REUSE",
+      "state": "SOURCE_OBSERVED_NOT_P01_VERIFIED",
+      "blocking": true,
+      "required_evidence": "Actual C05-P01 transaction and concurrency tests"
+    },
+    {
+      "id": "R0-34-04",
+      "gate": "SQLITE_BAN_EPOCH_FENCING",
+      "state": "LOCAL_BASELINE_ONLY",
+      "blocking": true,
+      "required_evidence": "Admission-time ban/revoke/select race tests"
+    },
+    {
+      "id": "R0-34-05",
+      "gate": "POSTGRES_MODERATION_PARITY",
+      "state": "UNKNOWN_FAIL_CLOSED",
+      "blocking": true,
+      "required_evidence": "PG migration and transaction-level suspension checks"
+    },
+    {
+      "id": "R0-34-06",
+      "gate": "C05_P01_IDEMPOTENCY_AND_CRASH",
+      "state": "NOT_IMPLEMENTED",
+      "blocking": true,
+      "required_evidence": "AdmissionId/fingerprint CAS and two-provider restore tests"
+    },
+    {
+      "id": "R0-34-07",
+      "gate": "NATIVE_ADAPTER_SOURCE_GATED",
+      "state": "DISABLED",
+      "blocking": true,
+      "required_evidence": "Same KR evidence + approved spec + runtime separate authorization"
+    },
+    {
+      "id": "R0-34-08",
+      "gate": "SERVER_CI_RECEIPT_AND_REVISION_PIN",
+      "state": "HISTORICAL_SNAPSHOT_ONLY",
+      "blocking": true,
+      "required_evidence": "PR commit + pinned Server/Spec/manifest + actual run receipts"
+    }
+  ],
+  "p01_proposed_api": {
+    "name": "IEncounterAdmission.TryReserveAsync",
+    "kind": "SERVER_DOMAIN_DESIGN_NOT_NATIVE",
+    "input_fields": [
+      "AdmissionId",
+      "AccountId",
+      "RoleId",
+      "SessionId",
+      "ConnectionId",
+      "SessionRevision",
+      "ExpiresAt",
+      "RequestFingerprint"
+    ],
+    "results": [
+      "Reserved",
+      "SameReservation",
+      "DeniedStaleLease",
+      "DeniedBan",
+      "DeniedOwnership",
+      "ConflictFingerprint",
+      "UnavailableProviderPolicy"
+    ],
+    "reservation_initial_state": "RESERVED",
+    "native_wire": false,
+    "atomic_with_authority_checks": true
+  },
+  "cases": [
+    {
+      "id": "I34-T01",
+      "category": "SOURCE",
+      "goal": "Server 21-commit diff and 14 changed paths pinned",
+      "design_status": "PLAN_ONLY",
+      "execution_status": "NOT_RUN",
+      "evidence_class": "PLANNED_NOT_EVIDENCE"
+    },
+    {
+      "id": "I34-T02",
+      "category": "SOURCE",
+      "goal": "WEB admin local-only source and runbook pins",
+      "design_status": "PLAN_ONLY",
+      "execution_status": "NOT_RUN",
+      "evidence_class": "PLANNED_NOT_EVIDENCE"
+    },
+    {
+      "id": "I34-T03",
+      "category": "NEGATIVE",
+      "goal": "Admin not remotely accessible via non-loopback bind",
+      "design_status": "PLAN_ONLY",
+      "execution_status": "NOT_RUN",
+      "evidence_class": "PLANNED_NOT_EVIDENCE"
+    },
+    {
+      "id": "I34-T04",
+      "category": "NEGATIVE",
+      "goal": "PostgreSQL WEB Admin not implied by PG CI",
+      "design_status": "PLAN_ONLY",
+      "execution_status": "NOT_RUN",
+      "evidence_class": "PLANNED_NOT_EVIDENCE"
+    },
+    {
+      "id": "I34-T05",
+      "category": "GOVERNANCE",
+      "goal": "REQ0006 local-only vs configurable IP/URL gap",
+      "design_status": "PLAN_ONLY",
+      "execution_status": "NOT_RUN",
+      "evidence_class": "PLANNED_NOT_EVIDENCE"
+    },
+    {
+      "id": "I34-T06",
+      "category": "GOVERNANCE",
+      "goal": "REQ0007/0008 remain bounded local scope",
+      "design_status": "PLAN_ONLY",
+      "execution_status": "NOT_RUN",
+      "evidence_class": "PLANNED_NOT_EVIDENCE"
+    },
+    {
+      "id": "I34-T07",
+      "category": "MIGRATION",
+      "goal": "Single provider allocator and duplicate version reject",
+      "design_status": "PLAN_ONLY",
+      "execution_status": "NOT_RUN",
+      "evidence_class": "PLANNED_NOT_EVIDENCE"
+    },
+    {
+      "id": "I34-T08",
+      "category": "MIGRATION",
+      "goal": "Fresh + upgrade + crash/backup/restore both providers",
+      "design_status": "PLAN_ONLY",
+      "execution_status": "NOT_RUN",
+      "evidence_class": "PLANNED_NOT_EVIDENCE"
+    },
+    {
+      "id": "I34-T09",
+      "category": "DOMAIN",
+      "goal": "P01 exact lease+owned selected role same transaction",
+      "design_status": "PLAN_ONLY",
+      "execution_status": "NOT_RUN",
+      "evidence_class": "PLANNED_NOT_EVIDENCE"
+    },
+    {
+      "id": "I34-T10",
+      "category": "CONCURRENCY",
+      "goal": "Ban/select/revoke vs P01 admission race",
+      "design_status": "PLAN_ONLY",
+      "execution_status": "NOT_RUN",
+      "evidence_class": "PLANNED_NOT_EVIDENCE"
+    },
+    {
+      "id": "I34-T11",
+      "category": "IDEMPOTENCY",
+      "goal": "Same id+same fingerprint replay returns same reservation",
+      "design_status": "PLAN_ONLY",
+      "execution_status": "NOT_RUN",
+      "evidence_class": "PLANNED_NOT_EVIDENCE"
+    },
+    {
+      "id": "I34-T12",
+      "category": "NEGATIVE",
+      "goal": "Same id different fingerprint denied without mutation",
+      "design_status": "PLAN_ONLY",
+      "execution_status": "NOT_RUN",
+      "evidence_class": "PLANNED_NOT_EVIDENCE"
+    },
+    {
+      "id": "I34-T13",
+      "category": "RECOVERY",
+      "goal": "Crash after reserve cannot duplicate Encounter",
+      "design_status": "PLAN_ONLY",
+      "execution_status": "NOT_RUN",
+      "evidence_class": "PLANNED_NOT_EVIDENCE"
+    },
+    {
+      "id": "I34-T14",
+      "category": "NEGATIVE",
+      "goal": "Postgres moderation unknown fails closed",
+      "design_status": "PLAN_ONLY",
+      "execution_status": "NOT_RUN",
+      "evidence_class": "PLANNED_NOT_EVIDENCE"
+    },
+    {
+      "id": "I34-T15",
+      "category": "SOURCE",
+      "goal": "C04 offline tests cannot promote original Client contract",
+      "design_status": "PLAN_ONLY",
+      "execution_status": "NOT_RUN",
+      "evidence_class": "PLANNED_NOT_EVIDENCE"
+    },
+    {
+      "id": "I34-T16",
+      "category": "NATIVE_NO_GO",
+      "goal": "R1 mock CI cannot prove original Client scene playable",
+      "design_status": "PLAN_ONLY",
+      "execution_status": "NOT_RUN",
+      "evidence_class": "PLANNED_NOT_EVIDENCE"
+    }
+  ],
+  "governance": {
+    "client_bin_executed": false,
+    "original_client_runtime_executed": false,
+    "server_c05_implemented": false,
+    "server_repo_modified": false,
+    "formal_req_rr_gap_spec_claim_test_changed": false,
+    "adr_0006_0007_approved": false,
+    "native_adapter_enabled": false,
+    "release_r0_pass": false,
+    "release_r1_pass": false,
+    "server_tests_run_by_s00": false,
+    "main_contract_status": "DRAFT_PARTIAL",
+    "next_migrations": "UNALLOCATED_NOT_APPLIED"
+  }
+}

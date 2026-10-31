@@ -143,3 +143,11 @@ Iterations 16–17 的正式流程編號合計 **E00–E26（27 個 gate）與 4
 - [S33 機讀 19-PR DAG](S00-ITERATION-33-C05-INTEGRATION-CONTRACT.json)：來源 Git blob pin Iterations27～32 六份契約及 E17-A/J/E23～E26 兩份 native gate、八份 Server 實際來源 blob，保存八個產品/DB/Native 決策清單；Server CI 僅為既存離線測試，不能當 original Client 相容性。
 - [24 個 I33-T01～T24 整合驗收](S00-20261031-ITERATION-33-ACCEPTANCE.md)：全部 `PLAN_ONLY/NOT_RUN`，加上 `python -B governance/check_s00_iteration33.py --check` 和 **18 個反升格回歸測試**。
 - 中央 C05 migration manifest 需由 Server owner 配號：SQLite local v2、PostgreSQL 003 已觀察，下一版均 `UNALLOCATED_NOT_APPLIED`，不可將 Iterations28～30 各自提過的候選 v3/004 直接套入不同 C05 模組。ADR-0006/0007 仍 PROPOSED，原 Client adapter OFF。
+
+
+## Iteration 34（2026-10-31）：真實 Server 21-commit Delta 收件與 C05 R0/P01 預檢
+
+- [Iteration34 完整 R0/P01 交付與 WEB Admin 回饋分類](S00-20261031-ITERATION-34-C05-R0-SERVER-DELTA-PREFLIGHT.md)：在 Iteration33 後，實際核對獨立 `ttr_server_roy` `272079cc→3e0b7e3` 的 21 個新提交／14 個變更檔案、最新四個 CI SUCCESS（均為原本離線／source-scoped 範圍）；確認新增 SQLite v2 本機 WEB Admin，但非 PostgreSQL／可配置遠端 IP，且 C05 仍未實作、`implemented_wire_contracts=[]`。
+- [S34 機讀差異與前置契約](S00-ITERATION-34-C05-R0-SERVER-DELTA-CONTRACT.json)：鎖定原 Iteration33 source blobs 和真 Server 7 個 Git blob、8 項 R0 未完成 gate、C05-P01 的單交易 Admission 及無 Native wire 的 domain 建議。**是一次快照，CI 不會 live 重新驗遠端 Server**。
+- [I34-T01～16 驗收草案](S00-20261031-ITERATION-34-ACCEPTANCE.md)：全部 `PLAN_ONLY/NOT_RUN`，新增 `python -B governance/check_s00_iteration34.py --check`、20 項 regression；它們只檢查本庫文件與證據身分，**不執行 Server .NET 或原版 Client**。
+- 不重開同義 REQ／RR，不推進 ADR-0004/5/6/7、正式 SPEC/GAP/CLM/TEST，亦不覆寫獨立 Server 庫。下一輪需 Server 真正提交 R0 policy/migration allocator 或 C05-P01 的實作／測試收據；不能再只畫同一份 19 PR DAG。
