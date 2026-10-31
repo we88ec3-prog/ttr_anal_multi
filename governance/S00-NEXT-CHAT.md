@@ -210,3 +210,11 @@ E23 SERVER_POLICY_NEEDS_ADR、E24 SOURCE_BACKED_PARTIAL、E25 NATIVE_DISCOVERY_R
 ## 2026-10-31 — S00 RR-0009 / RR-0010 有界驗收（新對話仍應讀最新 main）
 
 [完整雙項交接](s00-iterations/S00-20261031-RR0009-RR0010-REVIEW-AND-HANDOFF.md)、[RR-0009 專項 S00 有界決議](reviews/RR-0009-20261031-bounded-blocker-acceptance.md)：`RR-0009 ACCEPTED` 僅限 E70 完成 RR 驗收第5條「正向創角 UI 鏈尚未找到時的精確 blocker 與可解除證據」之研究交付；**N0→實際創角 GUI 尚未證明，GAP-CHAR-0002 OPEN**。`RR-0010 BLOCKED` 保持：C2S0x33 2B、遠征隊名稱 C2S0x3E 48B、分離 S2C0x4A 及 full/delta roster 未閉合真正建立角色 C2S→S2C→roster，**GAP-CHAR-0003 OPEN**。SPEC-CHAR/FLOW DRAFT/PARTIAL，正式 TEST 仍僅 OFFLINE_SYNTHETIC；S00 未執行原版 Client、未自行重跑 BIN／取代 T01 FULL-PASS，也沒有更動 Server repo。下一步 T03/T06 優先同版 GUI 入口/Listener 正向補證、T03/T04/T02 定向 create transaction 靜態分支，RR-0010 解除阻塞後才由正式 RR 台帳重新派工；T03 舊 T01 NEEDS_FIX 不因本次變更清除。
+
+## 2026-10-31 — Iteration38：C01 TCP→C04 原版 Client 登入整合補缺
+
+已核對 S00 `main=ac3aa886e9fd20be93b6f841ada66fe22e587aa1`、Server `main=284c1df16707834c5df64976ff8d1307e1906ae4`（之後仍須讀最新 main）。使用者本機的 Tartaros Rebirth Client 顯示 `ERROR: 서버에 접속할 수 없습니다.`；該截圖不能證明 TCP/認證原因，也未核對 Client EXE/BIN SHA，不能直接套原 KR SHA/8414/8415/8416。
+
+S00 [Iteration38 C04-D/E/F 規劃](s00-iterations/S00-20261031-ITERATION-38-C04-KR-LOGIN-GATEWAY-PLAN.md)及 [18 Gate 機讀矩陣](s00-iterations/S00-ITERATION-38-C04-LOGIN-GATES.json)：D **可立即做 Server-only opt-in loopback Listener 與安全 TCP RX/TX JSONL/遮蔽/滾檔**，E 原生 frame/auth/C02、F 回覆/選服/C03 roster/UI 只能依已審核版本契約分段啟用。C01 已做 synthetic TCP，漏的是 C01→Host→C04→C02/C03 的正式 Client 遊戲整合；不重做 C01，不混入 C05-P04。
+
+使用者 TCP 日誌需求登記 `REQ-0009 CANDIDATE`，不是正式批准全部部署政策；不新建同義 RR/GAP/TEST，沿 RR-0001/2/3/4/5/6/7/8/9/10 原狀。原版 profile 仍 UnverifiedFrameCodec，SPEC-NET/AUTH/CHAR/FLOW 都 DRAFT/PARTIAL；全部 real Client Gate NOT_RUN/blocked，**規劃已交付≠Server 程式已完成≠原版可登入**。不修改 Server repo/Client，不自動開新 branch 或啟動原版 Client。

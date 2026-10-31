@@ -168,3 +168,10 @@ Iterations 16–17 的正式流程編號合計 **E00–E26（27 個 gate）與 4
 - **修復現行收件器缺口**：`governance/check_s00_iteration35.py --candidate` 後續 PostgreSQL C05 migration 的 baseline 從舊 PG3 修正為 PG4；保留 Iteration35 當時歷史 state 不變，新增「v3 收件錯誤」及「重用 PG004」負向測試。
 - `python -B governance/check_s00_iteration36.py --check` 與 18 項設計回歸保護新來源、舊快照與 Native/ADR 不升格；**不是 PostgreSQL migration 已實際套用於玩家 DB，也不是 Server C05 或 Quest15 原生可玩測試**。
 - 並行 T01 合併的 T16-134 `SRC-0590 REGISTERED` 僅有 bounded 靜態 R2，不能冒充 Quest15 完整 C2S/S2C/場景因果。S00 本輪不擅自修改正式 REQ/RR/CLM/SPEC/GAP/TEST、T01 驗收，亦不修改獨立 Server 程式。
+
+## Iteration 38（2026-10-31，C01→C04 原版 Client 遊戲連線整合）
+
+- [C04-D／E／F 完整規劃](S00-20261031-ITERATION-38-C04-KR-LOGIN-GATEWAY-PLAN.md)：修補原本 C01 合成 TCP 與 C04 離線登入/角色清單之間缺少的遊戲 Gateway 接入。D 為 loopback、opt-in Listener＋安全 RX/TX JSONL，E 為 source-gated KR frame/Auth/C02 整合，F 為 source-gated 原版登入回覆、選服 Session／C03 roster 和實機 UI 驗收；C05-P04 不需等待此線完成。
+- [Iteration38 共 18 個 Gate 的機讀驗收矩陣](S00-ITERATION-38-C04-LOGIN-GATES.json)：BUILD、NET、LOG、AUTH、FLOW、CHAR、UI 分離 `NOT_RUN`、`NOT_IMPLEMENTED` 與 `BLOCKED_BY_NATIVE_CONTRACT`；不得以 /health、合成 TCP CI 代替原版 Client runtime。
+- 依使用者「Server 可能需要紀錄 log 檔紀錄 TCP 收發」正式登記 [REQ-0009](../../design/requirements/index.json)（`PLAYER_ADMIN_REQUEST`, `OPERATIONS`, **CANDIDATE**）；不新增同義 RR、GAP 或正式 conformance TEST；所有七份原生 SPEC 維持 DRAFT/PARTIAL。
+- 本輪僅 S00 Server-facing 規劃，不修改原版 Client、獨立 Server、資料庫、既有 Task 原稿或 C05 依賴，沒有原版 Client 連線/抓包。

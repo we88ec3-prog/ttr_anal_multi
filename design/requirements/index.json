@@ -339,6 +339,37 @@
         "ADR-0004",
         "ADR-0005"
       ]
+    },
+    {
+      "client_version": null,
+      "target_sha256": null,
+      "status": "CANDIDATE",
+      "priority": "P0",
+      "rr_ids": [],
+      "gap_ids": [],
+      "spec_ids": [],
+      "feedback_ids": [],
+      "claim_ids": [],
+      "id": "REQ-0009",
+      "title": "遊戲 TCP 收發檔案日誌與安全連線診斷",
+      "category": "OPERATIONS",
+      "need": "為排查原版 Client 無法連線、Port/監聽衝突、TCP 收發/封包解析失敗，遊戲 Gateway 應提供可持久、可關聯、具隱私保護的 ConnectionId/RX/TX/錯誤日誌。這項 Server-owned 觀察功能不得被視為原生封包格式或 Client 可玩性證明。",
+      "acceptance_criteria": [
+        "Server-only opt-in 遊戲 Listener 需提供每次 Bind、Accept、RX chunk、TX 嘗試／寫入完成、Close／Error、Timeout 的 UTC 事件、ConnectionId、runId 與明確日誌階段；TCP chunk 不可當一筆完整 frame，TX write 不可冒稱 Client ACK。",
+        "預設檔案日誌只記錄安全元資料：方向、大小、可靠解析的 marker/opcode、錯誤分類、端點與有限診斷關聯；未知或含帳密的輸入不得傾倒原始 Hex，嚴禁在包括輪替檔、例外輸出中洩漏 narrow/UTF-16 登入文字、密碼、token、Session bearer 或憑證雜湊。",
+        "實作有界異步寫檔、磁碟容量、權限/ACL、輪替、保留、drop counter、關機 flush/重啟安全；可選的開發 Hex trace 必須有獨立 opt-in 與已審核的敏感欄位遮蔽，無遮蔽表時預設拒絕 raw dump。",
+        "成功及失敗的 synthetic socket 連線、碎片／黏包、併發、OS write 失敗、日誌磁碟滿、權限拒絕及包含敏感標記的 E8/000F 測試均需實際 PASS；與原版 Client 互通 Gate 和 Test 明確分開，未經原生契約審核不得啟用 KrOriginalClient 正式 codec。"
+      ],
+      "discoveries": [
+        {
+          "channel": "PLAYER_ADMIN_REQUEST",
+          "requester_role": "ADMINISTRATOR",
+          "request_text": "另外Server可能需要紀錄log檔紀錄TCP的收發；後續要求「請規劃完成上git」。",
+          "request_record_ref": "design/requirements/requests/2026-10-31-game-tcp-observability.md",
+          "scope_note": "使用者提出候選 Server TCP 日誌需求，保存為 CANDIDATE；安全遮蔽、輪替、保留及部署方式均為 S00 建議，尚需政策批准。"
+        }
+      ],
+      "adr_ids": []
     }
   ]
 }

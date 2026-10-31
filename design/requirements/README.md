@@ -74,3 +74,9 @@ validator 只驗證索引、來源類別、連結、版本、提交的記錄路�
 [Iteration24](../../governance/s00-iterations/S00-20261031-ITERATION-24-SELECTION-SQUARE-HANDOFF.md) 應用 E80 RR-0002：S00 可先在獨立 Server 實作 **RoleSelectable / SelectionAttempt / SquareBootstrap** 的 domain model 與合成測試，對照現有 REQ-0003（角色清單權威）和 REQ-0004（角色選擇畫面/就緒），不要把選擇既存角色誤當 RR-0010 的建立角色。
 
 正式 CODE_ANALYSIS discovery 必須依 validator 綁已登錄的**同版本原生 CLM**；E80 本次只有原稿/verifier、S00 未重新執行原始 KR BIN 或建立獨立 scoped CLM，因此**不假填** E80 新字段（mode0/2、S2C69/7→C2S43）至舊 CLM、不擅加正式 REQ。待 T01/T03 交付正式限定來源，再評估是否沿 REQ-0004 擴充，或因選角的 Server-side authorization 不同驗收成果而新增獨立 CANDIDATE REQ。版本、Server policy 與 original Client evidence 必須分開。
+
+## Iteration 38 — 遊戲 TCP 日誌使用者需求（2026-10-31）
+
+使用者明確提出「另外 Server 可能需要紀錄 log 檔紀錄 TCP 的收發」，已以 `PLAYER_ADMIN_REQUEST`／管理員角色去敏登錄 [原始要求](requests/2026-10-31-game-tcp-observability.md)，新增唯一 `REQ-0009`（`OPERATIONS`, `CANDIDATE`，版本中立）。
+
+它與 `REQ-0005` 的原生 frame 適配（及 `REQ-0006` 的 Web Admin 稽核）具有不同的安全/檔案驗收，故獨立管理；原有 Client-first 封包問題仍按 RR-0001/0003/0004/0005/0006/0007 和 GAP-NET/AUTH 追查。設計範圍及 18 Gate 見 [S00 C04-D/E/F 計畫](../../governance/s00-iterations/S00-20261031-ITERATION-38-C04-KR-LOGIN-GATEWAY-PLAN.md)。這不批准輸出明文憑證／未知封包 raw hex，不等於開放真實 KR Listener 或完成 Client 登入。
