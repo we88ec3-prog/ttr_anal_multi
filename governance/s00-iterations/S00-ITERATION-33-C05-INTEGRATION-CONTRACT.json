@@ -1,0 +1,723 @@
+{
+  "schema": "s00-iteration33-c05-integrated-delivery-v1",
+  "kind": "NON_NORMATIVE_PLANNING_OVERLAY",
+  "date": "2026-10-31",
+  "client_version": "kr",
+  "client_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+  "planning_main_baseline": "e1a3c383a046a0514f7eee983bc2fc3173c3a113",
+  "source_blobs": [
+    {
+      "path": "governance/s00-iterations/S00-ITERATION-27-C05-DELIVERY-MATRIX.json",
+      "git_blob_sha": "5d2d814ec73e51d8d49a06b2305dfa9dd0877d78"
+    },
+    {
+      "path": "governance/s00-iterations/S00-ITERATION-28-C05-W01-W03-CONTRACT.json",
+      "git_blob_sha": "ff75e523cdd57601a983466afc28a59f7290aa19"
+    },
+    {
+      "path": "governance/s00-iterations/S00-ITERATION-29-C05-COMBAT-CONTRACT.json",
+      "git_blob_sha": "bb22562f91ea5cf4fc361630697ab554f6f00e1d"
+    },
+    {
+      "path": "governance/s00-iterations/S00-ITERATION-30-OBJECTIVE-SETTLEMENT-CONTRACT.json",
+      "git_blob_sha": "995e65b2f5312d8a595d8f2045659d1914ecbb80"
+    },
+    {
+      "path": "governance/s00-iterations/S00-ITERATION-31-QUEST-REWARD-CONTRACT.json",
+      "git_blob_sha": "1a37de69fd2ae19773b8a6dbde64034946d6e503"
+    },
+    {
+      "path": "governance/s00-iterations/S00-ITERATION-32-TUTORIAL-EXIT-RELOG-CONTRACT.json",
+      "git_blob_sha": "fd5e3f24f56010e0b99a190037951d513e107928"
+    },
+    {
+      "path": "governance/s00-iterations/S00-ITERATION-17-TUTORIAL-COMPLETION-GATES.json",
+      "git_blob_sha": "e5179650c54589630cae094fab4846d3584eb607"
+    },
+    {
+      "path": "governance/s00-iterations/S00-ITERATION-18-TUTORIAL-COMBAT-GATES.json",
+      "git_blob_sha": "1f2a7bc63e6bed56c6d5f63a5a2d248f100ea71e"
+    }
+  ],
+  "gate_snapshots": [
+    {
+      "id": "E17-A",
+      "evidence_state": "DISCOVERY_REQUIRED",
+      "blocking_unknown": "Scene / instance / encounter 間的 KR 實際映射與權威來源",
+      "owners": [
+        "T07",
+        "T16",
+        "T04"
+      ],
+      "native_compatibility_confirmed": false,
+      "original_client_runtime_executed": false
+    },
+    {
+      "id": "E17-J",
+      "evidence_state": "SERVER_POLICY_PENDING_ADR",
+      "blocking_unknown": "重試/重送/跨 scene/斷線復原與交易邊界待 ADR",
+      "owners": [
+        "T15",
+        "T02",
+        "T07",
+        "T14"
+      ],
+      "native_compatibility_confirmed": false,
+      "original_client_runtime_executed": false
+    },
+    {
+      "id": "E23",
+      "evidence_state": "SERVER_POLICY_NEEDS_ADR",
+      "blocking_unknown": "沒有已證原版 tutorial_complete packet/flag，也未證 account vs character scope；暫為 Server-only ADR 提案",
+      "owners": [
+        "T15",
+        "T16",
+        "T04",
+        "S00"
+      ],
+      "native_compatibility_confirmed": false,
+      "original_client_runtime_executed": false
+    },
+    {
+      "id": "E24",
+      "evidence_state": "SOURCE_BACKED_PARTIAL",
+      "blocking_unknown": "Quest15 available != accepted/completed；0x74(16)/0x38 town selector/0x40(15) 靜態存在，不代表實際 Server 時序",
+      "owners": [
+        "T16",
+        "T06",
+        "T02"
+      ],
+      "native_compatibility_confirmed": false,
+      "original_client_runtime_executed": false
+    },
+    {
+      "id": "E25",
+      "evidence_state": "NATIVE_DISCOVERY_REQUIRED",
+      "blocking_unknown": "Quest15 Scene3 不是 Server 強制地圖指令；T07 0x005F type6 有本機修補反例",
+      "owners": [
+        "T07",
+        "T05",
+        "T06",
+        "T16"
+      ],
+      "native_compatibility_confirmed": false,
+      "original_client_runtime_executed": false
+    },
+    {
+      "id": "E26",
+      "evidence_state": "ORIGINAL_CLIENT_RUNTIME_REQUIRED",
+      "blocking_unknown": "原版可玩實測需另行明確授權；本方案沒有完成任何原版 Client runtime 驗收",
+      "owners": [
+        "T15",
+        "T05",
+        "T04",
+        "S00"
+      ],
+      "native_compatibility_confirmed": false,
+      "original_client_runtime_executed": false
+    }
+  ],
+  "server_snapshot": {
+    "repo": "we88ec3-prog/ttr_server_roy",
+    "main_sha": "272079cc69b124870af303d711931ec20bce2229",
+    "ci_id": 41134733030,
+    "ci_conclusion": "SUCCESS_OFFLINE_ONLY",
+    "state": "C00_OPS_C02D_C03_OFFLINE_C04_BOUNDED_C05_NOT_IMPLEMENTED",
+    "source_blobs": [
+      {
+        "path": "src/Tartaros.Persistence/SqliteLocalDatabase.cs",
+        "git_blob_sha": "c38f647521f5e3f1e897f8a6d9331e8eecdbbb9b"
+      },
+      {
+        "path": "src/Tartaros.Persistence/PostgresCharacterActions.cs",
+        "git_blob_sha": "7447176fc781b2dfbb3f88e1866e8ceba0b7dccc"
+      },
+      {
+        "path": "src/Tartaros.Persistence/SqliteCharacterStore.cs",
+        "git_blob_sha": "6d423cf3b14627b89dc28912518b531aa0560f4e"
+      },
+      {
+        "path": "src/Tartaros.Session/ISessionLeaseRegistry.cs",
+        "git_blob_sha": "40512cc33e6e8ec6c90224d5a53ffdd8881fa929"
+      },
+      {
+        "path": "docs/OPS-LOCAL-SQLITE.md",
+        "git_blob_sha": "0a85a8281bce99571223d330a0966b60c2bbcf4d"
+      },
+      {
+        "path": "docs/C02-D-LOCAL-ACCOUNT-ADMIN.md",
+        "git_blob_sha": "f1d3023234523c64087d980238e277d5296ef947"
+      },
+      {
+        "path": "contracts/spec-revision.json",
+        "git_blob_sha": "a296c8dd101872c5e5c0b99fe03642fab0fd7c1a"
+      },
+      {
+        "path": "db/migrations/003_c03_selection.sql",
+        "git_blob_sha": "51fdf00130b86738b8eb4f74006abcde653ccd84"
+      }
+    ],
+    "ci_live_revalidates_remote": false
+  },
+  "integration": {
+    "total_prs": 19,
+    "source_slices": [
+      "S28-01..03",
+      "S29-01..04",
+      "S30-01..04",
+      "S31-01..04",
+      "S32-01..04"
+    ],
+    "workpack_order_policy": "TOPOLOGICAL_WITH_APPROVED_PARALLEL_READ_ONLY_PREP",
+    "no_runtime_timeline_commitment": true,
+    "subsystem_owners": "SERVER_IMPLEMENTATION_MAINTAINER",
+    "source_W01_W09": "S27-W01..W09"
+  },
+  "pr_plan": [
+    {
+      "id": "C05-P01",
+      "source_work_id": "S28-01",
+      "depends_on": [],
+      "release_slice": "R1",
+      "scope": "atomic admission/selected-role/Session lease",
+      "acceptance": "I28-T01..T05",
+      "implementation_status": "NOT_STARTED",
+      "domain_ci": "NOT_RUN",
+      "native_ci": "SOURCE_GATED_NOT_RUN",
+      "native_adapter_enabled": false
+    },
+    {
+      "id": "C05-P02",
+      "source_work_id": "S28-02",
+      "depends_on": [
+        "C05-P01"
+      ],
+      "release_slice": "R1",
+      "scope": "durable Encounter state/CAS/recovery",
+      "acceptance": "I28-T06..T09",
+      "implementation_status": "NOT_STARTED",
+      "domain_ci": "NOT_RUN",
+      "native_ci": "SOURCE_GATED_NOT_RUN",
+      "native_adapter_enabled": false
+    },
+    {
+      "id": "C05-P03",
+      "source_work_id": "S28-03",
+      "depends_on": [
+        "C05-P02"
+      ],
+      "release_slice": "R1",
+      "scope": "deterministic mock Actor spawn/AI/movement",
+      "acceptance": "I28-T10..T16",
+      "implementation_status": "NOT_STARTED",
+      "domain_ci": "NOT_RUN",
+      "native_ci": "SOURCE_GATED_NOT_RUN",
+      "native_adapter_enabled": false
+    },
+    {
+      "id": "C05-P04",
+      "source_work_id": "S29-01",
+      "depends_on": [
+        "C05-P02",
+        "C05-P03"
+      ],
+      "release_slice": "R2",
+      "scope": "fenced ordinary attack/ownership/window",
+      "acceptance": "I29-T01..T06",
+      "implementation_status": "NOT_STARTED",
+      "domain_ci": "NOT_RUN",
+      "native_ci": "SOURCE_GATED_NOT_RUN",
+      "native_adapter_enabled": false
+    },
+    {
+      "id": "C05-P05",
+      "source_work_id": "S29-02",
+      "depends_on": [
+        "C05-P04"
+      ],
+      "release_slice": "R2",
+      "scope": "atomic skill resources/cooldown/cancel",
+      "acceptance": "I29-T07..T12",
+      "implementation_status": "NOT_STARTED",
+      "domain_ci": "NOT_RUN",
+      "native_ci": "SOURCE_GATED_NOT_RUN",
+      "native_adapter_enabled": false
+    },
+    {
+      "id": "C05-P06",
+      "source_work_id": "S29-03",
+      "depends_on": [
+        "C05-P04",
+        "C05-P05"
+      ],
+      "release_slice": "R2",
+      "scope": "server-authored hit/HP/death once",
+      "acceptance": "I29-T13..T18",
+      "implementation_status": "NOT_STARTED",
+      "domain_ci": "NOT_RUN",
+      "native_ci": "SOURCE_GATED_NOT_RUN",
+      "native_adapter_enabled": false
+    },
+    {
+      "id": "C05-P07",
+      "source_work_id": "S29-04",
+      "depends_on": [
+        "C05-P06"
+      ],
+      "release_slice": "R2",
+      "scope": "combat cancel/relogin/crash fences",
+      "acceptance": "I29-T19..T24",
+      "implementation_status": "NOT_STARTED",
+      "domain_ci": "NOT_RUN",
+      "native_ci": "SOURCE_GATED_NOT_RUN",
+      "native_adapter_enabled": false
+    },
+    {
+      "id": "C05-P08",
+      "source_work_id": "S30-01",
+      "depends_on": [
+        "C05-P06",
+        "C05-P07"
+      ],
+      "release_slice": "R3",
+      "scope": "verified ActorDeath inbox and dedup",
+      "acceptance": "I30-T01..T06",
+      "implementation_status": "NOT_STARTED",
+      "domain_ci": "NOT_RUN",
+      "native_ci": "SOURCE_GATED_NOT_RUN",
+      "native_adapter_enabled": false
+    },
+    {
+      "id": "C05-P09",
+      "source_work_id": "S30-02",
+      "depends_on": [
+        "C05-P08"
+      ],
+      "release_slice": "R3",
+      "scope": "versioned wave/objective mock predicates",
+      "acceptance": "I30-T07..T12",
+      "implementation_status": "NOT_STARTED",
+      "domain_ci": "NOT_RUN",
+      "native_ci": "SOURCE_GATED_NOT_RUN",
+      "native_adapter_enabled": false
+    },
+    {
+      "id": "C05-P10",
+      "source_work_id": "S30-03",
+      "depends_on": [
+        "C05-P09"
+      ],
+      "release_slice": "R3",
+      "scope": "once-only Scenario terminal CAS",
+      "acceptance": "I30-T13..T18",
+      "implementation_status": "NOT_STARTED",
+      "domain_ci": "NOT_RUN",
+      "native_ci": "SOURCE_GATED_NOT_RUN",
+      "native_adapter_enabled": false
+    },
+    {
+      "id": "C05-P11",
+      "source_work_id": "S30-04",
+      "depends_on": [
+        "C05-P10"
+      ],
+      "release_slice": "R3",
+      "scope": "transactional terminal outbox/Quest seam",
+      "acceptance": "I30-T19..T24",
+      "implementation_status": "NOT_STARTED",
+      "domain_ci": "NOT_RUN",
+      "native_ci": "SOURCE_GATED_NOT_RUN",
+      "native_adapter_enabled": false
+    },
+    {
+      "id": "C05-P12",
+      "source_work_id": "S31-01",
+      "depends_on": [
+        "C05-P10",
+        "C05-P11"
+      ],
+      "release_slice": "R4",
+      "scope": "Quest14 objective/turn-in independent",
+      "acceptance": "I31-T01..T06",
+      "implementation_status": "NOT_STARTED",
+      "domain_ci": "NOT_RUN",
+      "native_ci": "SOURCE_GATED_NOT_RUN",
+      "native_adapter_enabled": false
+    },
+    {
+      "id": "C05-P13",
+      "source_work_id": "S31-02",
+      "depends_on": [
+        "C05-P12"
+      ],
+      "release_slice": "R4",
+      "scope": "Quest16 available/accept/complete",
+      "acceptance": "I31-T07..T12",
+      "implementation_status": "NOT_STARTED",
+      "domain_ci": "NOT_RUN",
+      "native_ci": "SOURCE_GATED_NOT_RUN",
+      "native_adapter_enabled": false
+    },
+    {
+      "id": "C05-P14",
+      "source_work_id": "S31-03",
+      "depends_on": [
+        "C05-P13",
+        "C05-P11"
+      ],
+      "release_slice": "R4",
+      "scope": "policy-gated reward ledger/outbox",
+      "acceptance": "I31-T13..T18",
+      "implementation_status": "NOT_STARTED",
+      "domain_ci": "NOT_RUN",
+      "native_ci": "SOURCE_GATED_NOT_RUN",
+      "native_adapter_enabled": false
+    },
+    {
+      "id": "C05-P15",
+      "source_work_id": "S31-04",
+      "depends_on": [
+        "C05-P13",
+        "C05-P14"
+      ],
+      "release_slice": "R4",
+      "scope": "Quest15 availability/relog",
+      "acceptance": "I31-T19..T24",
+      "implementation_status": "NOT_STARTED",
+      "domain_ci": "NOT_RUN",
+      "native_ci": "SOURCE_GATED_NOT_RUN",
+      "native_adapter_enabled": false
+    },
+    {
+      "id": "C05-P16",
+      "source_work_id": "S32-01",
+      "depends_on": [
+        "C05-P10",
+        "C05-P14",
+        "C05-P15"
+      ],
+      "release_slice": "R5",
+      "scope": "per-role tutorial terminal eligibility/checkpoint",
+      "acceptance": "I32-T01..T06",
+      "implementation_status": "NOT_STARTED",
+      "domain_ci": "NOT_RUN",
+      "native_ci": "SOURCE_GATED_NOT_RUN",
+      "native_adapter_enabled": false
+    },
+    {
+      "id": "C05-P17",
+      "source_work_id": "S32-02",
+      "depends_on": [
+        "C05-P16"
+      ],
+      "release_slice": "R5",
+      "scope": "fenced scene exit admission/transfer",
+      "acceptance": "I32-T07..T12",
+      "implementation_status": "NOT_STARTED",
+      "domain_ci": "NOT_RUN",
+      "native_ci": "SOURCE_GATED_NOT_RUN",
+      "native_adapter_enabled": false
+    },
+    {
+      "id": "C05-P18",
+      "source_work_id": "S32-03",
+      "depends_on": [
+        "C05-P17"
+      ],
+      "release_slice": "R5",
+      "scope": "mock world-ready vs Client observation",
+      "acceptance": "I32-T13..T18",
+      "implementation_status": "NOT_STARTED",
+      "domain_ci": "NOT_RUN",
+      "native_ci": "SOURCE_GATED_NOT_RUN",
+      "native_adapter_enabled": false
+    },
+    {
+      "id": "C05-P19",
+      "source_work_id": "S32-04",
+      "depends_on": [
+        "C05-P16",
+        "C05-P17",
+        "C05-P18"
+      ],
+      "release_slice": "R5",
+      "scope": "relog/ban/recovery/outbox reconciliation",
+      "acceptance": "I32-T19..T24",
+      "implementation_status": "NOT_STARTED",
+      "domain_ci": "NOT_RUN",
+      "native_ci": "SOURCE_GATED_NOT_RUN",
+      "native_adapter_enabled": false
+    }
+  ],
+  "release_gates": [
+    {
+      "id": "R0",
+      "name": "Governance, source, migrations and policy planning",
+      "work_ids": [],
+      "required": [
+        "Server owner reviews ADR-0006/ADR-0007 and explicitly approves each mutable product-policy slice before production use",
+        "Central migration allocator and lease/ban/provider lock-order review",
+        "Source-pinned mock fixture and offline test runner; native wire OFF"
+      ],
+      "level": "PLANNING_ONLY",
+      "status": "PLAN_ONLY"
+    },
+    {
+      "id": "R1",
+      "name": "Encounter/Actor offline mock",
+      "work_ids": [
+        "C05-P01",
+        "C05-P02",
+        "C05-P03"
+      ],
+      "required": [
+        "C03 selected-role/session ownership transaction fencing",
+        "Encounter revision/reopen; deterministic Actor/AI, negative cross-role/epoch tests",
+        "SQLite & PostgreSQL provider tests and restore, native adapter OFF"
+      ],
+      "level": "DOMAIN_SYNTHETIC_ONLY",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "R2",
+      "name": "Combat offline mock",
+      "work_ids": [
+        "C05-P04",
+        "C05-P05",
+        "C05-P06",
+        "C05-P07"
+      ],
+      "required": [
+        "Authoritative input/cost/cooldown/HP/death and cancel/replay",
+        "Stale session/ban, overflow, multi-worker, crash restore",
+        "No original KR skills or damage formula claim"
+      ],
+      "level": "DOMAIN_SYNTHETIC_ONLY",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "R3",
+      "name": "Scenario objective/terminal offline mock",
+      "work_ids": [
+        "C05-P08",
+        "C05-P09",
+        "C05-P10",
+        "C05-P11"
+      ],
+      "required": [
+        "Verified ActorDeath, bounded deterministic fixture wave/goal",
+        "One terminal CAS with durable outbox and no auto Quest turn-in",
+        "Reconnect/replay/outbox fault injection"
+      ],
+      "level": "DOMAIN_SYNTHETIC_ONLY",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "R4",
+      "name": "Quest/Reward offline mock",
+      "work_ids": [
+        "C05-P12",
+        "C05-P13",
+        "C05-P14",
+        "C05-P15"
+      ],
+      "required": [
+        "Quest14/16/15 states independent from Scenario and each other",
+        "Reward type2 value50 opaque without explicit policy mapping; once-only ledger",
+        "Provider crash/restore and Quest15 AVAILABLE not accepted"
+      ],
+      "level": "DOMAIN_SYNTHETIC_ONLY",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "R5",
+      "name": "Tutorial exit and relog offline mock",
+      "work_ids": [
+        "C05-P16",
+        "C05-P17",
+        "C05-P18",
+        "C05-P19"
+      ],
+      "required": [
+        "Durable tutorial checkpoint separate from SceneExitAdmission and Client ready",
+        "Full new SessionEpoch/ban/reconnect and outbox recovery",
+        "No synthetic Client ready promoted to native runtime proof"
+      ],
+      "level": "DOMAIN_SYNTHETIC_ONLY",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "R6",
+      "name": "Separate original KR Client adapter admission",
+      "work_ids": [],
+      "required": [
+        "Version SHA and direction/frame/Conn/scene/field/error source-backed contract for every native feature",
+        "Tracked authoritative research evidence/gap decisions and independently approved Server policy",
+        "User separately authorizes isolated original Client runtime; positive Client scene/world/quest/skill test, negative cases",
+        "Native code requires explicit maintainer release decision; no blanket enable for partial E17-E26"
+      ],
+      "level": "NATIVE_COMPATIBILITY_SEPARATE",
+      "status": "BLOCKED_BY_EVIDENCE"
+    }
+  ],
+  "policy_decisions": [
+    {
+      "id": "D33-01",
+      "owner": "Server maintainer",
+      "subject": "ADR-0006 per-role vs account tutorial progress and first-entry/resume",
+      "dependencies": [
+        "R0"
+      ],
+      "default_if_unresolved": "MOCK_ONLY_FAIL_CLOSED"
+    },
+    {
+      "id": "D33-02",
+      "owner": "Server maintainer",
+      "subject": "ADR-0007 Encounter reconnect/abort vs resume, terminal authority and failure precedence",
+      "dependencies": [
+        "C05-P02",
+        "C05-P10"
+      ],
+      "default_if_unresolved": "MOCK_ONLY_FAIL_CLOSED"
+    },
+    {
+      "id": "D33-03",
+      "owner": "Server maintainer",
+      "subject": "Mock combat cast cancel/refund/cooldown timing and hit formula",
+      "dependencies": [
+        "C05-P05",
+        "C05-P06"
+      ],
+      "default_if_unresolved": "FIXTURE_ONLY_NO_NATIVE_RULE"
+    },
+    {
+      "id": "D33-04",
+      "owner": "Server maintainer",
+      "subject": "Quest14/16 turn-in NPC authorization, objective states, Quest15 prerequisite",
+      "dependencies": [
+        "C05-P12",
+        "C05-P13",
+        "C05-P15"
+      ],
+      "default_if_unresolved": "NO_AUTO_QUEST_TRANSITION"
+    },
+    {
+      "id": "D33-05",
+      "owner": "Server maintainer + research",
+      "subject": "Quest16 Reward type2 value50 opaque mapping and payout gate",
+      "dependencies": [
+        "C05-P14"
+      ],
+      "default_if_unresolved": "REWARD_POLICY_UNRESOLVED_NO_CREDIT"
+    },
+    {
+      "id": "D33-06",
+      "owner": "Server maintainer",
+      "subject": "Tutorial completion vs SceneExit ordering, destination policy and failure compensation",
+      "dependencies": [
+        "C05-P16",
+        "C05-P17"
+      ],
+      "default_if_unresolved": "PENDING_NO_WORLD_READY"
+    },
+    {
+      "id": "D33-07",
+      "owner": "DB release owner",
+      "subject": "SQLite v2 / PG003 forward migration version ownership, lock order, upgrade+backup/restore",
+      "dependencies": [
+        "R0"
+      ],
+      "default_if_unresolved": "NO_C05_SCHEMA_RELEASE"
+    },
+    {
+      "id": "D33-08",
+      "owner": "Client compatibility research owners",
+      "subject": "KR version-specific positive source and isolated runtime release per adapter",
+      "dependencies": [
+        "R6"
+      ],
+      "default_if_unresolved": "NATIVE_ADAPTER_DISABLED"
+    }
+  ],
+  "migration_control": {
+    "db_owner_required": true,
+    "provider_current": {
+      "sqlite_local_user_version": 2,
+      "postgres_migrations_applied_through": 3,
+      "sqlite_c02d_suspend_supported": true,
+      "postgres_c02d_suspend_equivalence_verified": false
+    },
+    "new_versions": {
+      "sqlite": "UNALLOCATED_NOT_APPLIED",
+      "postgres": "UNALLOCATED_NOT_APPLIED"
+    },
+    "single_allocator": "SERVER_REPO_C05_SCHEMA_RELEASE_MANIFEST_REQUIRED",
+    "rules": [
+      "Before any C05 PR with DDL, latest actual DB migration state must be verified for each provider; do not reuse candidate SQLite v3/PG004 across subprojects",
+      "One centrally owned, append-only schema manifest records module, dependency, ordinal, file digest, status and provider; assign unique versions in release order and verify in CI",
+      "Merge order or transactional migrations must preserve C02/C03 existing data and SQLite C02-D ban revocation, with explicit PostgreSQL policy gap",
+      "For each schema step test fresh initialization, v2/003 upgrade, rollback on crash, backup/restore-new/reopen, unknown future versions fail-closed and unique event/grant/outbox constraints",
+      "No migration applied, no production schema release, no Server source changed by this S00 planning PR"
+    ]
+  },
+  "native_admission": {
+    "adapter": "SOURCE_GATED_NO_IMPLEMENTATION",
+    "version_sha_required": true,
+    "individual_feature_proof_required": true,
+    "original_client_run_authorization_required": true,
+    "proof_fields": [
+      "Client SHA/version",
+      "C2S/S2C opcode and complete frame",
+      "connection/scene/field authority",
+      "source function/producer/consumer pairing",
+      "failure/retry/size bounds",
+      "runtime UI/control negative and positive observation"
+    ],
+    "blocked_gates": [
+      "E17-A",
+      "E17-J",
+      "E23",
+      "E24",
+      "E25",
+      "E26"
+    ],
+    "do_not_infer_from": [
+      "CTutorial S2C0x004C local map14",
+      "Quest15 AVAILABLE",
+      "Lua LoadMap town001D.map",
+      "C2S0x42/S2C0x69/C2S0x43 partial",
+      "Server mock WORLD_DOMAIN_ADMITTED",
+      "Synthetic TCP/SQLite CI PASS"
+    ]
+  },
+  "governance": {
+    "adrs": [
+      "ADR-0006",
+      "ADR-0007"
+    ],
+    "adr_state": "PROPOSED_NOT_APPROVED",
+    "no_formal_rr_req_gap_claim_test_promotion": true,
+    "actual_server_prs_completed": 0,
+    "actual_server_c05_implemented": false,
+    "domain_gameplay_tests_executed": false,
+    "original_client_runtime_executed": false,
+    "original_server_trace_verified": false,
+    "original_native_compatibility_confirmed": false,
+    "native_adapter_enabled": false,
+    "source_evidence_upgraded": false
+  },
+  "acceptance_file": "governance/s00-iterations/S00-20261031-ITERATION-33-ACCEPTANCE.md",
+  "expected_acceptance_cases": 24,
+  "no_go": [
+    "NO_SERVER_IMPL_CLAIM_FROM_PLAN",
+    "NO_AUTOMATIC_ADR_APPROVAL",
+    "NO_NATIVE_CLIENT_READY_FROM_MOCK",
+    "NO_QUEST_AUTO_COMPLETION_FROM_SCENARIO",
+    "NO_REWARD_TYPE2_ASSUMPTION",
+    "NO_DUPLICATE_C05_MIGRATION_VERSION",
+    "NO_PROVIDER_POLICY_PARITY_ASSUMPTION",
+    "NO_ORIGINAL_CLIENT_RUNTIME_WITHOUT_AUTHORIZATION",
+    "NO_DOUBLE_REWARD_OR_OUTBOX",
+    "NO_FORMAL_EVIDENCE_PROMOTION"
+  ]
+}

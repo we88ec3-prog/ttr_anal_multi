@@ -1,0 +1,359 @@
+{
+  "schema": "s00-iteration32-tutorial-exit-relog-v1",
+  "kind": "NON_NORMATIVE_DOMAIN_DESIGN",
+  "date": "2026-10-31",
+  "s00_base_sha": "dcbb7f9d41b50bdf563ff849ae1442f56d9c40c4",
+  "client_build": "kr",
+  "client_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+  "sources": [
+    {
+      "path": "governance/s00-iterations/S00-ITERATION-31-QUEST-REWARD-CONTRACT.json",
+      "git_blob_sha": "1a37de69fd2ae19773b8a6dbde64034946d6e503"
+    },
+    {
+      "path": "governance/s00-iterations/S00-ITERATION-27-C05-DELIVERY-MATRIX.json",
+      "git_blob_sha": "5d2d814ec73e51d8d49a06b2305dfa9dd0877d78"
+    },
+    {
+      "path": "governance/s00-iterations/S00-ITERATION-17-TUTORIAL-COMPLETION-GATES.json",
+      "git_blob_sha": "e5179650c54589630cae094fab4846d3584eb607"
+    },
+    {
+      "path": "governance/s00-iterations/S00-ITERATION-18-TUTORIAL-COMBAT-GATES.json",
+      "git_blob_sha": "1f2a7bc63e6bed56c6d5f63a5a2d248f100ea71e"
+    },
+    {
+      "path": "governance/s00-iterations/S00-ITERATION-26-ENCOUNTER-QUEST-EXIT-MATRIX.json",
+      "git_blob_sha": "6655e480f3cedb8556d2700a89ef6e9cbb3bd208"
+    }
+  ],
+  "original_gates": [
+    {
+      "id": "E23",
+      "evidence_state": "SERVER_POLICY_NEEDS_ADR",
+      "blocking_unknown": "沒有已證原版 tutorial_complete packet/flag，也未證 account vs character scope；暫為 Server-only ADR 提案",
+      "owners": [
+        "T15",
+        "T16",
+        "T04",
+        "S00"
+      ],
+      "official_status": "PLAN_ONLY",
+      "native_compatibility_confirmed": false,
+      "original_runtime_executed": false
+    },
+    {
+      "id": "E24",
+      "evidence_state": "SOURCE_BACKED_PARTIAL",
+      "blocking_unknown": "Quest15 available != accepted/completed；0x74(16)/0x38 town selector/0x40(15) 靜態存在，不代表實際 Server 時序",
+      "owners": [
+        "T16",
+        "T06",
+        "T02"
+      ],
+      "official_status": "PLAN_ONLY",
+      "native_compatibility_confirmed": false,
+      "original_runtime_executed": false
+    },
+    {
+      "id": "E25",
+      "evidence_state": "NATIVE_DISCOVERY_REQUIRED",
+      "blocking_unknown": "Quest15 Scene3 不是 Server 強制地圖指令；T07 0x005F type6 有本機修補反例",
+      "owners": [
+        "T07",
+        "T05",
+        "T06",
+        "T16"
+      ],
+      "official_status": "PLAN_ONLY",
+      "native_compatibility_confirmed": false,
+      "original_runtime_executed": false
+    },
+    {
+      "id": "E26",
+      "evidence_state": "ORIGINAL_CLIENT_RUNTIME_REQUIRED",
+      "blocking_unknown": "原版可玩實測需另行明確授權；本方案沒有完成任何原版 Client runtime 驗收",
+      "owners": [
+        "T15",
+        "T05",
+        "T04",
+        "S00"
+      ],
+      "official_status": "PLAN_ONLY",
+      "native_compatibility_confirmed": false,
+      "original_runtime_executed": false
+    },
+    {
+      "id": "E17-J",
+      "evidence_state": "SERVER_POLICY_PENDING_ADR",
+      "blocking_unknown": "重試/重送/跨 scene/斷線復原與交易邊界待 ADR",
+      "owners": [
+        "T15",
+        "T02",
+        "T07",
+        "T14"
+      ],
+      "official_status": "PLAN_ONLY",
+      "native_compatibility_confirmed": false,
+      "original_runtime_executed": false
+    }
+  ],
+  "server_snapshot": {
+    "repo": "we88ec3-prog/ttr_server_roy",
+    "main_sha": "272079cc69b124870af303d711931ec20bce2229",
+    "ci_run": 41134733030,
+    "ci_conclusion": "SUCCESS_OFFLINE_ONLY",
+    "state": "C00_OPS_C02D_C03_OFFLINE_C04_PARTIAL_C05_NOT_IMPLEMENTED",
+    "anchors": [
+      {
+        "path": "src/Tartaros.Session/InMemorySessionRegistry.cs",
+        "git_blob_sha": "e1b2d09778156cc58e4b67ffc230ed991a8bc9f6"
+      },
+      {
+        "path": "src/Tartaros.Session/ISessionLeaseRegistry.cs",
+        "git_blob_sha": "40512cc33e6e8ec6c90224d5a53ffdd8881fa929"
+      },
+      {
+        "path": "src/Tartaros.Character/IAtomicCharacterActions.cs",
+        "git_blob_sha": "3700c6987b346decc3d59e51be853daca7c0cb78"
+      },
+      {
+        "path": "src/Tartaros.Persistence/SqliteLocalDatabase.cs",
+        "git_blob_sha": "c38f647521f5e3f1e897f8a6d9331e8eecdbbb9b"
+      },
+      {
+        "path": "src/Tartaros.Persistence/SqliteCharacterStore.cs",
+        "git_blob_sha": "6d423cf3b14627b89dc28912518b531aa0560f4e"
+      },
+      {
+        "path": "src/Tartaros.Persistence/PostgresCharacterActions.cs",
+        "git_blob_sha": "7447176fc781b2dfbb3f88e1866e8ceba0b7dccc"
+      },
+      {
+        "path": "docs/OPS-LOCAL-SQLITE.md",
+        "git_blob_sha": "0a85a8281bce99571223d330a0966b60c2bbcf4d"
+      },
+      {
+        "path": "contracts/spec-revision.json",
+        "git_blob_sha": "a296c8dd101872c5e5c0b99fe03642fab0fd7c1a"
+      }
+    ],
+    "ci_rechecks_remote": false
+  },
+  "parent": "S27-W08",
+  "dependencies": [
+    "S31-01",
+    "S31-02",
+    "S31-03",
+    "S31-04"
+  ],
+  "native_adapter_parent": "S27-W09_SOURCE_GATED_NO_IMPLEMENTATION",
+  "policy": {
+    "adr_ids": [
+      "ADR-0006",
+      "ADR-0007"
+    ],
+    "status": "PROPOSED_NOT_APPROVED",
+    "mode": "SERVER_MOCK_ONLY",
+    "server_c05_implemented": false,
+    "domain_tests_executed": false,
+    "original_client_runtime_executed": false,
+    "original_server_trace_verified": false,
+    "original_native_compatibility_confirmed": false,
+    "native_adapter_enabled": false,
+    "formal_registry_promoted": false
+  },
+  "state_dimensions": {
+    "role_tutorial": [
+      "NOT_STARTED",
+      "IN_PROGRESS",
+      "TERMINAL_ELIGIBLE",
+      "COMPLETED_POLICY_APPROVED"
+    ],
+    "scene_transfer": [
+      "NONE",
+      "RESERVED",
+      "TRANSFERRING",
+      "WORLD_DOMAIN_ADMITTED",
+      "ABORTED",
+      "EXPIRED"
+    ],
+    "native_observation": [
+      "UNOBSERVED",
+      "SCENE_LOADED_OBSERVED",
+      "CONTROL_READY_OBSERVED"
+    ],
+    "source_of_truth": "Per-role durable progress != scene admission != client observation != Quest15 available != reward ledger",
+    "world_ready_policy": "MOCK_DOMAIN_ONLY_NOT_ORIGINAL_CLIENT_WORLD_READY"
+  },
+  "persistence": {
+    "sqlite_existing_version": 2,
+    "postgres_existing_migration": 3,
+    "sqlite_next": "UNALLOCATED_NOT_APPLIED",
+    "postgres_next": "UNALLOCATED_NOT_APPLIED",
+    "migration_policy": "CENTRAL_C05_REVISION_SEQUENCER_REQUIRED",
+    "proposed_tables": [
+      "mock_tutorial_progress",
+      "mock_tutorial_completion_inbox",
+      "mock_scene_exit_admission",
+      "mock_scene_transfer_audit",
+      "mock_world_ready_observation",
+      "mock_recovery_inbox"
+    ],
+    "transaction_rule": "Current full SessionLease, selected role, SQLite ban and phase-specific CAS must guard any authoritative state change, no cross-transaction check-then-act",
+    "replay_rule": "Unique per role/lease epoch/admission/request/event payload fingerprints; old session cannot claim replay success",
+    "transport_rule": "Internal durable event at-most-once effect; outbox at-least-once delivery with consumer dedup, not exactly-once TCP",
+    "provider_scope": "SQLite local C02-D ban exists; PostgreSQL identical moderation is not independently confirmed"
+  },
+  "packages": [
+    {
+      "id": "S32-01",
+      "parent": "S27-W08",
+      "title": "Per-role tutorial completion eligibility and durable checkpoint",
+      "depends_on": [],
+      "gate_ids": [
+        "E23",
+        "E24"
+      ],
+      "mode": "SERVER_MOCK_PROPOSED",
+      "interfaces": [
+        "EvaluateMockTutorialCompletionEligibilityAsync(SessionLease, CharacterId, ExpectedProgressRevision, CancellationToken)",
+        "CommitMockTutorialCheckpointAsync(SessionLease, CharacterId, EligibilityProofId, RequestId, CancellationToken)"
+      ],
+      "invariants": [
+        "Only approved product policy may combine persisted ScenarioTerminal, Quest14/16 turn-in, RewardLedger finality and relevant quest progress into completion eligibility; Quest15 AVAILABLE alone is insufficient",
+        "Persist per-CharacterId TutorialProgress with immutable policy/config digest and monotone revision, separate AccountId, SessionLease, EncounterId and Client local flags",
+        "Do not conflate business COMPLETED checkpoint with SceneExitApproved or Client WorldReady; product-specific completion-vs-exit ordering requires explicit maintainer review",
+        "Every mutation rechecks full current SessionLease, owned selected CharacterId and SQLite moderation within same transaction/fenced authority; stale epoch and changed request fingerprint reject",
+        "Idempotent completion checkpoint has a unique event id and audit; no duplicate Quest/Reward mutation or invented native tutorial-complete field"
+      ],
+      "cases": [
+        "I32-T01",
+        "I32-T02",
+        "I32-T03",
+        "I32-T04",
+        "I32-T05",
+        "I32-T06"
+      ],
+      "native_blocker": "T15/T16/T04 original tutorial completion writer, account-vs-character granularity and authorized terminal/exit ordering unknown"
+    },
+    {
+      "id": "S32-02",
+      "parent": "S27-W08",
+      "title": "Exit admission, pending transfer and scene lease fencing",
+      "depends_on": [
+        "S32-01"
+      ],
+      "gate_ids": [
+        "E25",
+        "E17-J"
+      ],
+      "mode": "SERVER_MOCK_PROPOSED",
+      "interfaces": [
+        "ReserveMockNormalWorldExitAsync(SessionLease, CharacterId, MockDestinationKey, RequestId, CancellationToken)",
+        "CommitMockSceneTransferAsync(SessionLease, AdmissionId, ExpectedRevision, CancellationToken)",
+        "AbortOrExpireMockSceneTransferAsync(AdmissionId, Reason, ExpectedRevision, CancellationToken)"
+      ],
+      "invariants": [
+        "Scene exit is a separate versioned admission ID with current account/role/session lease and authorized mock destination policy, never inferred from Quest15 static SceneList or LoadMap town001D",
+        "Use admission RESERVED->TRANSFERRING->WORLD_DOMAIN_ADMITTED or ABORTED/EXPIRED with unique scoped request/epoch, actor/scene leases and CAS; no two live exit admissions per role",
+        "Do not destroy or duplicate prior tutorial encounter/role progress until transfer has a durable committed handoff and approved cleanup/rollback policy",
+        "Disconnect, ban, renewal, concurrent login or stale scene lease fences old transfer writes; retries return same durable result only after reauthorization",
+        "Mock world admission is only an internal Server domain fact; original KR scene/Conn/field/actor bootstrap writer and native adapter remain disabled"
+      ],
+      "cases": [
+        "I32-T07",
+        "I32-T08",
+        "I32-T09",
+        "I32-T10",
+        "I32-T11",
+        "I32-T12"
+      ],
+      "native_blocker": "T07/T05/T06/T16 original scene leave, 0x005F type6 ambiguity, world bootstrap and positive field admission unknown"
+    },
+    {
+      "id": "S32-03",
+      "parent": "S27-W08",
+      "title": "World-ready gates and Client observation separation",
+      "depends_on": [
+        "S32-02"
+      ],
+      "gate_ids": [
+        "E25",
+        "E26"
+      ],
+      "mode": "SERVER_MOCK_PROPOSED",
+      "interfaces": [
+        "ReconcileMockWorldAdmissionAsync(SessionLease, AdmissionId, CancellationToken)",
+        "RecordApprovedMockWorldReadyObservationAsync(AdmissionId, MockObservationId, CancellationToken)"
+      ],
+      "invariants": [
+        "Track three distinct dimensions: authorized Server world admission, installed scene/actor snapshot in mock environment, and observed Client scene/control readiness; no dimension implies another",
+        "For original Client, SceneLoaded/ControlReady require same-build positive runtime evidence and separate authorization; synthetic mock observation must be visibly labeled MOCK_ONLY",
+        "Do not infer WorldReady from C2S0x42, S2C0x69, C2S0x43, scene+0xCC pending, Lua LoadMap, Quest15 AVAILABLE or Server API success",
+        "No invented official town/field IDs, spawn coordinates, ready ACK/opcode or retry policy; dummy mock scene key remains opaque and source-gated",
+        "Without original native adapter, expose only internal mock readiness state and keep protocol writer OFF; no public game listener feature is switched on"
+      ],
+      "cases": [
+        "I32-T13",
+        "I32-T14",
+        "I32-T15",
+        "I32-T16",
+        "I32-T17",
+        "I32-T18"
+      ],
+      "native_blocker": "Original KR Client correct field/actor/control-ready sequence, direction-specific frames and runtime observation not demonstrated"
+    },
+    {
+      "id": "S32-04",
+      "parent": "S27-W08",
+      "title": "Relog/crash/ban recovery and durable transition reconciliation",
+      "depends_on": [
+        "S32-01",
+        "S32-02",
+        "S32-03"
+      ],
+      "gate_ids": [
+        "E17-J",
+        "E23",
+        "E26"
+      ],
+      "mode": "SERVER_MOCK_PROPOSED",
+      "interfaces": [
+        "ReconcileMockTutorialAndWorldOnLoginAsync(SessionLease, CharacterId, CancellationToken)",
+        "RepairMockInterruptedTransferAsync(AdmissionId, ExpectedRevision, CancellationToken)",
+        "AuditMockTutorialRecoveryAsync(CharacterId, RecoveryId, CancellationToken)"
+      ],
+      "invariants": [
+        "After restart or new lease restore per-role progress/quest ledger/settlement/scene admission consistently, never restore stale SessionLease or assume original Client controls are ready",
+        "Crash points before checkpoint commit, after checkpoint before transfer, after transfer before outbox and after delivery before ACK must reconcile without re-awarding, re-spawning or regressing terminal state",
+        "New login/renew/revoke/ban/unban fences prior epoch including pending Client observations; unban never revives revoked login or Scene admission",
+        "If no approved destination/bootstrap or failure/recovery policy, return explicit BLOCKED/PENDING and preserve durable state rather than looping tutorial or marking WorldReady",
+        "SQLite v2 and PostgreSQL migration003 require a single centrally sequenced C05 migration plan; use offline backup/restore-new with data integrity and uniqueness tests before any production approval"
+      ],
+      "cases": [
+        "I32-T19",
+        "I32-T20",
+        "I32-T21",
+        "I32-T22",
+        "I32-T23",
+        "I32-T24"
+      ],
+      "native_blocker": "T15/T05/T04 original relog Scene/Quest/Role state and real Client runtime trace absent"
+    }
+  ],
+  "acceptance_file": "governance/s00-iterations/S00-20261031-ITERATION-32-ACCEPTANCE.md",
+  "expected_case_count": 24,
+  "no_go": [
+    "NO_QUEST15_AVAILABLE_EQUALS_TUTORIAL_COMPLETED",
+    "NO_CLIENT_LOCAL_MAP_OR_LUA_AS_SERVER_PROOF",
+    "NO_SCENE_EXIT_EQUALS_WORLD_READY",
+    "NO_STALE_SESSION_REENTRY",
+    "NO_DUPLICATE_REWARD_ON_RELOG",
+    "NO_GUESSED_NATIVE_FIELD_OR_COORDINATES",
+    "NO_UNAPPROVED_ORIGINAL_CLIENT_RUNTIME",
+    "NO_C05_MIGRATION_VERSION_COLLISION",
+    "NO_ADR_AUTO_APPROVAL",
+    "NO_C05_IMPLEMENTATION_FALSE_CLAIM"
+  ]
+}

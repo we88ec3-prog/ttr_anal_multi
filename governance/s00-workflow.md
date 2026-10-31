@@ -128,3 +128,27 @@ Domain mock/prototype 可採並行研究和工程化測試，但正式業務 pol
 [Iteration29](s00-iterations/S00-20261031-ITERATION-29-COMBAT-IMPLEMENTATION-PLAN.md) 延續 Iteration28 的同交易 full lease/selected-role/Encounter 授權，不許另一次 `IsCurrentAsync`/選角 check 後直接寫 Hit；攻擊/技能只是意圖，技能費用/冷卻/取消必須以 mock policy CAS 防重複，Hit/HP/Death 由 Server-authoritative event 同交易更新，ActorDeath 只交給下一個 W05 objective，不可直接改 Scenario14/Quest/TutorialCompleted。**C02-D 最新 SQLite local v2 停權及 Session revoke 也須在 combat mutation gate 被重驗**；不能推論 PG 同步實作。
 
 `python -B governance/check_s00_iteration29.py --check` 僅保護本庫 source blob、E17-E/F/G 未升格、24 個 `NOT_RUN` 與 ADR-0006/0007 原提案狀態；無遠端 Server 程式碼執行、原版 Client 啟動或 GitHub API live snapshot revalidate。正式 REQ/RR/GAP/CLM/SPEC/TEST 需原唯一台帳審查，Server domain 需其維護者核准持久化與 cooldown/refund 規則，KR/TC 原生封包需同版正向來源及另行授權的 Client runtime。
+
+
+## Iteration 30：原始 Scenario14 研究與 Server mock Objective 隔離
+
+[Iteration30 設計](s00-iterations/S00-20261031-ITERATION-30-OBJECTIVE-SETTLEMENT-PLAN.md) 從 Iteration29 verified domain ActorDeath 開始，必須有 encounter/actor generation/DeathEvent 唯一鍵及 authority；原版 Client 的 Local Scenario `map[14]`、`IsScenarioEnded(14)`、S2C app0x004C 部分 handler **都不能直接構成 Server 成功條件**。Server domain mock 的 wave/objective 決策、終局 CAS、Outbox 與 Quest14 eligibility 四邊界需獨立 transaction/稽核；Quest14 completed/turned-in 必須另經 W06/NPC/Quest record writer 正向規格。出現真 source 差異要依既有 Task/RR/CLM 逐項去重、審查，不可直接修改台帳狀態。 `python -B governance/check_s00_iteration30.py --check` 是本庫**只讀規劃驗證**；不會驗證獨立 Server CI、真正原 Client Gameplay 或自動核准 ADR-0006/0007。
+
+
+## Iteration31 — Quest 狀態與 RewardLedger 必須和 Scenario / Client 事件分離
+
+[Iteration31 設計](s00-iterations/S00-20261031-ITERATION-31-QUEST-REWARD-PLAN.md) 承接 Iteration30 durable ScenarioTerminal，而**不**把 `map[14]`／S2C0x004C 或 QuestInfo.xml `Demand` 本地資源直接當 Server Quest writer。Quest14 eligibility/completed/turned-in、Quest16 available/accepted/completed/turned-in、Quest15 available、TutorialCompleted、WorldReady 全部是獨立權威，需 source 和 policy 分開審。Reward type2/value50 的經濟語意未證，不可自選 EXP/金幣；Mock payout 只有維護者核准 definition 才能同交易與唯一 reward ledger/outbox commit，重登/重送不得二次入帳。
+
+C05 模組的 SQLite v3/PG004 是 Iterations28～30 **互相可能衝突的候選版本**，新 Server PR 必須以當時 latest schema 全模組配置唯一 migration 順序，不能各個子團隊重用版本。CI 新增 `python -B governance/check_s00_iteration31.py --check` 只驗本庫 4 上游 Git blob pin、6 原始 gate/owner/blocker、24 NOT_RUN 與 ADR/Client no-go，**不是 Server/原 Client runtime 成功**。正式 spec/research RR/GAP 或 Server policy 批准仍按既有流程，由 owner 审查，不能自動升級。
+
+
+## Iteration32：Quest 完成與實際世界可操作不可互相代替
+
+[Iteration32 設計](s00-iterations/S00-20261031-ITERATION-32-TUTORIAL-EXIT-RELOG-PLAN.md) 將每角色 durable TutorialProgress、SceneExitAdmission/SceneLease、原版 KR Client SceneLoaded/ControlReady 視為三條不同狀態；`Quest15 AVAILABLE` 不意味 `TutorialCompleted`，Server Mock 世界入場不意味原版 Client 能移動。SceneList、town Lua、C2S0x42/S2C0x69/C2S0x43、`scene+0xCC` 或本地 S2C0x004C map 均不可當正向 Client 實測。每次權威寫入須同一交易再確認 full SessionLease、selected role、SQLite C02-D 停權、admission/version/CAS；重登及轉場 crash 不可重複 RewardLedger/Quest。新 `governance/check_s00_iteration32.py --check` CI 僅驗 source blob、E23/24/25/26/E17-J 原生 source blocker 和 24 個 NOT_RUN，不會執行 Server 或原版 Client、核准 ADR-0006/7 或改動正式台帳。
+
+
+## Iteration33：C05 交付的單一 PR DAG、Migration Allocator 與 Release Gate
+
+[Iteration33 整合規劃](s00-iterations/S00-20261031-ITERATION-33-C05-INTEGRATED-DELIVERY-PLAN.md) 僅為規劃：R0 review/source/DB allocator，R1～R5 為彼此依賴的 Server-only mock C05-P01～P19，R6 才是原版 Client 原生功能 per-feature admission（需同版 frame/Conn/scene/producer/consumer/Error/Runtime 正負證據）。**R5 mock pass 不等於 R6 Client 相容**。先確定 SQLite local v2 / PG migrations003 事實，因舊規劃多處同時把 v3/004 當候選，新 Server repo 必須設單一 C05 migration manifest 與 owner 逐 provider 唯一配號，備份/還原/DB 失敗中斷獨立測； PostgreSQL C02-D suspend policy 仍需另行證實。
+
+`python -B governance/check_s00_iteration33.py --check` 驗 19-PR DAG/唯一來源 workpack、Release R0～R6、D33-01～08 policy、24 個 `NOT_RUN` test、來源 Git blob/原 E17-A/J/E23～E26 status、ADR-0006/7 提案與 Native OFF。CI 只是 S00 規劃完整性，不能替代獨立 Server .NET CI、原版 KR Client Runtime 或政策核准，不能擅更改原正式 RR/REQ/GAP/CLM/TEST。
