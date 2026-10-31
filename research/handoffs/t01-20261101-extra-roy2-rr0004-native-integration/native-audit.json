@@ -1,0 +1,172 @@
+{
+  "schema": "t01-extra-roy2-rr0004-native-audit-v1",
+  "verification_date": "2026-11-01",
+  "binary": "Tartaros.bin",
+  "size": 12472320,
+  "sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+  "verified_pe": {
+    "machine": "0x14c",
+    "image_base": "0x400000",
+    "text_va": "0x401000",
+    "text_raw": "0x400",
+    "text_virtual_size": "0x7d01f0",
+    "text_raw_size": "0x7d0200"
+  },
+  "independent_pass": {
+    "full_literal_scans": 4,
+    "full_literal_immediate_hits": 11,
+    "instruction_prefixes": 16,
+    "direct_e8": 3,
+    "synthetic_guards": 12
+  },
+  "observed": {
+    "0xa02c": [
+      "0x805d04",
+      "0x806205"
+    ],
+    "0x5010": [
+      "0x7438c4"
+    ],
+    "0xa014": [
+      "0x7d1913"
+    ],
+    "0x500c": [
+      "0x8077c0",
+      "0x8077cc",
+      "0x80789c",
+      "0x807a21",
+      "0x807aad",
+      "0x807afc"
+    ]
+  },
+  "direct_e8": {
+    "0x8059e9": "0x805f50",
+    "0x806223": "0x807830",
+    "0x80623a": "0x807a70"
+  },
+  "synthetic_vectors": [
+    [
+      57,
+      0,
+      2,
+      "0BBB"
+    ],
+    [
+      4090,
+      0,
+      2,
+      "0BBB"
+    ],
+    [
+      4091,
+      0,
+      2,
+      "1A68"
+    ],
+    [
+      4092,
+      0,
+      2,
+      "1A68"
+    ],
+    [
+      4093,
+      0,
+      2,
+      "NONE"
+    ],
+    [
+      4096,
+      0,
+      2,
+      "NONE"
+    ],
+    [
+      57,
+      0,
+      0,
+      "1A68"
+    ],
+    [
+      1,
+      16377,
+      2,
+      "0BBB"
+    ],
+    [
+      1,
+      16378,
+      2,
+      "1A68"
+    ],
+    [
+      1,
+      16379,
+      2,
+      "1A68"
+    ],
+    [
+      1,
+      16380,
+      2,
+      "NONE"
+    ],
+    [
+      0,
+      0,
+      2,
+      "NONE"
+    ]
+  ],
+  "audit_limitations": [
+    "Literal scan enumerates raw four-byte displacements only; not exhaustive indirect alias or memcpy.",
+    "Guard vectors are synthetic and assume valid encoder Tx pointer and capacity state.",
+    "No game execution, real packet capture, Server behavior, or source document FULL-PASS claimed."
+  ],
+  "sources": {
+    "branch": "extra/roy2",
+    "head": "0a8960b9b50bafb9272c9e1ca170fd6924daf9fb",
+    "source_blob": "cf9cfeb9e2f09fa1a4e02fec774642be5e679713",
+    "verifier_blob": "216d39628c6c86a752e6f52bee5b58cd98c9be04",
+    "full_branch_head": "fe1112c77840b1627084df20f29f6f05dc64a2eb",
+    "rr0005_source_blob": "a8047fb1497aa05e29f71efa14cde12d9b26e1a5",
+    "rr0005_verifier_blob": "a21858c9b0e31385a2394e9efac257d57591916a"
+  },
+  "level": "T01 R0 plus bounded R2; NOT FULL_PASS",
+  "integrated_branch_head": "fe1112c77840b1627084df20f29f6f05dc64a2eb",
+  "rr0005": {
+    "original_source": "kr-extra-roy/20261101-014912-chatgpt-web-roy-RR0005-KR-hidden-ESI-Connect-slot-local-send-bounded.md",
+    "original_source_blob": "a8047fb1497aa05e29f71efa14cde12d9b26e1a5",
+    "exact_prefix_anchors_pass": 32,
+    "direct_E8_raw_candidate_sites_pass": 10,
+    "direct_E8_targets": {
+      "0x4957c0": [
+        "0x66c1a7",
+        "0x66c247"
+      ],
+      "0x495610": [
+        "0x6d6377",
+        "0x6d6424",
+        "0x6d6508",
+        "0x6d65c8",
+        "0x6d670c",
+        "0x6d696c"
+      ],
+      "0x8060d0": [
+        "0x495853",
+        "0x8069eb"
+      ]
+    },
+    "rooted_native_sections": [
+      "0x48ab70",
+      "0x4957c0",
+      "0x66c193"
+    ],
+    "semantic_boundary": "Old ESI host pushed, then ESI overwritten by global Client*; BF64/BF68 stores after three unchecked virtual return values in successful two-Conn branch; local queue != WSASend or Server ACK.",
+    "limitations": [
+      "Not all indirect Connect callers or virtual targets checked",
+      "No live connection or first S2C response captured",
+      "Original RR-0005 bounded S00 ACCEPTED, NOT T01 FULL_PASS"
+    ]
+  }
+}
