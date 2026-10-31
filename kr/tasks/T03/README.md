@@ -196,3 +196,13 @@ parser/auth、角色UI與選服呼叫介面的有限審核已整合；較早段�
 - **W15：scene-specific 結果 consumer。** `S2C app0x004A→0x4C21D0` 的 signed WORD+2→local `F4245`→`CExpeditionPage` 和 `0x672570`，status1 寫 `F938F2` / page ready，-1/-2/-3 錯誤各有分支。**原版 Server C2S3E↔S2C4A 交易配對仍 UNKNOWN**，不得推定官方 error enum。
 - **W16：三層身份界線。** Account auth、Expedition 名稱 `F938F2`、可操作 Role 陣列 `F94304+slot*0x210` 互不等同；S2C app2 與 app2B 共享 RoleStore，`CEmployNewCharacter→C2S0x33` 是另一類 UI／請求，既有角色選角 `C2S0x42` 也不是建名 ACK。
 - 主線正式 RR-0009 仍 `SUBMITTED`、RR-0010 `BLOCKED`；T01、S00、GAP-CHAR-0002/0003、其他 owner 狀態均未因本次作者提交而更改。未執行 Client，未推送 main。下個 E W17～W20 才追 roster 全量/增量/角色 UI；F 工作包追可操作角色的真正建立／招募。
+
+## T03-E W17～W20 — KR 全量／增量角色清單與 UI（2026-10-31）
+
+- **完整本次 BIN-first 原生證據**：[T03-E W17～W20](../../../kr-temp-roy/20261031-T03-E-W17-W20-roster-ui-native.md)；Git blob `5bf17fd8078344bb41a26e8de956b2ec23843731`。原始 KR `Tartaros.bin` SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`，本輪自原件核對 485/485 個已定位 native instruction bytes；**不是 485 個語意 FULL-PASS 或 Client runtime**。
+- [485 項自足原生 verifier](../../../kr-temp-roy/20261031-T03-E-verify.py)；Git blob `f3e8e73a93cb10ea920474ccacd563a3598a0230`。[機器可讀 handoff JSON](../../../kr-temp-roy/20261031-T03-E-handoff.json)；Git blob `eedf0b418e08feef69ef0c2ba307a48d0536fb7f`。
+- **W17 full S2C app0x0002**：65B prefix+53N，除 +0x0C Expedition name 外另有多個來源未命名欄位；53B row+0x2E ID<=9 才 `4D4150` 寫 `[F94304]+ID*0x210`（+0x5C=1）；但 full loop **即使 ID>9 仍可能因 gate queue 每筆 C2S0x26(3B)**，最後另可 queue C2S0x24(2B)，並寫本地 `F94240` 16-bit mask。
+- **W18 delta S2C app0x002B**：已循 16B network table→singleton vptr→8B業務 table→`4E2730` 正向定位；2B+53N，寫同一 `F94304`（`F8D9E0+0x6924`）角色記錄，但此 handler 不重發 full 的 per-row 26/post24/mask；RoleStore ctor 初始10×0x210、+0x5C=0，writer令1，**兩個 handler 沒有省略 slot 就清全部舊角色的保證**。
+- **W19 UI**：S2C B6→local F4278(0)→具條件 CExpeditionPage→`672F00` 讀 role flag，有資料/placeholder 分叉；另 local F42EF→`665150` 的回傳1可只代表 list-hit，**不保證 detail 已填、Client已允許該 role**。
+- **W20 選角 gate**：record+0x5C、full mask F94240、列表 hit 與 UI 選角 index 各為不同狀態。玩家控件正確且 index<=9、record flag1 才可達 `4A3B80` C2S0x42；**Server S2C 結果／場景切換另屬 G/T05**。
+- **正式 S00 狀態同步**：在研究期間主線 `ac3aa886e9fd20be93b6f841ada66fe22e587aa1` 限定 `RR-0009=ACCEPTED`（只接受 E70 提出的第5條原生 blocker/解除條件，**N0→創角 GUI 仍未證**）；`RR-0010=BLOCKED`、`GAP-CHAR-0002/0003 OPEN`，SPEC仍 DRAFT/PARTIAL，T01 原生 FULL-PASS未授予。本次只同步 main 後提交 T03 分支，不更動 RR/T01/S00 主責或原版 Client。

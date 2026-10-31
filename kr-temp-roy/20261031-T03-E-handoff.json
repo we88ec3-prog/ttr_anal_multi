@@ -1,0 +1,155 @@
+{
+  "schema": "t03-e-kr-roster-role-ui-native-handoff-v1",
+  "date_taipei": "2026-10-31",
+  "owner_task": "T03",
+  "owner": "chatgpt-web roy",
+  "branch": "t03/roy/chatgpt-web",
+  "source": {
+    "bin": "Tartaros.bin",
+    "bin_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+    "exe": "Tartaros.exe",
+    "exe_sha256": "03771b8e1c1e66248f54585fadf9a5e926eb77228721325bb9be5febc53b3b5f",
+    "pe": "PE32 i386",
+    "text_va": 4198400,
+    "text_raw": 1024
+  },
+  "work_packages": [
+    {
+      "id": "W17",
+      "status": "BOUNDED_CLIENT_STATIC_COMPLETE",
+      "functions": [
+        "0x4B7F00",
+        "0x4B8920",
+        "0x4D4150",
+        "0x4D3D00",
+        "0x4D3F80"
+      ],
+      "facts": [
+        "S2C app0x0002 65+53*N inner payload, name +0x0C, unknown header fields +2,+0x36..0x40",
+        "record row53 index at +0x2E and data writer +0x5C=1",
+        "per-row gated C2S 0x0026 3B including invalid ID>9, post gated C2S 0x0024 2B",
+        "F94240 16-bit local mask of rowID-1; index0 creates record but no set mask bit"
+      ],
+      "unknown": [
+        "upstream full packet validation and malformed name safety",
+        "official Server meanings of header fields"
+      ]
+    },
+    {
+      "id": "W18",
+      "status": "BOUNDED_CLIENT_STATIC_COMPLETE",
+      "functions": [
+        "0x493170",
+        "0x4943B0",
+        "0x4FDA30",
+        "0x4E2730",
+        "0x4E19A0",
+        "0x4E5FB0"
+      ],
+      "facts": [
+        "true network index0x2B positive callback to global singleton",
+        "delta inner payload 2+53*N, share F94304 pointer via F8D9E0+0x6924",
+        "delta does not locally issue per-row 0x26, post 0x24, or rebuild full F94240 mask",
+        "ten record constructor +0x5C=0; row writer +0x5C=1"
+      ],
+      "unknown": [
+        "all scene overrides",
+        "full roster omissions and delta omissions do not within these handlers revoke old entries; global reset writers unresolved"
+      ]
+    },
+    {
+      "id": "W19",
+      "status": "BOUNDED_CLIENT_STATIC_COMPLETE_WITH_GUI_RESOURCE_DEPENDENCY",
+      "functions": [
+        "0x4AE11D",
+        "0x4B5DD0",
+        "0x5A67D0",
+        "0x5A68D8",
+        "0x672F00",
+        "0x673790",
+        "0x665150"
+      ],
+      "facts": [
+        "S2C0x00B6 in valid scene -> local F4278(0) -> conditional CExpeditionPage UI",
+        "slot<=9 and record+0x5C gate existing vs placeholder; event F4278 not exclusive",
+        "F42EF detail-list helper 0x665150 returns list-hit even when role detail unavailable"
+      ],
+      "unknown": [
+        "GUI pack actual visibility/enable semantics, alternate event subscribers and runtime"
+      ]
+    },
+    {
+      "id": "W20",
+      "status": "BOUNDED_CLIENT_STATIC_COMPLETE_FOR_SELECTION_GATE",
+      "functions": [
+        "0x4D3F80",
+        "0x5F4760",
+        "0x5F47F5",
+        "0x4A3B80"
+      ],
+      "facts": [
+        "record+0x5C, 16-bit F94240 mask, FE1DF4 list hit and UI index are separate states",
+        "control identity, derived index<=9 and record+0x5C nonzero gate may lead C2S 0x0042 builder",
+        "C2S0x0042 not create-character ACK, and no proof Server accepted role"
+      ],
+      "unknown": [
+        "UI resource-derived actual enable/visible state",
+        "S2C selection result, scene/world transitions handled by G/T05"
+      ]
+    }
+  ],
+  "verification": {
+    "original_native_instruction_start_byte_slices": 485,
+    "passed": 485,
+    "distinct_entries": 485,
+    "additional_checks": [
+      "PE section/image base",
+      "rdata vptr+4",
+      "callback index",
+      "F4278 local map and jump target",
+      "roster index and stride arithmetic"
+    ],
+    "client_executed": false,
+    "official_server_trace": false,
+    "t01_full_pass": false
+  },
+  "formal_rr_status_snapshot": {
+    "RR_0002": "BLOCKED",
+    "RR_0003": "IN_REVIEW",
+    "RR_0008": "IN_REVIEW",
+    "RR_0009": "ACCEPTED_LIMITED_BLOCKER_RESEARCH",
+    "RR_0010": "BLOCKED"
+  },
+  "affected_specs": [
+    "SPEC-CHAR-0001",
+    "SPEC-FLOW-0001"
+  ],
+  "affected_gaps": [
+    "GAP-CHAR-0001",
+    "GAP-CHAR-0002",
+    "GAP-CHAR-0003"
+  ],
+  "outstanding": [
+    "role record revoke/reset aliases and session lifecycle",
+    "UI control resource/visible-ready semantics",
+    "C2S0x0033 recruit request to actual Server reply transaction",
+    "original Server packet ordering of S2C2/2B/B6 and role authorization"
+  ],
+  "citations": [
+    {
+      "path": "kr-extra-roy/20261031-chatgpt-web-roy-E70-RR0009-empty-roster-GUI-blocker.md",
+      "sha": "ef778ac58ccdfd4013962b86a2aa33bf6f245d13"
+    },
+    {
+      "path": "kr-extra-roy/20261031-chatgpt-web-roy-E77-RR0010-B6-roster-event-EXPD-scene-boundary.md",
+      "sha": "7589e9c63f56f9a9d8737f825c46170ea9e64ac7"
+    },
+    {
+      "path": "kr-extra-roy/20261031-chatgpt-web-roy-E79-RR0010-S2C2B-network-roster-alias-native-closure.md",
+      "sha": "95ced26202c2aedf7ff57c87d4991eff00ad64ff"
+    }
+  ],
+  "scope_limit": "Client source-backed static analysis, no code execution or server implementation; official original Server behavior is not inferred",
+  "formal_status_snapshot_main": "ac3aa886e9fd20be93b6f841ada66fe22e587aa1",
+  "formal_status_note": "RR-0009 accepted by S00 solely for E70's criterion-5 blocker research; N0-to-create-UI not proven. GAP-CHAR-0002 OPEN. RR-0010 BLOCKED."
+}
