@@ -1,0 +1,215 @@
+{
+  "schema": "s00-iteration40-c04-login-m2-acceptance-v1",
+  "kind": "NON_NORMATIVE_READINESS_OVERLAY",
+  "date": "2026-11-01",
+  "s00_main_before_t01_sync": "ecc948a9e2fa731a272a826e30f691dde88d7d76",
+  "t01_branch_head_fast_forwarded_to_main": "8c93012edc4b76103a72d8b2f8868d6357034978",
+  "t01_integration_sha": "8c93012edc4b76103a72d8b2f8868d6357034978",
+  "server_main_at_review": "b4f187445d1d287feab3ceee9ea86d9dc0f75d63",
+  "kr_bin_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+  "known_source_claims": [
+    {
+      "id": "CLM-NET-0037",
+      "source": "SRC-0653",
+      "evidence_level": "PARTIAL",
+      "effect": "source-scoped receive-boundary / conditional local pool risk, not first-wire proof"
+    },
+    {
+      "id": "CLM-CHAR-0007",
+      "source": "SRC-0652",
+      "evidence_level": "PARTIAL",
+      "effect": "local F431F Employ UI event fragment, not login or zero-roster UI ready"
+    }
+  ],
+  "baseline_server_impl": {
+    "D1-D4": "OFFLINE_DIAGNOSTIC_IMPLEMENTED",
+    "E0": "NATIVE_GATE_DISABLED",
+    "E1": "OFFLINE_ENVELOPE_INSPECTOR_ONLY",
+    "F": "OFFLINE_CHOICE_INSPECTOR_ONLY",
+    "E1b": "PLANNED",
+    "E2a": "PLANNED",
+    "E2b": "SOURCE_BLOCKED",
+    "E3a": "PLANNED",
+    "E3b": "SOURCE_AND_RUNTIME_BLOCKED",
+    "F0": "SOURCE_BLOCKED"
+  },
+  "milestones": [
+    {
+      "id": "M0",
+      "description": "safe diagnostic game listener with bounded raw TCP logging",
+      "status": "SERVER_ONLY_IMPLEMENTED",
+      "is_original_client_verified": false
+    },
+    {
+      "id": "M1",
+      "description": "source-scoped original Client C2S frame/login parsed",
+      "status": "BLOCKED_BY_NATIVE_CONTRACT",
+      "is_original_client_verified": false
+    },
+    {
+      "id": "M2",
+      "description": "original Client login C2S reaches correct C02 Account+Session decision",
+      "status": "PLANNED_AND_NATIVE_BLOCKED",
+      "is_original_client_verified": false
+    },
+    {
+      "id": "M3",
+      "description": "source-backed S2C sent and original Client sees login result",
+      "status": "BLOCKED_BY_NATIVE_CONTRACT",
+      "is_original_client_verified": false
+    },
+    {
+      "id": "M4",
+      "description": "server/channel/character roster GUI usable",
+      "status": "BLOCKED_BY_NATIVE_CONTRACT",
+      "is_original_client_verified": false
+    }
+  ],
+  "reused_requirements": [
+    "REQ-0001",
+    "REQ-0002",
+    "REQ-0003",
+    "REQ-0004",
+    "REQ-0005",
+    "REQ-0009"
+  ],
+  "reused_rrs": [
+    "RR-0001",
+    "RR-0003",
+    "RR-0004",
+    "RR-0005",
+    "RR-0006",
+    "RR-0007",
+    "RR-0009"
+  ],
+  "open_gaps": [
+    "GAP-NET-0001",
+    "GAP-NET-0002",
+    "GAP-NET-0003",
+    "GAP-AUTH-0001",
+    "GAP-FLOW-0001",
+    "GAP-CHAR-0002"
+  ],
+  "formal_registry_mutations": {
+    "new_rr": 0,
+    "new_req": 0,
+    "new_gap": 0,
+    "new_test": 0,
+    "promote_spec": 0
+  },
+  "authorization": {
+    "original_client_test_performed": false,
+    "server_code_changed": false,
+    "original_client_changed": false,
+    "session_wire_claim_approved": false
+  },
+  "release_policy": "No native codec/auth enablement without same Client build, direction+source-reviewed first frame, verified login C2S, approved Server security/provider, and separate authorized runtime test.",
+  "gates_count": 15,
+  "gates": [
+    {
+      "id": "I40-01",
+      "name": "T01_R0_R2_SOURCE",
+      "status": "MERGED_SOURCE_BOUNDED",
+      "evidence_target": "SOURCE_ONLY",
+      "acceptance": "T01 integration and claim hashes still PARTIAL"
+    },
+    {
+      "id": "I40-02",
+      "name": "SERVER_IMPLEMENTATION_INVENTORY",
+      "status": "OFFLINE_IMPLEMENTED",
+      "evidence_target": "SERVER_CI",
+      "acceptance": "D1-D4/E0/E1/F offline exists; no native runtime"
+    },
+    {
+      "id": "I40-03",
+      "name": "E1B_BOUNDED_RX_ACCUMULATOR",
+      "status": "PLANNED_NOT_IMPLEMENTED",
+      "evidence_target": "OFFLINE_SYNTHETIC",
+      "acceptance": "Split/coalesce/bad+good/invalid length with independent error categories"
+    },
+    {
+      "id": "I40-04",
+      "name": "E1B_INVALID_FRAME_REJECTION",
+      "status": "PLANNED_NOT_IMPLEMENTED",
+      "evidence_target": "OFFLINE_SYNTHETIC",
+      "acceptance": "No auth dispatch from invalid 0BBB/2633 or unsupported frame"
+    },
+    {
+      "id": "I40-05",
+      "name": "E2A_LOGIN_BUILDER_OFFLINE",
+      "status": "PLANNED_NOT_IMPLEMENTED",
+      "evidence_target": "OFFLINE_SYNTHETIC",
+      "acceptance": "E8 112B vs 0F 214B with encoding, opaque and credential redaction"
+    },
+    {
+      "id": "I40-06",
+      "name": "E1_NATIVE_FIRST_WIRE_CONTRACT",
+      "status": "BLOCKED_BY_NATIVE_CONTRACT",
+      "evidence_target": "T02_T01_SOURCE_REVIEW",
+      "acceptance": "First marker/slot/phase/direction/handshake not proven"
+    },
+    {
+      "id": "I40-07",
+      "name": "E2_NATIVE_LOGIN_BUILDER_TO_SOCKET",
+      "status": "BLOCKED_BY_NATIVE_CONTRACT",
+      "evidence_target": "T03_T01_SOURCE_REVIEW",
+      "acceptance": "Runtime E8/0F mode and E8 opaque/codepage provenance"
+    },
+    {
+      "id": "I40-08",
+      "name": "TRUSTED_C2S_DISPATCH_TO_C02",
+      "status": "BLOCKED_BY_NATIVE_CONTRACT",
+      "evidence_target": "NATIVE_SOURCE_PLUS_SERVER",
+      "acceptance": "Complete decoded app login requires reviewed frame and scene"
+    },
+    {
+      "id": "I40-09",
+      "name": "E3A_BACKEND_AUTH_TESTS",
+      "status": "PLANNED_NOT_IMPLEMENTED",
+      "evidence_target": "OFFLINE_SYNTHETIC",
+      "acceptance": "Same SQLite/PG as Admin, invalid/ban/down/no lease"
+    },
+    {
+      "id": "I40-10",
+      "name": "E3A_EXACT_LEASE_FENCING",
+      "status": "PLANNED_NOT_IMPLEMENTED",
+      "evidence_target": "OFFLINE_SYNTHETIC",
+      "acceptance": "Double login, retries, stale-close, timed lockout"
+    },
+    {
+      "id": "I40-11",
+      "name": "CLIENT_BUILD_ENDPOINT_PRECHECK",
+      "status": "NOT_RUN",
+      "evidence_target": "CLIENT_BUILD_AND_OPERATOR",
+      "acceptance": "Real Tartaros Rebirth executable/bin sha and endpoint unknown"
+    },
+    {
+      "id": "I40-12",
+      "name": "NATIVE_CLIENT_LOGIN_RX",
+      "status": "BLOCKED_BY_NATIVE_CONTRACT_AND_AUTHORIZATION",
+      "evidence_target": "ORIGINAL_CLIENT_RUNTIME",
+      "acceptance": "Authorized real Client C2S decoded correctly"
+    },
+    {
+      "id": "I40-13",
+      "name": "NATIVE_CLIENT_C02_LOGIN_DECISION",
+      "status": "BLOCKED_BY_NATIVE_CONTRACT_AND_AUTHORIZATION",
+      "evidence_target": "ORIGINAL_CLIENT_RUNTIME",
+      "acceptance": "Real login is passed to approved C02 account/session store"
+    },
+    {
+      "id": "I40-14",
+      "name": "S2C_REPLY_PAIRING_CONTRACT",
+      "status": "BLOCKED_BY_NATIVE_CONTRACT",
+      "evidence_target": "T02_T03_T01_SOURCE_REVIEW",
+      "acceptance": "Do not assume 0x13/0x7A pairing with E8/0F"
+    },
+    {
+      "id": "I40-15",
+      "name": "NATIVE_CLIENT_LOGIN_NEXT_UI",
+      "status": "BLOCKED_BY_NATIVE_CONTRACT_AND_AUTHORIZATION",
+      "evidence_target": "ORIGINAL_CLIENT_RUNTIME",
+      "acceptance": "Correct S2C to Client and visible next state"
+    }
+  ]
+}
