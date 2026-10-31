@@ -181,3 +181,14 @@ Iterations 16–17 的正式流程編號合計 **E00–E26（27 個 gate）與 4
 - [完整 Login Receive 開發交接](S00-20261101-ITERATION-39-C04-LOGIN-RECEIVE-IMPLEMENTATION-CONTRACT.md)：沿用 Iteration38 C04-D/E/F 而不重編，細分 D1/D2/D3（可立即開發的 Host/loopback RX/安全日誌）、E0（可開發的 decoder/parser seam）、E1/E2（T02/T03 source-gated 原生 frame／LOGIN）、E3（需安全審查的 C02 auth/Session 租約）、F0（需真回覆契約的登入 S2C 最小回覆）。不改 C05-Pxx。
 - [Iteration39 機讀 18 Gate／M0～M3 四里程碑](S00-ITERATION-39-C04-LOGIN-RECEIVE-GATES.json)：M0 safe synthetic TCP，M1 原版 Client C2S 正向辨識，M2 C02 真正處理原版登入，M3 Client 收到已證回覆；全部依 source/Server offline/native runtime 各自驗收。初始為 NOT_IMPLEMENTED/NOT_RUN/BLOCKED，不冒稱 Client 已登入。以 `python -B governance/check_s00_iteration39.py --check` 檢查一致性。
 - **研究去重**：沿用 REQ-0001/2/5/9、RR-0001/3/4/5/6/7 及相關 GAP，不新開同義正式 RR、GAP、TEST 或提升 SPEC。Client Build SHA、first frame、E8/0F 實際 source→wire、S2C reply pairing 不明；未修改 Server 原始碼／資料庫、未執行原版 Client，也沒有授權 native adapter 開啟。
+
+## Iteration 40（2026-11-01，T01 分支正式同步＋C04 登入接收的現況／剩餘工程）
+
+- [Iteration40 完整 S00→Server 開發交接](S00-20261101-ITERATION-40-T01-SYNC-C04-LOGIN-RECEIVE-DELIVERY.md)：已將 `t01/roy/chatgpt-web`（head `8c93012edc4b76103a72d8b2f8868d6357034978`）安全 fast-forward 進 main。保留 T01 三父 merge 歷史、SRC-0652/653、CLM-CHAR-0007／CLM-NET-0037（PARTIAL），**非全文 FULL-PASS**。T01 新增 RR-0006「checksum/decompress 錯誤 frame 與後續幀／條件式 pool 風險」支援 source-bounded 收包規劃；不假稱真正 first-login wire 已證。
+- [I40-01～15 及 M0～M4 機讀驗收](S00-ITERATION-40-C04-LOGIN-M2-ACCEPTANCE.json)：核對最新 Server main `b4f187445d1d287feab3ceee9ea86d9dc0f75d63`，C04-D1..D4/E0 已有診斷實作，E1/F 有純離線 inspector。真正差額是 **E1b（安全累積／decode seam）、E2a（E8/0F 離線候選）、E2b（真正登入 Source Gate）、E3a（C02 Domain offline）、E3b（原 Client C02 auth）、F0（正確 Client 結果回覆）**。M2「Server 收到並完成原生 Client 登入決策」仍 `PLANNED_AND_NATIVE_BLOCKED`，M3/M4 另需 Client 可觀測畫面。
+- [Iteration40 source/放行檢查](../check_s00_iteration40.py)、[regression tests](../tests/test_s00_iteration40.py) 防止 PARTIAL source/Server offline 變成 native PASS。本輪沒有建立新 RR/REQ/GAP/TEST、沒有原版 Client/Server 執行或程式修改；S00 僅規格設計與 Git 整合。
+
+## 2026-11-01 — C04 原版 Client 登入設計的最終可執行交接（迭代 38–40 收斂）
+
+- [C04 原版 Client 登入 — 最終開發交接與 M2/M3 完工條件](S00-20261101-C04-NATIVE-LOGIN-EXECUTION-READY-HANDOFF.md)：使用既有 C04-D1–D4/E0/E1/F 離線實作作起點，**立刻開發 E1b/E2a/E3a 的 Server-only 部分**；T02/T03/T01 依既有 RR 補證第一筆 Frame、E8/0F 真 C2S、0x13/0x7A 真 S2C pairing，才啟用 E2b/E3b/F0。**M2 是 Server 真 C2S→C02 認證，M3 是 Client 真收到已證回覆而進下一畫面，M4 另為選服角色列表**。規劃完成不代表原版 Client 已登入。
+- 本文件引用 [I39 18 Gate](S00-ITERATION-39-C04-LOGIN-RECEIVE-GATES.json) 和 [I40 15 Gate](S00-ITERATION-40-C04-LOGIN-M2-ACCEPTANCE.json)，**不另建重複 Gate/REQ/RR/GAP/TEST**；source、offline、runtime 驗收分層仍有效。此後同功能優先**實作與補證，不再反覆建立宏觀規劃**。

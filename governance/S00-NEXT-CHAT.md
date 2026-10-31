@@ -226,3 +226,13 @@ S00 [Iteration38 C04-D/E/F 規劃](s00-iterations/S00-20261031-ITERATION-38-C04-
 四個里程碑嚴格區分：**M0 synthetic TCP 接收可立即做；M1 真 Client login frame 辨識、M2 C02 真 Client 登入決策、M3 Client 成功／失敗 UI 均仍 BLOCKED_BY_NATIVE_CONTRACT 或 NOT_RUN。** S00 未核對截圖 Client EXE/BIN 真實 SHA／實際 Port／first bytes；不得拿 KR 8414/8415/8416 靜態 callsites 當成固定連線設定；frame marker、app E8/0F、S2C0x13/0x7A 有局部證據但真正 pairing 未證。C02 `LocalLoginCoordinator` 不能在安全與 Source Gate 以前直接暴露成原生 TCP endpoint；未知 Client bytes 不得做帳密抽取／C02 claim，不猜成功 reply。
 
 新 [Iteration39 validator](check_s00_iteration39.py) 與 [test](tests/test_s00_iteration39.py) 驗證 planned Gate/版本/未升 native。沿用 RR-0001/3/4/5/6/7，不新增同義 RR/GAP/TEST，也不改正式 SPEC 或 Client/Server 程式。S00 下一步若收到開發回報先比對 source/CI 的具體 Gate、版本，接著以正式研究流程協助 T02/T03 補仍可由 BIN 取得的 first-mode/Login/response 證據。
+
+## 2026-11-01 — S00 Iteration40：T01 限定證據同步及 C04 M2 登入接收完整規劃
+
+使用者要求「同步 t01/roy/chatgpt-web，規劃到 Server 接收 Client 登入並上 Git」：main 先以 fast-forward 含入 T01 branch head `8c93012edc4b76103a72d8b2f8868d6357034978`（來源三父 merge、ahead5/behind0），T01 新 `SRC-0652/653`、`CLM-CHAR-0007/CLM-NET-0037` 仍 PARTIAL，`RR-0006 IN_REVIEW`、`RR-0009 ACCEPTED`（僅有界 blocker）均不改。**41 native checks+1 math check 不是全文 FULL-PASS；T01 局部被驗證的 Rx pointer checkout risk 不是原版 Server 封包規則。**
+
+新 [Iteration40 細部開發交接](s00-iterations/S00-20261101-ITERATION-40-T01-SYNC-C04-LOGIN-RECEIVE-DELIVERY.md)、[15 Gate 及五里程碑 JSON](s00-iterations/S00-ITERATION-40-C04-LOGIN-M2-ACCEPTANCE.json)、[validator](check_s00_iteration40.py) 將先前 Iteration39 更新到最新 Server `b4f187445d1d287feab3ceee9ea86d9dc0f75d63`：**已有 D1..D4/E0 及 E1/F offline inspector**，下一段應給 Server 開發者 **C04-E1b+E2a+E3a OFFLINE**；E2b/E3b 開原版 Client native，仍要 T02/T03 first-wire、login builder→socket、opaque/codepage 和安全來源門檻；F0 本地 Client 可識別成功/失敗回覆另待真實 S2C pairing，未經授權不執行 Client。Server-only CI≠M2 真登入，M2 未可聲稱已達。**不要重做 C01/C04-D；不要把 C04-E1 candidate envelope header 當完整 frame decoder。** S00 不新增同義 REQ/RR/GAP/TEST，不改 Server 程式、DB 或 Client。
+
+## 2026-11-01 — C04 登入設計交付收斂（可直接交 Server 開發）
+
+[完整 M2/M3 最終開發交接](s00-iterations/S00-20261101-C04-NATIVE-LOGIN-EXECUTION-READY-HANDOFF.md) 是 Iteration38/39/40 的**執行入口**，沒有再建立一套登入需求／RR／Gate。核對基線 S00 main `e7c9befa49c46afdd3784ae9a910c7834f50e91e`、Server main `b4f187445d1d287feab3ceee9ea86d9dc0f75d63`；今後開工先核最新 SHA。真正流程為 **M0（已有 raw diagnostic Server-only）→ M1（真 Client C2S 正確解析）→ M2（原版 Client request→C02 帳密/Session 決策）→ M3（S2C 真回覆令 Client 進下一畫面）→ M4（角色 UI）**。目前後四段仍 native/source/runtime 受阻；沒有新原版 Client trace。**即刻交 Server 開發者 E1b/E2a/E3a OFFLINE，不重做 C01/C04-D；原生 E2b/E3b/F0 必要先由 T02/T03/T01 基於既有 RR-0001/3/4/6/7 補證。** 禁止從 E1 局部 envelope/離線 E8/0F layout 宣稱原版 wire 成功；不可假回 0x13/0x7A、不新增任意官方 Port/解碼模式、不可泄露登入憑證。S00 本輪只把執行契約上 Git，不改 Server/DB/Client、不改正式 RR/GAP/SPEC/TEST。

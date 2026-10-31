@@ -60,3 +60,13 @@ For a positive decoded payload, `0x804740→0x4930E0` requires the bounded clien
 - Base-scene S2C `0x0042→0x4B2190` and `0x0043→0x4B1A90` **do** have local inbound handler registrations, but this is **not** a proved request/reply match for C2S selection command 0x42, not proof of approval, and not proof of first tutorial scene transition. RR-0002 remains BLOCKED and RR-0008 IN_REVIEW.
 
 Existing source-derived claims `CLM-NET-0026..0031` (PARTIAL, SRC-0471/0472); no newly claimed native re-verification in this S00 edit. `TEST-NET-0003` is still **OFFLINE_SYNTHETIC**; `GAP-NET-0003` OPEN. The original Server first S2C command, actual socket order, malformed-input effects beyond these paths, and complete Client compatibility remain UNKNOWN.
+
+## 2026-11-01 — T01 新 RR-0006 限定補證（CLM-NET-0037）
+
+[來源限定 R0–R2 交接](../../research/handoffs/t01-20261101-extra-roy1-roy2-r0-r2/README.md)、[原稿 RR-0006 補充](../../kr-extra-roy/20261101-020429-chatgpt-web-roy-RR0006-Rx-boundary-node-lifetime-post-error-frame.md)（Git blob `ca698712d6016884308f866f0e7e643ce22c7d64`）現在已自 `t01/roy/chatgpt-web` fast-forward 納入 S00 main。登錄的 `SRC-0653 / CLM-NET-0037` 是 `CONFLICT_CHECKED / PARTIAL`，**不是全文 FULL-PASS 或可直接互通的原始 Server wire 規格**。
+
+- **可用的 Client 觀察**：`0x807B40` 解析完整 0BBB checksum mismatch 或 2633 inflate-error 時，可在限定控制條件下丟棄該 decoded node，仍消費這一個完整外框，並繼續同批下個 frame；這不表示 Socket 一定保持連線，更不表示 Server 必須鏡像 Client 的 error strategy。outer `n=0` 或 `n>4096` 是 parser status0，和「完整 frame 壞 checksum」不同；不完整幀保留/compact，也不應與完整壞幀混為一談。
+- **不可升格的 Client 風險**：`0x807C81` checkout pool node 後，四個指標超界跳到 `0x807DD6`，局部 bypass normal recycle，僅是**條件式未配對 checkout 風險**；目前未證正常有效 Connection/WSARecv 能觸發、也未證實際 leak。正常 RX 推導 `4103+4096=8199<0x5000` 有單一 WSARecv、正常 cursor/no alias 等前提，不能當全域排除或利用確認。
+- **對 C04-E1b Server 的要求**：將 `Incomplete`、`InvalidLength`、`BadChecksum`、`BadDecompress`、`Complete`、`UnknownMarker` 明確分型；對 malformed input 採**安全保守策略**，並以 synthetic `bad+good` 覆蓋 parser 消耗/緩衝回收，不能把原版 Client 的本地節點錯誤當 Server 的兼容 MUST。Client inbound/parser 證據不能取代 **Client C2S first-wire/Conn+A02C mode 真實選擇**或 LOGIN app 的 request/response pairing，`GAP-NET-0001/0003` 仍 OPEN。
+- 具體 Server 交接與真實 Client 登入 M2 準入條件見 [S00 Iteration40](../../governance/s00-iterations/S00-20261101-ITERATION-40-T01-SYNC-C04-LOGIN-RECEIVE-DELIVERY.md)。本 SPEC **維持 DRAFT/PARTIAL**，沒有原版 Client runtime、無 native codec 放行。
+
