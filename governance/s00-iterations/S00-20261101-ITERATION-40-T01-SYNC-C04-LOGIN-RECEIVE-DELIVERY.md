@@ -203,3 +203,7 @@ T01 新源結果由 `research/intake/index.json`／`research/claims/index.json` 
 - 獨立 Server：`src/Tartaros.Server.Host/Program.cs`、`src/Tartaros.Network/{DiagnosticGateway,SafeTcpEventJournal}.cs`、`src/Tartaros.Protocol/{KrE1OfflineEnvelopeInspector,NativeContractAdmission,KrLoginChoiceOfflineLayoutProbe,KrFOfflineChoiceInspector}.cs`、`src/Tartaros.Session/LocalLoginCoordinator.cs`、`docs/C04-D1-D2-D3-E0-IMPLEMENTATION.md`、`docs/C04-D4-IMPLEMENTATION.md`、`docs/C04-E1-F-OFFLINE-IMPLEMENTATION.md`、`contracts/spec-revision.json`。
 
 **最終狀態**：T01 同步後，S00 已把 Server **M2 原版登入接收並驗證的完整工程路徑**規劃到 C04-E3b；仍缺具體真正的 first-wire/login C2S source 及真 Client 授權測試，故 M2 只能 `PLANNED_AND_NATIVE_BLOCKED`，不能因離線 Server 模組開發好便標 Client 已登入。
+
+## 11. 收斂之後的正式工程入口（2026-11-01）
+
+本篇 Iteration40 的 T01 來源與有限 scope 均保留；為避免後續繼續要求「規劃到 Client 登入」時反覆重新切分工作包，已將 **M2（真 Client 登入送 C02）與 M3（真 Client 接受回覆）** 的開工界線、現有 Server 不重做清單、T02/T03 成果格式、開發者交辦文字與負向驗收集中於 [C04 最終開發交接](S00-20261101-C04-NATIVE-LOGIN-EXECUTION-READY-HANDOFF.md)。**S00 登入 Server 工程規劃已完成；原版 Client 實際登入尚未完成，卡在真正 source/mode/request/reply 審核、Server native code 與授權 runtime 測試。** 避免將新的文件當成額外必須等完的前置階段；立即可做 E1b/E2a/E3a OFFLINE，研究與程式開發並行。
