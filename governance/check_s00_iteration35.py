@@ -186,7 +186,7 @@ def validate_candidate(receipt):
                     errors.append("Policy decision needs source-pinned approval reference")
     elif slot.startswith("R0-"):
         provider = "SQLITE" if "SQLITE" in slot else "POSTGRES"
-        baseline = 2 if provider == "SQLITE" else 3
+        # The historical Iteration35 snapshot remains PG3, but future C05 receipts\n        # must start after actual Server WEB-ADMIN-PG schema 004.\n        baseline = 2 if provider == "SQLITE" else 4
         if detail.get("provider") != provider or detail.get("base_version") != baseline:
             errors.append("Migration provider or observed baseline mismatch")
         if not SHA64.fullmatch(str(detail.get("manifest_sha256", ""))):

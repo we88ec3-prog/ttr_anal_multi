@@ -166,3 +166,10 @@ C05 模組的 SQLite v3/PG004 是 Iterations28～30 **互相可能衝突的候�
 [Iteration35](s00-iterations/S00-20261031-ITERATION-35-R0-P01-EVIDENCE-INTAKE-PLAN.md) 提供 R0 policy／SQLite/PG migration 與 P01 原子 admission 五個獨立收件槽位及離線 `check_s00_iteration35.py --candidate receipt.json`。此工具只能拒絕缺少 commit/Git blob、離線 CI source/head、owner、provider、migration unique digest、D33-01～08 approval reference、P01 交易/CAS/replay/crash 測試等**結構不完備**的資料。**任何通過只稱 STRUCTURALLY_REVIEWABLE_NOT_APPROVED，不是 GitHub 官方驗證、T01 FULL-PASS、Server CI/R0 PASS 或原版 Client 可玩**。送交正式 owner 必須手動再次核對每份來源、SCHEMA/provider 交易與原版 Native 禁用狀態。
 
 在真實 R0/P01 Server 交件前，五槽仍 `NO_RECEIPT`、D33 決策未核准、P01/C05 尚未驗證、Native adapter OFF。此規格不動正式 REQ/RR/CLM/GAP/SPEC/TEST/ADR、Server 實作庫。不要把 I35 Python validator 的 CI 成功冒稱 I35-T01～T12 真實執行。
+
+
+## Iteration36 — PostgreSQL v4 已佔用 004；C05 PG migration 須從真實 DB/schema 配號
+
+[Iteration36 source-scoped review](s00-iterations/S00-20261031-ITERATION-36-POSTGRES-V4-DELTA.md) 核對獨立 Server 真實更新：PG v4 `004_web_admin.sql` 是 WEB Admin 模組的帳號停權、Session revoke/audit migration，帳號／Session／角色有 v4 同交易停權保護及隔離 DB CI。它**不是** C05 Encounter migration，也不代表真玩家 DB 已 migrate 或可對原版 Client 提供服務。因此後續 C05 PostgreSQL candidate 從 **v4 之後**提案，SQLite v2 各自配號；統一 allocator、核准 policy 和真正 P01 Admission 同交易仍缺收據。請勿把以前文稿的 PG004 競爭候選誤當可用號碼。
+
+這輪同時修正 Iteration35 candidate checker 從 PG3→PG4；原 Iteration35 machine state 的 PG3 代表當時舊 Server HEAD 快照，**不追改歷史**。新增 `python -B governance/check_s00_iteration36.py --check` 只核對 source Git blob 身分、未核准 C05、外部 CI ID 及 12 NOT_RUN，並不自動呼叫 GitHub/live database 或升格正式 RR/REQ/ADR/SPEC/T01；T16-134 Quest15 的 `SRC-0590` 也僅為 REGISTERED。
