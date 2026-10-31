@@ -1,0 +1,252 @@
+{
+  "schema": "s00-iteration38-c04-login-gates-v1",
+  "kind": "NON_NORMATIVE_DESIGN_AND_TEST_PLAN",
+  "date": "2026-10-31",
+  "client_version": "kr",
+  "client_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+  "s00_main_at_review": "ac3aa886e9fd20be93b6f841ada66fe22e587aa1",
+  "server_main_at_review": "284c1df16707834c5df64976ff8d1307e1906ae4",
+  "client_image_build_matches_source": "UNKNOWN",
+  "user_reported_error": "ERROR: 서버에 접속할 수 없습니다.",
+  "gate_count": 18,
+  "execution_status": "ALL_NOT_RUN_OR_BLOCKED",
+  "native_adapter_enabled": false,
+  "original_client_runtime_executed": false,
+  "source_review_needed": true,
+  "work_packages": [
+    {
+      "id": "C04-D",
+      "mode": "SERVER_ONLY_DIAGNOSTIC",
+      "can_start_now": true,
+      "dependencies": [
+        "C01-A",
+        "C01-B",
+        "C01-C"
+      ],
+      "gates": [
+        "BUILD-01",
+        "NET-01",
+        "NET-02",
+        "LOG-01",
+        "LOG-02",
+        "LOG-03",
+        "LOG-04",
+        "LOG-05",
+        "LOG-06",
+        "LOG-07"
+      ]
+    },
+    {
+      "id": "C04-E",
+      "mode": "PURE_MEMORY_ALLOWED_NATIVE_GATE_CLOSED",
+      "dependencies": [
+        "C04-D",
+        "SPEC-NET-0001",
+        "SPEC-NET-0003",
+        "RR-0001",
+        "RR-0004",
+        "RR-0006",
+        "RR-0007",
+        "RR-0003"
+      ],
+      "gates": [
+        "NET-03",
+        "AUTH-01"
+      ]
+    },
+    {
+      "id": "C04-F",
+      "mode": "PURE_MEMORY_ALLOWED_NATIVE_GATE_CLOSED",
+      "dependencies": [
+        "C04-E",
+        "C02",
+        "C03",
+        "SPEC-AUTH-0001",
+        "SPEC-CHAR-0001",
+        "SPEC-FLOW-0001",
+        "RR-0003",
+        "RR-0005",
+        "RR-0007",
+        "RR-0002"
+      ],
+      "gates": [
+        "AUTH-02",
+        "AUTH-03",
+        "FLOW-01",
+        "CHAR-01",
+        "UI-01",
+        "UI-02"
+      ]
+    }
+  ],
+  "research_reuse": [
+    "RR-0001",
+    "RR-0002",
+    "RR-0003",
+    "RR-0004",
+    "RR-0005",
+    "RR-0006",
+    "RR-0007",
+    "RR-0008",
+    "RR-0009",
+    "RR-0010"
+  ],
+  "requirement_reuse": [
+    "REQ-0001",
+    "REQ-0002",
+    "REQ-0003",
+    "REQ-0004",
+    "REQ-0005",
+    "REQ-0009"
+  ],
+  "new_formal_rr": [],
+  "new_formal_gap": [],
+  "new_formal_test": [],
+  "native_certification": "NOT_VERIFIED",
+  "gates": [
+    {
+      "id": "BUILD-01",
+      "package_id": "C04-D",
+      "evidence_target": "client_build_match",
+      "expected": "版本確認：EXE/BIN hash、設定來源、endpoint 來源",
+      "status": "NOT_RUN",
+      "blocker": "BUILD_MISMATCH_OR_UNKNOWN"
+    },
+    {
+      "id": "NET-01",
+      "package_id": "C04-D",
+      "evidence_target": "synthetic_socket",
+      "expected": "localhost configured listener start/fail/restart/port conflict",
+      "status": "NOT_IMPLEMENTED",
+      "blocker": "NO_NATIVE_LISTENER"
+    },
+    {
+      "id": "LOG-01",
+      "package_id": "C04-D",
+      "evidence_target": "synthetic_socket",
+      "expected": "ConnectionId/runId timeline for accept/RX/TX/close",
+      "status": "NOT_IMPLEMENTED",
+      "blocker": "NO_GAME_TCP_FILE_LOG"
+    },
+    {
+      "id": "LOG-02",
+      "package_id": "C04-D",
+      "evidence_target": "synthetic_socket",
+      "expected": "fragmentation/coalescence: RX_CHUNK != FRAME_DECODED",
+      "status": "NOT_IMPLEMENTED",
+      "blocker": "NO_FRAME_EVENT_LOG"
+    },
+    {
+      "id": "LOG-03",
+      "package_id": "C04-D",
+      "evidence_target": "synthetic_socket",
+      "expected": "TX write completed must not mean Client ACK",
+      "status": "NOT_IMPLEMENTED",
+      "blocker": "NO_GAME_TCP_FILE_LOG"
+    },
+    {
+      "id": "LOG-04",
+      "package_id": "C04-D",
+      "evidence_target": "synthetic_socket",
+      "expected": "password/UTF-16 sentinel absent from all logs, raw hex and rotation",
+      "status": "NOT_IMPLEMENTED",
+      "blocker": "NO_SAFE_REDACTION_TEST"
+    },
+    {
+      "id": "LOG-05",
+      "package_id": "C04-D",
+      "evidence_target": "synthetic_socket",
+      "expected": "unknown marker, malformed, checksum error log trusted classification only",
+      "status": "NOT_IMPLEMENTED",
+      "blocker": "NO_NATIVE_PROFILE"
+    },
+    {
+      "id": "LOG-06",
+      "package_id": "C04-D",
+      "evidence_target": "synthetic_socket",
+      "expected": "disk-full, ACL denial, restart, rotation, bounded queue",
+      "status": "NOT_IMPLEMENTED",
+      "blocker": "NO_LOG_ROTATION"
+    },
+    {
+      "id": "LOG-07",
+      "package_id": "C04-D",
+      "evidence_target": "synthetic_socket",
+      "expected": "sanitized diagnostic export no credentials/IP/ticket",
+      "status": "NOT_IMPLEMENTED",
+      "blocker": "NO_EXPORT_POLICY"
+    },
+    {
+      "id": "NET-02",
+      "package_id": "C04-D",
+      "evidence_target": "original_client_runtime",
+      "expected": "matched Client build real TCP CONNECT/ACCEPT",
+      "status": "NOT_RUN",
+      "blocker": "RUNTIME_NOT_VERIFIED"
+    },
+    {
+      "id": "NET-03",
+      "package_id": "C04-E",
+      "evidence_target": "original_client_runtime",
+      "expected": "source-reviewed first frame decode and negative handling",
+      "status": "BLOCKED_BY_NATIVE_CONTRACT",
+      "blocker": "RR-0001;RR-0004;RR-0006"
+    },
+    {
+      "id": "AUTH-01",
+      "package_id": "C04-E",
+      "evidence_target": "original_client_runtime",
+      "expected": "real native C2S auth through reviewed codec/C02",
+      "status": "BLOCKED_BY_NATIVE_CONTRACT",
+      "blocker": "RR-0003"
+    },
+    {
+      "id": "AUTH-02",
+      "package_id": "C04-F",
+      "evidence_target": "original_client_runtime",
+      "expected": "source-backed S2C success and observable next Client state",
+      "status": "BLOCKED_BY_NATIVE_CONTRACT",
+      "blocker": "RR-0003;RR-0007"
+    },
+    {
+      "id": "AUTH-03",
+      "package_id": "C04-F",
+      "evidence_target": "original_client_runtime",
+      "expected": "source-backed password/ban failure reply and visible Client outcome",
+      "status": "BLOCKED_BY_NATIVE_CONTRACT",
+      "blocker": "RR-0003"
+    },
+    {
+      "id": "FLOW-01",
+      "package_id": "C04-F",
+      "evidence_target": "original_client_runtime",
+      "expected": "choice/connection handoff session lease continuation",
+      "status": "BLOCKED_BY_NATIVE_CONTRACT",
+      "blocker": "RR-0005;GAP-NET-0002"
+    },
+    {
+      "id": "CHAR-01",
+      "package_id": "C04-F",
+      "evidence_target": "original_client_runtime",
+      "expected": "native roster 0/1/N and correct app/scene init",
+      "status": "BLOCKED_BY_NATIVE_CONTRACT",
+      "blocker": "RR-0002;GAP-CHAR-0001"
+    },
+    {
+      "id": "UI-01",
+      "package_id": "C04-F",
+      "evidence_target": "original_client_runtime",
+      "expected": "one existing role visible and interactive character-selection UI",
+      "status": "NOT_RUN",
+      "blocker": "GAP-FLOW-0001"
+    },
+    {
+      "id": "UI-02",
+      "package_id": "C04-F",
+      "evidence_target": "original_client_runtime",
+      "expected": "zero-role actionable character-creation UI (separate from UI-01)",
+      "status": "BLOCKED_BY_NATIVE_CONTRACT",
+      "blocker": "GAP-CHAR-0002"
+    }
+  ]
+}

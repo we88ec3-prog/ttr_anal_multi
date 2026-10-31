@@ -1,0 +1,352 @@
+{
+  "schema": "s00-iteration39-login-receive-plan-v1",
+  "kind": "NON_NORMATIVE_SERVER_IMPLEMENTATION_PLAN",
+  "date": "2026-11-01",
+  "s00_base_main": "edc11830d184165ee6d09632b35927bbd713c2d7",
+  "server_base_main": "284c1df16707834c5df64976ff8d1307e1906ae4",
+  "client_version": "kr",
+  "client_bin_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+  "reported_client_build_verified": false,
+  "reported_error": "ERROR: 서버에 접속할 수 없습니다.",
+  "original_client_executed_by_s00": false,
+  "server_code_changed": false,
+  "native_adapter_enabled": false,
+  "allowed_immediate_work": [
+    "C04-D1",
+    "C04-D2",
+    "C04-D3",
+    "C04-E0",
+    "C04-E3_OFFLINE_ONLY"
+  ],
+  "blocked_native_work": [
+    "C04-E1",
+    "C04-E2_NATIVE_ENABLE",
+    "C04-E3_NATIVE_ENABLE",
+    "C04-F0"
+  ],
+  "reused_requirements": [
+    "REQ-0001",
+    "REQ-0002",
+    "REQ-0005",
+    "REQ-0009"
+  ],
+  "reused_rrs": [
+    "RR-0001",
+    "RR-0003",
+    "RR-0004",
+    "RR-0005",
+    "RR-0006",
+    "RR-0007"
+  ],
+  "reused_open_gaps": [
+    "GAP-NET-0001",
+    "GAP-NET-0002",
+    "GAP-NET-0003",
+    "GAP-AUTH-0001",
+    "GAP-FLOW-0001"
+  ],
+  "formal_registry_mutations": {
+    "new_reqs": 0,
+    "new_rr": 0,
+    "new_gaps": 0,
+    "new_tests": 0,
+    "promoted_specs": 0
+  },
+  "package_dependencies": {
+    "C04-D1": [
+      "C01-A"
+    ],
+    "C04-D2": [
+      "C04-D1",
+      "C01-A",
+      "C01-C"
+    ],
+    "C04-D3": [
+      "C04-D2",
+      "REQ-0009"
+    ],
+    "C04-E0": [
+      "C04-D2",
+      "C04-A",
+      "C04-B"
+    ],
+    "C04-E1": [
+      "C04-E0",
+      "RR-0001",
+      "RR-0004",
+      "RR-0006",
+      "RR-0007"
+    ],
+    "C04-E2": [
+      "C04-E1",
+      "RR-0003"
+    ],
+    "C04-E3": [
+      "C04-E2",
+      "C02",
+      "SECURITY_REVIEW"
+    ],
+    "C04-F0": [
+      "C04-E3",
+      "RR-0003",
+      "RR-0005",
+      "RR-0007"
+    ]
+  },
+  "server_api_proposals": [
+    "GameGatewayHostedService",
+    "GameGatewayOptions",
+    "GameConnectionContext",
+    "ITcpEventSink",
+    "IKrInboundFrameReader",
+    "IClientLoginParser",
+    "ITrustedLoginAdapter",
+    "IClientLoginResultWriter"
+  ],
+  "stages": [
+    {
+      "id": "M0",
+      "label": "safe TCP listener plus observability",
+      "required_gate_ids": [
+        "I39-02",
+        "I39-03",
+        "I39-04",
+        "I39-05",
+        "I39-06",
+        "I39-07"
+      ],
+      "status": "PLAN_ONLY",
+      "can_develop_without_native_contract": true,
+      "claim_if_pass": "SERVER_OFFLINE_LISTENER_RX_ONLY"
+    },
+    {
+      "id": "M1",
+      "label": "original Client login frame recognized",
+      "required_gate_ids": [
+        "I39-01",
+        "I39-08",
+        "I39-09",
+        "I39-10",
+        "I39-11",
+        "I39-15"
+      ],
+      "status": "BLOCKED_BY_NATIVE_CONTRACT",
+      "can_develop_without_native_contract": false,
+      "claim_if_pass": "ORIGINAL_CLIENT_LOGIN_RX_RECOGNIZED"
+    },
+    {
+      "id": "M2",
+      "label": "original Client login accepted and processed by C02",
+      "required_gate_ids": [
+        "I39-12",
+        "I39-13",
+        "I39-14",
+        "I39-16"
+      ],
+      "depends_on": [
+        "M1"
+      ],
+      "status": "BLOCKED_BY_NATIVE_CONTRACT",
+      "can_develop_without_native_contract": false,
+      "claim_if_pass": "ORIGINAL_CLIENT_LOGIN_DOMAIN_DECIDED"
+    },
+    {
+      "id": "M3",
+      "label": "original Client receives approved success/failure",
+      "required_gate_ids": [
+        "I39-17",
+        "I39-18"
+      ],
+      "depends_on": [
+        "M2"
+      ],
+      "status": "BLOCKED_BY_NATIVE_CONTRACT",
+      "can_develop_without_native_contract": false,
+      "claim_if_pass": "ORIGINAL_CLIENT_LOGIN_UI_OBSERVED"
+    }
+  ],
+  "gates_count": 18,
+  "gates": [
+    {
+      "id": "I39-01",
+      "name": "CLIENT_BUILD",
+      "work_package": "C04-D1",
+      "owner": "S00+T02",
+      "evidence_target": "source_and_inventory",
+      "status": "NOT_RUN",
+      "blocker": "CLIENT_EXE_BIN_SHA_ENDPOINT_UNKNOWN",
+      "acceptance": "Client EXE/BIN fingerprint/endpoint and KR source pin; wrong-build rejection"
+    },
+    {
+      "id": "I39-02",
+      "name": "HOST_LISTEN",
+      "work_package": "C04-D1",
+      "owner": "Server",
+      "evidence_target": "server_offline",
+      "status": "NOT_IMPLEMENTED",
+      "blocker": null,
+      "acceptance": "Explicit loopback listener start and occupied-port failure"
+    },
+    {
+      "id": "I39-03",
+      "name": "RAW_ACCEPT",
+      "work_package": "C04-D2",
+      "owner": "Server",
+      "evidence_target": "server_offline",
+      "status": "NOT_IMPLEMENTED",
+      "blocker": null,
+      "acceptance": "Connect/Accept, RX>0, EOF vs idle vs remote reset"
+    },
+    {
+      "id": "I39-04",
+      "name": "RAW_STREAM",
+      "work_package": "C04-D2",
+      "owner": "Server",
+      "evidence_target": "server_offline",
+      "status": "NOT_IMPLEMENTED",
+      "blocker": null,
+      "acceptance": "Fragmented header/payload and coalesced frames; bounded stream"
+    },
+    {
+      "id": "I39-05",
+      "name": "LOG_SAFE",
+      "work_package": "C04-D3",
+      "owner": "Server",
+      "evidence_target": "server_offline",
+      "status": "NOT_IMPLEMENTED",
+      "blocker": null,
+      "acceptance": "Correlated safe JSONL incl rotation/credential sentinel absent"
+    },
+    {
+      "id": "I39-06",
+      "name": "HOST_RESTART",
+      "work_package": "C04-D1",
+      "owner": "Server",
+      "evidence_target": "server_offline",
+      "status": "NOT_IMPLEMENTED",
+      "blocker": null,
+      "acceptance": "Ctrl+C, stop/restart, port reuse failure, cancellation"
+    },
+    {
+      "id": "I39-07",
+      "name": "FAIL_CLOSED",
+      "work_package": "C04-E0",
+      "owner": "Server",
+      "evidence_target": "server_offline",
+      "status": "NOT_IMPLEMENTED",
+      "blocker": null,
+      "acceptance": "Unknown native profile/frame/scene must never call C02 or fake S2C"
+    },
+    {
+      "id": "I39-08",
+      "name": "FRAME_CONTRACT",
+      "work_package": "C04-E1",
+      "owner": "T02+T01+S00",
+      "evidence_target": "native_source_review",
+      "status": "BLOCKED_BY_NATIVE_CONTRACT",
+      "blocker": "RR-0001/RR-0004/RR-0006/RR-0007",
+      "acceptance": "Version/direction first-frame/handshake/slot/marker documented and reviewed"
+    },
+    {
+      "id": "I39-09",
+      "name": "FRAME_DECODE",
+      "work_package": "C04-E1",
+      "owner": "Server+T02",
+      "evidence_target": "native_evidence_and_offline",
+      "status": "BLOCKED_BY_NATIVE_CONTRACT",
+      "blocker": "RR-0001/RR-0004/RR-0006/RR-0007",
+      "acceptance": "Source-backed runtime frame decode with malformed and fragmentation tests"
+    },
+    {
+      "id": "I39-10",
+      "name": "LOGIN_BUILDER",
+      "work_package": "C04-E2",
+      "owner": "T03+T01+S00",
+      "evidence_target": "native_source_review",
+      "status": "BLOCKED_BY_NATIVE_CONTRACT",
+      "blocker": "RR-0003",
+      "acceptance": "Native reachable E8/0F builder mode, opaque bytes and codepage evidence"
+    },
+    {
+      "id": "I39-11",
+      "name": "LOGIN_PARSE",
+      "work_package": "C04-E2",
+      "owner": "Server+T03",
+      "evidence_target": "native_evidence_and_offline",
+      "status": "BLOCKED_BY_NATIVE_CONTRACT",
+      "blocker": "RR-0003",
+      "acceptance": "Trusted complete login C2S extracted only after frame and scene"
+    },
+    {
+      "id": "I39-12",
+      "name": "PROVIDER_PARITY",
+      "work_package": "C04-E3",
+      "owner": "Server",
+      "evidence_target": "server_offline",
+      "status": "NOT_IMPLEMENTED",
+      "blocker": "PROVIDER_SECURITY_REVIEW",
+      "acceptance": "SQLite/PG trusted account provider matches admin-managed DB and ban semantics"
+    },
+    {
+      "id": "I39-13",
+      "name": "AUTH_GATE",
+      "work_package": "C04-E3",
+      "owner": "Server",
+      "evidence_target": "server_offline",
+      "status": "NOT_IMPLEMENTED",
+      "blocker": "SECURITY_REVIEW",
+      "acceptance": "Existing/no account, wrong password, ban, outage, locked and abuse protection"
+    },
+    {
+      "id": "I39-14",
+      "name": "EPOCH_FENCING",
+      "work_package": "C04-E3",
+      "owner": "Server",
+      "evidence_target": "server_offline",
+      "status": "NOT_IMPLEMENTED",
+      "blocker": null,
+      "acceptance": "Duplicate attempts, old-lease disconnect race and revocation fencing"
+    },
+    {
+      "id": "I39-15",
+      "name": "NATIVE_RX",
+      "work_package": "C04-E1+E2",
+      "owner": "Server+S00",
+      "evidence_target": "original_client_runtime",
+      "status": "BLOCKED_BY_NATIVE_CONTRACT",
+      "blocker": "CLIENT_VERSION_AND_RUNTIME_AUTHORIZATION",
+      "acceptance": "Authorized original Client connects to controlled local listener and emits trace"
+    },
+    {
+      "id": "I39-16",
+      "name": "NATIVE_AUTH",
+      "work_package": "C04-E2+E3",
+      "owner": "Server+S00",
+      "evidence_target": "original_client_runtime",
+      "status": "BLOCKED_BY_NATIVE_CONTRACT",
+      "blocker": "FIRST_FRAME_AND_LOGIN_PARSER_AND_RUNTIME_AUTHORIZATION",
+      "acceptance": "Authorized original Client login reaches C02 with valid internal decision"
+    },
+    {
+      "id": "I39-17",
+      "name": "LOGIN_REPLY",
+      "work_package": "C04-F0",
+      "owner": "T03+T02+Server+S00",
+      "evidence_target": "source_and_original_client_runtime",
+      "status": "BLOCKED_BY_NATIVE_CONTRACT",
+      "blocker": "RR-0003/RR-0005/RR-0007",
+      "acceptance": "Correct source-backed S2C success/failure result reaches original Client"
+    },
+    {
+      "id": "I39-18",
+      "name": "CLIENT_LOGIN",
+      "work_package": "C04-F0",
+      "owner": "Server+S00",
+      "evidence_target": "original_client_runtime",
+      "status": "BLOCKED_BY_NATIVE_CONTRACT",
+      "blocker": "S2C_PAIRING_AND_RUNTIME_AUTHORIZATION",
+      "acceptance": "Authorized Client visibly proceeds to login-success next state"
+    }
+  ],
+  "acceptance_policy": "OFFLINE_PASS != SOURCE_NATIVE_VERIFIED != ORIGINAL_CLIENT_RUNTIME_PASS; no guessed frames or S2C, no original client execution without separate authorization."
+}

@@ -16,6 +16,7 @@ PATHS = [
     "design/gaps/index.json", "design/decisions/index.json",
     "design/feedback/index.json", "shared/targets.json",
     "design/requirements/requests/2026-10-31-admin-web-account-operations.md",
+    "design/requirements/requests/2026-10-31-game-tcp-observability.md",
 ]
 
 
@@ -43,10 +44,10 @@ class ServerRequirementTests(unittest.TestCase):
     def test_canonical_code_findings_not_approved(self):
         r = evaluate(self.root)
         self.assertEqual(r["errors"], [])
-        self.assertEqual(r["summary"]["requirements"], 8)
+        self.assertEqual(r["summary"]["requirements"], 9)
         self.assertEqual(r["summary"]["approved"], 0)
         self.assertEqual(r["summary"]["discovery_counts"],
-                         {"CODE_ANALYSIS": 5, "GAME_RUNTIME_OBSERVATION": 0, "PLAYER_ADMIN_REQUEST": 4})
+                         {"CODE_ANALYSIS": 5, "GAME_RUNTIME_OBSERVATION": 0, "PLAYER_ADMIN_REQUEST": 5})
 
 
     def test_admin_web_v1_three_requests_trace_to_actual_user_request(self):
@@ -72,6 +73,29 @@ class ServerRequirementTests(unittest.TestCase):
         self.assertEqual(found["REQ-0007"]["adr_ids"], ["ADR-0004"])
         self.assertNotIn("ADR-0002", access["adr_ids"])
         self.assertEqual(evaluate(self.root)["errors"], [])
+
+    def test_game_tcp_observability_is_separate_candidate_user_request(self):
+        records = json.loads((self.root / PATHS[0]).read_text(encoding="utf-8"))["items"]
+        log = next(r for r in records if r["id"] == "REQ-0009")
+        self.assertEqual(log["category"], "OPERATIONS")
+        self.assertIsNone(log["client_version"])
+        self.assertIsNone(log["target_sha256"])
+        self.assertEqual(log["status"], "CANDIDATE")
+        self.assertEqual(log["rr_ids"], [])
+        self.assertEqual(log["gap_ids"], [])
+        self.assertEqual(log["claim_ids"], [])
+        self.assertEqual(log["discoveries"][0]["channel"], "PLAYER_ADMIN_REQUEST")
+        self.assertEqual(log["discoveries"][0]["requester_role"], "ADMINISTRATOR")
+        self.assertEqual(log["discoveries"][0]["request_record_ref"],
+                         "design/requirements/requests/2026-10-31-game-tcp-observability.md")
+        self.assertTrue(any("密碼" in v for v in log["acceptance_criteria"]))
+        self.assertEqual(evaluate(self.root)["errors"], [])
+
+    def test_game_tcp_observability_record_missing_fails_closed(self):
+        path = self.root / "design/requirements/requests/2026-10-31-game-tcp-observability.md"
+        path.unlink()
+        self.assertTrue(any("feature request needs a public-safe internal request record" in e
+                            for e in evaluate(self.root)["errors"]))
 
     def test_admin_web_request_record_missing_fails_closed(self):
         path = self.root / "design/requirements/requests/2026-10-31-admin-web-account-operations.md"
@@ -143,8 +167,8 @@ class ServerRequirementTests(unittest.TestCase):
         self.edit(edit)
         r = evaluate(self.root)
         self.assertEqual(r["errors"], [])
-        self.assertEqual(r["summary"]["requirements"], 8)
-        self.assertEqual(r["summary"]["discovery_counts"]["PLAYER_ADMIN_REQUEST"], 6)
+        self.assertEqual(r["summary"]["requirements"], 9)
+        self.assertEqual(r["summary"]["discovery_counts"]["PLAYER_ADMIN_REQUEST"], 7)
 
     def test_historical_protocol_and_ops_safety_are_user_request_material(self):
         # Test-only player/admin discovery: not a real user submission.
