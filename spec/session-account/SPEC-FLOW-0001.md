@@ -101,3 +101,9 @@
 - E17-A～J 是 E17 戰鬥**子 gate**，不可增加為 E00–E26 之外新的 10 個主流程；E18–E26 正式 scene/quest/wire positive chain 仍有斷點。機器矩陣與 [18 項 I26 NOT_RUN 案例](../../governance/s00-iterations/S00-20261031-ITERATION-26-ACCEPTANCE.md) 是**規劃工件**，不是正式 TEST index。
 
 `SPEC-FLOW-0001` 依然 DRAFT/PARTIAL；ADR-0007 = PROPOSED/NON-NORMATIVE、不列 normative adr_ids；相關選角與場景 RR/GAP 原有狀態不變，Client/Server runtime 未執行。
+
+## S00 2026-10-31 — RR-0009 有界研究審查與 RR-0010 阻塞補證
+
+- [RR-0009 交付驗收](../../governance/reviews/RR-0009-20261031-bounded-blocker-acceptance.md) 狀態為 `ACCEPTED`，**僅限 E70 按 acceptance criterion #5 提交的精確 blocker、原生局部分析及解除條件**。零筆 roster `N=0` 僅跳過 53B rows，雖已找到 UI RTTI/cache/事件候選，沒有已證可點擊的創角按鈕或建角視窗正向路徑。**`GAP-CHAR-0002 OPEN`**。
+- [RR-0010 阻塞交接](../../governance/s00-iterations/S00-20261031-RR0009-RR0010-REVIEW-AND-HANDOFF.md) 保持 `BLOCKED`：`C2S 0x33` 2B 不含名字；`C2S 0x3E` 48B 為有界遠征隊名稱請求，`S2C 0x4A` 為分離的結果/UI handler，未證原版 Server 配對；full `S2C app2` 與 delta `app2B` 共享 role array，不代表建立角色成功。**`GAP-CHAR-0003 OPEN`**。
+- **本 SPEC 繼續 `DRAFT/PARTIAL`。** 不能將 UI local event、`0x33/0x3E/0x4A/0x42`、roster 訊息拼湊成已驗證原版建角時序；沒有新的正式 TEST、T01 FULL-PASS、Client runtime 或 native adapter 許可。既有 Iteration 21 的 QUEUED 文句屬該時點歷史快照。

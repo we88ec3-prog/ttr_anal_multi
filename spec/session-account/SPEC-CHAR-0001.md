@@ -64,3 +64,9 @@
 - **共用角色資料不是官方建立交易**：E79 S2C app2（完整）與 app2B（增量）寫同一 F94304 角色陣列；E80 C2S42 僅選已存在角色。C2S3E 建名、C2S33 招募候選、S2C2B 更新、S2CB6 UI、C2S42 選角是不同子流程；不擅寫 Server 一定把它們串在同一交易。
 
 未知：官方 C2S42 accepted/rejected S2C、mode2 業務語意、失敗重試 UI、Square world 初始化；RR-0010 的「創建角色→roster」因果仍未證。狀態 **DRAFT/PARTIAL**、RR-0002/0010 **BLOCKED**、相應 GAP **OPEN**。
+
+## S00 2026-10-31 — RR-0009 有界研究審查與 RR-0010 阻塞補證
+
+- [RR-0009 交付驗收](../../governance/reviews/RR-0009-20261031-bounded-blocker-acceptance.md) 狀態為 `ACCEPTED`，**僅限 E70 按 acceptance criterion #5 提交的精確 blocker、原生局部分析及解除條件**。零筆 roster `N=0` 僅跳過 53B rows，雖已找到 UI RTTI/cache/事件候選，沒有已證可點擊的創角按鈕或建角視窗正向路徑。**`GAP-CHAR-0002 OPEN`**。
+- [RR-0010 阻塞交接](../../governance/s00-iterations/S00-20261031-RR0009-RR0010-REVIEW-AND-HANDOFF.md) 保持 `BLOCKED`：`C2S 0x33` 2B 不含名字；`C2S 0x3E` 48B 為有界遠征隊名稱請求，`S2C 0x4A` 為分離的結果/UI handler，未證原版 Server 配對；full `S2C app2` 與 delta `app2B` 共享 role array，不代表建立角色成功。**`GAP-CHAR-0003 OPEN`**。
+- **本 SPEC 繼續 `DRAFT/PARTIAL`。** 不能將 UI local event、`0x33/0x3E/0x4A/0x42`、roster 訊息拼湊成已驗證原版建角時序；沒有新的正式 TEST、T01 FULL-PASS、Client runtime 或 native adapter 許可。既有 Iteration 21 的 QUEUED 文句屬該時點歷史快照。

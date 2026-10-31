@@ -206,3 +206,7 @@ E23 SERVER_POLICY_NEEDS_ADR、E24 SOURCE_BACKED_PARTIAL、E25 NATIVE_DISCOVERY_R
 重大前置：**唯一 C05 migration manifest / owner**，SQLite current v2、PG current migrations003；Iteration28～30 所說的 SQLite v3/PG004 都是歷史候選，禁止各模組重用版號，下一版 `UNALLOCATED_NOT_APPLIED`。PostgreSQL 是否等同 SQLite C02-D 的停權能力未驗證，不得默認跨 Provider parity。產品八個未決決策 D33-01～08 要經維護者批准，不可因 mock 完成便自動核准 ADR-0006/0007。
 
 原版 Client `CTutorial 0x4C` local map、Quest15 AVAILABLE、Lua town LoadMap、C2S0x42/S2C0x69/C2S0x43、Server Mock WorldAdmitted 都不能推論原版 KR Client ready。E17-A/J/E23～E26 的源證據、原 RR/GAP/CLAIM/TEST 及 ADR 狀態均未被更改，R6 `BLOCKED_BY_EVIDENCE`。如使用者改要求「開發」，應直接在獨立 `ttr_server_roy` 先落實 R0 schema/policy guard 與 P01 transactional Admission，然後逐步 commit/測試各 PR；原版 Client 證據不足不能成為停止所有 mock domain 工程的理由。
+
+## 2026-10-31 — S00 RR-0009 / RR-0010 有界驗收（新對話仍應讀最新 main）
+
+[完整雙項交接](s00-iterations/S00-20261031-RR0009-RR0010-REVIEW-AND-HANDOFF.md)、[RR-0009 專項 S00 有界決議](reviews/RR-0009-20261031-bounded-blocker-acceptance.md)：`RR-0009 ACCEPTED` 僅限 E70 完成 RR 驗收第5條「正向創角 UI 鏈尚未找到時的精確 blocker 與可解除證據」之研究交付；**N0→實際創角 GUI 尚未證明，GAP-CHAR-0002 OPEN**。`RR-0010 BLOCKED` 保持：C2S0x33 2B、遠征隊名稱 C2S0x3E 48B、分離 S2C0x4A 及 full/delta roster 未閉合真正建立角色 C2S→S2C→roster，**GAP-CHAR-0003 OPEN**。SPEC-CHAR/FLOW DRAFT/PARTIAL，正式 TEST 仍僅 OFFLINE_SYNTHETIC；S00 未執行原版 Client、未自行重跑 BIN／取代 T01 FULL-PASS，也沒有更動 Server repo。下一步 T03/T06 優先同版 GUI 入口/Listener 正向補證、T03/T04/T02 定向 create transaction 靜態分支，RR-0010 解除阻塞後才由正式 RR 台帳重新派工；T03 舊 T01 NEEDS_FIX 不因本次變更清除。
