@@ -151,3 +151,12 @@ Iterations 16–17 的正式流程編號合計 **E00–E26（27 個 gate）與 4
 - [S34 機讀差異與前置契約](S00-ITERATION-34-C05-R0-SERVER-DELTA-CONTRACT.json)：鎖定原 Iteration33 source blobs 和真 Server 7 個 Git blob、8 項 R0 未完成 gate、C05-P01 的單交易 Admission 及無 Native wire 的 domain 建議。**是一次快照，CI 不會 live 重新驗遠端 Server**。
 - [I34-T01～16 驗收草案](S00-20261031-ITERATION-34-ACCEPTANCE.md)：全部 `PLAN_ONLY/NOT_RUN`，新增 `python -B governance/check_s00_iteration34.py --check`、20 項 regression；它們只檢查本庫文件與證據身分，**不執行 Server .NET 或原版 Client**。
 - 不重開同義 REQ／RR，不推進 ADR-0004/5/6/7、正式 SPEC/GAP/CLM/TEST，亦不覆寫獨立 Server 庫。下一輪需 Server 真正提交 R0 policy/migration allocator 或 C05-P01 的實作／測試收據；不能再只畫同一份 19 PR DAG。
+
+
+## Iteration 35（2026-10-31）：C05 R0／P01 證據收件 CLI 與 fail-closed gate
+
+- [Iteration35 完整規範](S00-20261031-ITERATION-35-R0-P01-EVIDENCE-INTAKE-PLAN.md)：對照 Iteration34 和獨立 Server main `3e0b7e3`，確認沒有新的 C05-P01 code/政策/migration 實際交付；因此不重畫第三份 C05-P01～P19 DAG，而建立真正可使用的開發成果收件與拒收工具。
+- [五槽空收件狀態](S00-ITERATION-35-C05-EVIDENCE-INTAKE.json)：R0 policy／SQLite+PG migration／P01 SQLite+PG 均 `NO_RECEIPT`；D33-01～08 尚未核准、12 個 I35-T01～T12 下游驗收全 `PLAN_ONLY/NOT_RUN`；原版 Client/native adapter OFF。
+- `python -B governance/check_s00_iteration35.py --check` 只驗源 Git blob、空收件狀態、未批准邊界。新 `--candidate receipt.json` 可對未來真 Server PR/CI/政策簽核的證據形狀做**離線**拒收，格式通過只輸出 `STRUCTURALLY_REVIEWABLE_NOT_APPROVED`，還要人員遠端重新核對 SHA、Actions、schema、trace 與批准。
+- [22 項檢查器單元測試](../tests/test_s00_iteration35.py) 涵蓋假 SHA、CI head 不符、path traversal、Migration 重複版本、無備份還原、錯誤 provider、P01 少同交易/租約/重試負例、假政策批准及 Native 偽升格。這是測試驗證器，不是執行任何 I35-Txx Server 測試。
+- 不新增正式 RR/REQ/GAP/CLM/SPEC/TEST/ADR，不動 `ttr_server_roy` 或原版 Client；下一階段只在有實際 R0 設計核准／migration 或 C05-P01 Server PR 附 CI 收據時繼續實質審核。
