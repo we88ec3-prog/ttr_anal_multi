@@ -1,5 +1,15 @@
 # T08 實體生成與移除
 
+## T08-203 — 2026-10-31 16:56：KR 0007 / 2+26N Actor 建立／登記完整有界靜態分析 **FINISHED（BOUNDED_CLIENT_STATIC）**
+
+> **本段明確完成範圍**：按前次203規劃203-01～05，使用相同KR Tartaros.bin（12,472,320 bytes，SHA256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`）BIN-first核對：本地index7 receiver→`4AE4D0`、2-byte前置+26byte/row、4種Actor配置與constructor、各原生vtable共同setter與類別特有+30、ID/composite/位置/float/狀態實際寫入、主Actor樹插入、新ID/duplicate/invalid/OOM/owner P缺失分支。**T02 wire/framing→local index7的外層真正opcode/domain仍待跨Task證實，不擅自稱官方Server封包編號7**。整體T08 `native_complete`、T01 FULL-PASS、S00 RR/Server/遊玩驗收均未因此通過。
+>
+> - [**203完整原生研究稿（含全部5項驗收矩陣）**](../../../kr-temp-roy/20261031-165625-chatgpt-web-roy-T08-203-native-26byte-actor-spawn-type-writer-tree-dispatch-complete.md)，Git blob **`9b9eaf0ccf6184932816007099c0b92d1370aea9`**。發現main Actor tree在配置前先查 `Actor+4` WORD ID、既有直接skip，不刷新同ID；type0/1/6/7的alloc-size依序 0x444/0x434/0x42C/0x428，ctor依序 4CD6F0/4D1710/4D2120/4D1060，type2/3/4/5與>7進診斷；四類共享`vptr+3C/44/58/5C`，位置setter`4CAB80`依float比較及mode改 Actor+A0/A4、+AC並在條件下回呼`vptr+38`；新Actor主樹入口`4AEC03→4DFF30`， owner P數值綁定僅在R+18非零/查到P/P+4原0才進`4C6E50`，缺P不等於整個Actor不能建構。
+> - **本輪明確勘誤T08-201欄位表**：type6 `4AE8A2 8A 43 FD` 實際讀 **R+1** (R=EBX−4)，先前若列`R+3`是錯誤；並未覆寫201已凍結來源，改用本203新文檔更新真欄位契約。
+> - [**203可重跑的原BIN驗證程式**](../../../kr-temp-roy/T08-203-native-bin-verifier.py)，Git blob **`463824f14ca5aaba75c1538d23cd78d07bb6e3aa`**。本地作者另以較完整的獨立Python比對**113條原生code byte anchors、8條jump-table entries、16個四Actor共通virtual slots**全部PASS；GitHub版腳本包含代表性錨點、8 entry、16共通slot與4個特定slot，**勿誤認兩個腳本精確錨點數相同或已由CI執行**。Code原件唯讀，這仍不是T01整篇FULL-PASS。
+> - **203-03失敗界線**：L<2或不足一筆只返回0x100，`(L−2)%26`餘數在此handler不拒絕；invalid type進診斷而非建構；type1與type7部分配置失敗後還可能null解參照，因此不能宣稱完整OOM rollback安全（亦未實測crash）。主樹插入時若又發現duplicate會診斷，不直接free incoming Actor；owner P找不到只跳過P綁定。
+> - **下一目標T08-204**：用type1 CMonster及type6 CNPC的已核實new Actor與子物件身分，沿 Scene update/資源/model/display第一次真正consumer追**畫面可見性與外觀**；203的封包資料、類別與主樹不要整段重做。T02收包/wire本地index域、T06/T07資源與場景就緒分工不變；其它OOM rollback/重入及別名另列T08-210/208。T01 legacy來源仍需獨立複驗，**不得因203作者側完成而RESOLVED**。
+
 ## T08-202 — 2026-10-31 05:01 最終有界原生靜態分析 **FINISHED（BOUNDED_STATIC_ANALYSIS）**
 
 > **本段完工裁決優先於下列歷史 IN_PROGRESS 條目，但不塗改它們的時間性**。完成範圍是原T08-202接棒明列的000A owner/Actor關聯、Controller actor/8-byte pair與其真消費、26/81與reset清理、P+4/P+8數值的已知寫入與場景讀者，以及Client條件性5-byte輸出鏈。**T08整體Task native_complete不變；T01嚴格 FULL-PASS、S00 RR ACCEPTED、原版Server實作及遊玩驗收均不是本欄FINISHED。**
