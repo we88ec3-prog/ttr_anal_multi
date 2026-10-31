@@ -149,7 +149,7 @@ GameHost (existing HTTP health + C04 diagnostic)
 | 資料庫不可用或管理後台不同資料庫 | provider identity/version、DB outage category | 不回成功，不 fallback InMemory，不改 DB schema |
 | 有效登入但無原版回覆格式 | `AUTH_DECIDED_RESPONSE_UNAVAILABLE` | F0 待證；不能聲稱 Client 顯示成功 |
 
-**退款/回復策略**：本階段無扣費，無交易重試對玩家造成資源變更；認證 Claims 只維護 Session lease，失敗或中斷的 lease 依原有 CAS 精確釋放／到期回收；安全日誌可無資料持久化敏感內容。無法證明 Client 已收到回覆時，後續重試由 Server 規則避免重複 Session；不要把 UDP/TCP 重傳當應用層重試證明。
+**回滾／故障恢復策略**：本階段無扣費，無交易重試對玩家造成資源變更；認證 Claims 只維護 Session lease，失敗或中斷的 lease 依原有 CAS 精確釋放／到期回收；安全日誌可無資料持久化敏感內容。無法證明 Client 已收到回覆時，後續重試由 Server 規則避免重複 Session；不要把 UDP/TCP 重傳當應用層重試證明。
 
 ## 7. 驗收 Gate（這輪只新增規劃 overlay，**NOT_RUN**）
 

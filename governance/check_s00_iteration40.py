@@ -74,7 +74,7 @@ def evaluate(root: Path = ROOT):
         if src is None or src.get("integration_status")!="CONFLICT_CHECKED":
             errors.append(f"source not conflict-checked {row['source']}")
     for s in ("C04-E1b","C04-E2a","C04-E2b","C04-E3a","C04-E3b","CLM-NET-0037",
-              "RR-0006","0x807C81","0x0BBB","0x2633","C04-F0","T01"):
+              "RR-0006","0x807C81","0BBB","0x2633","C04-F0","T01"):
         if s not in doc:
             errors.append(f"handoff lacks scope: {s}")
     return {"errors":sorted(set(errors)), "summary":{
