@@ -218,3 +218,11 @@ E23 SERVER_POLICY_NEEDS_ADR、E24 SOURCE_BACKED_PARTIAL、E25 NATIVE_DISCOVERY_R
 S00 [Iteration38 C04-D/E/F 規劃](s00-iterations/S00-20261031-ITERATION-38-C04-KR-LOGIN-GATEWAY-PLAN.md)及 [18 Gate 機讀矩陣](s00-iterations/S00-ITERATION-38-C04-LOGIN-GATES.json)：D **可立即做 Server-only opt-in loopback Listener 與安全 TCP RX/TX JSONL/遮蔽/滾檔**，E 原生 frame/auth/C02、F 回覆/選服/C03 roster/UI 只能依已審核版本契約分段啟用。C01 已做 synthetic TCP，漏的是 C01→Host→C04→C02/C03 的正式 Client 遊戲整合；不重做 C01，不混入 C05-P04。
 
 使用者 TCP 日誌需求登記 `REQ-0009 CANDIDATE`，不是正式批准全部部署政策；不新建同義 RR/GAP/TEST，沿 RR-0001/2/3/4/5/6/7/8/9/10 原狀。原版 profile 仍 UnverifiedFrameCodec，SPEC-NET/AUTH/CHAR/FLOW 都 DRAFT/PARTIAL；全部 real Client Gate NOT_RUN/blocked，**規劃已交付≠Server 程式已完成≠原版可登入**。不修改 Server repo/Client，不自動開新 branch 或啟動原版 Client。
+
+## 2026-11-01 — Iteration39：C04-D/E Server 真登入 RX／認證工作規劃
+
+最新本輪設計為 [Iteration39 Client Login Receive 完整實作交接](s00-iterations/S00-20261101-ITERATION-39-C04-LOGIN-RECEIVE-IMPLEMENTATION-CONTRACT.md) 與 [18 Gate／M0..M3 JSON](s00-iterations/S00-ITERATION-39-C04-LOGIN-RECEIVE-GATES.json)；初始基準 S00 main `edc11830d184165ee6d09632b35927bbd713c2d7`、Server main `284c1df16707834c5df64976ff8d1307e1906ae4`，後續以最新 GitHub main 為準。原本 Iteration38 只做 D/E/F 宏觀規劃；這輪補為 D1 Host opt-in、D2 raw RX、D3 REQ-0009 安全日誌、E0 專用 parser seam、E1 真 frame、E2 真 login、E3 C02 auth/Session、F0 source-backed success/reject S2C；C05-P04 可並行。
+
+四個里程碑嚴格區分：**M0 synthetic TCP 接收可立即做；M1 真 Client login frame 辨識、M2 C02 真 Client 登入決策、M3 Client 成功／失敗 UI 均仍 BLOCKED_BY_NATIVE_CONTRACT 或 NOT_RUN。** S00 未核對截圖 Client EXE/BIN 真實 SHA／實際 Port／first bytes；不得拿 KR 8414/8415/8416 靜態 callsites 當成固定連線設定；frame marker、app E8/0F、S2C0x13/0x7A 有局部證據但真正 pairing 未證。C02 `LocalLoginCoordinator` 不能在安全與 Source Gate 以前直接暴露成原生 TCP endpoint；未知 Client bytes 不得做帳密抽取／C02 claim，不猜成功 reply。
+
+新 [Iteration39 validator](check_s00_iteration39.py) 與 [test](tests/test_s00_iteration39.py) 驗證 planned Gate/版本/未升 native。沿用 RR-0001/3/4/5/6/7，不新增同義 RR/GAP/TEST，也不改正式 SPEC 或 Client/Server 程式。S00 下一步若收到開發回報先比對 source/CI 的具體 Gate、版本，接著以正式研究流程協助 T02/T03 補仍可由 BIN 取得的 first-mode/Login/response 證據。

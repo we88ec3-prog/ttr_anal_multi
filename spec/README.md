@@ -57,3 +57,7 @@
 S00 [Iteration38](../governance/s00-iterations/S00-20261031-ITERATION-38-C04-KR-LOGIN-GATEWAY-PLAN.md) 補足原本 C01 synthetic TCP 元件尚未接入原版遊戲 Host 的**開發交付規劃**。C04-D 是 local-only listener/TCP 安全日誌；C04-E 是 source-gated KR framing/Auth；C04-F 是登入結果/選服切線/角色清單/UI。18 個規劃 Gate 見 [矩陣](../governance/s00-iterations/S00-ITERATION-38-C04-LOGIN-GATES.json)。
 
 **七份 SPEC 仍 DRAFT/PARTIAL、原有 GAP 全 OPEN、原有 conformance TEST 僅 OFFLINE_SYNTHETIC。** 本輪新增版本中立 `REQ-0009 CANDIDATE`（TCP RX/TX 日誌維運需求），**沒有新 native opcode、實機封包、T01 FULL-PASS、Server 源碼或原版 Client runtime PASS**。本頁較早記載的 7 GAP/8 RR 是舊迭代快照，必須查唯一 [RR](../research/requests/index.json)、[GAP](../design/gaps/index.json)、[REQ](../design/requirements/index.json) 最新狀態，不得以歷史文字代替台帳。
+
+## 2026-11-01 — 原版 Client 登入接收的具體 Server 開發切片（Iteration39）
+
+新增 [C04-D/E/F Login Receive 完整開發契約](../governance/s00-iterations/S00-20261101-ITERATION-39-C04-LOGIN-RECEIVE-IMPLEMENTATION-CONTRACT.md) 與 [18 個 I39 Gate 機讀矩陣](../governance/s00-iterations/S00-ITERATION-39-C04-LOGIN-RECEIVE-GATES.json)。明確區分 M0（可做 Server-only loopback TCP RX/日誌）、M1（同版原生登入封包可辨識）、M2（C02 受信認證與 Session）、M3（原版登入 S2C 與 Client UI）。本輪實際只完成 S00 **規劃**，M1/M2/M3 仍依 T02/T03/T01 證據、安全審查與另行授權的原版 Client Runtime 驗收；**沒有新 Client wire MUST、沒有正式 TEST PASS、SPEC 不升 STABLE**。

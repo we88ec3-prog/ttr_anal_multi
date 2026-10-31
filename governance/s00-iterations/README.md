@@ -175,3 +175,9 @@ Iterations 16–17 的正式流程編號合計 **E00–E26（27 個 gate）與 4
 - [Iteration38 共 18 個 Gate 的機讀驗收矩陣](S00-ITERATION-38-C04-LOGIN-GATES.json)：BUILD、NET、LOG、AUTH、FLOW、CHAR、UI 分離 `NOT_RUN`、`NOT_IMPLEMENTED` 與 `BLOCKED_BY_NATIVE_CONTRACT`；不得以 /health、合成 TCP CI 代替原版 Client runtime。
 - 依使用者「Server 可能需要紀錄 log 檔紀錄 TCP 收發」正式登記 [REQ-0009](../../design/requirements/index.json)（`PLAYER_ADMIN_REQUEST`, `OPERATIONS`, **CANDIDATE**）；不新增同義 RR、GAP 或正式 conformance TEST；所有七份原生 SPEC 維持 DRAFT/PARTIAL。
 - 本輪僅 S00 Server-facing 規劃，不修改原版 Client、獨立 Server、資料庫、既有 Task 原稿或 C05 依賴，沒有原版 Client 連線/抓包。
+
+## Iteration 39（2026-11-01，C04-D/E「Server 收到 Client 登入」具體實作契約）
+
+- [完整 Login Receive 開發交接](S00-20261101-ITERATION-39-C04-LOGIN-RECEIVE-IMPLEMENTATION-CONTRACT.md)：沿用 Iteration38 C04-D/E/F 而不重編，細分 D1/D2/D3（可立即開發的 Host/loopback RX/安全日誌）、E0（可開發的 decoder/parser seam）、E1/E2（T02/T03 source-gated 原生 frame／LOGIN）、E3（需安全審查的 C02 auth/Session 租約）、F0（需真回覆契約的登入 S2C 最小回覆）。不改 C05-Pxx。
+- [Iteration39 機讀 18 Gate／M0～M3 四里程碑](S00-ITERATION-39-C04-LOGIN-RECEIVE-GATES.json)：M0 safe synthetic TCP，M1 原版 Client C2S 正向辨識，M2 C02 真正處理原版登入，M3 Client 收到已證回覆；全部依 source/Server offline/native runtime 各自驗收。初始為 NOT_IMPLEMENTED/NOT_RUN/BLOCKED，不冒稱 Client 已登入。以 `python -B governance/check_s00_iteration39.py --check` 檢查一致性。
+- **研究去重**：沿用 REQ-0001/2/5/9、RR-0001/3/4/5/6/7 及相關 GAP，不新開同義正式 RR、GAP、TEST 或提升 SPEC。Client Build SHA、first frame、E8/0F 實際 source→wire、S2C reply pairing 不明；未修改 Server 原始碼／資料庫、未執行原版 Client，也沒有授權 native adapter 開啟。
