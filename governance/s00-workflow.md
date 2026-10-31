@@ -152,3 +152,10 @@ C05 模組的 SQLite v3/PG004 是 Iterations28～30 **互相可能衝突的候�
 [Iteration33 整合規劃](s00-iterations/S00-20261031-ITERATION-33-C05-INTEGRATED-DELIVERY-PLAN.md) 僅為規劃：R0 review/source/DB allocator，R1～R5 為彼此依賴的 Server-only mock C05-P01～P19，R6 才是原版 Client 原生功能 per-feature admission（需同版 frame/Conn/scene/producer/consumer/Error/Runtime 正負證據）。**R5 mock pass 不等於 R6 Client 相容**。先確定 SQLite local v2 / PG migrations003 事實，因舊規劃多處同時把 v3/004 當候選，新 Server repo 必須設單一 C05 migration manifest 與 owner 逐 provider 唯一配號，備份/還原/DB 失敗中斷獨立測； PostgreSQL C02-D suspend policy 仍需另行證實。
 
 `python -B governance/check_s00_iteration33.py --check` 驗 19-PR DAG/唯一來源 workpack、Release R0～R6、D33-01～08 policy、24 個 `NOT_RUN` test、來源 Git blob/原 E17-A/J/E23～E26 status、ADR-0006/7 提案與 Native OFF。CI 只是 S00 規劃完整性，不能替代獨立 Server .NET CI、原版 KR Client Runtime 或政策核准，不能擅更改原正式 RR/REQ/GAP/CLM/TEST。
+
+
+## Iteration34 — 以真實 Server 變更回饋取代重複的 C05 工作包規劃
+
+[Iteration34](s00-iterations/S00-20261031-ITERATION-34-C05-R0-SERVER-DELTA-PREFLIGHT.md) 將 Iteration33 之後的獨立 Server 真實增量（21 commits／14 paths、SQLite v2 本機 WEB Admin 及 CI）和 C05 R0/P01 逐一對照。WEB 本機功能不可外推成 REQ-0006 的可配置遠端 IP、PostgreSQL WEB Admin 或原版 KR Client 可用；正式 REQ-0006～8、ADR-0004～7 與 Client SPEC 都不由 implementation 自動批准。R0 migration/policy/P01 同交易 Session／ban／role gate 仍缺獨立 Server 實作與端到端測試；R6 Native adapter OFF。
+
+`python -B governance/check_s00_iteration34.py --check` 僅核對歷史來源 blob、快照範圍、16 個 NOT_RUN、8 個 blocker 和禁止升格；其 PASS 不代表 C05／Web Admin production Ready。未來若取得真正 Server PR/CI、政策批准或新原版 Client 靜態研究，以正式 S00 intake / ADR / RR 流程增量接收，不重建第二個需求台帳。
