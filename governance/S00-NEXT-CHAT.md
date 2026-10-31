@@ -184,3 +184,14 @@ Server 建議開工 C05-P8..P11，但**依賴**前面未實作的 C05-P1..P7（I
 **本輪重要新風險/修正**：Iteration28～30 的不同規劃均以 SQLite v3、PostgreSQL 004 當相對下一個候選版本，並未真正開 schema。若 Server 每個 C05 工作包各自使用相同版本號會產生 collision；故 Iteration31 一律保留 SQLite v2/PG003 現有基線、後續版號 `UNALLOCATED_NOT_APPLIED`，待 Server maintainer 一次配置 Encounter/Combat/Scenario/Quest 所有 migration 的唯一順序。現有 SQLite C02-D ban 不可自動當 PostgreSQL 已具相同功能。
 
 所有新工作包只是 `SERVER_MOCK_ONLY` 的設計，24 個驗收都 `NOT_RUN`；原版 Client NPC/Quest/status/Reward/Wire 仍 E20-E24/E26 PARTIAL/UNKNOWN，沒有新正式 RR/GAP/REQ/TEST 結案、沒有任何 KR Client runtime；ADR-0006/7 仍 PROPOSED/NON-NORMATIVE，原生 adapter OFF。下一步如繼續規劃可做 Iteration32 S27-W08 Tutorial terminal/Scene Exit/WorldReady/relog；若要求 Server 實作，應到 `ttr_server_roy` 實際建 C05 code/DB PR，從最前置的 W01/Encounter 開始。
+
+
+## 2026-10-31 — Iteration 32：S27-W08 TutorialComplete、SceneExit、WorldReady、ReLogin
+
+已核對 S00 `main=dcbb7f9d41b50bdf563ff849ae1442f56d9c40c4`／CI #41136854759 SUCCESS；Server `ttr_server_roy main=272079cc69b124870af303d711931ec20bce2229`／CI #41134733030 SUCCESS，仍只有 C00-OPS、C02-D local moderation、C03 offline Character、C04 bounded evidence，**C05 尚未實作**。下次開工必須重新查最新 main，不可長期沿用歷史快照。
+
+本輪新 [完整開發規劃](s00-iterations/S00-20261031-ITERATION-32-TUTORIAL-EXIT-RELOG-PLAN.md)、[S32-01..04 機讀契約](s00-iterations/S00-ITERATION-32-TUTORIAL-EXIT-RELOG-CONTRACT.json)、[24 項 I32-T01～24 皆 NOT_RUN](s00-iterations/S00-20261031-ITERATION-32-ACCEPTANCE.md)：S32-01 每角色 checkpoint 完成資格（Quest15 available 不是 completed），S32-02 獨立 SceneExitAdmission/CAS/lease/ban，S32-03 Server mock world admitted 與真實原版 Client scene/control ready 觀測隔離（native OFF），S32-04 new SessionLease、Quest/RewardLedger、crash/outbox/provider 恢復。S32 仍依賴未在 Server main 落地的 Iteration28～31 C05 模組，**沒有直接可跑原版 Client 的新程式**。
+
+E23 SERVER_POLICY_NEEDS_ADR、E24 SOURCE_BACKED_PARTIAL、E25 NATIVE_DISCOVERY_REQUIRED、E26 ORIGINAL_CLIENT_RUNTIME_REQUIRED、E17-J SERVER_POLICY_PENDING_ADR；研究 owner、阻塞與正式 RR/GAP/SPEC/TEST 未因 S00 CI 而改。原 Client 實跑需要另行明確授權；ADR-0006/0007 仍 PROPOSED。SQLite v2 / PostgreSQL 003 是現行已觀察 schema；下一版維持 `UNALLOCATED_NOT_APPLIED`，由 Server 專案統一配置模組 migration，避免不同 Iteration 方案互相佔用 v3/004。
+
+下輪若繼續規劃，建議 Iteration33 統整 C05-P1～P19 真實開發順序、統一 migration 版本、未決 policy 决策以及原版 Client native release gate。若使用者要「開發」而非「規劃」，須在 `ttr_server_roy` 實際寫 domain code/測試/PR，而不是在 S00 看見規劃就宣稱 gameplay 已完成。
