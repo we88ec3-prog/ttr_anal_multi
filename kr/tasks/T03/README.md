@@ -166,3 +166,14 @@ parser/auth、角色UI與選服呼叫介面的有限審核已整合；較早段�
 2026-10-29：參照 `extra/roy1` 的 E01–E16 SceneList/Lua/教學場景研究，原始 Git blob 完整保留於 `kr-extra-roy/`。S00 只抽取 E06/E08/E13/E16 的有限來源主張，將其與已存在的 T03 登入/選角證據分開；見 [來源整合說明](../../../governance/PHASE-B-T03-EXTRA-ROY1.md)、[跨流程草案](../../../spec/session-account/SPEC-FLOW-0001.md) 與 [場景依賴草案](../../../spec/world/SPEC-SCENE-0001.md)。
 
 **未證明**選角 C2S `0x42` 對應的 S2C 回覆會設定 `(questIdx=1001,sceneIdx=1)`，亦未證首次登入必進教學；E16 對 `0x565720` 的 EndCutScene 重入提供反證。下一項 T03 定向補證為 [RR-0008](../../../governance/T03-S00-AGENT-REQUESTS.md)，不用重新執行整批 E01–E16。這個註記不改 Task owner、原稿、過去 T01 裁定或正式 FULL-PASS 准入。
+
+## T03-B 登入認證工作包 W05～W08（2026-10-31，Client bounded static）
+
+- 完整 KR BIN-first 技術原稿：[T03-B W05～W08](../../../kr-temp-roy/20261031-182406-chatgpt-web-roy-T03-B-W05-W08-auth-BIN-first.md)；Git blob `e5463936b7b48421219c0e0c83d5d4bf9b07b09f`。
+- 64 項原始機器碼位置及 PE、vtable、direct-xref、zero-tail 的唯讀驗證器：[T03-B verify.py](../../../kr-temp-roy/20261031-182406-chatgpt-web-roy-T03-B-verify.py)；Git blob `d7f83bb2b8d71e3bcc3d39e2b7ed481cd5773f88`；本輪同版 BIN 實測 PASS。
+- 方向／狀態／UNKNOWN 機器交接：[T03-B handoff.json](../../../kr-temp-roy/20261031-182406-chatgpt-web-roy-T03-B-handoff.json)；Git blob `e59efc2d202665c28b285ad1159d009591d96521`。
+- W05：`0x6D6300` 物件 constructor 設 mode+8=0x52，vtable+0x30 指向 `0x440790`；本地 0x52→E8/112B，0x54 或其他→000F/214B；**不代表 launcher 總是選此 mode**。
+- W06：E8+104..109 仍無直接初始化 writer；全域 FBA808 在 .data virtual-zero tail、7 個直接位址 xref 為讀取；E8 WCTMB CodePage=0。實際六 bytes／執行時 setter/ACP 未閉合。
+- W07：LOGIN scene S2C13 status5／0+非空名稱／其它三種結果、S2C7A group cursor 的獨立布局、group 3+10N、local F4243。
+- W08：0x13 達局部狀態更新，+90=0 才 F4241，本地事件非 wire；另需 UI gate 才有條件 key0/key2 Connect，**不證官方原版 first S2C/實際配對**。
+- 此研究不重複提交 RR-0003（主線正式台帳 `IN_REVIEW`），不變更 `GAP-AUTH-0001 OPEN` 或 `SPEC-AUTH-0001 / SPEC-FLOW-0001 DRAFT/PARTIAL`；T01 FULL-PASS 和 S00 acceptance 尚未取得。完整 Client 靜態研究交付與原版 Server 動態未知明確分流。
