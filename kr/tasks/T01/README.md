@@ -136,3 +136,5 @@ T01 對 Server 設計的接收、精確主張去重、風險分流及 S00 交接
 2026-10-30 RR-0008/E68 T01 有界 R0–R2：[來源身分、21 個原生 byte 位址、兩個 RTTI、5 個 direct E8 target 與 Event.stp 資源交叉驗證](../../../research/handoffs/t01-20261030-rr0008-e68-bounded-r2/README.md)。新增 SRC-0474、CLM-SCENE-0005/0006（PARTIAL），既有 CLM-SCENE-0004 追加限定來源；RR-0008 轉 IN_REVIEW 供 S00 裁決，原版選角回覆仍 UNKNOWN、RR-0002 BLOCKED；**不新增全文 FULL-PASS 或修改其它 Task 退回／SPEC／GAP**。
 
 2026-10-30 T01→S00 bounded handoff: [extra/roy1 E61–E69 and T10 93-source R0/R1 plus targeted native R2](../../../research/handoffs/t01-20261030-extra-t10-s00/README.md). Imported 8 original sources; 93 T10 early/middle sources scoped CONFLICT_CHECKED; 29 PARTIAL/UNKNOWN claims; NO FULL_PASS/RR/SPEC promotion.
+
+2026-11-01 T01 專用分支整合：[extra/roy1 E81 + extra/roy2 RR-0006 限定 R0–R2](../../../research/handoffs/t01-20261101-extra-roy1-roy2-r0-r2/README.md)。三父 Git Merge 保留原始提交，納入四檔；新增 SRC-0652/0653 與 CLM-CHAR-0007/CLM-NET-0037（PARTIAL），獨立 41 項 native + 1 項算術 PASS。RR9 ACCEPTED 與 RR6 IN_REVIEW 不變，無 FULL-PASS 升格。本批僅在 t01/roy/chatgpt-web，未合回 main。

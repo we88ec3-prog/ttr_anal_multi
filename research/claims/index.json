@@ -16422,6 +16422,60 @@
           "integration_review_ref": "research/handoffs/t01-20261031-t08-roy-201-202-legacy/README.md"
         }
       ]
+    },
+    {
+      "id": "CLM-CHAR-0007",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/20261031-chatgpt-web-roy-E81-RR0009-F431F-Employ-UI-events-native-supplement.md",
+      "source_blob_sha": "7fea46f8803d67e8d63c281f448515c37a521796",
+      "source_intake_id": "SRC-0652",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "Local 0xF431F event route 0x5C32D0->0x5C36D0->0x6BF310; alternate 0x5AAE80; 0x4A98D0/FE1838 callback",
+      "assertion": "KR original Client has two local F431F consumers and an indirect event-construction callback. Owner path reaches CEmployNewCharacter record update only after nonzero event+0x14 and valid UI owner; no positive N=0 S2C roster-to-visible-create-GUI causality is established.",
+      "limitations": [
+        "No proven listener delivery, same-version resource/control identity, or dialog visible/enabled state.",
+        "Local C2S 0x33 candidate not equivalent to confirmed new-character creation request."
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [
+        "SPEC-CHAR-0001",
+        "SPEC-FLOW-0001"
+      ],
+      "related_claim_ids": [
+        "CLM-CHAR-0001",
+        "CLM-CHAR-0002"
+      ],
+      "review_ref": "research/handoffs/t01-20261101-extra-roy1-roy2-r0-r2/README.md",
+      "integration_status": "CONFLICT_CHECKED; PARTIAL_BOUNDED; NOT_FULL_PASS",
+      "quality_inheritance": false
+    },
+    {
+      "id": "CLM-NET-0037",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/20261101-020429-chatgpt-web-roy-RR0006-Rx-boundary-node-lifetime-post-error-frame.md",
+      "source_blob_sha": "ca698712d6016884308f866f0e7e643ce22c7d64",
+      "source_intake_id": "SRC-0653",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "0x807C81 checkout before 0x807C97/0x807CA9/0x807CB3/0x807CC5 bounds failure -> 0x807DD6, bypassing 0x807D97 recycle",
+      "assertion": "If one of four Rx bounds rejection branches executes after 0x807C81 checkout, the static control path jumps to 0x807DD6 without the normal 0x807D97 pool return or 0x807DAD enqueue. This establishes a conditional local unmatched-checkout risk, not demonstrated memory leak in valid sessions or a Server wire requirement.",
+      "limitations": [
+        "Normal WSARecv=4096 and single residual bound 4103 imply a next combined 8199<0x5000, but not full alias/race proof.",
+        "No actual branch feasibility, exploitability, allocator-null contract, real original Server capture or runtime outcome proven."
+      ],
+      "conflicts": [],
+      "affected_spec_ids": [
+        "SPEC-NET-0001",
+        "SPEC-NET-0003"
+      ],
+      "related_claim_ids": [
+        "CLM-NET-0027",
+        "CLM-NET-0028"
+      ],
+      "review_ref": "research/handoffs/t01-20261101-extra-roy1-roy2-r0-r2/README.md",
+      "integration_status": "CONFLICT_CHECKED; PARTIAL_BOUNDED; NOT_FULL_PASS",
+      "quality_inheritance": false
     }
   ]
 }
