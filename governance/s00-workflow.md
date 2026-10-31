@@ -159,3 +159,10 @@ C05 模組的 SQLite v3/PG004 是 Iterations28～30 **互相可能衝突的候�
 [Iteration34](s00-iterations/S00-20261031-ITERATION-34-C05-R0-SERVER-DELTA-PREFLIGHT.md) 將 Iteration33 之後的獨立 Server 真實增量（21 commits／14 paths、SQLite v2 本機 WEB Admin 及 CI）和 C05 R0/P01 逐一對照。WEB 本機功能不可外推成 REQ-0006 的可配置遠端 IP、PostgreSQL WEB Admin 或原版 KR Client 可用；正式 REQ-0006～8、ADR-0004～7 與 Client SPEC 都不由 implementation 自動批准。R0 migration/policy/P01 同交易 Session／ban／role gate 仍缺獨立 Server 實作與端到端測試；R6 Native adapter OFF。
 
 `python -B governance/check_s00_iteration34.py --check` 僅核對歷史來源 blob、快照範圍、16 個 NOT_RUN、8 個 blocker 和禁止升格；其 PASS 不代表 C05／Web Admin production Ready。未來若取得真正 Server PR/CI、政策批准或新原版 Client 靜態研究，以正式 S00 intake / ADR / RR 流程增量接收，不重建第二個需求台帳。
+
+
+## Iteration35 — 真正的 Server evidence 送達之前保持 NO_RECEIPT
+
+[Iteration35](s00-iterations/S00-20261031-ITERATION-35-R0-P01-EVIDENCE-INTAKE-PLAN.md) 提供 R0 policy／SQLite/PG migration 與 P01 原子 admission 五個獨立收件槽位及離線 `check_s00_iteration35.py --candidate receipt.json`。此工具只能拒絕缺少 commit/Git blob、離線 CI source/head、owner、provider、migration unique digest、D33-01～08 approval reference、P01 交易/CAS/replay/crash 測試等**結構不完備**的資料。**任何通過只稱 STRUCTURALLY_REVIEWABLE_NOT_APPROVED，不是 GitHub 官方驗證、T01 FULL-PASS、Server CI/R0 PASS 或原版 Client 可玩**。送交正式 owner 必須手動再次核對每份來源、SCHEMA/provider 交易與原版 Native 禁用狀態。
+
+在真實 R0/P01 Server 交件前，五槽仍 `NO_RECEIPT`、D33 決策未核准、P01/C05 尚未驗證、Native adapter OFF。此規格不動正式 REQ/RR/CLM/GAP/SPEC/TEST/ADR、Server 實作庫。不要把 I35 Python validator 的 CI 成功冒稱 I35-T01～T12 真實執行。
