@@ -160,3 +160,11 @@ Iterations 16–17 的正式流程編號合計 **E00–E26（27 個 gate）與 4
 - `python -B governance/check_s00_iteration35.py --check` 只驗源 Git blob、空收件狀態、未批准邊界。新 `--candidate receipt.json` 可對未來真 Server PR/CI/政策簽核的證據形狀做**離線**拒收，格式通過只輸出 `STRUCTURALLY_REVIEWABLE_NOT_APPROVED`，還要人員遠端重新核對 SHA、Actions、schema、trace 與批准。
 - [22 項檢查器單元測試](../tests/test_s00_iteration35.py) 涵蓋假 SHA、CI head 不符、path traversal、Migration 重複版本、無備份還原、錯誤 provider、P01 少同交易/租約/重試負例、假政策批准及 Native 偽升格。這是測試驗證器，不是執行任何 I35-Txx Server 測試。
 - 不新增正式 RR/REQ/GAP/CLM/SPEC/TEST/ADR，不動 `ttr_server_roy` 或原版 Client；下一階段只在有實際 R0 設計核准／migration 或 C05-P01 Server PR 附 CI 收據時繼續實質審核。
+
+
+## Iteration 36（2026-10-31）：PG 004 已被 WEB Admin 分配，C05 不能重用
+- [完整原始來源及開發交接](S00-20261031-ITERATION-36-POSTGRES-V4-DELTA.md)：在 S00 main `5897c505...` 核對獨立 Server `68186e8...`；比 Iteration35 快照新增 32 commits、28 files，PG WEB-ADMIN-PG-001 正式程式已包含 `db/migrations/004_web_admin.sql`、account/Session/character ban gating、PG 離線 DB 測試及本機 WEB `--postgres`。**版本 004 已被使用於來源程式，但不等於使用者 DB 已升版、C05-P01 已實作或可對外服務。**
+- [版本／來源核對 JSON](S00-ITERATION-36-POSTGRES-V4-DELTA.json)：固定 Server 9 份 Git blob 及四份同版 CI、C05 migration 尚未配號、PG 後續候選版本至少在 v4 之後但**不自動核准 v5**，原版 Client Native OFF、12 項 I36 驗收全 NOT_RUN；來源只做一次唯讀快照。
+- **修復現行收件器缺口**：`governance/check_s00_iteration35.py --candidate` 後續 PostgreSQL C05 migration 的 baseline 從舊 PG3 修正為 PG4；保留 Iteration35 當時歷史 state 不變，新增「v3 收件錯誤」及「重用 PG004」負向測試。
+- `python -B governance/check_s00_iteration36.py --check` 與 18 項設計回歸保護新來源、舊快照與 Native/ADR 不升格；**不是 PostgreSQL migration 已實際套用於玩家 DB，也不是 Server C05 或 Quest15 原生可玩測試**。
+- 並行 T01 合併的 T16-134 `SRC-0590 REGISTERED` 僅有 bounded 靜態 R2，不能冒充 Quest15 完整 C2S/S2C/場景因果。S00 本輪不擅自修改正式 REQ/RR/CLM/SPEC/GAP/TEST、T01 驗收，亦不修改獨立 Server 程式。

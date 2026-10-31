@@ -33,7 +33,7 @@ def fabricated(slot="P01-SQLITE"):
             for i in range(1, 9)]}
     elif slot.startswith("R0-"):
         provider = "SQLITE" if "SQLITE" in slot else "POSTGRES"
-        baseline = 2 if provider == "SQLITE" else 3
+        baseline = 2 if provider == "SQLITE" else 4
         details = {"provider": provider, "base_version": baseline,
                    "manifest_sha256": SHA256,
                    "allocations": [{"version": baseline + 1, "module": "Encounter",
@@ -179,6 +179,16 @@ class Iteration35Tests(unittest.TestCase):
         d = fabricated("R0-SQLITE-MIGRATION")
         d["ci_runs"][0]["test_ids"].remove("backup_restore")
         self.candidate_rejects(d, "Migration positive")
+
+    def test_pg_v3_no_longer_valid_for_new_c05(self):
+        d = fabricated("R0-POSTGRES-MIGRATION")
+        d["details"]["base_version"] = 3
+        self.candidate_rejects(d, "Migration provider or observed baseline mismatch")
+
+    def test_pg_v4_cannot_be_reallocated_for_c05(self):
+        d = fabricated("R0-POSTGRES-MIGRATION")
+        d["details"]["allocations"][0]["version"] = 4
+        self.candidate_rejects(d, "Migration version must be greater")
 
     def test_wrong_provider_baseline_rejected(self):
         d = fabricated("R0-POSTGRES-MIGRATION")
