@@ -238,3 +238,38 @@
 - `kr/evidence/81a3fe379d433685e342d65c96db6aa78a52e0510f294cc3e338c4e7b63269b6.txt`
 - `kr/evidence/b031b1f51bb9d8958fbaaa555b45f8b38845abd027e049d064525c747fabac34.txt`
 - `shared/CLIENT-MODIFICATION-POLICY.md`、`shared/verified-knowledge/README.md`
+
+
+## 13. B01/B03 追加全 .text 靜態 xref 與第二種 wrapper（同批補充）
+
+為避免只憑歷史 vtable 命名漏看原生其他 consumer，本次對 BIN `.text` 作完整靜態 `objdump -d`，以精確 direct-call 為索引（全文約 120 MiB，僅作本機臨時查詢資料，不上傳 binary）。找到 `0x4ADD50` 初始化入口的直接呼叫，例如 `0x422FB3`、`0x4369D2`、`0x4564F2`、`0x48F6EA`、`0x49530E`、`0x4C46F2`、`0x4C4AC2`；也找到**另一條**共用 result 包裝器：
+
+~~~asm
+436B95  mov eax,[ebp+10h]
+436B98  mov esi,[ebp+0Ch]
+436B9B  mov edi,[ebp+08h]
+436B9E  push eax
+436B9F  push esi
+436BA0  push edi
+436BA1  call 4B0640h         ; 共用結果消費
+436BAB  test ecx,ecx
+436BAD  jne 436C2Bh         ; 只有成功才繼續
+436BAF  cmp esi,2
+436BB8  add esi,0FFFFFFFEh
+436BBB  mov eax,4EC4EC4Fh  ; 同樣的 /13 row-count
+436BC0  mul esi
+436BC2  shr edx,2
+436BC9  add edi,4            ; row+2
+436BD0  mov al,[edi+2]       ; case= row+4
+436BD3  test al,al
+436BD7  sub al,2
+436BD9  cmp al,1             ; case0 或 case2/3
+436C0D  movzx ecx,WORD [edi]
+436C10  movzx edx,WORD [edi-2]
+436C1B  call 54A8F0h        ; 三英雄槽回饋
+436C23  add edi,0Dh
+~~~ 
+
+此 `0x436B70..0x436C3F` 包裝器與 `0x4C4920..0x4C4AB9` 在「common receiver 成功後，對 case0/2/3 呼叫 `0x54A8F0`」方面一致，但**兩者是不同原生函式**：`0x4C4920` 另有 `FB7A7C/78/80` 三個 virtual index 來源的暫存與清理。暫不以缺乏 RTTI 的直接證據替 `0x436B70` 亂命名 Scene 類型，也不把歷史「CMissionField」名稱自動套到它。
+
+**結果**：B03 現在至少可指出 `0x4B0640`、`0x436B70`、`0x4C4920` 三條具體 receiver/包裝路徑；新增 direct-call xref 不等同已閉合 socket/outer frame → scene table，B01 的 T02 依賴仍保留。對其他 Task 的函式、owner、catalog 沒有寫入。
