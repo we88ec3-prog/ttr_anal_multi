@@ -84,12 +84,28 @@ def main():
     # Legacy docs explicitly identify this table assignment; no original reply order inferred.
     exact(0x4B7DFF, 'c705fc2ffd00508f4b00', 'shared callback cell FD2FFC stores4B8F50; index60 from FD2CFC/8')
 
+    # Recheck the older tutorial consumer registration within its stated initializer.
+    initializer_start = 0x4B7D80
+    _, initializer = read(initializer_start, 0x180)
+    tutorial_registration = bytes.fromhex('c7056c30fd0060924b00')
+    locations = [initializer_start + i for i in range(len(initializer) - len(tutorial_registration) + 1)
+                 if initializer[i:i + len(tutorial_registration)] == tutorial_registration]
+    if len(locations) != 1:
+        raise ValueError('Legacy tutorial registration not uniquely present in the stated bounded initializer')
+    exact(locations[0], tutorial_registration.hex(),
+          'shared callback cell FD306C stores4B9260; index6E from FD2CFC/8, not post-name pairing')
+    exact(0x49319E, 'ba80474900899098030000',
+          'main callback stores494780 at+398; index19 only with independently scoped +208/stride10 table convention')
+
     windows = []
     for address, size, scope in [
         (0x4B8F50, 0x140, 'app60 handler constructor/scene/parser and outbound F5 local path'),
         (0x4C22C0, 0x80, 'scene list prelude, two-byte prefix and27-byte record division'),
         (0x5A6510, 0x180, 'ExpeditionPage name-ready initialization/display conditions'),
-        (0x4B9260, 0x160, 'tutorial scene consumer; official post-name pairing unknown')]:
+        (0x4B9260, 0x160, 'tutorial scene consumer; official post-name pairing unknown'),
+        (0x494780, 0x100, 'heartbeat consumer prelude and early-return gate; outstanding-counter effect'),
+        (0x4931A3, 0x20, 'legacy reported main-callback registration point; do not assume it is a function entry'),
+        (0x49481A, 0x100, 'heartbeat conditional fast-response block, from4947FE branch; not a standalone function entry')]:
         offset, code = read(address, size)
         rows = []
         for i in md.disasm(code, address):
@@ -99,7 +115,7 @@ def main():
                 break
         windows.append({'start': hex(address), 'file_offset': offset, 'requested_bytes': size,
                         'scope': scope, 'instructions': rows,
-                        'limitation': 'Linear static decode from stated entry, stops at first return; not complete CFG or dynamic reachability'})
+                        'limitation': 'Linear static decode from stated function/block/anchor entry, stops at first return; not complete CFG or dynamic reachability'})
     result = {'schema': 's00-legacy-static-recheck-v1', 'target_sha256': digest,
               'authority': 'READ_ONLY_SHIPPED_BYTES_BOUNDED_RECHECK',
               'tool': {'name': 'Capstone', 'version': capstone.__version__},

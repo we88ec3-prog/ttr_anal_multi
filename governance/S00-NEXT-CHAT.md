@@ -1,5 +1,7 @@
 # S00 新對話接續 — Server 規格、REQ 需求來源與角色畫面階段
 
+**2026-11-01 最新工程接續：** [冒險團命名／教學入口片段](s00-iterations/S00-20261101-EXPEDITION-NAME-TUTORIAL-ENTRY.md)。私庫新增same-DB exact-lease profile/name/owned-role資料、明確元件migration、非空scene候選、命名→教學入口與保活；9正向前置、198暫緩。主程式19個選定byte片段／7個有限window重核，非正式pairing/FULL-PASS。07:23 UTC本機Host已更新，等待使用者連測登入→命名→教學第一畫面；不要重啟正在測試的服務。B0/0C/0A/3F僅記world-init pending，不宣稱教學可控或已完成。Client未改，as_server_spec未動，main合併仍待明確授權。
+
 **2026-11-01 最新使用者補充：** [本地舊Server來源核驗與批次測試規劃](s00-iterations/S00-20261101-LEGACY-SERVER-INTAKE-AUDIT.md)。直接使用者指示、舊文件轉述、17個本輪精確byte核對、歷史修改Client runtime與Server假設分開；不將1/3初始角色／A0→60當官方需求。Client此後不修改，僅確認Windows更新bug例外；指定EXE SHA未變。使用者操作遊戲時Agent要開發後段，下一次安排登入→角色/命名→教學入口的已備妥片段，不為每個微小修正單獨要求重登。`as_server_spec`誤提已撤回，完全不動該專案。
 
 **2026-11-01 空清單實作接續：** [零角色清單實驗](s00-iterations/S00-20261101-EMPTY-ROSTER-EXPERIMENT.md)在primary交接後查同一SQLite exact lease／角色資料，僅零角色時送69B候選，額外明確opt-in；標頭值是Server實驗選擇，不是官方值。8正向前置、198暫緩；真Client roster/UI未驗。前置PR20／93待使用者明確合併授權，未合併main；後續工作分支有依賴，不得冒充正式規範。
@@ -252,3 +254,5 @@ S00 [Iteration38 C04-D/E/F 規劃](s00-iterations/S00-20261031-ITERATION-38-C04-
 [完整 M2/M3 最終開發交接](s00-iterations/S00-20261101-C04-NATIVE-LOGIN-EXECUTION-READY-HANDOFF.md) 是 Iteration38/39/40 的**執行入口**，沒有再建立一套登入需求／RR／Gate。核對基線 S00 main `e7c9befa49c46afdd3784ae9a910c7834f50e91e`、Server main `b4f187445d1d287feab3ceee9ea86d9dc0f75d63`；今後開工先核最新 SHA。真正流程為 **M0（已有 raw diagnostic Server-only）→ M1（真 Client C2S 正確解析）→ M2（原版 Client request→C02 帳密/Session 決策）→ M3（S2C 真回覆令 Client 進下一畫面）→ M4（角色 UI）**。目前後四段仍 native/source/runtime 受阻；沒有新原版 Client trace。**即刻交 Server 開發者 E1b/E2a/E3a OFFLINE，不重做 C01/C04-D；原生 E2b/E3b/F0 必要先由 T02/T03/T01 基於既有 RR-0001/3/4/6/7 補證。** 禁止從 E1 局部 envelope/離線 E8/0F layout 宣稱原版 wire 成功；不可假回 0x13/0x7A、不新增任意官方 Port/解碼模式、不可泄露登入憑證。S00 本輪只把執行契約上 Git，不改 Server/DB/Client、不改正式 RR/GAP/SPEC/TEST。
 
 **06:45 UTC人工實測補充：** 空角色候選69B已送、Client回C2S24，但使用者仍停選服；原gateway未涵蓋保存consumer中的1F/25，已補接並通過8正向前置。修正版畫面待測。REQ-0003已追加第5筆runtime discovery，細節見本輪空清單報告。
+
+**07:32 UTC人工結果：** 兩角色展示與原生命名UI已實測；v2觀察3E/48B、名稱DB revision2，發4A/6E後使用者確認進入教學／劇情。劇情後錯誤地圖／位置、人物未完整初始化，新REQ-0010登記world bootstrap，REQ-0004追加runtime。台帳10REQ／7runtime，正式狀態不升格。下一步補map/context／actor／control／collision；禁止舊Client guard。測試通知改用非同步提問卡，直接列點到哪與結果選項。

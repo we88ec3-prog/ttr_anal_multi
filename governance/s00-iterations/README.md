@@ -202,3 +202,5 @@ Iterations 16–17 的正式流程編號合計 **E00–E26（27 個 gate）與 4
 - 2026-11-01：[登入回覆、選服與主線交接 runtime](S00-20261101-LOGIN-REPLY-RUNTIME.md)，工作副本 M3 與人工正常 primary 身分交接已觀察，角色清單／創角與教學仍待完成。
 
 - 2026-11-01：[primary後的空角色清單實驗](S00-20261101-EMPTY-ROSTER-EXPERIMENT.md)，8正向工程前置，待真Client roster/UI驗證。
+
+- 2026-11-01：[冒險團資料／命名／教學入口片段](S00-20261101-EXPEDITION-NAME-TUTORIAL-ENTRY.md)，19原件片段／7有界window核對、9正流程前置，真Client與world仍待驗。
