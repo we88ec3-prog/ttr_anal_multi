@@ -70,3 +70,14 @@ fixture的三怪行動、出招／反向0E命中、玩家受傷、三次普攻�
 X技能→全部擊敗返回即停。先驗敵我動作、血條與命中感，不把目前能返教學當完整教學進廣場通過。
 招募／後兩段劇情與REQ-0017不因本輪刪除。其餘異常／邊界／競態／恢復／安全及壓測只記待測。
 normative pin `dd69ec9de353a695d25c6db8e362ff471ea0c137`、formal admission與所有APPROVED狀態不變。
+
+## v5本機啟用
+
+2026-11-01 11:59:25 UTC，已依既有授權替換指定v4 Host，保留相同資料庫／Admin。
+新模式COMBAT_CANDIDATE，無schema migration或Client修改。源碼內容已提交私庫
+`07e6fd9f1afe463cbf9c197ea963995793734235`；建置時為提交前工作樹，執行檔以DLL SHA追溯：
+Network `949d4719fc4ba1195a503d25190369e4c62227ea2d6299758520003d5d0e45d2`；
+Protocol `f01077677fc4b9ab52124bb6b8ff508993b5fec851bee7b5ad9acdd34e7113df`。
+14正流程合成重跑通過、publish完成，健康端點與本機listener flags正常。
+結果卡已發：先觀察三怪追擊／出招與受傷，再Z連按放開及一次X，擊敗後返回即停。
+實際Client結果待回，不能將合成／部署成功列為遊戲驗收。
