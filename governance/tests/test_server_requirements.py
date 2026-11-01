@@ -139,6 +139,7 @@ class ServerRequirementTests(unittest.TestCase):
 
     def test_mock_runtime_with_both_record_paths_is_structurally_allowed(self):
         # Mechanically accepted synthetic test fixture does not authorize actual Client execution.
+        baseline = evaluate(self.root)["summary"]["discovery_counts"]["GAME_RUNTIME_OBSERVATION"]
         self.add_safe_file("design/requirements/observations/mock.md", "synthetic mock only")
         self.add_safe_file("design/requirements/authorizations/mock.md", "mock permission record")
         def edit(d):
@@ -152,7 +153,7 @@ class ServerRequirementTests(unittest.TestCase):
         self.edit(edit)
         r = evaluate(self.root)
         self.assertEqual(r["errors"], [])
-        self.assertEqual(r["summary"]["discovery_counts"]["GAME_RUNTIME_OBSERVATION"], 2)
+        self.assertEqual(r["summary"]["discovery_counts"]["GAME_RUNTIME_OBSERVATION"], baseline + 1)
         self.assertEqual(r["summary"]["approved"], 0)
 
     def test_player_and_admin_both_share_same_existing_requirement(self):
