@@ -13,6 +13,7 @@ def main():
     p.add_argument('--binary', type=Path, required=True)
     p.add_argument('--capstone-path', type=Path, required=True)
     p.add_argument('--output', type=Path, required=True)
+    p.add_argument('--enemy-boundaries', action='store_true', help='Also recheck monster tick/SubAI model gate and map initializer calls')
     a = p.parse_args()
     assert not a.output.exists() and a.output.suffix == '.json'
     sys.path.insert(0, str(a.capstone_path))
@@ -33,15 +34,20 @@ def main():
         raise ValueError(hex(va))
     mappings = [(0xc07554, 0x68, 0x4c8da0), (0xc07b44, 0x68, 0x4c8da0),
                 (0xc078ec, 4, 0x4cbb00), (0xc078ec, 8, 0x476430)]
+    if a.enemy_boundaries:
+        mappings.append((0xc0c9dc, 0x24, 0x4d1af0))
     for table, slot, target in mappings:
         assert struct.unpack('<I', read(table+slot, 4))[0] == target
     assert read(0x4c75f6, 6).hex() == 'c700ec78c000'
     assert read(0x4cd728, 6).hex() == 'c707447bc000'
     md = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_32)
     windows = []
-    for va, size in [(0x546100, 0x1a0), (0x4c8a90, 0x100), (0x4c8da0, 0x30),
+    spans = [(0x546100, 0x1a0), (0x4c8a90, 0x100), (0x4c8da0, 0x30),
                      (0x4c75f6, 6), (0x4cd728, 6), (0x4cb230, 0xd0),
-                     (0x4cbb00, 0xb), (0x476430, 1), (0x806060, 0x6c)]:
+                     (0x4cbb00, 0xb), (0x476430, 1), (0x806060, 0x6c)]
+    if a.enemy_boundaries:
+        spans += [(0x4d1af0, 0x99), (0x549cf5, 0x12), (0x4f4960, 0x40), (0x4f3d80, 0x300)]
+    for va, size in spans:
         instructions = list(md.disasm(read(va, size), va))
         decoded = sum(i.size for i in instructions)
         raw = read(va, decoded)
