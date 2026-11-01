@@ -1,5 +1,9 @@
 # 分工接續規則
 
+## 2026-11-01 使用者測試優先序
+
+先專注「新帳號正常登入／創角選角／新手教學完成／進入廣場」的正流程。停權、錯誤、邊界、重送／重登、併發、故障、安全／營運與壓測等現在不執行，整理至 [待測試清單](design/testing/TUTORIAL-HAPPY-PATH-AND-DEFERRED-TESTS.md)，待使用者之後重新排程。保留既有程式與歷史結果，不把暫緩寫成通過／從未測試；不要再例行啟動完整 Server 行為測試。文件／索引格式核對、編譯與必要環境清理仍可做。
+
 ## 跨 Task 驗收退回（以 Task README 通知，不使用 GitHub Issue）
 
 - 各 Task **在新 ChatGPT 對話首次開工時**讀取自己的 kr/tasks/<TaskID>/README.md 中「T01 驗收退回事項」，優先處理 NEEDS_FIX、FIXING、READY_FOR_REVIEW、BLOCKED；沒有此節則照舊工作。同一對話續段沿用已讀內容，不因每次「請繼續下一段」重抓 GitHub。
