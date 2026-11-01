@@ -40,3 +40,9 @@ first battle win false、session0、character0。journey component不存在，�
 
 Quest14／16合法結算與獎勵發布仍待實作；fresh遊戲觀察也不替代其DB與協定證據。
 本紀錄不新增APPROVED需求或提高原生FULL-PASS，不把測試準備寫成整體goal完成。
+
+## 後續登入缺陷與替代基線
+
+原測試卡登入卡住，並非通過；詳見[登入名稱限制觀察](S00-20261102-FRESH-LOGIN-NAME-LIMIT.md)。
+已限制工具的fixture名稱為3..9 ASCII並另建短帳號；原baseline保留作歷史證據。
+新版測試卡結果待回，不能再以舊卡的帳號進行測試。
