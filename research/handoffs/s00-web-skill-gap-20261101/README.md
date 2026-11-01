@@ -1,5 +1,8 @@
 # ChatGPT Web：T10／T11 技能與連段補查工作卡
 
+使用者指定Web對話的本輪派工：[FOLLOWUP-02：v7連點Z與受擊接口](FOLLOWUP-02-V7-COMBO-AND-HURT.md)。
+這是原工作卡的後續，不另建平行RR台帳；派送與結果接收狀態另由S00記錄。
+
 已收件 Web commit4064846 的三份成果：[S00收件與實作範圍](../../../governance/s00-iterations/S00-20261101-WEB-COMBAT-INTAKE.md)。
 七段原始BIN視窗hash吻合僅為有限佐證；T01退回及Task完成狀態未改。Server已補多筆000A
 中唯一受控row的結構讀取，但同actor多row語意／Row A writer／技能ID與clock仍未閉合。
