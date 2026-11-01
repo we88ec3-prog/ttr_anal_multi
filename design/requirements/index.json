@@ -631,6 +631,64 @@
       "adr_ids": [],
       "feedback_ids": [],
       "claim_ids": []
+    },
+    {
+      "id": "REQ-0014",
+      "title": "首戰編隊確認後的地圖與控制初始化",
+      "need": "玩家按設定完成後仍停留編隊頁；Server須完成已授權首戰選擇後的地圖、角色及控制初始化，不以無關B0請求作載入完成前提。",
+      "acceptance_criteria": [
+        "正常編隊確認後實際離開入場設定頁，正確戰場、伊莉西亞、技能及合法目標可見且可操作。",
+        "必要地圖／角色／控制資料不能等待未證明的B0 loading ACK；不得用人工B0、無關狀態回覆或Client修改偽造載入成功。",
+        "保留已取得角色、編隊授權、保存返回位置及TUTO完成接收能力；首戰勝負、Quest14/16及廣場分開驗收。",
+        "將第一筆確認已接受／回覆已送，與後續重按Unavailable分開；合成成功不取代實際遊戲進場證據。",
+        "正常進場應關閉編隊頁並呈現原生換場／載入流程；不能以短暫卡頓直接換圖、人工延遲或假進度條替代。"
+      ],
+      "discoveries": [
+        {
+          "channel": "GAME_RUNTIME_OBSERVATION",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "tested_executable_sha256": "6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c",
+          "tested_build_kind": "MODIFIED_WORKING_COPY_NOT_ORIGINAL_CLIENT",
+          "observation_ref": "governance/s00-iterations/S00-20261101-TUTORIAL-FIRST-BATTLE.md",
+          "authorization_ref": "governance/s00-iterations/S00-20261101-TUTORIAL-FIRST-BATTLE.md",
+          "environment": "User-operated designated working copy and loopback first-battle-v1 Host, based on private38a3ae3 working tree. Exact DLL hashes and deployment are in linked report.",
+          "reproduction": "Normal tutorial movement/camera/Tab, approach entrance, retain default Isilia, press formation settings-complete button. Stop when formation remains visible.",
+          "limitations": "Only current working-copy behavior. No Client process attachment/modification, packet journal has opcode/length only. B0 known status/shop producers are not an exhaustive caller inventory. v2 actual entry/return remains unverified.",
+          "observed": "User reported no battle entry after settings-complete and supplied a screenshot of the still-open formation page. First C2S28/13B at09:47:52 UTC was accepted and stop/position/38 frames sent; later repeated28 were unavailable. No new B0 followed. Server v1 waited for B0 before sending map/actor/control; v2 removes this unproven ready gate, with13 positive synthetic cases passing."
+        },
+        {
+          "channel": "GAME_RUNTIME_OBSERVATION",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "tested_executable_sha256": "6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c",
+          "tested_build_kind": "MODIFIED_WORKING_COPY_NOT_ORIGINAL_CLIENT",
+          "observation_ref": "governance/s00-iterations/S00-20261101-TUTORIAL-FIRST-BATTLE.md",
+          "authorization_ref": "governance/s00-iterations/S00-20261101-TUTORIAL-FIRST-BATTLE.md",
+          "environment": "User-operated designated working copy, loopback first-battle-v2 Host enabled09:58:51 UTC. Same account/progress retained; no new migration. DLL hashes in linked report.",
+          "reproduction": "Normal tutorial movement/camera/Tab, approach entrance, retain default Isilia, press formation settings-complete button. Stop when formation remains visible.",
+          "limitations": "Current working-copy screenshot and user observation. B6 metadata after28 is not inferred to be a loading ACK. No Client process access/modification; original loading lifecycle and TUTO continuity still need source-backed repair.",
+          "observed": "User confirms the map changed and an enemy appeared after settings-complete, but formation remained open. User states the original has a scene-loading screen and this missing transition was also reported during old local development. Supplied screenshot confirms the modal still overlays the battle. No normal combat/return acceptance yet."
+        }
+      ],
+      "category": "CLIENT_COMPATIBILITY",
+      "priority": "P0",
+      "status": "CANDIDATE",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "rr_ids": [
+        "RR-0008"
+      ],
+      "gap_ids": [
+        "GAP-FLOW-0001",
+        "GAP-SCENE-0001"
+      ],
+      "spec_ids": [
+        "SPEC-FLOW-0001",
+        "SPEC-SCENE-0001",
+        "SPEC-CHAR-0001"
+      ],
+      "adr_ids": [],
+      "feedback_ids": [],
+      "claim_ids": []
     }
   ]
 }

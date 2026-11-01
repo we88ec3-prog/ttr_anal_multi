@@ -20,6 +20,8 @@ def main():
     parser.add_argument('--output', required=True, type=Path)
     parser.add_argument('--tutorial-pose', action='store_true', help='Include bounded camera/BND supplemental anchors')
     parser.add_argument('--tutorial-npc-formation', action='store_true', help='Include bounded targeted-delete/formation anchors')
+    parser.add_argument('--tutorial-first-battle', action='store_true', help='Include bounded load/activation/skills/scenario-end anchors')
+    parser.add_argument('--tutorial-entry-phase', action='store_true', help='Include TUTO05/09 UI16 entry and audio-mode correction')
     args = parser.parse_args()
     if args.output.resolve() == args.binary.resolve() or args.output.suffix.lower() != '.json':
         raise ValueError('Evidence output must be a separate JSON artifact, never the target binary')
@@ -193,6 +195,101 @@ def main():
             (0x5C33A1, 0xB, 'tutorialF43DA branch after earlier return, explicit block anchor'),
             (0x5C3666, 0x22, 'formation child display block'),
             (0x508325, 0x1B, 'allowed-mask bit selection block')]
+
+    if args.tutorial_first_battle:
+        exact(0x4ADF2D, 'c780c4010000f01b4b00', 'basic slot+1C4 registers candidate38 load consumer')
+        exact(0x4ADE51, 'c780a400000030594c00', 'basic slot+A4 registers candidate14 activation wrapper')
+        exact(0x4C5930, '8b01ff602c', 'activation dispatches current scene virtual+2C')
+        exact(0xC073E8 + 0x2C, '70254b00', 'tutorial scene activation vtable cell, data', data=True)
+        exact(0x4B259D, '895804', 'activation sets controller+4 from EBX=1 in preceding block')
+        exact(0x4C4AED, 'c7860c610000204f4c00', 'TUTO scene-local app4C registration relative to5EAC')
+        exact(0x4C4F75, '0fb74802', 'scenario end reads unsigned16 at payload+2')
+        relative_call(0x4C4F84, 0x4C2880, 'scenario completion flag lookup')
+        exact(0x4C4F89, 'c70001000000', 'scenario completion flag set1; not Quest reward proof')
+        exact(0xC0C9DC + 0x5C, '408c4c00', 'monster virtual+5C uses scale consumer, data', data=True)
+        exact(0x4B0211, '83c705', 'motion cursor advances to payload+5')
+        exact(0x4B0250, '0fb757fd', 'motion actor ID reads cursor-3')
+        exact(0x4B0290, '0fb647ff', 'motion direction reads cursor-1')
+        exact(0x4B030F, 'd94702', 'motion float reads cursor+2')
+        exact(0x4B0313, '0fb70f', 'motion ID reads cursor word')
+        relative_call(0x4B031A, 0x4C8A90, 'motion actor consumer')
+        exact(0x4B039E, '83c709', 'motion record cursor advances9')
+        exact(0x4E21AF, 'c78034090000d0464e00', 'account candidate126 registration')
+        exact(0x4E21BF, 'c7803c090000a0484e00', 'account candidate127 registration')
+        exact(0x4E220F, 'c7806409000020564e00', 'account candidate12C registration')
+        exact(0x4E46FB, '0fb67802', '126 role byte+2')
+        exact(0x4E4731, '83c0fdc1e802', '126 row count=(length-3)/4')
+        exact(0x4E4744, '83c703', '126 rows start+3')
+        exact(0x4E4750, '0fb64702', '126 level byte in row+2')
+        exact(0x4E4754, '0fb70f', '126 skill ID uint16')
+        exact(0x4E475E, '83c704', '126 row stride4')
+        exact(0x4E48CB, '0fb67e02', '127 role byte+2')
+        exact(0x4E48F0, '8a4603', '127 preset byte+3')
+        exact(0x4E48F3, '8a4e04', '127 enabled byte+4')
+        exact(0x4E492A, '83c0fbc1e802', '127 row count=(length-5)/4')
+        exact(0x4E562E, '8b4702', '12C role DWORD+2')
+        exact(0x4E566C, '8a5706', '12C selected preset byte+6')
+        exact(0x4E56BC, '83c0f8', '12C trailing byte count length-8')
+        exact(0x4E56C3, '83c708', '12C trailing entries start+8')
+        exact(0x4E1DBF, 'c7808403000000244e00', 'account candidate70 equipment wrapper registration')
+        exact(0x4E212F, 'c78044070000a0404e00', 'account E8 status consumer registration, not map-ready contract')
+        exact(0x4E40A6, '80780201', 'E8 consumer tests payload+2 status byte equals1')
+        exact(0x4E40B3, 'b9b0000000', 'status consumer prepares B0 request, not loading acknowledgement proof')
+        exact(0x4190D5, 'b8b0000000', 'separate B0 sender constant; caller semantics remain bounded')
+        supplemental_windows += [
+            (0x4B1BF0, 0x1D0, 'load handler prefix; no full CFG or runtime B0 assertion'),
+            (0x4C5930, 5, 'scene activation virtual dispatch leaf'),
+            (0x4B2570, 0xB0, 'scene activation controller flag block'),
+            (0x4C4F20, 0x80, 'TUTO scenario-end consumer prefix'),
+            (0x4E46D0, 0xA0, '126 skill rows consumer prefix'),
+            (0x4E48A0, 0xA0, '127 preset rows consumer prefix'),
+            (0x4E5620, 0xB0, '12C selected and available preset consumer prefix'),
+            (0x509A80, 0x160, 'equipment header and15-byte records; source layout only')]
+        supplemental_windows += [(0x4E40A0, 0x40, 'status1 to B0 request leaf; no map-ready assertion'),
+                                 (0x419070, 0xA0, 'separate B0 sender, no exhaustive caller inventory')]
+
+    if args.tutorial_entry_phase:
+        exact(0x4B7E8F, 'c705242dfd0030964b00', 'shared cell FD2D24 registers05 consumer4B9630')
+        exact(0x4B9662, 'b809000000', '05 consumer builds C2S09 word')
+        exact(0x4B9679, '6a02', '05 normal request sender length2')
+        exact(0x4B9702, '0fbe4602', '05 reads signed mode byte payload+2')
+        exact(0x4B972B, '813d74a6d6004f545554', 'mode1 special branch checks active scene tag TUTO')
+        relative_call(0x4B9737, 0x4C4EB0, 'TUTO field entry wrapper, no scene replacement in this branch')
+        relative_call(0x4C4F05, 0x4A9260, 'TUTO entry wrapper calls UI helper')
+        exact(0x4A92B6, 'b810000000', 'UI helper selects page16')
+        exact(0x4A92C3, 'a3f0adfa00', 'UI helper stores next page at FAADF0')
+        exact(0x4A92F9, '6a006a0a68fd430f00', 'UI helper posts F43FD with10,0')
+        relative_call(0x4A9302, 0x58AC30, 'UI local event post helper')
+        exact(0xC51D60 + 0x18, '60278100', 'OpenAL listener virtual+18 points812760, data', data=True)
+        exact(0x812766, '0500d00000', 'listener mode adds OpenAL distance model constant D000')
+        exact(0x81276C, 'ff15f823bd00', 'listener mode calls IAT BD23F8, independently verify import name')
+        # Resolve this one PE32 import from the original bytes, not cached symbol names.
+        import_rva = struct.unpack_from('<I', image, pe + 24 + 104)[0]
+        found = None
+        descriptor = image_base + import_rva
+        while True:
+            _, fields = read(descriptor, 20)
+            original, _, _, name_rva, first = struct.unpack('<IIIII', fields)
+            if not any((original, name_rva, first)): break
+            if first and image_base + first <= 0xBD23F8:
+                index = (0xBD23F8 - image_base - first) // 4
+                if 0 <= index < 4096:
+                    _, pointer = read(image_base + (original or first) + index * 4, 4)
+                    value = struct.unpack('<I', pointer)[0]
+                    if value and not value & 0x80000000:
+                        try:
+                            _, name = read(image_base + value + 2, 64)
+                            candidate = name.split(b'\0', 1)[0].decode('ascii')
+                            if candidate == 'alDistanceModel': found = candidate
+                        except (ValueError, UnicodeError): pass
+            descriptor += 20
+        checks.append({'claim_scope': 'PE32 IAT BD23F8 resolves alDistanceModel, not loading-page setter',
+                       'matched': found == 'alDistanceModel', 'actual': found})
+        supplemental_windows += [
+            (0x4B9630, 0x140, '05 mode entry/request and TUTO branch; bounded linear decode'),
+            (0x4C4EB0, 0x69, 'TUTO field entry wrapper'),
+            (0x4A9260, 0xC0, 'UI16 next-page selection/local event'),
+            (0x812760, 0x1F, 'OpenAL distance-model leaf; not a game loading-state transition')]
 
     windows = []
     for address, size, scope in [
