@@ -192,3 +192,7 @@ Iterations 16–17 的正式流程編號合計 **E00–E26（27 個 gate）與 4
 
 - [C04 原版 Client 登入 — 最終開發交接與 M2/M3 完工條件](S00-20261101-C04-NATIVE-LOGIN-EXECUTION-READY-HANDOFF.md)：使用既有 C04-D1–D4/E0/E1/F 離線實作作起點，**立刻開發 E1b/E2a/E3a 的 Server-only 部分**；T02/T03/T01 依既有 RR 補證第一筆 Frame、E8/0F 真 C2S、0x13/0x7A 真 S2C pairing，才啟用 E2b/E3b/F0。**M2 是 Server 真 C2S→C02 認證，M3 是 Client 真收到已證回覆而進下一畫面，M4 另為選服角色列表**。規劃完成不代表原版 Client 已登入。
 - 本文件引用 [I39 18 Gate](S00-ITERATION-39-C04-LOGIN-RECEIVE-GATES.json) 和 [I40 15 Gate](S00-ITERATION-40-C04-LOGIN-M2-ACCEPTANCE.json)，**不另建重複 Gate/REQ/RR/GAP/TEST**；source、offline、runtime 驗收分層仍有效。此後同功能優先**實作與補證，不再反覆建立宏觀規劃**。
+
+## 2026-11-01 — 指定工作副本一般權限啟動
+
+- [實際啟動、兩層權限與使用者授權紀錄](S00-20261101-STANDARD-USER-CLIENT-LAUNCH.md)：一般權限 launcher 與兩個明確獲准的 app 項目已讓遊戲進入登入頁，不需 UAC；REQ-0001 追加 runtime startup discovery，正常登入另觀察118B syntax拒絕，修正後同一帳號實測C02 AUTHACCEPTED；尚無S2C、M3／原版相容性。

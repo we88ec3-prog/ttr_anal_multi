@@ -18,6 +18,7 @@ PATHS = [
     "design/requirements/requests/2026-10-31-admin-web-account-operations.md",
     "design/requirements/requests/2026-10-31-game-tcp-observability.md",
     "design/requirements/requests/2026-11-01-local-login-runtime.md",
+    "governance/s00-iterations/S00-20261101-STANDARD-USER-CLIENT-LAUNCH.md",
 ]
 
 
@@ -48,7 +49,7 @@ class ServerRequirementTests(unittest.TestCase):
         self.assertEqual(r["summary"]["requirements"], 9)
         self.assertEqual(r["summary"]["approved"], 0)
         self.assertEqual(r["summary"]["discovery_counts"],
-                         {"CODE_ANALYSIS": 5, "GAME_RUNTIME_OBSERVATION": 1, "PLAYER_ADMIN_REQUEST": 5})
+                         {"CODE_ANALYSIS": 5, "GAME_RUNTIME_OBSERVATION": 2, "PLAYER_ADMIN_REQUEST": 5})
 
 
     def test_admin_web_v1_three_requests_trace_to_actual_user_request(self):
@@ -138,6 +139,7 @@ class ServerRequirementTests(unittest.TestCase):
 
     def test_mock_runtime_with_both_record_paths_is_structurally_allowed(self):
         # Mechanically accepted synthetic test fixture does not authorize actual Client execution.
+        baseline = evaluate(self.root)["summary"]["discovery_counts"]["GAME_RUNTIME_OBSERVATION"]
         self.add_safe_file("design/requirements/observations/mock.md", "synthetic mock only")
         self.add_safe_file("design/requirements/authorizations/mock.md", "mock permission record")
         def edit(d):
@@ -151,7 +153,7 @@ class ServerRequirementTests(unittest.TestCase):
         self.edit(edit)
         r = evaluate(self.root)
         self.assertEqual(r["errors"], [])
-        self.assertEqual(r["summary"]["discovery_counts"]["GAME_RUNTIME_OBSERVATION"], 2)
+        self.assertEqual(r["summary"]["discovery_counts"]["GAME_RUNTIME_OBSERVATION"], baseline + 1)
         self.assertEqual(r["summary"]["approved"], 0)
 
     def test_player_and_admin_both_share_same_existing_requirement(self):
