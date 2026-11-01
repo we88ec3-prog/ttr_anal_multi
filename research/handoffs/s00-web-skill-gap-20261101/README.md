@@ -1,5 +1,10 @@
 # ChatGPT Web：T10／T11 技能與連段補查工作卡
 
+已收件 Web commit4064846 的三份成果：[S00收件與實作範圍](../../../governance/s00-iterations/S00-20261101-WEB-COMBAT-INTAKE.md)。
+七段原始BIN視窗hash吻合僅為有限佐證；T01退回及Task完成狀態未改。Server已補多筆000A
+中唯一受控row的結構讀取，但同actor多row語意／Row A writer／技能ID與clock仍未閉合。
+此更新是文件收件，沒有向Web對話送出訊息或另行派工。
+
 最新續查：[普攻片長／012A counter界線](../../../governance/s00-iterations/S00-20261101-BASIC-CLIP-AND-COOLDOWN-COUNTERS.md)。
 已定位CSpliteMotion的row EndFrame+Delay累計與current FPS getter，仍未閉合取消／命中窗口。
 012A除33不直接證明毫秒，controller倒數在輸入發送gate之前，須補scheduler／UI使用。
