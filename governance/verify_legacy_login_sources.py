@@ -21,6 +21,7 @@ def main():
     parser.add_argument('--tutorial-pose', action='store_true', help='Include bounded camera/BND supplemental anchors')
     parser.add_argument('--tutorial-npc-formation', action='store_true', help='Include bounded targeted-delete/formation anchors')
     parser.add_argument('--tutorial-first-battle', action='store_true', help='Include bounded load/activation/skills/scenario-end anchors')
+    parser.add_argument('--tutorial-entry-phase', action='store_true', help='Include TUTO05/09 UI16 entry and audio-mode correction')
     args = parser.parse_args()
     if args.output.resolve() == args.binary.resolve() or args.output.suffix.lower() != '.json':
         raise ValueError('Evidence output must be a separate JSON artifact, never the target binary')
@@ -246,6 +247,49 @@ def main():
             (0x509A80, 0x160, 'equipment header and15-byte records; source layout only')]
         supplemental_windows += [(0x4E40A0, 0x40, 'status1 to B0 request leaf; no map-ready assertion'),
                                  (0x419070, 0xA0, 'separate B0 sender, no exhaustive caller inventory')]
+
+    if args.tutorial_entry_phase:
+        exact(0x4B7E8F, 'c705242dfd0030964b00', 'shared cell FD2D24 registers05 consumer4B9630')
+        exact(0x4B9662, 'b809000000', '05 consumer builds C2S09 word')
+        exact(0x4B9679, '6a02', '05 normal request sender length2')
+        exact(0x4B9702, '0fbe4602', '05 reads signed mode byte payload+2')
+        exact(0x4B972B, '813d74a6d6004f545554', 'mode1 special branch checks active scene tag TUTO')
+        relative_call(0x4B9737, 0x4C4EB0, 'TUTO field entry wrapper, no scene replacement in this branch')
+        relative_call(0x4C4F05, 0x4A9260, 'TUTO entry wrapper calls UI helper')
+        exact(0x4A92B6, 'b810000000', 'UI helper selects page16')
+        exact(0x4A92C3, 'a3f0adfa00', 'UI helper stores next page at FAADF0')
+        exact(0x4A92F9, '6a006a0a68fd430f00', 'UI helper posts F43FD with10,0')
+        relative_call(0x4A9302, 0x58AC30, 'UI local event post helper')
+        exact(0xC51D60 + 0x18, '60278100', 'OpenAL listener virtual+18 points812760, data', data=True)
+        exact(0x812766, '0500d00000', 'listener mode adds OpenAL distance model constant D000')
+        exact(0x81276C, 'ff15f823bd00', 'listener mode calls IAT BD23F8, independently verify import name')
+        # Resolve this one PE32 import from the original bytes, not cached symbol names.
+        import_rva = struct.unpack_from('<I', image, pe + 24 + 104)[0]
+        found = None
+        descriptor = image_base + import_rva
+        while True:
+            _, fields = read(descriptor, 20)
+            original, _, _, name_rva, first = struct.unpack('<IIIII', fields)
+            if not any((original, name_rva, first)): break
+            if first and image_base + first <= 0xBD23F8:
+                index = (0xBD23F8 - image_base - first) // 4
+                if 0 <= index < 4096:
+                    _, pointer = read(image_base + (original or first) + index * 4, 4)
+                    value = struct.unpack('<I', pointer)[0]
+                    if value and not value & 0x80000000:
+                        try:
+                            _, name = read(image_base + value + 2, 64)
+                            candidate = name.split(b'\0', 1)[0].decode('ascii')
+                            if candidate == 'alDistanceModel': found = candidate
+                        except (ValueError, UnicodeError): pass
+            descriptor += 20
+        checks.append({'claim_scope': 'PE32 IAT BD23F8 resolves alDistanceModel, not loading-page setter',
+                       'matched': found == 'alDistanceModel', 'actual': found})
+        supplemental_windows += [
+            (0x4B9630, 0x140, '05 mode entry/request and TUTO branch; bounded linear decode'),
+            (0x4C4EB0, 0x69, 'TUTO field entry wrapper'),
+            (0x4A9260, 0xC0, 'UI16 next-page selection/local event'),
+            (0x812760, 0x1F, 'OpenAL distance-model leaf; not a game loading-state transition')]
 
     windows = []
     for address, size, scope in [

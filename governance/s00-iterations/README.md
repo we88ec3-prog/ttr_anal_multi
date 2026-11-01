@@ -1,5 +1,7 @@
 # S00 Iterations 14–22 — 原稿保存與交接
 
+最新：[教學專用05/09進場分支](S00-20261101-TUTORIAL-ENTRY-PHASE.md)。限定原生路徑保留TUTO、選UI16；更正把音訊listener mode4誤稱loading page4的舊說法。v3實際編隊關閉／換場／戰後返回待回。
+
 最新：[首場教學戰鬥與載入等待修正](S00-20261101-TUTORIAL-FIRST-BATTLE.md)。REQ-0014記錄設定完成仍卡編隊頁；核對B0狀態／商城來源，v2不再等待臆定load-ready ACK。13個正流程合成通過，實際進場／戰後返回待回。
 
 最新：[教學NPC與首戰編隊](S00-20261101-TUTORIAL-NPC-AND-FORMATION.md)。REQ-0012／0013正流程問題及實測修正成功，預選伊莉西亞來源分類與使用者現況認可；下一段為戰場／完成後返回教學，未宣稱完整教學／廣場完成。

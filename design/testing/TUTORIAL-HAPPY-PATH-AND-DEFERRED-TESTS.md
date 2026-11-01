@@ -1,5 +1,9 @@
 # 新帳號完成新手教學進入廣場：正流程與待測試清單
 
+最新：[05/09教學進場候選](../../governance/s00-iterations/S00-20261101-TUTORIAL-ENTRY-PHASE.md)。
+13正流程合成通過；v3人工編隊關閉、換場、攻擊／返回結果待回。entry-pending重送、
+錯階段09、斷線／過期lease／partial-send與UI事件競態記為待測，現在不執行。
+
 最新：[首戰載入與B0誤判修正](../../governance/s00-iterations/S00-20261101-TUTORIAL-FIRST-BATTLE.md)。
 13 positive cases／5旅程rows／9方法；總207方法、198暫緩。使用者v1設定完成仍卡編隊頁；
 v2不等B0直接初始化，實際進場結果待回。AI反擊、成本、波次、Quest14/16、獎勵及廣場
