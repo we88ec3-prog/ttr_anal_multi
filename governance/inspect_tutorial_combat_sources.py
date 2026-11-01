@@ -13,6 +13,7 @@ def main():
     p.add_argument('--capstone-path', type=Path, required=True)
     p.add_argument('--output', type=Path, required=True)
     p.add_argument('--animation-timing', action='store_true', help='Additional bounded ASD frame/FPS and cooldown-counter windows')
+    p.add_argument('--stats-mapping', action='store_true', help='Recheck complete 5C record decoder and distinguish DWORD/WORD destinations')
     args = p.parse_args()
     assert args.output.suffix == '.json' and not args.output.exists()
     sys.path.insert(0, str(args.capstone_path))
@@ -41,6 +42,13 @@ def main():
         assert struct.unpack('<I',read(0xc5029c+0x10,4))[0]==0x7d8ca0
         assert struct.unpack('<I',read(0xc5029c+0x0c,4))[0]==0x7d8d20
         spans += [(0x7d9630,85),(0x7d8ca0,20),(0x545e20,0x110),(0x5452c0,0x130),(0x54f200,80)]
+    if args.stats_mapping:
+        spans += [(0x4d41a0,104)]
+        for va, expected in [(0x4d41a7,'8b5004895150'),(0x4d41ad,'8b5008895158'),
+                             (0x4d41b3,'8b500c895154'),(0x4d41b9,'0fb75010895140'),
+                             (0x4d41c0,'0fb75012895148'),(0x4d41c7,'0fb75014895144')]:
+            assert read(va,len(bytes.fromhex(expected))).hex()==expected
+        assert read(0x4d4207,1)==b'\xc3'
     for va,size in spans:
         ins=list(md.disasm(read(va,size),va)); count=sum(i.size for i in ins)
         windows.append({'start':hex(va),'end_exclusive':hex(va+count),'bytes':read(va,count).hex(),

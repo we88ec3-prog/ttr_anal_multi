@@ -104,6 +104,11 @@ Scenario/scenario_town000D.fld及.mre。FLD是幾何／環境XML，MRE標頭GEOM
 
 ## 交付格式與使用方式
 
+補充戰鬥優先缺口：[能力頁欄位落差與修正](../../../governance/s00-iterations/S00-20261101-COMBAT-STAT-DISPLAY.md)。
+舊資料已記錄5C的DWORD500/100/100不是當時能力頁顯示；WORD+16/+18/+20才有HP/SP/MP相關性。
+T10/T11請核對能力記錄+40/+48/+44到HUD與技能gate的消費者，以及與actor參數1/2/3的關係；
+仍需區分當前值／最大值、絕對數與比例，不要沿用錯誤fixture標籤。
+
 先交一份限定報告，建議位置`research/handoffs/s00-web-skill-gap-20261101/`，檔名包含
 日期與T10/T11及主題，**不覆蓋原作者原稿**。有Git工具與授權才提交／推送；否則交可保存原文。
 Web看不到E磁碟，缺BIN／資源時列出精確所需檔案，不能假裝讀過本機。
