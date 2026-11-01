@@ -33,6 +33,18 @@
           ],
           "observation": "Client 會建立 E8/000F 本地登入請求，LOGIN scene 可以消費 S2C 0x0013/0x007A；需研究確定 Server 對應回覆、錯誤欄位與合法狀態。",
           "limitations": "有 Client 本地 producer/consumer 靜態證據，未證成同一原版 Server 端 request/reply pairing，RR-0003 仍 IN_REVIEW。"
+        },
+        {
+          "channel": "GAME_RUNTIME_OBSERVATION",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "tested_executable_sha256": "6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c",
+          "tested_build_kind": "MODIFIED_WORKING_COPY_NOT_ORIGINAL_CLIENT",
+          "observation_ref": "design/requirements/requests/2026-11-01-local-login-runtime.md",
+          "authorization_ref": "design/requirements/requests/2026-11-01-local-login-runtime.md",
+          "environment": "Windows loopback; modified Tartaros.ip-zh-tw-only-v2.exe, explicitly distinct from the KR research target; Server checkout 284c1df16707834c5df64976ff8d1307e1906ae4, default diagnostic HTTP Host.",
+          "observed": "2026-11-01 00:35:47 +08:00 login attempt produced TCP SynSent to 127.0.0.1:8415 without an established connection. Host only listened on 5080 and reported gameListener=false. No auth payload, C02 decision or S2C reply observed.",
+          "reproduction": "Start the specified working-copy EXE and the Server default Host at the recorded checkout, then press login. Record OS TCP state and health before inferring an authentication failure.",
+          "limitations": "Modified executable observation only; target_sha256 identifies the static research baseline, not the tested EXE. Two-second OS snapshots are not packet capture. No original Client compatibility, credential correctness, frame variant or UI success claimed. Newer opt-in diagnostic implementation must be tested independently."
         }
       ],
       "rr_ids": [
