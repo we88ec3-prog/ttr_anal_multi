@@ -136,6 +136,9 @@ lease／grant競態、交易或分段傳送失敗、錯scene／未取得角色�
 43重複／缺少／逾時／晚B0、切場景期間partial-send／斷線／lease過期、完成持久化與重登恢復。
 目前只做獨立開關的正常「首戰→招募／劇情→69/43→廣場移動停止」TCP合成列；
 不是完整Quest16／Client到達驗收，詳[出口規劃](../../governance/s00-iterations/S00-20261101-ORDERED-TUTORIAL-EXIT-CANDIDATE.md)。
+廣場NPC另待測：模型／資源缺漏、不同NPC互動、半途傳送失敗、重複生成／切場景清理、
+動態阻擋／角色體積與可達路徑；靜態點clear不能取代這些案例。
+詳[NPC來源與候選限制](../../governance/s00-iterations/S00-20261101-SQUARE-NPC-CANDIDATES.md)。
 
 每次只記：正流程階段、Client／Server SHA、測試帳號用途、正常操作步驟、實際結果、證據位置與下一個阻塞。新發現的非正流程案例填上方待測清單，**當下先不測**；待使用者重新排程後逐項記執行日期、適用版本與結果。暫緩不等於通過或不需要測。
 
