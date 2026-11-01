@@ -6,6 +6,8 @@
 
 2026-11-01：REQ-0001 首次追加[本地登入運行觀察](requests/2026-11-01-local-login-runtime.md)。實際測試為指定的 **modified working copy**，另存 EXE SHA；REQ 的 KR target SHA 是靜態研究基準，不能聲稱本次測過原始 BIN。僅證連線入口缺口，尚未驗收帳密／Client 登入成功。
 
+後續 [credential 與本機認證交付](requests/2026-11-01-local-client-credential-and-auth-delivery.md) 將新帳號的 Client wire secret 與原始密碼 verifier 分開，已完成合成 Host/同庫 Session 整合；不是新的 runtime discovery、原始 Client 登入成功或正式 credential policy 批准。
+
 | `discoveries[].channel` | 來源情境與登記條件 | 必記內容 | 不代表 |
 | --- | --- | --- | --- |
 | `CODE_ANALYSIS` | 程式碼／反組譯分析時發現 Client 需要 Server 接收封包、回覆封包、提供資料、連線切換或狀態同步 | 與原始 Client 同版本的已登記 CLM、觀察內容、前置條件及 UNKNOWN | Server 在原版運行時必然發送、完整原版封包順序 |
