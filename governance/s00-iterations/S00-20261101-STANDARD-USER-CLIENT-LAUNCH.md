@@ -59,7 +59,25 @@ Server source review 發現 E8 的高位元組編碼預檢掃過完整51B容量�
 字串內容、保留長度／terminator／真正內容編碼檢查，並補 enum-only 拒絕原因。
 既有正常 E8 登入測試改用合法字串加非零未用容量，六項 HappyPath 通過；這是
 合成正流程 fixture，不是本次封包內容或原版 producer padding 的證據。
-是否排除實際阻礙仍待修正後工作副本重驗，不提前宣稱已解決。
+修正後重新啟動 Host、正常重開同一工作副本，以同一隔離測試帳號完成重驗：
+
+| UTC（2026-11-01） | 新 run 的 connection 1 事件 | bytes |
+| --- | --- | --- |
+| 05:57:28.307746 | ACCEPT | 0 |
+| 05:57:28.7386137 | RXCHUNK | 118 |
+| 05:57:28.7420541 | AUTHSTARTED | 0 |
+| 05:57:28.9031495 | AUTHACCEPTED | 0 |
+| 05:57:28.903162 | REPLYUNAVAILABLE | 0 |
+
+新 Host run health 為 received=118、accepted=1、rejected=0，providerUnavailable=0、
+logDropped=0、replyAvailable=false。Computer Use 獨立確認新 window 45551238、
+PID23092 仍在登入頁、欄位 disabled。launcher 第二次啟動仍非 elevated 且 EXE
+hash 不變。中間工具的 ShellExecuteW error2 為呼叫路徑轉義問題，改用正確
+完整路徑後成功，不歸因 Server／遊戲。
+
+**本次工作副本 M2 已確認**：正常遊戲請求經 parser→C02→AUTHACCEPTED；不是
+原始 KR Client M2，也不代表 M3。重現的 syntax 阻礙已排除，後續實際阻礙
+為 Host 未送回覆。未留 raw payload，故不將「NUL後特定bytes」寫成封包觀察。
 
 下一步：正常新帳號登入的同會話 RX／C02／S2C／UI 分開驗收，再繼續跨線、
 空名單、第一角色、新手教學與廣場。既有候選 serializer／handoff broker

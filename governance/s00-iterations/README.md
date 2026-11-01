@@ -195,4 +195,4 @@ Iterations 16–17 的正式流程編號合計 **E00–E26（27 個 gate）與 4
 
 ## 2026-11-01 — 指定工作副本一般權限啟動
 
-- [實際啟動、兩層權限與使用者授權紀錄](S00-20261101-STANDARD-USER-CLIENT-LAUNCH.md)：一般權限 launcher 與兩個明確獲准的 app 項目已讓遊戲進入登入頁，不需 UAC；REQ-0001 追加 runtime startup discovery，尚不宣稱登入或原版相容性。
+- [實際啟動、兩層權限與使用者授權紀錄](S00-20261101-STANDARD-USER-CLIENT-LAUNCH.md)：一般權限 launcher 與兩個明確獲准的 app 項目已讓遊戲進入登入頁，不需 UAC；REQ-0001 追加 runtime startup discovery，正常登入另觀察118B syntax拒絕，修正後同一帳號實測C02 AUTHACCEPTED；尚無S2C、M3／原版相容性。

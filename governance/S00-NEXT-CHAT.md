@@ -1,6 +1,6 @@
 # S00 新對話接續 — Server 規格、REQ 需求來源與角色畫面階段
 
-**2026-11-01 啟動障礙已排除：** [指定工作副本一般權限啟動的實際觀察](s00-iterations/S00-20261101-STANDARD-USER-CLIENT-LAUNCH.md)。使用者明確同意只將兩個指定 EXE 加入 Computer Use Always allow；已備份設定並完成。私庫 asInvoker launcher 在一般權限成功啟動工作副本，Computer Use 已確認登入畫面，沒有 UAC。REQ-0001 追加啟動觀察；另獲明確測試憑證授權後，真遊戲送出118B但 syntax 被拒、未到 C02；正修正字串內容編碼預檢並重驗，不以舊合成 health 累計宣稱真 Client 認證。下方等待 UAC 的段落為歷史快照，不能再視為目前啟動阻礙。
+**2026-11-01 啟動障礙已排除：** [指定工作副本一般權限啟動的實際觀察](s00-iterations/S00-20261101-STANDARD-USER-CLIENT-LAUNCH.md)。使用者明確同意只將兩個指定 EXE 加入 Computer Use Always allow；已備份設定並完成。私庫 asInvoker launcher 在一般權限成功啟動工作副本，Computer Use 已確認登入畫面，沒有 UAC。REQ-0001 追加啟動觀察；另獲明確測試憑證授權後，真遊戲送出118B但 syntax 被拒、未到 C02；修正 NUL 邊界預檢後同一帳號於05:57:28 UTC實測 AUTHACCEPTED，工作副本M2已確認；目前 REPLYUNAVAILABLE、M3未實作，不能宣稱已進選服或原始KR相容。下方等待 UAC 的段落為歷史快照，不能再視為目前啟動阻礙。
 
 **2026-11-01 最新工程接續：** 使用者短時間不能操作電腦，要求先開發；本輪不啟動遊戲。[主Lobby欄位回傳與Session交接](s00-iterations/S00-20261101-PRIMARY-LOBBY-HANDOFF.md) 保存57B key0 builder成功片段、28個instruction anchors及Server-owned短效grant／SQLite atomic transfer方案。私庫正向新帳號→handoff→空清單→創角選角通過；合計6正向、198其他方法暫緩，新增交接負例已併入待測清單。未接Host、未完成Client/UI/教學/廣場，不升格任何正式原生狀態。
 
