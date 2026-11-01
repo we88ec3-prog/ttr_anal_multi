@@ -26,3 +26,13 @@ S2C0x47: signed WORD at+2/+4 reaches561760. Source-shaped six-byte encoder exist
 privately but is dormant. W2 should use this receiver evidence rather than guess
 0x36/0x40 or a generic NPC ACK. Quest acceptance and authorized scheduling after
 15/1 remain unresolved; C2S3F literal1 alone is insufficient. No live change.
+
+## Square NPC interaction publication
+
+S00-20261102-SQUARE-NPC-INTERACTION.md records the newly added complete0x27
+checkpoint collection in the private candidate mode and restoration after15/1.
+26 positive synthetic cases pass; not deployed/human verified. Legacy
+anal/plaza_npcs.py had incorrect scene-start/result opcodes and prematurely
+completed15 after scene1; do not reuse those transitions. OriginalQuestInfo15
+has no explicitAcceptAction/CompleteAction children. This does not remove the
+need to determine authoritative acceptance and legal scene progression.

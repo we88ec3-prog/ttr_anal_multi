@@ -39,3 +39,5 @@ Server實作程式只保存在使用者指定的私有ttr_server_roy，不複製
 
 - [隔離前置測試準備](S00-20261102-ISOLATED-PREREQUISITES-PREP.md)：新空白資料庫與獨立發行檔，尚未換版。
 - [場景啟動接收函式](S00-20261102-SCENE-START-CONSUMER.md)：確認0x47及兩個有號WORD，排程與任務授權仍待接通。
+
+- [廣場 NPC 互動區域補齊](S00-20261102-SQUARE-NPC-INTERACTION.md)：0x27 完整清單、劇情後恢復與26個正流程測試；舊Server錯誤opcode／提前完成任務不可沿用。
