@@ -1,5 +1,9 @@
 # ChatGPT Web：T10／T11 技能與連段補查工作卡
 
+最新續查：[普攻片長／012A counter界線](../../../governance/s00-iterations/S00-20261101-BASIC-CLIP-AND-COOLDOWN-COUNTERS.md)。
+已定位CSpliteMotion的row EndFrame+Delay累計與current FPS getter，仍未閉合取消／命中窗口。
+012A除33不直接證明毫秒，controller倒數在輸入發送gate之前，須補scheduler／UI使用。
+
 最新來源更正：[0E命中／萬分比血條與ABF/ASD資料](../../../governance/s00-iterations/S00-20261101-COMBAT-RESULTS-AND-ENEMY-AGENTS.md)。
 0F是controller狀態路徑，舊Hit builder使用0F已撤回；不要重用舊候選。
 ASD有負Delay、多段及混合FPS，請補parser／取消窗口與命中frame，不能一律Length/40。

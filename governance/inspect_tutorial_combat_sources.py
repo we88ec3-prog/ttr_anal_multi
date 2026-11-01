@@ -12,6 +12,7 @@ def main():
     p.add_argument('--binary', type=Path, required=True)
     p.add_argument('--capstone-path', type=Path, required=True)
     p.add_argument('--output', type=Path, required=True)
+    p.add_argument('--animation-timing', action='store_true', help='Additional bounded ASD frame/FPS and cooldown-counter windows')
     args = p.parse_args()
     assert args.output.suffix == '.json' and not args.output.exists()
     sys.path.insert(0, str(args.capstone_path))
@@ -34,8 +35,13 @@ def main():
     assert struct.pack('<I',0xc556d8) in read(0x4ce7f0,0x180)
     md=capstone.Cs(capstone.CS_ARCH_X86,capstone.CS_MODE_32)
     windows=[]
-    for va,size in [(0x436c40,5),(0x4b19d0,48),(0x545c50,100),(0x4d1e34,53),(0x4ce7f0,144),
-                    (0x4b0770,18),(0x4b07af,7),(0x4b0819,7),(0x4b0b55,16)]:
+    spans=[(0x436c40,5),(0x4b19d0,48),(0x545c50,100),(0x4d1e34,53),(0x4ce7f0,144),
+           (0x4b0770,18),(0x4b07af,7),(0x4b0819,7),(0x4b0b55,16)]
+    if args.animation_timing:
+        assert struct.unpack('<I',read(0xc5029c+0x10,4))[0]==0x7d8ca0
+        assert struct.unpack('<I',read(0xc5029c+0x0c,4))[0]==0x7d8d20
+        spans += [(0x7d9630,85),(0x7d8ca0,20),(0x545e20,0x110),(0x5452c0,0x130),(0x54f200,80)]
+    for va,size in spans:
         ins=list(md.disasm(read(va,size),va)); count=sum(i.size for i in ins)
         windows.append({'start':hex(va),'end_exclusive':hex(va+count),'bytes':read(va,count).hex(),
                         'instructions':[{'va':hex(i.address),'bytes':i.bytes.hex(),'op':i.mnemonic+' '+i.op_str} for i in ins]})
@@ -45,6 +51,9 @@ def main():
     assert instructions['0x4b0770']=='imul eax, eax, 0xd'
     assert instructions['0x4b07af']=='movzx edx, word ptr [ebx]'
     assert instructions['0x4b0819']=='movzx edx, word ptr [ebx + 2]'
+    if args.animation_timing:
+        assert '0x3e0f83e1' in ' '.join(instructions.values())
+        assert '0x54f200' in ' '.join(i['op'] for w in windows if w['start']=='0x5452c0' for i in w['instructions'])
     selected={
       'Character/Cha/Base.stp':('ad5e92f9ef63afa1c2f5849823291c8ae3de7f885ece24fef1b6d771b03a9185',['Cha/Isla.abf']),
       'Character/Mon/Base.stp':('1854de2926ffe7c6172a4b350900f3b5b1e03d9f1757fc22d50b440515ec6957',['Mon/03_Assassin.abf']),
