@@ -10,7 +10,7 @@
 | --- | --- | --- |
 | P01 建立新帳號 | 後台以指定 Client profile 建立一個有效的新帳號；該帳號尚無角色 | 已建立隔離測試帳號，指定工作副本正常登入已達 AUTHACCEPTED；帳號未有實際 Client 創角證據 |
 | P02 登入成功 | 指定工作副本送出正常登入，Server 驗證，Client 接受正確回覆並顯示下一畫面 | 指定工作副本實測 C02 成功、回覆163B並顯示選服畫面；見本次 runtime 報告 |
-| P03 選服／頻道 | 正常選擇一個有效項目並完成後續連線接續 | 工作副本選服／分流可操作，Connect 已到兩個 listener；實際 primary 身分交接尚未通過，使用者接手測試 |
+| P03 選服／頻道 | 正常選擇一個有效項目並完成後續連線接續 | 工作副本人工正流程於06:33:01 UTC出現 PRIMARYHANDOFFACCEPTED；選服／分流身分接續已通過，後續 roster 回覆待實作 |
 | P04 創角／選角 | 新帳號建立第一個有效角色、出現在可操作清單並正常選取 | Server domain 有正向前置；實際 Client 未完成 |
 | P05 進入新手教學 | 正確場景載入、角色可見、可以正常控制 | 待實作／實測 |
 | P06 教學操作／戰鬥 | 依教學正常移動、NPC 互動、攻擊／技能、擊敗指定目標 | 待實作／實測；不加壓測或非法操作 |
@@ -83,4 +83,4 @@
 
 ## 登入回覆實驗接續
 
-詳見 [本次觀察](../../governance/s00-iterations/S00-20261101-LOGIN-REPLY-RUNTIME.md)。新增一項真 TCP／SQLite 合成正向登入回覆與主線交接前置；不代表真遊戲 primary 已通過。正常選服遇到的阻塞如實記錄。DT-07／09／11／14 另待測：傳送取消／部分傳送、primary shape／未知 post-login command、provider／日誌失效、跨 listener 計數與 buffer 生命週期；現在不執行。
+詳見 [本次觀察](../../governance/s00-iterations/S00-20261101-LOGIN-REPLY-RUNTIME.md)。新增一項真 TCP／SQLite 合成正向登入回覆與主線交接前置；此合成測試本身不代表真遊戲成功；另有06:33:01 UTC人工正流程的 primary 交接實測通過證據。正常選服遇到的阻塞如實記錄。DT-07／09／11／14 另待測：傳送取消／部分傳送、primary shape／未知 post-login command、provider／日誌失效、跨 listener 計數與 buffer 生命週期；現在不執行。

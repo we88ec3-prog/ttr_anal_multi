@@ -31,6 +31,7 @@ reply experiment 工作樹，不能把基準 commit 當作包含本次實作。
 | 06:11:02–03 | 正常按「連接」後 auxiliary 與 primary 各 ACCEPT；primary RX63，PRIMARYHANDOFFUNAVAILABLE 後 CLOSE。當次 grant 設計為60秒，操作距簽發約72秒；通用事件無法區分 shape／proof／expiry，不能只憑時間宣稱精確原因。 |
 | 06:19:18 | 新 Host run／新遊戲正常登入再次 AUTHACCEPTED、TXCOMPLETED163；使用者停止工具前未再完成 UI 交接確認。 |
 | 06:25:46 | 後續人工接手期間 RX118、AUTHSTARTED、AUTHREJECTED，尚無足夠證據定位原因；不是成功選服證據，也不安排錯誤帳密測試。 |
+| 06:32:58–06:33:01 | 使用者正常重新登入並按連接：AUTHACCEPTED、TXCOMPLETED163；auxiliary ACCEPT；primary ACCEPT、RX63、06:33:01.7857046 PRIMARYHANDOFFACCEPTED，接著 PRIMARYAPPLICATIONUNAVAILABLE。真工作副本 primary 身分交接首次通過，角色清單回覆仍未實作。 |
 
 本機去敏 metadata 位於
 `runtime-observations/2026-11-01/local-login-auth/reply-runtime-logs/` 與
@@ -47,7 +48,7 @@ AUTHACCEPTED。私庫以明確 opt-in 接上既有 app13 candidate 與 raw frame
 REQ-0002：先啟動兩個 loopback listener 再公布分流；login 完成後保留
 一次性 grant，primary 以同一 SQLite provider 原子轉移 exact lease。
 正常人工選服窗口改為兩分鐘且不超過 C02 原 lease，增加獨立 shape 事件，
-後續必須取得 PRIMARYHANDOFFACCEPTED 才可聲稱真遊戲交接通過。
+06:33:01 UTC 已在使用者正常操作下取得 PRIMARYHANDOFFACCEPTED，故本工作副本 primary 身分交接通過；不得外推角色 UI。
 這個期限與 grant 語意是 Server-owned design，並非原版 Server 規則。
 
 選服 row、flags、未命名欄位與 raw frame 模式採用明示的本機實驗選擇；
@@ -58,8 +59,10 @@ SPEC-NET-0001／0002、SPEC-AUTH-0001。沒有新 BIN 研究、T01 FULL-PASS 或
 
 ## 尚未完成
 
-實際 primary 身分交接尚待人工正常操作驗證；primary 尚無 roster 回覆，
+實際 primary 身分交接已在06:33:01 UTC通過；primary 尚無 roster 回覆，
 角色畫面／創角 wire／教學／廣場均未完成。私庫新增真 TCP＋SQLite 的
 合成正向交接測試只證工程前置，不證遊戲旅程。現有7個正向、198個暫緩
 方法定義；正常操作遇到阻塞應調查，其餘故障／過期／重播／併發專項不重跑。
 REQ 保持 CANDIDATE，RR/GAP/CLM/SPEC/ADR/正式 TEST 與 native admission 不升格。
+
+使用者另指出密碼不能貼上，要求縮短測試密碼。只對同一隔離本機 fixture 備份後更新 salted hash，保留帳號、Session、停權狀態與一般密碼規則；公開庫不保存憑證。這是測試便利性調整，不是 Client／Server 協定修正，新密碼尚待下一次正常登入觀察。
