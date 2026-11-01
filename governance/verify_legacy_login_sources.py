@@ -49,13 +49,13 @@ def main():
 
     md = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_32)
     checks = []
-    def exact(address, expected_hex, claim):
+    def exact(address, expected_hex, claim, data=False):
         expected = bytes.fromhex(expected_hex)
         offset, actual = read(address, len(expected))
         matched = actual == expected
         instructions = [{'address': hex(i.address), 'bytes': i.bytes.hex(),
                          'mnemonic': i.mnemonic, 'operands': i.op_str}
-                        for i in md.disasm(actual, address)]
+                        for i in md.disasm(actual, address)] if not data else []
         checks.append({'address': hex(address), 'file_offset': offset,
                        'claim_scope': claim, 'expected_hex': expected.hex(),
                        'actual_hex': actual.hex(), 'matched': matched,
@@ -97,8 +97,30 @@ def main():
     exact(0x49319E, 'ba80474900899098030000',
           'main callback stores494780 at+398; index19 only with independently scoped +208/stride10 table convention')
 
+    # Supplemental world bootstrap recheck. These are bounded facts, not an
+    # official Server response sequence or full validation of the handlers.
+    exact(0x4CD728, 'c707447bc000', 'CCharacter constructor installs vtable C07B44')
+    exact(0xC07BA0, '408c4c00', 'vtable C07B44+5C points to scale setter4C8C40 (data, not instructions)', data=True)
+    exact(0x4AE540, '83c306', 'actor reader advances cursor6 from application payload')
+    exact(0x4AEB5B, 'd9430a8b505c518bced91c24ffd2', 'third float at cursor+A is passed to actor virtual+5C')
+    exact(0x4AED47, '83c31a', 'actor reader advances26 bytes per record')
+    exact(0x4C8CAD, 'f30f104508f30f1186b4000000', 'scale setter saves scalar argument to actor+B4')
+    exact(0x4C8CCC, 'd84d08', 'model scale path multiplies by the scalar argument')
+    exact(0x4ADD7E, 'c7403cd0e44a00', 'basic handler slot+3C = actor reader4AE4D0, candidate app7')
+    exact(0x4ADD98, 'c7404430f54a00', 'basic handler slot+44 = metadata reader4AF530, candidate app8')
+    exact(0x4ADDA2, 'c7405420f94a00', 'basic handler slot+54 = control reader4AF920, candidate appA')
+    exact(0x4ADDAC, 'c74004f0fa4a00', 'basic handler slot+4 = parameter reader4AFAF0, candidate app0')
+    exact(0x4ADE11, 'c78084000000301a4b00', 'basic handler slot+84 = reset4B1A30, candidate app10')
+    exact(0x4ADE41, 'c78094000000f0244b00', 'basic handler slot+94 = map4B24F0, candidate app12')
+    exact(0x4ADFED, 'c780e4020000a03d4b00', 'basic handler slot+2E4 = stats4B3DA0, candidate app5C')
+
     windows = []
     for address, size, scope in [
+        (0x4AE4D0, 0x80, 'actor reader prelude and payload cursor origin'),
+        (0x4C8C40, 0xB0, 'actor virtual+5C scalar/model-scale path'),
+        (0x7A71B0, 0x100, 'model uniform scale leaf; supplemental bounded decode'),
+        (0x4B24F0, 0x90, 'map consumer reads payload+2 after clearing control'),
+        (0x4AF920, 0x150, 'control consumer account alias/count/entity pair prefix'),
         (0x4B8F50, 0x140, 'app60 handler constructor/scene/parser and outbound F5 local path'),
         (0x4C22C0, 0x80, 'scene list prelude, two-byte prefix and27-byte record division'),
         (0x5A6510, 0x180, 'ExpeditionPage name-ready initialization/display conditions'),

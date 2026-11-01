@@ -1,5 +1,7 @@
 # S00 新對話接續 — Server 規格、REQ 需求來源與角色畫面階段
 
+**08:04 UTC最新接續：** [教學地圖／玩家初始化候選](s00-iterations/S00-20261101-TUTORIAL-WORLD-BOOTSTRAP.md)。REQ-0010已收GAME_RUNTIME_OBSERVATION；主程式33片段／12 bounded windows、目前Table.stp map188/190對應已核對。私庫額外opt-in實作map188、scale1 actor、same-alias metadata/control、intro位置及正常移動回覆，10個positive cases通過（9方法／198暫緩）。本機新版已啟用，結果卡請使用者測到第一T標記後下一段提示就停；人工結果待回。Client完全未改，不支援移動後切角，不宣稱Server world authority或完整教學／廣場成功。勿重啟進行中的人工測試。
+
 **2026-11-01 最新工程接續：** [冒險團命名／教學入口片段](s00-iterations/S00-20261101-EXPEDITION-NAME-TUTORIAL-ENTRY.md)。私庫新增same-DB exact-lease profile/name/owned-role資料、明確元件migration、非空scene候選、命名→教學入口與保活；9正向前置、198暫緩。主程式19個選定byte片段／7個有限window重核，非正式pairing/FULL-PASS。07:23 UTC本機Host已更新，等待使用者連測登入→命名→教學第一畫面；不要重啟正在測試的服務。B0/0C/0A/3F僅記world-init pending，不宣稱教學可控或已完成。Client未改，as_server_spec未動，main合併仍待明確授權。
 
 **2026-11-01 最新使用者補充：** [本地舊Server來源核驗與批次測試規劃](s00-iterations/S00-20261101-LEGACY-SERVER-INTAKE-AUDIT.md)。直接使用者指示、舊文件轉述、17個本輪精確byte核對、歷史修改Client runtime與Server假設分開；不將1/3初始角色／A0→60當官方需求。Client此後不修改，僅確認Windows更新bug例外；指定EXE SHA未變。使用者操作遊戲時Agent要開發後段，下一次安排登入→角色/命名→教學入口的已備妥片段，不為每個微小修正單獨要求重登。`as_server_spec`誤提已撤回，完全不動該專案。
