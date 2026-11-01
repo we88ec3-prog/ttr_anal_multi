@@ -45,3 +45,37 @@ T10/T11 接續優先核對：能力記錄 +40/+48/+44 的 HUD／技能消費者�
 與 actor normalized parameter1/2/3 的關係；不能把兩組欄位或未知 DWORD 合併命名。
 冷卻012A時基、正式取消／命中窗口仍 UNKNOWN，未因本次更正而完成。
 normative pin、formal admission 與 APPROVED 狀態不變。
+
+## 後續：獨立初始化 actor 的三個比例槽
+
+能力頁修正後再查 `4CE7F0`（pseudocode SHA
+`e561c8bdfbbe38199284f734e075c6108e0cc79d86bc251d750e131cc684f0b0`），
+其 parameter setter 的 switch table 與兩段指令可確認：
+
+| parameter | actor 欄位 | 視覺槽索引 | 寫入視覺值 |
+| --- | --- | --- | --- |
+| 1 | +3B0 | 0 | signed WORD × 約0.0001 |
+| 2 | +3B4 | 1 | signed WORD ÷ 100.0 |
+| 3 | +3B8 | 2 | signed WORD ÷ 100.0 |
+
+視覺物件存在才走浮點寫入；此處不是完整 HUD／技能 gate 追蹤，也沒有證明
+能力頁記錄會自動更新這三槽。槽2/3作為 SP/MP 的命名沿用目前候選，不能只靠
+除數就當成原生顯示文字或絕對當前值已全文確認。
+
+原始 table `4CEB5C`＋key table `4CEB88` 的前3鍵分別落到
+`4CE83B/4CE880/4CE8C5`。`C557E8` double=100.0；第二／三段各69 bytes
+至共同尾部跳躍，不混入下個 case。新增 `--resource-ratios` 核對表項、目的欄位、
+除數與指令邊界，保存 [比例槽有限證據](evidence/S00-20261101-COMBAT-RESOURCE-RATIOS.json)。
+這是有限反組譯＋既存 Ghidra來源核對，不是整體 FULL-PASS。
+
+Server 原先 rebuild 只送 parameter1/5/6，沒有明確送滿的候選 SP/MP 槽；
+現在一次初始化1/2/3/5/6，值10000/100/100/100/30。
+不是把2/3誤送10000，也不假定能力頁的5C可以代替actor參數。
+每次既有actor rebuild均使用這個初始候選狀態，與既有Server的滿資源重建政策一致；
+沒有增加戰中自然回復、重連恢復或官方持久化假設。
+
+正常 TCP 三怪列進一步覆蓋：持續一般輸入→收到敵人對玩家0E→X動作108→
+候選SP65/MP70通知→35傷害→以Z收尾→三個entity各自移除→返回／重建滿比例→
+既有勝利持久化與蘋果取得。既有單怪列與其他正常列仍保留，15 cases通過。
+此處時間由測試clock控制，傷害與成本仍Server政策，非官方數值或Client畫面驗收。
+其餘198方法不執行；未換版中斷目前v6測試。

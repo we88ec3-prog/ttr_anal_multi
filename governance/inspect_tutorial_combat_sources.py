@@ -14,6 +14,7 @@ def main():
     p.add_argument('--output', type=Path, required=True)
     p.add_argument('--animation-timing', action='store_true', help='Additional bounded ASD frame/FPS and cooldown-counter windows')
     p.add_argument('--stats-mapping', action='store_true', help='Recheck complete 5C record decoder and distinguish DWORD/WORD destinations')
+    p.add_argument('--resource-ratios', action='store_true', help='Recheck character parameter2/3 visual ratios and jump-table cases')
     args = p.parse_args()
     assert args.output.suffix == '.json' and not args.output.exists()
     sys.path.insert(0, str(args.capstone_path))
@@ -49,6 +50,17 @@ def main():
                              (0x4d41c0,'0fb75012895148'),(0x4d41c7,'0fb75014895144')]:
             assert read(va,len(bytes.fromhex(expected))).hex()==expected
         assert read(0x4d4207,1)==b'\xc3'
+    resource_cases = None
+    if args.resource_ratios:
+        targets=struct.unpack('<11I',read(0x4ceb5c,44)); keys=read(0x4ceb88,30)
+        resource_cases={str(i+1):hex(targets[keys[i]]) for i in range(3)}
+        assert resource_cases=={'1':'0x4ce83b','2':'0x4ce880','3':'0x4ce8c5'}
+        assert struct.unpack('<d',read(0xc557e8,8))[0]==100.0
+        assert read(0x4ce884,6).hex()=='8983b4030000'
+        assert read(0x4ce8c9,6).hex()=='8983b8030000'
+        assert read(0x4ce8a6,6).hex()=='dc35e857c500'
+        assert read(0x4ce8eb,6).hex()=='dc35e857c500'
+        spans += [(0x4ce880,69),(0x4ce8c5,69)]
     for va,size in spans:
         ins=list(md.disasm(read(va,size),va)); count=sum(i.size for i in ins)
         windows.append({'start':hex(va),'end_exclusive':hex(va+count),'bytes':read(va,count).hex(),
@@ -82,6 +94,7 @@ def main():
     result={'target_sha256':BIN_SHA,'tool':'Capstone '+capstone.__version__,
             'classification':'bounded byte recheck plus resource metadata, not FULL-PASS or official Server rules',
             'health_scale':health_scale,'windows':windows,'resources':resources,
+            'character_parameter_cases':resource_cases,
             'limits':['No damage formula, official AI, wave/placement or cancel-window proof.',
                       'ASD negative Delay and mixed FPS require parser/timeline analysis; no blanket Length/FPS timing rule.']}
     args.output.write_bytes((json.dumps(result,ensure_ascii=False,indent=2)+'\n').encode('utf8'))
