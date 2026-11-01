@@ -1,5 +1,12 @@
 # 新帳號完成新手教學進入廣場：正流程與待測試清單
 
+目前最新：[移動、朝向與切角候選](../../governance/s00-iterations/S00-20261101-TUTORIAL-MOVEMENT-CAMERA-SWITCH.md)。
+**實測通過人物／HUD、方向鍵第一T、滑鼠移動與視角教學**；切角前出現朝向及殘留跑動bug。
+新版補正常轉段／silent release stop、東向64及static Server pose切角，11 positive cases通過，
+仍207方法／9正向方法／198暫緩；人工新版測到切角後下一T待回。
+額外待測：watchdog／輸入同時抵達、過期lease／取消／partial read清理、壓縮層邊界、
+資源SHA／格式不符、動態barrier、長時鐘間隙／倒退、長距離漂移與碰撞校準；現在不執行。
+
 最新：[教學world候選與來源限制](../../governance/s00-iterations/S00-20261101-TUTORIAL-WORLD-BOOTSTRAP.md)。
 仍207方法／9正向／198暫緩；旅程Theory增加world OFF/ON兩列，本次10 positive cases通過。
 人工測到第一T點後下一段提示即停，結果待回。地圖／人物／移動尚未以遊戲驗收。

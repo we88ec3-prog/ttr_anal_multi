@@ -469,6 +469,18 @@
           "reproduction": "Fresh normal login, select server/channel within two minutes, type a short disposable expedition name and confirm. Observe the first tutorial screen and compare metadata with user screenshots. Do not test movement until world initialization is supplied.",
           "limitations": "Working-copy compatibility only. Historical modified-Client results and Server starter/header/scene-pairing choices are distinct from native facts. No raw packet bodies retained; credentials, actual profile names and IDs are not published. No official Server transaction, T01 FULL-PASS, playable tutorial or square success claimed.",
           "observed": "After v2 naming at07:32:41 UTC and6E entry, the user confirmed tutorial/story appeared, then reported wrong map or position after the story. A user screenshot shows tutorial prompts with uninitialized player display and a scene resembling the expedition backdrop. Server currently records0C/B0/3F world initialization pending and supplies no complete map/actor/control bootstrap; exact map ID and coordinates are not established from the screenshot."
+        },
+        {
+          "channel": "GAME_RUNTIME_OBSERVATION",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "tested_executable_sha256": "6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c",
+          "tested_build_kind": "MODIFIED_WORKING_COPY_NOT_ORIGINAL_CLIENT",
+          "observation_ref": "governance/s00-iterations/S00-20261101-TUTORIAL-MOVEMENT-CAMERA-SWITCH.md",
+          "authorization_ref": "governance/s00-iterations/S00-20261101-TUTORIAL-MOVEMENT-CAMERA-SWITCH.md",
+          "environment": "User-driven designated working copy, local tutorial-world-v1 based on private1dcd9e80d07dda4c4d93d4d215fbca25441a319d; exact deployed DLL hashes in linked report; isolated loopback and SQLite component.",
+          "reproduction": "Normal login to tutorial, finish story, keyboard movement to first T, mouse movement and camera steps, stop at role-switch prompt. No deliberate negative test.",
+          "limitations": "Working-copy only. Metadata journal has opcode/length, not raw movement flags, headings or scene IDs. User-stated east-facing expectation is not proof of official spawn/camera policy. No full tutorial/combat/square acceptance.",
+          "observed": "The user confirmed visible actor/HUD, first keyboard T checkpoint, mouse movement and camera tutorial, reaching the role-switch prompt. A screenshot and user report separately identify wrong entry orientation: expected east, observed south. Exact heading bytes were not logged."
         }
       ],
       "rr_ids": [
@@ -481,6 +493,50 @@
       "spec_ids": [
         "SPEC-SCENE-0001",
         "SPEC-FLOW-0001",
+        "SPEC-CHAR-0001"
+      ],
+      "adr_ids": [],
+      "feedback_ids": [],
+      "claim_ids": []
+    },
+    {
+      "id": "REQ-0011",
+      "title": "新手教學轉段與輸入結束後停止角色移動",
+      "category": "CLIENT_COMPATIBILITY",
+      "priority": "P0",
+      "status": "CANDIDATE",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "need": "正常通過滑鼠／視角教學後，角色持續往前撞牆且無法改向；Server需結束殘留移動狀態，使下一段切角或移動可繼續，不以Client修改遮掩。",
+      "acceptance_criteria": [
+        "正常移動、放開輸入及教學轉段後，角色停止持續跑動；若Client不再傳輸入，也不能永久保留最後run flag。停止判定／時限是明示Server政策，不宣稱官方原生值。",
+        "實際遊戲可以在前一步停止後繼續正常移動或切換自有角色；切角保留Server當前位置／方向，不回預設出生點，不信任Client tick為世界權威。",
+        "以正常旅程重測並保留尚缺的動態碰撞、位置校準、任務／戰鬥／廣場及暫緩異常測試，不把離線／合成通過當作完整Client成功。"
+      ],
+      "discoveries": [
+        {
+          "channel": "GAME_RUNTIME_OBSERVATION",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "tested_executable_sha256": "6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c",
+          "tested_build_kind": "MODIFIED_WORKING_COPY_NOT_ORIGINAL_CLIENT",
+          "observation_ref": "governance/s00-iterations/S00-20261101-TUTORIAL-MOVEMENT-CAMERA-SWITCH.md",
+          "authorization_ref": "governance/s00-iterations/S00-20261101-TUTORIAL-MOVEMENT-CAMERA-SWITCH.md",
+          "environment": "User-driven designated working copy, local tutorial-world-v1 based on private1dcd9e80d07dda4c4d93d4d215fbca25441a319d; exact deployed DLL hashes in linked report; isolated loopback and SQLite component.",
+          "reproduction": "Normal login to tutorial, finish story, keyboard movement to first T, mouse movement and camera steps, stop at role-switch prompt. No deliberate negative test.",
+          "limitations": "Working-copy only. Metadata journal has opcode/length, not raw movement flags, headings or scene IDs. User-stated east-facing expectation is not proof of official spawn/camera policy. No full tutorial/combat/square acceptance.",
+          "observed": "After confirming mouse movement/camera steps and reaching the role-switch prompt, the user reported the actor continually moving into a wall and being unable to change direction. In the active run,90 C2S0A/11B were observed; last input08:19:30.6575323 UTC, later3F/8B08:19:35.2910942. The old route had no general scene stop or input-silence watchdog. No raw body was retained, so exact last flags or scene ID are unknown."
+        }
+      ],
+      "rr_ids": [
+        "RR-0008"
+      ],
+      "gap_ids": [
+        "GAP-FLOW-0001",
+        "GAP-SCENE-0001"
+      ],
+      "spec_ids": [
+        "SPEC-FLOW-0001",
+        "SPEC-SCENE-0001",
         "SPEC-CHAR-0001"
       ],
       "adr_ids": [],

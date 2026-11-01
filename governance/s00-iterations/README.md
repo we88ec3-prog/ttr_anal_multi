@@ -1,5 +1,7 @@
 # S00 Iterations 14–22 — 原稿保存與交接
 
+最新：[2026-11-01 教學正流程進展、朝向與殘留移動](S00-20261101-TUTORIAL-MOVEMENT-CAMERA-SWITCH.md)。REQ-0010／0011的runtime結果、靜態碰撞與鏡頭限定補查、Server停止／位置切角候選；舊版前三教學通過，新版重測待回。
+
 最新接續：[2026-11-01 劇情後錯誤地圖／玩家初始化](S00-20261101-TUTORIAL-WORLD-BOOTSTRAP.md)。REQ-0010 runtime需求、原始BIN局部重核、資源context及Server-only候選；人工第一移動點結果待回，正式狀態不升格。
 
 最新接續：[2026-11-01 本地舊Server核驗、來源分類與批次正常測試規劃](S00-20261101-LEGACY-SERVER-INTAKE-AUDIT.md)。原始KR17個byte片段核對通過，不代表完整函式／官方Server配對；Client修改限制以最新共用政策為準。
