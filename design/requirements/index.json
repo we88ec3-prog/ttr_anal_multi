@@ -723,6 +723,112 @@
           "reproduction": "Complete first battle, return and follow the normal recruitment/house story; observe no continuation after house scene.",
           "limitations": "Actual working-copy result, not original Client proof. Metadata has no scene bodies. Loading screen remains unconfirmed and full tutorial/square is incomplete.",
           "observed": "User reports Pinko-house story ends then progression stops; script Part2 waits for role2 availability after scene1000/13."
+        },
+        {
+          "channel": "GAME_RUNTIME_OBSERVATION",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "tested_executable_sha256": "6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c",
+          "tested_build_kind": "MODIFIED_WORKING_COPY_NOT_ORIGINAL_CLIENT",
+          "observation_ref": "governance/s00-iterations/S00-20261101-PINKO-RECRUITMENT.md",
+          "authorization_ref": "governance/s00-iterations/S00-20261101-PINKO-RECRUITMENT.md",
+          "environment": "User-operated designated working copy with loopback first-battle-v3 Host; no Client attachment or modification.",
+          "reproduction": "Normal login/tutorial, first battle, return and Pinko-house story; confirm Pinko recruitment, stop at the next prompt.",
+          "limitations": "User-operated modified working copy only. Live v4 logs have opcode/length but no scene bodies; the next-build scene-specific report events are not deployed. Next prompt text and full exit remain unverified.",
+          "observed": "User confirms v4 Pinko recruitment appears and normal confirmation continues to the next tutorial prompt. Host remains v4; no full tutorial/square completion claimed."
+        }
+      ],
+      "category": "CLIENT_COMPATIBILITY",
+      "priority": "P0",
+      "status": "CANDIDATE",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "rr_ids": [
+        "RR-0008"
+      ],
+      "gap_ids": [
+        "GAP-FLOW-0001",
+        "GAP-SCENE-0001"
+      ],
+      "spec_ids": [
+        "SPEC-FLOW-0001",
+        "SPEC-SCENE-0001",
+        "SPEC-CHAR-0001"
+      ],
+      "adr_ids": [],
+      "feedback_ids": [],
+      "claim_ids": []
+    },
+    {
+      "id": "REQ-0016",
+      "title": "新手首戰的怪物行為、技能施放與普攻連段",
+      "need": "先完成可正常操作的教學戰鬥，不能以單隻靜止怪與簡化扣血視為完整首戰。",
+      "acceptance_criteria": [
+        "正常首戰可進行生怪、怪物行動／攻擊、玩家技能與連段、命中及勝負。",
+        "來源支持、Server重建配置與未知規則分開，影片三隻怪不冒稱MEF原始COUNT。",
+        "不以動畫播放或合成通過宣稱完整遊戲戰鬥完成；保留現有招募／進度。"
+      ],
+      "discoveries": [
+        {
+          "channel": "GAME_RUNTIME_OBSERVATION",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "tested_executable_sha256": "6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c",
+          "tested_build_kind": "MODIFIED_WORKING_COPY_NOT_ORIGINAL_CLIENT",
+          "observation_ref": "governance/s00-iterations/S00-20261101-COMBAT-PRIORITY-AND-EXIT-BLOCKER.md",
+          "authorization_ref": "governance/s00-iterations/S00-20261101-COMBAT-PRIORITY-AND-EXIT-BLOCKER.md",
+          "environment": "User-operated designated working copy with loopback first-battle-v3 Host; no Client attachment or modification.",
+          "reproduction": "User-operated v4 normal tutorial: first battle, Pinko recruitment, then two dialogues; stop when player remains in place.",
+          "limitations": "Modified working-copy observation. No Client attachment/modification. Official full combat and exit/reward contract remain incomplete.",
+          "observed": "User reports tutorial combat is not smooth and explicitly prioritizes combat implementation before further exit work."
+        },
+        {
+          "channel": "PLAYER_ADMIN_REQUEST",
+          "requester_role": "PLAYER",
+          "request_text": "另外戰鬥目前是第一優先實作項目，不然無法進行正常的新手教學戰鬥",
+          "request_record_ref": "governance/s00-iterations/S00-20261101-COMBAT-PRIORITY-AND-EXIT-BLOCKER.md"
+        }
+      ],
+      "category": "CLIENT_COMPATIBILITY",
+      "priority": "P0",
+      "status": "CANDIDATE",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "rr_ids": [
+        "RR-0008"
+      ],
+      "gap_ids": [
+        "GAP-FLOW-0001",
+        "GAP-SCENE-0001"
+      ],
+      "spec_ids": [
+        "SPEC-FLOW-0001",
+        "SPEC-SCENE-0001",
+        "SPEC-CHAR-0001"
+      ],
+      "adr_ids": [],
+      "feedback_ids": [],
+      "claim_ids": []
+    },
+    {
+      "id": "REQ-0017",
+      "title": "蘋果招募後兩段劇情結束的轉場與廣場接續",
+      "need": "兩段對話結束後仍留原地，需完成合法任務／場景交握並恢復廣場控制；排在戰鬥修復後。",
+      "acceptance_criteria": [
+        "正常完成必要教學／劇情與任務後，同登入進廣場並可移動停止、必要NPC可見且無殘窗。",
+        "不只以最後3F、固定延遲或heartbeat視為完整教學完成；不提前寫完成／獎勵。",
+        "戰鬥優先實作，出口阻點保留待修，不刪除完整目標。"
+      ],
+      "discoveries": [
+        {
+          "channel": "GAME_RUNTIME_OBSERVATION",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "tested_executable_sha256": "6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c",
+          "tested_build_kind": "MODIFIED_WORKING_COPY_NOT_ORIGINAL_CLIENT",
+          "observation_ref": "governance/s00-iterations/S00-20261101-COMBAT-PRIORITY-AND-EXIT-BLOCKER.md",
+          "authorization_ref": "governance/s00-iterations/S00-20261101-COMBAT-PRIORITY-AND-EXIT-BLOCKER.md",
+          "environment": "User-operated designated working copy with loopback first-battle-v3 Host; no Client attachment or modification.",
+          "reproduction": "User-operated v4 normal tutorial: first battle, Pinko recruitment, then two dialogues; stop when player remains in place.",
+          "limitations": "Modified working-copy observation. No Client attachment/modification. Official full combat and exit/reward contract remain incomplete.",
+          "observed": "User reports two story dialogues follow Pinko recruitment; after both finish, expected transition/square does not occur and player remains in place."
         }
       ],
       "category": "CLIENT_COMPATIBILITY",
