@@ -1,5 +1,13 @@
 # 新帳號完成新手教學進入廣場：正流程與待測試清單
 
+最新：[NPC保留／首戰編隊](../../governance/s00-iterations/S00-20261101-TUTORIAL-NPC-AND-FORMATION.md)。
+**使用者實測切角後伊莉西亞仍在，編隊頁可看到她**。目前12 positive cases／9方法，
+總207方法、198暫緩。停在編隊頁，未按入戰。預選伊莉西亞體驗由使用者確認目前正確，
+僅要求釐清來源，不把它列bug或臆造官方鎖定規則。
+新增待測：targeted-delete／舊input生命週期、unknown prefix、重複grant／編隊請求、
+lease／grant競態、交易或分段傳送失敗、錯scene／未取得角色、編隊容量／強制名單邊界；
+現在不執行。正常戰場載入、技能／戰鬥、結束返回及後續任務仍屬當前開發。
+
 目前最新：[移動、朝向與切角候選](../../governance/s00-iterations/S00-20261101-TUTORIAL-MOVEMENT-CAMERA-SWITCH.md)。
 **實測通過人物／HUD、方向鍵第一T、滑鼠移動與視角教學**；切角前出現朝向及殘留跑動bug。
 新版補正常轉段／silent release stop、東向64及static Server pose切角，11 positive cases通過，

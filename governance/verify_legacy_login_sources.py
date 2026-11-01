@@ -19,6 +19,7 @@ def main():
     parser.add_argument('--capstone-path', type=Path)
     parser.add_argument('--output', required=True, type=Path)
     parser.add_argument('--tutorial-pose', action='store_true', help='Include bounded camera/BND supplemental anchors')
+    parser.add_argument('--tutorial-npc-formation', action='store_true', help='Include bounded targeted-delete/formation anchors')
     args = parser.parse_args()
     if args.output.resolve() == args.binary.resolve() or args.output.suffix.lower() != '.json':
         raise ValueError('Evidence output must be a separate JSON artifact, never the target binary')
@@ -151,6 +152,47 @@ def main():
             (0x4C8C30, 0x10, 'actor desired-heading byte setter'),
             (0x54C53C, 0x81, 'default camera actor-heading branch and yaw assignment'),
             (0x4449D0, 0x90, 'direction table initialization prefix; no full sin/cos audit')]
+
+    if args.tutorial_npc_formation:
+        exact(0x4B1A30, '6a00', 'type-wide reset selects category0')
+        relative_call(0x4B1A39, 0x4DFD40, 'type-wide reset calls category erase helper')
+        relative_call(0x4B1A5E, 0x4E1070, 'type-wide reset clears player metadata tree')
+        exact(0x4ADE8D, 'c780d4000000d0284b00', 'basic slot+D4 registers4B28D0, candidate1A')
+        exact(0x4B2908, '83c0fcd1e8', 'targeted delete record count=(length-4)/2')
+        exact(0x4B2918, '83c104', 'targeted delete list starts payload+4')
+        exact(0x4B2AB9, '0fb708', 'targeted delete takes one unsigned16 actor ID')
+        relative_call(0x4B2AC2, 0x4DFBC0, 'targeted actor erase, not category-wide reset')
+        exact(0x4E1E3F, 'c7805c01000030274e00', 'account slot+15C registers4E2730, candidate2B with base4/stride8')
+        exact(0x4E2762, '83c702', 'owned role records begin payload+2')
+        exact(0x4E2767, '0fb6472e', 'owned role index from record+2E')
+        relative_call(0x4E2782, 0x4D4150, 'bounded owned role record consumer')
+        exact(0x4E278A, '83c735', 'owned role record stride53')
+        exact(0x4AA4DF, 'b840000000', 'outbound scenario request app40 constant')
+        exact(0x4AA4F9, '6a04', 'outbound scenario request sends4 bytes')
+        exact(0x4ADF9D, 'c7807402000070354b00', 'basic slot+274 registers4B3570, candidate4E')
+        exact(0x4ADFAD, 'c7808402000000364b00', 'basic slot+284 registers4B3600, candidate50')
+        exact(0x4B3595, '0fb74002', 'selection consumer reads scenario unsigned16 at+2')
+        exact(0x4B35D5, '68da430f00', 'selection consumer emitsF43DA local event')
+        exact(0x5C3383, '2dda430f00', 'tutorial page distinguishesF43DA')
+        relative_call(0x5C33A1, 0x5C3610, 'tutorial page opens formation path')
+        exact(0x5C3677, '8b862c020000', 'formation path reads child+22C')
+        relative_call(0x5C367F, 0x596E00, 'formation child display path')
+        exact(0x4B3610, '8b0789420c', 'formation copies first4 bytes including opcode into FE18F8+C')
+        exact(0x4B3615, '668b4f0466894a10', 'formation copies payload+4 word')
+        exact(0x4B361D, '8a4706884212', 'formation copies payload+6 byte')
+        exact(0x4B3634, '83c0f9d1e8', 'formation ordered uint16 count=(length-7)/2')
+        exact(0x508332, '0fb7480e', 'formation allowed-mask consumer uses state+E, not state+C opcode word')
+        supplemental_windows += [
+            (0x4B1A30, 0x3B, 'type-wide reset; this leaf is not preserved as its own Ghidra function'),
+            (0x4B28D0, 0x21D, 'selected actor removal handler, bounded static decode only'),
+            (0x4DFBC0, 0x70, 'single actor lookup/delete helper'),
+            (0x4E2730, 0x73, 'owned role row consumer'),
+            (0x4D4150, 0x80, 'owned role flag and field copy consumer'),
+            (0x4B3570, 0x86, 'selection local event path'),
+            (0x4B3600, 0x105, 'formation record/header/list consumer'),
+            (0x5C33A1, 0xB, 'tutorialF43DA branch after earlier return, explicit block anchor'),
+            (0x5C3666, 0x22, 'formation child display block'),
+            (0x508325, 0x1B, 'allowed-mask bit selection block')]
 
     windows = []
     for address, size, scope in [
