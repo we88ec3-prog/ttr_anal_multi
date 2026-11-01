@@ -18,6 +18,7 @@ def main():
     parser.add_argument('--binary', required=True, type=Path)
     parser.add_argument('--capstone-path', type=Path)
     parser.add_argument('--output', required=True, type=Path)
+    parser.add_argument('--tutorial-pose', action='store_true', help='Include bounded camera/BND supplemental anchors')
     args = parser.parse_args()
     if args.output.resolve() == args.binary.resolve() or args.output.suffix.lower() != '.json':
         raise ValueError('Evidence output must be a separate JSON artifact, never the target binary')
@@ -114,6 +115,43 @@ def main():
     exact(0x4ADE41, 'c78094000000f0244b00', 'basic handler slot+94 = map4B24F0, candidate app12')
     exact(0x4ADFED, 'c780e4020000a03d4b00', 'basic handler slot+2E4 = stats4B3DA0, candidate app5C')
 
+    supplemental_windows = []
+    if args.tutorial_pose:
+        exact(0x830082, '6a34', 'BND reader initially reads34-byte header')
+        exact(0x830095, '837de803', 'BND header+20 compared to3; non3 follows legacy reader')
+        relative_call(0x83009E, 0x82F660, 'non3 header uses legacy layer loader')
+        exact(0x82F6C0, '6834020000', 'legacy BND header read234 bytes')
+        exact(0x82F735, '8db5f8fdffff', 'layer cursor header+38 from buffer at ebp-240')
+        exact(0x82F78F, '8b4e04', 'layer cursor+4 provides expanded-byte count to decompressor')
+        exact(0x82F7CB, '8b4e08', 'layer cursor+8 provides cell count, copied as count*4')
+        exact(0x82F815, '83c610', 'legacy descriptors stride10 hex')
+        exact(0x837C99, '03d88d149a', 'flat source cell address is row*width+column times4')
+        exact(0x837D08, '833cb300', 'nonzero source cell becomes set packed bit')
+        exact(0x82CE25, 'd94614d84df8', 'candidate X scales by bounds+14 after clamp')
+        exact(0x82CE30, 'd94618d84dfc', 'candidate Y scales by bounds+18 after clamp')
+        relative_call(0x82CE51, 0x832DA0, 'candidate checks bounds layer+28')
+        relative_call(0x82CE5D, 0x832DA0, 'candidate checks saved bounds layer+24')
+        exact(0xC55690, '000000000000c0bf', 'packed byte factor is NEGATIVE .125, data', data=True)
+        exact(0x832E90, '8b4e082bc80fbe01', 'subtract negative byte quotient from packed pointer, not subtract positive floor(index/8)')
+        exact(0x4AEB4B, '0fb64b128b068b5058518bceffd2', 'actor record direction at cursor+12 goes virtual+58')
+        exact(0xC07B9C, '308c4c00', 'CCharacter virtual+58 points4C8C30, data', data=True)
+        exact(0x4C8C33, '8a45088881b0000000', 'virtual+58 saves byte argument to actor+B0')
+        relative_call(0x4A9726, 0x54C410, 'bounded ApplyDefaultCamera wrapper')
+        exact(0x54C550, '8a98b0000000', 'default camera reads current actor+B0')
+        exact(0x54C56E, 'f30f100485207cfb00', 'default camera reads indexed angle table')
+        exact(0xC55A68, 'db0fc93c', 'float direction angle step approx2PI/256, data', data=True)
+        exact(0x54C5A9, 'dc05d85ac500', 'default camera adds constant atC55AD8')
+        exact(0xC55AD8, '00000060fb210940', 'camera constant approximatelyPI, data', data=True)
+        supplemental_windows = [
+            (0x83007B, 0x3A, 'success branch of830040 header reader, not a function entry'),
+            (0x82F6AE, 0x197, 'success branch of82F660 legacy BND layer loader'),
+            (0x837C40, 0x109, 'nonuniform block source row-major copy and bitpacking'),
+            (0x82CE10, 0x62, 'bounds clamp/scales and two layer tests after null prelude'),
+            (0x832E82, 0x38, 'nonuniform block packed byte query; negative constant matters'),
+            (0x4C8C30, 0x10, 'actor desired-heading byte setter'),
+            (0x54C53C, 0x81, 'default camera actor-heading branch and yaw assignment'),
+            (0x4449D0, 0x90, 'direction table initialization prefix; no full sin/cos audit')]
+
     windows = []
     for address, size, scope in [
         (0x4AE4D0, 0x80, 'actor reader prelude and payload cursor origin'),
@@ -127,7 +165,7 @@ def main():
         (0x4B9260, 0x160, 'tutorial scene consumer; official post-name pairing unknown'),
         (0x494780, 0x100, 'heartbeat consumer prelude and early-return gate; outstanding-counter effect'),
         (0x4931A3, 0x20, 'legacy reported main-callback registration point; do not assume it is a function entry'),
-        (0x49481A, 0x100, 'heartbeat conditional fast-response block, from4947FE branch; not a standalone function entry')]:
+        (0x49481A, 0x100, 'heartbeat conditional fast-response block, from4947FE branch; not a standalone function entry')] + supplemental_windows:
         offset, code = read(address, size)
         rows = []
         for i in md.disasm(code, address):
