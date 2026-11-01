@@ -117,6 +117,8 @@ metadata本機定位為`local-login-auth/expedition-journey-runtime-logs/`與
 REQ-0004追加GAME_RUNTIME_OBSERVATION紀錄UI推進與命名阻塞／修正。
 新REQ-0010以本次真實world缺漏觀察登記：教學map/actor/control初始化，不與
 REQ-0004的角色展示／命名UI混同；沿用RR-0008／scene-flow gap，不新增同義RR。
+後續修正分析／規劃見[教學world bootstrap](S00-20261101-TUTORIAL-WORLD-BOOTSTRAP.md)：
+目前map資源對應、actor scale欄位、同alias控制、候選序章位置及正常移動回覆；人工結果待回。
 原SPEC/RR/GAP/CLM/ADR/TEST不升格，完整教學任務與廣場仍未完成。
 
 使用者另要求「可測時直接以提問卡列出點到哪、詢問測後反應」。使用非同步提問，

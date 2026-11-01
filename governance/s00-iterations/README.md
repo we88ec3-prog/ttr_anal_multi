@@ -1,5 +1,7 @@
 # S00 Iterations 14–22 — 原稿保存與交接
 
+最新接續：[2026-11-01 劇情後錯誤地圖／玩家初始化](S00-20261101-TUTORIAL-WORLD-BOOTSTRAP.md)。REQ-0010 runtime需求、原始BIN局部重核、資源context及Server-only候選；人工第一移動點結果待回，正式狀態不升格。
+
 最新接續：[2026-11-01 本地舊Server核驗、來源分類與批次正常測試規劃](S00-20261101-LEGACY-SERVER-INTAKE-AUDIT.md)。原始KR17個byte片段核對通過，不代表完整函式／官方Server配對；Client修改限制以最新共用政策為準。
 
 這個目錄保存 2026-10-30 原先在舊 ChatGPT 對話生成的 **完整草案** 與工作矩陣。已從使用者的檔案庫恢復原始 Markdown / JSON，並非由簡短對話摘要重寫。
