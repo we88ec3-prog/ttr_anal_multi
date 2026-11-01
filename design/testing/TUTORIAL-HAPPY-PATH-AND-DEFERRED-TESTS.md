@@ -10,7 +10,7 @@
 | --- | --- | --- |
 | P01 建立新帳號 | 後台以指定 Client profile 建立一個有效的新帳號；該帳號尚無角色 | 已有合成 Host 整合證據；實際遊戲仍待驗 |
 | P02 登入成功 | 指定工作副本送出正常登入，Server 驗證，Client 接受正確回覆並顯示下一畫面 | 接收/C02 有合成證據；Client 回覆/UI 未完成 |
-| P03 選服／頻道 | 正常選擇一個有效項目並完成後續連線接續 | 待來源閉合與實作／實測 |
+| P03 選服／頻道 | 正常選擇一個有效項目並完成後續連線接續 | 已有主Lobby候選交接／SQLite正常路徑；實際選服、key2與Client仍待驗 |
 | P04 創角／選角 | 新帳號建立第一個有效角色、出現在可操作清單並正常選取 | Server domain 有正向前置；實際 Client 未完成 |
 | P05 進入新手教學 | 正確場景載入、角色可見、可以正常控制 | 待實作／實測 |
 | P06 教學操作／戰鬥 | 依教學正常移動、NPC 互動、攻擊／技能、擊敗指定目標 | 待實作／實測；不加壓測或非法操作 |
@@ -49,13 +49,32 @@
 | DT-22 | 部署、跨主機／多節點、外部曝光、正式安全／營運驗收 | 獨立部署與正式營運門檻 |
 | DT-23 | 後台查詢／分頁／稽核／備份等正常建帳號之外的管理操作 | 管理產品驗收，與目前遊玩主線分開 |
 
+## 主 Lobby 交接新增待測案例
+
+以下為2026-11-01[主Lobby交接開發](../../governance/s00-iterations/S00-20261101-PRIMARY-LOBBY-HANDOFF.md)新增的具體待測輸入；**全部待測試（目前暫緩），本輪未執行**，沿用上方DT分組，不新增正式TEST ID。
+
+| 對應類別 | 新增待測條件 |
+| --- | --- |
+| DT-03／05 | 修改alias／名稱／proof任一欄、跨帳號proof、空值／非ASCII；確認不建立或轉移Session |
+| DT-01／05 | grant到期、Session到期／撤銷、簽發後停權；確認舊grant不能登入 |
+| DT-08 | 同一proof第二次或跨連線重放、重複簽發；確認最多一次交接 |
+| DT-06／10 | 雙登入／renew／選角與redeem競爭、source完成與target到達的交錯、舊close對新lease的影響 |
+| DT-07 | grant前或交接中非預期斷線、idle timeout、取消／shutdown、retained grant到期清理；正常planned handoff已在正向路徑，不代表這些恢復測試已通過 |
+| DT-10／16 | 多次並行redeem、64筆容量、alias碰撞／耗盡、長期無後續呼叫的資源回收 |
+| DT-11 | 消耗grant前後provider失敗／DB鎖、transaction commit取消或錯誤，檢查無假成功／無空provider fallback |
+| DT-09／21 | 錯SHA、非57B、constant/NUL/padding違反、本機profile以外編碼、不同版本／未知marker |
+| DT-05／22 | key2 auxiliary與primary角色隔離；不可用第二次主Session Claim取代；其真正訊息仍需來源 |
+| DT-12／20／22 | process重啟／多process／多節點、持久化grant、PostgreSQL轉移實作與復原政策 |
+| DT-14 | reply／handoff／digest的log與例外遮蔽、owned buffer清除專項，不從ToString實作推稱已完成驗證 |
+| DT-15／22 | 64bit短效proof對外曝光前的限流／線路保護／猜測風險審查，不以loopback正向PASS核准正式部署 |
+
 ## 已有測試與歷史結果怎麼處理
 
 - 已做過的停權、壞封包、重送、舊 Session、併發、DB／日誌故障等結果保留，不改寫為「從未測過」。它們的**下一次測試**現在列為待測／暫緩。
 - Server `51c5c740a4c5e9bc9e72f520b673a458e0e7361a`（合併 `b9453e7`）的 135 unit＋108 protocol，以及當時 WEB 停權／Session 清理的合成 PASS，仍只屬該提交與當時範圍；不是本次新執行或實際 Client 驗收。
 - 原 Client、教學戰鬥／任務／廣場尚未做的負向／故障案例，保留為尚未取得證據，不能借用 domain／synthetic PASS 填補。
 - 測試程式、SFD 與既有保護不刪除；現階段 CI／本地命令改用明確正流程 allowlist。混合正負向的舊測試整個暫緩，不為了方便而夾帶執行。
-- Server 私庫另存 `docs/deferred-test-inventory.json`，以純來源盤點列出目前 **202 個 xUnit 方法定義：4 個明確正流程前置、198 個目前暫緩**。新增2項只核對正常登入回覆候選的13／7A布局，並非遊戲登入成功。此數字不展開 Theory 資料列，也不代表所有方法本輪已執行；舊的正負向混合或非目前 allowlist 的方法同樣先暫緩。生成器只讀取來源，不載入測試組件。
+- Server 私庫另存 `docs/deferred-test-inventory.json`，以純來源盤點列出目前 **204 個 xUnit 方法定義：6 個明確正流程前置、198 個目前暫緩**。其中2項核對13／7A候選布局，最新2項是正常57B candidate與SQLite主Lobby交接到創角選角；並非遊戲登入成功。此數字不展開 Theory 資料列，也不代表所有方法本輪已執行；舊的正負向混合或非目前 allowlist 的方法同樣先暫緩。生成器只讀取來源，不載入測試組件。
 - S00 的文件／索引一致性檢查與編譯屬交付維護，不是停權、故障或併發的 Server／遊玩行為測試，不因此擴大遊玩驗收聲稱。
 
 ## 執行紀錄要求
