@@ -765,7 +765,10 @@
       "acceptance_criteria": [
         "正常首戰可進行生怪、怪物行動／攻擊、玩家技能與連段、命中及勝負。",
         "來源支持、Server重建配置與未知規則分開，影片三隻怪不冒稱MEF原始COUNT。",
-        "不以動畫播放或合成通過宣稱完整遊戲戰鬥完成；保留現有招募／進度。"
+        "不以動畫播放或合成通過宣稱完整遊戲戰鬥完成；保留現有招募／進度。",
+        "連段接招窗口與動畫總長、輸入排隊／消費、傳送節流各自分開；不得以整段播完或發包門檻冒充正常連擊規則。",
+        "受擊展示、可打斷／可操作、觸發冷卻與技能CD分開；正常人測需避免連續重觸發造成過長硬直，移動受擊另核對。",
+        "怪物積極性按正常觀察校正，AI／MEF格式／接收與Server自製策略明列來源，不能假稱目前已由MEF控制。"
       ],
       "discoveries": [
         {
@@ -797,6 +800,18 @@
           "limitations": "Existing test account; not a fresh-account single-run or original Client acceptance. DB has win/roles only, no proven terminal quest/reward settlement.",
           "reproduction": "Normal tutorial first battle, receive enemy attacks and repeatedly press Z.",
           "observed": "User reports no hurt animation when attacked and no combo progression when tapping Z. X and all enemy behavior were not separately confirmed."
+        },
+        {
+          "channel": "GAME_RUNTIME_OBSERVATION",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "tested_executable_sha256": "6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c",
+          "tested_build_kind": "MODIFIED_WORKING_COPY_NOT_ORIGINAL_CLIENT",
+          "observation_ref": "governance/s00-iterations/S00-20261101-COMBAT-EXIT-V8-DEPLOYMENT.md",
+          "authorization_ref": "governance/s00-iterations/S00-20261101-COMBAT-EXIT-V8-DEPLOYMENT.md",
+          "environment": "User-operated working copy against loopback v8 source70a296b0ed2b1bce997b9d42b6cab4b596ae6f6b; no Client modification/attachment.",
+          "reproduction": "Normal first tutorial battle: stand or move while receiving attacks, tap Z and observe attack/hurt timing.",
+          "observed": "User now sees hurt motion, is uncertain about moving hurt, reports long reaction, slow combos waiting for whole clips, remembers a queue/consume mechanism, and suspects enemies attack too aggressively.",
+          "limitations": "Human working-copy feedback, not official timing/AI. Loading/full-square result not confirmed for v8; current Server AI is not MEF driven."
         }
       ],
       "category": "CLIENT_COMPATIBILITY",
@@ -906,6 +921,47 @@
         }
       ],
       "category": "CLIENT_COMPATIBILITY",
+      "priority": "P1",
+      "status": "CANDIDATE",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "rr_ids": [],
+      "gap_ids": [
+        "GAP-FLOW-0001",
+        "GAP-SCENE-0001"
+      ],
+      "spec_ids": [
+        "SPEC-FLOW-0001",
+        "SPEC-SCENE-0001",
+        "SPEC-CHAR-0001"
+      ],
+      "adr_ids": [
+        "ADR-0006",
+        "ADR-0007"
+      ],
+      "feedback_ids": [],
+      "claim_ids": []
+    },
+    {
+      "id": "REQ-0019",
+      "title": "馮德斯村完整主線的分析與Server實作準備",
+      "need": "使用者要求明天下班後可接續開發到完成馮德斯村主線，先派其他對話準備未用到的任務／副本／村落資料；S00親自處理AI／MEF及連段。",
+      "acceptance_criteria": [
+        "候選Town1/type2十筆鏈須用Chapter／SceneList／事件核對，包含Quest15進村橋接及離村橋段，不把到村當村主線完成。",
+        "逐任務交付typed IDs、觸發／回覆與consumer、場景／關卡／結果／返回、合法達成／獎勵保存與未知；可供獨立Server直接實作。",
+        "三extra交付經T01逐主張核對再由S00接收；原生已證、Server選擇、工作副本人測與未完成項分開；對話達長度上限即停派。",
+        "現有教學／戰鬥缺口保持優先，正常流程之外測試仍暫緩，不能以資料包或合成通過宣稱完成主線。"
+      ],
+      "discoveries": [
+        {
+          "channel": "PLAYER_ADMIN_REQUEST",
+          "requester_role": "PLAYER",
+          "request_text": "明天目標完成馮德斯村主線任務，請規劃明天可以請別人分析的資料，盡量讓明天下班後能讓你直接開發Server到完成馮德斯村主線",
+          "request_record_ref": "research/handoffs/s00-phindos-mainline-20261102/README.md",
+          "reference_materials": []
+        }
+      ],
+      "category": "SERVER_DESIGN",
       "priority": "P1",
       "status": "CANDIDATE",
       "client_version": "kr",
