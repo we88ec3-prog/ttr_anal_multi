@@ -15,6 +15,7 @@ def main():
     parser.add_argument("binary", type=pathlib.Path)
     parser.add_argument("--capstone-dir", type=pathlib.Path)
     parser.add_argument("--output", type=pathlib.Path)
+    parser.add_argument("--scope", choices=("choice", "handoff"), default="choice")
     args = parser.parse_args()
     if args.capstone_dir:
         sys.path.insert(0, str(args.capstone_dir.resolve()))
@@ -51,6 +52,10 @@ def main():
 
     ranges = [(0x4C3080, 0x4C316B), (0x507510, 0x507601),
               (0x507610, 0x507744), (0x507B10, 0x507BA0)]
+    if args.scope == "handoff":
+        # Success-path span ending after its first RET; failure branches beyond
+        # this span are deliberately not claimed as reviewed.
+        ranges = [(0x4957C0, 0x49597E)]
     decoder = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_32)
     instructions = {}
     spans = []
@@ -76,6 +81,19 @@ def main():
         0x507651: "897d90", 0x507654: "894d94", 0x507657: "895598",
         0x50771E: "8d4590", 0x507721: "e8ea030000",
     }
+    if args.scope == "handoff":
+        anchors = {
+            0x4957E0: "6a02", 0x4957E2: "6a00", 0x4957E4: "68e0200000",
+            0x4957F2: "6a02", 0x4957F4: "6a02", 0x4957FD: "68de200000",
+            0x49583E: "b97e000000", 0x495853: "e878083700",
+            0x495884: "66894dc0", 0x4958B8: "8b90e0670000", 0x4958BE: "8955c2",
+            0x4958C8: "05e4670000", 0x4958CE: "8d45c6", 0x4958D4: "e825e73f00",
+            0x4958E0: "05fa670000", 0x4958E6: "8d4de5",
+            0x4958F1: "c645da01", 0x4958FA: "8a9098680000", 0x495900: "8855db",
+            0x495908: "0599680000", 0x49590E: "8d45dc", 0x495914: "e840e23f00",
+            0x495921: "8b88a0680000", 0x495927: "894de1", 0x495935: "6a39",
+            0x495937: "8d45c0", 0x49593B: "6a00", 0x49593D: "ffd2",
+        }
     for va, expected in anchors.items():
         if va not in instructions or instructions[va].bytes.hex() != expected:
             raise ValueError(f"Instruction anchor mismatch: {va:x}")
@@ -88,6 +106,11 @@ def main():
                               "Linear decode is not complete CFG or semantic verification",
                               "No original Server packet, pairing, runtime, UI or T01 FULL-PASS verdict"],
               "ranges": spans}
+    if args.scope == "handoff":
+        result["schema"] = "s00-bounded-primary-lobby-handoff-instructions-v1"
+        result["limitations"] = ["Capstone bytes plus existing REA/bulk navigation, not a new REA dossier",
+            "Only the selected success-path span; not complete function CFG or semantic verification",
+            "Queue order is not observed TCP/OS completion; no original Server pairing or Client runtime verdict"]
     if args.output:
         args.output.write_bytes((json.dumps(result, indent=2) + "\n").encode("utf-8"))
     print(json.dumps({"target_sha256": digest, "checks": result["checks"]}))

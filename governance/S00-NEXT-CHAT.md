@@ -1,5 +1,7 @@
 # S00 新對話接續 — Server 規格、REQ 需求來源與角色畫面階段
 
+**2026-11-01 最新工程接續：** 使用者短時間不能操作電腦，要求先開發；本輪不啟動遊戲。[主Lobby欄位回傳與Session交接](s00-iterations/S00-20261101-PRIMARY-LOBBY-HANDOFF.md) 保存57B key0 builder成功片段、28個instruction anchors及Server-owned短效grant／SQLite atomic transfer方案。私庫正向新帳號→handoff→空清單→創角選角通過；合計6正向、198其他方法暫緩，新增交接負例已併入待測清單。未接Host、未完成Client/UI/教學/廣場，不升格任何正式原生狀態。
+
 **2026-11-01 正流程接續補充：** [登入回覆候選與 group/channel copy 補查](s00-iterations/S00-20261101-LOGIN-CHOICE-COPY-AND-REPLY-CANDIDATE.md)。補得 group ordinal return／child+8,+9 複製鏈（17 instruction anchor、非 T01 FULL-PASS）；Server 新增未接 Host 的13／7A candidate serializer。實際 Client 尚等待 Windows UAC：指定 EXE manifest 要求 requireAdministrator，不能將工具啟動逾時當作 Server/遊戲 bug。UAC 完成後從唯一新帳號正常登入觀察接續，不執行暫緩負例。
 
 **2026-11-01 最新使用者優先序：** 現在只安排新帳號到新手完成進廣場的正流程測試；停權等非正流程全部先記錄為待測試，之後再測。[目前正流程與待測試清單](../design/testing/TUTORIAL-HAPPY-PATH-AND-DEFERRED-TESTS.md) 優先於本交接舊段落的完整 Server 測試安排。歷史結果保留，不自動重跑；文件／索引檢查不代表遊玩相容性。
