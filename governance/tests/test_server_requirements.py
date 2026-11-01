@@ -24,6 +24,7 @@ PATHS = [
     "governance/s00-iterations/S00-20261101-EXPEDITION-NAME-TUTORIAL-ENTRY.md",
     "governance/s00-iterations/S00-20261101-TUTORIAL-MOVEMENT-CAMERA-SWITCH.md",
     "governance/s00-iterations/S00-20261101-TUTORIAL-NPC-AND-FORMATION.md",
+    "governance/s00-iterations/S00-20261101-TUTORIAL-FIRST-BATTLE.md",
 ]
 
 
@@ -51,10 +52,10 @@ class ServerRequirementTests(unittest.TestCase):
     def test_canonical_code_findings_not_approved(self):
         r = evaluate(self.root)
         self.assertEqual(r["errors"], [])
-        self.assertEqual(r["summary"]["requirements"], 13)
+        self.assertEqual(r["summary"]["requirements"], 14)
         self.assertEqual(r["summary"]["approved"], 0)
         self.assertEqual(r["summary"]["discovery_counts"],
-                         {"CODE_ANALYSIS": 5, "GAME_RUNTIME_OBSERVATION": 11, "PLAYER_ADMIN_REQUEST": 5})
+                         {"CODE_ANALYSIS": 5, "GAME_RUNTIME_OBSERVATION": 13, "PLAYER_ADMIN_REQUEST": 5})
 
 
     def test_admin_web_v1_three_requests_trace_to_actual_user_request(self):
@@ -175,7 +176,7 @@ class ServerRequirementTests(unittest.TestCase):
         self.edit(edit)
         r = evaluate(self.root)
         self.assertEqual(r["errors"], [])
-        self.assertEqual(r["summary"]["requirements"], 13)
+        self.assertEqual(r["summary"]["requirements"], 14)
         self.assertEqual(r["summary"]["discovery_counts"]["PLAYER_ADMIN_REQUEST"], 7)
 
     def test_historical_protocol_and_ops_safety_are_user_request_material(self):

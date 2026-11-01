@@ -13,8 +13,9 @@ ARCHIVE_SHA = '07d8f3a20aa4a396312c60927431a53a89dce6370ef8bb8192bd8d8eca1dd6b8'
 MEMBERS = {'BoundMap/town000.bnd': 'ee69d4ae60d468862761675f11f41c185f5810c7d1150e5876c4d9dd756ea776',
            'BoundMap/scenario_town000.bnd': '7c98d3d5c5512cfe20f2946abc27c1c94424474ee6450fa3593693a4c5139bfc'}
 
-def members(raw):
-    assert raw[:4] == b'STPD' and hashlib.sha256(raw).hexdigest() == ARCHIVE_SHA
+def members(raw, expected_sha=ARCHIVE_SHA, selected_members=None):
+    if selected_members is None: selected_members = MEMBERS
+    assert raw[:4] == b'STPD' and hashlib.sha256(raw).hexdigest() == expected_sha
     data = bytes(v ^ 255 for v in raw)
     index = struct.unpack_from('<I', data, 4)[0]
     assert raw[index:index+4] == b'STPI'
@@ -45,7 +46,7 @@ def members(raw):
         start = 16+first*1024
         assert start+size <= len(data)
         blocks[identity] = data[start:start+size]
-    return {name: blocks[files[name]] for name in MEMBERS}
+    return {name: blocks[files[name]] for name in selected_members}
 
 def inspect(name, data):
     assert hashlib.sha256(data).hexdigest() == MEMBERS[name]
@@ -79,11 +80,14 @@ def main():
     parser.add_argument('--archive', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--extract-bnd', type=Path)
+    parser.add_argument('--extract-battle-bnd', type=Path)
     args = parser.parse_args()
     assert args.output.suffix == '.json' and args.output.resolve() != args.archive.resolve()
-    if args.extract_bnd:
-        assert args.extract_bnd.suffix == '.bnd' and not args.extract_bnd.exists()
-        assert args.extract_bnd.resolve() not in (args.archive.resolve(), args.output.resolve())
+    destinations = [p for p in (args.extract_bnd,args.extract_battle_bnd) if p]
+    assert len({p.resolve() for p in destinations}) == len(destinations)
+    for path in destinations:
+        assert path.suffix == '.bnd' and not path.exists()
+        assert path.resolve() not in (args.archive.resolve(), args.output.resolve())
     extracted = members(args.archive.read_bytes())
     report = dict(schema='s00-static-tutorial-bounds-v1', archive_sha256=ARCHIVE_SHA,
                   authority='READ_ONLY_RESOURCE_INTERPRETATION', members=[inspect(n,d) for n,d in extracted.items()],
@@ -93,6 +97,9 @@ def main():
     if args.extract_bnd:
         args.extract_bnd.parent.mkdir(parents=True, exist_ok=True)
         with args.extract_bnd.open('xb') as f: f.write(extracted['BoundMap/town000.bnd'])
+    if args.extract_battle_bnd:
+        args.extract_battle_bnd.parent.mkdir(parents=True, exist_ok=True)
+        with args.extract_battle_bnd.open('xb') as f: f.write(extracted['BoundMap/scenario_town000.bnd'])
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_bytes((json.dumps(report, ensure_ascii=False, indent=2)+'\n').encode('utf8'))
     print(json.dumps({'members': len(report['members']), 'archive_sha256': ARCHIVE_SHA, 'result': 'PASS'}))

@@ -1,5 +1,15 @@
 # 新帳號完成新手教學進入廣場：正流程與待測試清單
 
+最新：[首戰載入與B0誤判修正](../../governance/s00-iterations/S00-20261101-TUTORIAL-FIRST-BATTLE.md)。
+13 positive cases／5旅程rows／9方法；總207方法、198暫緩。使用者v1設定完成仍卡編隊頁；
+v2不等B0直接初始化，實際進場結果待回。AI反擊、成本、波次、Quest14/16、獎勵及廣場
+仍是當前正常流程開發，沒有因先做單敵prototype而取消。
+新增待測：戰鬥／裝備及結算重送、active-run重登、過期lease／死亡與勝利競態、
+kit／win DB失敗與partial send、migration部分狀態／未知版本、clock及combo邊界；現在不執行。
+
+v2人工已確認換圖／敵人出現，但編隊頁仍開著、缺原版換場畫面（直接停頓進場）。
+先修完整scene／UI／loading及返回生命周期，再請使用者繼續戰鬥；不當作已可戰鬥。
+
 最新：[NPC保留／首戰編隊](../../governance/s00-iterations/S00-20261101-TUTORIAL-NPC-AND-FORMATION.md)。
 **使用者實測切角後伊莉西亞仍在，編隊頁可看到她**。目前12 positive cases／9方法，
 總207方法、198暫緩。停在編隊頁，未按入戰。預選伊莉西亞體驗由使用者確認目前正確，
