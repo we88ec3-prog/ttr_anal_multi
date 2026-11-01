@@ -57,3 +57,33 @@ pc126–136 再顯示 PostUIMessage_EmployChar(2) 並等待玩家確認；之後
 
 角色重送、已取得角色、錯場景／順序、斷線恢復、過期 lease、並行交易、部分傳送與 DB 失敗
 記入待測試，現在不執行。正常後續任務與完整戰鬥仍屬當前目標。
+
+## v4 本機啟用紀錄
+
+2026-11-01 11:17:21 UTC，以已授權的指定 Host 換版；同 DB、Admin 及 Client 保留，
+沒有 migration。Network DLL SHA256
+`6e3a7d4b6cb60f5f53212043ff455b39dabe5a343d9abcf5a744a8da204e9d21`；
+Persistence DLL SHA256
+`379abb75530d28279c9930f14b1c2e49a91b8d52aa3766b23732cb86ff3cc536`。
+私庫 commit `3680210dd7a1ea415b712a615ebac57efa45b7a5` 的 CI run41301192148 success；
+公開分析前一 commit `29e31970c87ebb03ecf4ac6b6af17963fa2873cd` CI run41301196968 success。
+上述 CI 不證明本版招募人測成功；結果卡已送出，尚待回報。
+
+## 預先核對後續，避免重用舊錯誤
+
+已找到本機 T07 舊交付 `kr-temp-roy/T07/completion-closure/` 的
+TUTORIAL-PLAZA-CLOSURE-INTERFACE.md、CORRECTIONS.md、FOLLOWUP-UI-AND-BOUNDS.md，
+以及 post-t01/V9-PROVISIONAL-REENTRY-AND-UI-GAPS.md。這些是待整合的有限來源，
+本輪只讀取／交叉對照，未把全部舊主張當作新的原生驗收或正式 spec。
+
+- 首戰後依序為招募4、蘋果家、取得／確認角色2、1000/14、提示8。提示8只更新教學 UI，
+  不足以當完整教學退出 ACK；任務15屬進廣場以後，不能提早完成。
+- 舊 helper 誤稱 QuestMgr 5030C0 是004C；T07更正為0064。TUTO場景的短004C/14
+  與 QuestMgr 結算不能混用；接續時須逐段重核，不照抄舊helper。
+- 廣場 init／最後map reset會清除綁定；需在最後reset後重建並綁定。
+  舊只等B0策略缺少依據，不能重犯；43也只作特定entry階段進度，不稱通用ready。
+- Map511/Town5/900,900仍是候選配對與位置，靜態可走不等於官方spawn或實際可操作。
+- 舊_LoadDisplay背景表／parser是後續調查線索，不表示轉場下載MEF；不靠固定等待假造完成。
+
+下一段開發需結合實際招募與最後提示事件，補教學14/16、必要資料與場景交握，
+再驗收同登入進廣場後的角色、NPC、移動和停止。沒有以首戰／招募代替完整目標。
