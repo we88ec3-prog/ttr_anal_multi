@@ -82,7 +82,7 @@ Quest117 `SceneList(117,1)` 對到 `Phindous_LittleTrouble`；保存 script 字�
 ## 5. 證據索引（引用檔的 Git blob SHA）
 
 - `shared/targets.json` — `88c3ca2e9dac95e78b66653365d7c1ac5b01a255`（目標版本宣告；非本機原檔 SHA 計算）。
-- `kr-temp-roy/T06/evidence/_TownList.xml` — `a check of exact blob required`（原 Town NPC roster；本批引用已 fetch 的來源）。
+- `kr-temp-roy/T06/evidence/_TownList.xml` — `d6c0d9621da3782d889cea870bd918eb57809c2a`（原 Town NPC roster；本批引用已 fetch 的來源）。
 - `kr-temp-roy/T06/evidence/town12-resource-bytes.json` — `1f8bca927dda9d46871950b39eb7416a4b382cc4`。
 - `kr-temp-roy/T06/evidence/town-scene-quest-join.json` — `9ed2b4e6188ca566cc2527659b913d3657bb1b71`。
 - `kr-temp-roy/T06/evidence/town-story-resource-association-review.json` — `00fb3e688ac3f23c1a310d5c7bc21739e6aa8c67`。
@@ -108,3 +108,9 @@ Quest117 `SceneList(117,1)` 對到 `Phindous_LittleTrouble`；保存 script 字�
 ### 本批交付判定
 
 可用於 Server 開發排 schema / typed-ID / resource pins / roster / 分段依賴，但**正常 Town scene 安裝、出生、NPC 互動 producer 與確切封包順序未閉合**；T01 仍需獨立驗證，S00 再決定採用。相容設計假設不得回填原生欄位。
+
+## 7. 批次01勘誤／NPC category 與 BND source boundary（增量查核）
+
+- `_TownList.xml` 的精確 Git blob SHA 已核：`d6c0d9621da3782d889cea870bd918eb57809c2a`。
+- 舊教學 NPC category3「一定送 C2S001C」的推論**已遭既有後續修正**：`governance/s00-iterations/S00-20261101-TUTORIAL-EXIT-GATES.md`（Git blob `54f53b06be4c6c0e72573fefd8c2f338081d09d1`）指出 `544070` category3 走本機 `F4388/F43D9`，而 `544020` 的 `001C` 位於**另一支路**。這是教程相關的前稿反證，**尚未核查 Town1 NPC 的新 producer**；應避免以 category3 自動送 001C、亦不要臆造 001D 回覆來解除鎖定。
+- 新選讀的已保存 KR bulk 函式 `0x830040.c`、`0x82f660.c`、`0x82f850.c`（各 Git blob `70a25b24145d02aff78a9cff5c4e78d3bf9f9569`、`e64f47137dce52e535b7f6a88ceb984c71e50c9b`、`c071ebc3d9992f7c03f77a161d5ceb4adf1e351c`）顯示 `header+0x20==3` 走 0x534 字節／0x28 stride 的 `82F850`，**其餘值**走 0x234 字節／0x10 stride 的 `82F660`。這是未逐指令重核的 bulk-derived 候選，詳批次02版本差異。Town1 的 header0 不等於確認 v2 可沿用 v0 的 Server 解碼器。
