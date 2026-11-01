@@ -18,3 +18,11 @@ S00的程式準備不能代替Web分析需要交付的Client因果鏈，也不�
 限定發布模式的Server現在準備了15/1 receipt後停止／重新bind既有actor及參數的候選，
 只恢復控制，不授Quest15完成或進村；尚未部署／真NPC人測。
 來源與細節見S00-20261102-QUEST15-INTRO-CONTROL.md及QUEST15-INTRO-CATALOG.json。
+
+## Scene-start receiver addition
+
+S00-20261102-SCENE-START-CONSUMER.md verifies registration and receiver for
+S2C0x47: signed WORD at+2/+4 reaches561760. Source-shaped six-byte encoder exists
+privately but is dormant. W2 should use this receiver evidence rather than guess
+0x36/0x40 or a generic NPC ACK. Quest acceptance and authorized scheduling after
+15/1 remain unresolved; C2S3F literal1 alone is insufficient. No live change.

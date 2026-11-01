@@ -36,3 +36,6 @@ Server實作程式只保存在使用者指定的私有ttr_server_roy，不複製
 - [任務前置明示發布與CSquare控制器核對](S00-20261102-TUTORIAL-PREREQUISITES-PUBLICATION.md)：26個正流程測試，模式預設關閉／未部署，普通Town1入口仍待證。
 
 - [Quest15開場NPC／對話及控制候選](S00-20261102-QUEST15-INTRO-CONTROL.md)：原始目錄欄位分域、六筆文字存在性、限定控制恢復，未宣稱NPC／進村人測成功。
+
+- [隔離前置測試準備](S00-20261102-ISOLATED-PREREQUISITES-PREP.md)：新空白資料庫與獨立發行檔，尚未換版。
+- [場景啟動接收函式](S00-20261102-SCENE-START-CONSUMER.md)：確認0x47及兩個有號WORD，排程與任務授權仍待接通。
