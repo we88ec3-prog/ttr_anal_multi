@@ -27,3 +27,5 @@ Server實作程式只保存在使用者指定的私有ttr_server_roy，不複製
 本輪新查的Quest15資源資料已補進上述進村規劃與可重跑工具；沒有只停留在對話摘要。
 
 - [進村四段事件與碰撞資格核對](S00-20261102-PHINDOS-SEQUENCES-AND-BOUNDS.md)：演出與普通村落初始化分開，實際Server讀取器核對，不宣稱進村成功。
+
+- [NPC本地劇情與通知方向](S00-20261102-SCENE-NOTIFICATION-ORDER.md)：1C前已有本地scene呼叫，3F literal1不作任務成功證明；採用typed欄位解析。
