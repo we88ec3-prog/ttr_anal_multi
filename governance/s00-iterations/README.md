@@ -198,3 +198,5 @@ Iterations 16–17 的正式流程編號合計 **E00–E26（27 個 gate）與 4
 - [實際啟動、兩層權限與使用者授權紀錄](S00-20261101-STANDARD-USER-CLIENT-LAUNCH.md)：一般權限 launcher 與兩個明確獲准的 app 項目已讓遊戲進入登入頁，不需 UAC；REQ-0001 追加 runtime startup discovery，正常登入另觀察118B syntax拒絕，修正後同一帳號實測C02 AUTHACCEPTED；尚無S2C、M3／原版相容性。
 
 - 2026-11-01：[登入回覆、選服與主線交接 runtime](S00-20261101-LOGIN-REPLY-RUNTIME.md)，工作副本 M3 與人工正常 primary 身分交接已觀察，角色清單／創角與教學仍待完成。
+
+- 2026-11-01：[primary後的空角色清單實驗](S00-20261101-EMPTY-ROSTER-EXPERIMENT.md)，8正向工程前置，待真Client roster/UI驗證。

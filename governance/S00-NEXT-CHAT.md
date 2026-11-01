@@ -1,5 +1,7 @@
 # S00 新對話接續 — Server 規格、REQ 需求來源與角色畫面階段
 
+**2026-11-01 空清單實作接續：** [零角色清單實驗](s00-iterations/S00-20261101-EMPTY-ROSTER-EXPERIMENT.md)在primary交接後查同一SQLite exact lease／角色資料，僅零角色時送69B候選，額外明確opt-in；標頭值是Server實驗選擇，不是官方值。8正向前置、198暫緩；真Client roster/UI未驗。前置PR20／93待使用者明確合併授權，未合併main；後續工作分支有依賴，不得冒充正式規範。
+
 **2026-11-01 最新 runtime：** [登入回覆／選服與交接](s00-iterations/S00-20261101-LOGIN-REPLY-RUNTIME.md)。指定工作副本已實測 M3 選服／分流 UI；使用者人工測試於06:33:01 UTC得到 PRIMARYHANDOFFACCEPTED，primary 身分交接已通過；角色清單回覆尚未實作。使用者已停止 Computer Use 並接手 UI，Agent 僅監看日誌及開發，測試期間勿重啟 Host。REQ-0001／0002 已追加 GAME_RUNTIME_OBSERVATION；7正向工程前置、198暫緩，非教學／廣場成功。下方 auth-only／M3未實作為歷史快照。
 
 **2026-11-01 啟動障礙已排除：** [指定工作副本一般權限啟動的實際觀察](s00-iterations/S00-20261101-STANDARD-USER-CLIENT-LAUNCH.md)。使用者明確同意只將兩個指定 EXE 加入 Computer Use Always allow；已備份設定並完成。私庫 asInvoker launcher 在一般權限成功啟動工作副本，Computer Use 已確認登入畫面，沒有 UAC。REQ-0001 追加啟動觀察；另獲明確測試憑證授權後，真遊戲送出118B但 syntax 被拒、未到 C02；修正 NUL 邊界預檢後同一帳號於05:57:28 UTC實測 AUTHACCEPTED，工作副本M2已確認；目前 REPLYUNAVAILABLE、M3未實作，不能宣稱已進選服或原始KR相容。下方等待 UAC 的段落為歷史快照，不能再視為目前啟動阻礙。
