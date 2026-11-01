@@ -51,3 +51,9 @@ SOURCE ONLY：v9仍使用先前已部署程式與原DB，沒有對實測DB建立
 [Quest snapshot／Town context](S00-20261101-QUEST-SNAPSHOT-AND-TOWN-CONTEXT.md)。
 本輪查T16現有README確認其Server內部規則與Client封包研究分工，並保留T16-117 mode2提交
 舊誤判的勘誤限制；沒有因名稱相似就補猜完成opcode。新元件沒有增加Client封包或native主張。
+
+## 後續開關補充
+
+為讓輸入額度修復可獨立部署，保存改為單獨明確opt-in環境模式，預設OFF。
+v10包含程式但未啟用保存、未建立元件；Host僅在明確啟用時要求Verify，
+原DB正流程另有合成覆蓋。詳INPUT-CREDIT-V10-DEPLOYMENT.md；不以此變更宣稱保存已部署。
