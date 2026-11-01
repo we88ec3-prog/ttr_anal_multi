@@ -58,6 +58,6 @@ python -B governance/verify_kr_login_choice_copy.py ORIGINAL_KR_BIN --capstone-d
 
 指定工作副本 `Tartaros.ip-zh-tw-only-v2.exe` SHA256 `6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c` 未修改。Computer Use 直接 `launch_app` 逾時；同工具能讀取 Explorer，raise 後能正常定位並雙擊指定 EXE。唯讀查到 EXE manifest 的 `requestedExecutionLevel level="requireAdministrator"`，Windows 已啟動 `consent.exe`，尚無遊戲程序／視窗。**真正阻塞是 Windows UAC 等待確認，不是帳號或 Server 連線失敗。**
 
-使用者已授權開遊戲與要求自行排查；工具禁止代操作 Windows 身分確認，故已說明並請使用者只完成 UAC。沒有改 manifest、UAC／AppCompat 設定、注入或附加遊戲，沒有把 consent PID 當成遊戲執行證據。
+使用者已授權開遊戲與要求自行排查；工具禁止代操作 Windows 身分確認，故已說明並請使用者只完成 UAC。最後複查：該次 consent 程序已消失，仍未出現指定遊戲程序／視窗；是關閉、逾時或其他結果 **UNKNOWN**，不能聲稱仍有存活的待確認啟動，也不能宣稱使用者已同意。沒有改 manifest、UAC／AppCompat 設定、注入或附加遊戲，沒有把 consent PID 當成遊戲執行證據。
 
 下一步：Windows 確認後自行取得遊戲視窗，觀察本次唯一新帳號正常 E8/0F→現有 Host auth；按既有 REQ-0001 追加同會話去敏 GAME_RUNTIME_OBSERVATION。確認實際 scene／初包後，再審核候選回覆欄位來源、Server-owned identity／跨線交換及 TX framing，接到隔離工作副本 profile 驗證真正下一畫面。仍缺時不得把 candidate builder 宣稱完整相容 Server；保持廣場最終目標，不停在合成 PASS。
