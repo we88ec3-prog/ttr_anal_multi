@@ -7,10 +7,11 @@ from inspect_tutorial_bounds_resource import members
 FIELD_SHA='18a375bd478133df276df6e97833e03140900454d5f04298ea508d0b67fcb73a'
 PATHS={'Field/Cluster/CLUST_scenario_town000_01.xml':'f2cbdae86822dfa25936087700ae3c44f3f68703d8d0fc6a5a35a8cda387c159',
        'Field/MapFlow/CHART_scenario_town000_01.xml':'c7ac1fe050335455fb7b4ca9707adc8b0553226c53aaab94d3609eec47b54eb6'}
-def decode(data):
+def decode(data, *, max_expanded=1_000_000):
+    assert 0 < max_expanded <= 8_000_000
     if data[:2]!=b'EX': return data
     mode=data[2]; compressed,expanded,offset=struct.unpack_from('<III',data,4)
-    assert mode in (0,1) and offset>=16 and offset+compressed<=len(data) and expanded<=1_000_000
+    assert mode in (0,1) and offset>=16 and offset+compressed<=len(data) and expanded<=max_expanded
     payload=data[offset:offset+compressed]
     if mode:
         key=[0x30,0xe7]
