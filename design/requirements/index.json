@@ -170,6 +170,18 @@
           ],
           "observation": "Client 全域 command 0x0002 在有效狀態下消費 65+53*N 角色清單，將部分記錄欄位寫入 UI 資料；Server 需提供符合已證欄位與後續初始化所需的資料。",
           "limitations": "完整 65B prefix 語義、原版合法角色資料/回覆時序及 GUI 刷新門檻尚未閉合；RR-0002 BLOCKED。"
+        },
+        {
+          "channel": "GAME_RUNTIME_OBSERVATION",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "tested_executable_sha256": "6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c",
+          "tested_build_kind": "MODIFIED_WORKING_COPY_NOT_ORIGINAL_CLIENT",
+          "observation_ref": "governance/s00-iterations/S00-20261101-EMPTY-ROSTER-EXPERIMENT.md",
+          "authorization_ref": "governance/s00-iterations/S00-20261101-EMPTY-ROSTER-EXPERIMENT.md",
+          "environment": "Windows user-driven designated working copy; loopback 8415/8416/8414; isolated SQLite; local Host build corresponding to private commit 924be30a6d5d25cf97d4d72c7a9ffec24244cef0; explicit empty-roster candidate mode.",
+          "observed": "2026-11-01 06:45:25 UTC normal login authenticated and sent163 bytes. At06:45:27 primary accepted the handoff, sent69 bytes after the authorized empty-roster query, received40 bytes and parsed C2S24, then logged PRIMARYAPPLICATIONUNAVAILABLE and closed. Auxiliary received16 bytes. The user explicitly reported still on server selection.",
+          "reproduction": "Fresh manual login with the authorized local fixture, select server/channel within two minutes and press Connect; compare separate login/primary/auxiliary metadata with the user-reported screen. Do not repeat-click or infer UI success from C2S24.",
+          "limitations": "Working-copy runtime only; no packet payloads retained. Unknown post-roster command was not logged, so it cannot be identified as1F/25 solely from this run. Existing saved consumer reveals omitted1F/25 normal followups; their acceptance is now implemented but actual UI outcome needs new observation. Candidate header zeros/alias/name are explicit Server experiment choices. Formal statuses unchanged; creation/tutorial/square incomplete."
         }
       ],
       "rr_ids": [

@@ -68,3 +68,33 @@ REQ-0003既有CODE_ANALYSIS與原runtime前提沿用，沒有在尚未實測時�
 GAME_RUNTIME_OBSERVATION。RR-0002／0010與GAP／SPEC／CLM／ADR／正式TEST狀態不變，
 native admission仍OFF，規範pin仍`dd69ec9de353a695d25c6db8e362ff471ea0c137`。
 接下來仍需角色UI、Expedition命名、真正可操作角色建立、教學與廣場，沒有Client修補。
+
+## 本輪使用者人工實測與修正
+
+使用者依已授權正流程重新登入、選服並回報「已按連接」，接著明確回報
+「仍停在選服畫面」。未使用Computer Use操作或觀看畫面；畫面結果來自使用者。
+實測EXE SHA256仍為`6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c`。
+Server為私庫`924be30a6d5d25cf97d4d72c7a9ffec24244cef0`所對應本機build，
+獨立Host於06:43:45 UTC啟動，相同隔離SQLite，loopback埠不變。
+
+| UTC | 已觀察metadata／結果 |
+| --- | --- |
+| 06:44:57 | RX118、AUTHREJECTED；沒有足夠資訊判定原因，不故意重現錯誤帳密。 |
+| 06:45:25 | 下一次正常登入AUTHACCEPTED、TXCOMPLETED163；短密碼調整後的正常登入已通過。公開庫不保存憑證。 |
+| 06:45:27.8447703 | primary RX63後PRIMARYHANDOFFACCEPTED。 |
+| 06:45:27.8536116 | TXCOMPLETED69、PRIMARYROSTERSENT；同一DB的授權零角色查詢後，候選已送出。 |
+| 06:45:27.8630232 | primary RX40後PRIMARYROSTERCOMPLETIONRECEIVED，即已解析2B C2S24；證明已進入相符的後續請求路徑，不能當UI成功。 |
+| 隨後 | PRIMARYAPPLICATIONUNAVAILABLE、CLOSE；auxiliary另RX16。使用者回報仍在選服。原日誌未保存opcode或payload，不能宣稱那筆Unavailable必是某個特定命令。 |
+
+本機metadata在`runtime-observations/2026-11-01/local-login-auth/empty-roster-runtime-logs/`，
+primary/auxiliary各在`reply-experiment/`子目錄。公開摘要是有界實測紀錄，原始payload未保留。
+
+回讀完整既存`0x4b7f00.c`尾段後，發現原實作只接24/15/A0，遺漏同一保存
+consumer明列的2B C2S1F及25。它們位於24後、15前；對官方語意與回覆仍UNKNOWN。
+私庫修正為正常接收24、1F、25、15、A0並計數，不猜任何S2C結果。
+這是實際阻塞後可修正的來源覆蓋缺口；尚不能保證足以讓畫面切換。
+正向測試按普通順序逐一送出並等待gateway計數，非故意黏包測試；8項通過，
+Release Host重新編譯成功。修正版真遊戲結果仍待下一次正常操作。
+
+此觀察追加既有REQ-0003的GAME_RUNTIME_OBSERVATION；不另造需求，不升格UI、
+RR/GAP/SPEC/CLM/ADR/正式TEST，也沒有教學或廣場成功。
