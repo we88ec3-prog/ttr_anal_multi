@@ -47,3 +47,13 @@ Server重建排程採一個跨read保留的100ms deadline；到期時優先處�
 多連線公平性、持續高流量、取消／半包、過期lease、partial-send、併發與故障等記待測，
 現在不執行。此案使用單一有效Session的正常輸入，不是負載／壓力測試。
 normative pin、formal admission及原始證據唯讀要求不變。
+
+## v6本機啟用
+
+2026-11-01 12:19:26 UTC，依既有授權替換指定v5 Host，資料庫／Admin／Client保留，
+無schema migration。v6含跨read world deadline及逐段普攻名目時長，15正流程通過、
+publish完成。源碼commit以私庫本次提交追溯；實際DLL SHA256：
+Network `2e617f509ba13d5baf9e24da846e09822f0ecd5dffcfeca527ccafdf35e2843e`；
+Protocol `bf87cdc5c0d09631abac6c060df17f8a2f03efe3d7a2ba77599d72dab4a9bc4e`。
+健康端點正常。新的v6結果卡取代v5卡，範圍仍為三怪追擊／出招／受傷、Z持續輸入及放開、
+一次X、全滅後返回即停。實際結果待回，不將這次換版當Client驗收。
