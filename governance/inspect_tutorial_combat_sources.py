@@ -15,6 +15,7 @@ def main():
     p.add_argument('--animation-timing', action='store_true', help='Additional bounded ASD frame/FPS and cooldown-counter windows')
     p.add_argument('--stats-mapping', action='store_true', help='Recheck complete 5C record decoder and distinguish DWORD/WORD destinations')
     p.add_argument('--resource-ratios', action='store_true', help='Recheck character parameter2/3 visual ratios and jump-table cases')
+    p.add_argument('--skill-timeline', action='store_true', help='Recheck split selection, selected effect-delay metadata; not damage timing')
     args = p.parse_args()
     assert args.output.suffix == '.json' and not args.output.exists()
     sys.path.insert(0, str(args.capstone_path))
@@ -61,10 +62,15 @@ def main():
         assert read(0x4ce8a6,6).hex()=='dc35e857c500'
         assert read(0x4ce8eb,6).hex()=='dc35e857c500'
         spans += [(0x4ce880,69),(0x4ce8c5,69)]
+    if args.skill_timeline:
+        assert struct.unpack('<I',read(0xc5029c+0x20,4))[0]==0x7da4d0
+        spans += [(0x7da4d0,205),(0x7da460,106)]
     for va,size in spans:
         ins=list(md.disasm(read(va,size),va)); count=sum(i.size for i in ins)
         windows.append({'start':hex(va),'end_exclusive':hex(va+count),'bytes':read(va,count).hex(),
                         'instructions':[{'va':hex(i.address),'bytes':i.bytes.hex(),'op':i.mnemonic+' '+i.op_str} for i in ins]})
+        if args.skill_timeline and va in (0x7da4d0,0x7da460):
+            assert count==size and ins[-1].mnemonic=='ret'
     instructions={i['va']:i['op'] for w in windows for i in w['instructions']}
     assert '0x3c' in ' '.join(i['op'] for i in windows[1]['instructions'])
     assert instructions['0x545c80']=='cmp word ptr [ebp + 0x10], ax'
@@ -74,6 +80,9 @@ def main():
     if args.animation_timing:
         assert '0x3e0f83e1' in ' '.join(instructions.values())
         assert '0x54f200' in ' '.join(i['op'] for w in windows if w['start']=='0x5452c0' for i in w['instructions'])
+    if args.skill_timeline:
+        assert instructions['0x7da47f']=='mov dword ptr [ecx + 0x110], esi'
+        assert instructions['0x7da58f']=='call 0x7da460'
     selected={
       'Character/Cha/Base.stp':('ad5e92f9ef63afa1c2f5849823291c8ae3de7f885ece24fef1b6d771b03a9185',['Cha/Isla.abf']),
       'Character/Mon/Base.stp':('1854de2926ffe7c6172a4b350900f3b5b1e03d9f1757fc22d50b440515ec6957',['Mon/03_Assassin.abf']),
@@ -90,7 +99,21 @@ def main():
             else:
                 row['headers']=[e.attrib for e in tree.iter('AnimationHeader')]
                 row['splits']=[e.attrib for e in tree.iter('SpliteData')]
+                if args.skill_timeline:
+                    row['animation_data']=[e.attrib for e in tree.iter('AnimationData')]
+                    row['effects']=[e.attrib for e in tree.iter('Effect')]
             resources.append(row)
+    if args.skill_timeline:
+        archive='Effect/Effect.stp'; pin='ef0c4fae74c5660aaea7cbe0919549c20db2fd248c81f829aeb7616a11b300ec'
+        effect_pins={'Effect/Character/C_Isla-BasisAttack01.eff':'0b8eed6cc1c72be4d1d43f2a3407cc6ab51ff90d37a28aaa2ae962ff8a09b124',
+                     'Effect/Character/C_Isla-BasisWslash01.eff':'b124fdee5bd0710a99e55a5eb26967e272988185551a99a65a9a0e7161aca42c'}
+        for name,raw in members((args.workspace/archive).read_bytes(),pin,effect_pins).items():
+            data=decode(raw); digest=hashlib.sha256(data).hexdigest(); assert digest==effect_pins[name]
+            tree=ET.fromstring(data.decode('euc-kr'))
+            delays=[float(e.get('Delay')) for e in tree.iter('Element')]
+            resources.append({'archive':archive,'archive_sha256':pin,'member':name,'member_sha256':digest,
+                              'element_count':len(delays),'distinct_element_delays':sorted(set(delays)),
+                              'classification':'visual effect delays; not proven authoritative hit timestamps'})
     result={'target_sha256':BIN_SHA,'tool':'Capstone '+capstone.__version__,
             'classification':'bounded byte recheck plus resource metadata, not FULL-PASS or official Server rules',
             'health_scale':health_scale,'windows':windows,'resources':resources,

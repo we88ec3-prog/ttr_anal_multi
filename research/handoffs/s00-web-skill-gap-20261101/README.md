@@ -104,6 +104,11 @@ Scenario/scenario_town000D.fld及.mre。FLD是幾何／環境XML，MRE標頭GEOM
 
 ## 交付格式與使用方式
 
+更新：[技能分段與命中時間界線](../../../governance/s00-iterations/S00-20261101-SKILL-TIMELINE-AND-HIT-BOUNDARY.md)。
+已新增108混合FPS／109單段的名目片長有限推導；仍未找到官方impact時間。
+特效Element的Delay不是傷害時刻或擊數證明，請優先補判定producer與clock／ID映射，
+不要把視覺Delay直接當Server多段傷害排程。
+
 補充戰鬥優先缺口：[能力頁欄位落差與修正](../../../governance/s00-iterations/S00-20261101-COMBAT-STAT-DISPLAY.md)。
 舊資料已記錄5C的DWORD500/100/100不是當時能力頁顯示；WORD+16/+18/+20才有HP/SP/MP相關性。
 T10/T11請核對能力記錄+40/+48/+44到HUD與技能gate的消費者，以及與actor參數1/2/3的關係；
