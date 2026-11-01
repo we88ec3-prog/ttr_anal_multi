@@ -52,7 +52,8 @@
 ## 已交付的派工與資源基準
 
 - [實際派工狀態](DISPATCH-STATUS.json)：四個指定對話均已接受訊息；交付成功不代表正在分析。
-  extra/roy3已回第一批限定靜態發現，尚未交新報告commit；其餘尚未收到分析結果。
+  extra/roy3已交報告並推送；S00已抓取精確commit `58851e4ea2404f2370e8c4310df7384519fdc80e`
+  的四份報告並傳給T01，獨立驗證仍待完成；其餘尚未收到分析結果。
   目前沒有已確認的對話長度上限訊號。
 - [唯讀資源核對](RESOURCE-BASELINE.json)：包含任務、地圖、Case、Town、MapFlow與BND的來源SHA及原始欄位。
   產生器為 `governance/inspect_phindos_mainline_resources.py`；這份輸出不是章節／原生執行驗收。
