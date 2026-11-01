@@ -74,7 +74,7 @@
 - Server `51c5c740a4c5e9bc9e72f520b673a458e0e7361a`（合併 `b9453e7`）的 135 unit＋108 protocol，以及當時 WEB 停權／Session 清理的合成 PASS，仍只屬該提交與當時範圍；不是本次新執行或實際 Client 驗收。
 - 原 Client、教學戰鬥／任務／廣場尚未做的負向／故障案例，保留為尚未取得證據，不能借用 domain／synthetic PASS 填補。
 - 測試程式、SFD 與既有保護不刪除；現階段 CI／本地命令改用明確正流程 allowlist。混合正負向的舊測試整個暫緩，不為了方便而夾帶執行。
-- Server 私庫另存 `docs/deferred-test-inventory.json`，以純來源盤點列出目前 **206 個 xUnit 方法定義：8 個明確正流程前置、198 個目前暫緩**。其中2項核對13／7A候選布局，最新2項是正常57B candidate與SQLite主Lobby交接到創角選角；並非遊戲登入成功。此數字不展開 Theory 資料列，也不代表所有方法本輪已執行；舊的正負向混合或非目前 allowlist 的方法同樣先暫緩。生成器只讀取來源，不載入測試組件。
+- Server 私庫另存 `docs/deferred-test-inventory.json`，以純來源盤點列出目前 **207 個 xUnit 方法定義：9 個明確正流程前置、198 個目前暫緩**。其中2項核對13／7A候選布局，最新2項是正常57B candidate與SQLite主Lobby交接到創角選角；並非遊戲登入成功。此數字不展開 Theory 資料列，也不代表所有方法本輪已執行；舊的正負向混合或非目前 allowlist 的方法同樣先暫緩。生成器只讀取來源，不載入測試組件。
 - S00 的文件／索引一致性檢查與編譯屬交付維護，不是停權、故障或併發的 Server／遊玩行為測試，不因此擴大遊玩驗收聲稱。
 
 ## 執行紀錄要求
@@ -88,3 +88,12 @@
 ## 空角色清單接續
 
 [零角色清單實驗](../../governance/s00-iterations/S00-20261101-EMPTY-ROSTER-EXPERIMENT.md)已接入transaction-authorized SQLite與69B候選回覆，第8個正流程前置通過。真遊戲roster/UI尚待人工正常操作，不能以合成C2S24升格。DT-05／09／11／14另記：非零DB名單／stale lease不可fallback空清單、header/name邊界、傳送／日誌失效、跨listener清理；現在全部待測，不執行。
+
+## 冒險團命名／教學入口片段
+
+[本輪完整規劃](../../governance/s00-iterations/S00-20261101-EXPEDITION-NAME-TUTORIAL-ENTRY.md)已對應私庫獨立opt-in實作，9個正向前置通過。
+下一段連測為正常登入→選服→角色／命名→教學第一畫面；角色控制／移動仍待後段資料。
+starter1/3、Unicode唯一性與30分鐘Session為Server實驗配置，不是官方需求。
+DT-03/04/05/06/07/10/11/12/14/22另記：名稱邊界／正規化碰撞、不同帳號角色集合、
+舊revision與續期後close、重送／重登、元件migration失敗／回復、C05多元件／PostgreSQL、
+長連線到期與資源壓力；現在全部暫緩，沒有移除原測試或用正常PASS替代。

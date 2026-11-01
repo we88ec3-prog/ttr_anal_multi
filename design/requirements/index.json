@@ -225,6 +225,18 @@
           ],
           "observation": "Client 對角色記錄存在可用旗標與 UI 讀取路徑；收到角色清單後仍需建立 UI／事件投遞前提，才能驗證畫面真的可操作。",
           "limitations": "目前只有局部 UI record/handler 路徑，不能宣稱 command2 直接強制刷新選角 UI 或無角色必開創角畫面。"
+        },
+        {
+          "channel": "GAME_RUNTIME_OBSERVATION",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "tested_executable_sha256": "6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c",
+          "tested_build_kind": "MODIFIED_WORKING_COPY_NOT_ORIGINAL_CLIENT",
+          "observation_ref": "governance/s00-iterations/S00-20261101-EXPEDITION-NAME-TUTORIAL-ENTRY.md",
+          "authorization_ref": "governance/s00-iterations/S00-20261101-EXPEDITION-NAME-TUTORIAL-ENTRY.md",
+          "environment": "Windows user-driven designated working copy, isolated SQLite v2 plus explicit expedition component v1, loopback 8415/8416/8414; local journey v1/v2 working-tree builds based on private8ab97f59c372339ae2f79bd743c707a5aeff255d. Exact DLL hashes and deployment times in the report.",
+          "reproduction": "Fresh normal login, select server/channel within two minutes, type a short disposable expedition name and confirm. Observe the first tutorial screen and compare metadata with user screenshots. Do not test movement until world initialization is supplied.",
+          "limitations": "Working-copy compatibility only. Historical modified-Client results and Server starter/header/scene-pairing choices are distinct from native facts. No raw packet bodies retained; credentials, actual profile names and IDs are not published. No official Server transaction, T01 FULL-PASS, playable tutorial or square success claimed.",
+          "observed": "First user screenshot showed two role models and the native naming dialog; v1 stopped after an unrecorded8B application. After source-shaped scene-report handling and bounded metadata changes, v2 at07:32:41 UTC received3E/48B, committed the name and sent4A/6E. The user confirmed the naming dialog closed and tutorial/story appeared. Independent DB readback showed named=true,revision2,two role rows."
         }
       ],
       "rr_ids": [
@@ -430,6 +442,50 @@
         }
       ],
       "adr_ids": []
+    },
+    {
+      "id": "REQ-0010",
+      "title": "新帳號教學場景的地圖與玩家初始化",
+      "category": "CLIENT_COMPATIBILITY",
+      "priority": "P0",
+      "status": "CANDIDATE",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "need": "命名後已進教學／劇情，但劇情結束仍顯示錯誤場景或位置且玩家初始化缺漏；Server需提供相符版本的map/context、owned-role actor與控制／碰撞資料，讓正常教學能開始，不以Client修補跳過。",
+      "acceptance_criteria": [
+        "以指定工作副本正流程觀察與同版資源／原程式核對，分清geometry、MEF、collision與出生位置；舊188/190/50018或座標fixture不直接升格官方值。",
+        "同一已認證Account/Session/owned role對應Server-owned actor與wire alias，按有來源的候選布局提供map、entity、metadata、control與必要非零初始化，不把一般C03 GUID或舊Client guard當解法。",
+        "實際Client在命名／劇情後進入正確教學區，人物可見且能完成第一個正常移動／互動檢查點；明記仍缺的任務／戰鬥／廣場部分，不以送出6E或保活成功冒稱完整教學通過。"
+      ],
+      "discoveries": [
+        {
+          "channel": "GAME_RUNTIME_OBSERVATION",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "tested_executable_sha256": "6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c",
+          "tested_build_kind": "MODIFIED_WORKING_COPY_NOT_ORIGINAL_CLIENT",
+          "observation_ref": "governance/s00-iterations/S00-20261101-EXPEDITION-NAME-TUTORIAL-ENTRY.md",
+          "authorization_ref": "governance/s00-iterations/S00-20261101-EXPEDITION-NAME-TUTORIAL-ENTRY.md",
+          "environment": "Windows user-driven designated working copy, isolated SQLite v2 plus explicit expedition component v1, loopback 8415/8416/8414; local journey v1/v2 working-tree builds based on private8ab97f59c372339ae2f79bd743c707a5aeff255d. Exact DLL hashes and deployment times in the report.",
+          "reproduction": "Fresh normal login, select server/channel within two minutes, type a short disposable expedition name and confirm. Observe the first tutorial screen and compare metadata with user screenshots. Do not test movement until world initialization is supplied.",
+          "limitations": "Working-copy compatibility only. Historical modified-Client results and Server starter/header/scene-pairing choices are distinct from native facts. No raw packet bodies retained; credentials, actual profile names and IDs are not published. No official Server transaction, T01 FULL-PASS, playable tutorial or square success claimed.",
+          "observed": "After v2 naming at07:32:41 UTC and6E entry, the user confirmed tutorial/story appeared, then reported wrong map or position after the story. A user screenshot shows tutorial prompts with uninitialized player display and a scene resembling the expedition backdrop. Server currently records0C/B0/3F world initialization pending and supplies no complete map/actor/control bootstrap; exact map ID and coordinates are not established from the screenshot."
+        }
+      ],
+      "rr_ids": [
+        "RR-0008"
+      ],
+      "gap_ids": [
+        "GAP-SCENE-0001",
+        "GAP-FLOW-0001"
+      ],
+      "spec_ids": [
+        "SPEC-SCENE-0001",
+        "SPEC-FLOW-0001",
+        "SPEC-CHAR-0001"
+      ],
+      "adr_ids": [],
+      "feedback_ids": [],
+      "claim_ids": []
     }
   ]
 }
