@@ -70,10 +70,24 @@ COUNT是**單次cluster呼叫**，不是整個Scenario14總數。
 需補觸發器／重複呼叫／波次／位置與合法結束條件，由S00依主責協調地圖／戰鬥任務，
 不塞入T10/T11傷害／技能研究冒稱已閉合。
 
+使用者隨後提供[參考影片A3-XRUsrcTM](https://www.youtube.com/watch?v=A3-XRUsrcTM)，
+明確說明3隻怪是他從影片得出的資訊，並提出Client可能缺少`.mef`或使用其他檔名來控制
+生怪／AI的假說。這是**玩家提供的參考材料及待查假說**，不是S00已核對影片時間碼、
+同版對照或資源已確認COUNT3。本輪Web讀取影片回Cache miss，沒有宣稱已觀看／證實。
+請先找出影片相關時間碼，記錄可見怪物數、同時／分波、角色及版本可比性；不能由外觀
+直接推定SkillID、HP、AI參數或Server封包。
+
 額外唯讀盤點：Town.stp含Town/town000D.fld及.mre；Scenario.stp含
 Scenario/scenario_town000D.fld及.mre。FLD是幾何／環境XML，MRE標頭GEOM_RESOURCE v1；
 檔名不能當成MEF trigger。這兩包索引未列出`.mef`成員；
 此有限盤點不是整套遊戲「不存在MEF」的證明，也不證明幾何Object數就是怪物數。
+補查須包含資源alias、改副檔名、壓縮／封裝及載入fallback。Map/Object/MapEffect.stp
+另有`.emf`成員，部分為gzip＋自訂header；尚未證明它們是本場景trigger或AI資料，
+不可只因副檔名倒序就當作scenario_town000.mef。這些是後續定位線索。
+
+後續原始碼核對見 [S00 MEF接收可行性](../../../governance/s00-iterations/S00-20261101-MEF-RECEIVE-FEASIBILITY.md)：
+換圖已初始化分支沒有消費查出的MEF字串；`.gb3`有改查`.emf`的資源路徑，不能當作MEF。
+目前MEF接收opcode、parser及內容格式仍UNKNOWN；Server自身生成／AI與Client接收MEF須分開。
 
 ## 交付格式與使用方式
 
