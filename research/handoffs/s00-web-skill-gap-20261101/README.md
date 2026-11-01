@@ -1,5 +1,9 @@
 # ChatGPT Web：T10／T11 技能與連段補查工作卡
 
+最新來源更正：[0E命中／萬分比血條與ABF/ASD資料](../../../governance/s00-iterations/S00-20261101-COMBAT-RESULTS-AND-ENEMY-AGENTS.md)。
+0F是controller狀態路徑，舊Hit builder使用0F已撤回；不要重用舊候選。
+ASD有負Delay、多段及混合FPS，請補parser／取消窗口與命中frame，不能一律Length/40。
+
 最新使用者優先序：**戰鬥第一優先**。蘋果招募已通過，但後續兩段對話後留原地另記REQ-0017；
 先補首戰技能／連段及怪物行為。新增有限資料與Server輸入遺失問題見
 [REQ-0016戰鬥工作](../../../governance/s00-iterations/S00-20261101-COMBAT-PRIORITY-AND-EXIT-BLOCKER.md)。Practice49/50/52對應Skill29/30/31，
