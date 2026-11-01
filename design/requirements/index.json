@@ -542,6 +542,95 @@
       "adr_ids": [],
       "feedback_ids": [],
       "claim_ids": []
+    },
+    {
+      "id": "REQ-0012",
+      "title": "切換玩家角色時保留教學NPC",
+      "need": "正常Tab切角後伊莉西亞消失；Server不能因替換自己的actor而清除其他教學NPC／玩家資料，必須保留後續教學所需人物。",
+      "acceptance_criteria": [
+        "實際正常切角能換角色與頭像，保持目前地圖／位置，伊莉西亞等既有教學NPC仍在。",
+        "只針對已認證Session的自有actor進行有來源的移除／重建，不以全類型reset、模型假替換或Client修改遮掩。",
+        "區分原生局部handler證據與Server候選順序；不從一次NPC保留成功宣稱所有場景／多人lifecycle已驗收。"
+      ],
+      "discoveries": [
+        {
+          "channel": "GAME_RUNTIME_OBSERVATION",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "tested_executable_sha256": "6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c",
+          "tested_build_kind": "MODIFIED_WORKING_COPY_NOT_ORIGINAL_CLIENT",
+          "observation_ref": "governance/s00-iterations/S00-20261101-TUTORIAL-NPC-AND-FORMATION.md",
+          "authorization_ref": "governance/s00-iterations/S00-20261101-TUTORIAL-NPC-AND-FORMATION.md",
+          "environment": "User-driven designated working copy; local pose-v1 then formation-v1 working-tree builds based on private3e12a30cb3efc622a21a751e7ec9f668a8234d1e. DLL hashes and loopback deployment in linked report.",
+          "reproduction": "Normal login, complete walking/mouse/camera tutorial, switch owned role with Tab, follow tutorial to first battle entrance. Stop on formation page without confirming battle.",
+          "limitations": "Current working-copy observation only; no game process attachment or Client/resource modifications. Packet journal records opcode/length, not bodies. Defaults for role4, level2, masks/capacity/order are prototype policy, not user requirement or verified official restriction.",
+          "observed": "The user reported Isilia disappearing after Tab on pose-v1, while the player could reach the first battlefield entrance. The old role rebuild emitted type-wide reset10. Formation-v1 changes the switch to targeted1A removal of the Server-owned player actor; the user then explicitly confirmed Isilia remained and the formation page appeared."
+        }
+      ],
+      "category": "CLIENT_COMPATIBILITY",
+      "priority": "P0",
+      "status": "CANDIDATE",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "rr_ids": [
+        "RR-0008"
+      ],
+      "gap_ids": [
+        "GAP-FLOW-0001",
+        "GAP-SCENE-0001"
+      ],
+      "spec_ids": [
+        "SPEC-FLOW-0001",
+        "SPEC-SCENE-0001",
+        "SPEC-CHAR-0001"
+      ],
+      "adr_ids": [],
+      "feedback_ids": [],
+      "claim_ids": []
+    },
+    {
+      "id": "REQ-0013",
+      "title": "首場教學戰鬥入口的角色取得與編隊頁",
+      "need": "正常靠近首場戰鬥入口未出現戰鬥選擇頁；Server需提供與教學相符的角色取得與編隊資料，讓原生頁面可顯示並列出已授權角色。",
+      "acceptance_criteria": [
+        "實際正常入口請求後原生戰鬥選擇／編隊頁出現，可看到伊莉西亞；開頁與進入／完成戰鬥分開驗收。",
+        "角色取得需同DB當前lease授權交易提交後再送候選資料，不以只改Client顯示冒稱Server ownership。",
+        "預選、可用名單、強制名單、人數與可否編輯各自追溯；未核實的固定伊莉西亞／禁改不能冒稱使用者要求或Client固定規則。",
+        "首戰載入、技能／傷害／勝負及返回教學仍須後續完成；不得把編隊頁出現寫成教學任務或廣場成功。"
+      ],
+      "discoveries": [
+        {
+          "channel": "GAME_RUNTIME_OBSERVATION",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "tested_executable_sha256": "6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c",
+          "tested_build_kind": "MODIFIED_WORKING_COPY_NOT_ORIGINAL_CLIENT",
+          "observation_ref": "governance/s00-iterations/S00-20261101-TUTORIAL-NPC-AND-FORMATION.md",
+          "authorization_ref": "governance/s00-iterations/S00-20261101-TUTORIAL-NPC-AND-FORMATION.md",
+          "environment": "User-driven designated working copy; local pose-v1 then formation-v1 working-tree builds based on private3e12a30cb3efc622a21a751e7ec9f668a8234d1e. DLL hashes and loopback deployment in linked report.",
+          "reproduction": "Normal login, complete walking/mouse/camera tutorial, switch owned role with Tab, follow tutorial to first battle entrance. Stop on formation page without confirming battle.",
+          "limitations": "Current working-copy observation only; no game process attachment or Client/resource modifications. Packet journal records opcode/length, not bodies. Defaults for role4, level2, masks/capacity/order are prototype policy, not user requirement or verified official restriction.",
+          "observed": "Pose-v1 observed C2S40/4B but supplied no formation response, and the user reported no battle-selection page. Formation-v1 transactionally grants role4 then sends candidate2B/5C/50/4E; at08:53:45.9993539 UTC the normal40 request was observed, and the user confirmed Isilia remained and was visible on the formation page. The user additionally reports the editor defaults to Isilia and cannot be changed, asking whether this came from the Client or an earlier request. Default4 came from old Server fixture; no prior human hard-lock request has been found in the reviewed records. Reason editing is blocked remains unverified. The user later clarified that letting the player experience Isilia is correct and requested no change to the current behavior; this was a provenance question, not a selection-lock defect. Native/source ownership of any additional UI restriction remains unproven."
+        }
+      ],
+      "category": "CLIENT_COMPATIBILITY",
+      "priority": "P0",
+      "status": "CANDIDATE",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "rr_ids": [
+        "RR-0008"
+      ],
+      "gap_ids": [
+        "GAP-FLOW-0001",
+        "GAP-SCENE-0001"
+      ],
+      "spec_ids": [
+        "SPEC-FLOW-0001",
+        "SPEC-SCENE-0001",
+        "SPEC-CHAR-0001"
+      ],
+      "adr_ids": [],
+      "feedback_ids": [],
+      "claim_ids": []
     }
   ]
 }

@@ -1,5 +1,7 @@
 # S00 新對話接續 — Server 規格、REQ 需求來源與角色畫面階段
 
+**08:53 UTC最新：** [教學NPC保留與編隊頁](s00-iterations/S00-20261101-TUTORIAL-NPC-AND-FORMATION.md)。新增REQ-0012／0013 GAME_RUNTIME_OBSERVATION（台帳13REQ／11runtime／0approved）。切角改只移除自有entity256，入口40/14交易取得role4後送2B／stats／50／4E；**使用者已確認伊莉西亞仍在，編隊頁可看到她**，唯讀DB roles3／revision3。12正向cases、86原始片段／30有限windows，非正式契約或T01 FULL-PASS。使用者釐清預選伊莉西亞體驗目前正確，僅詢問來源，不改限制／不列bug；預選／capacity沿用Server fixture，額外Client限制未核實。停在編隊頁，下一步開發戰場／技能／首戰結束回教學；不能用會丟失TUTO的舊5F2流程。使用者已授權整段更新時可直接結束指定本機遊戲連線，不再請手動關遊戲；Client操作／修改限制不變。
+
 **08:30 UTC最新：** [教學移動／朝向／切角](s00-iterations/S00-20261101-TUTORIAL-MOVEMENT-CAMERA-SWITCH.md)。使用者已實測人物HUD、鍵盤第一T、滑鼠與視角教學通過，停在切角；另指出進場朝南（預期東）與角色持續撞牆不能改向。REQ-0010追加runtime、新REQ-0011記殘留移動，台帳11REQ／9runtime／0approved。Server補heading64、轉段stop、750ms輸入靜默停止及額外pinned static bounds／monotonic pose切角；11正向cases（9方法／198暫緩）、實際資源reader通過。58原始片段／20有限windows與兩BND資源metadata重核，不是T01 FULL-PASS或精確Client時鐘／動態碰撞。使用者關閉舊遊戲後已換新版；提問卡請連測到切角後下一T，新版人工結果待回。勿重啟正在測試的Host。
 
 **08:04 UTC最新接續：** [教學地圖／玩家初始化候選](s00-iterations/S00-20261101-TUTORIAL-WORLD-BOOTSTRAP.md)。REQ-0010已收GAME_RUNTIME_OBSERVATION；主程式33片段／12 bounded windows、目前Table.stp map188/190對應已核對。私庫額外opt-in實作map188、scale1 actor、same-alias metadata/control、intro位置及正常移動回覆，10個positive cases通過（9方法／198暫緩）。本機新版已啟用，結果卡請使用者測到第一T標記後下一段提示就停；人工結果待回。Client完全未改，不支援移動後切角，不宣稱Server world authority或完整教學／廣場成功。勿重啟進行中的人工測試。
