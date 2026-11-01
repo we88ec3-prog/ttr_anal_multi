@@ -19,6 +19,8 @@ def main():
     parser.add_argument('--capstone-path', type=Path)
     parser.add_argument('--output', required=True, type=Path)
     args = parser.parse_args()
+    if args.output.resolve() == args.binary.resolve() or args.output.suffix.lower() != '.json':
+        raise ValueError('Evidence output must be a separate JSON artifact, never the target binary')
     if args.capstone_path:
         sys.path.insert(0, str(args.capstone_path.resolve()))
     capstone = importlib.import_module('capstone')
