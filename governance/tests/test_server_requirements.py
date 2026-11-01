@@ -18,6 +18,7 @@ PATHS = [
     "design/requirements/requests/2026-10-31-admin-web-account-operations.md",
     "design/requirements/requests/2026-10-31-game-tcp-observability.md",
     "design/requirements/requests/2026-11-01-local-login-runtime.md",
+    "governance/s00-iterations/S00-20261101-STANDARD-USER-CLIENT-LAUNCH.md",
 ]
 
 
@@ -48,7 +49,7 @@ class ServerRequirementTests(unittest.TestCase):
         self.assertEqual(r["summary"]["requirements"], 9)
         self.assertEqual(r["summary"]["approved"], 0)
         self.assertEqual(r["summary"]["discovery_counts"],
-                         {"CODE_ANALYSIS": 5, "GAME_RUNTIME_OBSERVATION": 1, "PLAYER_ADMIN_REQUEST": 5})
+                         {"CODE_ANALYSIS": 5, "GAME_RUNTIME_OBSERVATION": 2, "PLAYER_ADMIN_REQUEST": 5})
 
 
     def test_admin_web_v1_three_requests_trace_to_actual_user_request(self):

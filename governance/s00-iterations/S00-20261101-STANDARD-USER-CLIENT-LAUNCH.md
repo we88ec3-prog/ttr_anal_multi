@@ -38,9 +38,28 @@ SHA 白名單，拒絕 elevated caller，以 `UseShellExecute=false` 及僅限�
   焦點及 Unicode 輸入在此舊遊戲不可靠；未據此推論 Server 認證錯誤。
 
 本次啟動結果追加既有 REQ-0001 的 GAME_RUNTIME_OBSERVATION，不新增同義需求。
-登入提交尚待本次測試憑證輸入授權；不把停留登入頁記成 Server 拒絕登入。
-Host health 仍為 auth-only、replyAvailable=false，原生 admission OFF；舊的
-354 bytes／2 accepted／1 rejected 是先前合成測試累計，不能當成本次 Client。
+使用者另外明確同意將本次產生的隔離測試帳密輸入指定遊戲、送至本機
+`127.0.0.1:8415` 完成正流程登入；測試帳密不入 Git。透過鍵盤 Return 提交，
+2026-11-01 05:50:15.7588287 UTC 本機 journal 記到 connection 4 ACCEPT，
+05:50:16.2603646 UTC RXCHUNK 118 bytes，隨即 LOGINSYNTAXREJECTED／CLOSE。
+尚無 AUTHSTARTED，未到帳密驗證；畫面仍在登入頁且欄位 disabled。
+
+同期 health receivedBytes 由354增加到472，accepted=2、rejected=1沒有增加，
+replyAvailable=false，原生 admission OFF。舊的認證累計是合成測試，不能當成
+本次 Client 通過。這次沒有保存封包內容或密碼，也未擷取遊戲記憶體。
+
+### 由此提出的修正需求（仍屬既有 REQ-0001）
+
+正常登入須能在正確 frame／字串邊界內解析到 C02，再分別驗收 S2C 與下一畫面。
+本次 runtime 已證 Server 接收後在 syntax 階段中斷，但**僅有目前 journal 不能
+斷言是哪一個欄位造成**。不得將此寫成密碼錯誤或直接放寬所有 layout 檢查。
+
+Server source review 發現 E8 的高位元組編碼預檢掃過完整51B容量，連第一個NUL
+後面的未使用空間都檢查；實際 decoder 卻只消費 NUL 前內容。修正預檢只看
+字串內容、保留長度／terminator／真正內容編碼檢查，並補 enum-only 拒絕原因。
+既有正常 E8 登入測試改用合法字串加非零未用容量，六項 HappyPath 通過；這是
+合成正流程 fixture，不是本次封包內容或原版 producer padding 的證據。
+是否排除實際阻礙仍待修正後工作副本重驗，不提前宣稱已解決。
 
 下一步：正常新帳號登入的同會話 RX／C02／S2C／UI 分開驗收，再繼續跨線、
 空名單、第一角色、新手教學與廣場。既有候選 serializer／handoff broker
