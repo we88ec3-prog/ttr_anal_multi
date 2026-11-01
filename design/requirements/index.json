@@ -785,6 +785,18 @@
           "requester_role": "PLAYER",
           "request_text": "另外戰鬥目前是第一優先實作項目，不然無法進行正常的新手教學戰鬥",
           "request_record_ref": "governance/s00-iterations/S00-20261101-COMBAT-PRIORITY-AND-EXIT-BLOCKER.md"
+        },
+        {
+          "channel": "GAME_RUNTIME_OBSERVATION",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "tested_executable_sha256": "6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c",
+          "tested_build_kind": "MODIFIED_WORKING_COPY_NOT_ORIGINAL_CLIENT",
+          "observation_ref": "governance/s00-iterations/S00-20261101-V7-PLAYER-RESULT-AND-COMBAT-FIX.md",
+          "authorization_ref": "governance/s00-iterations/S00-20261101-V7-PLAYER-RESULT-AND-COMBAT-FIX.md",
+          "environment": "User-operated designated working copy against loopback v7 Host, deployed source0de80050c9a9f12f5666eaeb63a3e94c57529062. No Client attachment/modification.",
+          "limitations": "Existing test account; not a fresh-account single-run or original Client acceptance. DB has win/roles only, no proven terminal quest/reward settlement.",
+          "reproduction": "Normal tutorial first battle, receive enemy attacks and repeatedly press Z.",
+          "observed": "User reports no hurt animation when attacked and no combo progression when tapping Z. X and all enemy behavior were not separately confirmed."
         }
       ],
       "category": "CLIENT_COMPATIBILITY",
@@ -832,6 +844,18 @@
           "reproduction": "User-operated v4 normal tutorial: first battle, Pinko recruitment, then two dialogues; stop when player remains in place.",
           "limitations": "Modified working-copy observation. No Client attachment/modification. Official full combat and exit/reward contract remain incomplete.",
           "observed": "User reports two story dialogues follow Pinko recruitment; after both finish, expected transition/square does not occur and player remains in place."
+        },
+        {
+          "channel": "GAME_RUNTIME_OBSERVATION",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "tested_executable_sha256": "6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c",
+          "tested_build_kind": "MODIFIED_WORKING_COPY_NOT_ORIGINAL_CLIENT",
+          "observation_ref": "governance/s00-iterations/S00-20261101-V7-PLAYER-RESULT-AND-COMBAT-FIX.md",
+          "authorization_ref": "governance/s00-iterations/S00-20261101-V7-PLAYER-RESULT-AND-COMBAT-FIX.md",
+          "environment": "User-operated designated working copy against loopback v7 Host, deployed source0de80050c9a9f12f5666eaeb63a3e94c57529062. No Client attachment/modification.",
+          "limitations": "Existing test account; not a fresh-account single-run or original Client acceptance. DB has win/roles only, no proven terminal quest/reward settlement.",
+          "reproduction": "Normal tutorial through recruitment/final dialogues to square; move then release.",
+          "observed": "User confirms square reached, player/NPCs visible and initial movement/stop work; follow-up confirms no visible transition when entering square. Full settlement/persistence remains incomplete."
         }
       ],
       "category": "CLIENT_COMPATIBILITY",
@@ -842,6 +866,51 @@
       "rr_ids": [
         "RR-0008"
       ],
+      "gap_ids": [
+        "GAP-FLOW-0001",
+        "GAP-SCENE-0001"
+      ],
+      "spec_ids": [
+        "SPEC-FLOW-0001",
+        "SPEC-SCENE-0001",
+        "SPEC-CHAR-0001"
+      ],
+      "adr_ids": [
+        "ADR-0006",
+        "ADR-0007"
+      ],
+      "feedback_ids": [],
+      "claim_ids": []
+    },
+    {
+      "id": "REQ-0018",
+      "title": "廣場NPC後續劇情互動與控制恢復",
+      "need": "到達廣場後點NPC欲開始後續劇情，使用者回報無反應且不能移動；須補合法互動與控制接續，戰鬥仍優先。",
+      "acceptance_criteria": [
+        "先核對實際NPC／選項與Client事件，不從外觀猜Quest15或任意1D回覆。",
+        "正常互動能進入對應劇情並於結束恢復預期控制，不停在無回覆的鎖定狀態。",
+        "與教學terminal、任務／獎勵保存分開驗收；廣場可見不等於NPC互動通過。"
+      ],
+      "discoveries": [
+        {
+          "channel": "GAME_RUNTIME_OBSERVATION",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "tested_executable_sha256": "6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c",
+          "tested_build_kind": "MODIFIED_WORKING_COPY_NOT_ORIGINAL_CLIENT",
+          "observation_ref": "governance/s00-iterations/S00-20261101-V7-PLAYER-RESULT-AND-COMBAT-FIX.md",
+          "authorization_ref": "governance/s00-iterations/S00-20261101-V7-PLAYER-RESULT-AND-COMBAT-FIX.md",
+          "environment": "User-operated designated working copy against loopback v7 Host, deployed source0de80050c9a9f12f5666eaeb63a3e94c57529062. No Client attachment/modification.",
+          "limitations": "Existing test account; not a fresh-account single-run or original Client acceptance. DB has win/roles only, no proven terminal quest/reward settlement.",
+          "reproduction": "After arriving in square, user clicked an NPC to begin the next story. Exact NPC/option unknown.",
+          "observed": "User reports no story response and movement becomes unavailable after the NPC interaction."
+        }
+      ],
+      "category": "CLIENT_COMPATIBILITY",
+      "priority": "P1",
+      "status": "CANDIDATE",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "rr_ids": [],
       "gap_ids": [
         "GAP-FLOW-0001",
         "GAP-SCENE-0001"
