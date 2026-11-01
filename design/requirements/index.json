@@ -57,6 +57,18 @@
           "observed": "2026-11-01 05:39:16 UTC launcher created PID 47532 without elevation; working-copy SHA remained unchanged. Computer Use independently verified window 1118546, Tartaros Rebirth login screen, displayed version 1.1.62.46214. No UAC confirmation was needed in this successful launch. An explicitly authorized normal login at 05:50:16 UTC reached the Host (118 bytes) but was syntax rejected before C02. After the NUL-bounded encoding fix and a fresh Host run, the same disposable account at 05:57:28 UTC produced RXCHUNK 118, AUTHSTARTED, AUTHACCEPTED and REPLYUNAVAILABLE. Client remained on the login screen.",
           "reproduction": "Build the standard-user launcher; open it using the explicitly approved Computer Use app entry; verify per-launch JSON and then independently inspect the game child window. Do not infer game startup failure solely from the windowless helper response.",
           "limitations": "Working-copy startup and C02 M2 only; M3/S2C and next screen unverified. No raw payload retained, so unused-tail byte values and the original rejection subreason are not claimed as observed. Same fixture, after-fix success is real runtime evidence; old auth totals were synthetic. Not original KR compatibility or official Server wire contract; formal REQ/SPEC/GAP/RR status unchanged."
+        },
+        {
+          "channel": "GAME_RUNTIME_OBSERVATION",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "tested_executable_sha256": "6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c",
+          "tested_build_kind": "MODIFIED_WORKING_COPY_NOT_ORIGINAL_CLIENT",
+          "observation_ref": "governance/s00-iterations/S00-20261101-LOGIN-REPLY-RUNTIME.md",
+          "authorization_ref": "governance/s00-iterations/S00-20261101-LOGIN-REPLY-RUNTIME.md",
+          "environment": "Windows standard user; authorized working-copy EXE; isolated SQLite; loopback 8415/8416/8414. Server uncommitted reply experiment based on 69c714c54fb5c802251736ee38ff37c19fba3c53; baseline commit alone does not contain this implementation.",
+          "observed": "2026-11-01 06:09:50 UTC normal working-copy login produced RX118, AUTHACCEPTED and TXCOMPLETED163. Independent UI observation confirmed the server-selection screen with a selectable channel. Fresh run at 06:19:18 repeated authentication and reply. A later manual login at 06:25:46 produced AUTHREJECTED; its cause is unproven.",
+          "reproduction": "Use the designated working copy and authorized disposable local fixture against the explicit loopback reply experiment, verify C02 and TX metadata, then independently inspect server-selection UI.",
+          "limitations": "Working-copy runtime only. Server row values, grant semantics and expiry are explicit experimental choices. No raw payload retained, original KR compatibility, official Server pairing, roster UI, creation, tutorial or square success claimed. REQ stays CANDIDATE; formal SPEC/GAP/RR/CLM/ADR/TEST and native admission unchanged."
         }
       ],
       "rr_ids": [
@@ -100,6 +112,18 @@
           ],
           "observation": "0x0013 的條件式 local 成功分支與選服 UI 邏輯，可到 key0/key2 Connect；Server 需提供可用選服資料並銜接身分及 Session，但原版規則未知。",
           "limitations": "RR-0005 的 ACCEPTED 僅代表指定靜態研究交付；真實連線時序、端點權威及 Session handoff 尚未知。"
+        },
+        {
+          "channel": "GAME_RUNTIME_OBSERVATION",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "tested_executable_sha256": "6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c",
+          "tested_build_kind": "MODIFIED_WORKING_COPY_NOT_ORIGINAL_CLIENT",
+          "observation_ref": "governance/s00-iterations/S00-20261101-LOGIN-REPLY-RUNTIME.md",
+          "authorization_ref": "governance/s00-iterations/S00-20261101-LOGIN-REPLY-RUNTIME.md",
+          "environment": "Windows standard user; authorized working-copy EXE; isolated SQLite; loopback 8415/8416/8414. Server uncommitted reply experiment based on 69c714c54fb5c802251736ee38ff37c19fba3c53; baseline commit alone does not contain this implementation.",
+          "observed": "Normal Connect at 06:11:02 UTC reached both primary and auxiliary listeners. Primary received 63 bytes then PRIMARYHANDOFFUNAVAILABLE. The pilot used a 60-second grant and selection took about 72 seconds; the old generic event cannot isolate shape versus proof versus expiry. The current normal-operation window is two minutes, bounded by the source lease, with a separate shape event. Actual primary identity transfer remains unverified.",
+          "reproduction": "After a fresh successful normal login, select the left server, right channel and Connect within two minutes. Check primary/auxiliary metadata separately; only PRIMARYHANDOFFACCEPTED can prove actual primary transfer.",
+          "limitations": "Working-copy runtime only. Server row values, grant semantics and expiry are explicit experimental choices. No raw payload retained, original KR compatibility, official Server pairing, roster UI, creation, tutorial or square success claimed. REQ stays CANDIDATE; formal SPEC/GAP/RR/CLM/ADR/TEST and native admission unchanged."
         }
       ],
       "rr_ids": [
