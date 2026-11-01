@@ -18,3 +18,5 @@
 請先閱讀共同規則：https://github.com/we88ec3-prog/ttr_anal_multi/blob/codex/s00-combat-priority-20261101/research/handoffs/s00-phindos-web-analysis-20261103/COMMON.md
 然後執行本工作卡：https://github.com/we88ec3-prog/ttr_anal_multi/blob/codex/s00-combat-priority-20261101/research/handoffs/s00-phindos-web-analysis-20261103/W2-NPC-SCENES.md
 依共同交付格式新增results/W2/下的成果，先交P0可開發資料與精確未知。
+
+補充來源：governance/s00-iterations/S00-20261102-QUEST15-INTRO-CONTROL.md 及 evidence/S00-20261102-QUEST15-INTRO-CATALOG.json。NPC自身talk與腳本talk不同，請勿按檔案索引猜對話組。

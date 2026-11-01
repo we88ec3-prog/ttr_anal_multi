@@ -34,3 +34,5 @@ Server實作程式只保存在使用者指定的私有ttr_server_roy，不複製
 - [明日整村劇情Web AI工作包](../../research/handoffs/s00-phindos-web-analysis-20261103/README.md)：五張工作卡、77筆Town1任務、28段scene與分檔metadata、整合驗收格式。
 
 - [任務前置明示發布與CSquare控制器核對](S00-20261102-TUTORIAL-PREREQUISITES-PUBLICATION.md)：26個正流程測試，模式預設關閉／未部署，普通Town1入口仍待證。
+
+- [Quest15開場NPC／對話及控制候選](S00-20261102-QUEST15-INTRO-CONTROL.md)：原始目錄欄位分域、六筆文字存在性、限定控制恢復，未宣稱NPC／進村人測成功。
