@@ -44,3 +44,7 @@ FULL-PASS須涵蓋精確版本與全部實質主張；hash／抽樣bytes PASS不
 有Git寫入能力時提交並push自己的授權分支，回覆精確commit與每檔blob SHA；
 沒有則回覆完整檔案內容／patch與未推送狀態，不能聲稱上Git。
 先交P0首批可開發資料，再補全；對話真的達長度上限就交checkpoint並停止。
+
+## 開工前最新狀態
+
+請補讀[實作狀態更新](CURRENT-IMPLEMENTATION-STATE.md)，勿把保存候選或合成發布視為live已支援進村。

@@ -1,3 +1,8 @@
+## 後續狀態更新
+
+已新增明示opt-in的提交後發布adapter，詳見[發布與控制器核對](S00-20261102-TUTORIAL-PREREQUISITES-PUBLICATION.md)。
+下文「沒有接入adapter」是本保存元件首次提交時狀態；目前live v10仍未啟用、未換版、未migration。
+
 # S00：教學任務前置的獨立保存候選（SOURCE ONLY）
 
 為後續Quest15／廣場NPC接續新增私有Server domain元件，沒有接入目前Host、沒有發6F／74、
