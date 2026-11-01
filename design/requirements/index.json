@@ -45,6 +45,18 @@
           "observed": "2026-11-01 00:35:47 +08:00 login attempt produced TCP SynSent to 127.0.0.1:8415 without an established connection. Host only listened on 5080 and reported gameListener=false. No auth payload, C02 decision or S2C reply observed.",
           "reproduction": "Start the specified working-copy EXE and the Server default Host at the recorded checkout, then press login. Record OS TCP state and health before inferring an authentication failure.",
           "limitations": "Modified executable observation only; target_sha256 identifies the static research baseline, not the tested EXE. Two-second OS snapshots are not packet capture. No original Client compatibility, credential correctness, frame variant or UI success claimed. Newer opt-in diagnostic implementation must be tested independently."
+        },
+        {
+          "channel": "GAME_RUNTIME_OBSERVATION",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "tested_executable_sha256": "6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c",
+          "tested_build_kind": "MODIFIED_WORKING_COPY_NOT_ORIGINAL_CLIENT",
+          "observation_ref": "governance/s00-iterations/S00-20261101-STANDARD-USER-CLIENT-LAUNCH.md",
+          "authorization_ref": "governance/s00-iterations/S00-20261101-STANDARD-USER-CLIENT-LAUNCH.md",
+          "environment": "Windows standard-user launcher, child-only RunAsInvoker; isolated loopback auth-only Host based on Server 73e6d3c5b9e99182b959d6d921438b8fc1e134a9; Computer Use permission explicitly approved for exactly two executable names.",
+          "observed": "2026-11-01 05:39:16 UTC launcher created PID 47532 without elevation; working-copy SHA remained unchanged. Computer Use independently verified window 1118546, Tartaros Rebirth login screen, displayed version 1.1.62.46214. No UAC confirmation was needed in this successful launch.",
+          "reproduction": "Build the standard-user launcher; open it using the explicitly approved Computer Use app entry; verify per-launch JSON and then independently inspect the game child window. Do not infer game startup failure solely from the windowless helper response.",
+          "limitations": "Startup only. No login submitted in this observation, no real Client RX/auth or S2C/UI transition claimed. Historical health totals are synthetic. This is not original KR compatibility, not an official Server wire contract, and does not change formal REQ/SPEC/GAP/RR status."
         }
       ],
       "rr_ids": [
