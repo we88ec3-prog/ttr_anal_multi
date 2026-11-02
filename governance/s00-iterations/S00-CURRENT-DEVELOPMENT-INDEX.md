@@ -1,3 +1,7 @@
+# 2026-11-03 v15輸入說明／進度測試
+
+[收包管線、同方向恢復與主線段落指定](S00-20261103-INPUT-PIPELINE-AND-PROGRESS-DEBUG.md)：修除v14方向鎖，本機測試頁可指定六個已實作段落；測試連線不回寫正常主線紀錄，27個正常／新授權debug案例通過，Client操作待測。
+
 # 2026-11-03 v14與MEF遷移規劃
 
 [v14修正](S00-20261103-PHINDOS-V14-CORRECTIONS.md)：出口改站上按Z、清怪後保留戰鬥與空揮、修正非戰鬥Z停步；27正常測試通過，人測待完成。[MEF遷移計畫](S00-20261103-MEF-IMPLEMENTATION-AND-MIGRATION-PLAN.md)列內容／AI搬移及原生格式Gate，尚非已實作MEF。

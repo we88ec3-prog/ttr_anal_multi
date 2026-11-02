@@ -573,6 +573,18 @@
           "limitations": "Clarifies three defects; no separate confirmation of NPC-window fix or complete village arrival this run.",
           "reproduction": "Normal story-instance clear/portal; nonbattle forward tap then repeated Z.",
           "observed": "The movement defect is outside combat: forward tap then repeated Z does not immediately stop moving."
+        },
+        {
+          "channel": "GAME_RUNTIME_OBSERVATION",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "tested_executable_sha256": "6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c",
+          "tested_build_kind": "MODIFIED_WORKING_COPY_NOT_ORIGINAL_CLIENT",
+          "observation_ref": "governance/s00-iterations/S00-20261103-INPUT-PIPELINE-AND-PROGRESS-DEBUG.md",
+          "authorization_ref": "governance/s00-iterations/S00-20261103-PHINDOS-V14-CORRECTIONS.md",
+          "environment": "User-operated loopback v14; Serverbfc04f1f131c053192546e89a2624050c0b9c6ac. No Client modification by agent.",
+          "limitations": "No packet backlog measurement or full raw input capture; heading latch directly explains the asymmetry.",
+          "reproduction": "Nonbattle up -> Z -> up versus up -> Z -> right.",
+          "observed": "Same direction cannot resume; changing direction can resume."
         }
       ],
       "rr_ids": [
@@ -1136,6 +1148,47 @@
         }
       ],
       "category": "SERVER_DESIGN",
+      "priority": "P1",
+      "status": "CANDIDATE",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "rr_ids": [],
+      "gap_ids": [
+        "GAP-FLOW-0001",
+        "GAP-SCENE-0001"
+      ],
+      "spec_ids": [
+        "SPEC-FLOW-0001",
+        "SPEC-SCENE-0001",
+        "SPEC-CHAR-0001"
+      ],
+      "adr_ids": [
+        "ADR-0006",
+        "ADR-0007"
+      ],
+      "feedback_ids": [],
+      "claim_ids": []
+    },
+    {
+      "id": "REQ-0020",
+      "title": "本機測試主線進度指定與快進退回",
+      "need": "使用者要求直接指定已實作主線段落，減少反覆從頭進行教學的測試成本。",
+      "acceptance_criteria": [
+        "明示本機測試模式才提供段落指定；可在已實作的廣場、劇情、編隊、兩圖與村落間快進或退回。",
+        "控制要求由同一遊戲連線序列化套用，不和收包／world tick同時修改狀態。",
+        "已跳轉連線明確標記測試；不回寫正常任務勝利、完成key或獎勵，記錄可追溯測試操作。",
+        "現有正常進度與新帳號驗收分開；以正向切換／重打及實際Client結果驗收。"
+      ],
+      "discoveries": [
+        {
+          "channel": "PLAYER_ADMIN_REQUEST",
+          "requester_role": "PLAYER",
+          "request_text": "希望你能加一個功能，可以直接指定主線進度，快進或退回，用以持續測試",
+          "request_record_ref": "governance/s00-iterations/S00-20261103-INPUT-PIPELINE-AND-PROGRESS-DEBUG.md",
+          "reference_materials": []
+        }
+      ],
+      "category": "OPERATIONS",
       "priority": "P1",
       "status": "CANDIDATE",
       "client_version": "kr",
