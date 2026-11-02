@@ -4,7 +4,7 @@
 資料來源：本機已同步 main 的 ttr_anal_multi （可另指定 Server checkout）。
 只讀 GitHub checkout 內的 JSON/Markdown，寫入本機 XLSX，不做 git branch/commit/push。
 依 ID upsert，不刪舊列、不卡行號、不覆蓋人工備註；每次留下 JSON 差異日誌及原檔備份。
-使用 artifact_tool，無 openpyxl/pandas。
+使用 bundled @oai/artifact-tool JavaScript，無 openpyxl/pandas；先暫存，再獨立驗證發布。
 
 範例:
   python S00_Excel_增量更新.py --workbooks ./分類工作台 --analysis-dir ./ttr_anal_multi --server-dir ./ttr_server_roy
@@ -13,8 +13,6 @@ from __future__ import annotations
 import argparse, json, os, re, shutil, subprocess
 from datetime import datetime
 from pathlib import Path
-from collections import Counter
-from artifact_tool import Blob, SpreadsheetFile
 ANALYSIS_REPO='we88ec3-prog/ttr_anal_multi'
 SERVER_REPO='we88ec3-prog/ttr_server_roy'
 
@@ -121,131 +119,66 @@ def make_sfd(server_root,sha):
    url(SERVER_REPO,sha,'docs/server-followups/index.md')])
  return rows
 
-def make_dashboard(folder,sha,server_sha):
- counts={}
- for file,id_col in [('09_研究請求.xlsx',0),('10_Server需求.xlsx',0),('11_規格索引.xlsx',0),('12_缺口索引.xlsx',0),
-          ('08_研究證據.xlsx',0),('15_來源清單.xlsx',0),('02_封包總表.xlsx',0),('03_封包欄位.xlsx',0),
-          ('05_Server開發.xlsx',0),('14_Server待辦.xlsx',0)]:
-  path=folder/file
-  if not path.exists():continue
-  w=SpreadsheetFile.import_xlsx(Blob.load(str(path)));s=w.worksheets.get_item_at(0)
-  values=s.get_range('A6:A2000').values
-  counts[file]=sum(bool(r[0]) for r in values)
- def c(f):return counts.get(f,'')
- return [
- ['研究請求 RR',c('09_研究請求.xlsx'),'09_研究請求.xlsx','RR 狀態仍以 GitHub 唯一台帳為準'],
- ['Server 需求 REQ',c('10_Server需求.xlsx'),'10_Server需求.xlsx','不要把 CANDIDATE 當已批准'],
- ['SPEC',c('11_規格索引.xlsx'),'11_規格索引.xlsx','不自動升 STABLE'],
- ['GAP',c('12_缺口索引.xlsx'),'12_缺口索引.xlsx','不要自動關閉 GAP'],
- ['研究證據 CLM',c('08_研究證據.xlsx'),'08_研究證據.xlsx','逐筆保留 evidence_level'],
- ['原始來源 SRC',c('15_來源清單.xlsx'),'15_來源清單.xlsx','REGISTERED 非語意驗證'],
- ['已收錄封包候選',c('02_封包總表.xlsx'),'02_封包總表.xlsx','不是全部原版封包'],
- ['已收錄欄位',c('03_封包欄位.xlsx'),'03_封包欄位.xlsx','不是全部欄位'],
- ['Server 元件',c('05_Server開發.xlsx'),'05_Server開發.xlsx','程式碼實作與 Client 實測分開'],
- ['Server 後續 SFD',c('14_Server待辦.xlsx'),'14_Server待辦.xlsx','Server-only，與 RR 不同'],
- ['分析 main SHA',sha,'17_版本來源.xlsx','本次 Git checkout HEAD；需由 S00 確認等於最新 main'],
- ['Server HEAD SHA',server_sha or '未提供','17_版本來源.xlsx','需由 S00 確認等於最新 main'],
- ]
-
-def xlcol(k):
- res=''
- while k:
-  k,i=divmod(k-1,26);res=chr(i+65)+res
- return res
-
-def merge_existing(filename,records,updates,changes,backup_dir):
- """更新現有 workbook 的 record rows；不重建 workbook，也不刪除未知 ID。"""
- if not filename.exists():raise FileNotFoundError(f'找不到既有分類檔，為避免資料遺失不會自動重建：{filename}')
- w=SpreadsheetFile.import_xlsx(Blob.load(str(filename)));sheet=w.worksheets.get_item_at(0)
- n=len(records[0]) if records else 0
- if n==0:return 0
- hdr=sheet.get_range(f'A5:{xlcol(n)}5').values[0]
- if len(hdr)!=n or not hdr[0]:raise ValueError(f'欄位 schema 錯誤：{filename.name}')
- # 只讀現有資料；穩定 ID 而非行號決定更新目標。
- key_cells=sheet.get_range('A6:A2400').values
- last=max((i for i,r in enumerate(key_cells,6) if r[0] not in (None,'')),default=5)
- existing_rows=sheet.get_range(f'A6:{xlcol(n)}{last}').values if last>=6 else []
- active=[list(r) for r in existing_rows if r[0] not in (None,'')]
- index={str(r[0]):i for i,r in enumerate(active)}
- changed=0
- for row in records:
-  ident=str(row[0]);new=list(row)
-  if ident in index:
-   pos=index[ident];old=active[pos];
-   for j,value in enumerate(new):
-    if value is None:continue  # 預設不碰既有人工摘要與備註欄。
-    value=str(value) if isinstance(value,(list,dict)) else value
-    if old[j] != value:
-     changes.append({'file':filename.name,'id':ident,'field':hdr[j],'old':str(old[j] or '')[:1600], 'new':str(value or '')[:1600]})
-     old[j]=value;changed+=1
-  else:
-   active.append([v if v is not None else '' for v in new]);index[ident]=len(active)-1;changed+=1
-   changes.append({'file':filename.name,'id':ident,'action':'NEW_RECORD'})
- if changed:
-  backup=backup_dir/filename.name;shutil.copy2(filename,backup)
-  sheet.tables.delete_all()
-  sheet.get_range(f'A6:{xlcol(n)}{5+len(active)}').values=active
-  sheet.tables.add(f'A5:{xlcol(n)}{5+len(active)}',True,'TblUpdated'+re.sub('[^A-Za-z0-9]','',filename.stem))
-  temp=filename.with_suffix('.tmp.xlsx');SpreadsheetFile.export_xlsx(w).save(str(temp));os.replace(temp,filename)
-  print('UPDATED',filename.name,'records',len(active),'changed fields',changed,flush=True)
- else:print('UNCHANGED',filename.name,'records',len(active),flush=True)
- return changed
-
+# Runtime writer is the bundled @oai/artifact-tool JavaScript implementation.
+# Existing reader mappings remain above; every source field is additionally
+# preserved losslessly in typed JSON columns, split below Excel's cell limit.
 def main():
- p=argparse.ArgumentParser(description='按正式 GitHub 台帳增量編輯每分類單Sheet Excel；不更動 GitHub')
- p.add_argument('--workbooks',required=True,type=Path,help='分類 Excel 所在資料夾')
- p.add_argument('--analysis-dir',required=True,type=Path,help='已同步 main 的 ttr_anal_multi checkout')
- p.add_argument('--server-dir',type=Path,help='可選，已同步 main 的 ttr_server_roy checkout')
- p.add_argument('--require-main',action='store_true',help='非 main 分支時拒絕執行（預設只警告）')
- args=p.parse_args();root=args.analysis_dir.resolve();folder=args.workbooks.resolve();server=args.server_dir.resolve() if args.server_dir else None
- if not folder.is_dir() or not root.is_dir():p.error('工作簿目錄或分析 checkout 不存在')
- sha=rev(root);br=branch(root)
- if br!='main':
-  if args.require_main:p.error(f'分析 checkout 不是 main（{br}），停止更新')
-  print('WARNING: 分析 checkout 不在 main：',br)
- ssha=rev(server) if server else None
- print('Analysis',sha,'branch',br,'Server',ssha or 'not supplied',flush=True)
- # 預先全部讀取/驗證官方來源，避免寫入中途因檔案缺失留下跨檔不一致。
- idx={
-  '08_研究證據.xlsx':make_clm(read_json(root,'research/claims/index.json')['items'],sha),
-  '15_來源清單.xlsx':make_src(read_json(root,'research/intake/index.json')['items'],sha),
-  '09_研究請求.xlsx':make_rr(read_json(root,'research/requests/index.json')['items'],sha),
-  '10_Server需求.xlsx':make_req(read_json(root,'design/requirements/index.json')['items'],sha),
-  '11_規格索引.xlsx':make_spec(read_json(root,'spec/spec-index.json')['items'],sha),
-  '12_缺口索引.xlsx':make_gap(read_json(root,'design/gaps/index.json')['items'],sha),
-  '06_測試驗收.xlsx':make_tests(read_json(root,'conformance/test-index.json')['items'],sha),
-  '13_研究Task.xlsx':make_task(root,sha),
+ import tempfile, sys
+ p=argparse.ArgumentParser(description=__doc__)
+ p.add_argument('--workbooks',required=True,type=Path)
+ p.add_argument('--analysis-dir',required=True,type=Path)
+ p.add_argument('--server-dir',required=True,type=Path)
+ p.add_argument('--require-main',action='store_true')
+ p.add_argument('--node',default=os.environ.get('TARTAROS_WORKBOOK_NODE','node'))
+ p.add_argument('--runner-dir',required=True,type=Path,help='Conversation directory with a junction to bundled node_modules')
+ a=p.parse_args();root=a.analysis_dir.resolve();server=a.server_dir.resolve();folder=a.workbooks.resolve()
+ sha=rev(root);ssha=rev(server)
+ for repo in (root,server):
+  if branch(repo)!='main':p.error(f'Only main checkout is supported: {repo}')
+  remote=subprocess.run(['git','-C',str(repo),'rev-parse','origin/main'],capture_output=True,text=True,check=True).stdout.strip()
+  if rev(repo)!=remote:p.error(f'HEAD differs from fetched origin/main: {repo}')
+ records={
+  '08_研究證據.xlsx':('research/claims/index.json',make_clm),
+  '15_來源清單.xlsx':('research/intake/index.json',make_src),
+  '09_研究請求.xlsx':('research/requests/index.json',make_rr),
+  '10_Server需求.xlsx':('design/requirements/index.json',make_req),
+  '11_規格索引.xlsx':('spec/spec-index.json',make_spec),
+  '12_缺口索引.xlsx':('design/gaps/index.json',make_gap),
+  '06_測試驗收.xlsx':('conformance/test-index.json',make_tests),
  }
- if server:
-  sf=make_sfd(server,ssha)
-  if sf is not None:idx['14_Server待辦.xlsx']=sf
- for fn,r in idx.items():
-  keys=[x[0] for x in r]
-  if len(keys)!=len(set(keys)):raise ValueError('來源檔有重複主鍵 '+fn)
-  if not (folder/fn).exists():raise FileNotFoundError(folder/fn)
- timestamp=datetime.now().strftime('%Y%m%d-%H%M%S');backup_dir=folder/'backup'/timestamp;backup_dir.mkdir(parents=True,exist_ok=True)
- changes=[];total=0
- for fn,rows in idx.items():total+=merge_existing(folder/fn,rows,None,changes,backup_dir)
- # 00 資料欄位為 A5:D5；同步統計不依賴跨檔 Excel 公式。
- if (folder/'00_儀表板.xlsx').exists():
-  dash=make_dashboard(folder,sha,ssha)
-  total+=merge_existing(folder/'00_儀表板.xlsx',dash,None,changes,backup_dir)
- # 更新 17 的來源基準 SHA，但保留原本其他來源證據與使用者備註。
- if (folder/'17_版本來源.xlsx').exists():
-  book=SpreadsheetFile.import_xlsx(Blob.load(str(folder/'17_版本來源.xlsx')));s=book.worksheets.get_item_at(0)
-  old=s.get_range('A6:H100').values
-  for j,r in enumerate(old,6):
-   if r[0]=='權威' and r[1]=='分析與 Server 設計':
-    if r[4]!=sha:s.get_range(f'E{j}').values=[[sha]]
-   if r[0]=='權威' and r[1]=='Server 程式' and ssha:
-    if r[4]!=ssha:s.get_range(f'E{j}').values=[[ssha]]
-  filepath=folder/'17_版本來源.xlsx';temp=filepath.with_suffix('.tmp.xlsx')
-  if not (backup_dir/filepath.name).exists():shutil.copy2(filepath,backup_dir/filepath.name)
-  SpreadsheetFile.export_xlsx(book).save(str(temp));os.replace(temp,filepath)
- log={'timestamp':timestamp,'analysis_sha':sha,'analysis_branch':br,'server_sha':ssha,'changed_cells_or_records':total,
-   'changes':changes,'notes':('更新現有 Excel、保留人工備註；01 功能摘要/02 封包候選/03 欄位/04 流程/05 Server 開發/07 資源不從本次官方索引臆造新的內容。','正式 RR/REQ/CLM/SRC/TEST 以 GitHub 權威為準，不自動升證據或驗收。')}
- (folder/'update-history').mkdir(exist_ok=True)
- outfile=folder/'update-history'/(timestamp+'.json');outfile.write_text(json.dumps(log,ensure_ascii=False,indent=2),encoding='utf-8')
- print('FINISHED',total,'change entries',len(changes),'log',outfile,flush=True)
+ jobs=[]
+ for filename,(path,maker) in records.items():
+  data=read_json(root,path)['items']
+  data=[v for v in data if v.get('client_version') in (None,'kr')]
+  jobs.append(dict(file=filename,rows=maker(data,sha),source_records=data,source_path=path))
+ tasks=[read_json(root,f'kr/tasks/T{i:02d}/task.json') for i in range(1,17)]
+ jobs.append(dict(file='13_研究Task.xlsx',rows=make_task(root,sha),source_records=tasks,source_path='kr/tasks/Txx/task.json'))
+ sf=make_sfd(server,ssha)
+ if sf is None:raise FileNotFoundError('Server follow-up index missing')
+ raw_sfd=[]
+ for row in sf:
+  path=row[5].split('/blob/'+ssha+'/')[1]
+  text=(server/path).read_text(encoding='utf-8')
+  raw_sfd.append(dict(id=row[0],status=row[1],priority=row[2],milestone=row[3],title=row[4],source_path=path,document=text))
+ jobs.append(dict(file='14_Server待辦.xlsx',rows=sf,source_records=raw_sfd,source_path='docs/server-followups/index.md'))
+ for job in jobs:
+  ids=[str(v['id']) for v in job['source_records']]
+  if len(ids)!=len(set(ids)):raise ValueError('Duplicate source IDs: '+job['file'])
+  if not (folder/job['file']).is_file():raise FileNotFoundError(job['file'])
+  if len(ids)!=len(job['rows']):raise ValueError('Row count mismatch')
+  keys=sorted(set().union(*(v.keys() for v in job['source_records'])))
+  fields=[]
+  for key in keys:
+   count=max(1,max((len(json.dumps(v.get(key),ensure_ascii=False,separators=(',',':')).encode('utf-16-le'))//2 + 29999)//30000 for v in job['source_records']))
+   fields.append(dict(key=key,parts=count))
+  job['fields']=fields
+  job['field_values']=[[json.dumps(v.get(f['key']),ensure_ascii=False,separators=(',',':')) if f['key'] in v else '' for f in fields] for v in job['source_records']]
+ stamp=datetime.now().astimezone().strftime('%Y%m%d-%H%M%S')
+ plan=dict(schema='s00-full-field-sync-v2',timestamp=stamp,analysis_sha=sha,server_sha=ssha,analysis_dir=str(root),server_dir=str(server),folder=str(folder),jobs=jobs)
+ run=a.runner_dir.resolve();run.mkdir(parents=True,exist_ok=True)
+ planfile=run/'sync-plan.json';planfile.write_text(json.dumps(plan,ensure_ascii=False,indent=2),encoding='utf-8')
+ writer=run/'S00_workbook_writer.mjs';shutil.copy2(Path(__file__).with_name('S00_workbook_writer.mjs'),writer)
+ subprocess.run([a.node,str(writer),str(planfile)],check=True)
+ print('Sync prepared and exported. Verify saved files and manual preservation before Git submission.')
 
 if __name__=='__main__':main()

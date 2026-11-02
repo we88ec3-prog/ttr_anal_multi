@@ -14,22 +14,36 @@
 
 GitHub `main` 上的正式 RR、REQ、SPEC、GAP、CLM、SRC、TEST 台帳仍為唯一權威；此處是視圖與人工註記，不得從工作台反向提升研究驗證、規格成熟度、Server 可玩性。`S00` 負責整合 Server 需求與規劃；`T01` 審核原生證據；`T02`～`T16` 持續補證；`ttr_server_roy` 獨立管理 Server 實作。原版 Server-only 未知列為 Server 待開發需求，Client 必需 wire/parser/UI 未知列為 Client 待逆向。
 
-## Windows 更新（從已同步的 main checkout 執行）
+## 全欄位同步（2026-11-02）
 
-先將本 repo 與 `ttr_server_roy` 的本機 `main` 分別 `git pull --ff-only`，再在分析 repo 根目錄使用：
+本次已依最新 main 同步正式資料：CLM189、SRC653、RR10、REQ9、SPEC7、GAP9、TEST6、KR Task16、Server SFD9，共908筆。更新11份既有工作簿；其他8份（含人工補充）保持原檔不變。
+
+既有可讀欄位就地更新，表格右側新增 `正式JSON:<key>` 欄位，逐一保留來源記錄的所有原始欄位。陣列／物件使用完整 JSON；缺少欄位為空白，明確 null 為 `null`。超過單格限制的欄位分成 `(1/n)` 至 `(n/n)`，依序接合即可還原。完整欄位不等於全文原生驗收或實際可玩。
+
+本次來源：分析 main `ee6e3f22b35b9053d38dfbfb3538d7030522bd43`；Server main `69c714c54fb5c802251736ee38ff37c19fba3c53`。版本中立的共用 Server 需求亦保留，明確 TC 記錄不納入 KR。
+
+## Windows 增量更新
+
+先確認兩個乾淨的 main checkout 已 `git pull --ff-only`。不要切換或覆寫其他研究工作樹；本次使用既有 main 分支的隔離工作目錄，未建立額外分支。
+
+更新器保留 Python 資料來源讀取及 CLI，改由 JavaScript `@oai/artifact-tool` 修改現有 XLSX；不再需要 Python `artifact_tool`。使用 Codex bundled Node 與套件。先在本次執行目錄建立 `node_modules` junction，指向依賴載入器提供的 bundled node_modules，勿修改依賴資料夾。
 
 ```powershell
-python -m pip install artifact_tool
 python .\workbooks\tartaros-kr\S00_Excel_增量更新.py `
   --workbooks .\workbooks\tartaros-kr `
   --analysis-dir . `
-  --server-dir ..\ttr_server_roy `
-  --require-main
+  --server-dir 'E:\Tartaros\ttr_server\ttr_server_roy' `
+  --require-main `
+  --node '<bundled node.exe 絕對路徑>' `
+  --runner-dir '<本次執行目錄，含 node_modules junction>'
+
+python .\workbooks\tartaros-kr\S00_workbook_verify.py `
+  '<同一執行目錄>' --promote
 ```
 
-上例 `--server-dir` 請按實際本機路徑替換。此程式只修改本機既有檔案、建立備份與 `update-history/`，**不會自動提交 Git**；S00 應核對差異和原版 Client 真實驗收後，依使用者明確授權提交。
+第一步只匯出暫存候選，第二步以標準庫獨立核對已存檔資料、來源 JSON、既有 ID 列、未授權變更、樣式與工作表控制後，才備份並替換原檔，留下 `update-history/*.json`。人工摘要／備註與來源已不見的舊列保留。相同執行紀錄不可重複發布，以免覆寫原備份。更新器不會提交或推送 Git，也不改正式台帳／Server／Client。
 
-**注意**：更新器只會同步官方機器台帳及 Server SFD 的既有對應欄位；封包、角色流程、Server 實作摘要等非機器來源資料仍需 S00 另外核對證據後人工增量修訂。先更新正式資料並不等於實際 Client 連線測試已通過。
+**注意**：01功能、02封包、03欄位、04玩家流程、05Server開發、07資源仍屬人工核對視圖；這次未憑新台帳臆造內容。32筆封包與55筆欄位仍是候選清單，全集枚舉未完成。後續維護見 [全欄位同步紀錄](S00_全欄位同步_20261102.md)。
 
 ## 歷史首次基準
 
