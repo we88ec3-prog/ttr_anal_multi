@@ -1,0 +1,221 @@
+{
+  "schema": "w2-field19-case103-result-v1",
+  "classification": "PINNED_RESOURCE_AND_BOUNDED_KR_STATIC_NOT_FULL_PASS",
+  "source": {
+    "KR_BIN_SHA256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+    "W2_workcard_blob": "3a7b1e6c2f53db6e3705387447908143deafb641",
+    "RESOURCE_BASELINE_blob": "5ac883881d3ab0c711ad7c0bdd84c4dd3c2e5cd6",
+    "T14_WP03_blob": "de17ff49afb2ff460453784b8c1180e63021a3b9",
+    "T16_135_blob": "b0a15aaabe1fc2d86225c5d5466b6ab78564c29c"
+  },
+  "ids": {
+    "QuestID": 15,
+    "DemandID": 16,
+    "FieldID": 19,
+    "CaseID": 103,
+    "Chart": "CHART_S_pathofpindus_01.xml",
+    "MapFlowNodeIDs": [
+      1,
+      2
+    ],
+    "MapIDs": [
+      191,
+      192
+    ],
+    "TownID": 1,
+    "TownMapID": 182,
+    "EventSceneKey": [
+      15,
+      3
+    ]
+  },
+  "maps": [
+    {
+      "node": 1,
+      "mapId": 191,
+      "mapName": "scenario_pathofpindus01D",
+      "mef": "S_pathofpindus01.mef",
+      "bnd": "scenario_pathofpindus01",
+      "bnd_version": 2
+    },
+    {
+      "node": 2,
+      "mapId": 192,
+      "mapName": "scenario_pathofpindus02D",
+      "mef": "S_pathofpindus02.mef",
+      "bnd": "scenario_pathofpindus02",
+      "bnd_version": 2
+    }
+  ],
+  "phases": [
+    {
+      "name": "eligibility",
+      "kind": "RESOURCE_AND_T16_LIMITED",
+      "proof": "Quest15 Field19 Demand16; no original Server quest policy"
+    },
+    {
+      "name": "preload",
+      "kind": "PINNED_RESOURCE_ONLY",
+      "proof": "Case103 Stage19; MapFlow node1 Map191 and node2 Map192"
+    },
+    {
+      "name": "formation_enter",
+      "kind": "PARTIAL_REFERENCED",
+      "C2S_candidate": [
+        "004E",
+        "0028"
+      ],
+      "S2C_candidate": [
+        "005F/type2",
+        "0038/type2/6",
+        "0012",
+        "0014"
+      ],
+      "opaqueTokens": "no writer/schema authenticated",
+      "requiredOrder": "UNKNOWN"
+    },
+    {
+      "name": "map_transition",
+      "kind": "RESOURCE_ONLY",
+      "node1_to_node2_trigger": "UNKNOWN",
+      "spawn": "UNKNOWN"
+    },
+    {
+      "name": "decision_result",
+      "kind": "NATIVE_BOUNDED",
+      "direction": "S2C",
+      "app_opcode": "0x0022",
+      "typeOffset": 2,
+      "typeValue": 0,
+      "minReadAppBytes": 22,
+      "consumerEntryVA": "0x4B9770",
+      "type0VA": "0x4C4550"
+    },
+    {
+      "name": "return_clicked",
+      "kind": "NATIVE_BOUNDED",
+      "direction": "C2S",
+      "app_opcode": "0x0033",
+      "bodyLengthBytes": 2,
+      "bodyHex": "33 00",
+      "slot": 0,
+      "preconditions": [
+        "UI event 0x578 and widget identity match",
+        "F431F event +0x14=0",
+        "FBA798=0"
+      ],
+      "requestContainsDestination": false
+    },
+    {
+      "name": "post_result",
+      "kind": "SERVER_DESIGN",
+      "returnDestination": "SERVER_OWNED_UNKNOWN",
+      "Quest15Complete": "NOT_PROVEN_BY_33",
+      "sceneKey15_3": "INDEPENDENT_NOT_AUTO"
+    }
+  ],
+  "resultFields": [
+    {
+      "offset": 0,
+      "size": 2,
+      "type": "uint16le",
+      "meaning": "application opcode"
+    },
+    {
+      "offset": 2,
+      "size": 1,
+      "type": "int8",
+      "meaning": "decision subtype=0"
+    },
+    {
+      "offset": 3,
+      "size": 1,
+      "type": "byte",
+      "meaning": "UNKNOWN"
+    },
+    {
+      "offset": 4,
+      "size": 4,
+      "type": "uint32le",
+      "consumer": "FE18F8->+0x24",
+      "subByte4": "zero/nonzero UI presentation",
+      "semantic": "UNKNOWN"
+    },
+    {
+      "offset": 8,
+      "size": 4,
+      "type": "uint32le",
+      "consumer": "FE18F8->+0x28",
+      "subByte9": "FE18F8->+0x29 -> F431F event +0x14",
+      "semantic": "UNKNOWN"
+    },
+    {
+      "offset": 12,
+      "size": 4,
+      "type": "uint32le",
+      "consumer": "FE18F8->+0x2C",
+      "semantic": "UNKNOWN"
+    },
+    {
+      "offset": 16,
+      "size": 4,
+      "type": "uint32le",
+      "consumer": "FE18F8->+0x30",
+      "semantic": "UNKNOWN"
+    },
+    {
+      "offset": 20,
+      "size": 2,
+      "type": "uint16le",
+      "consumer": "FE18F8->+0x34",
+      "semantic": "UNKNOWN"
+    }
+  ],
+  "nativeEdges": [
+    [
+      "4B7DC0 opcode22",
+      "4B9770"
+    ],
+    [
+      "4B9770 type0",
+      "4B7D50(scene replace)"
+    ],
+    [
+      "4B9770 vtable+38",
+      "4C4550"
+    ],
+    [
+      "4C4550",
+      "F4297 + 4BA8C0"
+    ],
+    [
+      "6BA2C0 UI578",
+      "F431F"
+    ],
+    [
+      "F431F",
+      "5AAE80"
+    ],
+    [
+      "5AAE80 zero path",
+      "C2S33 slot0"
+    ]
+  ],
+  "unknown": [
+    "004E/0028 token owner, schema, bytes and echo",
+    "005F/type2/0038/0012/0014 Field19-specific complete schema and order",
+    "node1 Map191 to node2 Map192 native trigger",
+    "scenario BND version2 occupancy parsing and legal spawn",
+    "0022 type0 +3, +12..21 official business semantics, full original app payload size",
+    "0022 +4 zero/nonzero official victory/defeat label",
+    "Q15 reward type and Server transaction",
+    "C2S33 return destination and actual village scene installation",
+    "Quest15 and Scene(15,3) runtime causal order"
+  ],
+  "status": {
+    "wholeW2Completed": false,
+    "ClientRuntimeTested": false,
+    "T01FullPass": false,
+    "S00Approved": false
+  }
+}
