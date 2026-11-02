@@ -24,3 +24,14 @@ v14/v15文件把Z停步寫成修正目標，是需求解讀錯誤；歷史測試
 合成TCP正常旅程新增：方向移動200ms，方向放開且Z（相同朝向）停止；重複Z不累積位移；同方向加Z恢復且連續Z仍移動；再次放開方向且Z停止。最後位置核對原路線仍可接NPC。清怪後恢復等待改用持續推進的合成時鐘，避免已排送攻擊在單次時間跳躍後才開始而凍住測試。
 
 27個 Category=HappyPath 正流程／已授權進度指定測試通過（19秒，0失敗／略過）；先前兩次完整旅程卡在合成時鐘恢復等待，修正該等待後本批全數通過。需求來源校驗通過：20需求／35 runtime觀察／0正式批准。部署收據待補；真人廣場驗收仍待測，不能以合成輸入宣稱已修復真Client。
+
+## v16啟用收據
+
+公開分析 `007a682743227efc66d221b22adb32a6200b169c`、私有Server
+`e01730c9eed62f9edbd25eb2453898e198032a38` 已推送既有開發分支。
+2026-11-03 03:13 Asia/Taipei啟用，換版前核對8415／5082無Listener、舊PID已不存在，故未終止任何程式。
+新Host PID40356、路徑 `runtime-observations/2026-11-03-field19/phindos-host-v16/Tartaros.Server.Host.exe`，
+隔離DB仍為accounts-phindos-v12.db。health登入綁定／journey啟用；本機進度頁GET200。
+Host DLL SHA256 `0cc53a392e1602a0c2acd4da811ad255fca7a7535e12d17d23c69490ca0a558f`；
+Network DLL SHA256 `eb5e58ec990321efefb297a8db3f9139e91b17f9f739c95da50e3819b876d3b6`。
+未操作玩家進度POST，真人本輪結果仍PENDING。
