@@ -51,3 +51,7 @@ python .\workbooks\tartaros-kr\S00_workbook_verify.py `
 - Server `ttr_server_roy`：`69c714c54fb5c802251736ee38ff37c19fba3c53`
 
 首次發佈至 GitHub 不會修改上述原始分析資料，也不會自動建立新 Task、改變 RR 狀態或覆蓋 Server。
+
+## 已知驗收結果補登（2026-11-02）
+
+[驗收回填紀錄](S00_驗收回填_20261102.md)：HP流程8項指定修改工作副本通過、4項部分驗證、2項未涵蓋、1項尚未通過，另新增1項進村待開發。既有26個Server正流程合成案例另外彙總；6筆正式TEST未在本次重跑。未修改原版Client尚未驗收。這是既有證據補登，不是本次新增遊戲測試結果。
