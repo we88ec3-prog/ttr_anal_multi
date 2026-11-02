@@ -46,3 +46,11 @@ v14實際遊戲結果待測，不能以此合成結果標為已人工通過。
 [實作與遷移計畫](S00-20261103-MEF-IMPLEMENTATION-AND-MIGRATION-PLAN.md)列出生怪／波次／
 出口／AI／旅程的遷移對照、樣本與格式Gate、Server interpreter及逐圖切換。
 目前仍不是MEF；新增規劃不宣稱原生格式或Client傳檔介面已可用。
+
+## 發行收據
+
+私有Server `bfc04f1f131c053192546e89a2624050c0b9c6ac`、分析／MEF計畫
+`38885cc501476dde732cd2e8295ea1ae2aa30f1b`已推送既有開發分支，未合併main。
+2026-11-03 02:29（Asia/Taipei）核對v13 Host PID／路徑後，依授權替換本任務loopback服務。
+v14健康檢查確認本機8415與journey啟用；資料庫及前輪進度保留，新短帳號未預填進度。
+已送出「廣場非戰鬥Z停步→清怪後空揮→出口按Z→進村」連測卡；**實際人測PENDING**。
