@@ -1,3 +1,7 @@
+# 2026-11-03 v14與MEF遷移規劃
+
+[v14修正](S00-20261103-PHINDOS-V14-CORRECTIONS.md)：出口改站上按Z、清怪後保留戰鬥與空揮、修正非戰鬥Z停步；27正常測試通過，人測待完成。[MEF遷移計畫](S00-20261103-MEF-IMPLEMENTATION-AND-MIGRATION-PLAN.md)列內容／AI搬移及原生格式Gate，尚非已實作MEF。
+
 # 2026-11-03 v12人測與v13修正
 
 [人測](S00-20261103-PHINDOS-V12-HUMAN-RESULT.md)確認到村、人物NPC／移動停止及換場畫面，並有三項缺陷；[v13修正](S00-20261103-PHINDOS-V13-CORRECTIONS.md)已通過正常合成測試，實際遊戲重測待完成。以下較早「人工未完成／自動換圖／40接取」敘述按其版本保留。
