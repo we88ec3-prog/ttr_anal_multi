@@ -13,3 +13,7 @@ GET /local-test/progress/input-trace沿既有debug opt-in且僅loopback可讀。
 ## Web AI研究準備
 
 [工作包](../../research/handoffs/s00-input-and-quest-reuse-20261103/README.md)收錄P0多方向／多動作鍵與P1共用任務Runtime。先回答8000真正語義及held/released是否可由wire區分，再制定Server適配規則；不以Z強制停步、方向鎖、最後一鍵或硬猜優先序取代證據。尚未派送／認領／原生驗證。
+
+## v17啟用
+
+分析／工作包76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac、私有Server f95fe9099419b2bbb5f0daa71c6810d0c2b53d8e已push。2026-11-03 03:38 Asia/Taipei換版前明確核對並保存loopback8415/5082的v16 PID40356及完整Host路徑，僅停止該任務Host；v17 PID40044，路徑phindos-host-v17/Tartaros.Server.Host.exe，沿用accounts-phindos-v12.db。登入綁定／journey健康，input-trace GET200且未連接時為空陣列。Host DLL SHA256 41fc2f7529750f362f1c7c3049b4b2c7eedf22c0584f94c291b748111d6799cd；Network DLL SHA256 5c32b66e6022c8b56e3ca55b188adb9a462dd4d4fa3a82241a92b7f631d3d2d6。未操作Client或替玩家POST改進度。新診斷人測尚待。
