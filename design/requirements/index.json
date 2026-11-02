@@ -523,7 +523,8 @@
       "acceptance_criteria": [
         "正常移動、放開輸入及教學轉段後，角色停止持續跑動；若Client不再傳輸入，也不能永久保留最後run flag。停止判定／時限是明示Server政策，不宣稱官方原生值。",
         "實際遊戲可以在前一步停止後繼續正常移動或切換自有角色；切角保留Server當前位置／方向，不回預設出生點，不信任Client tick為世界權威。",
-        "以正常旅程重測並保留尚缺的動態碰撞、位置校準、任務／戰鬥／廣場及暫緩異常測試，不把離線／合成通過當作完整Client成功。"
+        "以正常旅程重測並保留尚缺的動態碰撞、位置校準、任務／戰鬥／廣場及暫緩異常測試，不把離線／合成通過當作完整Client成功。",
+        "非戰鬥移動獨立於Z：放開方向、只按Z應停止；方向仍按住且按Z應可移動，同方向再次輸入可恢復；須區分合成row驗證與真人按鍵驗收。"
       ],
       "discoveries": [
         {
@@ -585,6 +586,18 @@
           "limitations": "No packet backlog measurement or full raw input capture; heading latch directly explains the asymmetry.",
           "reproduction": "Nonbattle up -> Z -> up versus up -> Z -> right.",
           "observed": "Same direction cannot resume; changing direction can resume."
+        },
+        {
+          "channel": "GAME_RUNTIME_OBSERVATION",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "tested_executable_sha256": "6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c",
+          "tested_build_kind": "MODIFIED_WORKING_COPY_NOT_ORIGINAL_CLIENT",
+          "observation_ref": "governance/s00-iterations/S00-20261103-MOVEMENT-INTENT-V16.md",
+          "authorization_ref": "governance/s00-iterations/S00-20261103-MOVEMENT-INTENT-V16.md",
+          "environment": "User-operated loopback v15, private Server251af45056aa0e1096a9c686da0fa7ffa26b5736; existing test account in square. No Client modification/attachment.",
+          "reproduction": "In square repeatedly press Z; releasing Z restores movement. User clarifies original defect was movement continuing after releasing direction while pressing Z.",
+          "observed": "Repeated Z blocks movement in v15; user explicitly rejects stopping movement merely because Z is received.",
+          "limitations": "No raw per-row input capture for this run. v16 synthetic movement-bit cases do not prove physical key semantics or human acceptance."
         }
       ],
       "rr_ids": [
