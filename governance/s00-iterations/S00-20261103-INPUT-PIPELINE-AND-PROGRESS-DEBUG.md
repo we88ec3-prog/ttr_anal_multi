@@ -67,3 +67,12 @@ actor/NPC/control，廣場仍等原有43初始化訊息。跳到劇情／編隊�
 正常到村後再正向切六個checkpoint、重打第一圖並用出口進第二圖，最後SQL核對原正常
 stage1..4與lease／role紀錄仍未改寫。這些為合成TCP／資料驗證，實際頁面操作與Client切場待測。
 其餘負向、取消競態、多人、未知資產、重登恢復與壓測仍暫緩。
+
+## 發行收據
+
+私有Server `251af45056aa0e1096a9c686da0fa7ffa26b5736`，補充分析／REQ-0020
+`ea43c806373114886eddc0413a48d1f82ae3c374`均已推送既有開發分支。
+2026-11-03 02:52（Asia/Taipei）核對v14任務Host後換成v15，loopback8415與journey啟用。
+進度頁GET200、六段selector存在、status endpoint回TEST_PROGRESS_OVERRIDE與尚無連線ready=false。
+沒有為了頁面檢查對玩家執行POST／改進度；實際遊戲切換與同方向恢復仍待使用者回饋。
+已發測試卡：沿用完成角色準備的現有帳號，選廣場測方向→Z→同方向，再選第一圖，只測到進場。
