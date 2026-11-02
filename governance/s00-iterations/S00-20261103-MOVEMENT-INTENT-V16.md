@@ -29,7 +29,7 @@ v14/v15文件把Z停步寫成修正目標，是需求解讀錯誤；歷史測試
 
 公開分析 `007a682743227efc66d221b22adb32a6200b169c`、私有Server
 `e01730c9eed62f9edbd25eb2453898e198032a38` 已推送既有開發分支。
-2026-11-03 03:13 Asia/Taipei啟用，換版前核對8415／5082無Listener、舊PID已不存在，故未終止任何程式。
+2026-11-03 03:13 Asia/Taipei啟用；啟用腳本在實際執行環境核對8415／5082的loopback Listener與v15指定Host路徑才允許替換。未另保留換版前PID快照，不能以受限環境的空清單推定舊Host不存在。
 新Host PID40356、路徑 `runtime-observations/2026-11-03-field19/phindos-host-v16/Tartaros.Server.Host.exe`，
 隔離DB仍為accounts-phindos-v12.db。health登入綁定／journey啟用；本機進度頁GET200。
 Host DLL SHA256 `0cc53a392e1602a0c2acd4da811ad255fca7a7535e12d17d23c69490ca0a558f`；
