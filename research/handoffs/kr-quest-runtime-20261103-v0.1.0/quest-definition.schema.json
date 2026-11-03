@@ -1,0 +1,2196 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "0.1.0"
+    },
+    "model_kind": {
+      "const": "SERVER_CANDIDATE_NOT_NATIVE_MEF"
+    },
+    "client_profile": {
+      "$ref": "#/$defs/clientProfile"
+    },
+    "id": {
+      "$ref": "#/$defs/questId"
+    },
+    "display_name": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "ko_raw": {
+          "type": "string",
+          "minLength": 1
+        },
+        "zh_tw_working_translation": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "translation_status": {
+          "enum": [
+            "WORKING_TRANSLATION",
+            "NOT_PROVIDED"
+          ]
+        }
+      },
+      "required": [
+        "ko_raw",
+        "zh_tw_working_translation",
+        "translation_status"
+      ]
+    },
+    "source_data": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "raw_attributes": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "quest_type_raw": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "subtype_raw": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "town": {
+          "$ref": "#/$defs/townId"
+        },
+        "field": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/fieldId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "level_raw": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "giver": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/npcId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "finisher": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/npcId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "demand_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/questId"
+          },
+          "minItems": 0
+        },
+        "demand_operator_raw": {
+          "anyOf": [
+            {
+              "enum": [
+                "AND",
+                "OR"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "contents_present": {
+          "type": "boolean"
+        },
+        "accept_action_raw": {
+          "anyOf": [
+            {
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "complete_action_raw": {
+          "anyOf": [
+            {
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "quest_talk_row_present": {
+          "type": "boolean"
+        },
+        "reward_etc_present": {
+          "type": "boolean"
+        },
+        "reward_items_present": {
+          "type": "boolean"
+        },
+        "chapters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/chapterBinding"
+          },
+          "minItems": 0
+        },
+        "source": {
+          "$ref": "#/$defs/evidence"
+        }
+      },
+      "required": [
+        "raw_attributes",
+        "quest_type_raw",
+        "subtype_raw",
+        "town",
+        "field",
+        "level_raw",
+        "giver",
+        "finisher",
+        "demand_ids",
+        "demand_operator_raw",
+        "contents_present",
+        "accept_action_raw",
+        "complete_action_raw",
+        "quest_talk_row_present",
+        "reward_etc_present",
+        "reward_items_present",
+        "chapters",
+        "source"
+      ]
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "classification": {
+          "const": "SERVER_CANDIDATE_DESIGN"
+        },
+        "progress_scope": {
+          "anyOf": [
+            {
+              "enum": [
+                "account",
+                "expedition",
+                "character"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "eligibility_rule": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/condition"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "acceptance_rule": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/condition"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "npc_visibility_rule": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/condition"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "character_restrictions": {
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/characterId"
+              },
+              "minItems": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "repeatability": {
+          "anyOf": [
+            {
+              "enum": [
+                "once",
+                "repeatable",
+                "daily",
+                "weekly"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "branch_policy_ref": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "source": {
+          "$ref": "#/$defs/evidence"
+        }
+      },
+      "required": [
+        "classification",
+        "progress_scope",
+        "eligibility_rule",
+        "acceptance_rule",
+        "npc_visibility_rule",
+        "character_restrictions",
+        "repeatability",
+        "branch_policy_ref",
+        "source"
+      ]
+    },
+    "objectives": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/objective"
+      },
+      "minItems": 1
+    },
+    "rewards": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/reward"
+      },
+      "minItems": 0
+    },
+    "reward_policy_status": {
+      "enum": [
+        "BOUND",
+        "BLOCKED"
+      ]
+    },
+    "settlement": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "objective_rule": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/condition"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "turnin_rule": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/condition"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reward_plan_ref": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "transaction_contract": {
+          "const": "QUEST_SETTLEMENT_TRANSACTION_V0_1"
+        },
+        "status": {
+          "enum": [
+            "BOUND",
+            "BLOCKED"
+          ]
+        },
+        "source": {
+          "$ref": "#/$defs/evidence"
+        }
+      },
+      "required": [
+        "objective_rule",
+        "turnin_rule",
+        "reward_plan_ref",
+        "transaction_contract",
+        "status",
+        "source"
+      ]
+    },
+    "scenario_entry_ref": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "flow_ref": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "unlock_candidates": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/questId"
+      },
+      "minItems": 0
+    },
+    "activation": {
+      "enum": [
+        "DRAFT_BLOCKED",
+        "REVIEWED_DISABLED",
+        "ENABLED_AFTER_ACCEPTANCE"
+      ]
+    },
+    "blocking_issues": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/issue"
+      },
+      "minItems": 0
+    },
+    "provenance": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidence"
+      },
+      "minItems": 1
+    }
+  },
+  "required": [
+    "schema_version",
+    "model_kind",
+    "client_profile",
+    "id",
+    "display_name",
+    "source_data",
+    "policy",
+    "objectives",
+    "rewards",
+    "reward_policy_status",
+    "settlement",
+    "scenario_entry_ref",
+    "flow_ref",
+    "unlock_candidates",
+    "activation",
+    "blocking_issues",
+    "provenance"
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ttr:server-candidate:quest-definition:0.1.0",
+  "title": "KR 任務定義 0.1.0 — Server 候選，非原生 MEF",
+  "description": "Raw absent fields remain null. DRAFT_BLOCKED is importable for review, never executable. source_data is resource evidence; policy and settlement are proposed Server contracts. No default values or byte arrays.",
+  "x_evidence_class": "SERVER_CANDIDATE_DESIGN",
+  "$defs": {
+    "questId": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "domain": {
+          "const": "quest"
+        },
+        "value": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "domain",
+        "value"
+      ]
+    },
+    "chapterId": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "domain": {
+          "const": "chapter"
+        },
+        "value": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "domain",
+        "value"
+      ]
+    },
+    "npcId": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "domain": {
+          "const": "npc"
+        },
+        "value": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "domain",
+        "value"
+      ]
+    },
+    "townId": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "domain": {
+          "const": "town"
+        },
+        "value": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "domain",
+        "value"
+      ]
+    },
+    "fieldId": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "domain": {
+          "const": "field"
+        },
+        "value": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "domain",
+        "value"
+      ]
+    },
+    "mapId": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "domain": {
+          "const": "map"
+        },
+        "value": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "domain",
+        "value"
+      ]
+    },
+    "caseId": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "domain": {
+          "const": "case"
+        },
+        "value": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "domain",
+        "value"
+      ]
+    },
+    "itemId": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "domain": {
+          "const": "item"
+        },
+        "value": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "domain",
+        "value"
+      ]
+    },
+    "quest_rewards_etc_typeId": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "domain": {
+          "const": "quest_rewards_etc_type"
+        },
+        "value": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "domain",
+        "value"
+      ]
+    },
+    "quest_rewards_item_typeId": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "domain": {
+          "const": "quest_rewards_item_type"
+        },
+        "value": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "domain",
+        "value"
+      ]
+    },
+    "characterId": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "domain": {
+          "const": "character"
+        },
+        "value": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "domain",
+        "value"
+      ]
+    },
+    "scenarioId": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "domain": {
+          "const": "scenario"
+        },
+        "value": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "domain",
+        "value"
+      ]
+    },
+    "portal_effectId": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "domain": {
+          "const": "portal_effect"
+        },
+        "effect_id": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "state": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "domain",
+        "effect_id",
+        "state"
+      ]
+    },
+    "runtimeEntityId": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "domain": {
+          "const": "runtime_entity"
+        },
+        "instance_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "entity_key": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "domain",
+        "instance_key",
+        "entity_key"
+      ]
+    },
+    "sceneKey": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "domain": {
+          "const": "scene"
+        },
+        "quest": {
+          "$ref": "#/$defs/questId"
+        },
+        "scene_index": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "domain",
+        "quest",
+        "scene_index"
+      ]
+    },
+    "formationToken": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "domain": {
+          "const": "formation_token"
+        },
+        "opaque_value": {
+          "type": "string"
+        },
+        "owner_scope": {
+          "type": "string",
+          "minLength": 1
+        },
+        "instance_binding": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "domain",
+        "opaque_value",
+        "owner_scope",
+        "instance_binding"
+      ]
+    },
+    "portalKey": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "domain": {
+          "const": "portal"
+        },
+        "instance_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "map_node_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "wire_key": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "domain",
+        "instance_key",
+        "map_node_key",
+        "wire_key"
+      ]
+    },
+    "monsterResourceKey": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "domain": {
+          "const": "monster"
+        },
+        "resource_category": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "resource_id": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "pre": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "domain",
+        "resource_category",
+        "resource_id",
+        "pre"
+      ]
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "source_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_sha": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "evidence_kind": {
+          "enum": [
+            "CLIENT_RESOURCE_DIRECT",
+            "EXISTING_RESOURCE_BYTES_REPARSED",
+            "CLIENT_BINARY_BOUNDED",
+            "EXISTING_ANALYSIS",
+            "USER_REQUIREMENT",
+            "SERVER_IMPLEMENTATION_CANDIDATE",
+            "SERVER_IMPLEMENTATION_FACT",
+            "SERVER_CANDIDATE_DESIGN",
+            "HUMAN_ACCEPTANCE_RECORDED",
+            "UNKNOWN"
+          ]
+        },
+        "unknowns": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 0
+        }
+      },
+      "required": [
+        "source_ref",
+        "source_sha",
+        "evidence_kind",
+        "unknowns"
+      ]
+    },
+    "issue": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "type": "string",
+          "minLength": 1
+        },
+        "field": {
+          "type": "string",
+          "minLength": 1
+        },
+        "responsibility": {
+          "enum": [
+            "CLIENT_RESEARCH",
+            "SERVER_DESIGN",
+            "SERVER_DEVELOPMENT",
+            "INTEGRATION",
+            "GAMEPLAY_ACCEPTANCE",
+            "SOURCE_ABSENT"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "unblock_evidence": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "code",
+        "field",
+        "responsibility",
+        "reason",
+        "unblock_evidence"
+      ]
+    },
+    "atom": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "op": {
+              "const": "predicate"
+            },
+            "name": {
+              "const": "quest_settled"
+            },
+            "args": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "quest": {
+                  "$ref": "#/$defs/questId"
+                }
+              },
+              "required": [
+                "quest"
+              ]
+            },
+            "source": {
+              "$ref": "#/$defs/evidence"
+            }
+          },
+          "required": [
+            "op",
+            "name",
+            "args",
+            "source"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "op": {
+              "const": "predicate"
+            },
+            "name": {
+              "const": "authorized_prerequisite_present"
+            },
+            "args": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "quest_key": {
+                  "$ref": "#/$defs/questId"
+                }
+              },
+              "required": [
+                "quest_key"
+              ]
+            },
+            "source": {
+              "$ref": "#/$defs/evidence"
+            }
+          },
+          "required": [
+            "op",
+            "name",
+            "args",
+            "source"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "op": {
+              "const": "predicate"
+            },
+            "name": {
+              "const": "level_at_least"
+            },
+            "args": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "value": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "level_scope": {
+                  "enum": [
+                    "character",
+                    "expedition"
+                  ]
+                }
+              },
+              "required": [
+                "value",
+                "level_scope"
+              ]
+            },
+            "source": {
+              "$ref": "#/$defs/evidence"
+            }
+          },
+          "required": [
+            "op",
+            "name",
+            "args",
+            "source"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "op": {
+              "const": "predicate"
+            },
+            "name": {
+              "const": "town_is"
+            },
+            "args": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "town": {
+                  "$ref": "#/$defs/townId"
+                }
+              },
+              "required": [
+                "town"
+              ]
+            },
+            "source": {
+              "$ref": "#/$defs/evidence"
+            }
+          },
+          "required": [
+            "op",
+            "name",
+            "args",
+            "source"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "op": {
+              "const": "predicate"
+            },
+            "name": {
+              "const": "npc_interactable"
+            },
+            "args": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "npc": {
+                  "$ref": "#/$defs/npcId"
+                }
+              },
+              "required": [
+                "npc"
+              ]
+            },
+            "source": {
+              "$ref": "#/$defs/evidence"
+            }
+          },
+          "required": [
+            "op",
+            "name",
+            "args",
+            "source"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "op": {
+              "const": "predicate"
+            },
+            "name": {
+              "const": "character_owned"
+            },
+            "args": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "character": {
+                  "$ref": "#/$defs/characterId"
+                }
+              },
+              "required": [
+                "character"
+              ]
+            },
+            "source": {
+              "$ref": "#/$defs/evidence"
+            }
+          },
+          "required": [
+            "op",
+            "name",
+            "args",
+            "source"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "op": {
+              "const": "predicate"
+            },
+            "name": {
+              "const": "inventory_at_least"
+            },
+            "args": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "item": {
+                  "$ref": "#/$defs/itemId"
+                },
+                "count": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "required": [
+                "item",
+                "count"
+              ]
+            },
+            "source": {
+              "$ref": "#/$defs/evidence"
+            }
+          },
+          "required": [
+            "op",
+            "name",
+            "args",
+            "source"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "op": {
+              "const": "predicate"
+            },
+            "name": {
+              "const": "objective_count_at_least"
+            },
+            "args": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "objective_key": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "count": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "required": [
+                "objective_key",
+                "count"
+              ]
+            },
+            "source": {
+              "$ref": "#/$defs/evidence"
+            }
+          },
+          "required": [
+            "op",
+            "name",
+            "args",
+            "source"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "op": {
+              "const": "predicate"
+            },
+            "name": {
+              "const": "instance_outcome_matches_bound_objective"
+            },
+            "args": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "quest": {
+                  "$ref": "#/$defs/questId"
+                }
+              },
+              "required": [
+                "quest"
+              ]
+            },
+            "source": {
+              "$ref": "#/$defs/evidence"
+            }
+          },
+          "required": [
+            "op",
+            "name",
+            "args",
+            "source"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "op": {
+              "const": "predicate"
+            },
+            "name": {
+              "const": "flow_expected_node_and_authorized_scope"
+            },
+            "args": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "node": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "node"
+              ]
+            },
+            "source": {
+              "$ref": "#/$defs/evidence"
+            }
+          },
+          "required": [
+            "op",
+            "name",
+            "args",
+            "source"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "op": {
+              "const": "predicate"
+            },
+            "name": {
+              "const": "event.scene_equals"
+            },
+            "args": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "scene": {
+                  "$ref": "#/$defs/sceneKey"
+                }
+              },
+              "required": [
+                "scene"
+              ]
+            },
+            "source": {
+              "$ref": "#/$defs/evidence"
+            }
+          },
+          "required": [
+            "op",
+            "name",
+            "args",
+            "source"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "op": {
+              "const": "predicate"
+            },
+            "name": {
+              "const": "server_hook"
+            },
+            "args": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "hook_id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "contract_version": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "hook_id",
+                "contract_version"
+              ]
+            },
+            "source": {
+              "$ref": "#/$defs/evidence"
+            }
+          },
+          "required": [
+            "op",
+            "name",
+            "args",
+            "source"
+          ]
+        }
+      ]
+    },
+    "condition": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/atom"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "op": {
+              "enum": [
+                "all",
+                "any"
+              ]
+            },
+            "terms": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/condition"
+              },
+              "minItems": 1
+            }
+          },
+          "required": [
+            "op",
+            "terms"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "op": {
+              "const": "not"
+            },
+            "term": {
+              "$ref": "#/$defs/condition"
+            }
+          },
+          "required": [
+            "op",
+            "term"
+          ]
+        }
+      ]
+    },
+    "regionTarget": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "domain": {
+          "const": "region"
+        },
+        "map": {
+          "$ref": "#/$defs/mapId"
+        },
+        "region_key": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "domain",
+        "map",
+        "region_key"
+      ]
+    },
+    "scenarioOutcomeTarget": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "domain": {
+          "const": "scenario_outcome"
+        },
+        "scenario_entry_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "outcome_contract": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "domain",
+        "scenario_entry_ref",
+        "outcome_contract"
+      ]
+    },
+    "worldInteractionTarget": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "domain": {
+          "const": "world_interaction"
+        },
+        "map": {
+          "$ref": "#/$defs/mapId"
+        },
+        "interaction_key": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "domain",
+        "map",
+        "interaction_key"
+      ]
+    },
+    "serverHookTarget": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "domain": {
+          "const": "server_hook"
+        },
+        "hook_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "contract_version": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "domain",
+        "hook_id",
+        "contract_version"
+      ]
+    },
+    "objectiveTarget": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/npcId"
+        },
+        {
+          "$ref": "#/$defs/sceneKey"
+        },
+        {
+          "$ref": "#/$defs/regionTarget"
+        },
+        {
+          "$ref": "#/$defs/monsterResourceKey"
+        },
+        {
+          "$ref": "#/$defs/itemId"
+        },
+        {
+          "$ref": "#/$defs/scenarioOutcomeTarget"
+        },
+        {
+          "$ref": "#/$defs/worldInteractionTarget"
+        },
+        {
+          "$ref": "#/$defs/serverHookTarget"
+        }
+      ]
+    },
+    "objective": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "objective_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "kind": {
+          "anyOf": [
+            {
+              "enum": [
+                "talk",
+                "watch_scene",
+                "reach_region",
+                "kill",
+                "collect",
+                "clear_instance",
+                "deliver",
+                "interact",
+                "server_hook"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "target_ref": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/objectiveTarget"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "required_count": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "counter_scope": {
+          "anyOf": [
+            {
+              "enum": [
+                "account",
+                "expedition",
+                "character",
+                "quest_run",
+                "instance",
+                "party"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "event_contract": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "filters": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/condition"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "status": {
+          "enum": [
+            "BOUND",
+            "BLOCKED"
+          ]
+        },
+        "source": {
+          "$ref": "#/$defs/evidence"
+        }
+      },
+      "required": [
+        "objective_key",
+        "kind",
+        "target_ref",
+        "required_count",
+        "counter_scope",
+        "event_contract",
+        "filters",
+        "status",
+        "source"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "talk"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "target_ref": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/npcId"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "watch_scene"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "target_ref": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/sceneKey"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "reach_region"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "target_ref": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/regionTarget"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "kill"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "target_ref": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/monsterResourceKey"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "collect"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "target_ref": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/itemId"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "clear_instance"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "target_ref": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/scenarioOutcomeTarget"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "deliver"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "target_ref": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/itemId"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "interact"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "target_ref": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/worldInteractionTarget"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "server_hook"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "target_ref": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/serverHookTarget"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "reward": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "reward_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "raw_container": {
+          "anyOf": [
+            {
+              "enum": [
+                "RewardsEtc",
+                "RewardsItem"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "raw_type": {
+          "anyOf": [
+            {
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/quest_rewards_etc_typeId"
+                },
+                {
+                  "$ref": "#/$defs/quest_rewards_item_typeId"
+                }
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "raw_value": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "raw_item": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/itemId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "raw_count": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "client_display_domain": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "client_record_offset": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "display_scale_source": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "client_binding_sources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/evidence"
+          },
+          "minItems": 0
+        },
+        "grant_domain": {
+          "anyOf": [
+            {
+              "enum": [
+                "item",
+                "currency",
+                "character",
+                "character_experience",
+                "expedition_experience",
+                "other"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "recipient_scope": {
+          "anyOf": [
+            {
+              "enum": [
+                "account",
+                "expedition",
+                "character",
+                "quest_run"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "publication_adapter_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "status": {
+          "enum": [
+            "BOUND",
+            "BLOCKED"
+          ]
+        },
+        "source": {
+          "$ref": "#/$defs/evidence"
+        }
+      },
+      "required": [
+        "reward_key",
+        "raw_container",
+        "raw_type",
+        "raw_value",
+        "raw_item",
+        "raw_count",
+        "client_display_domain",
+        "client_record_offset",
+        "display_scale_source",
+        "client_binding_sources",
+        "grant_domain",
+        "recipient_scope",
+        "publication_adapter_id",
+        "status",
+        "source"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "raw_container": {
+                "const": "RewardsEtc"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "raw_type": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/quest_rewards_etc_typeId"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "raw_container": {
+                "const": "RewardsItem"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "raw_type": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/quest_rewards_item_typeId"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "chapterBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "chapter": {
+          "$ref": "#/$defs/chapterId"
+        },
+        "chapter_town": {
+          "$ref": "#/$defs/townId"
+        },
+        "source_order": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/sceneKey"
+          },
+          "minItems": 0
+        },
+        "source": {
+          "$ref": "#/$defs/evidence"
+        }
+      },
+      "required": [
+        "chapter",
+        "chapter_town",
+        "source_order",
+        "source"
+      ]
+    },
+    "clientProfile": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "region": {
+          "const": "KR"
+        },
+        "binary_sha256": {
+          "const": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91"
+        }
+      },
+      "required": [
+        "region",
+        "binary_sha256"
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "activation": {
+            "const": "ENABLED_AFTER_ACCEPTANCE"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "blocking_issues": {
+            "maxItems": 0
+          },
+          "flow_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "reward_policy_status": {
+            "const": "BOUND"
+          },
+          "policy": {
+            "properties": {
+              "progress_scope": {
+                "type": "string"
+              },
+              "eligibility_rule": {
+                "$ref": "#/$defs/condition"
+              },
+              "acceptance_rule": {
+                "$ref": "#/$defs/condition"
+              },
+              "npc_visibility_rule": {
+                "$ref": "#/$defs/condition"
+              },
+              "character_restrictions": {
+                "type": "array"
+              },
+              "repeatability": {
+                "type": "string"
+              },
+              "branch_policy_ref": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "settlement": {
+            "properties": {
+              "status": {
+                "const": "BOUND"
+              },
+              "objective_rule": {
+                "$ref": "#/$defs/condition"
+              },
+              "turnin_rule": {
+                "$ref": "#/$defs/condition"
+              },
+              "reward_plan_ref": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "objectives": {
+            "items": {
+              "properties": {
+                "status": {
+                  "const": "BOUND"
+                },
+                "kind": {
+                  "type": "string"
+                },
+                "required_count": {
+                  "type": "integer"
+                },
+                "counter_scope": {
+                  "type": "string"
+                },
+                "event_contract": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "target_ref": {
+                  "$ref": "#/$defs/objectiveTarget"
+                }
+              }
+            }
+          },
+          "rewards": {
+            "items": {
+              "properties": {
+                "status": {
+                  "const": "BOUND"
+                },
+                "grant_domain": {
+                  "type": "string"
+                },
+                "recipient_scope": {
+                  "type": "string"
+                },
+                "publication_adapter_id": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
