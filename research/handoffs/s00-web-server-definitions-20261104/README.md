@@ -25,3 +25,7 @@ MEF sample inventory、再次全包掃描、完整loader/parser/network-receive�
 ## 上班時低操作量的派工方式（最新）
 
 目前只派A/B，皆以Git已存在的來源一次下令完成，不要求使用者尋找影片、提供截圖、逐段播放或即時互動。C由S00在各副本實作時另處理；已有影片保留參考，使用者不必補找對應影片。若來源讀不到或資料不足，Web需交缺口清單與可做的部分，不把任務卡在等待使用者補素材。MEF搜尋仍等Server至少60%。
+
+## 材料放置政策
+
+依使用者確認，原BIN/STP/ABF與遊戲member留本機、由使用者另行上傳Web；不放Git。Git只存報告、資料定義、SHA／來源對照及未知清單。已整理本機初始包128檔約0.96MB，讀回檢核通過；它含Case/MapFlow/Cluster/MapList/QuestInfo、ActorList與部分Skill表、既有T10/T11/T16引用報告，未含BIN、raw Actor/ABF body或已確認Monster table。先做可用欄位與缺件精確member盤點；不能將原料尚缺寫成完整AI還原。包內Table carrier為已知variant，各member原始SHA符合情況逐一標明，不從載體相同／不同推論所有member版本。

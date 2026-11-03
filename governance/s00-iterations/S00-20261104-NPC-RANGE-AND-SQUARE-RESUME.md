@@ -32,3 +32,11 @@
 「除了新帳號，每次登出後登入都是在廣場，副本未完成登出視為放棄，重新進入副本的進度重來，副本進度重登不紀錄」。不保存副本進行狀態供續玩；既有事件journal僅留追溯。已完成主線前綴／進村milestone保留並在廣場初始化投影；沒有完成的當前任務重新進入時從其入口重置。正式Quest結算／獎勵仍未因此補完。
 
 正常重新登入的current transfer row只授權此次確實發送的廣場轉場；原normal settlement不移轉session、不重發角色／reward。合成測試加入跨登入新lease後可接受後續主線旅程，修正最初因缺少current transfer authorization導致的FK失敗，最終完整正流程結果另隨發行收據更新。
+
+## v20 發行收據
+
+最終30個HappyPath通過49秒。來源分析main2d044c47bd25e7e8fc38e7100a615b190482d2af，Server main89504aa646a9a0039dc125fe0c61c4aafcceab1f。2026-11-04 02:07:56 +08:00核對v19 PID476與精確Host路徑後換版；SQLite一致性backup及integrity_check通過，不改global schema或原Client。
+
+v20 PID36520，server-host-v20/Tartaros.Server.Host.exe；Host DLL SHA25643cfcb2cf3cd8006be3d451e62fc060afb7220c753c0665d4cf40168c9913275；Network DLL626c92c1643c1a0ad5668d45b53678fc177e5fe40aaf0a90f463c9c973f5bb64。原場景content SHA59a0e6221e76171ef9618b787dbf25c6ba0db61180866458317025916ef35678不變；沒有修改portal佈點或monster出生資料。auth/journey/story已啟用，真人驗收PENDING。
+
+Web分析原始材料只保存在本機runtime-observations/web-ai-input-20261104/Tartaros-Web-AI-A-B-input.zip，未上Git，含128檔約0.96MB。已逐項讀回ZIP/hash驗證。包內列來源、SHA與local Table variant限制，缺raw Actor/ABF、已確認Monster table與官方AI規則，不能叫完整AI原生資料包；先支援已有證據與A/B欄位盤點。使用者可一次上傳至Web；分析成果與來源SHA回寫本庫，原資源包不上Git。Web派工說明另見research/handoffs/s00-web-server-definitions-20261104/README.md。
