@@ -1,0 +1,1166 @@
+{
+  "schema_version": "0.1.0",
+  "model_kind": "SERVER_CANDIDATE_NOT_NATIVE_MEF",
+  "client_profile": {
+    "region": "KR",
+    "binary_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91"
+  },
+  "flow_id": "tutorial.current-candidate",
+  "quest_refs": [
+    {
+      "domain": "quest",
+      "value": 14
+    },
+    {
+      "domain": "quest",
+      "value": 16
+    }
+  ],
+  "activation": "DRAFT_BLOCKED",
+  "entry_node": "accept14",
+  "nodes": [
+    {
+      "node_id": "accept14",
+      "primitive": "accept_quest",
+      "input": {
+        "quest": {
+          "domain": "quest",
+          "value": 14
+        },
+        "policy_ref": null
+      },
+      "preconditions": {
+        "op": "predicate",
+        "name": "flow_expected_node_and_authorized_scope",
+        "args": {
+          "node": "accept14"
+        },
+        "source": {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac/research/handoffs/s00-input-and-quest-reuse-20261103/W2-REUSABLE-QUEST-RUNTIME.md",
+          "source_sha": "ad9db1e2ca4a33eccb453f941df6330d9500aaab4576130ef299ba59b9135b4e",
+          "evidence_kind": "SERVER_CANDIDATE_DESIGN",
+          "unknowns": []
+        }
+      },
+      "effect": [
+        "Migration gate: bind lawful Q14 acceptance without converting legacy milestones into completion"
+      ],
+      "wait": {
+        "event": "QuestAccepted",
+        "producer": "SERVER",
+        "proof": "AUTHORITATIVE_COMMIT",
+        "correlation_fields": [
+          "progress_scope",
+          "quest_run_id",
+          "session_epoch",
+          "flow_revision",
+          "scene_epoch",
+          "expected_node"
+        ],
+        "wire_adapter_id": null
+      },
+      "next": [
+        {
+          "on": "QuestAccepted",
+          "to": "tutorial",
+          "guard": null
+        }
+      ],
+      "persistence": {
+        "transaction": "QUEST_ACCEPT",
+        "durable_fields": [
+          "quest_run",
+          "accepted_at",
+          "content_version"
+        ],
+        "commit_before_effect": true
+      },
+      "status": "BLOCKED",
+      "source": {
+        "source_ref": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac/research/handoffs/s00-input-and-quest-reuse-20261103/W2-REUSABLE-QUEST-RUNTIME.md",
+        "source_sha": "ad9db1e2ca4a33eccb453f941df6330d9500aaab4576130ef299ba59b9135b4e",
+        "evidence_kind": "SERVER_CANDIDATE_DESIGN",
+        "unknowns": []
+      },
+      "unknowns": []
+    },
+    {
+      "node_id": "tutorial",
+      "primitive": "tutorial_hook",
+      "input": {
+        "hook_id": "legacy_tutorial_lua_and_first_battle",
+        "contract_ref": "TUTORIAL_CURRENT_CANDIDATE_V0_1"
+      },
+      "preconditions": {
+        "op": "predicate",
+        "name": "flow_expected_node_and_authorized_scope",
+        "args": {
+          "node": "tutorial"
+        },
+        "source": {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac/research/handoffs/s00-input-and-quest-reuse-20261103/W2-REUSABLE-QUEST-RUNTIME.md",
+          "source_sha": "ad9db1e2ca4a33eccb453f941df6330d9500aaab4576130ef299ba59b9135b4e",
+          "evidence_kind": "SERVER_CANDIDATE_DESIGN",
+          "unknowns": []
+        }
+      },
+      "effect": [
+        "Preserve tutorial scripts, first battle, role recruitment and owned-role equipment behavior"
+      ],
+      "wait": {
+        "event": "TutorialJourneyReady",
+        "producer": "SERVER",
+        "proof": "AUTHORITATIVE_COMMIT",
+        "correlation_fields": [
+          "progress_scope",
+          "quest_run_id",
+          "session_epoch",
+          "flow_revision",
+          "scene_epoch",
+          "expected_node"
+        ],
+        "wire_adapter_id": null
+      },
+      "next": [
+        {
+          "on": "TutorialJourneyReady",
+          "to": "exit",
+          "guard": null
+        }
+      ],
+      "persistence": {
+        "transaction": null,
+        "durable_fields": [],
+        "commit_before_effect": false
+      },
+      "status": "EXISTING_CANDIDATE_MAPPING",
+      "source": {
+        "source_ref": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac/research/handoffs/s00-input-and-quest-reuse-20261103/W2-REUSABLE-QUEST-RUNTIME.md",
+        "source_sha": "ad9db1e2ca4a33eccb453f941df6330d9500aaab4576130ef299ba59b9135b4e",
+        "evidence_kind": "SERVER_CANDIDATE_DESIGN",
+        "unknowns": []
+      },
+      "unknowns": [
+        "Scenario14 is not Quest14; Quest14 declares field18 and is not ordinary Town NPC content."
+      ]
+    },
+    {
+      "node_id": "exit",
+      "primitive": "tutorial_hook",
+      "input": {
+        "hook_id": "legacy_ordered_exit_10_12_13_14",
+        "contract_ref": "TUTORIAL_CURRENT_CANDIDATE_V0_1"
+      },
+      "preconditions": {
+        "op": "predicate",
+        "name": "flow_expected_node_and_authorized_scope",
+        "args": {
+          "node": "exit"
+        },
+        "source": {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac/research/handoffs/s00-input-and-quest-reuse-20261103/W2-REUSABLE-QUEST-RUNTIME.md",
+          "source_sha": "ad9db1e2ca4a33eccb453f941df6330d9500aaab4576130ef299ba59b9135b4e",
+          "evidence_kind": "SERVER_CANDIDATE_DESIGN",
+          "unknowns": []
+        }
+      },
+      "effect": [
+        "Preserve expected 1000/10,12,13,14 sequence and world exit candidate; do not interpret receipt as successful quest settlement"
+      ],
+      "wait": {
+        "event": "SquareTransferAuthorized",
+        "producer": "SERVER",
+        "proof": "AUTHORITATIVE_COMMIT",
+        "correlation_fields": [
+          "progress_scope",
+          "quest_run_id",
+          "session_epoch",
+          "flow_revision",
+          "scene_epoch",
+          "expected_node"
+        ],
+        "wire_adapter_id": null
+      },
+      "next": [
+        {
+          "on": "SquareTransferAuthorized",
+          "to": "settlement_gate",
+          "guard": null
+        }
+      ],
+      "persistence": {
+        "transaction": "LEGACY_TUTORIAL_JOURNEY",
+        "durable_fields": [
+          "tutorial_first_battle",
+          "owned_roles",
+          "journey_transfer"
+        ],
+        "commit_before_effect": true
+      },
+      "status": "EXISTING_CANDIDATE_MAPPING",
+      "source": {
+        "source_ref": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac/research/handoffs/s00-input-and-quest-reuse-20261103/W2-REUSABLE-QUEST-RUNTIME.md",
+        "source_sha": "ad9db1e2ca4a33eccb453f941df6330d9500aaab4576130ef299ba59b9135b4e",
+        "evidence_kind": "SERVER_CANDIDATE_DESIGN",
+        "unknowns": []
+      },
+      "unknowns": []
+    },
+    {
+      "node_id": "settlement_gate",
+      "primitive": "branch",
+      "input": {
+        "branch_policy_ref": null
+      },
+      "preconditions": {
+        "op": "predicate",
+        "name": "flow_expected_node_and_authorized_scope",
+        "args": {
+          "node": "settlement_gate"
+        },
+        "source": {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac/research/handoffs/s00-input-and-quest-reuse-20261103/W2-REUSABLE-QUEST-RUNTIME.md",
+          "source_sha": "ad9db1e2ca4a33eccb453f941df6330d9500aaab4576130ef299ba59b9135b4e",
+          "evidence_kind": "SERVER_CANDIDATE_DESIGN",
+          "unknowns": []
+        }
+      },
+      "effect": [
+        "Evaluate legitimate Q14/Q16 settlement separately from existing journey evidence and candidate prerequisite publication"
+      ],
+      "wait": {
+        "event": "LegacyPolicyReviewCompleted",
+        "producer": "SERVER",
+        "proof": "INTERNAL",
+        "correlation_fields": [
+          "progress_scope",
+          "quest_run_id",
+          "session_epoch",
+          "flow_revision",
+          "scene_epoch",
+          "expected_node"
+        ],
+        "wire_adapter_id": null
+      },
+      "next": [
+        {
+          "on": "LegacyPolicyReviewCompleted",
+          "to": "q14_objectives",
+          "guard": null
+        }
+      ],
+      "persistence": {
+        "transaction": null,
+        "durable_fields": [],
+        "commit_before_effect": false
+      },
+      "status": "BLOCKED",
+      "source": {
+        "source_ref": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac/research/handoffs/s00-input-and-quest-reuse-20261103/W2-REUSABLE-QUEST-RUNTIME.md",
+        "source_sha": "ad9db1e2ca4a33eccb453f941df6330d9500aaab4576130ef299ba59b9135b4e",
+        "evidence_kind": "SERVER_CANDIDATE_DESIGN",
+        "unknowns": []
+      },
+      "unknowns": [
+        "Existing account-scoped candidate keys14/16 do not prove original official settlement or paid rewards."
+      ]
+    },
+    {
+      "node_id": "q14_objectives",
+      "primitive": "evaluate_objectives",
+      "input": {
+        "quest": {
+          "domain": "quest",
+          "value": 14
+        },
+        "completion_rule_ref": null
+      },
+      "preconditions": {
+        "op": "predicate",
+        "name": "flow_expected_node_and_authorized_scope",
+        "args": {
+          "node": "q14_objectives"
+        },
+        "source": {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac/research/handoffs/s00-input-and-quest-reuse-20261103/W2-REUSABLE-QUEST-RUNTIME.md",
+          "source_sha": "ad9db1e2ca4a33eccb453f941df6330d9500aaab4576130ef299ba59b9135b4e",
+          "evidence_kind": "SERVER_CANDIDATE_DESIGN",
+          "unknowns": []
+        }
+      },
+      "effect": [
+        "Recompute server-authoritative objective predicates; never infer them from scene receipt"
+      ],
+      "wait": {
+        "event": "ObjectivesSatisfied",
+        "producer": "SERVER",
+        "proof": "AUTHORITATIVE_COMMIT",
+        "correlation_fields": [
+          "progress_scope",
+          "quest_run_id",
+          "session_epoch",
+          "flow_revision",
+          "scene_epoch",
+          "expected_node"
+        ],
+        "wire_adapter_id": null
+      },
+      "next": [
+        {
+          "on": "ObjectivesSatisfied",
+          "to": "q14_turnin",
+          "guard": null
+        }
+      ],
+      "persistence": {
+        "transaction": "OBJECTIVE_COMMIT",
+        "durable_fields": [
+          "objective_counters",
+          "objective_evidence_refs"
+        ],
+        "commit_before_effect": true
+      },
+      "status": "BLOCKED",
+      "source": {
+        "source_ref": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac/research/handoffs/s00-input-and-quest-reuse-20261103/W2-REUSABLE-QUEST-RUNTIME.md",
+        "source_sha": "ad9db1e2ca4a33eccb453f941df6330d9500aaab4576130ef299ba59b9135b4e",
+        "evidence_kind": "SERVER_CANDIDATE_DESIGN",
+        "unknowns": []
+      },
+      "unknowns": [
+        "LEGAL_OBJECTIVE_UNBOUND"
+      ]
+    },
+    {
+      "node_id": "q14_turnin",
+      "primitive": "await_turnin_intent",
+      "input": {
+        "quest": {
+          "domain": "quest",
+          "value": 14
+        },
+        "npc": {
+          "domain": "npc",
+          "value": 10027
+        },
+        "intent_contract": null
+      },
+      "preconditions": {
+        "op": "predicate",
+        "name": "flow_expected_node_and_authorized_scope",
+        "args": {
+          "node": "q14_turnin"
+        },
+        "source": {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac/research/handoffs/s00-input-and-quest-reuse-20261103/W2-REUSABLE-QUEST-RUNTIME.md",
+          "source_sha": "ad9db1e2ca4a33eccb453f941df6330d9500aaab4576130ef299ba59b9135b4e",
+          "evidence_kind": "SERVER_CANDIDATE_DESIGN",
+          "unknowns": []
+        }
+      },
+      "effect": [
+        "Validate turn-in intent against committed objectives and correct finisher; do not settle from UI close"
+      ],
+      "wait": {
+        "event": "TurnInAuthorized",
+        "producer": "CLIENT_INTENT",
+        "proof": "INTENT_ONLY",
+        "correlation_fields": [
+          "progress_scope",
+          "quest_run_id",
+          "session_epoch",
+          "flow_revision",
+          "scene_epoch",
+          "expected_node"
+        ],
+        "wire_adapter_id": null
+      },
+      "next": [
+        {
+          "on": "TurnInAuthorized",
+          "to": "q14_settlement",
+          "guard": null
+        }
+      ],
+      "persistence": {
+        "transaction": null,
+        "durable_fields": [],
+        "commit_before_effect": false
+      },
+      "status": "BLOCKED",
+      "source": {
+        "source_ref": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac/research/handoffs/s00-input-and-quest-reuse-20261103/W2-REUSABLE-QUEST-RUNTIME.md",
+        "source_sha": "ad9db1e2ca4a33eccb453f941df6330d9500aaab4576130ef299ba59b9135b4e",
+        "evidence_kind": "SERVER_CANDIDATE_DESIGN",
+        "unknowns": []
+      },
+      "unknowns": [
+        "TURNIN_ADAPTER_AND_POLICY_UNBOUND"
+      ]
+    },
+    {
+      "node_id": "q14_settlement",
+      "primitive": "settle_quest",
+      "input": {
+        "quest": {
+          "domain": "quest",
+          "value": 14
+        },
+        "reward_plan_ref": null,
+        "transaction_contract": "QUEST_SETTLEMENT_TRANSACTION_V0_1"
+      },
+      "preconditions": {
+        "op": "predicate",
+        "name": "flow_expected_node_and_authorized_scope",
+        "args": {
+          "node": "q14_settlement"
+        },
+        "source": {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac/research/handoffs/s00-input-and-quest-reuse-20261103/W2-REUSABLE-QUEST-RUNTIME.md",
+          "source_sha": "ad9db1e2ca4a33eccb453f941df6330d9500aaab4576130ef299ba59b9135b4e",
+          "evidence_kind": "SERVER_CANDIDATE_DESIGN",
+          "unknowns": []
+        }
+      },
+      "effect": [
+        "Atomically persist legal settlement, reward ledger and versioned outbox; raw reward never defaults to a currency"
+      ],
+      "wait": {
+        "event": "QuestSettlementCommitted",
+        "producer": "SERVER",
+        "proof": "AUTHORITATIVE_COMMIT",
+        "correlation_fields": [
+          "progress_scope",
+          "quest_run_id",
+          "session_epoch",
+          "flow_revision",
+          "scene_epoch",
+          "expected_node"
+        ],
+        "wire_adapter_id": null
+      },
+      "next": [
+        {
+          "on": "QuestSettlementCommitted",
+          "to": "q14_publish",
+          "guard": null
+        }
+      ],
+      "persistence": {
+        "transaction": "QUEST_SETTLEMENT_TRANSACTION_V0_1",
+        "durable_fields": [
+          "quest_state",
+          "settlement_key",
+          "reward_ledger",
+          "completed_prerequisites",
+          "publication_outbox"
+        ],
+        "commit_before_effect": true
+      },
+      "status": "BLOCKED",
+      "source": {
+        "source_ref": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac/research/handoffs/s00-input-and-quest-reuse-20261103/W2-REUSABLE-QUEST-RUNTIME.md",
+        "source_sha": "ad9db1e2ca4a33eccb453f941df6330d9500aaab4576130ef299ba59b9135b4e",
+        "evidence_kind": "SERVER_CANDIDATE_DESIGN",
+        "unknowns": []
+      },
+      "unknowns": [
+        "REWARD_PLAN_AND_LEGAL_COMPLETION_UNBOUND"
+      ]
+    },
+    {
+      "node_id": "q14_publish",
+      "primitive": "publish_quest_projection",
+      "input": {
+        "quest": {
+          "domain": "quest",
+          "value": 14
+        },
+        "projection_contract": "COMMITTED_QUEST_PROJECTION_V0_1"
+      },
+      "preconditions": {
+        "op": "predicate",
+        "name": "flow_expected_node_and_authorized_scope",
+        "args": {
+          "node": "q14_publish"
+        },
+        "source": {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac/research/handoffs/s00-input-and-quest-reuse-20261103/W2-REUSABLE-QUEST-RUNTIME.md",
+          "source_sha": "ad9db1e2ca4a33eccb453f941df6330d9500aaab4576130ef299ba59b9135b4e",
+          "evidence_kind": "SERVER_CANDIDATE_DESIGN",
+          "unknowns": []
+        }
+      },
+      "effect": [
+        "Use existing versioned codec adapters to publish committed UI/prerequisite/reward projections"
+      ],
+      "wait": {
+        "event": "ProjectionScheduled",
+        "producer": "SERVER",
+        "proof": "INTERNAL",
+        "correlation_fields": [
+          "progress_scope",
+          "quest_run_id",
+          "session_epoch",
+          "flow_revision",
+          "scene_epoch",
+          "expected_node"
+        ],
+        "wire_adapter_id": null
+      },
+      "next": [
+        {
+          "on": "ProjectionScheduled",
+          "to": "q14_unlock",
+          "guard": null
+        }
+      ],
+      "persistence": {
+        "transaction": null,
+        "durable_fields": [],
+        "commit_before_effect": false
+      },
+      "status": "CANDIDATE",
+      "source": {
+        "source_ref": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac/research/handoffs/s00-input-and-quest-reuse-20261103/W2-REUSABLE-QUEST-RUNTIME.md",
+        "source_sha": "ad9db1e2ca4a33eccb453f941df6330d9500aaab4576130ef299ba59b9135b4e",
+        "evidence_kind": "SERVER_CANDIDATE_DESIGN",
+        "unknowns": []
+      },
+      "unknowns": [
+        "Receipt alone does not prove visible Client UI success."
+      ]
+    },
+    {
+      "node_id": "q14_unlock",
+      "primitive": "publish_next_quests",
+      "input": {
+        "candidates": [
+          {
+            "domain": "quest",
+            "value": 16
+          }
+        ],
+        "evaluate_individually": true
+      },
+      "preconditions": {
+        "op": "predicate",
+        "name": "flow_expected_node_and_authorized_scope",
+        "args": {
+          "node": "q14_unlock"
+        },
+        "source": {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac/research/handoffs/s00-input-and-quest-reuse-20261103/W2-REUSABLE-QUEST-RUNTIME.md",
+          "source_sha": "ad9db1e2ca4a33eccb453f941df6330d9500aaab4576130ef299ba59b9135b4e",
+          "evidence_kind": "SERVER_CANDIDATE_DESIGN",
+          "unknowns": []
+        }
+      },
+      "effect": [
+        "Reevaluate each candidate eligibility with its own town/level/NPC/branch policy; no id increment"
+      ],
+      "wait": {
+        "event": "AvailabilityProjected",
+        "producer": "SERVER",
+        "proof": "INTERNAL",
+        "correlation_fields": [
+          "progress_scope",
+          "quest_run_id",
+          "session_epoch",
+          "flow_revision",
+          "scene_epoch",
+          "expected_node"
+        ],
+        "wire_adapter_id": null
+      },
+      "next": [
+        {
+          "on": "AvailabilityProjected",
+          "to": "q14_end",
+          "guard": null
+        }
+      ],
+      "persistence": {
+        "transaction": null,
+        "durable_fields": [],
+        "commit_before_effect": false
+      },
+      "status": "CANDIDATE",
+      "source": {
+        "source_ref": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac/research/handoffs/s00-input-and-quest-reuse-20261103/W2-REUSABLE-QUEST-RUNTIME.md",
+        "source_sha": "ad9db1e2ca4a33eccb453f941df6330d9500aaab4576130ef299ba59b9135b4e",
+        "evidence_kind": "SERVER_CANDIDATE_DESIGN",
+        "unknowns": []
+      },
+      "unknowns": []
+    },
+    {
+      "node_id": "q14_end",
+      "primitive": "evaluate_eligibility",
+      "input": {
+        "quest": {
+          "domain": "quest",
+          "value": 16
+        }
+      },
+      "preconditions": {
+        "op": "predicate",
+        "name": "flow_expected_node_and_authorized_scope",
+        "args": {
+          "node": "q14_end"
+        },
+        "source": {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac/research/handoffs/s00-input-and-quest-reuse-20261103/W2-REUSABLE-QUEST-RUNTIME.md",
+          "source_sha": "ad9db1e2ca4a33eccb453f941df6330d9500aaab4576130ef299ba59b9135b4e",
+          "evidence_kind": "SERVER_CANDIDATE_DESIGN",
+          "unknowns": []
+        }
+      },
+      "effect": [
+        "Evaluate Q16 after Q14 settlement"
+      ],
+      "wait": {
+        "event": "EligibilityAuthorized",
+        "producer": "SERVER",
+        "proof": "INTERNAL",
+        "correlation_fields": [
+          "progress_scope",
+          "quest_run_id",
+          "session_epoch",
+          "flow_revision",
+          "scene_epoch",
+          "expected_node"
+        ],
+        "wire_adapter_id": null
+      },
+      "next": [
+        {
+          "on": "EligibilityAuthorized",
+          "to": "accept16",
+          "guard": null
+        }
+      ],
+      "persistence": {
+        "transaction": null,
+        "durable_fields": [],
+        "commit_before_effect": false
+      },
+      "status": "BLOCKED",
+      "source": {
+        "source_ref": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac/research/handoffs/s00-input-and-quest-reuse-20261103/W2-REUSABLE-QUEST-RUNTIME.md",
+        "source_sha": "ad9db1e2ca4a33eccb453f941df6330d9500aaab4576130ef299ba59b9135b4e",
+        "evidence_kind": "SERVER_CANDIDATE_DESIGN",
+        "unknowns": []
+      },
+      "unknowns": []
+    },
+    {
+      "node_id": "accept16",
+      "primitive": "accept_quest",
+      "input": {
+        "quest": {
+          "domain": "quest",
+          "value": 16
+        },
+        "policy_ref": null
+      },
+      "preconditions": {
+        "op": "predicate",
+        "name": "flow_expected_node_and_authorized_scope",
+        "args": {
+          "node": "accept16"
+        },
+        "source": {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac/research/handoffs/s00-input-and-quest-reuse-20261103/W2-REUSABLE-QUEST-RUNTIME.md",
+          "source_sha": "ad9db1e2ca4a33eccb453f941df6330d9500aaab4576130ef299ba59b9135b4e",
+          "evidence_kind": "SERVER_CANDIDATE_DESIGN",
+          "unknowns": []
+        }
+      },
+      "effect": [
+        "Require Q16-specific acceptance before its objective evaluation"
+      ],
+      "wait": {
+        "event": "QuestAccepted",
+        "producer": "SERVER",
+        "proof": "AUTHORITATIVE_COMMIT",
+        "correlation_fields": [
+          "progress_scope",
+          "quest_run_id",
+          "session_epoch",
+          "flow_revision",
+          "scene_epoch",
+          "expected_node"
+        ],
+        "wire_adapter_id": null
+      },
+      "next": [
+        {
+          "on": "QuestAccepted",
+          "to": "q16_objectives",
+          "guard": null
+        }
+      ],
+      "persistence": {
+        "transaction": "QUEST_ACCEPT",
+        "durable_fields": [
+          "quest_run",
+          "accepted_at",
+          "content_version"
+        ],
+        "commit_before_effect": true
+      },
+      "status": "BLOCKED",
+      "source": {
+        "source_ref": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac/research/handoffs/s00-input-and-quest-reuse-20261103/W2-REUSABLE-QUEST-RUNTIME.md",
+        "source_sha": "ad9db1e2ca4a33eccb453f941df6330d9500aaab4576130ef299ba59b9135b4e",
+        "evidence_kind": "SERVER_CANDIDATE_DESIGN",
+        "unknowns": []
+      },
+      "unknowns": []
+    },
+    {
+      "node_id": "q16_objectives",
+      "primitive": "evaluate_objectives",
+      "input": {
+        "quest": {
+          "domain": "quest",
+          "value": 16
+        },
+        "completion_rule_ref": null
+      },
+      "preconditions": {
+        "op": "predicate",
+        "name": "flow_expected_node_and_authorized_scope",
+        "args": {
+          "node": "q16_objectives"
+        },
+        "source": {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac/research/handoffs/s00-input-and-quest-reuse-20261103/W2-REUSABLE-QUEST-RUNTIME.md",
+          "source_sha": "ad9db1e2ca4a33eccb453f941df6330d9500aaab4576130ef299ba59b9135b4e",
+          "evidence_kind": "SERVER_CANDIDATE_DESIGN",
+          "unknowns": []
+        }
+      },
+      "effect": [
+        "Recompute server-authoritative objective predicates; never infer them from scene receipt"
+      ],
+      "wait": {
+        "event": "ObjectivesSatisfied",
+        "producer": "SERVER",
+        "proof": "AUTHORITATIVE_COMMIT",
+        "correlation_fields": [
+          "progress_scope",
+          "quest_run_id",
+          "session_epoch",
+          "flow_revision",
+          "scene_epoch",
+          "expected_node"
+        ],
+        "wire_adapter_id": null
+      },
+      "next": [
+        {
+          "on": "ObjectivesSatisfied",
+          "to": "q16_turnin",
+          "guard": null
+        }
+      ],
+      "persistence": {
+        "transaction": "OBJECTIVE_COMMIT",
+        "durable_fields": [
+          "objective_counters",
+          "objective_evidence_refs"
+        ],
+        "commit_before_effect": true
+      },
+      "status": "BLOCKED",
+      "source": {
+        "source_ref": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac/research/handoffs/s00-input-and-quest-reuse-20261103/W2-REUSABLE-QUEST-RUNTIME.md",
+        "source_sha": "ad9db1e2ca4a33eccb453f941df6330d9500aaab4576130ef299ba59b9135b4e",
+        "evidence_kind": "SERVER_CANDIDATE_DESIGN",
+        "unknowns": []
+      },
+      "unknowns": [
+        "LEGAL_OBJECTIVE_UNBOUND"
+      ]
+    },
+    {
+      "node_id": "q16_turnin",
+      "primitive": "await_turnin_intent",
+      "input": {
+        "quest": {
+          "domain": "quest",
+          "value": 16
+        },
+        "npc": {
+          "domain": "npc",
+          "value": 10027
+        },
+        "intent_contract": null
+      },
+      "preconditions": {
+        "op": "predicate",
+        "name": "flow_expected_node_and_authorized_scope",
+        "args": {
+          "node": "q16_turnin"
+        },
+        "source": {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac/research/handoffs/s00-input-and-quest-reuse-20261103/W2-REUSABLE-QUEST-RUNTIME.md",
+          "source_sha": "ad9db1e2ca4a33eccb453f941df6330d9500aaab4576130ef299ba59b9135b4e",
+          "evidence_kind": "SERVER_CANDIDATE_DESIGN",
+          "unknowns": []
+        }
+      },
+      "effect": [
+        "Validate turn-in intent against committed objectives and correct finisher; do not settle from UI close"
+      ],
+      "wait": {
+        "event": "TurnInAuthorized",
+        "producer": "CLIENT_INTENT",
+        "proof": "INTENT_ONLY",
+        "correlation_fields": [
+          "progress_scope",
+          "quest_run_id",
+          "session_epoch",
+          "flow_revision",
+          "scene_epoch",
+          "expected_node"
+        ],
+        "wire_adapter_id": null
+      },
+      "next": [
+        {
+          "on": "TurnInAuthorized",
+          "to": "q16_settlement",
+          "guard": null
+        }
+      ],
+      "persistence": {
+        "transaction": null,
+        "durable_fields": [],
+        "commit_before_effect": false
+      },
+      "status": "BLOCKED",
+      "source": {
+        "source_ref": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac/research/handoffs/s00-input-and-quest-reuse-20261103/W2-REUSABLE-QUEST-RUNTIME.md",
+        "source_sha": "ad9db1e2ca4a33eccb453f941df6330d9500aaab4576130ef299ba59b9135b4e",
+        "evidence_kind": "SERVER_CANDIDATE_DESIGN",
+        "unknowns": []
+      },
+      "unknowns": [
+        "TURNIN_ADAPTER_AND_POLICY_UNBOUND"
+      ]
+    },
+    {
+      "node_id": "q16_settlement",
+      "primitive": "settle_quest",
+      "input": {
+        "quest": {
+          "domain": "quest",
+          "value": 16
+        },
+        "reward_plan_ref": null,
+        "transaction_contract": "QUEST_SETTLEMENT_TRANSACTION_V0_1"
+      },
+      "preconditions": {
+        "op": "predicate",
+        "name": "flow_expected_node_and_authorized_scope",
+        "args": {
+          "node": "q16_settlement"
+        },
+        "source": {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac/research/handoffs/s00-input-and-quest-reuse-20261103/W2-REUSABLE-QUEST-RUNTIME.md",
+          "source_sha": "ad9db1e2ca4a33eccb453f941df6330d9500aaab4576130ef299ba59b9135b4e",
+          "evidence_kind": "SERVER_CANDIDATE_DESIGN",
+          "unknowns": []
+        }
+      },
+      "effect": [
+        "Atomically persist legal settlement, reward ledger and versioned outbox; raw reward never defaults to a currency"
+      ],
+      "wait": {
+        "event": "QuestSettlementCommitted",
+        "producer": "SERVER",
+        "proof": "AUTHORITATIVE_COMMIT",
+        "correlation_fields": [
+          "progress_scope",
+          "quest_run_id",
+          "session_epoch",
+          "flow_revision",
+          "scene_epoch",
+          "expected_node"
+        ],
+        "wire_adapter_id": null
+      },
+      "next": [
+        {
+          "on": "QuestSettlementCommitted",
+          "to": "q16_publish",
+          "guard": null
+        }
+      ],
+      "persistence": {
+        "transaction": "QUEST_SETTLEMENT_TRANSACTION_V0_1",
+        "durable_fields": [
+          "quest_state",
+          "settlement_key",
+          "reward_ledger",
+          "completed_prerequisites",
+          "publication_outbox"
+        ],
+        "commit_before_effect": true
+      },
+      "status": "BLOCKED",
+      "source": {
+        "source_ref": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac/research/handoffs/s00-input-and-quest-reuse-20261103/W2-REUSABLE-QUEST-RUNTIME.md",
+        "source_sha": "ad9db1e2ca4a33eccb453f941df6330d9500aaab4576130ef299ba59b9135b4e",
+        "evidence_kind": "SERVER_CANDIDATE_DESIGN",
+        "unknowns": []
+      },
+      "unknowns": [
+        "REWARD_PLAN_AND_LEGAL_COMPLETION_UNBOUND"
+      ]
+    },
+    {
+      "node_id": "q16_publish",
+      "primitive": "publish_quest_projection",
+      "input": {
+        "quest": {
+          "domain": "quest",
+          "value": 16
+        },
+        "projection_contract": "COMMITTED_QUEST_PROJECTION_V0_1"
+      },
+      "preconditions": {
+        "op": "predicate",
+        "name": "flow_expected_node_and_authorized_scope",
+        "args": {
+          "node": "q16_publish"
+        },
+        "source": {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac/research/handoffs/s00-input-and-quest-reuse-20261103/W2-REUSABLE-QUEST-RUNTIME.md",
+          "source_sha": "ad9db1e2ca4a33eccb453f941df6330d9500aaab4576130ef299ba59b9135b4e",
+          "evidence_kind": "SERVER_CANDIDATE_DESIGN",
+          "unknowns": []
+        }
+      },
+      "effect": [
+        "Use existing versioned codec adapters to publish committed UI/prerequisite/reward projections"
+      ],
+      "wait": {
+        "event": "ProjectionScheduled",
+        "producer": "SERVER",
+        "proof": "INTERNAL",
+        "correlation_fields": [
+          "progress_scope",
+          "quest_run_id",
+          "session_epoch",
+          "flow_revision",
+          "scene_epoch",
+          "expected_node"
+        ],
+        "wire_adapter_id": null
+      },
+      "next": [
+        {
+          "on": "ProjectionScheduled",
+          "to": "q16_unlock",
+          "guard": null
+        }
+      ],
+      "persistence": {
+        "transaction": null,
+        "durable_fields": [],
+        "commit_before_effect": false
+      },
+      "status": "CANDIDATE",
+      "source": {
+        "source_ref": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac/research/handoffs/s00-input-and-quest-reuse-20261103/W2-REUSABLE-QUEST-RUNTIME.md",
+        "source_sha": "ad9db1e2ca4a33eccb453f941df6330d9500aaab4576130ef299ba59b9135b4e",
+        "evidence_kind": "SERVER_CANDIDATE_DESIGN",
+        "unknowns": []
+      },
+      "unknowns": [
+        "Receipt alone does not prove visible Client UI success."
+      ]
+    },
+    {
+      "node_id": "q16_unlock",
+      "primitive": "publish_next_quests",
+      "input": {
+        "candidates": [
+          {
+            "domain": "quest",
+            "value": 15
+          }
+        ],
+        "evaluate_individually": true
+      },
+      "preconditions": {
+        "op": "predicate",
+        "name": "flow_expected_node_and_authorized_scope",
+        "args": {
+          "node": "q16_unlock"
+        },
+        "source": {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac/research/handoffs/s00-input-and-quest-reuse-20261103/W2-REUSABLE-QUEST-RUNTIME.md",
+          "source_sha": "ad9db1e2ca4a33eccb453f941df6330d9500aaab4576130ef299ba59b9135b4e",
+          "evidence_kind": "SERVER_CANDIDATE_DESIGN",
+          "unknowns": []
+        }
+      },
+      "effect": [
+        "Reevaluate each candidate eligibility with its own town/level/NPC/branch policy; no id increment"
+      ],
+      "wait": {
+        "event": "AvailabilityProjected",
+        "producer": "SERVER",
+        "proof": "INTERNAL",
+        "correlation_fields": [
+          "progress_scope",
+          "quest_run_id",
+          "session_epoch",
+          "flow_revision",
+          "scene_epoch",
+          "expected_node"
+        ],
+        "wire_adapter_id": null
+      },
+      "next": [
+        {
+          "on": "AvailabilityProjected",
+          "to": "q16_end",
+          "guard": null
+        }
+      ],
+      "persistence": {
+        "transaction": null,
+        "durable_fields": [],
+        "commit_before_effect": false
+      },
+      "status": "CANDIDATE",
+      "source": {
+        "source_ref": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac/research/handoffs/s00-input-and-quest-reuse-20261103/W2-REUSABLE-QUEST-RUNTIME.md",
+        "source_sha": "ad9db1e2ca4a33eccb453f941df6330d9500aaab4576130ef299ba59b9135b4e",
+        "evidence_kind": "SERVER_CANDIDATE_DESIGN",
+        "unknowns": []
+      },
+      "unknowns": []
+    },
+    {
+      "node_id": "q16_end",
+      "primitive": "end",
+      "input": {
+        "outcome": "SETTLED",
+        "quest": {
+          "domain": "quest",
+          "value": 16
+        }
+      },
+      "preconditions": {
+        "op": "predicate",
+        "name": "flow_expected_node_and_authorized_scope",
+        "args": {
+          "node": "q16_end"
+        },
+        "source": {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac/research/handoffs/s00-input-and-quest-reuse-20261103/W2-REUSABLE-QUEST-RUNTIME.md",
+          "source_sha": "ad9db1e2ca4a33eccb453f941df6330d9500aaab4576130ef299ba59b9135b4e",
+          "evidence_kind": "SERVER_CANDIDATE_DESIGN",
+          "unknowns": []
+        }
+      },
+      "effect": [
+        "End this quest run after committed settlement only"
+      ],
+      "wait": null,
+      "next": [],
+      "persistence": {
+        "transaction": null,
+        "durable_fields": [],
+        "commit_before_effect": false
+      },
+      "status": "CANDIDATE",
+      "source": {
+        "source_ref": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac/research/handoffs/s00-input-and-quest-reuse-20261103/W2-REUSABLE-QUEST-RUNTIME.md",
+        "source_sha": "ad9db1e2ca4a33eccb453f941df6330d9500aaab4576130ef299ba59b9135b4e",
+        "evidence_kind": "SERVER_CANDIDATE_DESIGN",
+        "unknowns": []
+      },
+      "unknowns": []
+    }
+  ],
+  "explicit_event_loops": [],
+  "legal_settlement_nodes": [
+    "q14_settlement",
+    "q16_settlement"
+  ],
+  "blocking_issues": [
+    {
+      "code": "SCOPE_UNDECIDED",
+      "field": "policy.progress_scope",
+      "responsibility": "SERVER_DESIGN",
+      "reason": "正常進度scope尚未核准；既有候選按account保存，Tab切角不能隱式分家。",
+      "unblock_evidence": "S00 scope/owner與遷移規則核准。"
+    },
+    {
+      "code": "LEGAL_OBJECTIVE_UNBOUND",
+      "field": "objectives",
+      "responsibility": "SERVER_DESIGN",
+      "reason": "原表沒有足夠結構化目標，不以播放或任意receipt當合法達成。",
+      "unblock_evidence": "逐任務目標predicate、來源事件、數量/作用域與正流程卡。"
+    },
+    {
+      "code": "ACCEPT_TURNIN_ADAPTER",
+      "field": "policy.acceptance_rule",
+      "responsibility": "CLIENT_RESEARCH",
+      "reason": "已有條件式NPC/Quest UI收發，不等於本任務每一操作的完整原生配對。",
+      "unblock_evidence": "對應NPC/controller/UI mode的意圖與回覆consumer證據。"
+    },
+    {
+      "code": "REWARD_PLAN_UNBOUND",
+      "field": "settlement.reward_plan_ref",
+      "responsibility": "SERVER_DESIGN",
+      "reason": "raw reward metadata/顯示域不是發獎交易；未列reward亦不可默認零。",
+      "unblock_evidence": "S00可實作reward plan/歸屬/發放時點與Client publication adapter。"
+    },
+    {
+      "code": "CONTENT_NOT_GAMEPLAY_VERIFIED",
+      "field": "activation",
+      "responsibility": "GAMEPLAY_ACCEPTANCE",
+      "reason": "此資料例與新引擎未做正常通關驗收。",
+      "unblock_evidence": "保留既有通路，在隔離正流程完成逐卡觀察與正常保存核對。"
+    }
+  ],
+  "provenance": [
+    {
+      "source_ref": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac/research/handoffs/s00-input-and-quest-reuse-20261103/W2-REUSABLE-QUEST-RUNTIME.md",
+      "source_sha": "ad9db1e2ca4a33eccb453f941df6330d9500aaab4576130ef299ba59b9135b4e",
+      "evidence_kind": "SERVER_CANDIDATE_DESIGN",
+      "unknowns": []
+    },
+    {
+      "source_ref": "07-Table.stp!Table/QuestInfo.xml#/QuestInfo/Quest[@id='14']",
+      "source_sha": "5d251415fdfdc453adefbff03114ded5a8ea41b696ce0aab86a23070e0fdca60",
+      "evidence_kind": "CLIENT_RESOURCE_DIRECT",
+      "unknowns": [
+        "Level comparison and character/account scope are Server contract requirements, not declared here.",
+        "Missing XML node is absent; no default action/reward/target is inferred.",
+        "Demands carries only id entries; multi-entry AND/OR consumer needs native evidence.",
+        "Quest completion condition, objective type/count, replay policy and reward type semantics are not encoded in selected rows."
+      ]
+    },
+    {
+      "source_ref": "07-Table.stp!Table/QuestInfo.xml#/QuestInfo/Quest[@id='16']",
+      "source_sha": "5d251415fdfdc453adefbff03114ded5a8ea41b696ce0aab86a23070e0fdca60",
+      "evidence_kind": "CLIENT_RESOURCE_DIRECT",
+      "unknowns": [
+        "Level comparison and character/account scope are Server contract requirements, not declared here.",
+        "Missing XML node is absent; no default action/reward/target is inferred.",
+        "Demands carries only id entries; multi-entry AND/OR consumer needs native evidence.",
+        "Quest completion condition, objective type/count, replay policy and reward type semantics are not encoded in selected rows."
+      ]
+    }
+  ]
+}

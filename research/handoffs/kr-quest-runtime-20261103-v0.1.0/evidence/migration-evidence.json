@@ -1,0 +1,885 @@
+{
+  "schema": "quest-migration-evidence",
+  "schema_version": "0.1.0",
+  "classification": "SERVER_CANDIDATE_DESIGN_WITH_PINNED_IMPLEMENTATION_AND_PRIOR_RUNTIME_EVIDENCE",
+  "analysis_main": "83959c0e7e65ab01348b285f03c285f487077610",
+  "supplemental_analysis_commit": "76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac",
+  "server_branch": "codex/tutorial-combat-priority-20261101",
+  "server_commit": "f95fe9099419b2bbb5f0daa71c6810d0c2b53d8e",
+  "server_main_separately_observed": "69c714c54fb5c802251736ee38ff37c19fba3c53",
+  "original_kr_bin_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+  "this_batch_actions": [
+    "read pinned source",
+    "verify downloaded text matches Git blob SHA",
+    "review historical redacted snapshots"
+  ],
+  "not_performed": [
+    "Client execution or attachment",
+    "Server execution or mutation",
+    "player DB read or mutation",
+    "normal gameplay test",
+    "deferred replay/reconnect/concurrency/fault tests",
+    "Git branch creation/commit/push",
+    "owner or RR mutation"
+  ],
+  "migration_rows": [
+    {
+      "migration_id": "M01",
+      "current_implementation_kind": "SERVER_IMPLEMENTATION_FACT",
+      "mapping_kind": "SERVER_CANDIDATE_DESIGN",
+      "current_branch": "LocalExpeditionConnection.HandleApplicationAsync: tutorial entry/name; LocalTutorialWorldConnection bootstrap",
+      "proposed_common_primitive": "admit_journey; install_scene; initialize_map; bind_control",
+      "content_fields": {
+        "route": "tutorial",
+        "bootstrap_scene": "existing TUTO route",
+        "persist_owner_scope": "account in current candidate"
+      },
+      "special_hook": "TUTO_COROUTINE_CONTINUITY",
+      "adoption": "EXTRACT_BEHIND_EXISTING_ADAPTER; DO_NOT_REWRITE_WHOLE_ROUTE",
+      "unknowns": "Original tutorial terminal/Quest14/16 lawful settlement is not established by entry. Account-scoped current implementation does not settle final product scope.",
+      "normal_flow_acceptance": "Historical fresh working-copy run reached Square; future extracted adapter NOT_RUN.",
+      "sources": [
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_server_roy/blob/f95fe9099419b2bbb5f0daa71c6810d0c2b53d8e/src/Tartaros.Network/LocalExpeditionJourneyExperiment.cs",
+          "source_sha": "af60eb3cf7b74e9f500a906a9e12556fcc72f344",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "de821e282accda861b748f821bc739e5ba16ef303a77a536b85242e2ae2438e8",
+          "locator": "HandleApplicationAsync"
+        },
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_server_roy/blob/f95fe9099419b2bbb5f0daa71c6810d0c2b53d8e/src/Tartaros.Network/LocalTutorialWorldConnection.cs",
+          "source_sha": "de016b9c50b5fec22a74e90419e74e8cb8952ca4",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "a1d75bbb1bf3c51ed43827d4181f73bd4cccbc0380929bb28dfc2d0a5835acce",
+          "locator": "Handle"
+        },
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac/governance/s00-iterations/S00-20261102-FRESH-TUTORIAL-HUMAN-PASS.md",
+          "source_sha": "e3a7d6b07ea30fca3bf992c822239ae095046c43",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "95c7dd283dd42ae5868ee90e083f1d50c0d962bd12577560bd0d4bf487a31259",
+          "locator": ""
+        }
+      ]
+    },
+    {
+      "migration_id": "M02",
+      "current_implementation_kind": "SERVER_IMPLEMENTATION_FACT",
+      "mapping_kind": "SERVER_CANDIDATE_DESIGN",
+      "current_branch": "HandleApplicationAsync exact C2S [40 00 0e 00] and GrantTutorialIsiliaAuthorizedAsync",
+      "proposed_common_primitive": "handle_scenario_intent; offer_formation",
+      "content_fields": {
+        "scenario_request_key": 14,
+        "formation_token_raw": 14,
+        "selected_leader_candidates": [
+          1,
+          3,
+          4
+        ],
+        "owned_role_required": true
+      },
+      "special_hook": "TUTORIAL_ISILIA_RECRUITMENT",
+      "adoption": "EXTRACT_BEHIND_EXISTING_ADAPTER; DO_NOT_REWRITE_WHOLE_ROUTE",
+      "unknowns": "Role4 grant and raw token14 are existing Server candidate policies, not universal Quest accept/reward. Single-player does not imply one playable character in original game.",
+      "normal_flow_acceptance": "Fresh tutorial route human-reported; generic formation extraction NOT_RUN.",
+      "sources": [
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_server_roy/blob/f95fe9099419b2bbb5f0daa71c6810d0c2b53d8e/src/Tartaros.Network/LocalExpeditionJourneyExperiment.cs",
+          "source_sha": "af60eb3cf7b74e9f500a906a9e12556fcc72f344",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "de821e282accda861b748f821bc739e5ba16ef303a77a536b85242e2ae2438e8",
+          "locator": "_formationEnabled C2S40 gate"
+        },
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_server_roy/blob/f95fe9099419b2bbb5f0daa71c6810d0c2b53d8e/src/Tartaros.Network/LocalTutorialWorldConnection.cs",
+          "source_sha": "de016b9c50b5fec22a74e90419e74e8cb8952ca4",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "a1d75bbb1bf3c51ed43827d4181f73bd4cccbc0380929bb28dfc2d0a5835acce",
+          "locator": "TrySelectFirstBattle"
+        }
+      ]
+    },
+    {
+      "migration_id": "M03",
+      "current_implementation_kind": "SERVER_IMPLEMENTATION_FACT",
+      "mapping_kind": "SERVER_CANDIDATE_DESIGN",
+      "current_branch": "LocalTutorialWorldConnection.BeginFirstBattle → _battleEntryPending → C2S09 → InitializeFirstBattle",
+      "proposed_common_primitive": "create_instance; initialize_map; wait_receipt",
+      "content_fields": {
+        "map_id": 190,
+        "receipt_opcode": "0x0009",
+        "receipt_body_length": 2
+      },
+      "special_hook": "TUTO_05_TYPE1_ENTRY",
+      "adoption": "EXTRACT_BEHIND_EXISTING_ADAPTER; DO_NOT_REWRITE_WHOLE_ROUTE",
+      "unknowns": "Do not replace TUTO with general 5F/type2 controller or destroy the coroutine; native stage receipt does not prove all world readiness.",
+      "normal_flow_acceptance": "Preserve tested tutorial route; generalized replacement NOT_RUN.",
+      "sources": [
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_server_roy/blob/f95fe9099419b2bbb5f0daa71c6810d0c2b53d8e/src/Tartaros.Network/LocalTutorialWorldConnection.cs",
+          "source_sha": "de016b9c50b5fec22a74e90419e74e8cb8952ca4",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "a1d75bbb1bf3c51ed43827d4181f73bd4cccbc0380929bb28dfc2d0a5835acce",
+          "locator": "BeginFirstBattle/InitializeFirstBattle/Handle(command9)"
+        }
+      ]
+    },
+    {
+      "migration_id": "M04",
+      "current_implementation_kind": "SERVER_IMPLEMENTATION_FACT",
+      "mapping_kind": "SERVER_CANDIDATE_DESIGN",
+      "current_branch": "PollWorldAsync RecordFirstBattleWinAuthorizedAsync → CompleteFirstBattleReturn",
+      "proposed_common_primitive": "persist_instance_outcome; restore_origin_map",
+      "content_fields": {
+        "return_pose": "saved pre-encounter position/direction",
+        "local_scenario_end": 14
+      },
+      "special_hook": "TUTO_4C_LOCAL_END",
+      "adoption": "EXTRACT_BEHIND_EXISTING_ADAPTER; DO_NOT_REWRITE_WHOLE_ROUTE",
+      "unknowns": "4C is TUTO local completion consumer, not general Scenario22 result nor Quest settlement. No original official encounter completion rule is inferred.",
+      "normal_flow_acceptance": "Fresh tutorial source has win saved and continued story; extracted hook NOT_RUN.",
+      "sources": [
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_server_roy/blob/f95fe9099419b2bbb5f0daa71c6810d0c2b53d8e/src/Tartaros.Network/LocalExpeditionJourneyExperiment.cs",
+          "source_sha": "af60eb3cf7b74e9f500a906a9e12556fcc72f344",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "de821e282accda861b748f821bc739e5ba16ef303a77a536b85242e2ae2438e8",
+          "locator": "PollWorldAsync"
+        },
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_server_roy/blob/f95fe9099419b2bbb5f0daa71c6810d0c2b53d8e/src/Tartaros.Persistence/SqliteTutorialStateStore.cs",
+          "source_sha": "995fc114e4181cccec8b652839e7513a59bb91cb",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "78f889314c884812006326c94c052e7ab13eaa3ab54df2ea6136c5639ef602c5",
+          "locator": "RecordFirstBattleWinAuthorizedAsync"
+        },
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_server_roy/blob/f95fe9099419b2bbb5f0daa71c6810d0c2b53d8e/src/Tartaros.Network/LocalTutorialWorldConnection.cs",
+          "source_sha": "de016b9c50b5fec22a74e90419e74e8cb8952ca4",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "a1d75bbb1bf3c51ed43827d4181f73bd4cccbc0380929bb28dfc2d0a5835acce",
+          "locator": "CompleteFirstBattleReturn"
+        },
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac/governance/s00-iterations/S00-20261102-FRESH-TUTORIAL-HUMAN-PASS.md",
+          "source_sha": "e3a7d6b07ea30fca3bf992c822239ae095046c43",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "95c7dd283dd42ae5868ee90e083f1d50c0d962bd12577560bd0d4bf487a31259",
+          "locator": ""
+        }
+      ]
+    },
+    {
+      "migration_id": "M05",
+      "current_implementation_kind": "SERVER_IMPLEMENTATION_FACT",
+      "mapping_kind": "SERVER_CANDIDATE_DESIGN",
+      "current_branch": "HandleApplicationAsync exact scene1000/13 report; GrantPinkoAuthorizedAsync; role2 publish",
+      "proposed_common_primitive": "grant_authorized_role; publish_roster",
+      "content_fields": {
+        "scene_key": {
+          "quest_key": 1000,
+          "scene_key": 13
+        },
+        "granted_role_index": 2,
+        "required_existing_role": 4
+      },
+      "special_hook": "TUTORIAL_PINKO_RECRUITMENT",
+      "adoption": "EXTRACT_BEHIND_EXISTING_ADAPTER; DO_NOT_REWRITE_WHOLE_ROUTE",
+      "unknowns": "Current grant is fixed tutorial reconstruction plus saved first win; arbitrary scene report must not grant roles. General role reward requires separately approved objective/entitlement.",
+      "normal_flow_acceptance": "Fresh historical snapshot role1/2/3/4; current new mapping NOT_RUN.",
+      "sources": [
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_server_roy/blob/f95fe9099419b2bbb5f0daa71c6810d0c2b53d8e/src/Tartaros.Network/LocalExpeditionJourneyExperiment.cs",
+          "source_sha": "af60eb3cf7b74e9f500a906a9e12556fcc72f344",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "de821e282accda861b748f821bc739e5ba16ef303a77a536b85242e2ae2438e8",
+          "locator": "FirstBattleWinPersisted/CanRecruitPinko block"
+        },
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_server_roy/blob/f95fe9099419b2bbb5f0daa71c6810d0c2b53d8e/src/Tartaros.Persistence/SqliteTutorialStateStore.cs",
+          "source_sha": "995fc114e4181cccec8b652839e7513a59bb91cb",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "78f889314c884812006326c94c052e7ab13eaa3ab54df2ea6136c5639ef602c5",
+          "locator": "GrantPinkoAuthorizedAsync"
+        },
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac/governance/s00-iterations/S00-20261102-FRESH-TUTORIAL-HUMAN-PASS.md",
+          "source_sha": "e3a7d6b07ea30fca3bf992c822239ae095046c43",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "95c7dd283dd42ae5868ee90e083f1d50c0d962bd12577560bd0d4bf487a31259",
+          "locator": ""
+        }
+      ]
+    },
+    {
+      "migration_id": "M06",
+      "current_implementation_kind": "SERVER_IMPLEMENTATION_FACT",
+      "mapping_kind": "SERVER_CANDIDATE_DESIGN",
+      "current_branch": "ExitScenes=[10,12,13,14]; ObserveExitScene(quest1000,value1)",
+      "proposed_common_primitive": "await_ordered_receipt; release_tutorial_session",
+      "content_fields": {
+        "scene_domain_key": 1000,
+        "ordered_scene_keys": [
+          10,
+          12,
+          13,
+          14
+        ],
+        "last_receipt_value": 1
+      },
+      "special_hook": "TUTORIAL_EXIT_PRESENTATION_SEQUENCE",
+      "adoption": "EXTRACT_BEHIND_EXISTING_ADAPTER; DO_NOT_REWRITE_WHOLE_ROUTE",
+      "unknowns": "3F report literal1 also has load-failure producers; ordered receipt is presentation progress only. Persistent coroutine resume not implemented/proven.",
+      "normal_flow_acceptance": "Historical normal scene metadata and human Square movement; full legal settlement still OPEN.",
+      "sources": [
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_server_roy/blob/f95fe9099419b2bbb5f0daa71c6810d0c2b53d8e/src/Tartaros.Network/LocalExpeditionJourneyExperiment.cs",
+          "source_sha": "af60eb3cf7b74e9f500a906a9e12556fcc72f344",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "de821e282accda861b748f821bc739e5ba16ef303a77a536b85242e2ae2438e8",
+          "locator": "ExitScenes/ObserveExitScene"
+        },
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac/governance/s00-iterations/S00-20261102-FRESH-TUTORIAL-HUMAN-PASS.md",
+          "source_sha": "e3a7d6b07ea30fca3bf992c822239ae095046c43",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "95c7dd283dd42ae5868ee90e083f1d50c0d962bd12577560bd0d4bf487a31259",
+          "locator": ""
+        }
+      ]
+    },
+    {
+      "migration_id": "M07",
+      "current_implementation_kind": "SERVER_IMPLEMENTATION_FACT",
+      "mapping_kind": "SERVER_CANDIDATE_DESIGN",
+      "current_branch": "CommitSquareTransferAsync → RecordSquareTransferAuthorizedAsync → CommitTutorialPrerequisitesAuthorizedAsync → PrepareSquarePrerequisites",
+      "proposed_common_primitive": "commit_transfer_authority; publish_prerequisite_snapshot",
+      "content_fields": {
+        "prerequisite_keys": [
+          14,
+          16
+        ],
+        "reward_entitlement": {
+          "quest_key": 16,
+          "raw_type": 2,
+          "raw_value": 50,
+          "state": "PENDING_NATIVE_PUBLICATION"
+        },
+        "scope": "current candidate account"
+      },
+      "special_hook": "TUTORIAL_PREREQUISITE_POLICY_V1",
+      "adoption": "EXTRACT_BEHIND_EXISTING_ADAPTER; DO_NOT_REWRITE_WHOLE_ROUTE",
+      "unknowns": "Preserve reconstruction provenance; do not re-label keys14/16 as recovered official settlement. Future owner/expedition scope and legal terminal rules need S00 decision.",
+      "normal_flow_acceptance": "Phindos v12 saved proof links tutorial transfer/settlement to same connection; awards remain pending.",
+      "sources": [
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_server_roy/blob/f95fe9099419b2bbb5f0daa71c6810d0c2b53d8e/src/Tartaros.Network/LocalExpeditionJourneyExperiment.cs",
+          "source_sha": "af60eb3cf7b74e9f500a906a9e12556fcc72f344",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "de821e282accda861b748f821bc739e5ba16ef303a77a536b85242e2ae2438e8",
+          "locator": "CommitSquareTransferAsync"
+        },
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_server_roy/blob/f95fe9099419b2bbb5f0daa71c6810d0c2b53d8e/src/Tartaros.Persistence/SqliteTutorialStateStore.cs",
+          "source_sha": "995fc114e4181cccec8b652839e7513a59bb91cb",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "78f889314c884812006326c94c052e7ab13eaa3ab54df2ea6136c5639ef602c5",
+          "locator": "CommitTutorialPrerequisitesAuthorizedAsync"
+        },
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac/governance/s00-iterations/evidence/S00-20261103-PHINDOS-HUMAN-PASS.json",
+          "source_sha": "269ff2f51a02b91b1fb296f32eb4ba57928c0780",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "0420f7da68869760c2f070a4b5df398f8c1ede598ea20d2747be3f29d1a70e61",
+          "locator": ""
+        }
+      ]
+    },
+    {
+      "migration_id": "M08",
+      "current_implementation_kind": "SERVER_IMPLEMENTATION_FACT",
+      "mapping_kind": "SERVER_CANDIDATE_DESIGN",
+      "current_branch": "CanObserveQuest15Intro; C2S1C(category3,NPC10338); scene15/1 report; request47/15/2",
+      "proposed_common_primitive": "admit_npc_intent; await_receipt; prepare_scene_handoff; play_scene",
+      "content_fields": {
+        "quest_id": 15,
+        "npc_id": 10338,
+        "scene_edges": [
+          [
+            1,
+            2
+          ]
+        ],
+        "nearby_gate": "candidate Server pose margin3"
+      },
+      "special_hook": "NPC_DIALOG_LIFECYCLE_ADAPTER",
+      "adoption": "EXTRACT_BEHIND_EXISTING_ADAPTER; DO_NOT_REWRITE_WHOLE_ROUTE",
+      "unknowns": "S2C40/status0 creates accept dialogue and cannot be a silent ACK. v13 removed extra40; actual absence of UI overlap remains unconfirmed. No generic close-UI opcode is recovered.",
+      "normal_flow_acceptance": "v12 arrival passed with dialogue-overlap defect; v13+ corrected mapping NOT_HUMAN_CONFIRMED.",
+      "sources": [
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_server_roy/blob/f95fe9099419b2bbb5f0daa71c6810d0c2b53d8e/src/Tartaros.Network/LocalTutorialWorldConnection.cs",
+          "source_sha": "de016b9c50b5fec22a74e90419e74e8cb8952ca4",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "a1d75bbb1bf3c51ed43827d4181f73bd4cccbc0380929bb28dfc2d0a5835acce",
+          "locator": "CanObserveQuest15Intro; Handle square3F and NPC1C"
+        },
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac/governance/s00-iterations/S00-20261103-PHINDOS-V13-CORRECTIONS.md",
+          "source_sha": "4738f3defcafe20dfebbb82db56df739ae14bc0a",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "b0bc7c4f581ff9b7c55d5daf27ca720b4ef833dc801fd025476f2364b166d84e",
+          "locator": "NPC對話與第二段劇情"
+        },
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac/governance/s00-iterations/S00-20261103-PHINDOS-V12-HUMAN-RESULT.md",
+          "source_sha": "768fe53494aec176864ac59c8b5039d4b45192e7",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "54b7d95fd7dcb6c471b0b068d3d27701217a154e42c4c1025be63889cad1918b",
+          "locator": ""
+        }
+      ]
+    },
+    {
+      "migration_id": "M09",
+      "current_implementation_kind": "SERVER_IMPLEMENTATION_FACT",
+      "mapping_kind": "SERVER_CANDIDATE_DESIGN",
+      "current_branch": "scene15/2 receipt → Formation(mask)/SelectFormation; C2S28 → RecordStage(Accepted)",
+      "proposed_common_primitive": "offer_single_player_formation; confirm_formation; admit_instance",
+      "content_fields": {
+        "formation_token": {
+          "domain": "opaque token",
+          "raw": 19
+        },
+        "owned_supported_leaders": [
+          1,
+          3,
+          4
+        ],
+        "current_capacity": 1,
+        "quest_id": 15,
+        "field_id": 19,
+        "case_id": 103
+      },
+      "special_hook": "SUPPORTED_ROSTER_CAPABILITY_POLICY",
+      "adoption": "EXTRACT_BEHIND_EXISTING_ADAPTER; DO_NOT_REWRITE_WHOLE_ROUTE",
+      "unknowns": "Current single selected leader is implementation limitation, not original formation limit. Raw token19 must not be derived from Field19. Accepted stage1 means instance admission, not Quest accept.",
+      "normal_flow_acceptance": "v12 route admitted role4 and reached village; current generalized primitive NOT_RUN.",
+      "sources": [
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_server_roy/blob/f95fe9099419b2bbb5f0daa71c6810d0c2b53d8e/src/Tartaros.Network/LocalTutorialWorldConnection.cs",
+          "source_sha": "de016b9c50b5fec22a74e90419e74e8cb8952ca4",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "a1d75bbb1bf3c51ed43827d4181f73bd4cccbc0380929bb28dfc2d0a5835acce",
+          "locator": "TrySelectPhindosBattle/BeginPhindosBattle"
+        },
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_server_roy/blob/f95fe9099419b2bbb5f0daa71c6810d0c2b53d8e/src/Tartaros.Network/LocalExpeditionJourneyExperiment.cs",
+          "source_sha": "af60eb3cf7b74e9f500a906a9e12556fcc72f344",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "de821e282accda861b748f821bc739e5ba16ef303a77a536b85242e2ae2438e8",
+          "locator": "RecordStageAuthorizedAsync(Accepted)"
+        },
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_server_roy/blob/f95fe9099419b2bbb5f0daa71c6810d0c2b53d8e/src/Tartaros.Protocol/KrPhindosBridgeCandidateProtocol.cs",
+          "source_sha": "4fc711ceaa668a0f0e4ca3c4d738cc3c3414bebd",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "b972c0b48b498b60ba4f1153c8d544f5f7c58db554da776615d5f65ddad4cbd7",
+          "locator": "Formation/SelectFormation"
+        },
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_server_roy/blob/f95fe9099419b2bbb5f0daa71c6810d0c2b53d8e/src/Tartaros.Persistence/SqlitePhindosJourneyStore.cs",
+          "source_sha": "aee865311b3006f510f572f46466fe94c0ac5f8c",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "402002e3c02f31d2e8c01eea9e104f97b71f55082c82ce79a02bd65d1be15790",
+          "locator": "RecordStageAuthorizedAsync"
+        }
+      ]
+    },
+    {
+      "migration_id": "M10",
+      "current_implementation_kind": "SERVER_IMPLEMENTATION_FACT",
+      "mapping_kind": "SERVER_CANDIDATE_DESIGN",
+      "current_branch": "InitializePhindosNode and LocalPhindosBridgeConfiguration",
+      "proposed_common_primitive": "initialize_scenario_node; initialize_map; spawn_group; bind_control",
+      "content_fields": {
+        "graph_nodes": [
+          {
+            "node": 1,
+            "map_id": 191
+          },
+          {
+            "node": 2,
+            "map_id": 192
+          }
+        ],
+        "controller_adapter": "Scenario 5F/type2; context38/type2 with Case103",
+        "source_policy": "native resource members plus explicit Server reconstruction"
+      },
+      "special_hook": "NONE; CONTENT_POLICY_VERSION_REQUIRED",
+      "adoption": "EXTRACT_BEHIND_EXISTING_ADAPTER; DO_NOT_REWRITE_WHOLE_ROUTE",
+      "unknowns": "Spawn coordinates/HP60/one cluster per node/all-dead are Server candidate; MEF format and official scheduling unknown. 38+5 remains opaque.",
+      "normal_flow_acceptance": "v12 working-copy node progression reached village; no native MEF approval.",
+      "sources": [
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_server_roy/blob/f95fe9099419b2bbb5f0daa71c6810d0c2b53d8e/src/Tartaros.Network/LocalTutorialWorldConnection.cs",
+          "source_sha": "de016b9c50b5fec22a74e90419e74e8cb8952ca4",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "a1d75bbb1bf3c51ed43827d4181f73bd4cccbc0380929bb28dfc2d0a5835acce",
+          "locator": "InitializePhindosNode"
+        },
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_server_roy/blob/f95fe9099419b2bbb5f0daa71c6810d0c2b53d8e/src/Tartaros.Network/LocalPhindosBridgeConfiguration.cs",
+          "source_sha": "64ca414eb0e531dab04dda2322d0019aed8da309",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "d2f347933d05b9013a57ac963edc5192384ea3558bfd97a8139ea1608ff3f7bf",
+          "locator": "Spawn/Encounter/Validate"
+        },
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_server_roy/blob/f95fe9099419b2bbb5f0daa71c6810d0c2b53d8e/src/Tartaros.Protocol/KrPhindosBridgeCandidateProtocol.cs",
+          "source_sha": "4fc711ceaa668a0f0e4ca3c4d738cc3c3414bebd",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "b972c0b48b498b60ba4f1153c8d544f5f7c58db554da776615d5f65ddad4cbd7",
+          "locator": "InstallScenario/Context"
+        },
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac/governance/s00-iterations/S00-20261103-PHINDOS-V12-HUMAN-RESULT.md",
+          "source_sha": "768fe53494aec176864ac59c8b5039d4b45192e7",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "54b7d95fd7dcb6c471b0b068d3d27701217a154e42c4c1025be63889cad1918b",
+          "locator": ""
+        }
+      ]
+    },
+    {
+      "migration_id": "M11",
+      "current_implementation_kind": "SERVER_IMPLEMENTATION_FACT",
+      "mapping_kind": "SERVER_CANDIDATE_DESIGN",
+      "current_branch": "PendingPhindosStage → RecordStage(FirstMapWon/SecondMapWon) → CommitPhindosStage",
+      "proposed_common_primitive": "persist_objective_evidence; open_manual_portal",
+      "content_fields": {
+        "clear_policy": "current Server all-dead plus death presentation",
+        "keep_combat_alive_after_clear": true,
+        "clear_input_buffer_once": true
+      },
+      "special_hook": "INSTANCE_COMBAT_CONTEXT_SURVIVES_CLEAR",
+      "adoption": "EXTRACT_BEHIND_EXISTING_ADAPTER; DO_NOT_REWRITE_WHOLE_ROUTE",
+      "unknowns": "Clear does not mean instance exit or Quest completion. Persisted stage2/3 are current candidate milestones. New empty-space actions retain resources/cooldowns.",
+      "normal_flow_acceptance": "Manual portal / retained combat required by user; v14 synthetic record exists, fresh human result not established.",
+      "sources": [
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_server_roy/blob/f95fe9099419b2bbb5f0daa71c6810d0c2b53d8e/src/Tartaros.Network/LocalTutorialWorldConnection.cs",
+          "source_sha": "de016b9c50b5fec22a74e90419e74e8cb8952ca4",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "a1d75bbb1bf3c51ed43827d4181f73bd4cccbc0380929bb28dfc2d0a5835acce",
+          "locator": "PendingPhindosStage/CommitPhindosStage"
+        },
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_server_roy/blob/f95fe9099419b2bbb5f0daa71c6810d0c2b53d8e/src/Tartaros.Network/LocalExpeditionJourneyExperiment.cs",
+          "source_sha": "af60eb3cf7b74e9f500a906a9e12556fcc72f344",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "de821e282accda861b748f821bc739e5ba16ef303a77a536b85242e2ae2438e8",
+          "locator": "PollWorldAsync"
+        },
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_server_roy/blob/f95fe9099419b2bbb5f0daa71c6810d0c2b53d8e/src/Tartaros.Persistence/SqlitePhindosJourneyStore.cs",
+          "source_sha": "aee865311b3006f510f572f46466fe94c0ac5f8c",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "402002e3c02f31d2e8c01eea9e104f97b71f55082c82ce79a02bd65d1be15790",
+          "locator": "RecordStageAuthorizedAsync"
+        },
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac/governance/s00-iterations/S00-20261103-PHINDOS-V14-CORRECTIONS.md",
+          "source_sha": "c0e1ad91e77d4f8e9b8e3e235a1bf0c4e73ccbff",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "d22e7368238e64b35f0f140334061c71f32f40913713679e983ad41799a91502",
+          "locator": "修正內容"
+        }
+      ]
+    },
+    {
+      "migration_id": "M12",
+      "current_implementation_kind": "SERVER_IMPLEMENTATION_FACT",
+      "mapping_kind": "SERVER_CANDIDATE_DESIGN",
+      "current_branch": "Handle C2S1C(category0,current node key), validate monotonic Server pose → next map/result",
+      "proposed_common_primitive": "admit_portal_interaction; transfer_node",
+      "content_fields": {
+        "manual_input": "stand within portal and press Z",
+        "portal_key_scope": "current instance/current map node",
+        "automatic": false
+      },
+      "special_hook": "PORTAL_INTERACTION_ADAPTER",
+      "adoption": "EXTRACT_BEHIND_EXISTING_ADAPTER; DO_NOT_REWRITE_WHOLE_ROUTE",
+      "unknowns": "Portal key1/2 is candidate correlation, not MapId. Candidate radius6/native effect4.8/reconciliation margin1.2 and positions are policy, not official layout.",
+      "normal_flow_acceptance": "User requirement explicit; current manual-exit route NOT_HUMAN_CONFIRMED.",
+      "sources": [
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_server_roy/blob/f95fe9099419b2bbb5f0daa71c6810d0c2b53d8e/src/Tartaros.Network/LocalTutorialWorldConnection.cs",
+          "source_sha": "de016b9c50b5fec22a74e90419e74e8cb8952ca4",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "a1d75bbb1bf3c51ed43827d4181f73bd4cccbc0380929bb28dfc2d0a5835acce",
+          "locator": "Handle phindosPortalOpen"
+        },
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_server_roy/blob/f95fe9099419b2bbb5f0daa71c6810d0c2b53d8e/src/Tartaros.Protocol/KrPhindosBridgeCandidateProtocol.cs",
+          "source_sha": "4fc711ceaa668a0f0e4ca3c4d738cc3c3414bebd",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "b972c0b48b498b60ba4f1153c8d544f5f7c58db554da776615d5f65ddad4cbd7",
+          "locator": "ExitPortal"
+        },
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac/governance/s00-iterations/S00-20261103-PHINDOS-V14-CORRECTIONS.md",
+          "source_sha": "c0e1ad91e77d4f8e9b8e3e235a1bf0c4e73ccbff",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "d22e7368238e64b35f0f140334061c71f32f40913713679e983ad41799a91502",
+          "locator": "玩家補充的正確需求/修正內容"
+        }
+      ]
+    },
+    {
+      "migration_id": "M13",
+      "current_implementation_kind": "SERVER_IMPLEMENTATION_FACT",
+      "mapping_kind": "SERVER_CANDIDATE_DESIGN",
+      "current_branch": "second-map saved clear → manual exit → Result22/type0 → C2S33/2B",
+      "proposed_common_primitive": "show_instance_result; await_return_intent",
+      "content_fields": {
+        "result_adapter": "general ScenarioDecision",
+        "return_intent": {
+          "opcode": "0x0033",
+          "body_length": 2
+        }
+      },
+      "special_hook": "SCENARIO_RESULT_ADAPTER; TUTO_RETURN_SEPARATE",
+      "adoption": "EXTRACT_BEHIND_EXISTING_ADAPTER; DO_NOT_REWRITE_WHOLE_ROUTE",
+      "unknowns": "Zero result counters/+9 direct-return are current candidate output, not recovered rewards/statistics. Same C2S33 has other scene uses. Result does not settle Quest15.",
+      "normal_flow_acceptance": "v12 route returned; no generic cross-scene result claim.",
+      "sources": [
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_server_roy/blob/f95fe9099419b2bbb5f0daa71c6810d0c2b53d8e/src/Tartaros.Network/LocalTutorialWorldConnection.cs",
+          "source_sha": "de016b9c50b5fec22a74e90419e74e8cb8952ca4",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "a1d75bbb1bf3c51ed43827d4181f73bd4cccbc0380929bb28dfc2d0a5835acce",
+          "locator": "Handle phindosResult"
+        },
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_server_roy/blob/f95fe9099419b2bbb5f0daa71c6810d0c2b53d8e/src/Tartaros.Protocol/KrPhindosBridgeCandidateProtocol.cs",
+          "source_sha": "4fc711ceaa668a0f0e4ca3c4d738cc3c3414bebd",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "b972c0b48b498b60ba4f1153c8d544f5f7c58db554da776615d5f65ddad4cbd7",
+          "locator": "Result"
+        },
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac/governance/s00-iterations/evidence/S00-20261103-PHINDOS-HUMAN-PASS.json",
+          "source_sha": "269ff2f51a02b91b1fb296f32eb4ba57928c0780",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "0420f7da68869760c2f070a4b5df398f8c1ede598ea20d2747be3f29d1a70e61",
+          "locator": ""
+        }
+      ]
+    },
+    {
+      "migration_id": "M14",
+      "current_implementation_kind": "SERVER_IMPLEMENTATION_FACT",
+      "mapping_kind": "SERVER_CANDIDATE_DESIGN",
+      "current_branch": "InitializePhindosTown(startStory:true) → scene15/3 →15/4 → ArrivalAuthorized → rebuild",
+      "proposed_common_primitive": "return_to_town; play_scene; await_receipt; commit_arrival_authority; rebuild_world",
+      "content_fields": {
+        "town_id": 1,
+        "map_id": 182,
+        "scene_keys": [
+          3,
+          4
+        ],
+        "arrival_stage": 4
+      },
+      "special_hook": "RESTOREMAP_REQUIRES_WORLD_REBIND",
+      "adoption": "EXTRACT_BEHIND_EXISTING_ADAPTER; DO_NOT_REWRITE_WHOLE_ROUTE",
+      "unknowns": "MissionRoom99/type3 normal-town use and spawn778/746 are current candidate. RestoreMap may replace actor bindings; arriving is not Quest15 settlement or paid reward.",
+      "normal_flow_acceptance": "v12 village display/move/stop and loading user-reported; stage4 saved; Q15 completion absent.",
+      "sources": [
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_server_roy/blob/f95fe9099419b2bbb5f0daa71c6810d0c2b53d8e/src/Tartaros.Network/LocalTutorialWorldConnection.cs",
+          "source_sha": "de016b9c50b5fec22a74e90419e74e8cb8952ca4",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "a1d75bbb1bf3c51ed43827d4181f73bd4cccbc0380929bb28dfc2d0a5835acce",
+          "locator": "InitializePhindosTown/Handle phindosScene/CommitPhindosStage"
+        },
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_server_roy/blob/f95fe9099419b2bbb5f0daa71c6810d0c2b53d8e/src/Tartaros.Persistence/SqlitePhindosJourneyStore.cs",
+          "source_sha": "aee865311b3006f510f572f46466fe94c0ac5f8c",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "402002e3c02f31d2e8c01eea9e104f97b71f55082c82ce79a02bd65d1be15790",
+          "locator": "RecordStageAuthorizedAsync"
+        },
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac/governance/s00-iterations/evidence/S00-20261103-PHINDOS-HUMAN-PASS.json",
+          "source_sha": "269ff2f51a02b91b1fb296f32eb4ba57928c0780",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "0420f7da68869760c2f070a4b5df398f8c1ede598ea20d2747be3f29d1a70e61",
+          "locator": ""
+        }
+      ]
+    },
+    {
+      "migration_id": "M15",
+      "current_implementation_kind": "SERVER_IMPLEMENTATION_FACT",
+      "mapping_kind": "SERVER_CANDIDATE_DESIGN",
+      "current_branch": "LocalProgressDebugControl + ApplyProgressDebug + _debugProgressOverride skip stage writes",
+      "proposed_common_primitive": "apply_debug_checkpoint; rebuild_presentation",
+      "content_fields": {
+        "mode": "TEST_PROGRESS_OVERRIDE",
+        "lifetime": "current connection until disconnect",
+        "normal_quest_writes": false,
+        "checkpoints": [
+          "Square",
+          "Story2",
+          "Formation",
+          "Road191",
+          "Road192",
+          "Phindos"
+        ]
+      },
+      "special_hook": "DEBUG_PERSISTENCE_FIREWALL",
+      "adoption": "EXTRACT_BEHIND_EXISTING_ADAPTER; DO_NOT_REWRITE_WHOLE_ROUTE",
+      "unknowns": "Source does skip normal Phindos milestones but still calls PrepareStarterKitAuthorizedAsync before override and after debug formation; that method INSERT OR IGNOREs normal progress/equipment. Current broader zero-write claim is not proven; require read-only existing kit or separate fixture store.",
+      "normal_flow_acceptance": "Historical synthetic audit preserved four normal milestones; no new debug/negative tests run here.",
+      "sources": [
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_server_roy/blob/f95fe9099419b2bbb5f0daa71c6810d0c2b53d8e/src/Tartaros.Network/LocalProgressDebugControl.cs",
+          "source_sha": "3207c1210a2d471510b07fef8ff9a0c9ff724ded",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "f10506100f5154ba06b3efa680941543e643e4889a8bbd73bbd53a964064a65a",
+          "locator": "TryQueue/TryTake"
+        },
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_server_roy/blob/f95fe9099419b2bbb5f0daa71c6810d0c2b53d8e/src/Tartaros.Network/LocalExpeditionJourneyExperiment.cs",
+          "source_sha": "af60eb3cf7b74e9f500a906a9e12556fcc72f344",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "de821e282accda861b748f821bc739e5ba16ef303a77a536b85242e2ae2438e8",
+          "locator": "PollWorldAsync and TrySelectPhindosBattle"
+        },
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_server_roy/blob/f95fe9099419b2bbb5f0daa71c6810d0c2b53d8e/src/Tartaros.Network/LocalTutorialWorldConnection.cs",
+          "source_sha": "de016b9c50b5fec22a74e90419e74e8cb8952ca4",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "a1d75bbb1bf3c51ed43827d4181f73bd4cccbc0380929bb28dfc2d0a5835acce",
+          "locator": "ApplyProgressDebug"
+        },
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_server_roy/blob/f95fe9099419b2bbb5f0daa71c6810d0c2b53d8e/src/Tartaros.Persistence/SqliteTutorialStateStore.cs",
+          "source_sha": "995fc114e4181cccec8b652839e7513a59bb91cb",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "78f889314c884812006326c94c052e7ab13eaa3ab54df2ea6136c5639ef602c5",
+          "locator": "PrepareStarterKitAuthorizedAsync"
+        },
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac/governance/s00-iterations/S00-20261103-INPUT-PIPELINE-AND-PROGRESS-DEBUG.md",
+          "source_sha": "59b1c68e389b6ba52e49d833e8a3181019ef64af",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "3fb1b7f4cf306c14a6448e9adba1086808b44e45e631520d4b4358cb2e6d579b",
+          "locator": ""
+        }
+      ]
+    },
+    {
+      "migration_id": "M16",
+      "current_implementation_kind": "SERVER_IMPLEMENTATION_FACT",
+      "mapping_kind": "SERVER_CANDIDATE_DESIGN",
+      "current_branch": "No Quest15 completion key or paid reward; Quest117+ not implemented in pinned bridge",
+      "proposed_common_primitive": "authorize_turn_in; commit_settlement; publish_reward; recompute_offer",
+      "content_fields": {
+        "quest_id": 15,
+        "next_candidate_quest": 117,
+        "settlement_policy": null,
+        "reward_publication": null
+      },
+      "special_hook": "BLOCKED_UNTIL_OBJECTIVE_AND_REWARD_CONTRACT",
+      "adoption": "EXTRACT_BEHIND_EXISTING_ADAPTER; DO_NOT_REWRITE_WHOLE_ROUTE",
+      "unknowns": "Do not create fabricated completed records from stage4 or scene15/4. Need legitimate objectives/turn-in/reward consumer and scope; client scene graph alone is insufficient.",
+      "normal_flow_acceptance": "NOT_RUN/BLOCKED; historical arrival explicitly excludes Q15 completion/117+.",
+      "sources": [
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac/governance/s00-iterations/evidence/S00-20261103-PHINDOS-HUMAN-PASS.json",
+          "source_sha": "269ff2f51a02b91b1fb296f32eb4ba57928c0780",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "0420f7da68869760c2f070a4b5df398f8c1ede598ea20d2747be3f29d1a70e61",
+          "locator": ""
+        },
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_server_roy/blob/f95fe9099419b2bbb5f0daa71c6810d0c2b53d8e/docs/LOCAL-PHINDOS-SINGLE-PLAYER-BRIDGE.md",
+          "source_sha": "427b74ec24c00b71d0b36372fb934ce1c0259c7a",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "b2a7a4e63d75784cbf0c35d856be8376bd659e29fcf982602c6b110ecc45c264",
+          "locator": "Connected route/end point"
+        },
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/83959c0e7e65ab01348b285f03c285f487077610/research/handoffs/s00-phindos-mainline-20261102/W1-RESULT-BATCH01-15-TO-117-CHAPTER-SCENE-MATRIX.md",
+          "source_sha": "6293490460e3d9793b0eb5dfe9aa0cb0df05f89c",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "5029f3dada29aea5b32faa801f1421caca2d660ab293f5277d773b8ce0cbceae",
+          "locator": "1.2/2"
+        }
+      ]
+    }
+  ],
+  "exceptions": [
+    {
+      "exception_id": "EX01",
+      "name": "Tutorial preserves CTutorial coroutine",
+      "reason": "05/type1 + C2S09 entry and 4C local Scenario end have a tutorial-specific controller lifetime.",
+      "keep_hook": "TUTO_COROUTINE_CONTINUITY",
+      "source_refs": [
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_server_roy/blob/f95fe9099419b2bbb5f0daa71c6810d0c2b53d8e/src/Tartaros.Network/LocalTutorialWorldConnection.cs",
+          "source_sha": "de016b9c50b5fec22a74e90419e74e8cb8952ca4",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "a1d75bbb1bf3c51ed43827d4181f73bd4cccbc0380929bb28dfc2d0a5835acce",
+          "locator": "BeginFirstBattle/CompleteFirstBattleReturn"
+        }
+      ],
+      "status": "PRESERVE_EXISTING_BOUNDARY"
+    },
+    {
+      "exception_id": "EX02",
+      "name": "Tutorial recruitment and owner scope",
+      "reason": "Current role4/role2 grants and account-scoped prerequisites are reconstruction policies; active avatar changes do not define new quest ownership.",
+      "keep_hook": "TUTORIAL_ROLE_GRANT_POLICY",
+      "source_refs": [
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_server_roy/blob/f95fe9099419b2bbb5f0daa71c6810d0c2b53d8e/src/Tartaros.Network/LocalExpeditionJourneyExperiment.cs",
+          "source_sha": "af60eb3cf7b74e9f500a906a9e12556fcc72f344",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "de821e282accda861b748f821bc739e5ba16ef303a77a536b85242e2ae2438e8",
+          "locator": "HandleApplicationAsync"
+        },
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_server_roy/blob/f95fe9099419b2bbb5f0daa71c6810d0c2b53d8e/src/Tartaros.Persistence/SqliteTutorialStateStore.cs",
+          "source_sha": "995fc114e4181cccec8b652839e7513a59bb91cb",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "78f889314c884812006326c94c052e7ab13eaa3ab54df2ea6136c5639ef602c5",
+          "locator": "GrantPinkoAuthorizedAsync/CommitTutorialPrerequisitesAuthorizedAsync"
+        }
+      ],
+      "status": "SERVER_POLICY_REVIEW"
+    },
+    {
+      "exception_id": "EX03",
+      "name": "Scene receipt is not success",
+      "reason": "Original scene report producers include load-failure paths; literal1 and ordered receipt can support presentation handoff only.",
+      "keep_hook": "SCENE_RECEIPT_CLASSIFIER",
+      "source_refs": [
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_server_roy/blob/f95fe9099419b2bbb5f0daa71c6810d0c2b53d8e/src/Tartaros.Network/LocalExpeditionJourneyExperiment.cs",
+          "source_sha": "af60eb3cf7b74e9f500a906a9e12556fcc72f344",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "de821e282accda861b748f821bc739e5ba16ef303a77a536b85242e2ae2438e8",
+          "locator": "ObserveExitScene/comment"
+        }
+      ],
+      "status": "CLIENT_SEMANTICS_PARTIAL"
+    },
+    {
+      "exception_id": "EX04",
+      "name": "NPC dialogue to next scene",
+      "reason": "40/status0 opens dialogue; cannot use it as generic silent acceptance. Explicit UI close receipt/wire not recovered.",
+      "keep_hook": "INTERACTION_LIFECYCLE_ADAPTER",
+      "source_refs": [
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac/governance/s00-iterations/S00-20261103-PHINDOS-V13-CORRECTIONS.md",
+          "source_sha": "4738f3defcafe20dfebbb82db56df739ae14bc0a",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "b0bc7c4f581ff9b7c55d5daf27ca720b4ef833dc801fd025476f2364b166d84e",
+          "locator": "NPC對話與第二段劇情"
+        }
+      ],
+      "status": "CLIENT_LIFECYCLE_AND_HUMAN_RECHECK_BLOCKED"
+    },
+    {
+      "exception_id": "EX05",
+      "name": "Single-player formation capacity",
+      "reason": "One leader1/3/4 is current ability restriction, not original single-player capacity. Followers and Pinko battle unavailable.",
+      "keep_hook": "SUPPORTED_CAPABILITIES_ADMISSION",
+      "source_refs": [
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_server_roy/blob/f95fe9099419b2bbb5f0daa71c6810d0c2b53d8e/docs/LOCAL-PHINDOS-SINGLE-PLAYER-BRIDGE.md",
+          "source_sha": "427b74ec24c00b71d0b36372fb934ce1c0259c7a",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "b2a7a4e63d75784cbf0c35d856be8376bd659e29fcf982602c6b110ecc45c264",
+          "locator": ""
+        }
+      ],
+      "status": "CURRENT_IMPLEMENTATION_LIMIT"
+    },
+    {
+      "exception_id": "EX06",
+      "name": "MEF unavailable",
+      "reason": "Current nodes/spawn/portal/win data are Server candidate definitions; native MEF parser and referenced script semantics not restored.",
+      "keep_hook": "NATIVE_MEF_IMPORT_GATE_SEPARATE",
+      "source_refs": [
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac/governance/s00-iterations/S00-20261103-MEF-IMPLEMENTATION-AND-MIGRATION-PLAN.md",
+          "source_sha": "b19516dd7a9f1fc7ca0b4ac40388ca7945e20022",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "953a552181f769b2a71cc7fa8d6c6eca4f7da3f4495d0895c60631aa3a0a55ff",
+          "locator": ""
+        }
+      ],
+      "status": "BLOCKED_BY_FORMAT_FOR_NATIVE_MEF_ONLY"
+    },
+    {
+      "exception_id": "EX07",
+      "name": "RestoreMap after town story",
+      "reason": "Presentation cleanup can replace scene/controller/actor slots; scene completion cannot substitute for world rebuild and control admission.",
+      "keep_hook": "WORLD_REBIND_AFTER_PRESENTATION",
+      "source_refs": [
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_server_roy/blob/f95fe9099419b2bbb5f0daa71c6810d0c2b53d8e/src/Tartaros.Network/LocalTutorialWorldConnection.cs",
+          "source_sha": "de016b9c50b5fec22a74e90419e74e8cb8952ca4",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "a1d75bbb1bf3c51ed43827d4181f73bd4cccbc0380929bb28dfc2d0a5835acce",
+          "locator": "InitializePhindosTown/Handle scene15/1/CommitPhindosStage"
+        }
+      ],
+      "status": "PRESERVE_ADAPTER_ORDER"
+    },
+    {
+      "exception_id": "EX08",
+      "name": "Unknown settlement and reward rules",
+      "reason": "Existing stage4 is ArrivalAuthorized; prerequisite bitmap and rewards remain independent.",
+      "keep_hook": "SETTLEMENT_BLOCKER",
+      "source_refs": [
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac/governance/s00-iterations/evidence/S00-20261103-PHINDOS-HUMAN-PASS.json",
+          "source_sha": "269ff2f51a02b91b1fb296f32eb4ba57928c0780",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "0420f7da68869760c2f070a4b5df398f8c1ede598ea20d2747be3f29d1a70e61",
+          "locator": ""
+        }
+      ],
+      "status": "BLOCKED_FOR_ACTIVATING_QUEST15_117_SETTLEMENT"
+    },
+    {
+      "exception_id": "EX09",
+      "name": "Debug kit operation writes normal tables",
+      "reason": "Normal milestone bypass alone does not cover PrepareStarterKitAuthorizedAsync INSERT OR IGNORE on normal tutorial progress/equipment.",
+      "keep_hook": "READ_ONLY_KIT_OR_DEBUG_STORE",
+      "source_refs": [
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_server_roy/blob/f95fe9099419b2bbb5f0daa71c6810d0c2b53d8e/src/Tartaros.Network/LocalExpeditionJourneyExperiment.cs",
+          "source_sha": "af60eb3cf7b74e9f500a906a9e12556fcc72f344",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "de821e282accda861b748f821bc739e5ba16ef303a77a536b85242e2ae2438e8",
+          "locator": "PollWorldAsync"
+        },
+        {
+          "source_ref": "https://github.com/we88ec3-prog/ttr_server_roy/blob/f95fe9099419b2bbb5f0daa71c6810d0c2b53d8e/src/Tartaros.Persistence/SqliteTutorialStateStore.cs",
+          "source_sha": "995fc114e4181cccec8b652839e7513a59bb91cb",
+          "source_sha_algorithm": "git-blob-sha1",
+          "source_content_sha256": "78f889314c884812006326c94c052e7ab13eaa3ab54df2ea6136c5639ef602c5",
+          "locator": "PrepareStarterKitAuthorizedAsync"
+        }
+      ],
+      "status": "SERVER_DEVELOPMENT_REQUIREMENT_NO_TEST_EXECUTED"
+    }
+  ]
+}
