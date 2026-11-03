@@ -53,3 +53,11 @@ Town2的韓文資源名為알스메르，普通Map183→town002D／town002.bnd�
 曾修正合成測試讀庫的Pooling設定、以及加入prerequisite後讀包期待；最後一輪完整集合通過。其餘負向／重登／故障／競態／安全／壓測仍未執行。Client多鍵移動未因這次進村開發宣稱修好。
 
 新旅程的Client窗口生命週期、NPC真實互動、scene自然退出及Map183操作均待玩家驗收。合成通過不能算「所有主線功能／正式結算已完成」。部署、來源commit與後續人測在本批收據補入。
+
+## 本機 v19 發行收據
+
+Server main f6c1b171132365d94c9026605f4f5ad0ed81920d；補充來源分析main f961278d00eef2299ff89c295b7cf8f1c76d255c。2026-11-03T17:34:41Z，核對loopback8415/5082的v18 PID23216與精確Host路徑後關閉；先以SQLite backup API保存測試庫並驗integrity_check，再顯式初始化story component，global schema不變。
+
+v19 PID476，指定server-host-v19/Tartaros.Server.Host.exe；Host DLL SHA256 883acb564e32b3bcf5eda5e28e6b32f632e370510aac933cd91c61220e131f0d；Network DLL 57a8c55f8fd324b620daaa62aa6c7b1c08da5078664c06634ab93ee7ddf70bb4a。content SHA256 59a0e6221e76171ef9618b787dbf25c6ba0db61180866458317025916ef35678。auth/journey/story health均true，兩個journal Healthy且dropped0。登入前ready=false、不列story checkpoints是尚無active authenticated connection的預期狀態；登入可操作後才提供新增checkpoint。真人驗收PENDING。
+
+同時收到的v18移動抖動／方向＋Z回報另見S00-20261104-V18-PLAYER-INPUT-RESULT.md；未將其標為v19通過或修好。
