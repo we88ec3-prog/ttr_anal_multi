@@ -26,3 +26,15 @@ The original KR Client contains partial, distinct source paths: local Scenario14
 ## Approval gates
 
 [Iteration26 implementation plan](../../governance/s00-iterations/S00-20261031-ITERATION-26-COMBAT-QUEST-EXIT-PLAN.md), [19-gate machine matrix](../../governance/s00-iterations/S00-ITERATION-26-ENCOUNTER-QUEST-EXIT-MATRIX.json), and [18 planned tests](../../governance/s00-iterations/S00-20261031-ITERATION-26-ACCEPTANCE.md). All tests NOT_RUN. Requires an explicit maintainer review/approval_record before normative status; do not add to formal SPEC adr_ids while PROPOSED. E17/E18–26 remain Client evidence-limited. New official RR/REQ/TEST need their own separate pipeline and T01 scoped original evidence.
+
+## 2026-11-01 bounded T16 intake and current implementation gap
+
+[S00 intake/work packages](../../governance/s00-iterations/S00-20261101-T16-QUEST-SETTLEMENT-INTAKE.md)
+link this existing proposal to REQ-0017 without granting approval. Qualified6F
+snapshot,74 delta and40/45/46 UI effects do not choose Server completion timing.
+The earlier per-role model and T16 role-isolation recommendations remain proposals:
+an expedition switching team members during one tutorial must not silently acquire
+unrelated progress ledgers merely because the active avatar changed. Explicit scope
+decision, valid Quest14/16 settlement/reward conditions, committed publication state
+and fresh-account playable acceptance are still required. The local v7 candidate
+has first-battle/ownership/ordered exit, not this complete settlement transaction.

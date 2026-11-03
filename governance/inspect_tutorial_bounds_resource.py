@@ -1,0 +1,118 @@
+"""Read a pinned local STPD archive; emit metadata only, optionally extract town000
+to a NEW caller-selected BND file. Never starts or attaches to a game process.
+Static resource interpretation is not original Server policy or runtime proof.
+"""
+import argparse
+import hashlib
+import json
+import struct
+import zlib
+from pathlib import Path
+
+ARCHIVE_SHA = '07d8f3a20aa4a396312c60927431a53a89dce6370ef8bb8192bd8d8eca1dd6b8'
+MEMBERS = {'BoundMap/town000.bnd': 'ee69d4ae60d468862761675f11f41c185f5810c7d1150e5876c4d9dd756ea776',
+           'BoundMap/scenario_town000.bnd': '7c98d3d5c5512cfe20f2946abc27c1c94424474ee6450fa3593693a4c5139bfc'}
+SQUARE = {'BoundMap/square001.bnd': '97a87b26f7d3f5c80ea4039a4cf7ca9dce664c78004aaa6e03e17bad77af24a3'}
+
+def members(raw, expected_sha=ARCHIVE_SHA, selected_members=None):
+    if selected_members is None: selected_members = MEMBERS
+    assert raw[:4] == b'STPD' and hashlib.sha256(raw).hexdigest() == expected_sha
+    data = bytes(v ^ 255 for v in raw)
+    index = struct.unpack_from('<I', data, 4)[0]
+    assert raw[index:index+4] == b'STPI'
+    position = index + 8
+    files = {}
+    def node(parent, depth=0):
+        nonlocal position
+        assert depth < 64
+        length = struct.unpack_from('<H', data, position)[0]; position += 2
+        name = data[position:position+length].decode('ascii').rstrip('\0'); position += length
+        kind = data[position]; position += 1
+        path = '/'.join(filter(None, (parent, name)))
+        if kind in (1, 2):
+            count = struct.unpack_from('<I', data, position)[0]; position += 12
+            for _ in range(count): node(path, depth+1)
+        elif kind == 0:
+            _, identity = struct.unpack_from('<II', data, position); position += 16
+            files[path] = identity
+        else: raise ValueError('Unsupported STPD index node')
+    node('')
+    assert position == len(data)
+    table = struct.unpack_from('>I', data, 12)[0]
+    count = struct.unpack_from('<I', data, table)[0]
+    blocks = {}
+    for i in range(count):
+        identity, size, first, last = struct.unpack_from('<4I', data, table+4+i*32)
+        assert last >= first and size <= (last-first+1)*1024
+        start = 16+first*1024
+        assert start+size <= len(data)
+        blocks[identity] = data[start:start+size]
+    return {name: blocks[files[name]] for name in selected_members}
+
+def inspect(name, data):
+    assert hashlib.sha256(data).hexdigest() == (MEMBERS[name] if name in MEMBERS else SQUARE[name])
+    assert data[:21] == b'MapTool Reinforce 1.0'
+    version, width, height, world_x, world_y = struct.unpack_from('<IIIff', data, 0x20)
+    square = name in SQUARE
+    assert version == 0 and (width, height) == (768, 768)
+    assert (world_x, world_y) == ((1536., 1536.) if square else (768., 768.))
+    layers, records = [], []
+    cursor = 0x234
+    for i in range(32):
+        offset, compressed, expanded, count = struct.unpack_from('<4I', data, 0x34+i*16)
+        if count == 0: continue
+        assert i < 2 and offset == cursor and count == width*height and expanded == count*4
+        chunk = data[cursor:cursor+compressed]
+        decoder = zlib.decompressobj()
+        decoded = decoder.decompress(chunk)
+        assert decoder.eof and not decoder.unused_data and len(decoded) == expanded
+        layers.append(decoded)
+        records.append(dict(layer=i, offset=offset, compressed=compressed, expanded=expanded, cells=count,
+                            decoded_sha256=hashlib.sha256(decoded).hexdigest()))
+        cursor += compressed
+    assert len(layers) == 2 and cursor == len(data)
+    samples = []
+    points = ((900,900),(906,900),(900,906)) if square else ((231,144), (275,144), (311,149), (360,170), (383,315), (440,394), (368,272))
+    for x, y in points:
+        column, row = int(x*width/world_x), int(y*height/world_y)
+        values = [struct.unpack_from('<I', layer, (row*width+column)*4)[0] for layer in layers]
+        samples.append(dict(x=x, y=y, layer_values=values, static_base_clear=all(v == 0 for v in values)))
+    return dict(member=name, sha256=hashlib.sha256(data).hexdigest(), bytes=len(data), header_version=version,
+                dimensions=[width,height], world_extent=[world_x,world_y], layers=records, samples=samples)
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--archive', type=Path, required=True)
+    parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--extract-bnd', type=Path)
+    parser.add_argument('--extract-battle-bnd', type=Path)
+    parser.add_argument('--include-square', action='store_true')
+    parser.add_argument('--extract-square-bnd', type=Path)
+    args = parser.parse_args()
+    assert args.output.suffix == '.json' and args.output.resolve() != args.archive.resolve()
+    destinations = [p for p in (args.extract_bnd,args.extract_battle_bnd,args.extract_square_bnd) if p]
+    assert len({p.resolve() for p in destinations}) == len(destinations)
+    for path in destinations:
+        assert path.suffix == '.bnd' and not path.exists()
+        assert path.resolve() not in (args.archive.resolve(), args.output.resolve())
+    selected = {**MEMBERS,**SQUARE} if args.include_square or args.extract_square_bnd else MEMBERS
+    extracted = members(args.archive.read_bytes(),selected_members=selected)
+    report = dict(schema='s00-static-tutorial-bounds-v1', archive_sha256=ARCHIVE_SHA,
+                  authority='READ_ONLY_RESOURCE_INTERPRETATION', members=[inspect(n,d) for n,d in extracted.items()],
+                  limitations=['Only pinned local archive; official BIN/resource pairing unproven',
+                               'Static first two layers only, no dynamic MEF barriers/overrides',
+                               'No game process, official spawn, world clock, or runtime movement proof'])
+    if args.extract_bnd:
+        args.extract_bnd.parent.mkdir(parents=True, exist_ok=True)
+        with args.extract_bnd.open('xb') as f: f.write(extracted['BoundMap/town000.bnd'])
+    if args.extract_battle_bnd:
+        args.extract_battle_bnd.parent.mkdir(parents=True, exist_ok=True)
+        with args.extract_battle_bnd.open('xb') as f: f.write(extracted['BoundMap/scenario_town000.bnd'])
+    if args.extract_square_bnd:
+        args.extract_square_bnd.parent.mkdir(parents=True, exist_ok=True)
+        with args.extract_square_bnd.open('xb') as f: f.write(extracted['BoundMap/square001.bnd'])
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_bytes((json.dumps(report, ensure_ascii=False, indent=2)+'\n').encode('utf8'))
+    print(json.dumps({'members': len(report['members']), 'archive_sha256': ARCHIVE_SHA, 'result': 'PASS'}))
+
+if __name__ == '__main__': main()
