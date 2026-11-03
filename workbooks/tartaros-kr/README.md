@@ -71,3 +71,7 @@ python .\workbooks\tartaros-kr\S00_workbook_verify.py `
 依分析main 7bd1e72e0、Server main f6c1b171132365d94c9026605f4f5ad0ed81920d增量同步11份正式資料視圖；REQ20的runtime observations目前37筆，加入v18移動抖動／方向＋Z仍不能移動回報。更新與獨立存檔驗證收據為update-history/20261104-013756.json。另修正儀表板A2/A3仍顯示初版日期／舊SHA的來源標題，改為目前同步SHA與收據；本輪保留人工資料與樣式檢核見update-history/20261104-014004.json。
 
 v19的30個HappyPath合成案例涵蓋至爾斯梅勒村的敘事旅程，真人待測、正式獎勵與EXP等仍待補；功能人工進度與6筆正式TEST未升格。移動問題保持待修。完整範圍與測試入口見governance/s00-iterations/S00-20261104-ALSMEER-STORY-CONTINUATION.md（相對repo root）。
+
+## v20與明日Web派工同步（2026-11-04）
+
+11份正式視圖依分析main fb6a78bf26fdfacdd5bc28ffcb1b63b011487307、Server main89504aa646a9a0039dc125fe0c61c4aafcceab1f完成存檔獨立驗證與發布，收據update-history/20261104-021501.json。REQ20目前runtime39、player/admin19，新增NPC距離、登入廣場／主線保存、MEF60%後再查等使用者需求。人工資料／ID／公式／樣式保留；6項正式TEST及功能人工進度未升格。v20正流程30項合成通過49秒、真人待驗收。原Web材料ZIP只在本機，不納入Git；W1/W2/W3提示詞見research/handoffs/s00-web-server-definitions-20261104/（repo root）。
