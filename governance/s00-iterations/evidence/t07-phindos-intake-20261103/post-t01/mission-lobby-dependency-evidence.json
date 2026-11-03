@@ -1,0 +1,333 @@
+{
+  "at": "2026-10-27T16:09:07.144747+00:00",
+  "analyst": "roy",
+  "status": "待整合",
+  "source_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+  "tools": "REA6.5.0/Ghidra12.1.4 retained bulk; Python struct on saved original bytes",
+  "checks": {
+    "scene_init_slot10": true,
+    "scene_exit_slot14": true,
+    "scene_tick_slot18": true,
+    "scene_ready_slot2c": true,
+    "ui_registry_type_mission_lobby": true,
+    "town_preload_checks_npc_list": true,
+    "server_field19_explicit_unimplemented": true
+  },
+  "sources": [
+    {
+      "path": "../evidence/0x5877f0.c",
+      "sha256": "310de6dcf747e257332ad5f81563aba55b513aaecb51df47704c82e8ec2953c2"
+    },
+    {
+      "path": "../evidence/0x4b9320.c",
+      "sha256": "43a4f4b31bb494372d30dd7bff15ffb10ca54a9f12239453dbffb40031a4848b"
+    },
+    {
+      "path": "../evidence/0x4bcba0.c",
+      "sha256": "df19fbde7379008e3a31ed1b1f0bc9b7bd32fe29afb7df2c3cfaa3ce4af30539"
+    },
+    {
+      "path": "../evidence/0x4bceb0.c",
+      "sha256": "e2d30177c60496a9dc764080c45fb01410f35e74ca0cbcf5c8c160a1e715f8ed"
+    },
+    {
+      "path": "../evidence/0x4bcf60.c",
+      "sha256": "db0572bd830e14de137983e877b4e23c7347c51f28b504f9d1983aebb2e394eb"
+    },
+    {
+      "path": "../evidence/0x4adb10.c",
+      "sha256": "551da574175ae0043c1cfe3fec34a67577e523aab2f11c2a71a58104c393749b"
+    },
+    {
+      "path": "../evidence/0x540a40.c",
+      "sha256": "70e0ae785b1adc74631f25b37a40a6370fe97c581f6d9002b6cdb5d443ceeff9"
+    },
+    {
+      "path": "../evidence/0x541c00.c",
+      "sha256": "cf80ddec0833c28193b4c9700033a644e443a391b7d94370d77150fe4e5d7d7c"
+    },
+    {
+      "path": "../evidence/0x541f90.c",
+      "sha256": "bea6e0cec7dc75d7b901dc0964aabf095920db5eaf870f9a5ed1116d603e7e30"
+    },
+    {
+      "path": "../evidence/field19-trigger-inventory.json",
+      "sha256": "b728f207a6aff834f42b767c56abe628067235c24d170b893819249c9fd24f22"
+    },
+    {
+      "path": "../evidence/missionroom-vtable.json",
+      "sha256": "c9ef0828b7b17f0d07f8a78e4f8fc7bb8467c619bd327619684ae7bf26c4e665"
+    }
+  ],
+  "server_source": {
+    "path": "E:\\Tartaros\\workspace\\SERVER\\tutorial-plaza-v8\\overlay\\login_test_server.py",
+    "sha256": "5344a137d76229497480e08483f105e377e6689ac14ede7668fd732dd3bd62ae",
+    "selected_lines": [
+      {
+        "line": 318,
+        "text": "                                elif expedition and command==0x0c and len(payload)==6:"
+      },
+      {
+        "line": 319,
+        "text": "                                    selected_character=struct.unpack_from('<I',payload,2)[0]"
+      },
+      {
+        "line": 320,
+        "text": "                                    if selected_character not in expedition.data['characters']:"
+      },
+      {
+        "line": 321,
+        "text": "                                        record('tutorial-character-rejected',connection=connection,character=selected_character)"
+      },
+      {
+        "line": 322,
+        "text": "                                    elif plaza_player_sent:"
+      },
+      {
+        "line": 323,
+        "text": "                                        tutorial_character=selected_character"
+      },
+      {
+        "line": 324,
+        "text": "                                        skill_cast.reset()"
+      },
+      {
+        "line": 325,
+        "text": "                                        position=position_tracker.stop_for_switch()"
+      },
+      {
+        "line": 326,
+        "text": "                                        packets=expedition.switch_character(tutorial_character,position)"
+      },
+      {
+        "line": 327,
+        "text": "                                        conn.sendall(b''.join(encode(p) for p in packets))"
+      },
+      {
+        "line": 328,
+        "text": "                                        input_state=None"
+      },
+      {
+        "line": 329,
+        "text": "                                        simulated_positions[0x100]=(position['x'],position['y'],None)"
+      },
+      {
+        "line": 330,
+        "text": "                                        record('tutorial-character-switch',connection=connection,character=tutorial_character,position=position)"
+      },
+      {
+        "line": 331,
+        "text": "                                elif expedition and tutorial_plaza_sent and command in (0x40,0x28):"
+      },
+      {
+        "line": 332,
+        "text": "                                    # Field19 route not implemented; preserve evidence, no fake14 entry."
+      },
+      {
+        "line": 333,
+        "text": "                                    record('plaza-instance-request-unimplemented',connection=connection,command=command,request=payload.hex() if len(payload)<=13 else None,payload_bytes=len(payload),quest15_accepted=plaza_npcs.accepted)"
+      },
+      {
+        "line": 334,
+        "text": "                                elif expedition and command==0x28:"
+      },
+      {
+        "line": 335,
+        "text": "                                    try:"
+      },
+      {
+        "line": 336,
+        "text": "                                        response=expedition.battle_entry(payload)"
+      },
+      {
+        "line": 337,
+        "text": "                                        if not plaza_player_sent:"
+      },
+      {
+        "line": 338,
+        "text": "                                            raise ValueError('Tutorial player initialization not completed')"
+      },
+      {
+        "line": 339,
+        "text": "                                        if tutorial_battle_started:"
+      },
+      {
+        "line": 340,
+        "text": "                                            record('tutorial-battle-entry-duplicate',connection=connection,scenario=14)"
+      },
+      {
+        "line": 341,
+        "text": "                                        else:"
+      },
+      {
+        "line": 342,
+        "text": "                                            tutorial_battle_position=position_tracker.stop_for_switch()"
+      },
+      {
+        "line": 343,
+        "text": "                                            from new_expedition import BATTLE_SPAWN"
+      },
+      {
+        "line": 365,
+        "text": "                                elif expedition and tutorial_plaza_pending and ((command==0x43 and len(payload)==4 and payload[3]==10) or (command==0xb0 and len(payload)==2)):"
+      },
+      {
+        "line": 366,
+        "text": "                                    position={'x':900.,'y':900.,'direction':64,'speed':30,'percent':100}"
+      },
+      {
+        "line": 367,
+        "text": "                                    if saved_position and expedition.tutorial_completed:"
+      },
+      {
+        "line": 368,
+        "text": "                                        position=dict(saved_position)"
+      },
+      {
+        "line": 369,
+        "text": "                                    packets=(plaza_map_response(),)+expedition.switch_character(tutorial_character,position)+(struct.pack('<H',0x14),)+plaza_npcs.enter()"
+      },
+      {
+        "line": 370,
+        "text": "                                    conn.sendall(b''.join(encode(p) for p in packets))"
+      },
+      {
+        "line": 371,
+        "text": "                                    skill_cast.reset()"
+      },
+      {
+        "line": 372,
+        "text": "                                    position_tracker.x,position_tracker.y=position['x'],position['y']"
+      },
+      {
+        "line": 373,
+        "text": "                                    position_tracker.direction=position['direction']"
+      },
+      {
+        "line": 374,
+        "text": "                                    position_tracker.speed=position['speed']"
+      },
+      {
+        "line": 375,
+        "text": "                                    position_tracker.moving=False"
+      },
+      {
+        "line": 376,
+        "text": "                                    position_tracker.tick=position_tracker.received=None"
+      },
+      {
+        "line": 377,
+        "text": "                                    input_state=None"
+      },
+      {
+        "line": 378,
+        "text": "                                    tutorial_plaza_pending=False"
+      },
+      {
+        "line": 379,
+        "text": "                                    tutorial_plaza_sent=True"
+      },
+      {
+        "line": 380,
+        "text": "                                    # Fresh plaza login has not passed the tutorial B0"
+      },
+      {
+        "line": 381,
+        "text": "                                    # path that normally enables movement handling."
+      },
+      {
+        "line": 382,
+        "text": "                                    plaza_player_sent=True"
+      },
+      {
+        "line": 383,
+        "text": "                                    tutorial_flow.mark_player_data_sent()"
+      },
+      {
+        "line": 384,
+        "text": "                                    # Do not persist completion from sendall or input alone."
+      },
+      {
+        "line": 385,
+        "text": "                                    record('tutorial-plaza-player-data-sent',connection=connection,map=511,acceptance='awaiting-client-observation')"
+      },
+      {
+        "line": 386,
+        "text": "                                    from plaza_npcs import interaction_settings"
+      },
+      {
+        "line": 387,
+        "text": "                                    record('plaza-interaction-profile',connection=connection,regions=interaction_settings(),official_radius_verified=False)"
+      },
+      {
+        "line": 388,
+        "text": "                                elif expedition and tutorial_plaza_sent and command in (0x1c,0x36,0x3c,0x3f):"
+      },
+      {
+        "line": 389,
+        "text": "                                    packets=plaza_npcs.request(payload)"
+      },
+      {
+        "line": 390,
+        "text": "                                    if packets:"
+      },
+      {
+        "line": 391,
+        "text": "                                        conn.sendall(b''.join(encode(p) for p in packets))"
+      },
+      {
+        "line": 392,
+        "text": "                                    record('plaza-npc-quest-request',connection=connection,request=payload.hex(),responses=[p.hex() for p in packets],accepted=plaza_npcs.accepted,completed=plaza_npcs.completed)"
+      },
+      {
+        "line": 393,
+        "text": "                                elif expedition and command==0xb0 and len(payload)==2 and tutorial_battle_started:"
+      },
+      {
+        "line": 449,
+        "text": "                                elif expedition and command==0x40 and len(payload)==4:"
+      },
+      {
+        "line": 450,
+        "text": "                                    try:"
+      },
+      {
+        "line": 451,
+        "text": "                                        response=expedition.scenario_selection(payload)"
+      },
+      {
+        "line": 452,
+        "text": "                                        unlocked=expedition.unlock_isilia(payload)"
+      },
+      {
+        "line": 453,
+        "text": "                                        conn.sendall(b''.join(encode(p) for p in unlocked))"
+      },
+      {
+        "line": 454,
+        "text": "                                        record('tutorial-isilia-unlocked',connection=connection,level=2,trigger='formation-request')"
+      },
+      {
+        "line": 455,
+        "text": "                                        conn.sendall(encode(expedition.formation())+encode(response))"
+      },
+      {
+        "line": 456,
+        "text": "                                        record('tutorial-scenario-selection',connection=connection,scenario=14,response=response.hex())"
+      },
+      {
+        "line": 457,
+        "text": "                                    except ValueError as error:"
+      },
+      {
+        "line": 458,
+        "text": "                                        record('tutorial-scenario-rejected',connection=connection,error=str(error))"
+      },
+      {
+        "line": 459,
+        "text": "                                elif expedition and command==0x3f and plaza_player_sent:"
+      }
+    ]
+  },
+  "runtime_verified": false
+}

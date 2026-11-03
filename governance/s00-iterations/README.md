@@ -214,3 +214,5 @@ Iterations 16–17 的正式流程編號合計 **E00–E26（27 個 gate）與 4
 - 2026-11-01：[primary後的空角色清單實驗](S00-20261101-EMPTY-ROSTER-EXPERIMENT.md)，8正向工程前置，待真Client roster/UI驗證。
 
 - 2026-11-01：[冒險團資料／命名／教學入口片段](S00-20261101-EXPEDITION-NAME-TUTORIAL-ENTRY.md)，19原件片段／7有界window核對、9正流程前置，真Client與world仍待驗。
+
+- [目前開發採用資料入口](S00-CURRENT-DEVELOPMENT-INDEX.md)：含新帳號教學結果與最新馮德斯進村目標，與舊規劃分開。

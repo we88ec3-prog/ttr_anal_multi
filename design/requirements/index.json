@@ -69,6 +69,18 @@
           "observed": "2026-11-01 06:09:50 UTC normal working-copy login produced RX118, AUTHACCEPTED and TXCOMPLETED163. Independent UI observation confirmed the server-selection screen with a selectable channel. Fresh run at 06:19:18 repeated authentication and reply. A later manual login at 06:25:46 produced AUTHREJECTED; its cause is unproven. User-driven normal login at 06:32:58 UTC again reached AUTHACCEPTED and TXCOMPLETED163.",
           "reproduction": "Use the designated working copy and authorized disposable local fixture against the explicit loopback reply experiment, verify C02 and TX metadata, then independently inspect server-selection UI.",
           "limitations": "Working-copy runtime only. Server row values, grant semantics and expiry are explicit experimental choices. No raw payload retained, original KR compatibility, official Server pairing, roster UI, creation, tutorial or square success claimed. REQ stays CANDIDATE; formal SPEC/GAP/RR/CLM/ADR/TEST and native admission unchanged."
+        },
+        {
+          "channel": "GAME_RUNTIME_OBSERVATION",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "tested_executable_sha256": "6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c",
+          "tested_build_kind": "MODIFIED_WORKING_COPY_NOT_ORIGINAL_CLIENT",
+          "observation_ref": "governance/s00-iterations/S00-20261102-FRESH-LOGIN-NAME-LIMIT.md",
+          "authorization_ref": "governance/s00-iterations/S00-20261102-FRESH-LOGIN-NAME-LIMIT.md",
+          "environment": "User-driven new isolated fixture, unchanged working-copy EXE against loopback v10 cd2a7bc; external Host51020/Admin2452 verified healthy.",
+          "observed": "User reports login stuck after submitting credentials. Two corresponding metadata attempts show RX118, AUTHACCEPTED then AUTHPROVIDERUNAVAILABLE and CLOSE without TX; source path passes a ten-character fixture name to the broker limited to nine characters.",
+          "reproduction": "Normal fresh-account login from the issued tutorial test card, before server selection or naming.",
+          "limitations": "Modified working copy only. Metadata does not expose exception type or credential content; cause is separately located in candidate Server code. The nine-character guard is Server policy, not an established native maximum. Short replacement fixture baseline passed; Client retest pending."
         }
       ],
       "rr_ids": [
@@ -511,7 +523,8 @@
       "acceptance_criteria": [
         "正常移動、放開輸入及教學轉段後，角色停止持續跑動；若Client不再傳輸入，也不能永久保留最後run flag。停止判定／時限是明示Server政策，不宣稱官方原生值。",
         "實際遊戲可以在前一步停止後繼續正常移動或切換自有角色；切角保留Server當前位置／方向，不回預設出生點，不信任Client tick為世界權威。",
-        "以正常旅程重測並保留尚缺的動態碰撞、位置校準、任務／戰鬥／廣場及暫緩異常測試，不把離線／合成通過當作完整Client成功。"
+        "以正常旅程重測並保留尚缺的動態碰撞、位置校準、任務／戰鬥／廣場及暫緩異常測試，不把離線／合成通過當作完整Client成功。",
+        "非戰鬥移動獨立於Z：放開方向、只按Z應停止；方向仍按住且按Z應可移動，同方向再次輸入可恢復；須區分合成row驗證與真人按鍵驗收。"
       ],
       "discoveries": [
         {
@@ -525,6 +538,78 @@
           "reproduction": "Normal login to tutorial, finish story, keyboard movement to first T, mouse movement and camera steps, stop at role-switch prompt. No deliberate negative test.",
           "limitations": "Working-copy only. Metadata journal has opcode/length, not raw movement flags, headings or scene IDs. User-stated east-facing expectation is not proof of official spawn/camera policy. No full tutorial/combat/square acceptance.",
           "observed": "After confirming mouse movement/camera steps and reaching the role-switch prompt, the user reported the actor continually moving into a wall and being unable to change direction. In the active run,90 C2S0A/11B were observed; last input08:19:30.6575323 UTC, later3F/8B08:19:35.2910942. The old route had no general scene stop or input-silence watchdog. No raw body was retained, so exact last flags or scene ID are unknown."
+        },
+        {
+          "channel": "GAME_RUNTIME_OBSERVATION",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "tested_executable_sha256": "6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c",
+          "tested_build_kind": "MODIFIED_WORKING_COPY_NOT_ORIGINAL_CLIENT",
+          "observation_ref": "governance/s00-iterations/S00-20261102-HOUSE-INPUT-CREDIT-STARVATION.md",
+          "authorization_ref": "governance/s00-iterations/S00-20261102-HOUSE-INPUT-CREDIT-STARVATION.md",
+          "environment": "User-operated working copy against loopback v9 Host60448/source5cd508f; no Client modification or attachment.",
+          "reproduction": "Normal first battle and scenes1000/10,12, then walk toward Pinko house.",
+          "observed": "User reports no dialogue and arrow keys no longer move the actor. Metadata has exactly180 input batches, then heartbeats only; native send allowance and missing replenishment explain starvation.",
+          "limitations": "Metadata-only log snapshot has no input flags. Correction requires human confirmation; not full quest/combat acceptance."
+        },
+        {
+          "channel": "GAME_RUNTIME_OBSERVATION",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "tested_executable_sha256": "6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c",
+          "tested_build_kind": "MODIFIED_WORKING_COPY_NOT_ORIGINAL_CLIENT",
+          "observation_ref": "governance/s00-iterations/S00-20261102-INPUT-CREDIT-V10-DEPLOYMENT.md",
+          "authorization_ref": "governance/s00-iterations/S00-20261102-INPUT-CREDIT-V10-DEPLOYMENT.md",
+          "environment": "User-operated unchanged working copy against loopback v10, source cd2a7bc70f3cfb92602628137bf65c5df81b0eb2; journey persistence OFF.",
+          "reproduction": "Normal tutorial first battle, return to Pinko house, story and recruitment, then square movement and release. Existing isolated test account.",
+          "observed": "User confirms entering Pinko house, recruiting, arriving in the square and moving/stopping normally.",
+          "limitations": "Existing-account working-copy human result only. Fresh-account single-run acceptance, legitimate quest/reward settlement, visible loading, NPC interaction and deferred combat feel are not established."
+        },
+        {
+          "channel": "GAME_RUNTIME_OBSERVATION",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "tested_executable_sha256": "6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c",
+          "tested_build_kind": "MODIFIED_WORKING_COPY_NOT_ORIGINAL_CLIENT",
+          "observation_ref": "governance/s00-iterations/S00-20261103-PHINDOS-V14-CORRECTIONS.md",
+          "authorization_ref": "governance/s00-iterations/S00-20261103-PHINDOS-V13-CORRECTIONS.md",
+          "environment": "User-operated loopback v13; Server7cae1e66cf7138739637d72d287b90e8599fac42. No Client operation/modification by agent.",
+          "limitations": "Clarifies three defects; no separate confirmation of NPC-window fix or complete village arrival this run.",
+          "reproduction": "Normal story-instance clear/portal; nonbattle forward tap then repeated Z.",
+          "observed": "The movement defect is outside combat: forward tap then repeated Z does not immediately stop moving."
+        },
+        {
+          "channel": "GAME_RUNTIME_OBSERVATION",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "tested_executable_sha256": "6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c",
+          "tested_build_kind": "MODIFIED_WORKING_COPY_NOT_ORIGINAL_CLIENT",
+          "observation_ref": "governance/s00-iterations/S00-20261103-INPUT-PIPELINE-AND-PROGRESS-DEBUG.md",
+          "authorization_ref": "governance/s00-iterations/S00-20261103-PHINDOS-V14-CORRECTIONS.md",
+          "environment": "User-operated loopback v14; Serverbfc04f1f131c053192546e89a2624050c0b9c6ac. No Client modification by agent.",
+          "limitations": "No packet backlog measurement or full raw input capture; heading latch directly explains the asymmetry.",
+          "reproduction": "Nonbattle up -> Z -> up versus up -> Z -> right.",
+          "observed": "Same direction cannot resume; changing direction can resume."
+        },
+        {
+          "channel": "GAME_RUNTIME_OBSERVATION",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "tested_executable_sha256": "6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c",
+          "tested_build_kind": "MODIFIED_WORKING_COPY_NOT_ORIGINAL_CLIENT",
+          "observation_ref": "governance/s00-iterations/S00-20261103-MOVEMENT-INTENT-V16.md",
+          "authorization_ref": "governance/s00-iterations/S00-20261103-MOVEMENT-INTENT-V16.md",
+          "environment": "User-operated loopback v15, private Server251af45056aa0e1096a9c686da0fa7ffa26b5736; existing test account in square. No Client modification/attachment.",
+          "reproduction": "In square repeatedly press Z; releasing Z restores movement. User clarifies original defect was movement continuing after releasing direction while pressing Z.",
+          "observed": "Repeated Z blocks movement in v15; user explicitly rejects stopping movement merely because Z is received.",
+          "limitations": "No raw per-row input capture for this run. v16 synthetic movement-bit cases do not prove physical key semantics or human acceptance."
+        },
+        {
+          "channel": "GAME_RUNTIME_OBSERVATION",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "tested_executable_sha256": "6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c",
+          "tested_build_kind": "MODIFIED_WORKING_COPY_NOT_ORIGINAL_CLIENT",
+          "observation_ref": "governance/s00-iterations/S00-20261103-MULTI-KEY-DIAGNOSTICS.md",
+          "authorization_ref": "governance/s00-iterations/S00-20261103-MULTI-KEY-DIAGNOSTICS.md",
+          "environment": "User-operated loopback v16, private Servere01730c9eed62f9edbd25eb2453898e198032a38; square test. No Client changes.",
+          "reproduction": "Hold up and repeatedly press Z. User additionally reports sending up+Z, left+Z, down+Z, right+Z in that order.",
+          "observed": "Held up + repeated Z still prevents movement in v16. No per-direction separate result reported.",
+          "limitations": "152 input application metadata records contain no row flags/direction; cannot retrospectively map them to physical keys. Bounded diagnostic ring prepared, new human capture pending."
         }
       ],
       "rr_ids": [
@@ -812,6 +897,43 @@
           "reproduction": "Normal first tutorial battle: stand or move while receiving attacks, tap Z and observe attack/hurt timing.",
           "observed": "User now sees hurt motion, is uncertain about moving hurt, reports long reaction, slow combos waiting for whole clips, remembers a queue/consume mechanism, and suspects enemies attack too aggressively.",
           "limitations": "Human working-copy feedback, not official timing/AI. Loading/full-square result not confirmed for v8; current Server AI is not MEF driven."
+        },
+        {
+          "channel": "PLAYER_ADMIN_REQUEST",
+          "requester_role": "PLAYER",
+          "request_text": "連擊可能還要優化，之後進入馮德斯村的副本再做測試優化\n移動後攻擊可能也要做修正或優化",
+          "request_record_ref": "governance/s00-iterations/S00-20261102-HOUSE-INPUT-CREDIT-STARVATION.md"
+        },
+        {
+          "channel": "GAME_RUNTIME_OBSERVATION",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "tested_executable_sha256": "6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c",
+          "tested_build_kind": "MODIFIED_WORKING_COPY_NOT_ORIGINAL_CLIENT",
+          "observation_ref": "governance/s00-iterations/S00-20261103-PHINDOS-V12-HUMAN-RESULT.md",
+          "authorization_ref": "governance/s00-iterations/S00-20261103-PHINDOS-V12-DEPLOYMENT.md",
+          "environment": "User-operated designated working copy against loopback v12 Host; Server f1261c82d76b43918a8c268ed607a898d7341af6. No Client operation/modification by agent.",
+          "limitations": "One fresh normal run; arrival/loading observed with three defects. Not original acceptance, official MEF, multi-character followers or full village mainline.",
+          "reproduction": "Normal tutorial -> square main NPC -> one-character story-instance formation -> Road191/192 -> result return -> Phindos village.",
+          "observed": "A forward tap followed by repeated Z does not stop walking immediately. Movement-to-attack handoff needs correction."
+        },
+        {
+          "channel": "GAME_RUNTIME_OBSERVATION",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "tested_executable_sha256": "6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c",
+          "tested_build_kind": "MODIFIED_WORKING_COPY_NOT_ORIGINAL_CLIENT",
+          "observation_ref": "governance/s00-iterations/S00-20261103-PHINDOS-V14-CORRECTIONS.md",
+          "authorization_ref": "governance/s00-iterations/S00-20261103-PHINDOS-V13-CORRECTIONS.md",
+          "environment": "User-operated loopback v13; Server7cae1e66cf7138739637d72d287b90e8599fac42. No Client operation/modification by agent.",
+          "limitations": "Clarifies three defects; no separate confirmation of NPC-window fix or complete village arrival this run.",
+          "reproduction": "Normal story-instance clear/portal; nonbattle forward tap then repeated Z.",
+          "observed": "After all enemies die the player cannot attack; user requires the whole instance to remain in combat, including empty-space attacks."
+        },
+        {
+          "channel": "PLAYER_ADMIN_REQUEST",
+          "requester_role": "PLAYER",
+          "request_text": "另外請規劃.mef檔的實作，那些功能目前由Server操控的改由.mef操控",
+          "request_record_ref": "governance/s00-iterations/S00-20261103-MEF-IMPLEMENTATION-AND-MIGRATION-PLAN.md",
+          "reference_materials": []
         }
       ],
       "category": "CLIENT_COMPATIBILITY",
@@ -871,6 +993,30 @@
           "limitations": "Existing test account; not a fresh-account single-run or original Client acceptance. DB has win/roles only, no proven terminal quest/reward settlement.",
           "reproduction": "Normal tutorial through recruitment/final dialogues to square; move then release.",
           "observed": "User confirms square reached, player/NPCs visible and initial movement/stop work; follow-up confirms no visible transition when entering square. Full settlement/persistence remains incomplete."
+        },
+        {
+          "channel": "GAME_RUNTIME_OBSERVATION",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "tested_executable_sha256": "6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c",
+          "tested_build_kind": "MODIFIED_WORKING_COPY_NOT_ORIGINAL_CLIENT",
+          "observation_ref": "governance/s00-iterations/S00-20261102-FRESH-TUTORIAL-HUMAN-PASS.md",
+          "authorization_ref": "governance/s00-iterations/S00-20261102-FRESH-TUTORIAL-HUMAN-PASS.md",
+          "environment": "User-operated fresh isolated account, loopback v10 source cd2a7bc; no Client changes or new deployment.",
+          "reproduction": "First login and naming, normal movement/camera/Tab, default Isilia battle, Pinko recruitment and final scenes; square NPC visible, move and release stop. No skip or square NPC interaction.",
+          "observed": "User confirms tutorial complete, square reached and movement/stopping normal. Same-account read-only before/after proves empty initial profile/roles/equipment/progress and saved win, owned roles1/2/3/4, role4 equipment afterward. Metadata spans login, naming, Server win and ordered exit scenes.",
+          "limitations": "Fresh working-copy happy path only. Quest14/16 settlement, rewards and terminal persistence are not implemented; visible loading, native MEF/AI, deferred combat feel and square NPC story not established."
+        },
+        {
+          "channel": "GAME_RUNTIME_OBSERVATION",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "tested_executable_sha256": "6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c",
+          "tested_build_kind": "MODIFIED_WORKING_COPY_NOT_ORIGINAL_CLIENT",
+          "observation_ref": "governance/s00-iterations/S00-20261103-PHINDOS-V12-HUMAN-RESULT.md",
+          "authorization_ref": "governance/s00-iterations/S00-20261103-PHINDOS-V12-DEPLOYMENT.md",
+          "environment": "User-operated designated working copy against loopback v12 Host; Server f1261c82d76b43918a8c268ed607a898d7341af6. No Client operation/modification by agent.",
+          "limitations": "One fresh normal run; arrival/loading observed with three defects. Not original acceptance, official MEF, multi-character followers or full village mainline.",
+          "reproduction": "Normal tutorial -> square main NPC -> one-character story-instance formation -> Road191/192 -> result return -> Phindos village.",
+          "observed": "Loading/transition screen appeared and operated normally on the v12 test route; player explicitly accepted this item."
         }
       ],
       "category": "CLIENT_COMPATIBILITY",
@@ -918,6 +1064,18 @@
           "limitations": "Existing test account; not a fresh-account single-run or original Client acceptance. DB has win/roles only, no proven terminal quest/reward settlement.",
           "reproduction": "After arriving in square, user clicked an NPC to begin the next story. Exact NPC/option unknown.",
           "observed": "User reports no story response and movement becomes unavailable after the NPC interaction."
+        },
+        {
+          "channel": "GAME_RUNTIME_OBSERVATION",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "tested_executable_sha256": "6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c",
+          "tested_build_kind": "MODIFIED_WORKING_COPY_NOT_ORIGINAL_CLIENT",
+          "observation_ref": "governance/s00-iterations/S00-20261103-PHINDOS-V12-HUMAN-RESULT.md",
+          "authorization_ref": "governance/s00-iterations/S00-20261103-PHINDOS-V12-DEPLOYMENT.md",
+          "environment": "User-operated designated working copy against loopback v12 Host; Server f1261c82d76b43918a8c268ed607a898d7341af6. No Client operation/modification by agent.",
+          "limitations": "One fresh normal run; arrival/loading observed with three defects. Not original acceptance, official MEF, multi-character followers or full village mainline.",
+          "reproduction": "Normal tutorial -> square main NPC -> one-character story-instance formation -> Road191/192 -> result return -> Phindos village.",
+          "observed": "After first NPC story, NPC dialogue window overlaps scene2. Arrival did not eliminate this presentation defect."
         }
       ],
       "category": "CLIENT_COMPATIBILITY",
@@ -950,7 +1108,8 @@
         "候選Town1/type2十筆鏈須用Chapter／SceneList／事件核對，包含Quest15進村橋接及離村橋段，不把到村當村主線完成。",
         "逐任務交付typed IDs、觸發／回覆與consumer、場景／關卡／結果／返回、合法達成／獎勵保存與未知；可供獨立Server直接實作。",
         "三extra交付經T01逐主張核對再由S00接收；原生已證、Server選擇、工作副本人測與未完成項分開；對話達長度上限即停派。",
-        "現有教學／戰鬥缺口保持優先，正常流程之外測試仍暫緩，不能以資料包或合成通過宣稱完成主線。"
+        "現有教學／戰鬥缺口保持優先，正常流程之外測試仍暫緩，不能以資料包或合成通過宣稱完成主線。",
+        "主線角色編隊屬單人任務副本；與多人組隊邀請、匹配及多人任務分開規劃與驗收，不把單人等同只能出戰一名角色。"
       ],
       "discoveries": [
         {
@@ -959,9 +1118,102 @@
           "request_text": "明天目標完成馮德斯村主線任務，請規劃明天可以請別人分析的資料，盡量讓明天下班後能讓你直接開發Server到完成馮德斯村主線",
           "request_record_ref": "research/handoffs/s00-phindos-mainline-20261102/README.md",
           "reference_materials": []
+        },
+        {
+          "channel": "PLAYER_ADMIN_REQUEST",
+          "requester_role": "PLAYER",
+          "request_text": "目前階段目標是開發到新帳號能完成進入到馮德斯村",
+          "request_record_ref": "governance/s00-iterations/S00-20261102-PHINDOS-ENTRY-MILESTONE.md",
+          "reference_materials": []
+        },
+        {
+          "channel": "PLAYER_ADMIN_REQUEST",
+          "requester_role": "PLAYER",
+          "request_text": "請先整理幾個分析目標，我明天用web ai分析，以讓你明天能直接開發完所有蒙德斯村劇情",
+          "request_record_ref": "research/handoffs/s00-phindos-web-analysis-20261103/README.md",
+          "reference_materials": []
+        },
+        {
+          "channel": "PLAYER_ADMIN_REQUEST",
+          "requester_role": "PLAYER",
+          "request_text": "先繼續開發，目前進度到哪?目前先開發完進入馮德斯村後上git，然後開始測試",
+          "request_record_ref": "governance/s00-iterations/S00-20261103-PHINDOS-SINGLE-PLAYER-BRIDGE.md",
+          "reference_materials": []
+        },
+        {
+          "channel": "PLAYER_ADMIN_REQUEST",
+          "requester_role": "PLAYER",
+          "request_text": "目前主線出現的組隊畫面進入的任務都是單人任務副本，與組隊任務是不同的項目",
+          "request_record_ref": "governance/s00-iterations/S00-20261103-PHINDOS-SINGLE-PLAYER-BRIDGE.md",
+          "reference_materials": []
+        },
+        {
+          "channel": "GAME_RUNTIME_OBSERVATION",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "tested_executable_sha256": "6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c",
+          "tested_build_kind": "MODIFIED_WORKING_COPY_NOT_ORIGINAL_CLIENT",
+          "observation_ref": "governance/s00-iterations/S00-20261103-PHINDOS-V12-HUMAN-RESULT.md",
+          "authorization_ref": "governance/s00-iterations/S00-20261103-PHINDOS-V12-DEPLOYMENT.md",
+          "environment": "User-operated designated working copy against loopback v12 Host; Server f1261c82d76b43918a8c268ed607a898d7341af6. No Client operation/modification by agent.",
+          "limitations": "One fresh normal run; arrival/loading observed with three defects. Not original acceptance, official MEF, multi-character followers or full village mainline.",
+          "reproduction": "Normal tutorial -> square main NPC -> one-character story-instance formation -> Road191/192 -> result return -> Phindos village.",
+          "observed": "User reached Phindos, player/NPC visible and movement/stop normal. But clearing enemies auto-advanced; player requires entering an exit portal before next map/result."
+        },
+        {
+          "channel": "GAME_RUNTIME_OBSERVATION",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "tested_executable_sha256": "6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c",
+          "tested_build_kind": "MODIFIED_WORKING_COPY_NOT_ORIGINAL_CLIENT",
+          "observation_ref": "governance/s00-iterations/S00-20261103-PHINDOS-V14-CORRECTIONS.md",
+          "authorization_ref": "governance/s00-iterations/S00-20261103-PHINDOS-V13-CORRECTIONS.md",
+          "environment": "User-operated loopback v13; Server7cae1e66cf7138739637d72d287b90e8599fac42. No Client operation/modification by agent.",
+          "limitations": "Clarifies three defects; no separate confirmation of NPC-window fix or complete village arrival this run.",
+          "reproduction": "Normal story-instance clear/portal; nonbattle forward tap then repeated Z.",
+          "observed": "Player must stand on exit portal and press Z; walking into it must not automatically teleport."
         }
       ],
       "category": "SERVER_DESIGN",
+      "priority": "P1",
+      "status": "CANDIDATE",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "rr_ids": [],
+      "gap_ids": [
+        "GAP-FLOW-0001",
+        "GAP-SCENE-0001"
+      ],
+      "spec_ids": [
+        "SPEC-FLOW-0001",
+        "SPEC-SCENE-0001",
+        "SPEC-CHAR-0001"
+      ],
+      "adr_ids": [
+        "ADR-0006",
+        "ADR-0007"
+      ],
+      "feedback_ids": [],
+      "claim_ids": []
+    },
+    {
+      "id": "REQ-0020",
+      "title": "本機測試主線進度指定與快進退回",
+      "need": "使用者要求直接指定已實作主線段落，減少反覆從頭進行教學的測試成本。",
+      "acceptance_criteria": [
+        "明示本機測試模式才提供段落指定；可在已實作的廣場、劇情、編隊、兩圖與村落間快進或退回。",
+        "控制要求由同一遊戲連線序列化套用，不和收包／world tick同時修改狀態。",
+        "已跳轉連線明確標記測試；不回寫正常任務勝利、完成key或獎勵，記錄可追溯測試操作。",
+        "現有正常進度與新帳號驗收分開；以正向切換／重打及實際Client結果驗收。"
+      ],
+      "discoveries": [
+        {
+          "channel": "PLAYER_ADMIN_REQUEST",
+          "requester_role": "PLAYER",
+          "request_text": "希望你能加一個功能，可以直接指定主線進度，快進或退回，用以持續測試",
+          "request_record_ref": "governance/s00-iterations/S00-20261103-INPUT-PIPELINE-AND-PROGRESS-DEBUG.md",
+          "reference_materials": []
+        }
+      ],
+      "category": "OPERATIONS",
       "priority": "P1",
       "status": "CANDIDATE",
       "client_version": "kr",
