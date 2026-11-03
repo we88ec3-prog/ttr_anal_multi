@@ -79,6 +79,9 @@ for item in result['pending']:
   new=[E.tostring(x,encoding='unicode') for x in ax.findall('m:'+tag,NS)]
   # Attribute defaults/namespaces may normalize; report separately below.
   assert old==new,(item['file'],'unexpected native sheet control change',tag)
+ if item['file']=='00_儀表板.xlsx':
+  assert plan['analysis_sha'][:12] in after['A3'] and plan['server_sha'][:12] in after['A3']
+  assert plan['timestamp'] in after['A3']
  if item['file'] in jobs:
   j=jobs[item['file']];headers={v:rc(a)[0] for a,v in after.items() if rc(a)[1]==5}
   index={str(v):rc(a)[1] for a,v in after.items() if rc(a)[0]=='A' and rc(a)[1]>=6}

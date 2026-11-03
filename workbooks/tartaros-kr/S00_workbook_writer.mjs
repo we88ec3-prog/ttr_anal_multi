@@ -31,6 +31,10 @@ async function edit(file, rows, fields=[], fieldValues=[]){
   changes.push({file,id,cell:col(c+1)+(r+1),field:headers[c]??'',old,new:value});
   grid[r]??=[];grid[r][c]=value;changed++;
  }
+ if(file==='00_儀表板.xlsx'){
+  set(1,0,'本表為正式台帳的增量同步視圖；未用跨檔公式，功能人工進度與驗收不自動升格。','SYNC_METADATA');
+  set(2,0,`資料版本：分析 ${plan.analysis_sha.slice(0,12)} / Server ${plan.server_sha.slice(0,12)}；完整來源與同步紀錄見 update-history/${plan.timestamp}.json。`,'SYNC_METADATA');
+ }
  const extra=[];
  for(const f of fields){
   const positions=[];

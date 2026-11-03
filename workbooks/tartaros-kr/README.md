@@ -65,3 +65,9 @@ python .\workbooks\tartaros-kr\S00_workbook_verify.py `
 已依分析main d552852448d63755e55f97c314486c6b07e7f723及Server main a3478089164d24eeaec75839ee5c5b86cb36aad7，同步11份既有工作簿：CLM189、SRC762、RR10、REQ20、SPEC7、GAP9、TEST6、KR Task16、SFD13。保留人工備註／ID列／公式／樣式／sheet控制；獨立存檔驗證後才發布，來源與欄位清單見 update-history/20261104-002455.json。原始備份留在本機，不納入Git。
 
 更新器修正為僅格式化各正式JSON欄，避免跨過夾在中間的人工欄位。第一次候選因06表人工欄W5樣式改動被檢核攔截，未覆寫；修正後完整保留檢核通過。功能規劃的人工進度與未測項目不因台帳同步升格。Server v18的28項合成正流程結果見當前S00整合報告，不等於正式6個TEST或真人驗收已全數通過。
+
+## v19 進村旅程與最新玩家回報同步
+
+依分析main 7bd1e72e0、Server main f6c1b171132365d94c9026605f4f5ad0ed81920d增量同步11份正式資料視圖；REQ20的runtime observations目前37筆，加入v18移動抖動／方向＋Z仍不能移動回報。更新與獨立存檔驗證收據為update-history/20261104-013756.json。另修正儀表板A2/A3仍顯示初版日期／舊SHA的來源標題，改為目前同步SHA與收據；本輪保留人工資料與樣式檢核見update-history/20261104-014004.json。
+
+v19的30個HappyPath合成案例涵蓋至爾斯梅勒村的敘事旅程，真人待測、正式獎勵與EXP等仍待補；功能人工進度與6筆正式TEST未升格。移動問題保持待修。完整範圍與測試入口見governance/s00-iterations/S00-20261104-ALSMEER-STORY-CONTINUATION.md（相對repo root）。
