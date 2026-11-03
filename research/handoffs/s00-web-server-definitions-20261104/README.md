@@ -29,3 +29,11 @@ MEF sample inventory、再次全包掃描、完整loader/parser/network-receive�
 ## 材料放置政策
 
 依使用者確認，原BIN/STP/ABF與遊戲member留本機、由使用者另行上傳Web；不放Git。Git只存報告、資料定義、SHA／來源對照及未知清單。已整理本機初始包128檔約0.96MB，讀回檢核通過；它含Case/MapFlow/Cluster/MapList/QuestInfo、ActorList與部分Skill表、既有T10/T11/T16引用報告，未含BIN、raw Actor/ABF body或已確認Monster table。先做可用欄位與缺件精確member盤點；不能將原料尚缺寫成完整AI還原。包內Table carrier為已知variant，各member原始SHA符合情況逐一標明，不從載體相同／不同推論所有member版本。
+
+## 明天可一次下令的三份工作
+
+- W1-PROMPT.md：副本事件／怪群資料定義，交付JSON/schema/source-map。
+- W2-PROMPT.md：三隻怪的技能／AI欄位對照與最小缺件清單，沒有raw ABF時不猜值。
+- W3-PROMPT.md：離線主線資料轉換程式與一致性報告，標準庫、來源唯讀、輸出仍DRAFT。
+
+每個對話上傳同一份本機ZIP，貼對應一份提示詞。三者各寫自己的W1/W2/W3目錄，互不等待、不需使用者找影片／即時協助。原材料不進Git，成果由T01來源核驗與S00採用分開處理；對話是否實際具Git寫入能力必須自查，無能力就交成果ZIP/patch。此處尚未自動派送給任何Web對話。
