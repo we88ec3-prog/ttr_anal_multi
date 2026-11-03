@@ -27,6 +27,8 @@ PATHS = [
     "governance/s00-iterations/S00-20261101-TUTORIAL-FIRST-BATTLE.md",
     "governance/s00-iterations/S00-20261101-PINKO-RECRUITMENT.md",
     "governance/s00-iterations/S00-20261101-COMBAT-PRIORITY-AND-EXIT-BLOCKER.md",
+    # REQ-0016..0018 runtime observations: keep their real record in the isolated test tree.
+    "governance/s00-iterations/S00-20261101-V7-PLAYER-RESULT-AND-COMBAT-FIX.md",
 ]
 
 
@@ -54,10 +56,10 @@ class ServerRequirementTests(unittest.TestCase):
     def test_canonical_code_findings_not_approved(self):
         r = evaluate(self.root)
         self.assertEqual(r["errors"], [])
-        self.assertEqual(r["summary"]["requirements"], 17)
+        self.assertEqual(r["summary"]["requirements"], 18)
         self.assertEqual(r["summary"]["approved"], 0)
         self.assertEqual(r["summary"]["discovery_counts"],
-                         {"CODE_ANALYSIS": 5, "GAME_RUNTIME_OBSERVATION": 18, "PLAYER_ADMIN_REQUEST": 6})
+                         {"CODE_ANALYSIS": 5, "GAME_RUNTIME_OBSERVATION": 21, "PLAYER_ADMIN_REQUEST": 6})
 
 
     def test_admin_web_v1_three_requests_trace_to_actual_user_request(self):
@@ -178,7 +180,7 @@ class ServerRequirementTests(unittest.TestCase):
         self.edit(edit)
         r = evaluate(self.root)
         self.assertEqual(r["errors"], [])
-        self.assertEqual(r["summary"]["requirements"], 17)
+        self.assertEqual(r["summary"]["requirements"], 18)
         self.assertEqual(r["summary"]["discovery_counts"]["PLAYER_ADMIN_REQUEST"], 8)
 
     def test_historical_protocol_and_ops_safety_are_user_request_material(self):
