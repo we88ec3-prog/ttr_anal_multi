@@ -27,6 +27,9 @@ PATHS = [
     "governance/s00-iterations/S00-20261101-TUTORIAL-FIRST-BATTLE.md",
     "governance/s00-iterations/S00-20261101-PINKO-RECRUITMENT.md",
     "governance/s00-iterations/S00-20261101-COMBAT-PRIORITY-AND-EXIT-BLOCKER.md",
+    "governance/s00-iterations/S00-20261101-V7-PLAYER-RESULT-AND-COMBAT-FIX.md",
+    "governance/s00-iterations/S00-20261101-COMBAT-EXIT-V8-DEPLOYMENT.md",
+    "research/handoffs/s00-phindos-mainline-20261102/README.md",
 ]
 
 
@@ -51,13 +54,30 @@ class ServerRequirementTests(unittest.TestCase):
         dest.parent.mkdir(parents=True, exist_ok=True)
         dest.write_text(contents, encoding="utf-8")
 
+    def test_fixture_includes_all_registered_public_safe_provenance(self):
+        # Keep sandboxed test fixtures in sync with the real requirement catalog.
+        # Missing records must not be bypassed by weakening evaluate()'s checks.
+        catalog = json.loads((ROOT / PATHS[0]).read_text(encoding="utf-8"))
+        referenced = set()
+        field_names = {
+            "GAME_RUNTIME_OBSERVATION": ("observation_ref", "authorization_ref"),
+            "PLAYER_ADMIN_REQUEST": ("request_record_ref",),
+        }
+        for requirement in catalog["items"]:
+            for discovery in requirement["discoveries"]:
+                for field in field_names.get(discovery["channel"], ()):
+                    ref = discovery.get(field)
+                    if ref:
+                        referenced.add(ref)
+        self.assertEqual(referenced - set(PATHS), set())
+
     def test_canonical_code_findings_not_approved(self):
         r = evaluate(self.root)
         self.assertEqual(r["errors"], [])
-        self.assertEqual(r["summary"]["requirements"], 17)
+        self.assertEqual(r["summary"]["requirements"], 19)
         self.assertEqual(r["summary"]["approved"], 0)
         self.assertEqual(r["summary"]["discovery_counts"],
-                         {"CODE_ANALYSIS": 5, "GAME_RUNTIME_OBSERVATION": 18, "PLAYER_ADMIN_REQUEST": 6})
+                         {"CODE_ANALYSIS": 5, "GAME_RUNTIME_OBSERVATION": 22, "PLAYER_ADMIN_REQUEST": 7})
 
 
     def test_admin_web_v1_three_requests_trace_to_actual_user_request(self):
@@ -178,8 +198,8 @@ class ServerRequirementTests(unittest.TestCase):
         self.edit(edit)
         r = evaluate(self.root)
         self.assertEqual(r["errors"], [])
-        self.assertEqual(r["summary"]["requirements"], 17)
-        self.assertEqual(r["summary"]["discovery_counts"]["PLAYER_ADMIN_REQUEST"], 8)
+        self.assertEqual(r["summary"]["requirements"], 19)
+        self.assertEqual(r["summary"]["discovery_counts"]["PLAYER_ADMIN_REQUEST"], 9)
 
     def test_historical_protocol_and_ops_safety_are_user_request_material(self):
         # Test-only player/admin discovery: not a real user submission.
