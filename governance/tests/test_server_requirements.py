@@ -90,7 +90,17 @@ class ServerRequirementTests(unittest.TestCase):
                     ref = discovery.get(field)
                     if ref:
                         referenced.add(ref)
-        self.assertEqual(referenced - set(PATHS), set())
+        for ref in sorted(referenced):
+            rel = PurePosixPath(ref)
+            self.assertFalse(rel.is_absolute(), ref)
+            self.assertNotIn("..", rel.parts, ref)
+            self.assertNotIn("\\", ref)
+            source = (ROOT / ref).resolve()
+            self.assertTrue(source.is_relative_to(ROOT.resolve()), ref)
+            self.assertTrue(source.is_file(), ref)
+            fixture = self.root / ref
+            self.assertTrue(fixture.is_file(), ref)
+            self.assertEqual(fixture.read_bytes(), source.read_bytes(), ref)
 
     def test_canonical_code_findings_not_approved(self):
         r = evaluate(self.root)
