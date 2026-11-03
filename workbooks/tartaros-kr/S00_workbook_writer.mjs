@@ -61,12 +61,14 @@ async function edit(file, rows, fields=[], fieldValues=[]){
   const tables=s.tables.items.map(t=>({name:t.name,style:t.style,showHeaders:t.showHeaders,showFilterButton:t.showFilterButton,showBandedColumns:t.showBandedColumns,showTotals:t.showTotals}));
   if(tables.length!==1)throw Error(file+': expected one existing table');
   if(fields.length){
-   const first=Math.min(...extra.flat())+1;
-   const area=s.getRange(`${col(first)}5:${col(headers.length)}${last}`);
-   area.format.columnWidthPx=240;area.format.wrapText=true;area.format.verticalAlignment='top';
-   s.getRange(`A5:${col(headers.length)}5`).format.rowHeight=48;
-   s.getRange(`${col(first)}5:${col(headers.length)}5`).format.fill='#087789';
-   s.getRange(`${col(first)}5:${col(headers.length)}5`).format.font={bold:true,color:'#FFFFFF',size:10};
+   // Formal JSON columns can be separated by retained human columns.
+   // Format each owned column, never the bounding span across those notes.
+   for(const c of extra.flat()){
+    const letter=col(c+1),area=s.getRange(`${letter}5:${letter}${last}`);
+    area.format.columnWidthPx=240;area.format.wrapText=true;area.format.verticalAlignment='top';
+    const header=s.getRange(`${letter}5`);
+    header.format.fill='#087789';header.format.font={bold:true,color:'#FFFFFF',size:10};
+   }
   }
   s.tables.items[0].delete();
   // Some legacy names (e.g. Tbl15) look like cell references to the current

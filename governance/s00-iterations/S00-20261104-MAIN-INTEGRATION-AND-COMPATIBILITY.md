@@ -41,4 +41,17 @@ Server原main69c714c54fb5c802251736ee38ff37c19fba3c53快轉整合現有f95fe9099
 
 ## 驗證與部署
 
-v18正流程測試、main推送與部署收據在本批完成後補入。只執行Category=HappyPath與靜態內容／治理檢查，其餘已暫緩套件不執行。Client EXE／資源未修改或操作；真人驗收仍待測。
+v18最後一輪28個HappyPath通過（19秒，0失敗／略過），Release publish成功。中間診斷持久檔讀取測試遇到Windows檔案共享限制，修正為FileShare.ReadWrite後重跑允許集合通過。只執行Category=HappyPath與靜態內容／治理檢查，其餘已暫緩套件不執行。Client EXE／資源未修改或操作；真人驗收仍待測。
+
+## v18發行收據
+
+分析main d552852448d63755e55f97c314486c6b07e7f723，Server main a3478089164d24eeaec75839ee5c5b86cb36aad7 均已推送。啟用PID23216，完整指定路徑 runtime-observations/2026-11-04-main-integration/server-host-v18/Tartaros.Server.Host.exe；沿用本任務原隔離DB，不修改Client。
+Host DLL SHA256 dc7f89abcc337ec7c7b41a82747582f5802eda44f73c2d5adc2a0bf8ac617e26；Network DLL SHA256 4419c3c56389cb733327b1c4e2df4549f6ec06c97d9fda2553cf9c13c6f6b648。啟用前已在實際執行環境保存Listener清單（本輪為空），腳本仍限制只可替換原v17 exactpath的loopback Listener。health登入與journey啟用，progress/status顯示traceJournalState Healthy、dropped0，尚未有遊戲連線。
+
+本版是有限相容性修正，不是宣稱四方向加Z已修復或整村主線已完成；下一輪需實際row＋S2C紀錄確定可區分的輸入與FSM生命週期。未接收到的新遊戲測試不補寫PASS。
+
+## 工作台同步與下一目標
+
+11份既有工作簿已獨立驗證／發布，SRC762、REQ20、SFD13等正式欄位就地同步；人工備註、ID、公式、原樣式與sheet控制保留。同步收據 workbooks/tartaros-kr/update-history/20261104-002455.json。功能表未測狀態不升格。更新器修復正式欄之間人工欄誤套格式問題。
+
+使用者後續指定繼續開發至爾斯梅勒村，稍後才人測。沿Quest15後的候選主線查證到Town2／Alsmeer；v18保持可測，不因未完成的後續逐個換版。新的終點不代表本報T16草案已自動啟用。
