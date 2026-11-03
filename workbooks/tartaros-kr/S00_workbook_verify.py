@@ -128,5 +128,5 @@ if '--promote' in sys.argv:
                     'Packet/field universe remains incomplete. Source absent/null values are preserved without invention.',
                     'Version-neutral Server requirements are included; explicit TC data is excluded.',
                     'Supplemental JSON columns preserve complete source fields; long cells split at30000 UTF16 units.']}
- (history/(plan['timestamp']+'.json')).write_text(json.dumps(receipt,ensure_ascii=False,indent=2),encoding='utf-8')
+ (history/(plan['timestamp']+'.json')).write_bytes((json.dumps(receipt,ensure_ascii=False,indent=2)+'\n').encode('utf-8'))
  print('PROMOTED',len(hashes),'existing workbooks; backups retained; receipt',history/(plan['timestamp']+'.json'))
