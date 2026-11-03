@@ -1,5 +1,19 @@
 # S00 新對話接續 — Server 規格、REQ 需求來源與角色畫面階段
 
+**08:53 UTC最新：** [教學NPC保留與編隊頁](s00-iterations/S00-20261101-TUTORIAL-NPC-AND-FORMATION.md)。新增REQ-0012／0013 GAME_RUNTIME_OBSERVATION（台帳13REQ／11runtime／0approved）。切角改只移除自有entity256，入口40/14交易取得role4後送2B／stats／50／4E；**使用者已確認伊莉西亞仍在，編隊頁可看到她**，唯讀DB roles3／revision3。12正向cases、86原始片段／30有限windows，非正式契約或T01 FULL-PASS。使用者釐清預選伊莉西亞體驗目前正確，僅詢問來源，不改限制／不列bug；預選／capacity沿用Server fixture，額外Client限制未核實。停在編隊頁，下一步開發戰場／技能／首戰結束回教學；不能用會丟失TUTO的舊5F2流程。使用者已授權整段更新時可直接結束指定本機遊戲連線，不再請手動關遊戲；Client操作／修改限制不變。
+
+**08:30 UTC最新：** [教學移動／朝向／切角](s00-iterations/S00-20261101-TUTORIAL-MOVEMENT-CAMERA-SWITCH.md)。使用者已實測人物HUD、鍵盤第一T、滑鼠與視角教學通過，停在切角；另指出進場朝南（預期東）與角色持續撞牆不能改向。REQ-0010追加runtime、新REQ-0011記殘留移動，台帳11REQ／9runtime／0approved。Server補heading64、轉段stop、750ms輸入靜默停止及額外pinned static bounds／monotonic pose切角；11正向cases（9方法／198暫緩）、實際資源reader通過。58原始片段／20有限windows與兩BND資源metadata重核，不是T01 FULL-PASS或精確Client時鐘／動態碰撞。使用者關閉舊遊戲後已換新版；提問卡請連測到切角後下一T，新版人工結果待回。勿重啟正在測試的Host。
+
+**08:04 UTC最新接續：** [教學地圖／玩家初始化候選](s00-iterations/S00-20261101-TUTORIAL-WORLD-BOOTSTRAP.md)。REQ-0010已收GAME_RUNTIME_OBSERVATION；主程式33片段／12 bounded windows、目前Table.stp map188/190對應已核對。私庫額外opt-in實作map188、scale1 actor、same-alias metadata/control、intro位置及正常移動回覆，10個positive cases通過（9方法／198暫緩）。本機新版已啟用，結果卡請使用者測到第一T標記後下一段提示就停；人工結果待回。Client完全未改，不支援移動後切角，不宣稱Server world authority或完整教學／廣場成功。勿重啟進行中的人工測試。
+
+**2026-11-01 最新工程接續：** [冒險團命名／教學入口片段](s00-iterations/S00-20261101-EXPEDITION-NAME-TUTORIAL-ENTRY.md)。私庫新增same-DB exact-lease profile/name/owned-role資料、明確元件migration、非空scene候選、命名→教學入口與保活；9正向前置、198暫緩。主程式19個選定byte片段／7個有限window重核，非正式pairing/FULL-PASS。07:23 UTC本機Host已更新，等待使用者連測登入→命名→教學第一畫面；不要重啟正在測試的服務。B0/0C/0A/3F僅記world-init pending，不宣稱教學可控或已完成。Client未改，as_server_spec未動，main合併仍待明確授權。
+
+**2026-11-01 最新使用者補充：** [本地舊Server來源核驗與批次測試規劃](s00-iterations/S00-20261101-LEGACY-SERVER-INTAKE-AUDIT.md)。直接使用者指示、舊文件轉述、17個本輪精確byte核對、歷史修改Client runtime與Server假設分開；不將1/3初始角色／A0→60當官方需求。Client此後不修改，僅確認Windows更新bug例外；指定EXE SHA未變。使用者操作遊戲時Agent要開發後段，下一次安排登入→角色/命名→教學入口的已備妥片段，不為每個微小修正單獨要求重登。`as_server_spec`誤提已撤回，完全不動該專案。
+
+**2026-11-01 空清單實作接續：** [零角色清單實驗](s00-iterations/S00-20261101-EMPTY-ROSTER-EXPERIMENT.md)在primary交接後查同一SQLite exact lease／角色資料，僅零角色時送69B候選，額外明確opt-in；標頭值是Server實驗選擇，不是官方值。8正向前置、198暫緩；真Client roster/UI未驗。前置PR20／93待使用者明確合併授權，未合併main；後續工作分支有依賴，不得冒充正式規範。
+
+**2026-11-01 最新 runtime：** [登入回覆／選服與交接](s00-iterations/S00-20261101-LOGIN-REPLY-RUNTIME.md)。指定工作副本已實測 M3 選服／分流 UI；使用者人工測試於06:33:01 UTC得到 PRIMARYHANDOFFACCEPTED，primary 身分交接已通過；角色清單回覆尚未實作。使用者已停止 Computer Use 並接手 UI，Agent 僅監看日誌及開發，測試期間勿重啟 Host。REQ-0001／0002 已追加 GAME_RUNTIME_OBSERVATION；7正向工程前置、198暫緩，非教學／廣場成功。下方 auth-only／M3未實作為歷史快照。
+
 **2026-11-01 啟動障礙已排除：** [指定工作副本一般權限啟動的實際觀察](s00-iterations/S00-20261101-STANDARD-USER-CLIENT-LAUNCH.md)。使用者明確同意只將兩個指定 EXE 加入 Computer Use Always allow；已備份設定並完成。私庫 asInvoker launcher 在一般權限成功啟動工作副本，Computer Use 已確認登入畫面，沒有 UAC。REQ-0001 追加啟動觀察；另獲明確測試憑證授權後，真遊戲送出118B但 syntax 被拒、未到 C02；修正 NUL 邊界預檢後同一帳號於05:57:28 UTC實測 AUTHACCEPTED，工作副本M2已確認；目前 REPLYUNAVAILABLE、M3未實作，不能宣稱已進選服或原始KR相容。下方等待 UAC 的段落為歷史快照，不能再視為目前啟動阻礙。
 
 **2026-11-01 最新工程接續：** 使用者短時間不能操作電腦，要求先開發；本輪不啟動遊戲。[主Lobby欄位回傳與Session交接](s00-iterations/S00-20261101-PRIMARY-LOBBY-HANDOFF.md) 保存57B key0 builder成功片段、28個instruction anchors及Server-owned短效grant／SQLite atomic transfer方案。私庫正向新帳號→handoff→空清單→創角選角通過；合計6正向、198其他方法暫緩，新增交接負例已併入待測清單。未接Host、未完成Client/UI/教學/廣場，不升格任何正式原生狀態。
@@ -244,3 +258,7 @@ S00 [Iteration38 C04-D/E/F 規劃](s00-iterations/S00-20261031-ITERATION-38-C04-
 ## 2026-11-01 — C04 登入設計交付收斂（可直接交 Server 開發）
 
 [完整 M2/M3 最終開發交接](s00-iterations/S00-20261101-C04-NATIVE-LOGIN-EXECUTION-READY-HANDOFF.md) 是 Iteration38/39/40 的**執行入口**，沒有再建立一套登入需求／RR／Gate。核對基線 S00 main `e7c9befa49c46afdd3784ae9a910c7834f50e91e`、Server main `b4f187445d1d287feab3ceee9ea86d9dc0f75d63`；今後開工先核最新 SHA。真正流程為 **M0（已有 raw diagnostic Server-only）→ M1（真 Client C2S 正確解析）→ M2（原版 Client request→C02 帳密/Session 決策）→ M3（S2C 真回覆令 Client 進下一畫面）→ M4（角色 UI）**。目前後四段仍 native/source/runtime 受阻；沒有新原版 Client trace。**即刻交 Server 開發者 E1b/E2a/E3a OFFLINE，不重做 C01/C04-D；原生 E2b/E3b/F0 必要先由 T02/T03/T01 基於既有 RR-0001/3/4/6/7 補證。** 禁止從 E1 局部 envelope/離線 E8/0F layout 宣稱原版 wire 成功；不可假回 0x13/0x7A、不新增任意官方 Port/解碼模式、不可泄露登入憑證。S00 本輪只把執行契約上 Git，不改 Server/DB/Client、不改正式 RR/GAP/SPEC/TEST。
+
+**06:45 UTC人工實測補充：** 空角色候選69B已送、Client回C2S24，但使用者仍停選服；原gateway未涵蓋保存consumer中的1F/25，已補接並通過8正向前置。修正版畫面待測。REQ-0003已追加第5筆runtime discovery，細節見本輪空清單報告。
+
+**07:32 UTC人工結果：** 兩角色展示與原生命名UI已實測；v2觀察3E/48B、名稱DB revision2，發4A/6E後使用者確認進入教學／劇情。劇情後錯誤地圖／位置、人物未完整初始化，新REQ-0010登記world bootstrap，REQ-0004追加runtime。台帳10REQ／7runtime，正式狀態不升格。下一步補map/context／actor／control／collision；禁止舊Client guard。測試通知改用非同步提問卡，直接列點到哪與結果選項。
