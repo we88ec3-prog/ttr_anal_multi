@@ -15,3 +15,15 @@ v22使用者回覆「這次連廣場都無法進入」。本輪進場失敗保�
 ## v23本機發行
 
 2026-11-05 00:35:16 +08:00核對v22 PID38440／精確路徑後替換，SQLite一致性備份驗證成功。v23 source08a99617bb84cbe0725debc5d20f1377e3a3685f，Host PID36128；Host DLLbad0d7987a92aad9f3836e2152e8c76875af7bebbbe02a1b8dae227e90fd78b4，Network DLLdfc93749c8e4583c385655969f458504b96bf16546a7423d6c09b3e2bdd6a392。story content與Client都不改。服務已啟動，34正向測試通過49秒；已發v23短卡取代v22，真人PENDING。
+
+## v23本輪真人通過
+
+使用者對v23短卡回覆：「操控正常，NPC 劇情出現」。該卡三項為短按上放開只連Z會停止、按住上加連Z可走、全部放開再按同方向可走；然後Story117靠近目標NPC按Z到第一段劇情。按這個明確工作副本範圍記通過，並非所有方向／多鍵／戰鬥取消／原始Client或正式任務結算通過。
+
+固定來源v23 build08a99617bb84cbe0725debc5d20f1377e3a3685f、PID36128。journal包含角色0入場42000000、43及B0，NPC10002手動意圖1C0003001227被正確phase/距離gate接受，scene117/1啟動；265個原0A row僅8000共109、0000共156，未見action-only0001。這與非戰鬥availability清除技能候選的預期一致；不從這些rows反推實體按鍵，按鍵成功由使用者卡片回覆支持。兩journal Healthy/dropped0。
+
+日誌另有117/1回報及10047意圖，快照已到下一個Intro；保留但不擴大本輪驗收，已請使用者停在目前劇情。debug主線不回寫正常完成／獎勵。完整本機快照在v23-human-pass-snapshot，公開摘要在v23-human-result.json，不上傳原始連線資料。
+
+補充觀測限制：現有RecordSentFrame除命令白名單外仍限制frame<=68B，因此1682B availability及多NPC27不在完整出站紀錄內。不能將空缺解讀為未送，也不宣稱完整抓包；本輪此類封包形狀／清除／交握順序有合成測試，實際操控與NPC結果由真人驗證。大型快照改記摘要/hash的Server觀測改良另登待辦，現在不為此再換版。
+
+REQ-0004/0011/0019各追加GAME_RUNTIME_OBSERVATION；需求整體仍CANDIDATE，APPROVED仍0，SPEC/ADR/Task全文審核與原件FULL-PASS不提升。v22失敗歷史、v23工程34項／49秒及本輪正向實機通過分別保留。
