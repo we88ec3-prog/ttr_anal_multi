@@ -1,3 +1,5 @@
+本輪接續：[T01 W1/W2/W3複核與v21候選](S00-20261104-T01-W123-INTAKE-AND-V21-BOOTSTRAP.md)。
+
 最新修正：[NPC三倍距離與登入回廣場](S00-20261104-NPC-RANGE-AND-SQUARE-RESUME.md)。真人驗收待測。
 
 最新：[馮德斯→爾斯梅勒主線旅程候選](S00-20261104-ALSMEER-STORY-CONTINUATION.md)：共用敘事／Scenario骨架接10任務、16圖及Town2初始化；30個合成正流程通過。正式獎勵／EXP／角色取得與MEF仍有缺口，真人驗收待測。
