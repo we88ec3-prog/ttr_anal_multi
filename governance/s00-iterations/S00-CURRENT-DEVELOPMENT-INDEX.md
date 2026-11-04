@@ -1,3 +1,5 @@
+本輪：[v22非戰鬥輸入可用性與村莊互動候選](S00-20261105-V22-INTERACTION-INPUT-AND-TOWN.md)。34正流程合成通過；待發行及人測，不改Client。
+
 本輪P0：[v21操控／NPC退回](S00-20261104-V21-CONTROLS-NPC-REVIEW.md)。展示頁與進廣場人測通過；村莊NPC／方向＋Z仍未通過。750ms修正33項合成通過但尚未換版，整批就緒前不要求重測。
 
 本輪接續：[T01 W1/W2/W3複核與v21候選](S00-20261104-T01-W123-INTAKE-AND-V21-BOOTSTRAP.md)。
