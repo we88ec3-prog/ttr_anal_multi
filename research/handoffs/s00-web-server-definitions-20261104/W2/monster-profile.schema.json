@@ -1,0 +1,1178 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ttr:handoff:W2:monster-profile-inventory:2.0.0",
+  "title": "W2 三怪來源對照（待審資料；非原生 MEF 或可部署 Monster AI）",
+  "description": "W2 bounded v2 inventory of ZIP plus pinned original Table/Base members. It preserves unknown AI/time values and separates historical reports from direct resource facts; not a runtime AI schema.",
+  "type": "object",
+  "properties": {
+    "format": {
+      "const": "W2_MONSTER_PROFILE_INVENTORY_V2"
+    },
+    "schema_version": {
+      "const": "2.0.0"
+    },
+    "client_version": {
+      "const": "kr"
+    },
+    "prepared_date": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "status": {
+      "const": "DRAFT_FOR_REVIEW"
+    },
+    "source_analysis_commit": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "input_manifest_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "source_index": {
+      "const": "source-index.json"
+    },
+    "technical_scope": {
+      "const": "UPLOADED_PACKAGE_AND_PINNED_TABLE_BASE_ARCHIVES"
+    },
+    "formal_native_verification": {
+      "const": "NOT_T01_FULL_PASS"
+    },
+    "upstream_t16_activation": {
+      "const": "DRAFT_BLOCKED"
+    },
+    "runtime_ready": {
+      "const": false
+    },
+    "source_status_legend": {
+      "type": "object",
+      "properties": {
+        "已知來源值": {
+          "type": "string"
+        },
+        "候選政策": {
+          "type": "string"
+        },
+        "無來源": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "已知來源值",
+        "候選政策",
+        "無來源"
+      ],
+      "additionalProperties": false
+    },
+    "matrix_imports": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/matrixImport"
+      },
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "profiles": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/profile"
+      },
+      "minItems": 3,
+      "maxItems": 3
+    },
+    "server_policy_candidates": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/policy"
+      },
+      "minItems": 9,
+      "maxItems": 9
+    },
+    "raw_resource_verification": {
+      "const": "PINNED_ARCHIVE_MEMBERS_REVERIFIED"
+    },
+    "previous_delivery_commit": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "updated_at": {
+      "type": "string"
+    },
+    "evidence_revision_notes": {
+      "type": "string"
+    },
+    "source_archives": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "carrier": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "bytes": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "member_count": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "audit_report": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "carrier",
+          "sha256",
+          "bytes",
+          "member_count",
+          "audit_report"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "format",
+    "schema_version",
+    "client_version",
+    "prepared_date",
+    "status",
+    "source_analysis_commit",
+    "input_manifest_sha256",
+    "source_index",
+    "technical_scope",
+    "formal_native_verification",
+    "upstream_t16_activation",
+    "runtime_ready",
+    "source_status_legend",
+    "matrix_imports",
+    "profiles",
+    "server_policy_candidates",
+    "raw_resource_verification",
+    "previous_delivery_commit",
+    "updated_at",
+    "evidence_revision_notes",
+    "source_archives"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "sourceRef": {
+      "type": "object",
+      "properties": {
+        "package_path": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "member": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "repository_path": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "source_commit": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "git_blob_sha1": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "carrier_sha256_declared": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "selector": {
+          "type": "string"
+        },
+        "line": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "evidence_basis": {
+          "enum": [
+            "raw_member_literal",
+            "existing_report_not_raw_reverified",
+            "package_scope",
+            "package_search_scope",
+            "raw_archive_member_literal",
+            "raw_archive_member_search"
+          ]
+        },
+        "carrier": {
+          "type": "string"
+        },
+        "carrier_sha256_verified": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "package_path",
+        "sha256",
+        "member",
+        "repository_path",
+        "source_commit",
+        "git_blob_sha1",
+        "carrier_sha256_declared",
+        "selector",
+        "line",
+        "evidence_basis"
+      ],
+      "additionalProperties": false
+    },
+    "actorKey": {
+      "type": "object",
+      "properties": {
+        "domain": {
+          "const": "actor_resource"
+        },
+        "category": {
+          "const": 1
+        },
+        "actor_id": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "domain",
+        "category",
+        "actor_id"
+      ],
+      "additionalProperties": false
+    },
+    "variantKey": {
+      "type": "object",
+      "properties": {
+        "domain": {
+          "const": "actor_resource"
+        },
+        "category": {
+          "const": 1
+        },
+        "actor_id": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "pre": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "domain",
+        "category",
+        "actor_id",
+        "pre"
+      ],
+      "additionalProperties": false
+    },
+    "rawActor": {
+      "type": "object",
+      "properties": {
+        "ID": {
+          "type": "string"
+        },
+        "PRE": {
+          "type": "string"
+        },
+        "FILE": {
+          "type": "string"
+        },
+        "NAME": {
+          "type": "string"
+        },
+        "NAMECOLOR": {
+          "type": "string"
+        },
+        "SCALE": {
+          "type": "string"
+        },
+        "SPECIES": {
+          "type": "string"
+        },
+        "SHOW_MINIMAP": {
+          "type": "string"
+        },
+        "SHOW_PANEL": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "ID",
+        "PRE",
+        "FILE",
+        "NAME",
+        "NAMECOLOR",
+        "SPECIES",
+        "SHOW_MINIMAP",
+        "SHOW_PANEL"
+      ],
+      "additionalProperties": false
+    },
+    "variant": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "$ref": "#/$defs/variantKey"
+        },
+        "source_status": {
+          "const": "已知來源值"
+        },
+        "evidence_kind": {
+          "const": "raw_member_literal"
+        },
+        "raw_attributes": {
+          "$ref": "#/$defs/rawActor"
+        },
+        "absent_attributes": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "SCALE"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "source": {
+          "$ref": "#/$defs/sourceRef"
+        },
+        "file_link_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "key",
+        "source_status",
+        "evidence_kind",
+        "raw_attributes",
+        "absent_attributes",
+        "source",
+        "file_link_id"
+      ],
+      "additionalProperties": false
+    },
+    "matrixCell": {
+      "type": "object",
+      "properties": {
+        "source_status": {
+          "const": "已知來源值"
+        },
+        "evidence_kind": {
+          "const": "existing_report_not_raw_reverified"
+        },
+        "matrix_tier": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "matrix_key": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "matrix_variant": {
+          "type": "null"
+        },
+        "actor_pre": {
+          "type": "null"
+        },
+        "skill_word": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 65535
+        },
+        "source": {
+          "$ref": "#/$defs/sourceRef"
+        },
+        "raw_matrix_sha256": {
+          "type": "null"
+        },
+        "link_id": {
+          "type": "string"
+        },
+        "skillactive_no_present_in_supplied_member": {
+          "const": false
+        },
+        "effect_index_present_in_supplied_member": {
+          "const": false
+        },
+        "skill_action_effect_binding": {
+          "const": "UNKNOWN"
+        }
+      },
+      "required": [
+        "source_status",
+        "evidence_kind",
+        "matrix_tier",
+        "matrix_key",
+        "matrix_variant",
+        "actor_pre",
+        "skill_word",
+        "source",
+        "raw_matrix_sha256",
+        "link_id",
+        "skillactive_no_present_in_supplied_member",
+        "effect_index_present_in_supplied_member",
+        "skill_action_effect_binding"
+      ],
+      "additionalProperties": false
+    },
+    "animationRef": {
+      "type": "object",
+      "properties": {
+        "source_status": {
+          "const": "已知來源值"
+        },
+        "evidence_kind": {
+          "const": "existing_report_not_raw_reverified"
+        },
+        "slot": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "name": {
+          "type": "string"
+        },
+        "actor_pre": {
+          "type": "null"
+        },
+        "frames": {
+          "type": "null"
+        },
+        "fps": {
+          "type": "null"
+        },
+        "presentation_duration_ms": {
+          "type": "null"
+        },
+        "server_ai_duration_ms": {
+          "type": "null"
+        },
+        "raw_body_sha256": {
+          "type": "null"
+        },
+        "source": {
+          "$ref": "#/$defs/sourceRef"
+        },
+        "link_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "source_status",
+        "evidence_kind",
+        "slot",
+        "name",
+        "actor_pre",
+        "frames",
+        "fps",
+        "presentation_duration_ms",
+        "server_ai_duration_ms",
+        "raw_body_sha256",
+        "source",
+        "link_id"
+      ],
+      "additionalProperties": false
+    },
+    "aiField": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string"
+        },
+        "source_status": {
+          "const": "無來源"
+        },
+        "value": {
+          "type": "null"
+        },
+        "unit": {
+          "type": "null"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "server_requirement": {
+          "type": "string"
+        },
+        "related_report_link_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "related_source_link_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "label",
+        "source_status",
+        "value",
+        "unit",
+        "reason",
+        "server_requirement",
+        "related_report_link_ids",
+        "related_source_link_ids"
+      ],
+      "additionalProperties": false
+    },
+    "aiFields": {
+      "type": "object",
+      "properties": {
+        "chase": {
+          "$ref": "#/$defs/aiField"
+        },
+        "perception": {
+          "$ref": "#/$defs/aiField"
+        },
+        "return": {
+          "$ref": "#/$defs/aiField"
+        },
+        "skill_selection": {
+          "$ref": "#/$defs/aiField"
+        },
+        "windup": {
+          "$ref": "#/$defs/aiField"
+        },
+        "hit": {
+          "$ref": "#/$defs/aiField"
+        },
+        "cooldown": {
+          "$ref": "#/$defs/aiField"
+        },
+        "hurt": {
+          "$ref": "#/$defs/aiField"
+        },
+        "death": {
+          "$ref": "#/$defs/aiField"
+        }
+      },
+      "required": [
+        "chase",
+        "perception",
+        "return",
+        "skill_selection",
+        "windup",
+        "hit",
+        "cooldown",
+        "hurt",
+        "death"
+      ],
+      "additionalProperties": false
+    },
+    "profile": {
+      "type": "object",
+      "properties": {
+        "actor_key": {
+          "$ref": "#/$defs/actorKey"
+        },
+        "file_stem": {
+          "type": "string"
+        },
+        "body_carrier": {
+          "type": "string"
+        },
+        "body_member": {
+          "type": "string"
+        },
+        "body_extension": {
+          "const": ".abf"
+        },
+        "body_member_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "body_resolution": {
+          "const": "EXACT_MEMBER_RAW_VERIFIED"
+        },
+        "variants": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/variant"
+          },
+          "minItems": 1
+        },
+        "cluster_pre_literals": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "uniqueItems": true
+        },
+        "cluster_scope": {
+          "type": "string"
+        },
+        "reported_matrix_cells": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/matrixCell"
+          }
+        },
+        "reported_animation_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/animationRef"
+          }
+        },
+        "ai_fields": {
+          "$ref": "#/$defs/aiFields"
+        },
+        "required_member_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "link_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "runtime_ready": {
+          "const": false
+        },
+        "body_carrier_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "body_source": {
+          "$ref": "#/$defs/sourceRef"
+        },
+        "body_character_attributes": {
+          "type": "object",
+          "properties": {
+            "RelativePath": {
+              "type": "string"
+            },
+            "BaseFile": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "RelativePath",
+            "BaseFile"
+          ],
+          "additionalProperties": false
+        },
+        "body_link_id": {
+          "type": "string"
+        },
+        "body_binding_basis": {
+          "const": "ACTOR_FILE_STEM_EQUALS_UNIQUE_MEMBER_BASENAME"
+        },
+        "body_runtime_resolution_verified": {
+          "const": false
+        },
+        "body_pre_specific_overrides_verified": {
+          "const": false
+        },
+        "matrix_cells": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/rawMatrixCell"
+          }
+        },
+        "animations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/rawAnimation"
+          }
+        },
+        "other_resource_refs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "enum": [
+                  "base_model",
+                  "texture"
+                ]
+              },
+              "resource_reference": {
+                "type": "string"
+              },
+              "source": {
+                "$ref": "#/$defs/sourceRef"
+              },
+              "link_id": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "kind",
+              "resource_reference",
+              "source",
+              "link_id"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "open_requirement_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "actor_key",
+        "file_stem",
+        "body_carrier",
+        "body_member",
+        "body_extension",
+        "body_member_sha256",
+        "body_resolution",
+        "variants",
+        "cluster_pre_literals",
+        "cluster_scope",
+        "reported_matrix_cells",
+        "reported_animation_refs",
+        "ai_fields",
+        "required_member_ids",
+        "link_ids",
+        "runtime_ready",
+        "body_carrier_sha256",
+        "body_source",
+        "body_character_attributes",
+        "body_link_id",
+        "body_binding_basis",
+        "body_runtime_resolution_verified",
+        "body_pre_specific_overrides_verified",
+        "matrix_cells",
+        "animations",
+        "other_resource_refs",
+        "open_requirement_ids"
+      ],
+      "additionalProperties": false
+    },
+    "matrixImport": {
+      "type": "object",
+      "properties": {
+        "member": {
+          "type": "string"
+        },
+        "source": {
+          "$ref": "#/$defs/sourceRef"
+        },
+        "present_in_package": {
+          "const": false
+        },
+        "member_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "required_member_id": {
+          "type": "string"
+        },
+        "scope": {
+          "enum": [
+            "monster_core",
+            "optional_character_comparison"
+          ]
+        },
+        "present_in_uploaded_archive": {
+          "const": true
+        },
+        "carrier": {
+          "const": "Table.stp"
+        },
+        "carrier_sha256_verified": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "member_source": {
+          "$ref": "#/$defs/sourceRef"
+        }
+      },
+      "required": [
+        "member",
+        "source",
+        "present_in_package",
+        "member_sha256",
+        "required_member_id",
+        "scope",
+        "present_in_uploaded_archive",
+        "carrier",
+        "carrier_sha256_verified",
+        "member_source"
+      ],
+      "additionalProperties": false
+    },
+    "policy": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "field": {
+          "enum": [
+            "chase",
+            "perception",
+            "return",
+            "skill_selection",
+            "windup",
+            "hit",
+            "cooldown",
+            "hurt",
+            "death"
+          ]
+        },
+        "label": {
+          "type": "string"
+        },
+        "source_status": {
+          "const": "候選政策"
+        },
+        "proposed_contract": {
+          "type": "string"
+        },
+        "numeric_value": {
+          "type": "null"
+        },
+        "approved_by_s00": {
+          "const": false
+        },
+        "provenance": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "field",
+        "label",
+        "source_status",
+        "proposed_contract",
+        "numeric_value",
+        "approved_by_s00",
+        "provenance"
+      ],
+      "additionalProperties": false
+    },
+    "rawMatrixCell": {
+      "type": "object",
+      "properties": {
+        "source_status": {
+          "const": "已知來源值"
+        },
+        "evidence_kind": {
+          "const": "raw_archive_member_literal"
+        },
+        "matrix_tier": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "matrix_key": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "matrix_variant": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "actor_pre": {
+          "type": "null"
+        },
+        "skill_word": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 65535
+        },
+        "source": {
+          "$ref": "#/$defs/sourceRef"
+        },
+        "raw_matrix_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "link_id": {
+          "type": "string"
+        },
+        "skillactive_no_present_in_supplied_member": {
+          "const": false
+        },
+        "effect_index_present_in_supplied_member": {
+          "type": "boolean"
+        },
+        "skill_action_effect_binding": {
+          "const": "UNKNOWN"
+        },
+        "domain_collision_note": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "source_status",
+        "evidence_kind",
+        "matrix_tier",
+        "matrix_key",
+        "matrix_variant",
+        "actor_pre",
+        "skill_word",
+        "source",
+        "raw_matrix_sha256",
+        "link_id",
+        "skillactive_no_present_in_supplied_member",
+        "effect_index_present_in_supplied_member",
+        "skill_action_effect_binding",
+        "domain_collision_note"
+      ],
+      "additionalProperties": false
+    },
+    "rawAnimation": {
+      "type": "object",
+      "properties": {
+        "source_status": {
+          "const": "已知來源值"
+        },
+        "evidence_kind": {
+          "const": "raw_archive_member_literal"
+        },
+        "slot": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "name": {
+          "type": "string"
+        },
+        "raw_attributes": {
+          "type": "object",
+          "properties": {
+            "ID": {
+              "type": "string"
+            },
+            "File": {
+              "type": "string"
+            },
+            "CameraAttach": {
+              "type": "string"
+            },
+            "FrameSpeed": {
+              "type": "string"
+            },
+            "FaceIndex": {
+              "type": "string"
+            },
+            "Repeat": {
+              "type": "string"
+            },
+            "RepeatStartFrame": {
+              "type": "string"
+            },
+            "LagtimeType": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "ID",
+            "File",
+            "CameraAttach",
+            "FrameSpeed",
+            "FaceIndex",
+            "Repeat",
+            "RepeatStartFrame",
+            "LagtimeType"
+          ],
+          "additionalProperties": false
+        },
+        "relative_clip_reference": {
+          "type": "string"
+        },
+        "actor_pre": {
+          "type": "null"
+        },
+        "frame_speed_raw": {
+          "type": "string"
+        },
+        "frame_speed_unit": {
+          "type": "null"
+        },
+        "frames": {
+          "type": "null"
+        },
+        "fps": {
+          "type": "null"
+        },
+        "presentation_duration_ms": {
+          "type": "null"
+        },
+        "server_ai_duration_ms": {
+          "type": "null"
+        },
+        "raw_body_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "source": {
+          "$ref": "#/$defs/sourceRef"
+        },
+        "link_id": {
+          "type": "string"
+        },
+        "effects": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "raw_attributes": {
+                "type": "object",
+                "properties": {
+                  "File": {
+                    "type": "string"
+                  },
+                  "Folder": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "File",
+                  "Folder"
+                ],
+                "additionalProperties": false
+              },
+              "resource_path": {
+                "type": "string"
+              },
+              "timing": {
+                "type": "null"
+              },
+              "timing_unit": {
+                "type": "null"
+              },
+              "referenced_member_verified": {
+                "const": false
+              },
+              "source": {
+                "$ref": "#/$defs/sourceRef"
+              },
+              "link_id": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "raw_attributes",
+              "resource_path",
+              "timing",
+              "timing_unit",
+              "referenced_member_verified",
+              "source",
+              "link_id"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "sounds": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "raw_attributes": {
+                "type": "object",
+                "properties": {
+                  "File": {
+                    "type": "string"
+                  },
+                  "Folder": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "File",
+                  "Folder"
+                ],
+                "additionalProperties": false
+              },
+              "resource_path": {
+                "type": "string"
+              },
+              "timing": {
+                "type": "null"
+              },
+              "timing_unit": {
+                "type": "null"
+              },
+              "referenced_member_verified": {
+                "const": false
+              },
+              "source": {
+                "$ref": "#/$defs/sourceRef"
+              },
+              "link_id": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "raw_attributes",
+              "resource_path",
+              "timing",
+              "timing_unit",
+              "referenced_member_verified",
+              "source",
+              "link_id"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "source_status",
+        "evidence_kind",
+        "slot",
+        "name",
+        "raw_attributes",
+        "relative_clip_reference",
+        "actor_pre",
+        "frame_speed_raw",
+        "frame_speed_unit",
+        "frames",
+        "fps",
+        "presentation_duration_ms",
+        "server_ai_duration_ms",
+        "raw_body_sha256",
+        "source",
+        "link_id",
+        "effects",
+        "sounds"
+      ],
+      "additionalProperties": false
+    }
+  }
+}
