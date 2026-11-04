@@ -37,3 +37,7 @@ ABF motionID/ASD HeaderID與Effect路徑是資源事實；Practice filename同st
 使用者另授權新Client開場／台版翻譯／字型版本，見../client-variants/20261105-zh-tw-v3/README.md；原版及v2不動。新EXE兩byte差異、文字only overlay、TC主字型補KR回退均靜態驗證，不當作原件或真人通過。
 
 v28及新Client真人PENDING。先新啟動檔到廣場看NPC翻譯／字型，再選六鍵測試場依序各一次，不走出口；任何錯誤立即停。缺資源灰色可另選普通Road191 Z+C後觀察CD結束但資源尚不足時，不應再無限黑。HP回復仍待使用者之後實測。其餘角色與進階技能持續依catalog缺口開發，不以固定motion代替。
+
+## 部署／短卡
+
+Server maine3cd883e66c29fa71d0ebe9c211897384f75b87c已推送並啟用v28；核對v27Host路徑／PID後先備份隔離SQLite，再只替換loopback Host，認證／旅程／劇情健康、丟棄0。新Client SHA f1a23ee3c410e4261aef5eddcb9b4bacbe185cfff50d83155d2c3842bf088cee，由Open-Tartaros-zh-tw-v3.cmd設獨立cwd。已發「新Client開場／NPC文字／字型→IsiliaSkills六鍵」短卡，兩者真人PENDING，不改判為原件或全角色通過。
