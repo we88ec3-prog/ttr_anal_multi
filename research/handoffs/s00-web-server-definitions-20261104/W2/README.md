@@ -4,6 +4,8 @@
 
 **本包完成上傳材料範圍內的三怪欄位盤點、typed 引用與缺件交付，可供 S00 建立資料模型、安排最小資源抽取及決定 Server 政策。它仍是 `DRAFT_FOR_REVIEW` 的證據資料包；沒有取得三怪的完整原生技能／AI 定義。**
 
+**2026-11-04 19:54（Asia/Taipei）原件補充：**使用者追問缺件是否在已上傳的 `Table.stp`，已直接核對該原件的完整 1,026 個 member。`MonsterMatrices.xml` 與 `CharacterMatrices.xml` 確實存在，三怪共11個矩陣 key 已取得來源值；五個 W2 Table XML 也全數與此原件解碼 bytes 相符。三個 body stem 及 `.abf` 成員均不在此 Table 的 member index；既有治理腳本文字指向 `Character/Mon/Base.stp`，該載體未在本次重驗。完整結果、精確路徑、SHA 與範圍見 [原件補充核對](20261104-195413-W2-table-stp-followup.md)／[機器可讀結果](table-stp-presence-audit.json)。下列原始盤點及原五份必交資料仍保留 **ZIP-only 快照**；其中「缺件／原始版本未核實」不應再解讀為本補充之後的完整可用來源狀態。補充沒有提升正式審核或 runtime 成熟度。
+
 使用者本次明確指定 `extra/roy2` 並要求上 Git，優先於輸入提示詞的預設 main。開工核對 main `4875b184370f6030902460d95003fa71f8e062cd`，既有 `extra/roy2` 的 `44e91057a9a3f9ba7a2fcac8c5bca53c7899f5bb` 為其祖先，已在同一分支 fast-forward 到該基準。本輪新增成果只在本 `W2/` 目錄；不更改 Task owner、RR／CLM／SPEC／ADR 或其他工作原稿。
 
 ## 1. 直接可用的資料
