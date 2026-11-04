@@ -40,3 +40,11 @@
 新增來源目錄後共32項HappyPath通過61秒；19項需求治理測試、S00 registry與dispatch checker通過。目錄第一次交叉檢核誤將既有「第一個ClusterSet」政策當成set ID0，Case108第一個set實為1；已修正為必須明確指定EXISTING_FIRST_CLUSTERSET_POLICY、再按原宣告順序取該set。沒有改W1原資料或遊戲選群。來源目錄SHA3622d06355672dd27df6053f2a1147319d274d83a46b0977cff0b13f8e8e70dc，保留5Case／143群；目前Host不自動載入此目錄，不變更v20已有怪群／座標。
 
 角色頁等待與村莊NPC候選快照時序仍待真人測試；未把合成32項折算為正式6項TEST、Client原件相容性或開發60%。廣場登入／NPC的人測通過只按使用者本次陳述登記。將在同一批完成後換版，不零碎換版。
+
+新增角色頁進入的已擁有角色檢核，並保留Soma／Shubalman既有kit路徑；Pinko2進廣場不虛構尚無候選的戰鬥kit。role/mode是同個0042的兩個欄，mode0/2僅按既有形狀接受，不擅自命名其原服業務。CExpeditionScene同一sender也可由選擇事件觸發，因此本輪尚不能聲稱每筆0042都必為實體按鈕點擊，須人測頁面停留行為。
+
+## v21本機發行
+
+Server main8a13678cee8d58d566498c9d097b3bd2377410da。最後完整32項HappyPath通過61秒，含展示後分別以owned Soma1／Shubalman3／Pinko2進廣場及mode0/2正常形狀；自動F5不換場。19項需求治理檢核通過。W1唯讀CLI核對5Case／143群／16個目前主線選群通過，不啟用額外怪群。
+
+2026-11-04 22:58:50 +08:00，核對v20 PID29432與精確Host路徑後關閉該loopback服務；SQLite backup API與integrity_check驗證成功，不改DB schema，不改Client或原始資源。v21 PID30924，路徑runtime-observations/2026-11-04-w123-review/server-host-v21/Tartaros.Server.Host.exe。Host DLL SHA7a7e9e00618cadc1066ed4a7ad98d1e77cc6e1afb141f2467047e90eeb1b1378；Network DLLadb48c18a3d63a1f26bd7b873e1d6d19b7539f923ba87b13d3e9e2f8c7301b88。story content SHA59a0e6221e76171ef9618b787dbf25c6ba0db61180866458317025916ef35678不變。auth/journey/story服務正常，兩個journal Healthy且dropped0。新版人測PENDING，已發短卡：展示頁停留→按鈕進廣場→Story117 NPC第一段劇情就停。
