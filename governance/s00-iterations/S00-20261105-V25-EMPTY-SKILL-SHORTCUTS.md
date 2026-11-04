@@ -19,3 +19,7 @@ Server原順序在owner/controller Bind前送126/127/12C。本輪把完整三包
 v25尚未部署／人測。下一輪先確認廣場與Road191快捷列圖示；有圖示才續原Z連段、滿SP的Z+C與不足X保留移動短卡，任何異常停下。仍不跑暫緩套件，不改Client，不啟動MEF搜尋／新原件分析。
 
 更新：修正TCP helper先後預期後，38項Category=HappyPath全部通過57秒；保留既有技能內容、裝備與旅程檢查。真人HUD仍PENDING。
+
+## 部署
+
+Server main191aa20e29be4f73022faf162fa66ae79ae3c6dd已推送並啟用v25。核對舊Host路徑／PID後只替換loopback連線，SQLite備份已驗完整性，認證／旅程／劇情健康檢查正常且丟棄0。EXE hash未變，發出廣場／Road191圖示優先短卡；真人仍PENDING。公開只存來源／元件與本地快照hash，raw journal留本機。
