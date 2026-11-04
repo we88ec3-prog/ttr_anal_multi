@@ -35,3 +35,9 @@ Town43前不發布角色／NPC ready及劇情。先排隊世界資料，待43後
 ## 發行／人測
 
 工程修正就緒，準備批次發行v22；精確commit、DLL SHA、Host PID與發行時間另存收據。人測仍PENDING：廣場短按方向後放開只Z、持續方向加Z、同方向重新按；再Story117正常靠近NPC按Z到第一段劇情就停。若控制失敗或卡住就停，避免重跑新手流程；不按跳過教學、不擴大目前暫緩測試。
+
+## v22發行收據
+
+2026-11-05 00:27:43 +08:00，核對舊Host PID30924／精確v21路徑與loopback listeners後替換；一致性SQLite備份成功，未變schema或帳號正常進度。v22 build source287bf10efa1b2eaf20f6fa42d821cbd1f2f338d2，PID38440。Host DLL42340ef36d934fd9c576f6e97ed0fa432c74d92f7c45bbba1133efced6b2054f；Network DLLf85090fe0c63ec564b199a20bd2365dea3f1b115341ca4602bcccfa7a2addd85；story內容SHA不變。兩個journal Healthy/dropped0；Client EXE SHA與既有6f92ba12…d3b3c一致。
+
+已發同一張正向短卡：角色展示→廣場三種移動／Z→debugStory117→NPC第一段劇情就停，技能欄異常冷卻呈現另記。人測PENDING，未列任何新增實機PASS。收據只代表啟動與工程檢核，不代表原件相容或操控需求完成。
