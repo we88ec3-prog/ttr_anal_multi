@@ -1,3 +1,5 @@
+目前：[v26圖示／連段／Z+C／行走人測通過；v27末段間隔與暫定回復](S00-20261105-V27-COMBO-RESTART-AND-RECOVERY.md)。44正流程合成通過；v27人測PENDING。
+
 目前P0：[v26技能ID域混用](S00-20261105-V26-SKILL-ID-DOMAINS.md)。v25副本仍空白退回；已證timer錯把Practice49/50/52當active29/30/31，修正後尚待人測。
 
 目前P0：[v25技能快捷列空白](S00-20261105-V25-EMPTY-SKILL-SHORTCUTS.md)。v24戰鬥短卡中止；綁定後發布完整組態與固定出站診斷修補候選，尚待人測。
