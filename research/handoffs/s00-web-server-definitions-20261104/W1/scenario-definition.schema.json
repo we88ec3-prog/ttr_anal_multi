@@ -1,0 +1,770 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/ttr/w1/scenario-definition.schema.json",
+  "title": "W1 provisional KR scenario source & Server candidate definition",
+  "description": "Not native MEF; no activation or quest reward semantics asserted.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "kind",
+    "client_version",
+    "status",
+    "native_mef",
+    "origin",
+    "interpretation_boundaries",
+    "definitions"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "0.1.0-w1"
+    },
+    "kind": {
+      "const": "KR_W1_OFFLINE_SCENARIO_SOURCE_MODEL"
+    },
+    "client_version": {
+      "const": "KR"
+    },
+    "status": {
+      "const": "DRAFT_BLOCKED"
+    },
+    "native_mef": {
+      "const": false
+    },
+    "origin": {
+      "type": "object"
+    },
+    "interpretation_boundaries": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "definitions": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": {
+        "$ref": "#/$defs/ScenarioDefinition"
+      }
+    }
+  },
+  "$defs": {
+    "Classification": {
+      "enum": [
+        "CLIENT_RESOURCE_DIRECT",
+        "EXISTING_ANALYSIS_CITED",
+        "SERVER_CANDIDATE",
+        "USER_POLICY",
+        "UNKNOWN"
+      ]
+    },
+    "TypedId": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "domain",
+        "value"
+      ],
+      "properties": {
+        "domain": {
+          "enum": [
+            "quest",
+            "field",
+            "case",
+            "map",
+            "scene",
+            "mapflow-node",
+            "spawn-group",
+            "cluster-set",
+            "actor-resource",
+            "portal-key",
+            "scenario-definition"
+          ]
+        },
+        "value": {
+          "oneOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "integer"
+            }
+          ]
+        }
+      }
+    },
+    "SourceRef": {
+      "type": "object",
+      "required": [
+        "classification"
+      ],
+      "properties": {
+        "member": {
+          "type": "string"
+        },
+        "member_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "selector": {
+          "type": "string"
+        },
+        "repo_path": {
+          "type": "string"
+        },
+        "snapshot_commit": {
+          "type": "string"
+        },
+        "file_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "classification": {
+          "$ref": "#/$defs/Classification"
+        }
+      }
+    },
+    "Condition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "predicate",
+        "classification"
+      ],
+      "properties": {
+        "kind": {
+          "const": "Condition"
+        },
+        "predicate": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "classification": {
+          "$ref": "#/$defs/Classification"
+        }
+      }
+    },
+    "Action": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "action_type",
+        "spawn_group",
+        "condition",
+        "classification"
+      ],
+      "properties": {
+        "kind": {
+          "const": "Action"
+        },
+        "action_type": {
+          "enum": [
+            "SPAWN_GROUP",
+            "ACTIVATE_PORTAL",
+            "PLAY_SCENE_CUE"
+          ]
+        },
+        "spawn_group": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/TypedId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "condition": {
+          "$ref": "#/$defs/Condition"
+        },
+        "classification": {
+          "$ref": "#/$defs/Classification"
+        }
+      }
+    },
+    "SpawnGroup": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "group",
+        "set_id_raw",
+        "group_id_raw",
+        "member_objects",
+        "position_world",
+        "activation_condition",
+        "wave_order",
+        "classification",
+        "source"
+      ],
+      "properties": {
+        "kind": {
+          "const": "SpawnGroup"
+        },
+        "group": {
+          "$ref": "#/$defs/TypedId"
+        },
+        "set_id_raw": {
+          "type": "integer"
+        },
+        "group_id_raw": {
+          "type": "integer"
+        },
+        "member_objects": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": [
+              "actor_resource",
+              "pre_raw",
+              "count_raw",
+              "raw_attributes"
+            ],
+            "properties": {
+              "actor_resource": {
+                "$ref": "#/$defs/TypedId"
+              },
+              "pre_raw": {
+                "type": "integer"
+              },
+              "count_raw": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "raw_attributes": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "position_world": {
+          "type": "null"
+        },
+        "activation_condition": {
+          "type": "null"
+        },
+        "wave_order": {
+          "type": "null"
+        },
+        "classification": {
+          "const": "CLIENT_RESOURCE_DIRECT"
+        },
+        "source": {
+          "$ref": "#/$defs/SourceRef"
+        }
+      }
+    },
+    "PortalDefinition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "key",
+        "from_map_node",
+        "candidate_destinations",
+        "world_position",
+        "collision_radius",
+        "render_scale",
+        "activation_condition",
+        "interaction",
+        "placement_policy",
+        "classification",
+        "source"
+      ],
+      "properties": {
+        "kind": {
+          "const": "PortalDefinition"
+        },
+        "key": {
+          "$ref": "#/$defs/TypedId"
+        },
+        "from_map_node": {
+          "$ref": "#/$defs/TypedId"
+        },
+        "candidate_destinations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TypedId"
+          }
+        },
+        "world_position": {
+          "type": "null"
+        },
+        "collision_radius": {
+          "type": "null"
+        },
+        "render_scale": {
+          "type": "null"
+        },
+        "activation_condition": {
+          "$ref": "#/$defs/Condition"
+        },
+        "interaction": {
+          "type": "object",
+          "required": [
+            "policy",
+            "classification"
+          ],
+          "properties": {
+            "policy": {
+              "const": "STAND_INSIDE_AND_PRESS_Z"
+            },
+            "classification": {
+              "const": "USER_POLICY"
+            }
+          }
+        },
+        "placement_policy": {
+          "type": "object",
+          "required": [
+            "large_exit_at_corridor_bottom",
+            "keep_spawn_clear_of_entrance",
+            "classification"
+          ],
+          "properties": {
+            "large_exit_at_corridor_bottom": {
+              "const": true
+            },
+            "keep_spawn_clear_of_entrance": {
+              "const": true
+            },
+            "classification": {
+              "const": "USER_POLICY"
+            }
+          }
+        },
+        "classification": {
+          "const": "SERVER_CANDIDATE"
+        },
+        "source": {
+          "$ref": "#/$defs/SourceRef"
+        }
+      }
+    },
+    "MapNode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "node",
+        "node_id_raw",
+        "node_list_position",
+        "title_raw",
+        "attributes_raw",
+        "editor_layout",
+        "editor_layout_is_world_position",
+        "map_choices",
+        "scene_cues",
+        "spawn_group_selected",
+        "spawn_condition",
+        "actions",
+        "portal",
+        "source"
+      ],
+      "properties": {
+        "kind": {
+          "const": "MapNode"
+        },
+        "node": {
+          "$ref": "#/$defs/TypedId"
+        },
+        "node_id_raw": {
+          "type": "integer"
+        },
+        "node_list_position": {
+          "type": "integer"
+        },
+        "title_raw": {
+          "type": "string"
+        },
+        "attributes_raw": {
+          "type": "object"
+        },
+        "editor_layout": {
+          "type": "object"
+        },
+        "editor_layout_is_world_position": {
+          "const": false
+        },
+        "map_choices": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": [
+              "map",
+              "percent_raw",
+              "raw_attributes",
+              "map_resource",
+              "source"
+            ],
+            "properties": {
+              "map": {
+                "$ref": "#/$defs/TypedId"
+              },
+              "percent_raw": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "raw_attributes": {
+                "type": "object"
+              },
+              "map_resource": {
+                "type": "object"
+              },
+              "source": {
+                "$ref": "#/$defs/SourceRef"
+              }
+            }
+          }
+        },
+        "scene_cues": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "scene",
+              "function_name",
+              "candidate_join",
+              "trigger_condition",
+              "classification",
+              "source"
+            ],
+            "properties": {
+              "scene": {
+                "type": "object",
+                "required": [
+                  "domain",
+                  "quest",
+                  "index"
+                ],
+                "properties": {
+                  "domain": {
+                    "const": "scene"
+                  },
+                  "quest": {
+                    "type": "integer"
+                  },
+                  "index": {
+                    "type": "integer"
+                  }
+                }
+              },
+              "function_name": {
+                "type": "string"
+              },
+              "candidate_join": {
+                "const": "EXACT_LOADMAP_MODEL_LITERAL"
+              },
+              "trigger_condition": {
+                "type": "null"
+              },
+              "classification": {
+                "const": "SERVER_CANDIDATE"
+              },
+              "source": {
+                "$ref": "#/$defs/SourceRef"
+              }
+            }
+          }
+        },
+        "spawn_group_selected": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "object",
+              "required": [
+                "ref",
+                "classification",
+                "source"
+              ],
+              "properties": {
+                "ref": {
+                  "$ref": "#/$defs/TypedId"
+                },
+                "classification": {
+                  "const": "SERVER_CANDIDATE"
+                },
+                "source": {
+                  "$ref": "#/$defs/SourceRef"
+                }
+              }
+            }
+          ]
+        },
+        "spawn_condition": {
+          "$ref": "#/$defs/Condition"
+        },
+        "actions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Action"
+          }
+        },
+        "portal": {
+          "$ref": "#/$defs/PortalDefinition"
+        },
+        "source": {
+          "$ref": "#/$defs/SourceRef"
+        }
+      }
+    },
+    "ScenarioDefinition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "definition_key",
+        "case",
+        "stage_field",
+        "case_attributes_raw",
+        "quest_links",
+        "mapflow_member",
+        "cluster_member",
+        "map_graph",
+        "nodes",
+        "cluster_sets",
+        "preload_image_ids",
+        "member_provenance",
+        "runtime_flags",
+        "status",
+        "classification"
+      ],
+      "properties": {
+        "kind": {
+          "const": "ScenarioDefinition"
+        },
+        "definition_key": {
+          "$ref": "#/$defs/TypedId"
+        },
+        "case": {
+          "$ref": "#/$defs/TypedId"
+        },
+        "stage_field": {
+          "$ref": "#/$defs/TypedId"
+        },
+        "case_attributes_raw": {
+          "type": "object"
+        },
+        "quest_links": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "quest",
+              "field",
+              "join",
+              "trigger_on_quest_accept",
+              "classification",
+              "source"
+            ],
+            "properties": {
+              "quest": {
+                "$ref": "#/$defs/TypedId"
+              },
+              "field": {
+                "$ref": "#/$defs/TypedId"
+              },
+              "join": {
+                "const": "QUEST_FIELD_EQUALS_CASE_STAGE_CANDIDATE"
+              },
+              "trigger_on_quest_accept": {
+                "type": "null"
+              },
+              "classification": {
+                "const": "SERVER_CANDIDATE"
+              },
+              "source": {
+                "$ref": "#/$defs/SourceRef"
+              },
+              "note": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "mapflow_member": {
+          "type": "string"
+        },
+        "cluster_member": {
+          "type": "string"
+        },
+        "map_graph": {
+          "type": "object",
+          "required": [
+            "node_list_declared_order",
+            "node_link_traversal_order",
+            "root_node_ids",
+            "edges",
+            "edges_mean_runtime_transition",
+            "classification"
+          ],
+          "properties": {
+            "node_list_declared_order": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            },
+            "node_link_traversal_order": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            },
+            "root_node_ids": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            },
+            "edges": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "from",
+                  "to",
+                  "link_order",
+                  "condition",
+                  "branch_probability_raw",
+                  "classification",
+                  "source"
+                ],
+                "properties": {
+                  "from": {
+                    "$ref": "#/$defs/TypedId"
+                  },
+                  "to": {
+                    "$ref": "#/$defs/TypedId"
+                  },
+                  "link_order": {
+                    "type": "integer"
+                  },
+                  "condition": {
+                    "$ref": "#/$defs/Condition"
+                  },
+                  "branch_probability_raw": {
+                    "type": "null"
+                  },
+                  "classification": {
+                    "const": "CLIENT_RESOURCE_DIRECT"
+                  },
+                  "source": {
+                    "$ref": "#/$defs/SourceRef"
+                  }
+                }
+              }
+            },
+            "edges_mean_runtime_transition": {
+              "type": "null"
+            },
+            "classification": {
+              "const": "CLIENT_RESOURCE_DIRECT"
+            }
+          }
+        },
+        "nodes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/MapNode"
+          }
+        },
+        "cluster_sets": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": [
+              "set",
+              "set_id_raw",
+              "base_level_raw",
+              "raw_attributes",
+              "groups",
+              "classification",
+              "source"
+            ],
+            "properties": {
+              "set": {
+                "$ref": "#/$defs/TypedId"
+              },
+              "set_id_raw": {
+                "type": "integer"
+              },
+              "base_level_raw": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "raw_attributes": {
+                "type": "object"
+              },
+              "groups": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/SpawnGroup"
+                }
+              },
+              "classification": {
+                "const": "CLIENT_RESOURCE_DIRECT"
+              },
+              "source": {
+                "$ref": "#/$defs/SourceRef"
+              }
+            }
+          }
+        },
+        "preload_image_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TypedId"
+          }
+        },
+        "member_provenance": {
+          "type": "object"
+        },
+        "runtime_flags": {
+          "type": "object",
+          "required": [
+            "encounter_completion",
+            "quest_settlement",
+            "portal_activation",
+            "official_mef_consumed"
+          ],
+          "properties": {
+            "encounter_completion": {
+              "type": "null"
+            },
+            "quest_settlement": {
+              "type": "null"
+            },
+            "portal_activation": {
+              "type": "null"
+            },
+            "official_mef_consumed": {
+              "type": "null"
+            }
+          }
+        },
+        "status": {
+          "const": "DRAFT_BLOCKED"
+        },
+        "classification": {
+          "const": "SERVER_CANDIDATE"
+        }
+      }
+    }
+  }
+}
