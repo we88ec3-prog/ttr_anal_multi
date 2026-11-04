@@ -1,15 +1,15 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:ttr:handoff:W2:monster-profile-inventory:1.0.0",
+  "$id": "urn:ttr:handoff:W2:monster-profile-inventory:2.0.0",
   "title": "W2 三怪來源對照（待審資料；非原生 MEF 或可部署 Monster AI）",
-  "description": "This schema validates this bounded W2 evidence inventory. Unknown AI values and unresolved body names must remain null. Future evidence requires a new reviewed schema/version; this is not the Server engine runtime schema.",
+  "description": "W2 bounded v2 inventory of ZIP plus pinned original Table/Base members. It preserves unknown AI/time values and separates historical reports from direct resource facts; not a runtime AI schema.",
   "type": "object",
   "properties": {
     "format": {
-      "const": "W2_MONSTER_PROFILE_INVENTORY_V1"
+      "const": "W2_MONSTER_PROFILE_INVENTORY_V2"
     },
     "schema_version": {
-      "const": "1.0.0"
+      "const": "2.0.0"
     },
     "client_version": {
       "const": "kr"
@@ -33,10 +33,10 @@
       "const": "source-index.json"
     },
     "technical_scope": {
-      "const": "UPLOADED_PACKAGE_ONLY"
+      "const": "UPLOADED_PACKAGE_AND_PINNED_TABLE_BASE_ARCHIVES"
     },
     "formal_native_verification": {
-      "const": "NOT_PERFORMED_THIS_ROUND"
+      "const": "NOT_T01_FULL_PASS"
     },
     "upstream_t16_activation": {
       "const": "DRAFT_BLOCKED"
@@ -87,6 +87,53 @@
       },
       "minItems": 9,
       "maxItems": 9
+    },
+    "raw_resource_verification": {
+      "const": "PINNED_ARCHIVE_MEMBERS_REVERIFIED"
+    },
+    "previous_delivery_commit": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "updated_at": {
+      "type": "string"
+    },
+    "evidence_revision_notes": {
+      "type": "string"
+    },
+    "source_archives": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "carrier": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "bytes": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "member_count": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "audit_report": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "carrier",
+          "sha256",
+          "bytes",
+          "member_count",
+          "audit_report"
+        ],
+        "additionalProperties": false
+      }
     }
   },
   "required": [
@@ -105,7 +152,12 @@
     "source_status_legend",
     "matrix_imports",
     "profiles",
-    "server_policy_candidates"
+    "server_policy_candidates",
+    "raw_resource_verification",
+    "previous_delivery_commit",
+    "updated_at",
+    "evidence_revision_notes",
+    "source_archives"
   ],
   "additionalProperties": false,
   "$defs": {
@@ -113,7 +165,10 @@
       "type": "object",
       "properties": {
         "package_path": {
-          "type": "string"
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "sha256": {
           "type": "string",
@@ -167,8 +222,17 @@
             "raw_member_literal",
             "existing_report_not_raw_reverified",
             "package_scope",
-            "package_search_scope"
+            "package_search_scope",
+            "raw_archive_member_literal",
+            "raw_archive_member_search"
           ]
+        },
+        "carrier": {
+          "type": "string"
+        },
+        "carrier_sha256_verified": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
         }
       },
       "required": [
@@ -465,6 +529,12 @@
             "type": "string"
           },
           "uniqueItems": true
+        },
+        "related_source_link_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       },
       "required": [
@@ -474,7 +544,8 @@
         "unit",
         "reason",
         "server_requirement",
-        "related_report_link_ids"
+        "related_report_link_ids",
+        "related_source_link_ids"
       ],
       "additionalProperties": false
     },
@@ -532,19 +603,20 @@
           "type": "string"
         },
         "body_carrier": {
-          "type": "null"
+          "type": "string"
         },
         "body_member": {
-          "type": "null"
+          "type": "string"
         },
         "body_extension": {
-          "type": "null"
+          "const": ".abf"
         },
         "body_member_sha256": {
-          "type": "null"
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
         },
         "body_resolution": {
-          "const": "EXACT_STEM_ONLY_SUFFIX_AND_CARRIER_UNPROVEN"
+          "const": "EXACT_MEMBER_RAW_VERIFIED"
         },
         "variants": {
           "type": "array",
@@ -596,6 +668,89 @@
         },
         "runtime_ready": {
           "const": false
+        },
+        "body_carrier_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "body_source": {
+          "$ref": "#/$defs/sourceRef"
+        },
+        "body_character_attributes": {
+          "type": "object",
+          "properties": {
+            "RelativePath": {
+              "type": "string"
+            },
+            "BaseFile": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "RelativePath",
+            "BaseFile"
+          ],
+          "additionalProperties": false
+        },
+        "body_link_id": {
+          "type": "string"
+        },
+        "body_binding_basis": {
+          "const": "ACTOR_FILE_STEM_EQUALS_UNIQUE_MEMBER_BASENAME"
+        },
+        "body_runtime_resolution_verified": {
+          "const": false
+        },
+        "body_pre_specific_overrides_verified": {
+          "const": false
+        },
+        "matrix_cells": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/rawMatrixCell"
+          }
+        },
+        "animations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/rawAnimation"
+          }
+        },
+        "other_resource_refs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "enum": [
+                  "base_model",
+                  "texture"
+                ]
+              },
+              "resource_reference": {
+                "type": "string"
+              },
+              "source": {
+                "$ref": "#/$defs/sourceRef"
+              },
+              "link_id": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "kind",
+              "resource_reference",
+              "source",
+              "link_id"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "open_requirement_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       },
       "required": [
@@ -614,7 +769,18 @@
         "ai_fields",
         "required_member_ids",
         "link_ids",
-        "runtime_ready"
+        "runtime_ready",
+        "body_carrier_sha256",
+        "body_source",
+        "body_character_attributes",
+        "body_link_id",
+        "body_binding_basis",
+        "body_runtime_resolution_verified",
+        "body_pre_specific_overrides_verified",
+        "matrix_cells",
+        "animations",
+        "other_resource_refs",
+        "open_requirement_ids"
       ],
       "additionalProperties": false
     },
@@ -631,7 +797,8 @@
           "const": false
         },
         "member_sha256": {
-          "type": "null"
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
         },
         "required_member_id": {
           "type": "string"
@@ -641,6 +808,19 @@
             "monster_core",
             "optional_character_comparison"
           ]
+        },
+        "present_in_uploaded_archive": {
+          "const": true
+        },
+        "carrier": {
+          "const": "Table.stp"
+        },
+        "carrier_sha256_verified": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "member_source": {
+          "$ref": "#/$defs/sourceRef"
         }
       },
       "required": [
@@ -649,7 +829,11 @@
         "present_in_package",
         "member_sha256",
         "required_member_id",
-        "scope"
+        "scope",
+        "present_in_uploaded_archive",
+        "carrier",
+        "carrier_sha256_verified",
+        "member_source"
       ],
       "additionalProperties": false
     },
@@ -700,6 +884,293 @@
         "numeric_value",
         "approved_by_s00",
         "provenance"
+      ],
+      "additionalProperties": false
+    },
+    "rawMatrixCell": {
+      "type": "object",
+      "properties": {
+        "source_status": {
+          "const": "已知來源值"
+        },
+        "evidence_kind": {
+          "const": "raw_archive_member_literal"
+        },
+        "matrix_tier": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "matrix_key": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "matrix_variant": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "actor_pre": {
+          "type": "null"
+        },
+        "skill_word": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 65535
+        },
+        "source": {
+          "$ref": "#/$defs/sourceRef"
+        },
+        "raw_matrix_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "link_id": {
+          "type": "string"
+        },
+        "skillactive_no_present_in_supplied_member": {
+          "const": false
+        },
+        "effect_index_present_in_supplied_member": {
+          "type": "boolean"
+        },
+        "skill_action_effect_binding": {
+          "const": "UNKNOWN"
+        },
+        "domain_collision_note": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "source_status",
+        "evidence_kind",
+        "matrix_tier",
+        "matrix_key",
+        "matrix_variant",
+        "actor_pre",
+        "skill_word",
+        "source",
+        "raw_matrix_sha256",
+        "link_id",
+        "skillactive_no_present_in_supplied_member",
+        "effect_index_present_in_supplied_member",
+        "skill_action_effect_binding",
+        "domain_collision_note"
+      ],
+      "additionalProperties": false
+    },
+    "rawAnimation": {
+      "type": "object",
+      "properties": {
+        "source_status": {
+          "const": "已知來源值"
+        },
+        "evidence_kind": {
+          "const": "raw_archive_member_literal"
+        },
+        "slot": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "name": {
+          "type": "string"
+        },
+        "raw_attributes": {
+          "type": "object",
+          "properties": {
+            "ID": {
+              "type": "string"
+            },
+            "File": {
+              "type": "string"
+            },
+            "CameraAttach": {
+              "type": "string"
+            },
+            "FrameSpeed": {
+              "type": "string"
+            },
+            "FaceIndex": {
+              "type": "string"
+            },
+            "Repeat": {
+              "type": "string"
+            },
+            "RepeatStartFrame": {
+              "type": "string"
+            },
+            "LagtimeType": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "ID",
+            "File",
+            "CameraAttach",
+            "FrameSpeed",
+            "FaceIndex",
+            "Repeat",
+            "RepeatStartFrame",
+            "LagtimeType"
+          ],
+          "additionalProperties": false
+        },
+        "relative_clip_reference": {
+          "type": "string"
+        },
+        "actor_pre": {
+          "type": "null"
+        },
+        "frame_speed_raw": {
+          "type": "string"
+        },
+        "frame_speed_unit": {
+          "type": "null"
+        },
+        "frames": {
+          "type": "null"
+        },
+        "fps": {
+          "type": "null"
+        },
+        "presentation_duration_ms": {
+          "type": "null"
+        },
+        "server_ai_duration_ms": {
+          "type": "null"
+        },
+        "raw_body_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "source": {
+          "$ref": "#/$defs/sourceRef"
+        },
+        "link_id": {
+          "type": "string"
+        },
+        "effects": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "raw_attributes": {
+                "type": "object",
+                "properties": {
+                  "File": {
+                    "type": "string"
+                  },
+                  "Folder": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "File",
+                  "Folder"
+                ],
+                "additionalProperties": false
+              },
+              "resource_path": {
+                "type": "string"
+              },
+              "timing": {
+                "type": "null"
+              },
+              "timing_unit": {
+                "type": "null"
+              },
+              "referenced_member_verified": {
+                "const": false
+              },
+              "source": {
+                "$ref": "#/$defs/sourceRef"
+              },
+              "link_id": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "raw_attributes",
+              "resource_path",
+              "timing",
+              "timing_unit",
+              "referenced_member_verified",
+              "source",
+              "link_id"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "sounds": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "raw_attributes": {
+                "type": "object",
+                "properties": {
+                  "File": {
+                    "type": "string"
+                  },
+                  "Folder": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "File",
+                  "Folder"
+                ],
+                "additionalProperties": false
+              },
+              "resource_path": {
+                "type": "string"
+              },
+              "timing": {
+                "type": "null"
+              },
+              "timing_unit": {
+                "type": "null"
+              },
+              "referenced_member_verified": {
+                "const": false
+              },
+              "source": {
+                "$ref": "#/$defs/sourceRef"
+              },
+              "link_id": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "raw_attributes",
+              "resource_path",
+              "timing",
+              "timing_unit",
+              "referenced_member_verified",
+              "source",
+              "link_id"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "source_status",
+        "evidence_kind",
+        "slot",
+        "name",
+        "raw_attributes",
+        "relative_clip_reference",
+        "actor_pre",
+        "frame_speed_raw",
+        "frame_speed_unit",
+        "frames",
+        "fps",
+        "presentation_duration_ms",
+        "server_ai_duration_ms",
+        "raw_body_sha256",
+        "source",
+        "link_id",
+        "effects",
+        "sounds"
       ],
       "additionalProperties": false
     }
