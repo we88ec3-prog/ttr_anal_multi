@@ -1,0 +1,433 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "0.1.0"
+    },
+    "model_kind": {
+      "const": "SERVER_CANDIDATE_NOT_NATIVE_MEF"
+    },
+    "entry_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "quest": {
+      "$ref": "urn:ttr:server-candidate:quest-definition:0.1.0#/$defs/questId"
+    },
+    "field": {
+      "$ref": "urn:ttr:server-candidate:quest-definition:0.1.0#/$defs/fieldId"
+    },
+    "case": {
+      "anyOf": [
+        {
+          "$ref": "urn:ttr:server-candidate:quest-definition:0.1.0#/$defs/caseId"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "join_kind": {
+      "const": "QUEST_FIELD_EQUALS_CASE_STAGE_CANDIDATE"
+    },
+    "mode": {
+      "const": "SINGLE_EXPEDITION_SCENARIO"
+    },
+    "multiplayer_party_contract": {
+      "type": "null"
+    },
+    "lifecycle_profile": {
+      "enum": [
+        "TUTORIAL_CONTINUATION",
+        "GENERAL_SCENARIO"
+      ]
+    },
+    "tutorial_hook_contract_ref": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "admission_policy_ref": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "allowed_formation_policy_ref": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "legacy_formation_constraint": {
+      "anyOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "source_policy": {
+              "type": "string",
+              "minLength": 1
+            },
+            "selected_leader_count": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "owned_character_ids": {
+              "type": "array",
+              "items": {
+                "$ref": "urn:ttr:server-candidate:quest-definition:0.1.0#/$defs/characterId"
+              },
+              "minItems": 0
+            }
+          },
+          "required": [
+            "source_policy",
+            "selected_leader_count",
+            "owned_character_ids"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "formation_token_contract": {
+      "const": "OPAQUE_SERVER_ISSUED_ECHO_BOUND_TO_OWNER_AND_ADMISSION"
+    },
+    "mapflow_member": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "cluster_member": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "map_graph": {
+      "anyOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "nodes": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "node_key": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "map_choices": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "map": {
+                          "$ref": "urn:ttr:server-candidate:quest-definition:0.1.0#/$defs/mapId"
+                        },
+                        "weight_raw": {
+                          "anyOf": [
+                            {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "map",
+                        "weight_raw"
+                      ]
+                    },
+                    "minItems": 1
+                  },
+                  "source": {
+                    "$ref": "urn:ttr:server-candidate:quest-definition:0.1.0#/$defs/evidence"
+                  }
+                },
+                "required": [
+                  "node_key",
+                  "map_choices",
+                  "source"
+                ]
+              },
+              "minItems": 1
+            },
+            "edges": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "from_node": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "to_node": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "trigger_policy_ref": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "source": {
+                    "$ref": "urn:ttr:server-candidate:quest-definition:0.1.0#/$defs/evidence"
+                  }
+                },
+                "required": [
+                  "from_node",
+                  "to_node",
+                  "trigger_policy_ref",
+                  "source"
+                ]
+              },
+              "minItems": 0
+            },
+            "source": {
+              "$ref": "urn:ttr:server-candidate:quest-definition:0.1.0#/$defs/evidence"
+            }
+          },
+          "required": [
+            "nodes",
+            "edges",
+            "source"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "completion_rule_ref": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "after_clear_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "retain_combat_until_map_or_result_transition": {
+          "const": true
+        },
+        "allow_empty_space_actions": {
+          "const": true
+        },
+        "prevent_second_outcome_commit": {
+          "const": true
+        },
+        "source": {
+          "$ref": "urn:ttr:server-candidate:quest-definition:0.1.0#/$defs/evidence"
+        }
+      },
+      "required": [
+        "retain_combat_until_map_or_result_transition",
+        "allow_empty_space_actions",
+        "prevent_second_outcome_commit",
+        "source"
+      ]
+    },
+    "portal_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "activation": {
+          "const": "STAND_INSIDE_AND_PRESS_Z"
+        },
+        "candidate_wire_automatic_flag": {
+          "const": 0
+        },
+        "geometry_binding_ref": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "source": {
+          "$ref": "urn:ttr:server-candidate:quest-definition:0.1.0#/$defs/evidence"
+        }
+      },
+      "required": [
+        "activation",
+        "candidate_wire_automatic_flag",
+        "geometry_binding_ref",
+        "source"
+      ]
+    },
+    "result_contract_ref": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "return_contract_ref": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "quest_completion_on_instance_result": {
+      "const": false
+    },
+    "status": {
+      "enum": [
+        "DRAFT_BLOCKED",
+        "REVIEWED_DISABLED",
+        "ENABLED_AFTER_ACCEPTANCE"
+      ]
+    },
+    "blocking_issues": {
+      "type": "array",
+      "items": {
+        "$ref": "urn:ttr:server-candidate:quest-definition:0.1.0#/$defs/issue"
+      },
+      "minItems": 0
+    },
+    "provenance": {
+      "type": "array",
+      "items": {
+        "$ref": "urn:ttr:server-candidate:quest-definition:0.1.0#/$defs/evidence"
+      },
+      "minItems": 1
+    }
+  },
+  "required": [
+    "schema_version",
+    "model_kind",
+    "entry_id",
+    "quest",
+    "field",
+    "case",
+    "join_kind",
+    "mode",
+    "multiplayer_party_contract",
+    "lifecycle_profile",
+    "tutorial_hook_contract_ref",
+    "admission_policy_ref",
+    "allowed_formation_policy_ref",
+    "legacy_formation_constraint",
+    "formation_token_contract",
+    "mapflow_member",
+    "cluster_member",
+    "map_graph",
+    "completion_rule_ref",
+    "after_clear_policy",
+    "portal_policy",
+    "result_contract_ref",
+    "return_contract_ref",
+    "quest_completion_on_instance_result",
+    "status",
+    "blocking_issues",
+    "provenance"
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ttr:server-candidate:scenario-entry:0.1.0",
+  "title": "單人Scenario入場資料 0.1.0 — Server候選；非原生MEF",
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "ENABLED_AFTER_ACCEPTANCE"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "blocking_issues": {
+            "maxItems": 0
+          },
+          "admission_policy_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "allowed_formation_policy_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "map_graph": {
+            "type": "object"
+          },
+          "completion_rule_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "portal_policy": {
+            "properties": {
+              "geometry_binding_ref": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

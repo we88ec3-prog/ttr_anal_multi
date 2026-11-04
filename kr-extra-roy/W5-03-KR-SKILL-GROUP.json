@@ -1,0 +1,86 @@
+{
+  "schema": "w5-03-kr-client-skill-group-s2c-0127-v1",
+  "status": "BOUNDED_NATIVE_PARTIAL_NOT_SKILL_ACQUISITION",
+  "kr_bin_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+  "registration": {
+    "va": "0x4E21BF",
+    "handler": "0x4E48A0",
+    "table_stride": 8,
+    "handler_offset": 4,
+    "table_write_offset": "0x93C",
+    "opcode": "0x0127",
+    "direction": "S2C"
+  },
+  "payload": {
+    "header_bytes": 5,
+    "entries_stride": 4,
+    "min_read_bytes": 5,
+    "entry_count_formula": "floor((decoded_app_len-5)/4)",
+    "role_index": {
+      "offset": 2,
+      "type": "u8",
+      "max": 9
+    },
+    "group": {
+      "offset": 3,
+      "type": "u8",
+      "max": 6
+    },
+    "group_metadata": {
+      "offset": 4,
+      "type": "u8",
+      "writer": "role+0x110+group*28+0x18"
+    },
+    "skill_entries": [
+      {
+        "offset": "5+4*i",
+        "type": "u16le",
+        "meaning": "skill candidate metadata key"
+      },
+      {
+        "offset": "7+4*i",
+        "type": "u8",
+        "meaning": "vector entry value candidate"
+      },
+      {
+        "offset": "8+4*i",
+        "type": "u8",
+        "meaning": "not consumed in verified loop"
+      }
+    ]
+  },
+  "record": {
+    "store_ptr_offset": "Client+0x6924",
+    "stride": "0x210",
+    "category_base_offset": "0x110",
+    "category_stride": 28,
+    "group_writer": "0x4E4911",
+    "clear_handler": "0x4D4270",
+    "append_update": "0x41D780",
+    "aggregate": "category+0x14",
+    "metadata_key_map": "0xFB11AC",
+    "composite_rebuild": "0x41D5F0",
+    "downstream": "0x825FA0"
+  },
+  "native_repro": {
+    "positive_prefixes": 44,
+    "direct_e8_callees": 2
+  },
+  "unknown": [
+    "original C2S skill learn/unlock producer",
+    "original skill grant reply pairing",
+    "official group category and value semantics",
+    "actual S2C final send/scene timing",
+    "item/equip acquisition and UI data writer",
+    "recruitment transaction"
+  ],
+  "server_only": [
+    "authoritative skill grants and unlock policy",
+    "character-specific persistent skill inventory",
+    "source-reviewed skill-group codec and session sync",
+    "transaction and revision semantics"
+  ],
+  "full_pass": false,
+  "server_approved": false,
+  "runtime_tested": false
+}

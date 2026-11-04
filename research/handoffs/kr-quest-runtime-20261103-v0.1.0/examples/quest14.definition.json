@@ -1,0 +1,187 @@
+{
+  "schema_version": "0.1.0",
+  "model_kind": "SERVER_CANDIDATE_NOT_NATIVE_MEF",
+  "client_profile": {
+    "region": "KR",
+    "binary_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91"
+  },
+  "id": {
+    "domain": "quest",
+    "value": 14
+  },
+  "display_name": {
+    "ko_raw": "튜토리얼-이실리아",
+    "zh_tw_working_translation": "教學：伊希莉亞",
+    "translation_status": "WORKING_TRANSLATION"
+  },
+  "source_data": {
+    "raw_attributes": {
+      "id": "14",
+      "type": "3",
+      "town": "0",
+      "field": "18",
+      "level": "1",
+      "giver": "10027",
+      "finisher": "10027",
+      "subtype": "1",
+      "subject": "튜토리얼-이실리아"
+    },
+    "quest_type_raw": 3,
+    "subtype_raw": 1,
+    "town": {
+      "domain": "town",
+      "value": 0
+    },
+    "field": {
+      "domain": "field",
+      "value": 18
+    },
+    "level_raw": 1,
+    "giver": {
+      "domain": "npc",
+      "value": 10027
+    },
+    "finisher": {
+      "domain": "npc",
+      "value": 10027
+    },
+    "demand_ids": [],
+    "demand_operator_raw": null,
+    "contents_present": false,
+    "accept_action_raw": {
+      "type": "1"
+    },
+    "complete_action_raw": {
+      "type": "1"
+    },
+    "quest_talk_row_present": false,
+    "reward_etc_present": false,
+    "reward_items_present": false,
+    "chapters": [],
+    "source": {
+      "source_ref": "07-Table.stp!Table/QuestInfo.xml#/QuestInfo/Quest[@id='14']",
+      "source_sha": "5d251415fdfdc453adefbff03114ded5a8ea41b696ce0aab86a23070e0fdca60",
+      "evidence_kind": "CLIENT_RESOURCE_DIRECT",
+      "unknowns": [
+        "Level comparison and character/account scope are Server contract requirements, not declared here.",
+        "Missing XML node is absent; no default action/reward/target is inferred.",
+        "Demands carries only id entries; multi-entry AND/OR consumer needs native evidence.",
+        "Quest completion condition, objective type/count, replay policy and reward type semantics are not encoded in selected rows."
+      ]
+    }
+  },
+  "policy": {
+    "classification": "SERVER_CANDIDATE_DESIGN",
+    "progress_scope": null,
+    "eligibility_rule": null,
+    "acceptance_rule": null,
+    "npc_visibility_rule": null,
+    "character_restrictions": null,
+    "repeatability": null,
+    "branch_policy_ref": null,
+    "source": {
+      "source_ref": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac/research/handoffs/s00-input-and-quest-reuse-20261103/W2-REUSABLE-QUEST-RUNTIME.md",
+      "source_sha": "ad9db1e2ca4a33eccb453f941df6330d9500aaab4576130ef299ba59b9135b4e",
+      "evidence_kind": "SERVER_CANDIDATE_DESIGN",
+      "unknowns": [
+        "原始Demands清單與Client篩選不是完整Server規則。"
+      ]
+    }
+  },
+  "objectives": [
+    {
+      "objective_key": "q14.legal_completion",
+      "kind": null,
+      "target_ref": null,
+      "required_count": null,
+      "counter_scope": null,
+      "event_contract": null,
+      "filters": null,
+      "status": "BLOCKED",
+      "source": {
+        "source_ref": "07-Table.stp!Table/QuestInfo.xml#/QuestInfo/Quest[@id='14']",
+        "source_sha": "5d251415fdfdc453adefbff03114ded5a8ea41b696ce0aab86a23070e0fdca60",
+        "evidence_kind": "CLIENT_RESOURCE_DIRECT",
+        "unknowns": [
+          "所選Quest無結構化Contents目標；不可由scene數、Field或文字推導目標/數量/作用域。"
+        ]
+      }
+    }
+  ],
+  "rewards": [],
+  "reward_policy_status": "BLOCKED",
+  "settlement": {
+    "objective_rule": null,
+    "turnin_rule": null,
+    "reward_plan_ref": null,
+    "transaction_contract": "QUEST_SETTLEMENT_TRANSACTION_V0_1",
+    "status": "BLOCKED",
+    "source": {
+      "source_ref": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/76e6f9ba9a130bf8b8abb404f21ab75d18cb19ac/research/handoffs/s00-input-and-quest-reuse-20261103/W2-REUSABLE-QUEST-RUNTIME.md",
+      "source_sha": "ad9db1e2ca4a33eccb453f941df6330d9500aaab4576130ef299ba59b9135b4e",
+      "evidence_kind": "SERVER_CANDIDATE_DESIGN",
+      "unknowns": [
+        "獨立合法完成/交付/發獎政策尚未定；此形狀完整但不得執行。"
+      ]
+    }
+  },
+  "scenario_entry_ref": "scenario.q14.candidate",
+  "flow_ref": "tutorial.current-candidate",
+  "unlock_candidates": [
+    {
+      "domain": "quest",
+      "value": 16
+    }
+  ],
+  "activation": "DRAFT_BLOCKED",
+  "blocking_issues": [
+    {
+      "code": "SCOPE_UNDECIDED",
+      "field": "policy.progress_scope",
+      "responsibility": "SERVER_DESIGN",
+      "reason": "正常進度scope尚未核准；既有候選按account保存，Tab切角不能隱式分家。",
+      "unblock_evidence": "S00 scope/owner與遷移規則核准。"
+    },
+    {
+      "code": "LEGAL_OBJECTIVE_UNBOUND",
+      "field": "objectives",
+      "responsibility": "SERVER_DESIGN",
+      "reason": "原表沒有足夠結構化目標，不以播放或任意receipt當合法達成。",
+      "unblock_evidence": "逐任務目標predicate、來源事件、數量/作用域與正流程卡。"
+    },
+    {
+      "code": "ACCEPT_TURNIN_ADAPTER",
+      "field": "policy.acceptance_rule",
+      "responsibility": "CLIENT_RESEARCH",
+      "reason": "已有條件式NPC/Quest UI收發，不等於本任務每一操作的完整原生配對。",
+      "unblock_evidence": "對應NPC/controller/UI mode的意圖與回覆consumer證據。"
+    },
+    {
+      "code": "REWARD_PLAN_UNBOUND",
+      "field": "settlement.reward_plan_ref",
+      "responsibility": "SERVER_DESIGN",
+      "reason": "raw reward metadata/顯示域不是發獎交易；未列reward亦不可默認零。",
+      "unblock_evidence": "S00可實作reward plan/歸屬/發放時點與Client publication adapter。"
+    },
+    {
+      "code": "CONTENT_NOT_GAMEPLAY_VERIFIED",
+      "field": "activation",
+      "responsibility": "GAMEPLAY_ACCEPTANCE",
+      "reason": "此資料例與新引擎未做正常通關驗收。",
+      "unblock_evidence": "保留既有通路，在隔離正流程完成逐卡觀察與正常保存核對。"
+    }
+  ],
+  "provenance": [
+    {
+      "source_ref": "07-Table.stp!Table/QuestInfo.xml#/QuestInfo/Quest[@id='14']",
+      "source_sha": "5d251415fdfdc453adefbff03114ded5a8ea41b696ce0aab86a23070e0fdca60",
+      "evidence_kind": "CLIENT_RESOURCE_DIRECT",
+      "unknowns": [
+        "Level comparison and character/account scope are Server contract requirements, not declared here.",
+        "Missing XML node is absent; no default action/reward/target is inferred.",
+        "Demands carries only id entries; multi-entry AND/OR consumer needs native evidence.",
+        "Quest completion condition, objective type/count, replay policy and reward type semantics are not encoded in selected rows."
+      ]
+    }
+  ]
+}

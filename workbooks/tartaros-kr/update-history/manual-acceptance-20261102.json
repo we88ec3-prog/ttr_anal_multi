@@ -1,0 +1,1846 @@
+{
+  "schema": "s00-manual-acceptance-backfill-v1",
+  "recorded_date": "2026-11-02",
+  "basis": "Existing human reports, persisted before/after evidence and prior synthetic run; no new game or test execution.",
+  "source_analysis_main_before_edit": "92b6cb37c8ec42bd442cd4347ec10c34edc07b43",
+  "evidence": {
+    "date": "2026-11-02",
+    "client_sha256": "6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c",
+    "human_server_commit": "cd2a7bc70f3cfb92602628137bf65c5df81b0eb2",
+    "synthetic_server_commit": "1473173883b83c7a456e7816470273e81664972a",
+    "analysis_evidence_commit": "2d2fdc09249a2a594ff379eba332ebbebb58e9c8",
+    "items": [
+      {
+        "id": "HP-01",
+        "status": "PARTIAL",
+        "result": "測試帳號已建立且可登入；未單獨驗收後台建立帳號畫面。本次未重測。",
+        "scope": "帳號供應與登入成功不等於 Admin 建立帳號 UI 已驗收。",
+        "kind": "帳號準備／後續人測間接證據",
+        "unknown": "後台手動建立帳號流程未單獨驗收。"
+      },
+      {
+        "id": "HP-02",
+        "status": "PASS_WORKING_COPY",
+        "result": "指定工作副本已成功連入本機 Server，完成後續教學。本次未重測。",
+        "scope": "指定修改工作副本＋loopback 的正常連線通過；非未修改原版相容性。",
+        "kind": "使用者操作＋連線／handoff metadata",
+        "unknown": "不涵蓋其他 EXE、遠端網路或所有 socket／mode 組合。"
+      },
+      {
+        "id": "HP-03",
+        "status": "PASS_WORKING_COPY",
+        "result": "短帳號輸入帳密後成功登入並接續正常流程。本次未重測。",
+        "scope": "目前測試帳號／憑證策略的登入通過，非全部登入 builder 變體。",
+        "kind": "使用者操作＋AUTHACCEPTED metadata",
+        "unknown": "未涵蓋所有 mode52／54 路徑、長帳號與其他編碼。"
+      },
+      {
+        "id": "HP-04",
+        "status": "PASS_WORKING_COPY",
+        "result": "認證與登入回覆成功，能繼續選服及教學。本次未重測。",
+        "scope": "指定工作副本的正常成功回覆與 UI 流程通過；不驗收全部狀態碼。",
+        "kind": "使用者操作＋163B TXCOMPLETED／handoff metadata",
+        "unknown": "原版 request/reply 全配對及錯誤狀態未驗收。"
+      },
+      {
+        "id": "HP-05",
+        "status": "PASS_WORKING_COPY",
+        "result": "選服／分流後連接成功，能命名並進入教學。本次未重測。",
+        "scope": "目前單一本機測試配置；不代表所有分流及重新連線路徑通過。",
+        "kind": "使用者操作＋primary handoff metadata",
+        "unknown": "其他伺服器／分流與重登測試暫緩。"
+      },
+      {
+        "id": "HP-06",
+        "status": "PARTIAL",
+        "result": "primary roster 與後續自有隊員資料已有證據；一般角色清單畫面未逐 gate 單獨驗收。",
+        "scope": "冒險團隊員與獨立 character 選角模型分開，不將角色資料存在視為全部 UI 已驗收。",
+        "kind": "roster metadata＋測前／測後資料",
+        "unknown": "command2 各種 gate 與一般列表 UI 尚未完整驗收。"
+      },
+      {
+        "id": "HP-07",
+        "status": "NOT_COVERED",
+        "result": "本輪走冒險團命名及教學；未驗收 N=0 一般創角對話框。",
+        "scope": "目前正常冒險團流程不等於通用無角色創角 UI。",
+        "kind": "未涵蓋／模型不同",
+        "unknown": "一般創角入口另行驗收，不因教學通過標記 PASS。"
+      },
+      {
+        "id": "HP-08",
+        "status": "PASS_WORKING_COPY",
+        "result": "新帳號輸入冒險團名稱後視窗關閉，進入教學；測後命名已保存。本次未重測。",
+        "scope": "指定工作副本正常命名／教學入口通過；不含全部命名錯誤分支。",
+        "kind": "使用者操作＋命名 metadata／profile 保存",
+        "unknown": "命名邊界、錯誤及重送測試暫緩。"
+      },
+      {
+        "id": "HP-09",
+        "status": "PARTIAL",
+        "result": "教學後自有隊員1／2／3／4與蘋果招募已有證據；通用 CEmployNewCharacter／C2S33 流程未獨立完整驗收。",
+        "scope": "教學角色取得通過，不擴張為全部角色建立／招募介面通過。",
+        "kind": "使用者招募回報＋測後角色保存",
+        "unknown": "各角色招募條件及通用 C2S33 全流程仍需驗收。"
+      },
+      {
+        "id": "HP-10",
+        "status": "NOT_COVERED",
+        "result": "教學 Tab 切角有人測通過；此列的一般列表選角 C2S42 未單獨驗收。",
+        "scope": "Tab 切角與一般角色列表選擇是不同入口。",
+        "kind": "未涵蓋／入口不同",
+        "unknown": "列表 roleIndex／mode gate 與 C2S42 另行驗收。"
+      },
+      {
+        "id": "HP-11",
+        "status": "PASS_WORKING_COPY",
+        "result": "廣場人物與 NPC 出現，能移動並放開停止。本次未重測。",
+        "scope": "目前廣場候選初始化有人測通過，不代表普通村落入場或載入畫面可見性已通過。",
+        "kind": "使用者畫面／操作回報＋正常教學 metadata",
+        "unknown": "載入／轉場畫面可見性未確認；普通 Town1 仍未完成。"
+      },
+      {
+        "id": "HP-12",
+        "status": "PASS_WORKING_COPY",
+        "result": "新帳號能進教學，完成移動、視角、切角、預設伊莉西亞首戰與招募流程。本次未重測。",
+        "scope": "正常教學流程通過，戰鬥品質與正式 Quest 結算另列。",
+        "kind": "使用者完整教學回報＋Server 首戰勝利保存",
+        "unknown": "不代表 MEF／原生 AI 或全部技能／連段正確。"
+      },
+      {
+        "id": "HP-13",
+        "status": "NOT_PASSED_WORKING_COPY",
+        "result": "先前點廣場主線 NPC 後無反應並不能移動；尚無修正版人測通過紀錄。",
+        "scope": "使用者未能辨識韓文 NPC 名稱，不把該次問題擅自歸給特定 NPC ID。",
+        "kind": "使用者問題回報；後續修正僅合成驗證",
+        "unknown": "NPC 意圖、Quest15 後續劇情與正常進村接續待完成／驗收。",
+        "source": "conversation"
+      },
+      {
+        "id": "HP-14",
+        "status": "PARTIAL",
+        "result": "首戰可進場、普攻擊敗敵人並返回；連擊速度、移動中受擊／攻擊銜接仍有待改善。",
+        "scope": "戰鬥流程可完成，未通過完整戰鬥手感、怪物平衡或 MEF 邏輯驗收。",
+        "kind": "使用者首戰完成及後續缺陷回報",
+        "unknown": "連擊／移動後攻擊留到馮德斯副本優化；目前 AI 由 Server 程式控制，非已還原 MEF。",
+        "source": "conversation"
+      },
+      {
+        "id": "HP-15",
+        "status": "PASS_WORKING_COPY",
+        "result": "使用者確認完成教學、招募及後續劇情，到廣場且能移動停止。本次未重測。",
+        "scope": "人工遊玩流程通過；不把 Scenario end 等同 Quest14／16 合法結算、獎勵或終態持久化。",
+        "kind": "新帳號完整正流程人測＋測前／測後保存",
+        "unknown": "正式結算／獎勵發布／終態保存與轉場可見性未由此輪驗收。"
+      },
+      {
+        "id": "HP-16",
+        "status": "NOT_READY",
+        "title": "正常主線到達馮德斯村",
+        "result": "尚未完成可驗收版本；目前沒有正常進村通過紀錄。",
+        "scope": "必須從正常主線接續到一般村落，不能以演出地圖或直接傳送代替。",
+        "kind": "待開發／待人測",
+        "unknown": "Quest15 劇情／必要戰鬥接續、普通村落控制器、合法出生點與入場保存。",
+        "source": "conversation"
+      }
+    ]
+  },
+  "status_counts_HP": {
+    "PARTIAL": 4,
+    "PASS_WORKING_COPY": 8,
+    "NOT_COVERED": 2,
+    "NOT_PASSED_WORKING_COPY": 1,
+    "NOT_READY": 1
+  },
+  "synthetic_cases_passed": 26,
+  "formal_TEST_definitions_unchanged": 6,
+  "unmodified_original_Client_acceptance": "NOT_VERIFIED",
+  "verification": [
+    {
+      "file": "06_測試驗收.xlsx",
+      "changed_cells": 209,
+      "unrelated_cells_preserved": true,
+      "existing_ID_rows_preserved": true,
+      "native_sheet_controls_preserved": true
+    },
+    {
+      "file": "00_儀表板.xlsx",
+      "changed_cells": 28,
+      "unrelated_cells_preserved": true,
+      "existing_ID_rows_preserved": true,
+      "native_sheet_controls_preserved": true
+    }
+  ],
+  "files": [
+    {
+      "file": "06_測試驗收.xlsx",
+      "before_sha256": "03b18799351d189ba5e3a64da0a9fd4b77c6e5d61388696099f3f84e08b95176",
+      "after_sha256": "0037f574012227a37e353fcaab6fc519c1db744c6c4029d43c53c08a9c660866"
+    },
+    {
+      "file": "00_儀表板.xlsx",
+      "before_sha256": "bfb1e12ff90c6fcede3e8cf43aca7b4f4b3ece1fab2da68d0b3df933a4566930",
+      "after_sha256": "078dacee3ccf9a44fbd84602cd07a19d573b8d321741127161acfd3875a62fdb"
+    }
+  ],
+  "changes": [
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HEADER",
+      "cell": "W5",
+      "old": "",
+      "new": "驗收證據種類"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HEADER",
+      "cell": "X5",
+      "old": "",
+      "new": "測試 Client SHA256"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HEADER",
+      "cell": "Y5",
+      "old": "",
+      "new": "測試 Server commit"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HEADER",
+      "cell": "Z5",
+      "old": "",
+      "new": "登錄日期"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HEADER",
+      "cell": "AA5",
+      "old": "",
+      "new": "未修改原版 Client 驗收"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HEADER",
+      "cell": "AB5",
+      "old": "",
+      "new": "未涵蓋／待改善"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HEADER",
+      "cell": "E5",
+      "old": "定義狀態",
+      "new": "驗收狀態／正式定義"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HEADER",
+      "cell": "F5",
+      "old": "本次執行結果",
+      "new": "已知驗收結果／本次是否重測"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-01",
+      "cell": "B12",
+      "old": "本工作台建議驗收",
+      "new": "工作副本流程驗收"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-01",
+      "cell": "E12",
+      "old": "NOT_RUN",
+      "new": "PARTIAL"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-01",
+      "cell": "F12",
+      "old": "未實測",
+      "new": "測試帳號已建立且可登入；未單獨驗收後台建立帳號畫面。本次未重測。"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-01",
+      "cell": "G12",
+      "old": "原版 Client 畫面或可觀察行為必須符合預期",
+      "new": "帳號供應與登入成功不等於 Admin 建立帳號 UI 已驗收。"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-01",
+      "cell": "K12",
+      "old": "https://github.com/we88ec3-prog/ttr_server_roy/blob/69c714c54fb5c802251736ee38ff37c19fba3c53/docs/WEB-ADMIN-LOCAL.md",
+      "new": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/2d2fdc09249a2a594ff379eba332ebbebb58e9c8/governance/s00-iterations/S00-20261102-FRESH-TUTORIAL-HUMAN-PASS.md"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-01",
+      "cell": "L12",
+      "old": "https://github.com/we88ec3-prog/ttr_server_roy/blob/69c714c54fb5c802251736ee38ff37c19fba3c53/docs/TESTING-PRIORITY.md",
+      "new": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/2d2fdc09249a2a594ff379eba332ebbebb58e9c8/governance/s00-iterations/S00-20261102-FRESH-TUTORIAL-HUMAN-PASS.md"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-01",
+      "cell": "W12",
+      "old": "",
+      "new": "帳號準備／後續人測間接證據"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-01",
+      "cell": "Z12",
+      "old": "",
+      "new": "2026-11-02"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-01",
+      "cell": "AA12",
+      "old": "",
+      "new": "未驗收；指定修改工作副本結果不等同原版"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-01",
+      "cell": "AB12",
+      "old": "",
+      "new": "後台手動建立帳號流程未單獨驗收。"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-02",
+      "cell": "B13",
+      "old": "本工作台建議驗收",
+      "new": "工作副本流程驗收"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-02",
+      "cell": "E13",
+      "old": "NOT_RUN",
+      "new": "PASS_WORKING_COPY"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-02",
+      "cell": "F13",
+      "old": "未實測",
+      "new": "指定工作副本已成功連入本機 Server，完成後續教學。本次未重測。"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-02",
+      "cell": "G13",
+      "old": "原版 Client 畫面或可觀察行為必須符合預期",
+      "new": "指定修改工作副本＋loopback 的正常連線通過；非未修改原版相容性。"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-02",
+      "cell": "K13",
+      "old": "https://github.com/we88ec3-prog/ttr_server_roy/blob/69c714c54fb5c802251736ee38ff37c19fba3c53/docs/C04-E85-RUNTIME-OBSERVATION.md",
+      "new": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/2d2fdc09249a2a594ff379eba332ebbebb58e9c8/governance/s00-iterations/S00-20261102-FRESH-TUTORIAL-HUMAN-PASS.md"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-02",
+      "cell": "L13",
+      "old": "https://github.com/we88ec3-prog/ttr_server_roy/blob/69c714c54fb5c802251736ee38ff37c19fba3c53/docs/TESTING-PRIORITY.md",
+      "new": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/2d2fdc09249a2a594ff379eba332ebbebb58e9c8/governance/s00-iterations/S00-20261102-FRESH-TUTORIAL-HUMAN-PASS.md"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-02",
+      "cell": "W13",
+      "old": "",
+      "new": "使用者操作＋連線／handoff metadata"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-02",
+      "cell": "X13",
+      "old": "",
+      "new": "6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-02",
+      "cell": "Y13",
+      "old": "",
+      "new": "cd2a7bc70f3cfb92602628137bf65c5df81b0eb2"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-02",
+      "cell": "Z13",
+      "old": "",
+      "new": "2026-11-02"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-02",
+      "cell": "AA13",
+      "old": "",
+      "new": "未驗收；指定修改工作副本結果不等同原版"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-02",
+      "cell": "AB13",
+      "old": "",
+      "new": "不涵蓋其他 EXE、遠端網路或所有 socket／mode 組合。"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-03",
+      "cell": "B14",
+      "old": "本工作台建議驗收",
+      "new": "工作副本流程驗收"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-03",
+      "cell": "E14",
+      "old": "NOT_RUN",
+      "new": "PASS_WORKING_COPY"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-03",
+      "cell": "F14",
+      "old": "未實測",
+      "new": "短帳號輸入帳密後成功登入並接續正常流程。本次未重測。"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-03",
+      "cell": "G14",
+      "old": "原版 Client 畫面或可觀察行為必須符合預期",
+      "new": "目前測試帳號／憑證策略的登入通過，非全部登入 builder 變體。"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-03",
+      "cell": "K14",
+      "old": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/ac6aac673426459df2a778d20a80c623b8559a92/spec/session-account/SPEC-AUTH-0001.md",
+      "new": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/2d2fdc09249a2a594ff379eba332ebbebb58e9c8/governance/s00-iterations/S00-20261102-FRESH-TUTORIAL-HUMAN-PASS.md"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-03",
+      "cell": "L14",
+      "old": "https://github.com/we88ec3-prog/ttr_server_roy/blob/69c714c54fb5c802251736ee38ff37c19fba3c53/docs/TESTING-PRIORITY.md",
+      "new": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/2d2fdc09249a2a594ff379eba332ebbebb58e9c8/governance/s00-iterations/S00-20261102-FRESH-TUTORIAL-HUMAN-PASS.md"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-03",
+      "cell": "W14",
+      "old": "",
+      "new": "使用者操作＋AUTHACCEPTED metadata"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-03",
+      "cell": "X14",
+      "old": "",
+      "new": "6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-03",
+      "cell": "Y14",
+      "old": "",
+      "new": "cd2a7bc70f3cfb92602628137bf65c5df81b0eb2"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-03",
+      "cell": "Z14",
+      "old": "",
+      "new": "2026-11-02"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-03",
+      "cell": "AA14",
+      "old": "",
+      "new": "未驗收；指定修改工作副本結果不等同原版"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-03",
+      "cell": "AB14",
+      "old": "",
+      "new": "未涵蓋所有 mode52／54 路徑、長帳號與其他編碼。"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-04",
+      "cell": "B15",
+      "old": "本工作台建議驗收",
+      "new": "工作副本流程驗收"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-04",
+      "cell": "E15",
+      "old": "NOT_RUN",
+      "new": "PASS_WORKING_COPY"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-04",
+      "cell": "F15",
+      "old": "未實測",
+      "new": "認證與登入回覆成功，能繼續選服及教學。本次未重測。"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-04",
+      "cell": "G15",
+      "old": "原版 Client 畫面或可觀察行為必須符合預期",
+      "new": "指定工作副本的正常成功回覆與 UI 流程通過；不驗收全部狀態碼。"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-04",
+      "cell": "K15",
+      "old": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/ac6aac673426459df2a778d20a80c623b8559a92/spec/session-account/phase-b-message-matrix.md",
+      "new": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/2d2fdc09249a2a594ff379eba332ebbebb58e9c8/governance/s00-iterations/S00-20261102-FRESH-TUTORIAL-HUMAN-PASS.md"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-04",
+      "cell": "L15",
+      "old": "https://github.com/we88ec3-prog/ttr_server_roy/blob/69c714c54fb5c802251736ee38ff37c19fba3c53/docs/TESTING-PRIORITY.md",
+      "new": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/2d2fdc09249a2a594ff379eba332ebbebb58e9c8/governance/s00-iterations/S00-20261102-FRESH-TUTORIAL-HUMAN-PASS.md"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-04",
+      "cell": "W15",
+      "old": "",
+      "new": "使用者操作＋163B TXCOMPLETED／handoff metadata"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-04",
+      "cell": "X15",
+      "old": "",
+      "new": "6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-04",
+      "cell": "Y15",
+      "old": "",
+      "new": "cd2a7bc70f3cfb92602628137bf65c5df81b0eb2"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-04",
+      "cell": "Z15",
+      "old": "",
+      "new": "2026-11-02"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-04",
+      "cell": "AA15",
+      "old": "",
+      "new": "未驗收；指定修改工作副本結果不等同原版"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-04",
+      "cell": "AB15",
+      "old": "",
+      "new": "原版 request/reply 全配對及錯誤狀態未驗收。"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-05",
+      "cell": "B16",
+      "old": "本工作台建議驗收",
+      "new": "工作副本流程驗收"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-05",
+      "cell": "E16",
+      "old": "NOT_RUN",
+      "new": "PASS_WORKING_COPY"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-05",
+      "cell": "F16",
+      "old": "未實測",
+      "new": "選服／分流後連接成功，能命名並進入教學。本次未重測。"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-05",
+      "cell": "G16",
+      "old": "原版 Client 畫面或可觀察行為必須符合預期",
+      "new": "目前單一本機測試配置；不代表所有分流及重新連線路徑通過。"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-05",
+      "cell": "K16",
+      "old": "https://github.com/we88ec3-prog/ttr_server_roy/blob/69c714c54fb5c802251736ee38ff37c19fba3c53/docs/LOCAL-LOBBY-HANDOFF.md",
+      "new": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/2d2fdc09249a2a594ff379eba332ebbebb58e9c8/governance/s00-iterations/S00-20261102-FRESH-TUTORIAL-HUMAN-PASS.md"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-05",
+      "cell": "L16",
+      "old": "https://github.com/we88ec3-prog/ttr_server_roy/blob/69c714c54fb5c802251736ee38ff37c19fba3c53/docs/TESTING-PRIORITY.md",
+      "new": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/2d2fdc09249a2a594ff379eba332ebbebb58e9c8/governance/s00-iterations/S00-20261102-FRESH-TUTORIAL-HUMAN-PASS.md"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-05",
+      "cell": "W16",
+      "old": "",
+      "new": "使用者操作＋primary handoff metadata"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-05",
+      "cell": "X16",
+      "old": "",
+      "new": "6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-05",
+      "cell": "Y16",
+      "old": "",
+      "new": "cd2a7bc70f3cfb92602628137bf65c5df81b0eb2"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-05",
+      "cell": "Z16",
+      "old": "",
+      "new": "2026-11-02"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-05",
+      "cell": "AA16",
+      "old": "",
+      "new": "未驗收；指定修改工作副本結果不等同原版"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-05",
+      "cell": "AB16",
+      "old": "",
+      "new": "其他伺服器／分流與重登測試暫緩。"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-06",
+      "cell": "B17",
+      "old": "本工作台建議驗收",
+      "new": "工作副本流程驗收"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-06",
+      "cell": "E17",
+      "old": "NOT_RUN",
+      "new": "PARTIAL"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-06",
+      "cell": "F17",
+      "old": "未實測",
+      "new": "primary roster 與後續自有隊員資料已有證據；一般角色清單畫面未逐 gate 單獨驗收。"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-06",
+      "cell": "G17",
+      "old": "原版 Client 畫面或可觀察行為必須符合預期",
+      "new": "冒險團隊員與獨立 character 選角模型分開，不將角色資料存在視為全部 UI 已驗收。"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-06",
+      "cell": "K17",
+      "old": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/ac6aac673426459df2a778d20a80c623b8559a92/spec/session-account/SPEC-CHAR-0001.md",
+      "new": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/2d2fdc09249a2a594ff379eba332ebbebb58e9c8/governance/s00-iterations/S00-20261102-FRESH-TUTORIAL-HUMAN-PASS.md"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-06",
+      "cell": "L17",
+      "old": "https://github.com/we88ec3-prog/ttr_server_roy/blob/69c714c54fb5c802251736ee38ff37c19fba3c53/docs/TESTING-PRIORITY.md",
+      "new": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/2d2fdc09249a2a594ff379eba332ebbebb58e9c8/governance/s00-iterations/S00-20261102-FRESH-TUTORIAL-HUMAN-PASS.md"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-06",
+      "cell": "W17",
+      "old": "",
+      "new": "roster metadata＋測前／測後資料"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-06",
+      "cell": "X17",
+      "old": "",
+      "new": "6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-06",
+      "cell": "Y17",
+      "old": "",
+      "new": "cd2a7bc70f3cfb92602628137bf65c5df81b0eb2"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-06",
+      "cell": "Z17",
+      "old": "",
+      "new": "2026-11-02"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-06",
+      "cell": "AA17",
+      "old": "",
+      "new": "未驗收；指定修改工作副本結果不等同原版"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-06",
+      "cell": "AB17",
+      "old": "",
+      "new": "command2 各種 gate 與一般列表 UI 尚未完整驗收。"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-07",
+      "cell": "B18",
+      "old": "本工作台建議驗收",
+      "new": "工作副本流程驗收"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-07",
+      "cell": "E18",
+      "old": "NOT_RUN",
+      "new": "NOT_COVERED"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-07",
+      "cell": "F18",
+      "old": "未實測",
+      "new": "本輪走冒險團命名及教學；未驗收 N=0 一般創角對話框。"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-07",
+      "cell": "G18",
+      "old": "原版 Client 畫面或可觀察行為必須符合預期",
+      "new": "目前正常冒險團流程不等於通用無角色創角 UI。"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-07",
+      "cell": "K18",
+      "old": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/ac6aac673426459df2a778d20a80c623b8559a92/spec/session-account/SPEC-CHAR-0001.md",
+      "new": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/2d2fdc09249a2a594ff379eba332ebbebb58e9c8/governance/s00-iterations/S00-20261102-FRESH-TUTORIAL-HUMAN-PASS.md"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-07",
+      "cell": "L18",
+      "old": "https://github.com/we88ec3-prog/ttr_server_roy/blob/69c714c54fb5c802251736ee38ff37c19fba3c53/docs/TESTING-PRIORITY.md",
+      "new": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/2d2fdc09249a2a594ff379eba332ebbebb58e9c8/governance/s00-iterations/S00-20261102-FRESH-TUTORIAL-HUMAN-PASS.md"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-07",
+      "cell": "W18",
+      "old": "",
+      "new": "未涵蓋／模型不同"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-07",
+      "cell": "Z18",
+      "old": "",
+      "new": "2026-11-02"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-07",
+      "cell": "AA18",
+      "old": "",
+      "new": "未驗收；指定修改工作副本結果不等同原版"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-07",
+      "cell": "AB18",
+      "old": "",
+      "new": "一般創角入口另行驗收，不因教學通過標記 PASS。"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-08",
+      "cell": "B19",
+      "old": "本工作台建議驗收",
+      "new": "工作副本流程驗收"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-08",
+      "cell": "E19",
+      "old": "NOT_RUN",
+      "new": "PASS_WORKING_COPY"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-08",
+      "cell": "F19",
+      "old": "未實測",
+      "new": "新帳號輸入冒險團名稱後視窗關閉，進入教學；測後命名已保存。本次未重測。"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-08",
+      "cell": "G19",
+      "old": "原版 Client 畫面或可觀察行為必須符合預期",
+      "new": "指定工作副本正常命名／教學入口通過；不含全部命名錯誤分支。"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-08",
+      "cell": "K19",
+      "old": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/ac6aac673426459df2a778d20a80c623b8559a92/spec/session-account/SPEC-CHAR-0001.md",
+      "new": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/2d2fdc09249a2a594ff379eba332ebbebb58e9c8/governance/s00-iterations/S00-20261102-FRESH-TUTORIAL-HUMAN-PASS.md"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-08",
+      "cell": "L19",
+      "old": "https://github.com/we88ec3-prog/ttr_server_roy/blob/69c714c54fb5c802251736ee38ff37c19fba3c53/docs/TESTING-PRIORITY.md",
+      "new": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/2d2fdc09249a2a594ff379eba332ebbebb58e9c8/governance/s00-iterations/S00-20261102-FRESH-TUTORIAL-HUMAN-PASS.md"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-08",
+      "cell": "W19",
+      "old": "",
+      "new": "使用者操作＋命名 metadata／profile 保存"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-08",
+      "cell": "X19",
+      "old": "",
+      "new": "6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-08",
+      "cell": "Y19",
+      "old": "",
+      "new": "cd2a7bc70f3cfb92602628137bf65c5df81b0eb2"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-08",
+      "cell": "Z19",
+      "old": "",
+      "new": "2026-11-02"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-08",
+      "cell": "AA19",
+      "old": "",
+      "new": "未驗收；指定修改工作副本結果不等同原版"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-08",
+      "cell": "AB19",
+      "old": "",
+      "new": "命名邊界、錯誤及重送測試暫緩。"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-09",
+      "cell": "B20",
+      "old": "本工作台建議驗收",
+      "new": "工作副本流程驗收"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-09",
+      "cell": "E20",
+      "old": "NOT_RUN",
+      "new": "PARTIAL"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-09",
+      "cell": "F20",
+      "old": "未實測",
+      "new": "教學後自有隊員1／2／3／4與蘋果招募已有證據；通用 CEmployNewCharacter／C2S33 流程未獨立完整驗收。"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-09",
+      "cell": "G20",
+      "old": "原版 Client 畫面或可觀察行為必須符合預期",
+      "new": "教學角色取得通過，不擴張為全部角色建立／招募介面通過。"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-09",
+      "cell": "K20",
+      "old": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/ac6aac673426459df2a778d20a80c623b8559a92/spec/session-account/SPEC-CHAR-0001.md",
+      "new": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/2d2fdc09249a2a594ff379eba332ebbebb58e9c8/governance/s00-iterations/S00-20261102-FRESH-TUTORIAL-HUMAN-PASS.md"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-09",
+      "cell": "L20",
+      "old": "https://github.com/we88ec3-prog/ttr_server_roy/blob/69c714c54fb5c802251736ee38ff37c19fba3c53/docs/TESTING-PRIORITY.md",
+      "new": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/2d2fdc09249a2a594ff379eba332ebbebb58e9c8/governance/s00-iterations/S00-20261102-FRESH-TUTORIAL-HUMAN-PASS.md"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-09",
+      "cell": "W20",
+      "old": "",
+      "new": "使用者招募回報＋測後角色保存"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-09",
+      "cell": "X20",
+      "old": "",
+      "new": "6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-09",
+      "cell": "Y20",
+      "old": "",
+      "new": "cd2a7bc70f3cfb92602628137bf65c5df81b0eb2"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-09",
+      "cell": "Z20",
+      "old": "",
+      "new": "2026-11-02"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-09",
+      "cell": "AA20",
+      "old": "",
+      "new": "未驗收；指定修改工作副本結果不等同原版"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-09",
+      "cell": "AB20",
+      "old": "",
+      "new": "各角色招募條件及通用 C2S33 全流程仍需驗收。"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-10",
+      "cell": "B21",
+      "old": "本工作台建議驗收",
+      "new": "工作副本流程驗收"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-10",
+      "cell": "E21",
+      "old": "NOT_RUN",
+      "new": "NOT_COVERED"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-10",
+      "cell": "F21",
+      "old": "未實測",
+      "new": "教學 Tab 切角有人測通過；此列的一般列表選角 C2S42 未單獨驗收。"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-10",
+      "cell": "G21",
+      "old": "原版 Client 畫面或可觀察行為必須符合預期",
+      "new": "Tab 切角與一般角色列表選擇是不同入口。"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-10",
+      "cell": "K21",
+      "old": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/ac6aac673426459df2a778d20a80c623b8559a92/spec/session-account/SPEC-FLOW-0001.md",
+      "new": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/2d2fdc09249a2a594ff379eba332ebbebb58e9c8/governance/s00-iterations/S00-20261102-FRESH-TUTORIAL-HUMAN-PASS.md"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-10",
+      "cell": "L21",
+      "old": "https://github.com/we88ec3-prog/ttr_server_roy/blob/69c714c54fb5c802251736ee38ff37c19fba3c53/docs/TESTING-PRIORITY.md",
+      "new": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/2d2fdc09249a2a594ff379eba332ebbebb58e9c8/governance/s00-iterations/S00-20261102-FRESH-TUTORIAL-HUMAN-PASS.md"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-10",
+      "cell": "W21",
+      "old": "",
+      "new": "未涵蓋／入口不同"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-10",
+      "cell": "Z21",
+      "old": "",
+      "new": "2026-11-02"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-10",
+      "cell": "AA21",
+      "old": "",
+      "new": "未驗收；指定修改工作副本結果不等同原版"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-10",
+      "cell": "AB21",
+      "old": "",
+      "new": "列表 roleIndex／mode gate 與 C2S42 另行驗收。"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-11",
+      "cell": "B22",
+      "old": "本工作台建議驗收",
+      "new": "工作副本流程驗收"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-11",
+      "cell": "E22",
+      "old": "NOT_RUN",
+      "new": "PASS_WORKING_COPY"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-11",
+      "cell": "F22",
+      "old": "未實測",
+      "new": "廣場人物與 NPC 出現，能移動並放開停止。本次未重測。"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-11",
+      "cell": "G22",
+      "old": "原版 Client 畫面或可觀察行為必須符合預期",
+      "new": "目前廣場候選初始化有人測通過，不代表普通村落入場或載入畫面可見性已通過。"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-11",
+      "cell": "K22",
+      "old": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/ac6aac673426459df2a778d20a80c623b8559a92/spec/session-account/SPEC-FLOW-0001.md",
+      "new": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/2d2fdc09249a2a594ff379eba332ebbebb58e9c8/governance/s00-iterations/S00-20261102-FRESH-TUTORIAL-HUMAN-PASS.md"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-11",
+      "cell": "L22",
+      "old": "https://github.com/we88ec3-prog/ttr_server_roy/blob/69c714c54fb5c802251736ee38ff37c19fba3c53/docs/TESTING-PRIORITY.md",
+      "new": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/2d2fdc09249a2a594ff379eba332ebbebb58e9c8/governance/s00-iterations/S00-20261102-FRESH-TUTORIAL-HUMAN-PASS.md"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-11",
+      "cell": "W22",
+      "old": "",
+      "new": "使用者畫面／操作回報＋正常教學 metadata"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-11",
+      "cell": "X22",
+      "old": "",
+      "new": "6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-11",
+      "cell": "Y22",
+      "old": "",
+      "new": "cd2a7bc70f3cfb92602628137bf65c5df81b0eb2"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-11",
+      "cell": "Z22",
+      "old": "",
+      "new": "2026-11-02"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-11",
+      "cell": "AA22",
+      "old": "",
+      "new": "未驗收；指定修改工作副本結果不等同原版"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-11",
+      "cell": "AB22",
+      "old": "",
+      "new": "載入／轉場畫面可見性未確認；普通 Town1 仍未完成。"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-12",
+      "cell": "B23",
+      "old": "本工作台建議驗收",
+      "new": "工作副本流程驗收"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-12",
+      "cell": "E23",
+      "old": "NOT_RUN",
+      "new": "PASS_WORKING_COPY"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-12",
+      "cell": "F23",
+      "old": "未實測",
+      "new": "新帳號能進教學，完成移動、視角、切角、預設伊莉西亞首戰與招募流程。本次未重測。"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-12",
+      "cell": "G23",
+      "old": "原版 Client 畫面或可觀察行為必須符合預期",
+      "new": "正常教學流程通過，戰鬥品質與正式 Quest 結算另列。"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-12",
+      "cell": "K23",
+      "old": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/ac6aac673426459df2a778d20a80c623b8559a92/spec/session-account/SPEC-FLOW-0001.md",
+      "new": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/2d2fdc09249a2a594ff379eba332ebbebb58e9c8/governance/s00-iterations/S00-20261102-FRESH-TUTORIAL-HUMAN-PASS.md"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-12",
+      "cell": "L23",
+      "old": "https://github.com/we88ec3-prog/ttr_server_roy/blob/69c714c54fb5c802251736ee38ff37c19fba3c53/docs/TESTING-PRIORITY.md",
+      "new": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/2d2fdc09249a2a594ff379eba332ebbebb58e9c8/governance/s00-iterations/S00-20261102-FRESH-TUTORIAL-HUMAN-PASS.md"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-12",
+      "cell": "W23",
+      "old": "",
+      "new": "使用者完整教學回報＋Server 首戰勝利保存"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-12",
+      "cell": "X23",
+      "old": "",
+      "new": "6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-12",
+      "cell": "Y23",
+      "old": "",
+      "new": "cd2a7bc70f3cfb92602628137bf65c5df81b0eb2"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-12",
+      "cell": "Z23",
+      "old": "",
+      "new": "2026-11-02"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-12",
+      "cell": "AA23",
+      "old": "",
+      "new": "未驗收；指定修改工作副本結果不等同原版"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-12",
+      "cell": "AB23",
+      "old": "",
+      "new": "不代表 MEF／原生 AI 或全部技能／連段正確。"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-13",
+      "cell": "B24",
+      "old": "本工作台建議驗收",
+      "new": "工作副本流程驗收"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-13",
+      "cell": "E24",
+      "old": "NOT_RUN",
+      "new": "NOT_PASSED_WORKING_COPY"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-13",
+      "cell": "F24",
+      "old": "未實測",
+      "new": "先前點廣場主線 NPC 後無反應並不能移動；尚無修正版人測通過紀錄。"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-13",
+      "cell": "G24",
+      "old": "原版 Client 畫面或可觀察行為必須符合預期",
+      "new": "使用者未能辨識韓文 NPC 名稱，不把該次問題擅自歸給特定 NPC ID。"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-13",
+      "cell": "K24",
+      "old": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/ac6aac673426459df2a778d20a80c623b8559a92/kr-temp-roy/20261030-144014-chatgpt-web-roy-T16-128-KR-Quest15-study4-S2C-0040-0045-0046-0047-006F-0074-mode2-mode3-state-UI.md",
+      "new": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/main/workbooks/tartaros-kr/S00_驗收回填_20261102.md"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-13",
+      "cell": "L24",
+      "old": "https://github.com/we88ec3-prog/ttr_server_roy/blob/69c714c54fb5c802251736ee38ff37c19fba3c53/docs/TESTING-PRIORITY.md",
+      "new": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/main/workbooks/tartaros-kr/S00_驗收回填_20261102.md"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-13",
+      "cell": "W24",
+      "old": "",
+      "new": "使用者問題回報；後續修正僅合成驗證"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-13",
+      "cell": "Z24",
+      "old": "",
+      "new": "2026-11-02"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-13",
+      "cell": "AA24",
+      "old": "",
+      "new": "未驗收；指定修改工作副本結果不等同原版"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-13",
+      "cell": "AB24",
+      "old": "",
+      "new": "NPC 意圖、Quest15 後續劇情與正常進村接續待完成／驗收。"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-14",
+      "cell": "B25",
+      "old": "本工作台建議驗收",
+      "new": "工作副本流程驗收"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-14",
+      "cell": "E25",
+      "old": "NOT_RUN",
+      "new": "PARTIAL"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-14",
+      "cell": "F25",
+      "old": "未實測",
+      "new": "首戰可進場、普攻擊敗敵人並返回；連擊速度、移動中受擊／攻擊銜接仍有待改善。"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-14",
+      "cell": "G25",
+      "old": "原版 Client 畫面或可觀察行為必須符合預期",
+      "new": "戰鬥流程可完成，未通過完整戰鬥手感、怪物平衡或 MEF 邏輯驗收。"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-14",
+      "cell": "K25",
+      "old": "https://github.com/we88ec3-prog/ttr_server_roy/blob/69c714c54fb5c802251736ee38ff37c19fba3c53/docs/C05-P03-IMPLEMENTATION.md",
+      "new": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/main/workbooks/tartaros-kr/S00_驗收回填_20261102.md"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-14",
+      "cell": "L25",
+      "old": "https://github.com/we88ec3-prog/ttr_server_roy/blob/69c714c54fb5c802251736ee38ff37c19fba3c53/docs/TESTING-PRIORITY.md",
+      "new": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/main/workbooks/tartaros-kr/S00_驗收回填_20261102.md"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-14",
+      "cell": "W25",
+      "old": "",
+      "new": "使用者首戰完成及後續缺陷回報"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-14",
+      "cell": "X25",
+      "old": "",
+      "new": "6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-14",
+      "cell": "Y25",
+      "old": "",
+      "new": "流程證據：cd2a7bc70f3cfb92602628137bf65c5df81b0eb2；手感缺陷回報版號未確認"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-14",
+      "cell": "Z25",
+      "old": "",
+      "new": "2026-11-02"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-14",
+      "cell": "AA25",
+      "old": "",
+      "new": "未驗收；指定修改工作副本結果不等同原版"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-14",
+      "cell": "AB25",
+      "old": "",
+      "new": "連擊／移動後攻擊留到馮德斯副本優化；目前 AI 由 Server 程式控制，非已還原 MEF。"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-15",
+      "cell": "B26",
+      "old": "本工作台建議驗收",
+      "new": "工作副本流程驗收"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-15",
+      "cell": "E26",
+      "old": "NOT_RUN",
+      "new": "PASS_WORKING_COPY"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-15",
+      "cell": "F26",
+      "old": "未實測",
+      "new": "使用者確認完成教學、招募及後續劇情，到廣場且能移動停止。本次未重測。"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-15",
+      "cell": "G26",
+      "old": "原版 Client 畫面或可觀察行為必須符合預期",
+      "new": "人工遊玩流程通過；不把 Scenario end 等同 Quest14／16 合法結算、獎勵或終態持久化。"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-15",
+      "cell": "K26",
+      "old": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/ac6aac673426459df2a778d20a80c623b8559a92/spec/session-account/SPEC-FLOW-0001.md",
+      "new": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/2d2fdc09249a2a594ff379eba332ebbebb58e9c8/governance/s00-iterations/S00-20261102-FRESH-TUTORIAL-HUMAN-PASS.md"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-15",
+      "cell": "L26",
+      "old": "https://github.com/we88ec3-prog/ttr_server_roy/blob/69c714c54fb5c802251736ee38ff37c19fba3c53/docs/TESTING-PRIORITY.md",
+      "new": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/2d2fdc09249a2a594ff379eba332ebbebb58e9c8/governance/s00-iterations/S00-20261102-FRESH-TUTORIAL-HUMAN-PASS.md"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-15",
+      "cell": "W26",
+      "old": "",
+      "new": "新帳號完整正流程人測＋測前／測後保存"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-15",
+      "cell": "X26",
+      "old": "",
+      "new": "6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-15",
+      "cell": "Y26",
+      "old": "",
+      "new": "cd2a7bc70f3cfb92602628137bf65c5df81b0eb2"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-15",
+      "cell": "Z26",
+      "old": "",
+      "new": "2026-11-02"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-15",
+      "cell": "AA26",
+      "old": "",
+      "new": "未驗收；指定修改工作副本結果不等同原版"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-15",
+      "cell": "AB26",
+      "old": "",
+      "new": "正式結算／獎勵發布／終態保存與轉場可見性未由此輪驗收。"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-16",
+      "cell": "A27",
+      "old": "",
+      "new": "HP-16"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-16",
+      "cell": "B27",
+      "old": "",
+      "new": "工作副本流程驗收"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-16",
+      "cell": "C27",
+      "old": "",
+      "new": "Tartaros KR"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-16",
+      "cell": "D27",
+      "old": "",
+      "new": "正常主線到達馮德斯村"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-16",
+      "cell": "H27",
+      "old": "",
+      "new": "正常進村後玩家／NPC可見、能移動停止，進度可核對"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-16",
+      "cell": "E27",
+      "old": "",
+      "new": "NOT_READY"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-16",
+      "cell": "F27",
+      "old": "",
+      "new": "尚未完成可驗收版本；目前沒有正常進村通過紀錄。"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-16",
+      "cell": "G27",
+      "old": "",
+      "new": "必須從正常主線接續到一般村落，不能以演出地圖或直接傳送代替。"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-16",
+      "cell": "K27",
+      "old": "",
+      "new": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/main/workbooks/tartaros-kr/S00_驗收回填_20261102.md"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-16",
+      "cell": "L27",
+      "old": "",
+      "new": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/main/workbooks/tartaros-kr/S00_驗收回填_20261102.md"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-16",
+      "cell": "W27",
+      "old": "",
+      "new": "待開發／待人測"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-16",
+      "cell": "Z27",
+      "old": "",
+      "new": "2026-11-02"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-16",
+      "cell": "AA27",
+      "old": "",
+      "new": "未驗收；指定修改工作副本結果不等同原版"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "HP-16",
+      "cell": "AB27",
+      "old": "",
+      "new": "Quest15 劇情／必要戰鬥接續、普通村落控制器、合法出生點與入場保存。"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "SYN-HP-20261102",
+      "cell": "A28",
+      "old": "",
+      "new": "SYN-HP-20261102"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "SYN-HP-20261102",
+      "cell": "B28",
+      "old": "",
+      "new": "Server 正流程合成測試"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "SYN-HP-20261102",
+      "cell": "C28",
+      "old": "",
+      "new": "KR 候選協定／本機 Server"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "SYN-HP-20261102",
+      "cell": "D28",
+      "old": "",
+      "new": "正流程回歸：首戰／招募／廣場／NPC互動初始化"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "SYN-HP-20261102",
+      "cell": "E28",
+      "old": "",
+      "new": "PASS_SYNTHETIC"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "SYN-HP-20261102",
+      "cell": "F28",
+      "old": "",
+      "new": "既有執行：26通過、0失敗、0略過；本次未重跑。"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "SYN-HP-20261102",
+      "cell": "G28",
+      "old": "",
+      "new": "合成網路／保存與候選初始化測試；不代表真實 Client 畫面或可玩性。"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "SYN-HP-20261102",
+      "cell": "H28",
+      "old": "",
+      "new": "26個正流程案例通過；沒有執行暫緩測試。"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "SYN-HP-20261102",
+      "cell": "K28",
+      "old": "",
+      "new": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/2d2fdc09249a2a594ff379eba332ebbebb58e9c8/governance/s00-iterations/S00-20261102-SQUARE-NPC-INTERACTION.md"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "SYN-HP-20261102",
+      "cell": "L28",
+      "old": "",
+      "new": "https://github.com/we88ec3-prog/ttr_anal_multi/blob/2d2fdc09249a2a594ff379eba332ebbebb58e9c8/governance/s00-iterations/S00-20261102-SQUARE-NPC-INTERACTION.md"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "SYN-HP-20261102",
+      "cell": "W28",
+      "old": "",
+      "new": "既有 Server 正流程測試結果"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "SYN-HP-20261102",
+      "cell": "Y28",
+      "old": "",
+      "new": "1473173883b83c7a456e7816470273e81664972a"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "SYN-HP-20261102",
+      "cell": "Z28",
+      "old": "",
+      "new": "2026-11-02"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "SYN-HP-20261102",
+      "cell": "AA28",
+      "old": "",
+      "new": "不適用；不是 Client 驗收"
+    },
+    {
+      "file": "06_測試驗收.xlsx",
+      "id": "SYN-HP-20261102",
+      "cell": "AB28",
+      "old": "",
+      "new": "未包含中斷後未提交的場景2候選變更；不代表進村或原版相容性。"
+    },
+    {
+      "file": "00_儀表板.xlsx",
+      "id": "HP 工作副本流程通過",
+      "cell": "A20",
+      "old": "",
+      "new": "HP 工作副本流程通過"
+    },
+    {
+      "file": "00_儀表板.xlsx",
+      "id": "HP 工作副本流程通過",
+      "cell": "B20",
+      "old": "",
+      "new": 8
+    },
+    {
+      "file": "00_儀表板.xlsx",
+      "id": "HP 工作副本流程通過",
+      "cell": "C20",
+      "old": "",
+      "new": "06_測試驗收.xlsx"
+    },
+    {
+      "file": "00_儀表板.xlsx",
+      "id": "HP 工作副本流程通過",
+      "cell": "D20",
+      "old": "",
+      "new": "歷史人測結果補登；不是原版 Client 驗收。"
+    },
+    {
+      "file": "00_儀表板.xlsx",
+      "id": "HP 部分驗證",
+      "cell": "A21",
+      "old": "",
+      "new": "HP 部分驗證"
+    },
+    {
+      "file": "00_儀表板.xlsx",
+      "id": "HP 部分驗證",
+      "cell": "B21",
+      "old": "",
+      "new": 4
+    },
+    {
+      "file": "00_儀表板.xlsx",
+      "id": "HP 部分驗證",
+      "cell": "C21",
+      "old": "",
+      "new": "06_測試驗收.xlsx"
+    },
+    {
+      "file": "00_儀表板.xlsx",
+      "id": "HP 部分驗證",
+      "cell": "D21",
+      "old": "",
+      "new": "部分有證據，仍有未涵蓋入口或待改善項。"
+    },
+    {
+      "file": "00_儀表板.xlsx",
+      "id": "HP 本輪未涵蓋",
+      "cell": "A22",
+      "old": "",
+      "new": "HP 本輪未涵蓋"
+    },
+    {
+      "file": "00_儀表板.xlsx",
+      "id": "HP 本輪未涵蓋",
+      "cell": "B22",
+      "old": "",
+      "new": 2
+    },
+    {
+      "file": "00_儀表板.xlsx",
+      "id": "HP 本輪未涵蓋",
+      "cell": "C22",
+      "old": "",
+      "new": "06_測試驗收.xlsx"
+    },
+    {
+      "file": "00_儀表板.xlsx",
+      "id": "HP 本輪未涵蓋",
+      "cell": "D22",
+      "old": "",
+      "new": "一般創角／列表選角未由目前教學流程驗收。"
+    },
+    {
+      "file": "00_儀表板.xlsx",
+      "id": "HP 尚未通過",
+      "cell": "A23",
+      "old": "",
+      "new": "HP 尚未通過"
+    },
+    {
+      "file": "00_儀表板.xlsx",
+      "id": "HP 尚未通過",
+      "cell": "B23",
+      "old": "",
+      "new": 1
+    },
+    {
+      "file": "00_儀表板.xlsx",
+      "id": "HP 尚未通過",
+      "cell": "C23",
+      "old": "",
+      "new": "06_測試驗收.xlsx"
+    },
+    {
+      "file": "00_儀表板.xlsx",
+      "id": "HP 尚未通過",
+      "cell": "D23",
+      "old": "",
+      "new": "廣場主線 NPC 無修正版人測通過紀錄。"
+    },
+    {
+      "file": "00_儀表板.xlsx",
+      "id": "HP 待開發／待驗收",
+      "cell": "A24",
+      "old": "",
+      "new": "HP 待開發／待驗收"
+    },
+    {
+      "file": "00_儀表板.xlsx",
+      "id": "HP 待開發／待驗收",
+      "cell": "B24",
+      "old": "",
+      "new": 1
+    },
+    {
+      "file": "00_儀表板.xlsx",
+      "id": "HP 待開發／待驗收",
+      "cell": "C24",
+      "old": "",
+      "new": "06_測試驗收.xlsx"
+    },
+    {
+      "file": "00_儀表板.xlsx",
+      "id": "HP 待開發／待驗收",
+      "cell": "D24",
+      "old": "",
+      "new": "正常主線進入馮德斯村尚未完成。"
+    },
+    {
+      "file": "00_儀表板.xlsx",
+      "id": "Server 正流程合成測試",
+      "cell": "A25",
+      "old": "",
+      "new": "Server 正流程合成測試"
+    },
+    {
+      "file": "00_儀表板.xlsx",
+      "id": "Server 正流程合成測試",
+      "cell": "B25",
+      "old": "",
+      "new": 26
+    },
+    {
+      "file": "00_儀表板.xlsx",
+      "id": "Server 正流程合成測試",
+      "cell": "C25",
+      "old": "",
+      "new": "06_測試驗收.xlsx"
+    },
+    {
+      "file": "00_儀表板.xlsx",
+      "id": "Server 正流程合成測試",
+      "cell": "D25",
+      "old": "",
+      "new": "既有結果：26通過；本次只補登，沒有重跑。"
+    },
+    {
+      "file": "00_儀表板.xlsx",
+      "id": "未修改原版 Client 驗收",
+      "cell": "A26",
+      "old": "",
+      "new": "未修改原版 Client 驗收"
+    },
+    {
+      "file": "00_儀表板.xlsx",
+      "id": "未修改原版 Client 驗收",
+      "cell": "B26",
+      "old": "",
+      "new": "未驗收"
+    },
+    {
+      "file": "00_儀表板.xlsx",
+      "id": "未修改原版 Client 驗收",
+      "cell": "C26",
+      "old": "",
+      "new": "06_測試驗收.xlsx"
+    },
+    {
+      "file": "00_儀表板.xlsx",
+      "id": "未修改原版 Client 驗收",
+      "cell": "D26",
+      "old": "",
+      "new": "與修改工作副本及合成測試分開判定。"
+    }
+  ]
+}

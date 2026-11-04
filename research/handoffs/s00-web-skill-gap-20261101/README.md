@@ -1,5 +1,27 @@
 # ChatGPT Web：T10／T11 技能與連段補查工作卡
 
+使用者指定Web對話的本輪派工：[FOLLOWUP-02：v7連點Z與受擊接口](FOLLOWUP-02-V7-COMBO-AND-HURT.md)。
+這是原工作卡的後續，不另建平行RR台帳；派送與結果接收狀態另由S00記錄。
+[派送結果](DISPATCH-02-STATUS.json)：直接傳訊工具接受，收件對話狀態active；後續成果尚未交付。
+
+已收件 Web commit4064846 的三份成果：[S00收件與實作範圍](../../../governance/s00-iterations/S00-20261101-WEB-COMBAT-INTAKE.md)。
+七段原始BIN視窗hash吻合僅為有限佐證；T01退回及Task完成狀態未改。Server已補多筆000A
+中唯一受控row的結構讀取，但同actor多row語意／Row A writer／技能ID與clock仍未閉合。
+此更新是文件收件，沒有向Web對話送出訊息或另行派工。
+
+最新續查：[普攻片長／012A counter界線](../../../governance/s00-iterations/S00-20261101-BASIC-CLIP-AND-COOLDOWN-COUNTERS.md)。
+已定位CSpliteMotion的row EndFrame+Delay累計與current FPS getter，仍未閉合取消／命中窗口。
+012A除33不直接證明毫秒，controller倒數在輸入發送gate之前，須補scheduler／UI使用。
+
+最新來源更正：[0E命中／萬分比血條與ABF/ASD資料](../../../governance/s00-iterations/S00-20261101-COMBAT-RESULTS-AND-ENEMY-AGENTS.md)。
+0F是controller狀態路徑，舊Hit builder使用0F已撤回；不要重用舊候選。
+ASD有負Delay、多段及混合FPS，請補parser／取消窗口與命中frame，不能一律Length/40。
+
+最新使用者優先序：**戰鬥第一優先**。蘋果招募已通過，但後續兩段對話後留原地另記REQ-0017；
+先補首戰技能／連段及怪物行為。新增有限資料與Server輸入遺失問題見
+[REQ-0016戰鬥工作](../../../governance/s00-iterations/S00-20261101-COMBAT-PRIORITY-AND-EXIT-BLOCKER.md)。Practice49/50/52對應Skill29/30/31，
+不能混成Motion ID；資源cooltime原值／單位與施放裁決仍須原生核對。
+
 使用者於2026-11-01要求先查看現有T10/T11缺口，再透過本分析庫交代Web工作，成果供
 後續獨立Server開發使用。`as_server_spec`是誤植，已撤回，**不涉及該專案**。
 本文件是使用者授權的補查範圍與交付約定，不是另一份RR台帳、已發布的正式認領或Task完成宣告。
@@ -90,6 +112,18 @@ Scenario/scenario_town000D.fld及.mre。FLD是幾何／環境XML，MRE標頭GEOM
 目前MEF接收opcode、parser及內容格式仍UNKNOWN；Server自身生成／AI與Client接收MEF須分開。
 
 ## 交付格式與使用方式
+
+更新：[技能分段與命中時間界線](../../../governance/s00-iterations/S00-20261101-SKILL-TIMELINE-AND-HIT-BOUNDARY.md)。
+已新增108混合FPS／109單段的名目片長有限推導；仍未找到官方impact時間。
+特效Element的Delay不是傷害時刻或擊數證明，請優先補判定producer與clock／ID映射，
+不要把視覺Delay直接當Server多段傷害排程。
+
+補充戰鬥優先缺口：[能力頁欄位落差與修正](../../../governance/s00-iterations/S00-20261101-COMBAT-STAT-DISPLAY.md)。
+舊資料已記錄5C的DWORD500/100/100不是當時能力頁顯示；WORD+16/+18/+20才有HP/SP/MP相關性。
+T10/T11請核對能力記錄+40/+48/+44到HUD與技能gate的消費者，以及與actor參數1/2/3的關係；
+仍需區分當前值／最大值、絕對數與比例，不要沿用錯誤fixture標籤。
+同報告新增actor參數2/3各除100的有限核對及初始化修正；視覺槽索引並不等於
+完整HUD／技能gate語意已證實。請沿+3B0/+3B4/+3B8查消費者，與能力記錄分開。
 
 先交一份限定報告，建議位置`research/handoffs/s00-web-skill-gap-20261101/`，檔名包含
 日期與T10/T11及主題，**不覆蓋原作者原稿**。有Git工具與授權才提交／推送；否則交可保存原文。

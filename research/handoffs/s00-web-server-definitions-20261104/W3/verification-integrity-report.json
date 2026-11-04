@@ -1,0 +1,288 @@
+{
+  "schema_version": "1.0.0",
+  "status": "PASS",
+  "scope": "Five bounded offline data-contract probes on disposable copies; not game negative/fault/concurrency tests or native evidence.",
+  "source_input_unchanged": true,
+  "converter_unchanged": true,
+  "converter_sha256": "5e9d8a99fe0bd092a4b34388d500e3a7c359ea8055a312843601334a601155dc",
+  "input_manifest_sha256": "4b6f14740df2ccfe1447ad84acac45ceb4752d67c4108d5c3f49335d0c9b96f3",
+  "fixtures_are_native_evidence": false,
+  "game_or_server_executed": false,
+  "historical_scripts_executed": false,
+  "probes": [
+    {
+      "probe": "duplicate_quest_id",
+      "expected_issue": "DUPLICATE_ID",
+      "return_code": 1,
+      "expected_diagnostic_found": true,
+      "fixture_manifest_errors": 0,
+      "status": "PASS",
+      "matching_diagnostics": [
+        {
+          "code": "DUPLICATE_ID",
+          "duplicated_id": 117,
+          "input_path": "git-evidence/research/handoffs/kr-quest-runtime-20261103-v0.1.0/quest-definitions.json",
+          "input_pointer": "/definitions/20",
+          "message": "Duplicate canonical ID; first row retained for diagnostics.",
+          "responsibility": "CONVERTER",
+          "severity": "ERROR"
+        }
+      ],
+      "stdout": "Offline conversion: FAIL; quests=10; scenes=30; errors=1; activation=DRAFT_BLOCKED",
+      "stderr_present": false
+    },
+    {
+      "probe": "npc_scene_crosses_quest",
+      "expected_issue": "SCENE_QUEST_MISMATCH",
+      "return_code": 1,
+      "expected_diagnostic_found": true,
+      "fixture_manifest_errors": 0,
+      "status": "PASS",
+      "matching_diagnostics": [
+        {
+          "code": "SCENE_QUEST_MISMATCH",
+          "input_path": "git-evidence/research/handoffs/kr-quest-runtime-20261103-v0.1.0/quest-npc-scenes.csv",
+          "input_pointer": "/rows/10/scene_key",
+          "message": "NPC association scene belongs to another Quest, even if the NPC is shared.",
+          "quest_id": 118,
+          "responsibility": "CONVERTER",
+          "scene_quest_id": 119,
+          "severity": "ERROR"
+        }
+      ],
+      "stdout": "Offline conversion: FAIL; quests=10; scenes=30; errors=2; activation=DRAFT_BLOCKED",
+      "stderr_present": false
+    },
+    {
+      "probe": "flow_quest_domain_mixup",
+      "expected_issue": "DOMAIN_MIXUP",
+      "return_code": 1,
+      "expected_diagnostic_found": true,
+      "fixture_manifest_errors": 0,
+      "status": "PASS",
+      "matching_diagnostics": [
+        {
+          "code": "DOMAIN_MIXUP",
+          "expected_domain": "quest",
+          "input_path": "git-evidence/research/handoffs/kr-quest-runtime-20261103-v0.1.0/quest-flows.json",
+          "input_pointer": "/flows/1/quest_refs/0",
+          "message": "Typed reference list has the wrong ID domain.",
+          "responsibility": "CONVERTER",
+          "severity": "ERROR"
+        },
+        {
+          "code": "DOMAIN_MIXUP",
+          "input_path": "git-evidence/research/handoffs/kr-quest-runtime-20261103-v0.1.0/quest-flows.json",
+          "input_pointer": "/flows/1/quest_refs/0",
+          "message": "Flow.quest_refs must contain QuestIDs.",
+          "responsibility": "CONVERTER",
+          "severity": "ERROR"
+        }
+      ],
+      "stdout": "Offline conversion: FAIL; quests=10; scenes=30; errors=2; activation=DRAFT_BLOCKED",
+      "stderr_present": false
+    },
+    {
+      "probe": "missing_csv_objective_projection",
+      "expected_issue": "PROJECTION_MISMATCH",
+      "return_code": 1,
+      "expected_diagnostic_found": true,
+      "fixture_manifest_errors": 0,
+      "status": "PASS",
+      "matching_diagnostics": [
+        {
+          "actual": [
+            [
+              14,
+              "q14.legal_completion"
+            ],
+            [
+              15,
+              "q15.legal_completion"
+            ],
+            [
+              16,
+              "q16.legal_completion"
+            ],
+            [
+              118,
+              "q118.legal_completion"
+            ],
+            [
+              119,
+              "q119.legal_completion"
+            ],
+            [
+              120,
+              "q120.legal_completion"
+            ],
+            [
+              121,
+              "q121.legal_completion"
+            ],
+            [
+              122,
+              "q122.legal_completion"
+            ],
+            [
+              123,
+              "q123.legal_completion"
+            ],
+            [
+              124,
+              "q124.legal_completion"
+            ],
+            [
+              131,
+              "q131.legal_completion"
+            ],
+            [
+              132,
+              "q132.legal_completion"
+            ],
+            [
+              133,
+              "q133.legal_completion"
+            ],
+            [
+              1002,
+              "q1002.legal_completion"
+            ],
+            [
+              2742,
+              "q2742.legal_completion"
+            ],
+            [
+              2743,
+              "q2743.legal_completion"
+            ],
+            [
+              2744,
+              "q2744.legal_completion"
+            ],
+            [
+              2745,
+              "q2745.legal_completion"
+            ],
+            [
+              2746,
+              "q2746.legal_completion"
+            ]
+          ],
+          "code": "PROJECTION_MISMATCH",
+          "expected": [
+            [
+              14,
+              "q14.legal_completion"
+            ],
+            [
+              15,
+              "q15.legal_completion"
+            ],
+            [
+              16,
+              "q16.legal_completion"
+            ],
+            [
+              117,
+              "q117.legal_completion"
+            ],
+            [
+              118,
+              "q118.legal_completion"
+            ],
+            [
+              119,
+              "q119.legal_completion"
+            ],
+            [
+              120,
+              "q120.legal_completion"
+            ],
+            [
+              121,
+              "q121.legal_completion"
+            ],
+            [
+              122,
+              "q122.legal_completion"
+            ],
+            [
+              123,
+              "q123.legal_completion"
+            ],
+            [
+              124,
+              "q124.legal_completion"
+            ],
+            [
+              131,
+              "q131.legal_completion"
+            ],
+            [
+              132,
+              "q132.legal_completion"
+            ],
+            [
+              133,
+              "q133.legal_completion"
+            ],
+            [
+              1002,
+              "q1002.legal_completion"
+            ],
+            [
+              2742,
+              "q2742.legal_completion"
+            ],
+            [
+              2743,
+              "q2743.legal_completion"
+            ],
+            [
+              2744,
+              "q2744.legal_completion"
+            ],
+            [
+              2745,
+              "q2745.legal_completion"
+            ],
+            [
+              2746,
+              "q2746.legal_completion"
+            ]
+          ],
+          "input_path": "git-evidence/research/handoffs/kr-quest-runtime-20261103-v0.1.0/quest-objectives.csv",
+          "input_pointer": null,
+          "message": "Canonical/CSV projection key sets differ; a row is missing or extra.",
+          "responsibility": "CONVERTER",
+          "severity": "ERROR"
+        }
+      ],
+      "stdout": "Offline conversion: FAIL; quests=10; scenes=30; errors=1; activation=DRAFT_BLOCKED",
+      "stderr_present": false
+    },
+    {
+      "probe": "canonical_and_csv_disagree_with_raw_town",
+      "expected_issue": "PROJECTION_MISMATCH",
+      "return_code": 1,
+      "expected_diagnostic_found": true,
+      "fixture_manifest_errors": 0,
+      "status": "PASS",
+      "matching_diagnostics": [
+        {
+          "actual": 2,
+          "code": "PROJECTION_MISMATCH",
+          "expected": 1,
+          "input_path": "git-evidence/research/handoffs/kr-quest-runtime-20261103-v0.1.0/quest-definitions.json",
+          "input_pointer": "/definitions/9/source_data/town",
+          "message": "Typed/raw scalar differs from actual QuestInfo attribute.",
+          "responsibility": "CONVERTER",
+          "severity": "ERROR"
+        }
+      ],
+      "stdout": "Offline conversion: FAIL; quests=10; scenes=30; errors=1; activation=DRAFT_BLOCKED",
+      "stderr_present": false
+    }
+  ]
+}

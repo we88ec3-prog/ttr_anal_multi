@@ -4,7 +4,7 @@ import shutil
 import sys
 import tempfile
 import unittest
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "governance"))
@@ -26,6 +26,10 @@ PATHS = [
     "governance/s00-iterations/S00-20261101-TUTORIAL-NPC-AND-FORMATION.md",
     "governance/s00-iterations/S00-20261101-TUTORIAL-FIRST-BATTLE.md",
     "governance/s00-iterations/S00-20261101-PINKO-RECRUITMENT.md",
+    "governance/s00-iterations/S00-20261101-COMBAT-PRIORITY-AND-EXIT-BLOCKER.md",
+    "governance/s00-iterations/S00-20261101-V7-PLAYER-RESULT-AND-COMBAT-FIX.md",
+    "governance/s00-iterations/S00-20261101-COMBAT-EXIT-V8-DEPLOYMENT.md",
+    "research/handoffs/s00-phindos-mainline-20261102/README.md",
 ]
 
 
@@ -39,6 +43,27 @@ class ServerRequirementTests(unittest.TestCase):
             dest.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(ROOT / p, dest)
 
+        # Copy any additional evidence files referenced by today's requirement catalog.
+        # Missing/unsafe references are intentionally not synthesized: evaluate() must fail closed.
+        registry = json.loads((self.root / PATHS[0]).read_text(encoding="utf-8"))
+        references = {
+            discovery[key]
+            for requirement in registry["items"]
+            for discovery in requirement.get("discoveries", [])
+            for key in ("observation_ref", "authorization_ref", "request_record_ref")
+            if isinstance(discovery.get(key), str)
+        }
+        for p in sorted(references - set(PATHS)):
+            rel = PurePosixPath(p)
+            if rel.is_absolute() or ".." in rel.parts or "\\" in p or p.startswith("./"):
+                continue
+            source = (ROOT / p).resolve()
+            if not source.is_relative_to(ROOT.resolve()) or not source.is_file():
+                continue
+            dest = self.root / p
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(source, dest)
+
     def edit(self, fn):
         path = self.root / PATHS[0]
         doc = json.loads(path.read_text(encoding="utf-8"))
@@ -50,13 +75,43 @@ class ServerRequirementTests(unittest.TestCase):
         dest.parent.mkdir(parents=True, exist_ok=True)
         dest.write_text(contents, encoding="utf-8")
 
+    def test_fixture_includes_all_registered_public_safe_provenance(self):
+        # Keep sandboxed test fixtures in sync with the real requirement catalog.
+        # Missing records must not be bypassed by weakening evaluate()'s checks.
+        catalog = json.loads((ROOT / PATHS[0]).read_text(encoding="utf-8"))
+        referenced = set()
+        field_names = {
+            "GAME_RUNTIME_OBSERVATION": ("observation_ref", "authorization_ref"),
+            "PLAYER_ADMIN_REQUEST": ("request_record_ref",),
+        }
+        for requirement in catalog["items"]:
+            for discovery in requirement["discoveries"]:
+                for field in field_names.get(discovery["channel"], ()):
+                    ref = discovery.get(field)
+                    if ref:
+                        referenced.add(ref)
+        for ref in sorted(referenced):
+            rel = PurePosixPath(ref)
+            self.assertFalse(rel.is_absolute(), ref)
+            self.assertNotIn("..", rel.parts, ref)
+            self.assertNotIn("\\", ref)
+            source = (ROOT / ref).resolve()
+            self.assertTrue(source.is_relative_to(ROOT.resolve()), ref)
+            self.assertTrue(source.is_file(), ref)
+            fixture = self.root / ref
+            self.assertTrue(fixture.is_file(), ref)
+            self.assertEqual(fixture.read_bytes(), source.read_bytes(), ref)
+
     def test_canonical_code_findings_not_approved(self):
         r = evaluate(self.root)
         self.assertEqual(r["errors"], [])
-        self.assertEqual(r["summary"]["requirements"], 15)
+        items = json.loads((self.root / PATHS[0]).read_text(encoding="utf-8"))["items"]
+        self.assertEqual(r["summary"]["requirements"], len(items))
         self.assertEqual(r["summary"]["approved"], 0)
-        self.assertEqual(r["summary"]["discovery_counts"],
-                         {"CODE_ANALYSIS": 5, "GAME_RUNTIME_OBSERVATION": 15, "PLAYER_ADMIN_REQUEST": 5})
+        self.assertEqual(r["summary"]["discovery_counts"], {
+            channel: sum(d["channel"] == channel for req in items for d in req["discoveries"])
+            for channel in ("CODE_ANALYSIS", "GAME_RUNTIME_OBSERVATION", "PLAYER_ADMIN_REQUEST")
+        })
 
 
     def test_admin_web_v1_three_requests_trace_to_actual_user_request(self):
@@ -164,6 +219,7 @@ class ServerRequirementTests(unittest.TestCase):
         self.assertEqual(r["summary"]["approved"], 0)
 
     def test_player_and_admin_both_share_same_existing_requirement(self):
+        baseline = evaluate(self.root)["summary"]
         for name in ("player", "admin"):
             self.add_safe_file(f"design/requirements/requests/{name}.md", "internal sample, no real user data")
         def edit(d):
@@ -177,8 +233,9 @@ class ServerRequirementTests(unittest.TestCase):
         self.edit(edit)
         r = evaluate(self.root)
         self.assertEqual(r["errors"], [])
-        self.assertEqual(r["summary"]["requirements"], 15)
-        self.assertEqual(r["summary"]["discovery_counts"]["PLAYER_ADMIN_REQUEST"], 7)
+        self.assertEqual(r["summary"]["requirements"], baseline["requirements"])
+        self.assertEqual(r["summary"]["discovery_counts"]["PLAYER_ADMIN_REQUEST"],
+                         baseline["discovery_counts"]["PLAYER_ADMIN_REQUEST"] + 2)
 
     def test_historical_protocol_and_ops_safety_are_user_request_material(self):
         # Test-only player/admin discovery: not a real user submission.
@@ -221,6 +278,9 @@ class ServerRequirementTests(unittest.TestCase):
                             for x in evaluate(self.root)["errors"]))
 
     def test_user_request_is_not_original_client_evidence(self):
+        before = json.loads((self.root / PATHS[0]).read_text(encoding="utf-8"))["items"][0]
+        removed_code = sum(d["channel"] == "CODE_ANALYSIS" for d in before["discoveries"])
+        baseline_code = evaluate(self.root)["summary"]["discovery_counts"]["CODE_ANALYSIS"]
         self.add_safe_file("design/requirements/requests/mock.md", "synthetic")
         def edit(d):
             d["items"][0]["discoveries"] = [{
@@ -232,7 +292,8 @@ class ServerRequirementTests(unittest.TestCase):
         r = evaluate(self.root)
         self.assertEqual(r["errors"], [])
         self.assertEqual(r["summary"]["approved"], 0)
-        self.assertEqual(r["summary"]["discovery_counts"]["CODE_ANALYSIS"], 4)
+        self.assertEqual(r["summary"]["discovery_counts"]["CODE_ANALYSIS"],
+                         baseline_code - removed_code)
 
     def test_unapproved_other_discovery_source_fails_closed(self):
         self.edit(lambda d: d["items"][0]["discoveries"][0].update(channel="SERVER_IMPLEMENTATION_FEEDBACK"))
