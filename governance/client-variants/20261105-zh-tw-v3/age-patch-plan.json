@@ -1,0 +1,94 @@
+{
+  "source_exe": "E:\\Tartaros\\workspace\\Tartaros.ip-zh-tw-only-v2.exe",
+  "source_sha256": "6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c",
+  "source_original_bin_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+  "status": "STATIC_CANDIDATE_READY_FOR_SEPARATE_VARIANT_BUILD",
+  "patches": [
+    {
+      "va": "0x4c3580",
+      "file_offset": 797056,
+      "before": "8935a82bfd00",
+      "after": "893da82bfd00",
+      "purpose": "write0viaEDIinsteadOf1viaESI to grade visibility flag FD2BA8"
+    },
+    {
+      "va": "0x4c3586",
+      "file_offset": 797062,
+      "before": "c705b02bfd00d2000000",
+      "after": "c705b02bfd0000000000",
+      "purpose": "zero grade frame counter FD2BB0 instead of210"
+    }
+  ],
+  "changed_bytes": 2,
+  "scope": "disable opening fullscreen Contents_Class/Contents_Class2 grade overlay from CLogin initialization; retain all other initialization/network/first-scene paths",
+  "precondition": "EDI is zero from XOR EDI,EDI at4C3332 and callee-saved throughout; ESI is one from4C3313. Exact source SHA and before-byte guards mandatory.",
+  "not_patched": [
+    "495280 Sleep3000",
+    "login authentication",
+    "account/age data",
+    "gameplay logic",
+    "original source file"
+  ],
+  "runtime": "NOT_EXECUTED_NOT_ATTACHED_PENDING_USER",
+  "limitations": [
+    "Fullscreen draw source is clear; exact screenshot identification is supported by graded resource naming/draw chain, not an in-process observation.",
+    "Separate overlay duration visibility verified statically; actual startup needs user test.",
+    "Remaining loading time not promised removed; unrelated Sleep3000 deliberately retained."
+  ],
+  "sources": [
+    {
+      "path": "kr-bulk-roy/9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91/functions/0x48a190.c",
+      "blob": "f5d89d9b654653f3ff081a856250ee0ab765fb63",
+      "sha256": "132e35406897a5d032c1ccab1fdd6750d26f2fe7797d411032a9744b5c8ee067",
+      "evidence_scope": "existing Ghidra bulk decompilation, not newly verified complete native semantics"
+    },
+    {
+      "path": "kr-bulk-roy/9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91/functions/0x490fe0.c",
+      "blob": "201f5cd23bef5e5c93fe1b35444aef8338be00d8",
+      "sha256": "ccc5a15a95cdb9c89c0f2ccd19f76278dd3735213da329952fb33b1fa70fa4d8",
+      "evidence_scope": "existing Ghidra bulk decompilation, not newly verified complete native semantics"
+    },
+    {
+      "path": "kr-bulk-roy/9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91/functions/0x492900.c",
+      "blob": "6f4f5cc8327a0d92ff9201a92c9e515a4644894d",
+      "sha256": "2211cdbd985973b15b216da5ce491b8791f70c943bc5b6f1b15241b6ffb0a23a",
+      "evidence_scope": "existing Ghidra bulk decompilation, not newly verified complete native semantics"
+    },
+    {
+      "path": "kr-bulk-roy/9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91/functions/0x4c32e0.c",
+      "blob": "83d5bc7c6a043315a8b46edd021574a9b6871da7",
+      "sha256": "7ea77ac5d46897c4ef9e675af0a6f3e648cd4d94162042478e5d98117d1e9440",
+      "evidence_scope": "existing Ghidra bulk decompilation, not newly verified complete native semantics"
+    },
+    {
+      "path": "kr-bulk-roy/9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91/functions/0x554160.c",
+      "blob": "82d39377fdd14c32bc00aab34cc4b9e596d32568",
+      "sha256": "2d23e87342e3c0e855568ed4b66317990fd4de81d44a9a4c78def2afdefbfa86",
+      "evidence_scope": "existing Ghidra bulk decompilation, not newly verified complete native semantics"
+    },
+    {
+      "path": "kr-bulk-roy/9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91/functions/0x5541a0.c",
+      "blob": "59cab59d5ef05692755ab97b4e17dc77c567821f",
+      "sha256": "5306210ac71bc953b394155b6820b358d786129ea82e5db14e41ba2543ff56c5",
+      "evidence_scope": "existing Ghidra bulk decompilation, not newly verified complete native semantics"
+    },
+    {
+      "path": "kr-bulk-roy/9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91/functions/0x5541e0.c",
+      "blob": "ee1ae2f231dd584256a29ae9df1925b959f31a34",
+      "sha256": "3fdd4a209327c4765d33358bfe763ed83fc36b4a083b6b378e1c7498cbc98cb6",
+      "evidence_scope": "existing Ghidra bulk decompilation, not newly verified complete native semantics"
+    },
+    {
+      "path": "kr-bulk-roy/9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91/functions/0x554220.c",
+      "blob": "6444101c04fd609a5fac280bf05f1699cce30603",
+      "sha256": "1de03bb6b56af6eb1d599bd76913bd8dc63afaccab5298a0f3cd79f3cfadc635",
+      "evidence_scope": "existing Ghidra bulk decompilation, not newly verified complete native semantics"
+    },
+    {
+      "path": "kr-bulk-roy/9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91/functions/0x495280.c",
+      "blob": "de3c757d22e25f3ae48920dd6d370e7622b1f86c",
+      "sha256": "98a060eaae5feddb5dc7a15a0780d3588747d5673911683856a58e1e50811ccb",
+      "evidence_scope": "existing Ghidra bulk decompilation, not newly verified complete native semantics"
+    }
+  ]
+}
