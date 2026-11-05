@@ -1,0 +1,78 @@
+{
+  "schema": "t03-c-selection-channel-handoff-v1",
+  "timestamp": "2026-10-31T18:36:19+08:00",
+  "branch": "t03/roy/chatgpt-web",
+  "base_commit": "9f2a08a9332fdd9916effd6c4660c6541907a45f",
+  "client_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+  "scope": "KR T03 client selection/group/channel interface only. No original Server internals.",
+  "work": [
+    {
+      "id": "W09",
+      "status": "BOUNDED_STATIC_COMPLETE_WITH_UI_LISTENER_GAP",
+      "native": [
+        "0x4C3080",
+        "0x507510",
+        "0x507610",
+        "0x507750",
+        "0x5078C0",
+        "0x66B910"
+      ],
+      "summary": "S2C13 count +1C,cursor +92; S2C7A count+2,cursor+6; 3+10N; IPv4 bytes4..7; row8 append filter; row9 forwarded; two-step index and stride 0x60."
+    },
+    {
+      "id": "W10",
+      "status": "BOUNDED_STATIC_COMPLETE",
+      "native": [
+        "0x66C620",
+        "0x66C090"
+      ],
+      "summary": "UI 0x709 refresh; 0x70A f4 matching record path; 0x578 f8 alternate resolver; mappedCode/record/F94294 gated Connect."
+    },
+    {
+      "id": "W11",
+      "status": "BOUNDED_STATIC_COMPLETE_T02_DEPENDENCY",
+      "native": [
+        "0x495610",
+        "0x4957C0"
+      ],
+      "summary": "key1 port8415 BF60, key0 port8416 BF64, key2 port8414 BF68; key0 local app1 len0x39 on successful both Connect; no actual wire/Server ACK."
+    },
+    {
+      "id": "W12",
+      "status": "PARTIAL_STATIC_NO_GLOBAL_RETRY_CLOSURE",
+      "native": [
+        "0x4957C0",
+        "0x806FC0"
+      ],
+      "summary": "null key0/key2 branches and successful-side cleanup; no automatic retry in helper; global timer/UI cancel/re-login incomplete."
+    }
+  ],
+  "evidence": {
+    "local_binary_validation": "113/113 exact native instruction starts passed against SHA256 target",
+    "repro_script_assertion_count": 72,
+    "runtime": "NOT_RUN",
+    "original_server_packet_capture": "UNAVAILABLE"
+  },
+  "blocking_unknowns": [
+    "F4243 local event bus to visible UI callback full subscription",
+    "real active GUI layout identity / resource loading",
+    "global timer retry/other UI close back-to-login callback graph",
+    "original first S2C opcode after key0/key2 connects"
+  ],
+  "state": {
+    "rr0003": "IN_REVIEW",
+    "rr0002": "BLOCKED",
+    "T01": "ONLY_T01_CAN_RESOLVE",
+    "spec": "DRAFT_UNCHANGED"
+  },
+  "dependencies": [
+    "T02 transport/Conn",
+    "T06 UI resources",
+    "S00 server contract"
+  ],
+  "server_candidate_requirements": [
+    "CANDIDATE-REQ-T03-CHOICE-LIST-SAFE",
+    "CANDIDATE-REQ-T03-CONN-HANDOFF",
+    "CANDIDATE-REQ-T03-CHOICE-ERRORS"
+  ]
+}
