@@ -27,3 +27,7 @@ No assumption that reply=request+1 is permitted: S2C0053..58 dispatch to TradeMg
 Original XML/member payloads are not copied into this package. Metadata is local and not a formal RR claim or T01 FULL-PASS.
 
 Snapshot caveat: the earlier party-publication-candidates.json preflight_note/unknown create-producer wording predates create-party-producer.json. The latter closes the named-create producer; positive reply field semantics/order remain open. This package is source evidence, not T01 FULL-PASS or tested Server compatibility.
+
+## Consumer follow-up
+
+party-ui-consumers.json closes capacity via the native modify-dialog combo ABI, member role/level and the non-Duel constructor-neutral tag boundary. roster-local-identity.json additionally verifies the existing0002 roster producer writes F93930 at4B803F/4B8042; no extra opaque002A bootstrap is required. 005E/0060 to008A/008B remains an explicit Server policy candidate. Source identities/windows were checked against pinned originals; this is not a complete function/native acceptance verdict.

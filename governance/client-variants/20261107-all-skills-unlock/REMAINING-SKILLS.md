@@ -144,3 +144,5 @@ https://www.youtube.com/watch?v=z-F_fNP_pzE&list=PLY-ROEecpbS_UjeCtXctL-MZcj7jpZ
 https://www.youtube.com/watch?v=CSKA-ZXu-Z4
 
 原件資源存在與同槽取代不能等同動畫映射；未找到精確橋接不授權更動Client或直接借用基礎技能動畫。
+
+2026-11-08追加：13項basic bridge播放邊界見basic-bridge-producer-boundary.json。接收端4B01C0→4C8A90→4C8DA0→7A6970→7A7800直接消費Server motion；未找到active→motion生成規則，開放數不增加，87項仍待補證。
