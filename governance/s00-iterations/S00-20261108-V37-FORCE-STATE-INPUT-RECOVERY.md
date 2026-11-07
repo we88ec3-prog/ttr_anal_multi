@@ -14,3 +14,10 @@ ForceState12與技能charge-tier2是兩個不同域，不以狀態發現升格�
 ## 驗證與部署
 
 95項Category=HappyPath通過50秒、0失敗／略過；九角色長按測試改為驗證000C狀態12且不送000D，不能維持原來錯誤封包斷言只求綠燈。新的狀態入口仍需使用者實機驗證。S00需求來源與部署回執後補。
+
+## 部署與接續
+
+2026-11-08台灣00:31啟用v37，PID3136，私有main `e54312454b845053f63a21641cc563167f3a0970`，分析來源 `0a46dc945642a3d4fde33570c50958c3dc3108ae`。重開機後未見舊Host，換版腳本仍核對8415／5082監聽擁有者以排除其他程式，隔離DB先一致性備份。
+Host DLL SHA256 `1f1d85430bccb0a8b37607316dcdebd0cf943889e510643d5a2f56668e8aab30`；Network `6ab194f5304e108aab23a5c4791e0feb76cecb10516962edb80a9cbba488e010`。
+原生ForceState由另一分析範圍獨立核對RTTI、狀態ctor ABI、OnEnter及input gate；主代理另核對000C reader的actorFSM virtual8呼叫。不是T01全文驗收或官方時序證明。
+獨立重查程序與auth／journey／story健康，仍使用v7，不啟動／操作Client。新短卡已送出，結果PENDING。需求來源、完整性與19項治理測試通過；原始檔保持唯讀。
