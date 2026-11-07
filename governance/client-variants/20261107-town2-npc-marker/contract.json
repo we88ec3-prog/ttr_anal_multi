@@ -1,0 +1,108 @@
+{
+  "schema": "TOWN2_NPC_QUEST_MARKER_BOUNDED_V1",
+  "status": "SOURCE_CHAIN_PARTIAL_NOT_RUNTIME_OR_T01_FULLPASS",
+  "targetSha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+  "questInfoMemberSha256": "5d251415fdfdc453adefbff03114ded5a8ea41b696ce0aab86a23070e0fdca60",
+  "quest133": {
+    "attributes": {
+      "id": "133",
+      "type": "2",
+      "town": "2",
+      "field": "21",
+      "level": "10",
+      "giver": "10053",
+      "finisher": "10005",
+      "subtype": "1",
+      "subject": "\uc815\uc758\uc758 \uc0ac\ub3c4"
+    },
+    "children": [
+      {
+        "tag": "Demands",
+        "attributes": {},
+        "children": [
+          {
+            "tag": "Demand",
+            "attributes": {
+              "id": "132"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "eligibility": {
+    "builder": "500240",
+    "roleAggregation": "signed MAX(roleRecord+8) across valid role slots1..9; presence flag roleRecord+5C !=0; initial maximum0",
+    "roleRecordStride": "0x210",
+    "questLevelSource": "504740 parses literal level into local QuestRecord+0C",
+    "gate": "500491..500498: if QuestRecord+0C > maximum then skip candidate",
+    "otherGates": [
+      "QuestRecord+20 == currentTown parameter",
+      "questID must not be in20-slot exclusions owner+5ED0",
+      "questID must not already be in prerequisite vector owner+5EB0/+5EB4",
+      "every Demand key must be present in prerequisite vector",
+      "global condition/exclusion data atFB9398 inspected as separate early filter; full semantics not closed"
+    ],
+    "candidateVector": "QuestOwner+5EC0/+5EC4 WORD IDs"
+  },
+  "statsWriter": {
+    "handler": "005C ->4B3DA0 ->4D41A0",
+    "fields": {
+      "payload+2": "role index BYTE <=9 and selectedrecord+5C valid",
+      "payload+3": "u8 widened toDWORD roleRecord+8"
+    },
+    "full53ByteRow": "4D4150 row+2A DWORD ->roleRecord+8",
+    "rebuild": "4B3DA0 invokes500240 afterward; 6F snapshot502170 also invokes500240",
+    "limit": "005C does not create absent roles or award EXP; numeric balance/level ownership remains Server responsibility"
+  },
+  "marker": {
+    "type2Lookup": "500A00 from candidate vector; record+28 giver equals actor/model selector and record+4 type==2",
+    "status": "500A80 admits type2 lookup whenF9392C in1/3/7/23/24; present candidate contributesreturn5",
+    "actorPath": "CNPC constructor4D2120; update4D2890 calls4D2360",
+    "actorSelector": "4D2360 uses signed WORD model fromactor+88",
+    "renderGates": [
+      "actor+36C nonzero skips whole marker update",
+      "status0 removes actor+420 attached marker and markerKind+424=-1",
+      "status5 rechecks globalmode in1/3/7/23/24; no rebuild ifmarkerKind already2; otherwise creates attached resource via49B140/551F90, storesactor+420 andkind2"
+    ],
+    "unknown": [
+      "exact marker glyph/resource lookup ABI",
+      "runtime globalmode andNPC subtype identity for this specific client instance",
+      "all actor visibility/effect resource success paths"
+    ]
+  },
+  "serverObservation": {
+    "file": "server-runtime-dev/src/Tartaros.Network/LocalTutorialWorldConnection.cs",
+    "lineAtReview": 569,
+    "behavior": "Rebuild sends Stats twice with role2=1,role4=2,others=5. This can overwrite a prior raisedlevel before6F.",
+    "conditionalConclusion": "If all valid roles retain maximum<10, nativecandidateQ133 necessarilyfailslevelgate. Isilia2 alone does not prove other validroles maximum.",
+    "fixScope": "publish correct Server-owned/test-level DTO consistently in both Rebuild Stats outputs beforecandidate refresh; do not editQuestInfo orClient gates; retainsource rawlevel andtest-only provenance.",
+    "notProven": "Changing this field alone guarantees marker display; other context/giver/actor gates remain."
+  },
+  "nativeWindows": [
+    {
+      "start": "0x5002e7",
+      "end_exclusive": "0x500317",
+      "sha256": "52f38c0123c84ea667241065f3def19928cda3e7e9ef8e7457482a23b6df6db5",
+      "bytes_hex": "83fe09771ca10443f90003c783785c00740f85c0740b8b40083bc37f028bc38bd881c7100200004681ffa01400007ca0"
+    },
+    {
+      "start": "0x500485",
+      "end_exclusive": "0x50049e",
+      "sha256": "ede345d237e38a62cf9676a4ad97d22e329182a1475522c5c57e68b7008a244a",
+      "bytes_hex": "8b53203b550c0f85b90000008b430c3b4424180f8fac000000"
+    },
+    {
+      "start": "0x4d41a0",
+      "end_exclusive": "0x4d41ad",
+      "sha256": "bba88f6e4ce9bab40be353859cbcdf4e26f3cdb9b17a6c6f1a8c7b61e2670f96",
+      "bytes_hex": "0fb650038951088b5004895150"
+    },
+    {
+      "start": "0x4d2890",
+      "end_exclusive": "0x4d28c0",
+      "sha256": "6073be67de51a465660c971dd054f7296784b5a9c9c934527d1eddb71d653bfe",
+      "bytes_hex": "56578bf1e8e75cffff568bf8e8bffaffff8bb62004000085f67405e8d0de07008bc75f5ec3cccccccccccccccccccccc"
+    }
+  ]
+}
