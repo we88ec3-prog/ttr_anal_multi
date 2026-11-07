@@ -1,3 +1,13 @@
+最新已提交來源：私有main2428e3342f7fc5e3d72c60be556969e193870ad1（state-refresh／已支援角色切角kit），現行Host仍v44；公開加入／快速加入／邀請admission與多人world不在已完成功能內。
+
+2026-11-08 狀態同步後補（未部署）：room revision／不可變snapshot讓timer只發布變更，不建無界通知佇列。房間位置取實際world，列表filter不改位置；載入／戰鬥／劇情鎖定時busy。名稱快取在建隊snapshot前發布，普通資料更新不重送本人加入旗標。正常非戰鬥切換已擁有1/3/4角色，先準備既有授權starter kit再重建，避免舊角色kit不符而漏發裝備／技能。106項正流程通過51秒，包含角色3裝備19、已學技能與party角色/等級同步；其他角色持久資料未擴充。第一候選有1項filter/位置混用失敗，修正後才通過。
+
+2026-11-08 房主姓名後補（未部署）：008D之前在已認證slot0發布可見房主001C姓名快取，使用持久冒險團名，不是房間名／角色名。已核對slot0/slot2共用正常receive lane2，001C於CClient第一層轉GlobalStatus、無scene gate；這是Server主動發布政策，不把slot2的0013請求掛到slot0，也未猜aux認證。106項正流程通過51秒，已斷言NewVoyage姓名及UID與列表一致；實機待測。詳directory-owner-name-chain-v1.json及owner-name-proactive-dispatch-boundary-v1.json。
+
+2026-11-08 改名／容量後補（未部署）：已接005F46B正常修改，更新共享目錄後以008B45B發布，與008C取消公開分開；106項正流程通過51秒，包含修改後008D顯示新名稱與容量。
+
+2026-11-08 接線後補（未部署）：旅程共用目錄已接0052查詢、0053建隊、5E/60實際公開狀態、003D城鎮context及005D離隊；gateway斷線與debug覆寫清理房間。106項HappyPath通過53秒，包含真實合成TCP/SQLite旅程檢查清單由空→公開列→私人隱藏、正常進村及離隊。仍未接manual/quickjoin通知、名字cache及多人場景；現行Host仍v44/PID30596。
+
 # 正常房間公開目錄核心（Server候選，尚未接線）
 
 目前實際運作為v44，使用者稍後才測正常建隊進村。這份是接續開發，不能當已部署的公開組隊／加入功能。

@@ -146,3 +146,5 @@ https://www.youtube.com/watch?v=CSKA-ZXu-Z4
 原件資源存在與同槽取代不能等同動畫映射；未找到精確橋接不授權更動Client或直接借用基礎技能動畫。
 
 2026-11-08追加：13項basic bridge播放邊界見basic-bridge-producer-boundary.json。接收端4B01C0→4C8A90→4C8DA0→7A6970→7A7800直接消費Server motion；未找到active→motion生成規則，開放數不增加，87項仍待補證。
+
+2026-11-08數字family新補證：Ruko Ambush、Epds IceShield／Hammer在EFF子物件Element.File找到3個精確stem，13個clip彼此不等價且無Basis變體標記；只能縮小候選，仍不選代表clip。詳numeric-stem-family-review.json，完整解析結構留本機，未開放數維持87。

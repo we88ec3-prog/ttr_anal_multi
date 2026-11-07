@@ -1,3 +1,5 @@
+2026-11-08 開發中更新：[共享房間、名稱與角色狀態](../../design/runtime-content/NORMAL-PARTY-DIRECTORY-CANDIDATE.md)私有main2428e3342f7f，106項正流程通過51秒，尚未部署。實際仍v44/PID30596，使用者稍後再測；全角色87項未開、3組新資源family仍無唯一可用變體。
+
 2026-11-08 開發中：[共享正常房間目錄核心](../../design/runtime-content/NORMAL-PARTY-DIRECTORY-CANDIDATE.md)，私有main8da7e540，106項正流程通過；尚未接線／未部署。現行Host仍v44/PID30596，使用者稍後再測。
 
 2026-11-08 最新：v44啟用（PID30596/source1e739c3c）；v43因008B/008C索引換算錯誤撤回。105項HappyPath通過，增加公開轉私人分支；使用者要求稍後一起測，實機待回。全角色仍87映射未解；公開房間目錄／加入繼續開發，不閒置。v10翻譯待測。
