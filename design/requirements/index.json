@@ -1636,6 +1636,18 @@
           "reproduction": "Returning display -> enter square -> three normal direction/Z checks -> Story117 progress override -> approach expected NPC and pressZ.",
           "observed": "User confirms village NPC story appears. Native manual NPC10002 intent1C0003001227 was accepted and117/1 began. Later events are retained without broadening acceptance.",
           "limitations": "Bounded working-copy positive pass only. Debug navigation does not persist normal quest completion; no original full-pass, full village/story/combat or new cooldown UI acceptance. Large outbound snapshots exceed existing68B journal limit."
+        },
+        {
+          "channel": "GAME_RUNTIME_OBSERVATION",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "tested_executable_sha256": "937486b989d0a1adcddd86f5224011f8b22907c61dd30c3772ad4179891299ec",
+          "tested_build_kind": "MODIFIED_WORKING_COPY_NOT_ORIGINAL_CLIENT",
+          "observation_ref": "governance/s00-iterations/S00-20261108-V42-HUMAN-PROGRESSION-AND-TEXT-GAPS.md",
+          "authorization_ref": "governance/s00-iterations/S00-20261108-V42-HUMAN-PROGRESSION-AND-TEXT-GAPS.md",
+          "environment": "User-operated instructed v7 Client, loopback v42 Host7684/source d40b5c0. Executing EXE identity not independently inspected.",
+          "reproduction": "Normal tutorial -> square -> Phindos -> Q117/118/119 combat/result/return; no debug progress override.",
+          "observed": "打完巨大公雞副本後無法繼續主線；Server留存Q120/Npc/revision20，無物品條件，要求level8。",
+          "limitations": "Gameplay blocker reported; source/code show unresolved normal progression. No live Client record inspection or complete village acceptance; query ready=false is retained last state."
         }
       ],
       "category": "SERVER_DESIGN",
@@ -1643,10 +1655,13 @@
       "status": "CANDIDATE",
       "client_version": "kr",
       "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
-      "rr_ids": [],
+      "rr_ids": [
+        "RR-0014"
+      ],
       "gap_ids": [
         "GAP-FLOW-0001",
-        "GAP-SCENE-0001"
+        "GAP-SCENE-0001",
+        "GAP-PROGRESS-0001"
       ],
       "spec_ids": [
         "SPEC-FLOW-0001",
@@ -1751,6 +1766,41 @@
           "reproduction": "Progress debug Story133 -> Town2/Map183, inspect NPC mainline marker.",
           "observed": "可進村，移動正常，但NPC沒有主線任務的標記",
           "limitations": "Village/movement pass only; no reported interaction success or full story pass. Fixed low-role publication is code evidence; native eligibility/render chain is bounded static evidence, not a live memory observation."
+        }
+      ]
+    },
+    {
+      "id": "REQ-0022",
+      "title": "結算、主線角色名稱及任務介面的繁中顯示補齊",
+      "need": "使用者正常主線測試發現結算標題、說話者名稱及任務內容／按鈕仍韓文。",
+      "category": "CLIENT_COMPATIBILITY",
+      "priority": "P1",
+      "status": "CANDIDATE",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "rr_ids": [],
+      "gap_ids": [],
+      "spec_ids": [],
+      "adr_ids": [],
+      "feedback_ids": [],
+      "claim_ids": [],
+      "acceptance_criteria": [
+        "按台版同ID或已核對名稱來源翻譯顯示文字，保留KR任務條件、等級、數值與控制流程。",
+        "保留所有舊EXE與原始配套，以新檔名交付；fcs.flu與pack.gms不覆寫。",
+        "結算、劇情說話者與任務內容／按鈕各自記錄靜態驗證及實機結果，未測不標通過。"
+      ],
+      "discoveries": [
+        {
+          "channel": "GAME_RUNTIME_OBSERVATION",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "tested_executable_sha256": "937486b989d0a1adcddd86f5224011f8b22907c61dd30c3772ad4179891299ec",
+          "tested_build_kind": "MODIFIED_WORKING_COPY_NOT_ORIGINAL_CLIENT",
+          "observation_ref": "governance/s00-iterations/S00-20261108-V42-HUMAN-PROGRESSION-AND-TEXT-GAPS.md",
+          "authorization_ref": "governance/s00-iterations/S00-20261108-V42-HUMAN-PROGRESSION-AND-TEXT-GAPS.md",
+          "environment": "User-operated instructed v7 Client, loopback v42 Host7684/source d40b5c0. Executing EXE identity not independently inspected.",
+          "reproduction": "Inspect normal result screen, Phindos entry scene speaker and quest interface.",
+          "observed": "結算有韓文，主線對話角色名稱韓文；任務內容與任務介面按鈕韓文。",
+          "limitations": "User screenshots and instructed v7 identity; text-source/consumer fix remains candidate until actual display tested."
         }
       ]
     }

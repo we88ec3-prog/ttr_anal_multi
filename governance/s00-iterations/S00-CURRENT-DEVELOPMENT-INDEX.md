@@ -1,5 +1,7 @@
 正常主線補證：[角色成長／結算缺口](../client-variants/20261108-mainline-progression/README.md)。22任務原值已核對，19條超過固定顯示5級，第一風險Q120=8；RR-0014查EXP／level發布，不把debug補等級當自然升級。
 
+2026-11-08：人測Q119公雞副本返回後已推進Q120，但等級8成長門檻未補齊，REQ-0019／GAP-PROGRESS-0001／RR-0014保持未完成；[回報](S00-20261108-V42-HUMAN-PROGRESSION-AND-TEXT-GAPS.md)。另v8翻譯候選已製作，645列UI、7714處任務顯示與9角色名，[來源與驗證](../client-variants/20261108-variant-v8/README.md)；REQ-0022人測待回，未修改任務數值。
+
 2026-11-08：v42已批次啟用（PID7684），合併v39–41及怪物碰撞停止修正，105項HappyPath通過。來源內容仍為v34，資料庫無schema變更、已備份；[換版收據](evidence/S00-20261108-V42-DEPLOYMENT.json)。v42新帳號至馮德斯測試卡取代v38，結果待回；不能算新版人測通過。
 
 2026-11-08：v41將10副本／33節點接入共用有限事件引擎，敘事Commit後才發布副本狀態。104項HappyPath及兩份真實內容靜態載入通過；[設計](../../design/runtime-content/STORY-EVENT-ENGINE-CANDIDATE.md)／[建置收據](evidence/S00-20261108-V41-BUILD-ONLY.json)。未部署，不代表原生MEF、完整波次、正式獎勵或新的人測通過。
