@@ -28,3 +28,7 @@ ForceState12本身不改charge tier。不要把FSM12、motion19、active68、row
 ## 回報
 
 狀態只寫research/requests/index.json，經dispatch.py認領／提交；本文件不自動喚醒Web。先回一份最小可用報告，附相對路徑及Git blob，T01驗來源、S00決定可採用範圍。不存在新映射就明列未完成，不填Enabled=true以湊數。
+
+## RR-0012後續限定補證（仍未結案）
+
+新增 governance/client-variants/20261108-v-row-consumers/：actor+3E8→54F270 arg2→81A8E0 row的選定ABI與KR/TC126組矩陣已核對。後續不要重做這些；仍需釐清官方67/68/69的回覆／狀態政策，而非把當前Server row2畫面當證據。長V與release的0xC0本來略過普通row可用查詢，Server不應只因row2/col8為0拒絕此操作。
