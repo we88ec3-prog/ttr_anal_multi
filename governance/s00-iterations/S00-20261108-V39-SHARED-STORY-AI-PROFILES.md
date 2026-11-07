@@ -13,3 +13,7 @@ v38的外部MonsterBehavior設定僅透過PhindosBridge交給Map191/192；後續
 新案例不只是catalog roundtrip：走NPC→劇情→編隊→進場劇情重建，再確認HP90及命中後血條3333、指定怪物motion108、玩家受5點傷害的血條9900，避免Host／World接線被漏掉仍顯示綠燈。另一案例覆蓋既有33個node缺欄位時的預設相容。
 這只覆蓋共用AI參數接線。逐物種AI、事件／波次、生怪安全距離、原生MEF與87項技能映射仍未完成。
 v38短卡仍待回，這批先建置／上Git，不為未改預設數值的接線工作中斷使用者當前測試。啟用與實機驗收另記，不把程式已準備當已部署。
+
+## 建置收據
+
+私有實作main `9a1f13c9ff28a5d2567552bb02a2933a85d9d011`已Release publish至本機v39獨立目錄；[精確DLL／測試／內容SHA收據](evidence/S00-20261108-V39-BUILD-ONLY.json)標示NOT_DEPLOYED。檢核最終TRX為100通過、0失敗，且含具名profile World實際行為案例；既有story與AI檔SHA未變。v38仍為目前測試版本，沒有啟動v39、關閉連線或修改DB。
