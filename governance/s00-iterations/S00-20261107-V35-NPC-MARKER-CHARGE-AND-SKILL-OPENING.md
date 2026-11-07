@@ -35,3 +35,11 @@ Server修正只限明示進度指定：同一Rebuild的兩次5C都使用max(原�
 中間一輪92通過、1失敗是舊的matrix0可測數斷言仍119，而新內容為121；更新該覆蓋斷言後整批重跑，不將前一輪當全綠。
 沒有執行Client、重演負流程或改正式角色數值。NPC標記與技能退階實機仍PENDING，部署回執另補。
 先前使用者影片連結已列入剩餘清單，標示USER_SUPPLIED_NOT_REVIEWED；本輪網頁抓取5個連結皆cache miss，未據此補動畫或宣稱已看影片。
+
+## v35部署
+
+私有main `f49721abae5087855034774528675b182797357c`，2026-11-07台灣22:25啟用，PID8280。
+核對舊v34 PID39276與exact路徑後一次換版，隔離SQLite先一致性備份；story內容SHA14773c…f50c、泳池與外部AI／場景設定保持。
+Host DLL SHA256 `187fcbf5103af3cd027e1310075d154e474879be3e7b7595927a2456e7eee65d`；Network `c034102dbc2a9daa95da7e99ea05968d267d6307b260c8f85f0cd0c8918518d2`。
+獨立重查Host存活及auth／journey／story皆健康。Client維持v7，不啟動／操作遊戲。
+新短卡先測Q133主線標記／第一劇情，再測伊希莉亞進階X、索瑪及蘋果進階X+C退階；結果PENDING。
