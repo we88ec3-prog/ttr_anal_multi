@@ -1,3 +1,5 @@
+目前P0：[資源回復造成冷卻圓形進度重轉](S00-20261107-RESOURCE-RECOVERY-COOLDOWN-RESTART.md)。已核對Server全表reset/republication觸發，原deadline不變；Server-only修正需求已記錄，尚未套用。
+
 最新：[Server與測試現況](S00-20261107-CURRENT-SERVER-AND-TEST-STATUS.md)；[已核准Client v5頭頂名稱修正](../client-variants/20261107-zh-tw-v5/README.md)。v28持續運作，v5與六鍵人測待回。
 
 最新：[使用者核准的原目錄Client v4](../client-variants/20261107-zh-tw-v4/README.md)。只新增EXE與四個翻譯/字型檔，79個既有檔案hash保留，靜態檢查通過、實機待測。
