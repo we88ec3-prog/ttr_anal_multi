@@ -1771,8 +1771,8 @@
     },
     {
       "id": "REQ-0022",
-      "title": "結算、主線角色名稱及任務介面的繁中顯示補齊",
-      "need": "使用者正常主線測試發現結算標題、說話者名稱及任務內容／按鈕仍韓文。",
+      "title": "村莊名稱、結算、主線角色名稱及任務／隊伍介面的繁中顯示補齊",
+      "need": "使用者正常主線測試發現結算標題、說話者名稱、任務內容／按鈕、村莊名稱及隊伍介面仍韓文，要求一併修正。",
       "category": "CLIENT_COMPATIBILITY",
       "priority": "P1",
       "status": "CANDIDATE",
@@ -1787,7 +1787,8 @@
       "acceptance_criteria": [
         "按台版同ID或已核對名稱來源翻譯顯示文字，保留KR任務條件、等級、數值與控制流程。",
         "保留所有舊EXE與原始配套，以新檔名交付；fcs.flu與pack.gms不覆寫。",
-        "結算、劇情說話者與任務內容／按鈕各自記錄靜態驗證及實機結果，未測不標通過。"
+        "結算、劇情說話者與任務內容／按鈕各自記錄靜態驗證及實機結果，未測不標通過。",
+        "村莊中文以同ID台版來源核對；世界地圖／隊伍介面各自人測，v10靜態通過不算實機完成。"
       ],
       "discoveries": [
         {
@@ -1801,6 +1802,76 @@
           "reproduction": "Inspect normal result screen, Phindos entry scene speaker and quest interface.",
           "observed": "結算有韓文，主線對話角色名稱韓文；任務內容與任務介面按鈕韓文。",
           "limitations": "User screenshots and instructed v7 identity; text-source/consumer fix remains candidate until actual display tested."
+        },
+        {
+          "channel": "GAME_RUNTIME_OBSERVATION",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "tested_executable_sha256": "e8d6e46eb727da74c7eed67f1c112a0736c14aa5701e01dbf4aa83bbf4cdc74a",
+          "tested_build_kind": "MODIFIED_WORKING_COPY_NOT_ORIGINAL_CLIENT",
+          "observation_ref": "governance/client-variants/20261108-variant-v9/README.md",
+          "authorization_ref": "governance/client-variants/20261108-variant-v9/README.md",
+          "environment": "User-operated instructed v8 Client; loopback v42. Executing EXE identity not independently inspected; matching passive crash dump used for wrapper defect attribution.",
+          "reproduction": "Launch v8 from game root.",
+          "observed": "0xC0000005; passive dump write to readonly1048782 atEIP104D07C.",
+          "limitations": "Modified translation wrapper defect; not original Client evidence."
+        },
+        {
+          "channel": "GAME_RUNTIME_OBSERVATION",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "tested_executable_sha256": "11499fad85ad4059adbc378596b8ce9c1d69a9674a9506a651e95d372d5d7afa",
+          "tested_build_kind": "MODIFIED_WORKING_COPY_NOT_ORIGINAL_CLIENT",
+          "observation_ref": "governance/client-variants/20261108-variant-v9/README.md",
+          "authorization_ref": "governance/client-variants/20261108-variant-v9/README.md",
+          "environment": "User-operated instructed v9 Client; loopback v42. Executing EXE identity not independently inspected.",
+          "reproduction": "Launch v9, inspect quest UI and normal worldmap/party room entry.",
+          "observed": "可正常進入，任務名稱中文，但介面按鈕、描述、村莊及組隊介面仍韓文。",
+          "limitations": "Startup/partial text pass only; complete UI, result and speaker acceptance unverified."
+        }
+      ]
+    },
+    {
+      "id": "REQ-0023",
+      "title": "正常世界地圖與隊伍房間流程進入村莊",
+      "need": "使用者明確將正常管道開啟組隊房間進村列為目前階段目標；不能以單人主線編隊或測試跳轉代替。",
+      "category": "PRODUCT_FEATURE",
+      "priority": "P0",
+      "status": "CANDIDATE",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "rr_ids": [],
+      "gap_ids": [
+        "GAP-FLOW-0001"
+      ],
+      "spec_ids": [
+        "SPEC-FLOW-0001"
+      ],
+      "adr_ids": [],
+      "feedback_ids": [],
+      "claim_ids": [],
+      "acceptance_criteria": [
+        "按已核對Client請求接入世界地圖選村、房間建立／狀態與進村；識別等級前置的真實欄位與領域。",
+        "使用正常遊戲UI建立房間並進馮德斯，人物、NPC及移動停止正常；不修改Client玩法或採用debug跳圖算通過。",
+        "保留單人主線編隊、一般房間、廣場與村莊狀態的差異；多人同步等未排程測試另列待測。"
+      ],
+      "discoveries": [
+        {
+          "channel": "PLAYER_ADMIN_REQUEST",
+          "requester_role": "PLAYER",
+          "request_text": "目前階段目標是公開所有角色技能與正常管道(開啟組隊房間)進入村莊",
+          "request_record_ref": "governance/s00-iterations/S00-20261108-NORMAL-ROOM-VILLAGE-ENTRY.md",
+          "reference_materials": []
+        },
+        {
+          "channel": "GAME_RUNTIME_OBSERVATION",
+          "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "tested_executable_sha256": "11499fad85ad4059adbc378596b8ce9c1d69a9674a9506a651e95d372d5d7afa",
+          "tested_build_kind": "MODIFIED_WORKING_COPY_NOT_ORIGINAL_CLIENT",
+          "observation_ref": "governance/s00-iterations/S00-20261108-NORMAL-ROOM-VILLAGE-ENTRY.md",
+          "authorization_ref": "governance/s00-iterations/S00-20261108-NORMAL-ROOM-VILLAGE-ENTRY.md",
+          "environment": "User-operated instructed v7 Client, loopback v42 Host7684/source d40b5c0. Executing EXE identity not independently inspected.",
+          "reproduction": "Square->Move to Village worldmap->PhindosLv01->Party/room create->confirm.",
+          "observed": "目前無法透過正常管道開啟組隊房間進村；顯示未符合可進入等級。",
+          "limitations": "Exact producer/gating domain unresolved; do not attribute popup to character level or Server response without trace."
         }
       ]
     }

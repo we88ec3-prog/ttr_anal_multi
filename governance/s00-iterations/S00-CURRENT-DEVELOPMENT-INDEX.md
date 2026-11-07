@@ -1,3 +1,5 @@
+2026-11-08 最新：目前階段目標為全角色技能開放及正常建隊進村，見 [正常房間阻塞](S00-20261108-NORMAL-ROOM-VILLAGE-ENTRY.md)。v8 啟動失敗、v9 啟動部分通過但介面仍韓文；[v10](../client-variants/20261108-variant-v10/README.md) 改用已確認的直接 XML 文字讀取路徑，靜態檢查通過、人測待回。Server 仍 v42，以下舊版本部署／待測敘述為歷史。
+
 正常主線補證：[角色成長／結算缺口](../client-variants/20261108-mainline-progression/README.md)。22任務原值已核對，19條超過固定顯示5級，第一風險Q120=8；RR-0014查EXP／level發布，不把debug補等級當自然升級。
 
 2026-11-08：人測Q119公雞副本返回後已推進Q120，但等級8成長門檻未補齊，REQ-0019／GAP-PROGRESS-0001／RR-0014保持未完成；[回報](S00-20261108-V42-HUMAN-PROGRESSION-AND-TEXT-GAPS.md)。另v8翻譯候選已製作，645列UI、7714處任務顯示與9角色名，[來源與驗證](../client-variants/20261108-variant-v8/README.md)；REQ-0022人測待回，未修改任務數值。
