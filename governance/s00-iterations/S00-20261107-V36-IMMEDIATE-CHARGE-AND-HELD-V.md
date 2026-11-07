@@ -23,3 +23,9 @@ v35實際input183/191/197均有flags128，Server只回停止與motion19；不是
 最終95項Category=HappyPath全通過，0失敗／略過，55秒；含九角色超過12秒持續長按／放開、立即退階及同包release＋技能，不用原來只要求不切組的舊斷言冒充符合需求。S00需求／索引完整性及19個來源測試通過。部署／實機待補。未操作Client或修改資源。
 
 另查13命名缺口與2多Basis家族的32份精確EFF，沒有顯式SkillID/motion/alias欄位，87項仍未開放；限定補證見[紀錄](../client-variants/20261107-v36-emission/effect-bridge-audit/README.md)。不把效果名近似當映射。
+
+## v36部署
+
+2026-11-07台灣23:41啟用，私有main `1d4b2ab72ab32257829dbbfb1d22d8fd6491df58`，分析來源 `c44dbd7d922fe3ec6cf6b014229033d1b2e1e74b`。精確核對舊v35 PID8280／路徑後關閉指定Host，一致性備份隔離DB，啟用PID41012。
+Host DLL SHA256 `e143546ffd792cea675ba899dca89a6fd35f272620094200972cb6f450097307`；Network `c72cc230c54cdb1bd3c6a699c31c1186c80ac88dbea5bb5a1608784d3d654974`。泳池1088、story內容v34及外部AI／scenario JSON身份保持，無原生MEF reader。
+獨立確認Host存活及auth／journey／story均正常，未操作Client。新短卡已送出，只測長V切組、放開立即復原／行走、施放時即回基礎圖示但動畫完成；實機PENDING，87項未開放維持。
