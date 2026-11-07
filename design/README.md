@@ -13,3 +13,5 @@
 - [後續主線顯式生怪／出口配置候選](runtime-content/STORY-PLACEMENT-CANDIDATE.md)
 
 - [後續主線共用事件引擎候選](runtime-content/STORY-EVENT-ENGINE-CANDIDATE.md)
+
+- [怪物碰撞停止通知一致性](runtime-content/MONSTER-COLLISION-MOVEMENT-CANDIDATE.md)
