@@ -1,3 +1,5 @@
+架構補證：[怪物AI／位置／傷害權限界線](../client-variants/20261108-monster-authority-boundary/README.md)。現行Server控制維持，原生Client完整自主AI／MEF執行仍未證；RR-0013由T13定向接續，未改Runtime。
+
 目前接續：[v38 V矩陣／原生選列與跨列長按](S00-20261108-V38-CHARGE-ROW-BOUNDARIES.md)。v37三項操作通過；v38解除row2無col8而拒絕長V的Server限制，98正流程合成通過，v38已部署、短卡人測待回。兩次短V／長V同組仍是政策，未冒稱官方已證。
 
 目前P0：[v37原生ForceState修正](S00-20261108-V37-FORCE-STATE-INPUT-RECOVERY.md)。v36人測無法移動／施放退回；改用原生FSM12而非000D循環19，95正流程合成通過，v37三項操作人測通過。兩次短V／長V同技能組仍是Server政策，RR-0012待補證；87映射缺口由RR-0011定向接續。
