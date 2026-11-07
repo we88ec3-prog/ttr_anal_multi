@@ -1,3 +1,5 @@
+2026-11-08 v57未部署：[技能攻擊／治療分流政策](../../../design/runtime-content/LAB-SKILL-IMPACT-ROUTING.md)修正治療／防禦輔助技能誤走通用傷害，五項自身補血採明示Server暫用魔攻100與校準公式；不是官方公式、多人治療或完整技能。148項正流程通過，現行Host仍v53，正常建隊進村實機待測。候選數仍178／880slots，65個active未開放。後文為歷史狀態。
+
 2026-11-08 v56未部署：[四項元件線索比較政策](../../../design/runtime-content/FOUR-TOKEN-LAB-POLICY.md)新增幻滅刀影、躍舞手裏劍201、聖靈之盾與正義火焰炮隔離候選。178個lab候選／880slots，65個active尚不可測；不是完整技能或官方映射。128項正流程及Host Release建置通過，Host仍v53、正常建隊進村實機待測。後文保留歷史狀態。
 
 2026-11-08 v55未部署：[元件名稱錨點比較政策](../../../design/runtime-content/COMPONENT-ANCHOR-LAB-POLICY.md)新增露可伏擊、艾芬多絲冰盾與冰鎚的隔離視效候選。174個lab候選／876slots，69個active仍不可測；不是原版映射或完整技能。124項正流程通過，測試fixture調整後3項再通過。Host仍v53，正常進村實機待測；後文為歷史狀態。
