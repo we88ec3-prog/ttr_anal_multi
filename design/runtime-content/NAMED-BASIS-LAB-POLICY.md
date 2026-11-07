@@ -1,3 +1,5 @@
+2026-11-08 現行測試Host已改為v53，PID44028，部署來源8d4638e4a166172040ea8c8f25bdaf460668af95。115項HappyPath通過；四個loopback端口／健康／HTTP技能目錄189組、841可用slot獨立核對。此合併版取代v50測試卡，原正常建隊進村路徑保留；165個lab候選不等於完整技能，實機仍待使用者稍後測。多人加入／邀請仍預設停用，原生MEF仍不支援。
+
 # Eight individually reviewed lab family hypotheses — v53
 
 Status: SERVER_DESIGN_CHOICE / BUILD_ONLY / HUMAN_COMPARISON_PENDING.
