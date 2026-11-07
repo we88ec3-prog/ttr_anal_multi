@@ -1,3 +1,5 @@
+最新：[Server與測試現況](S00-20261107-CURRENT-SERVER-AND-TEST-STATUS.md)；[已核准Client v5頭頂名稱修正](../client-variants/20261107-zh-tw-v5/README.md)。v28持續運作，v5與六鍵人測待回。
+
 最新：[使用者核准的原目錄Client v4](../client-variants/20261107-zh-tw-v4/README.md)。只新增EXE與四個翻譯/字型檔，79個既有檔案hash保留，靜態檢查通過、實機待測。
 
 目前P0：[v28資源語意／反灰／一級耗量與六鍵測試](S00-20261105-V28-RESOURCE-SEMANTICS-AND-SIX-KEYS.md)。v27技能／MP-SP回復通過，HP未測，耗量／黑圖示退回；57正流程合成通過，新Client與v28人測PENDING。
@@ -52,7 +54,7 @@
 Server實作程式只保存在使用者指定的私有ttr_server_roy，不複製到此庫。
 本入口是目前主要採用資料的導覽，不宣稱所有探索、尚未採用的舊稿或第三方報告都已驗收。
 
-目前工作分支：`codex/s00-combat-priority-20261101`，Draft PR102；未合併main。
+歷史工作分支曾為`codex/s00-combat-priority-20261101`。其提交現已全部納入main；目前只在main作業，見2026-11-07分支稽核。
 原始bulk及歷史Task主張沿用原索引與限制，分支推送不等於正式規格批准。
 
 - [舊Server資料採用界線](S00-20261101-LEGACY-SERVER-INTAKE-AUDIT.md)
