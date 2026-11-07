@@ -41,3 +41,5 @@ MP/SP仍每10秒回復最大值50%，HP每60秒20%；本輪只改測試上限，
 ## 證據界線
 
 這是修改工作副本與loopback Server候選，不是原始Client完整相容驗收；REQ維持CANDIDATE、不提升SPEC／T01 FULL-PASS。原EXE、STP、BND、貼圖、字型和新解包member均留本機，本庫只收metadata、分析與重現工具。
+
+補證已完成：[16技能有界結構檢核](../client-variants/20261107-role-skills/blocked-followup/README.md)重讀41次原／工作member，檢查完整Practice／Active entry及指定ABF／ASD／EFF／輔助表；沒有可獨立閉合的active→motion連結，零項升級，16項仍禁用。本段停止擴搜，不宣稱整個Client不存在映射。
