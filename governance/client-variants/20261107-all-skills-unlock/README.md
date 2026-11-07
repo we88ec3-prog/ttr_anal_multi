@@ -1,3 +1,5 @@
+2026-11-08 v60未部署：[原生Buff快照0077接線政策](../../../design/runtime-content/LAB-BUFF-SNAPSHOT-0077-POLICY.md)已核接收lane2／primary可達、actor+3F0替換、ID／level至UI；剩餘時間與高byte語意未證明。技能場接上四防禦Buff套用／到期／耗盡的完整清單，僅發自身已核ID1..4。154項正流程及27組初始化順序追加斷言通過，Host Release通過；圖示／視效仍待實機，現行Host仍v58。後文舊的Buff wire未決／未部署敘述保留其當時範圍。
+
 2026-11-08 v59未部署：[四項防禦技能政策](../../../design/runtime-content/LAB-DEFENCE-BUFF-POLICY.md)採用新核對BuffExplain同名候選，接上索瑪防禦、坦基裝甲減傷、坦基屏障與意志之盾的自身有限次阻擋；不聲稱原版Active→Buff派送或time單位已證明。物攻／迴避公式與隊友效果待開發。153項正流程通過，現行Host仍v58；178／880候選數不變，正常進村實機仍待測。後文保留歷史狀態。
 
 2026-11-08 現行Host已整批更新至v58，PID30588，來源d2b85b791ce02b250818ddce19b30b77ed398580；取代v53測試版。四個loopback埠、健康與HTTP技能189組／880slots／178個候選獨立核對，巡行陣每2秒補105HP等暫定設定已實際提供。149項HappyPath通過、DB一致備份已核驗。正常建隊進村仍優先且實機待測，未催測；原生MEF、多人與完整技能仍未完成。收據見host-v58-deployment.json；後文未部署／v53敘述為歷史狀態。
