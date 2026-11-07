@@ -1,3 +1,5 @@
+2026-11-08 候選政策更新（未部署）：[索瑪普攻測試政策](../../../design/runtime-content/SOMA-BASIC-LAB-POLICY.md)新增role1/Practice1/active1專用六clip候選，明確是Server選定的隔離比較方案，並非新找到官方動作映射。lab候選157項／799個矩陣slot，尚不可測86項；來源映射缺口仍87項（索瑪此項仍未閉合），不可混計。新duration查核亦未驗證舊sum((End+Delay)/FPS)為原生時鐘，不能改成End−Start或稱為硬直／cancel權威。後文數量／「未開放」敘述保留歷史狀態。
+
 # 全角色技能開放接續
 
 本包是原始資源的欄位／SHA投影與Server隔離預覽候選，不是Client資源包或完整技能完成證明。
