@@ -1,3 +1,5 @@
+最新：[v6直接讀取NPC中文XML](../client-variants/20261107-zh-tw-v6/README.md)。保留v5退回，v6靜態檢查通過、實機待測；v29冷卻亦待回。測試卡送出後已續查聊天提示來源與台韓指令差異。
+
 最新：[v29冷卻增量修正已部署](S00-20261107-V29-COOLDOWN-DELTA-DEPLOYMENT.md)。59項正流程合成通過；資源回復、其他技能與到期不再重建未改變的冷卻。實機圖示待測，翻譯仍v5退回、無新版。
 
 目前P0：[資源回復造成冷卻圓形進度重轉](S00-20261107-RESOURCE-RECOVERY-COOLDOWN-RESTART.md)。已核對Server全表reset/republication觸發，原deadline不變；Server-only修正需求已記錄，尚未套用。

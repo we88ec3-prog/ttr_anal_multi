@@ -1,3 +1,5 @@
+接續：[已追到頭頂名稱／職稱直接讀取入口與v6提案](../20261107-nameplate-read-path/README.md)，新配套XML待使用者確認，未建立v6。
+
 最新人測：NPC頭頂名稱仍韓文，v5名稱修正未通過。見[實機退回](HUMAN-NAMEPLATE-REJECTION.md)，靜態結果不等於實際顯示。
 
 # zh-TW v5 — NPC頭頂名稱／職稱（2026-11-07）
