@@ -21,3 +21,9 @@ ForceState12與技能charge-tier2是兩個不同域，不以狀態發現升格�
 Host DLL SHA256 `1f1d85430bccb0a8b37607316dcdebd0cf943889e510643d5a2f56668e8aab30`；Network `6ab194f5304e108aab23a5c4791e0feb76cecb10516962edb80a9cbba488e010`。
 原生ForceState由另一分析範圍獨立核對RTTI、狀態ctor ABI、OnEnter及input gate；主代理另核對000C reader的actorFSM virtual8呼叫。不是T01全文驗收或官方時序證明。
 獨立重查程序與auth／journey／story健康，仍使用v7，不啟動／操作Client。新短卡已送出，結果PENDING。需求來源、完整性與19項治理測試通過；原始檔保持唯讀。
+
+## v37實機結果與新問題
+
+使用者回覆「三項正常」，限定通過：長按V氣散發動畫／圖示、放開立即復原及移動、氣散發X成功施放且圖示立即回基礎／招式播完可走。這不升級全角色／全部技能或正式原件相容性。
+同時詢問兩次短V與長V目前同組是否真有根據。67／69原文確有初次及二次集氣文字；兩種操作同選row2是現行Server政策，並未證明原版同組。已建立GAP-SKILL-0002／RR-0012定向補證，不以文字有二階推定兩條操作相等。
+87項映射缺口另建立GAP-SKILL-0001／RR-0011；優先關閉一條確切映射，不重查已齊的1448等級耗量／係數或32份EFF陰性範圍。正式派工不自動喚醒其他Web對話。
