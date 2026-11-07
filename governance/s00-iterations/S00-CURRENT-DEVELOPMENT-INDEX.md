@@ -1,3 +1,5 @@
+目前開發：[爾勒梅斯村Town2主線接續](S00-20261107-TOWN2-MAINLINE-CONTINUATION.md)。舊版只到村口，Q133～144十二段主線尚未完成，正在接入；銀行／裝備／商店／掉落撿取依使用者要求排在其後。v33仍運作，新增批次未部署／未人測。
+
 最新：[v33＋v7、v31人測回饋](S00-20261107-V33-HELD-V-ANIMATION-AND-V7-TOOLTIPS.md)。MEF資料層外部檔已啟用，79正流程合成通過；V補單次／循環動畫與release候選，v7修中文說明。原生MEF／SP轉換與89技能缺口仍未完成，實機待回。
 
 最新：[MEF重新啟動／Server內容層](S00-20261107-MEF-RESUME-AND-SERVER-SCENARIO-DATA.md)。新排程解除60%暫緩；78項正流程合成通過，原生MEF reader仍缺樣本／格式，與Server自訂JSON清楚分開。
