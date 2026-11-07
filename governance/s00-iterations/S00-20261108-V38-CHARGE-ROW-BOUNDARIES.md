@@ -14,3 +14,9 @@ BeginHeldV原本以目前profile的column8查找特殊技能；當profile位於r
 ## 驗證與部署
 
 新增三組正流程測試，分別從row0/1/2逐一檢查九角色進入原生ForceState、放開後回基礎／可走及資源不誤扣；98項Category=HappyPath全通過51秒，0失敗／略過。部署回執後補。v37正在使用，不為未完成修正反覆換版。
+
+## v38部署
+
+2026-11-08台灣00:49啟用，PID27096，私有main `01aed878b4d0f9db5b2ff7f798e48adcde97088a`，分析來源 `e199d1bf16cf09aab358093447f4456ba73aa39f`。核對舊v37 PID3136及exactHost路徑後，備份隔離DB並換版。
+Host DLL SHA256 `49415c742d7e83e023fa82f7f50dc4d6da86ec073fd7896031aa0a6e7b8bd0b4`；Network `f990183832db0babb0d2533d175c014daf8ff7fcaaec539094e7464a30aae4f0`。泳池1088、storyv34、外部scenario與AI資料維持；Client仍v7。
+獨立核對程序及auth／journey／story正常。新短卡只測兩次短V後接長V、放開復原／行走，結果PENDING；不以同圖示當官方分組驗收。v37已通過內容保留，不重跑整段教學。原生MEF與87映射仍未完成。
