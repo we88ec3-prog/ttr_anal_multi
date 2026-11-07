@@ -43,3 +43,9 @@ MP/SP仍每10秒回復最大值50%，HP每60秒20%；本輪只改測試上限，
 這是修改工作副本與loopback Server候選，不是原始Client完整相容驗收；REQ維持CANDIDATE、不提升SPEC／T01 FULL-PASS。原EXE、STP、BND、貼圖、字型和新解包member均留本機，本庫只收metadata、分析與重現工具。
 
 補證已完成：[16技能有界結構檢核](../client-variants/20261107-role-skills/blocked-followup/README.md)重讀41次原／工作member，檢查完整Practice／Active entry及指定ABF／ASD／EFF／輔助表；沒有可獨立閉合的active→motion連結，零項升級，16項仍禁用。本段停止擴搜，不宣稱整個Client不存在映射。
+
+## v30 使用者回饋與延後項目
+
+使用者回覆「泳池正常，但部分NPC位置在不可移動位置，先記著以後再處理」。記錄泳池顯示正常的有限實機結果；NPC安全佈點退回並依使用者要求DEFERRED，尚無明確NPC ID／座標，不要求現在重測。先前Server靜態BND點位檢核不等於實際Client可接近性或全部NPC位置驗收，不覆寫先前合成結果，也不標記全廣場完成。
+
+技能未開放共16個槽位：12個尚未閉合技能ID至動畫／特效的對應、4個有多段候選但階段執行規則未確認。這是測試場的明示保留，並非角色等級不足、資源不足或已證實Client缺檔；完整表與補證見role-skills/blocked-rows.json及blocked-followup。開放119槽也只屬有限動畫／耗量候選，未宣稱所有實戰判定完成。
