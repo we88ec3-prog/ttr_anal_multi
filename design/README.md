@@ -7,3 +7,5 @@
 **目前不受理外部回報。** 此為公開 repository，所有提交至此的 FB 都可被第三方看到；不得包含帳號、金鑰、私有程式碼或具敏感性的日誌。未來交接政策另見 `governance/future-feedback/`（未啟用）。
 
 - [主線遭遇共用AI設定候選](runtime-content/STORY-AI-PROFILE-CANDIDATE.md)：具名profile、SHA及舊資料相容；明示NOT_NATIVE_MEF，未升正式SPEC。
+
+- [正常主線角色成長與結算門檻](runtime-content/NORMAL-PROGRESSION-REQUIREMENTS.md)：區分自然升級、敘事進度及實際發獎，debug不當正式驗收。
