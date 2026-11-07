@@ -1,3 +1,5 @@
+最新：[使用者核准的原目錄Client v4](../client-variants/20261107-zh-tw-v4/README.md)。只新增EXE與四個翻譯/字型檔，79個既有檔案hash保留，靜態檢查通過、實機待測。
+
 目前P0：[v28資源語意／反灰／一級耗量與六鍵測試](S00-20261105-V28-RESOURCE-SEMANTICS-AND-SIX-KEYS.md)。v27技能／MP-SP回復通過，HP未測，耗量／黑圖示退回；57正流程合成通過，新Client與v28人測PENDING。
 
 目前：[v26圖示／連段／Z+C／行走人測通過；v27末段間隔與暫定回復](S00-20261105-V27-COMBO-RESTART-AND-RECOVERY.md)。44正流程合成通過；v27人測PENDING。

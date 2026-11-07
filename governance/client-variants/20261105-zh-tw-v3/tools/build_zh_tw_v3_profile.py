@@ -38,7 +38,7 @@ exe=D/'Tartaros.zh-tw-v3.exe';write_once(exe,b)
 # All ordinary runtime files are private copies; game logs/config stay local.
 files=[]
 for src in R.iterdir():
- if src.is_file() and src.suffix.lower() in {'.dll','.ini','.lua','.xml','.scn','.cfg','.dat','.stp','.flu'}:
+ if src.is_file() and src.suffix.lower() in {'.dll','.ini','.lua','.xml','.scn','.cfg','.dat','.stp','.flu','.gms'}:
   copy_once(src,D/src.name);files.append({'name':src.name,'sha256':sha(src.read_bytes())})
 for name in ['Character','Effect','Emblem','Image','Map','Material','Sound']:
  src=R/name;dst=D/name
@@ -50,6 +50,8 @@ for name in ['Character','Effect','Emblem','Image','Map','Material','Sound']:
   encoded=base64.b64encode(command.encode('utf-16le')).decode()
   subprocess.run(['powershell.exe','-NoProfile','-NonInteractive','-EncodedCommand',encoded],check=True,creationflags=0x08000000)
  assert dst.resolve()==src.resolve()
+# Render state package is required for alpha blending/test and materials.
+assert (D/'pack.gms').read_bytes()==(R/'pack.gms').read_bytes(),'Render-state package must match baseline'
 # Native716440 silently skips registration when this file is absent.
 registry=(D/'fcs.flu').read_bytes();groups,entries=struct.unpack_from('<II',registry)
 assert len(registry)==8+groups*0x158+entries*0x218,'Invalid resource registry layout'
