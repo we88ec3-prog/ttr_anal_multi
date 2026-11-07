@@ -1,0 +1,11 @@
+# 後續主線副本接入共用事件引擎
+
+SERVER_DESIGN_CHOICE／NOT_NATIVE_MEF。將既有有限敘事內容編譯成每任務一個共用LocalScenarioDefinition；使用與馮德斯首段相同的Entry／GroupCleared／InteractZ引擎，原生格式與官方規則仍未知。
+
+每個執行節點採任務內ordinal+1為本地ID，不冒充原始SourceNode或MapID。既有模型成員、顯式／舊候選座標、AIprofile、出口設定原樣保留；最後節點的Z事件回Result，其餘接下一ordinal。初始事件圖沿用原內容陣列順序，不推測分支／波次。來源引用保存精確story內容SHA；編譯圖另計自己的canonical JSON SHA，不把來源SHA冒充圖檔SHA。
+
+路線的敘事階段仍管理入場／清場／返回劇情。執行中副本狀態不得在持久化提交前前進：事件在獨立副本快照上規劃，敘事Commit才發布新狀態。清場可以先解鎖引擎中的出口，但World須等清場劇情完成才顯示／接受Z。按Z的距離與key仍由World依同份配置判定。
+
+每個連線／副本有自己的runtime instance；共用definition唯讀。完成任務或明示debug重設清除instance。重登仍放棄未完成副本，不保存其中怪物或引擎cursor。Scene回報不代表正式Quest獎勵入帳。
+
+驗證需覆蓋全部33節點的編譯等價、圖與敘事的清場／傳送／Result、提交前後狀態及獨立instance正流程；既有完整TCP正流程須保持通過。原生MEF、敵方Client自主AI及正式獎勵仍不因此完成。
