@@ -11,3 +11,5 @@
 - [正常主線角色成長與結算門檻](runtime-content/NORMAL-PROGRESSION-REQUIREMENTS.md)：區分自然升級、敘事進度及實際發獎，debug不當正式驗收。
 
 - [後續主線顯式生怪／出口配置候選](runtime-content/STORY-PLACEMENT-CANDIDATE.md)
+
+- [後續主線共用事件引擎候選](runtime-content/STORY-EVENT-ENGINE-CANDIDATE.md)
