@@ -5,3 +5,5 @@
 - [內部回饋](feedback/README.md)：目前只有維護者自有 Server 的可公開回饋，私人開發庫的 bug 留原處。
 
 **目前不受理外部回報。** 此為公開 repository，所有提交至此的 FB 都可被第三方看到；不得包含帳號、金鑰、私有程式碼或具敏感性的日誌。未來交接政策另見 `governance/future-feedback/`（未啟用）。
+
+- [主線遭遇共用AI設定候選](runtime-content/STORY-AI-PROFILE-CANDIDATE.md)：具名profile、SHA及舊資料相容；明示NOT_NATIVE_MEF，未升正式SPEC。

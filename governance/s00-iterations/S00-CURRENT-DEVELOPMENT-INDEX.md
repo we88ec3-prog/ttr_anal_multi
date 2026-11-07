@@ -1,3 +1,5 @@
+開發準備：[v39後續主線共用AI設定](S00-20261108-V39-SHARED-STORY-AI-PROFILES.md)。補33個node的外部AI接線，先建置／驗證，不中斷v38測試；原生MEF未完成。
+
 架構補證：[怪物AI／位置／傷害權限界線](../client-variants/20261108-monster-authority-boundary/README.md)。現行Server控制維持，原生Client完整自主AI／MEF執行仍未證；RR-0013由T13定向接續，未改Runtime。
 
 目前接續：[v38 V矩陣／原生選列與跨列長按](S00-20261108-V38-CHARGE-ROW-BOUNDARIES.md)。v37三項操作通過；v38解除row2無col8而拒絕長V的Server限制，98正流程合成通過，v38已部署、短卡人測待回。兩次短V／長V同組仍是政策，未冒稱官方已證。
