@@ -1,3 +1,5 @@
+2026-11-08 現行Host已整批更新至v58，PID30588，來源d2b85b791ce02b250818ddce19b30b77ed398580；取代v53測試版。四個loopback埠、健康與HTTP技能189組／880slots／178個候選獨立核對，巡行陣每2秒補105HP等暫定設定已實際提供。149項HappyPath通過、DB一致備份已核驗。正常建隊進村仍優先且實機待測，未催測；原生MEF、多人與完整技能仍未完成。收據見host-v58-deployment.json；後文未部署／v53敘述為歷史狀態。
+
 2026-11-08 v58未部署：[巡行陣持續治療政策](../../../design/runtime-content/LAB-HEALING-FIELD-POLICY.md)新增固定位置治療陣：Server暫定半徑45、每2秒補血、6秒到期，只接自身；不是原生數值／MEF或多人治療。149項正流程、Host Release與JS語法通過。現行Host仍v53，正常建隊進村實機待測；候選數178／880slots不變。後文保留歷史狀態。
 
 2026-11-08 v57未部署：[技能攻擊／治療分流政策](../../../design/runtime-content/LAB-SKILL-IMPACT-ROUTING.md)修正治療／防禦輔助技能誤走通用傷害，五項自身補血採明示Server暫用魔攻100與校準公式；不是官方公式、多人治療或完整技能。148項正流程通過，現行Host仍v53，正常建隊進村實機待測。候選數仍178／880slots，65個active未開放。後文為歷史狀態。
