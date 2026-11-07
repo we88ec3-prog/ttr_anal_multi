@@ -1,3 +1,5 @@
+最新狀態：使用者要求修正後已部署v29，見[S00部署紀錄](S00-20261107-V29-COOLDOWN-DELTA-DEPLOYMENT.md)。以下FIX_NOT_YET_APPLIED為初次收件歷史，真人待測。
+
 # GAME_RUNTIME_OBSERVATION: resource recovery restarts cooldown sweep
 
 ## User report — 2026-11-07
@@ -51,3 +53,28 @@ casting another skill does not reset its existing neighbors' sweeps.
 
 Status: REPORTED / SOURCE_CONFIRMED_REFRESH_TRIGGER / FIX_NOT_YET_APPLIED.
 Live Server remains v28; no new deployment or human pass is claimed in this report.
+
+## User-approved correction implementation
+
+User subsequently requested the correction. Prepared v29 Server-only behavior:
+resource-only changes and rejected actions no longer publish012A snapshots;
+new admitted skill sends one reset0 row for that skill; expiry sends zero rows
+only for the skills whose published deadlines expired. World/battle setup keeps
+the full context snapshot. Pending published skill keys ensure expiry is sent
+once and later start/expiry does not rebuild unrelated timers.
+
+The existing reader545E20 supports these per-skill rows: reset0 updates only
+listed keys while preserving others; it writes total and remaining for those
+keys, which is why unchanged active timers must not be repeated. Counter unit
+and rendering remain bounded historical assumptions; human sweep acceptance
+must be separate from the positive synthetic tests.
+
+Two added positive cases cover recovery during a20s timer with insufficient then
+sufficient MP while admission remains blocked until the original deadline, and
+independent20s/30s timers whose starts/expiries must leave each other unchanged.
+First test compilation had a local helper reference error; fixed to direct
+BinaryPrimitives decoding. Build/positive result and activation follow in the
+v29 release record; this section alone is not a deployment/pass claim.
+
+Translation: v5 overhead-name fix remains human-rejected. No v6/new translation
+build is released with this Server-only correction, and no Client is modified.

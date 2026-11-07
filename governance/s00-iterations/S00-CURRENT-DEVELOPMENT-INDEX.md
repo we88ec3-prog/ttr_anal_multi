@@ -1,3 +1,5 @@
+最新：[v29冷卻增量修正已部署](S00-20261107-V29-COOLDOWN-DELTA-DEPLOYMENT.md)。59項正流程合成通過；資源回復、其他技能與到期不再重建未改變的冷卻。實機圖示待測，翻譯仍v5退回、無新版。
+
 目前P0：[資源回復造成冷卻圓形進度重轉](S00-20261107-RESOURCE-RECOVERY-COOLDOWN-RESTART.md)。已核對Server全表reset/republication觸發，原deadline不變；Server-only修正需求已記錄，尚未套用。
 
 最新：[Server與測試現況](S00-20261107-CURRENT-SERVER-AND-TEST-STATUS.md)；[已核准Client v5頭頂名稱修正](../client-variants/20261107-zh-tw-v5/README.md)。v28持續運作，v5與六鍵人測待回。
