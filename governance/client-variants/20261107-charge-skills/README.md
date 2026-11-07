@@ -77,3 +77,41 @@ active67/68/2544；active67台版名「覺悟1階段」MP50、active68「覺悟2
 
 目前缺口：selector變體writer、完整V事件→tier/cost/motion的正式Server規則、
 各role特殊技能motion及技能位移／多段／傷害、不同context角色權限與重設時機。
+
+## 追加：Tab與特殊column（2026-11-07）
+
+原始Table.stp/KeyMapping.xml兩Type均Key15/Mod0→logical22；Ctrl+Tab
+(Mod29)→logical39（此分支未追）。5452C0讀phase22=FB901A，phase1/2於
+5455F2 OR controller+5C的0x10。54F270將0x10選matrix column10；548D20
+反向映射col7→0x8、col8→0x80、col9→0x40、col10→0x10。因C0在
+54F270 bypass，此反向helper不是完整V官方施法流程的證明。
+
+C0F944候選表+2C=5452C0、+48=546100；W03明確保留subtype/runtime
+owner缺口。546100依FBA7AC==3選actor槽、!=1才查矩陣，尚未將數值
+1/3完整封閉為Single/Multi/Tuto，因此不宣稱全context相同。
+
+Isilia default0 col10 active2544台版名稱「轉換伊希莉亞進階技能」，
+Practice193/isla_matrixchange01.xml需角色50級；其ACTIVEINFO為HP-10、CD300
+（單位未正式驗收）。Tab戰鬥matrix模式技能與教學切角不可混為一談。
+角色選單65D920→4A3660另送000C+DWORDrole的6B請求；本次未將Tab的0x10
+強稱000C。
+
+V特別欄位67/68的Practice63/64要求角色10/25級。69雖有原始ACTIVEINFO
+MP-90，不可僅因名字或相鄰編號自動授予或升階。現階段僅事件/column
+映射閉合，充能累積、升階上限、短放降階、消耗與motion policy仍未知。
+
+## Native matrix selection packet closure (bounded)
+
+4E1DA0 table indices259/25B and4FDA30 key*2+1 dispatcher identify012C/012D.
+012C: u16opcode,u32role,u8heroD8,u8unconsumed,then allowed-selector bytes to end.
+4E5620 clears hero+1F8/+1FC byte vector and appends each selector through655CE0.
+012D: u16opcode,u32role,u8first,u8second.4E56F0 passes hero+1F4 as EAX,
+packet+6 as stackarg and+7 as DL to81A860. The helper requires both values
+in allowed-vector, writes hero+1F4=first,+1F5=second,+1F6=0. It marks
+hero+208 DWORD=1 if active selector changed.4E56F0 enqueues UI eventF4417.
+
+This closes a real receive setter, unlike ParamUpdate property4 or17. It supports
+a declared test-lab publish sequence012C(known allowlist) then012D(desired,other).
+Official Tab-action2544-to-012D causality and a writer setting+1F6=1 remain open.
+See matrix-selector-contract.json for exact source identities and original BIN
+windows. No provider execution or Client changes were performed.
