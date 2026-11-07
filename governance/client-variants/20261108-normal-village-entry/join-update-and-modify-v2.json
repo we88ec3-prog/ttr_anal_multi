@@ -1,0 +1,598 @@
+{
+  "schema": "normal-party-join-update-v2",
+  "targetSha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+  "authority": "BOUNDED_NATIVE_AND_RESOURCE_EVIDENCE_NOT_OFFICIAL_SERVER_REPLY_CAPTURE",
+  "opcodeAuthority": {
+    "file": "party-opcode-correction-v2.json",
+    "sha256": "62856cc0bca284fc35167f52aee3eeb65bb9f766a087c5c260015e2cd37f1d35",
+    "formula": "(original registration memory displacement - 4) / 8; verifier checks exact divisible operands"
+  },
+  "memberPublication": {
+    "handler": "008F -> 53A0A0",
+    "partyKey": "WORD packet+2 -> AX -> 53A960",
+    "replacement": "DWORD packet+4 != 0 -> 797A00 with EDI=party+28: frees member objects and clears vector; party record/current pointer remains",
+    "row": "9 bytes from packet+8: DWORD UID, BYTE role, BYTE level, WORD flags, BYTE Duel grouping candidate",
+    "flags": {
+      "0002": "leader property; ordinary full snapshot writes member+6 = true",
+      "0004": "join notification; if row UID equals GlobalStatus+5F50 then 53B750(partyKey) sets current party pointer; 53AAA0 notification",
+      "0008": "53ACE0 ordinary leave notification then 539810 marks member inactive",
+      "0040": "53B100 kick notification then 539810 marks member inactive",
+      "0001": "if existing member leader and set: clears leader and saves old leader UID",
+      "0020": "with 0002, when prior leader test does not take 0001 path: saves new leader UID"
+    },
+    "leaderTail": "if old/new leader UID nonzero -> 53B2C0(new UID), emits F4405; this does not itself prove a Server leadership-transfer request",
+    "tail": "5398E0 compacts inactive member entries, then F4404 UI notification",
+    "identity": "existing S2C0002 DWORD+2 -> F93930 = GlobalStatus+5F50; use published wireAlias; no need to invent unknown 002A fields"
+  },
+  "sourceShapedPolicyCandidates": {
+    "joiner": "008E existing room record, then 008F full snapshot owner flags2 and joining self flags4; self UID must match current roster identity",
+    "existingOwner": "008F full snapshot owner flags2 and new member flags4; replacing member vector does not clear current party record",
+    "leaver": "0089 status0 clears own party; remaining members may receive 008F row flags8; official ordering not captured",
+    "limits": [
+      "These consumers establish party affiliation and UI only, not scene/mode/map/position or actor spawn.",
+      "008E/008F do not carry directory kind/context. No same-scene teleport or room-context setter is inferred.",
+      "No actual multiplayer test performed; Server authorization, membership transactions and cross-session ordering remain policy."
+    ]
+  },
+  "modify": {
+    "normalUI": "68D020 -> 68D3BD push0, push EDI(capacity), call53B990",
+    "request": "005F, 46 bytes: WORD opcode; name21WCHAR at+2; BYTE capacity+2C; BYTE flag+2D=0 in normal dialog",
+    "consumer": "008B -> 53A8C0 reads terminated name+2 and capacity+2C; minimum read45B; not a two-byte clear",
+    "listing": "008A sets record+24 from WORD+2; 008C clears record+24 without packet field reads"
+  },
+  "quickJoin": {
+    "resource": "Matching EID16000 TextLink1145 -> Korean code1145 빠른 참여 (Quick Join)",
+    "nativeUI": "68E087 -> setup692390; 6923A3 push16000 binds button at panel+100; click69029E reads panel+208 kind and +20C context ->53BC60",
+    "request": "0055 length4: WORD opcode, BYTE kind+2, BYTE context+3",
+    "boundary": "Quick Join is NOT a room target setter."
+  },
+  "waitingFilter": {
+    "resource": "Matching EID50000 TextLink608 -> 파티 대기중인 리스트만 표시 (show only waiting parties)",
+    "request": "0052 +6 checkbox filter bit9; not a level filter",
+    "boundary": "Exact server admission/filter semantics beyond the UI label remain policy."
+  },
+  "manualJoin": {
+    "resource": "Matching EID11000 TextLink155 파티 신청",
+    "native": "selected row 68F6A0 ->6903B0 -> row DWORD+2E ownerUID ->53BC00(ownerUID,1)",
+    "request": "0054 length7: WORD opcode, BYTE1+2, DWORD ownerUID+3; not listing WORD key"
+  },
+  "sources": [
+    {
+      "va": "0053A0A0",
+      "path": "anal-multi\\kr-bulk-roy\\9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91\\functions\\0x53a0a0.c",
+      "sha256": "f97de786d74c0d870c354ecb11fa8b9aa295e9c8e141bacdd0654d22b56600d8"
+    },
+    {
+      "va": "00539690",
+      "path": "anal-multi\\kr-bulk-roy\\9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91\\functions\\0x539690.c",
+      "sha256": "1b12e2b1be80a5b29e44598627f7aca8b8271c9008b18d57d817e684667cb4e7"
+    },
+    {
+      "va": "00539810",
+      "path": "anal-multi\\kr-bulk-roy\\9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91\\functions\\0x539810.c",
+      "sha256": "0c48189e2eceb930bf5e6ac4ccd461c79ee4b8259852892b9cf7c81f0e01ebd9"
+    },
+    {
+      "va": "005398E0",
+      "path": "anal-multi\\kr-bulk-roy\\9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91\\functions\\0x5398e0.c",
+      "sha256": "cfa1c7d2f78825e6d11cf0a6c4cf5cd230ce8ae29f73c4b43ac606a0d3fc8290"
+    },
+    {
+      "va": "0053B750",
+      "path": "anal-multi\\kr-bulk-roy\\9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91\\functions\\0x53b750.c",
+      "sha256": "74754f39513c072fdbfb4d36b82153336774189ca82968e91cc9638c980ec992"
+    },
+    {
+      "va": "0053AAA0",
+      "path": "anal-multi\\kr-bulk-roy\\9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91\\functions\\0x53aaa0.c",
+      "sha256": "e719033af9a9991dbe346d0ce9d5d8fe724247c2a0ef753681ac28a57e31466f"
+    },
+    {
+      "va": "0053ACE0",
+      "path": "anal-multi\\kr-bulk-roy\\9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91\\functions\\0x53ace0.c",
+      "sha256": "29ad4bed7c438f7e33e16a218176b8d96a9b152c4a4eaac6a2859524a51f6fbb"
+    },
+    {
+      "va": "0053B100",
+      "path": "anal-multi\\kr-bulk-roy\\9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91\\functions\\0x53b100.c",
+      "sha256": "0eda957a97efa489890798fa80a7ae9501d3832ee224b5e61c7a180ff20bbfe5"
+    },
+    {
+      "va": "0053B2C0",
+      "path": "anal-multi\\kr-bulk-roy\\9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91\\functions\\0x53b2c0.c",
+      "sha256": "e8a97d206e080b9bb563d53048880d3571f60c516e01d40ed3d3748b852a1cf5"
+    },
+    {
+      "va": "00797A00",
+      "path": "anal-multi\\kr-bulk-roy\\9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91\\functions\\0x797a00.c",
+      "sha256": "8450d47bcbe6e5c2e723ca8ce4e7b74a6ad70a37d7c64b9e48d0032b722a1f0c"
+    },
+    {
+      "va": "0053B990",
+      "path": "anal-multi\\kr-bulk-roy\\9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91\\functions\\0x53b990.c",
+      "sha256": "3f752ec7309d58f913fc385281bcab0c1b271af3b75a5a7e6acde76731c35515"
+    },
+    {
+      "va": "0068D020",
+      "path": "anal-multi\\kr-bulk-roy\\9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91\\functions\\0x68d020.c",
+      "sha256": "f8661a529f128c29f45d5145b909e889c6ea8f60fa22ea21266eb02796b4fe9d"
+    },
+    {
+      "va": "0068E070",
+      "path": "anal-multi\\kr-bulk-roy\\9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91\\functions\\0x68e070.c",
+      "sha256": "b3c19f63af115e9426ec655ed5606e9bbd447025e3687451cba5fc043ce6c086"
+    },
+    {
+      "va": "00692390",
+      "path": "anal-multi\\kr-bulk-roy\\9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91\\functions\\0x692390.c",
+      "sha256": "180ea4e8cceac858210102f58df4d715609cfd1fa89a3cdfb39176c168a073f8"
+    },
+    {
+      "va": "0068FED0",
+      "path": "anal-multi\\kr-bulk-roy\\9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91\\functions\\0x68fed0.c",
+      "sha256": "7869a6484ea598ba8599333722e49a6cc6fa2eaaffce0227e1b5f038cdf4f061"
+    },
+    {
+      "va": "0053BC60",
+      "path": "anal-multi\\kr-bulk-roy\\9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91\\functions\\0x53bc60.c",
+      "sha256": "454f878d098d2acd8b84b9cf8a3978cbd07120ad3fc003db95a31824461ec88c"
+    },
+    {
+      "va": "0068F6A0",
+      "path": "anal-multi\\kr-bulk-roy\\9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91\\functions\\0x68f6a0.c",
+      "sha256": "146af94478268d5afc8c62417c4cefdedd048d0c6f91c429dd08ead89dea98f9"
+    },
+    {
+      "va": "006903B0",
+      "path": "anal-multi\\kr-bulk-roy\\9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91\\functions\\0x6903b0.c",
+      "sha256": "9ec5a9b36f34a4c80547e4b1deead161f610f5f015ebc4ad2dd74d1d8370aa88"
+    },
+    {
+      "va": "0053BC00",
+      "path": "anal-multi\\kr-bulk-roy\\9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91\\functions\\0x53bc00.c",
+      "sha256": "71d11f29190982d2db1dd7bcf15860dd055b2fd85d75cf3b0a95b9982d76b96c"
+    }
+  ],
+  "originalWindows": [
+    {
+      "va": "0053A0CE",
+      "length": 37,
+      "sha256": "8c35b6c3c2f7394dd93536f0bff0a3c75fee607cc5dc671d3b07a3b9da5cfd34",
+      "instructions": [
+        {
+          "va": "0053A0CE",
+          "text": "mov ax, word ptr [ebx + 2]"
+        },
+        {
+          "va": "0053A0D2",
+          "text": "call 0x53a960"
+        },
+        {
+          "va": "0053A0D7",
+          "text": "mov esi, eax"
+        },
+        {
+          "va": "0053A0D9",
+          "text": "mov dword ptr [ebp - 0x10], esi"
+        },
+        {
+          "va": "0053A0DC",
+          "text": "test esi, esi"
+        },
+        {
+          "va": "0053A0DE",
+          "text": "je 0x53a2b9"
+        },
+        {
+          "va": "0053A0E4",
+          "text": "cmp dword ptr [ebx + 4], 0"
+        },
+        {
+          "va": "0053A0E8",
+          "text": "je 0x53a0f2"
+        },
+        {
+          "va": "0053A0EA",
+          "text": "lea edi, [esi + 0x28]"
+        },
+        {
+          "va": "0053A0ED",
+          "text": "call 0x797a00"
+        }
+      ]
+    },
+    {
+      "va": "0053A1C5",
+      "length": 81,
+      "sha256": "5c886dbe4dd333264f30490acf9db6baf7b8a89def09a1857987bacc459067d1",
+      "instructions": [
+        {
+          "va": "0053A1C5",
+          "text": "mov eax, dword ptr [ebp + 8]"
+        },
+        {
+          "va": "0053A1C8",
+          "text": "movzx ecx, word ptr [eax + 2]"
+        },
+        {
+          "va": "0053A1CC",
+          "text": "push ecx"
+        },
+        {
+          "va": "0053A1CD",
+          "text": "mov ecx, dword ptr [ebp - 0x14]"
+        },
+        {
+          "va": "0053A1D0",
+          "text": "call 0x53b750"
+        },
+        {
+          "va": "0053A1D5",
+          "text": "mov edx, dword ptr [ebp - 0x10]"
+        },
+        {
+          "va": "0053A1D8",
+          "text": "movzx eax, word ptr [edx]"
+        },
+        {
+          "va": "0053A1DB",
+          "text": "mov ecx, dword ptr [ebp - 0x14]"
+        },
+        {
+          "va": "0053A1DE",
+          "text": "push eax"
+        },
+        {
+          "va": "0053A1DF",
+          "text": "mov edx, esi"
+        },
+        {
+          "va": "0053A1E1",
+          "text": "call 0x53aaa0"
+        },
+        {
+          "va": "0053A1E6",
+          "text": "jmp 0x53a215"
+        },
+        {
+          "va": "0053A1E8",
+          "text": "test al, 0x40"
+        },
+        {
+          "va": "0053A1EA",
+          "text": "je 0x53a1f5"
+        },
+        {
+          "va": "0053A1EC",
+          "text": "mov ecx, esi"
+        },
+        {
+          "va": "0053A1EE",
+          "text": "call 0x53b100"
+        },
+        {
+          "va": "0053A1F3",
+          "text": "jmp 0x53a20a"
+        },
+        {
+          "va": "0053A1F5",
+          "text": "test al, 8"
+        },
+        {
+          "va": "0053A1F7",
+          "text": "je 0x53a215"
+        },
+        {
+          "va": "0053A1F9",
+          "text": "mov eax, dword ptr [ebp - 0x10]"
+        },
+        {
+          "va": "0053A1FC",
+          "text": "movzx eax, word ptr [eax]"
+        },
+        {
+          "va": "0053A1FF",
+          "text": "mov ecx, dword ptr [ebp - 0x14]"
+        },
+        {
+          "va": "0053A202",
+          "text": "push eax"
+        },
+        {
+          "va": "0053A203",
+          "text": "mov edx, esi"
+        },
+        {
+          "va": "0053A205",
+          "text": "call 0x53ace0"
+        },
+        {
+          "va": "0053A20A",
+          "text": "mov edi, dword ptr [ebx - 6]"
+        },
+        {
+          "va": "0053A20D",
+          "text": "mov edx, dword ptr [ebp - 0x10]"
+        },
+        {
+          "va": "0053A210",
+          "text": "call 0x539810"
+        }
+      ]
+    },
+    {
+      "va": "0068D3AC",
+      "length": 25,
+      "sha256": "2ac9e7251b253c1994c380a57011d290412eb4bb338ffa5eca77f7bfa95b95e8",
+      "instructions": [
+        {
+          "va": "0068D3AC",
+          "text": "lea esi, [ebp - 0x2c]"
+        },
+        {
+          "va": "0068D3AF",
+          "text": "call 0x41a4d0"
+        },
+        {
+          "va": "0068D3B4",
+          "text": "cmp dword ptr [eax + 0x5ed8], 0"
+        },
+        {
+          "va": "0068D3BB",
+          "text": "je 0x68d3c5"
+        },
+        {
+          "va": "0068D3BD",
+          "text": "push 0"
+        },
+        {
+          "va": "0068D3BF",
+          "text": "push edi"
+        },
+        {
+          "va": "0068D3C0",
+          "text": "call 0x53b990"
+        }
+      ]
+    },
+    {
+      "va": "0068E087",
+      "length": 13,
+      "sha256": "6f6dc4f6835abc4fe707db2635b16a247a72667ced33e44f40aba89a15e7d1be",
+      "instructions": [
+        {
+          "va": "0068E087",
+          "text": "lea edi, [esi + 0x100]"
+        },
+        {
+          "va": "0068E08D",
+          "text": "mov ecx, esi"
+        },
+        {
+          "va": "0068E08F",
+          "text": "call 0x692390"
+        }
+      ]
+    },
+    {
+      "va": "006923A3",
+      "length": 10,
+      "sha256": "e6aaf1080449079dff1cc31128a7954bec31b3b1d4a739cb21ca098e2e3bcb9e",
+      "instructions": [
+        {
+          "va": "006923A3",
+          "text": "push 0x3e80"
+        },
+        {
+          "va": "006923A8",
+          "text": "call 0x746940"
+        }
+      ]
+    },
+    {
+      "va": "0069029E",
+      "length": 37,
+      "sha256": "47b338c277f6380c210f8dc5ead4a3476e3485a69d68cde0fcd19471120f2cd6",
+      "instructions": [
+        {
+          "va": "0069029E",
+          "text": "mov ecx, dword ptr [esi + 0x100]"
+        },
+        {
+          "va": "006902A4",
+          "text": "cmp eax, dword ptr [ecx + 0x20]"
+        },
+        {
+          "va": "006902A7",
+          "text": "jne 0x6902ca"
+        },
+        {
+          "va": "006902A9",
+          "text": "call 0x41a4d0"
+        },
+        {
+          "va": "006902AE",
+          "text": "movzx edx, byte ptr [esi + 0x20c]"
+        },
+        {
+          "va": "006902B5",
+          "text": "movzx eax, byte ptr [esi + 0x208]"
+        },
+        {
+          "va": "006902BC",
+          "text": "push edx"
+        },
+        {
+          "va": "006902BD",
+          "text": "push eax"
+        },
+        {
+          "va": "006902BE",
+          "text": "call 0x53bc60"
+        }
+      ]
+    },
+    {
+      "va": "0053BC60",
+      "length": 87,
+      "sha256": "ed4a7ec3cc6ad45bfe3326362e6d0e90446e6f76e11567a9e5bae905f3ed154d",
+      "instructions": [
+        {
+          "va": "0053BC60",
+          "text": "push ebp"
+        },
+        {
+          "va": "0053BC61",
+          "text": "mov ebp, esp"
+        },
+        {
+          "va": "0053BC63",
+          "text": "push ecx"
+        },
+        {
+          "va": "0053BC64",
+          "text": "mov eax, 1"
+        },
+        {
+          "va": "0053BC69",
+          "text": "test byte ptr [0xfb1314], al"
+        },
+        {
+          "va": "0053BC6F",
+          "text": "jne 0x53bc84"
+        },
+        {
+          "va": "0053BC71",
+          "text": "or dword ptr [0xfb1314], eax"
+        },
+        {
+          "va": "0053BC77",
+          "text": "push 0xbccf10"
+        },
+        {
+          "va": "0053BC7C",
+          "text": "call 0x89231a"
+        },
+        {
+          "va": "0053BC81",
+          "text": "add esp, 4"
+        },
+        {
+          "va": "0053BC84",
+          "text": "cmp dword ptr [0xfba798], 0"
+        },
+        {
+          "va": "0053BC8B",
+          "text": "mov cl, byte ptr [ebp + 8]"
+        },
+        {
+          "va": "0053BC8E",
+          "text": "mov dl, byte ptr [ebp + 0xc]"
+        },
+        {
+          "va": "0053BC91",
+          "text": "mov eax, 0x55"
+        },
+        {
+          "va": "0053BC96",
+          "text": "mov word ptr [ebp - 4], ax"
+        },
+        {
+          "va": "0053BC9A",
+          "text": "mov byte ptr [ebp - 2], cl"
+        },
+        {
+          "va": "0053BC9D",
+          "text": "mov byte ptr [ebp - 1], dl"
+        },
+        {
+          "va": "0053BCA0",
+          "text": "jne 0x53bcb7"
+        },
+        {
+          "va": "0053BCA2",
+          "text": "mov ecx, dword ptr [0xfba854]"
+        },
+        {
+          "va": "0053BCA8",
+          "text": "mov eax, dword ptr [ecx]"
+        },
+        {
+          "va": "0053BCAA",
+          "text": "mov eax, dword ptr [eax + 0x10]"
+        },
+        {
+          "va": "0053BCAD",
+          "text": "push 4"
+        },
+        {
+          "va": "0053BCAF",
+          "text": "lea edx, [ebp - 4]"
+        },
+        {
+          "va": "0053BCB2",
+          "text": "push edx"
+        },
+        {
+          "va": "0053BCB3",
+          "text": "push 0"
+        },
+        {
+          "va": "0053BCB5",
+          "text": "call eax"
+        }
+      ]
+    }
+  ],
+  "resources": [
+    {
+      "carrier": "UI/Component.stp",
+      "carrierSha256": "e868e88ad03394d1345204094a0171f4f21b7fa7553446327701c3bc6aa67d26",
+      "member": "Component/Party_Matching_Wnd.FTC",
+      "decodedLength": 154361,
+      "decodedSha256": "92c72f1cb3d1853928102849fb3715a07cfd4b11a2d1383b54fd3170d09735ac",
+      "boundedWidgetLinks": [
+        {
+          "eid": "11000",
+          "class": "FXUIContentButton",
+          "textLinkCodes": [
+            "155"
+          ]
+        },
+        {
+          "eid": "50000",
+          "class": "FXUICheckBox",
+          "textLinkCodes": [
+            "608"
+          ]
+        },
+        {
+          "eid": "16000",
+          "class": "FXUIContentButton",
+          "textLinkCodes": [
+            "1145"
+          ]
+        }
+      ],
+      "boundedLabelNodes": []
+    },
+    {
+      "carrier": "UI/StringTable.stp",
+      "carrierSha256": "05a1a7ee26e343e1a016a37d1de2418a6da8fc5a71d5322587c49741d1162ef0",
+      "member": "StringTable/Korean.FCS",
+      "decodedLength": 135942,
+      "decodedSha256": "c512bdc8181cfc11f4c7c6e1624bdb37b01f9fd659ad0530656417e1c83ebe5c",
+      "boundedLabelNodes": [
+        "<CHARSETITEM ClassID=\"61001\" ClassName=\"FXUICharSetItem\" Code=\"608\">\n        <Contents Data=\"파티 대기중인 리스트만 표시\" />\n    </CHARSETITEM>\n    ",
+        "<Contents Data=\"파티 대기중인 리스트만 표시\" />\n    ",
+        "<CHARSETITEM ClassID=\"61001\" ClassName=\"FXUICharSetItem\" Code=\"1145\">\n        <Contents Data=\"빠른 참여\" />\n    </CHARSETITEM>\n    ",
+        "<Contents Data=\"빠른 참여\" />\n    "
+      ]
+    }
+  ],
+  "limitations": [
+    "Original artifact only; no Client launch/attachment/patch/provider call.",
+    "No formal RR or full-function pass claim.",
+    "Prior metadata remains retained; opcode correction v2 supersedes conflicting old opcode prose."
+  ]
+}
