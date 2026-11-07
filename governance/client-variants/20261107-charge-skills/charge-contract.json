@@ -1,0 +1,3574 @@
+{
+  "schema": "tartaros-charge-input-debug-tier-evidence-v1",
+  "authority": "BOUNDED_EXISTING_SOURCE_NOT_OFFICIAL_SERVER_RULES",
+  "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+  "catalog_sha256": "5f4d8310037f985047e903b102f5240f12ede24311a9e59a7e7f9366c935d14b",
+  "matrix_member_identity": {
+    "original_sha256": "78ca8db32ae323436d5c37b0162cca72a3c2b2a769924a63458dd087f96b7dad",
+    "working_sha256": "78ca8db32ae323436d5c37b0162cca72a3c2b2a769924a63458dd087f96b7dad",
+    "matched": true
+  },
+  "v_input": {
+    "condition": "KR default Type0 Key47 / logical16; current bank/UI/FSM/send gates must permit the row",
+    "logical_phase_address": "0xFB9014",
+    "state_record": "controller+0x40 state DWORD, +0x44 timeGetTime stamp",
+    "threshold_ms": 500,
+    "comparison": "strict elapsed > 500",
+    "events": [
+      {
+        "state_transition": "0 ->2",
+        "input_phase": "pressed1 or held2",
+        "return": 1,
+        "added_mask": "0x0000",
+        "meaning": "starts local input measurement, no added event bit"
+      },
+      {
+        "state_transition": "2 ->0",
+        "input_phase": "released3 or idle0",
+        "return": 2,
+        "added_mask": "0x0008",
+        "meaning": "short release event"
+      },
+      {
+        "state_transition": "2 ->3",
+        "input_phase": "still held and elapsed>500",
+        "return": 3,
+        "added_mask": "0x0080",
+        "meaning": "long threshold event; not a continuous held bit"
+      },
+      {
+        "state_transition": "3 ->0",
+        "input_phase": "released3 or idle0",
+        "return": 4,
+        "added_mask": "0x0040",
+        "meaning": "long release event"
+      }
+    ],
+    "limits": [
+      "Not a physical held snapshot",
+      "No direct proof event->official tier/cost/motion policy",
+      "0xC0 flags bypass 54F270 timer predicate; that is not proof of cast success"
+    ]
+  },
+  "tier_feedback": {
+    "candidate_command": "0000 existing ParamUpdate",
+    "packet_bytes": 8,
+    "fields": [
+      {
+        "offset": 0,
+        "type": "u16",
+        "meaning": "command0"
+      },
+      {
+        "offset": 2,
+        "type": "u16",
+        "meaning": "actor entity ID"
+      },
+      {
+        "offset": 4,
+        "type": "u16",
+        "meaning": "property4"
+      },
+      {
+        "offset": 6,
+        "type": "u16 read signed in setter",
+        "meaning": "matrix row candidate value"
+      }
+    ],
+    "consumer": "4AFAF0 -> actor virtual+2C -> CCharacter4CE7F0 property4",
+    "actor_field": "signed WORD -> DWORD actor+0x3E8",
+    "debug_matrix_row_domain": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "matrix_reader_domain": "row<4,column<11; resource defines which nonzero cells exist",
+    "effect": "value1 builds FORCE attached effect; other values clean old effect but do not enter that branch",
+    "selector_distinction": "property4 controls row, NOT matrix variant selector",
+    "matrix_variant_selector": "per-hero record +0x1F4/1F5 selected by +1F6; no direct Server setter closed in this audit"
+  },
+  "default_matrix_role_projections": [
+    {
+      "role": 1,
+      "default_matrix": 0,
+      "rows": [
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 1,
+          "input_mask_candidate": 1,
+          "input_kind": "single",
+          "active_skill": 1,
+          "practice_candidates_level1": [
+            1,
+            1148
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "電火球",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": 0,
+            "cooltime": 0
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 2,
+          "input_mask_candidate": 2,
+          "input_kind": "single",
+          "active_skill": 2,
+          "practice_candidates_level1": [
+            2
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "索瑪衝擊",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -50,
+            "mp": 0,
+            "cooltime": 50
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 3,
+          "input_mask_candidate": 4,
+          "input_kind": "single",
+          "active_skill": 4,
+          "practice_candidates_level1": [
+            4,
+            1019
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "防禦",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": -90,
+            "cooltime": 400
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 4,
+          "input_mask_candidate": 3,
+          "input_kind": "combined",
+          "active_skill": 7,
+          "practice_candidates_level1": [
+            7
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "爆擊",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -125,
+            "mp": 0,
+            "cooltime": 300
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 5,
+          "input_mask_candidate": 5,
+          "input_kind": "combined",
+          "active_skill": 3,
+          "practice_candidates_level1": [
+            3
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "電擊波",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -90,
+            "mp": 0,
+            "cooltime": 100
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 6,
+          "input_mask_candidate": 6,
+          "input_kind": "combined",
+          "active_skill": 5,
+          "practice_candidates_level1": [
+            5,
+            1148
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "連鎖閃電",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": -70,
+            "cooltime": 45
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 7,
+          "input_mask_candidate": null,
+          "input_kind": "special_unclosed",
+          "active_skill": 58,
+          "practice_candidates_level1": [
+            15
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "集氣 1階段",
+          "level1_signed_costs": {
+            "hp": -50,
+            "sp": 0,
+            "mp": 0,
+            "cooltime": 0
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 8,
+          "input_mask_candidate": null,
+          "input_kind": "special_unclosed",
+          "active_skill": 59,
+          "practice_candidates_level1": [
+            16
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "集氣 2階段",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": 0,
+            "cooltime": 0
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 10,
+          "input_mask_candidate": null,
+          "input_kind": "special_unclosed",
+          "active_skill": 2541,
+          "practice_candidates_level1": [
+            190
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "轉換索瑪進階技能",
+          "level1_signed_costs": {
+            "hp": -10,
+            "sp": 0,
+            "mp": 0,
+            "cooltime": 300
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 1,
+          "input_mask_candidate": 1,
+          "input_kind": "single",
+          "active_skill": 6,
+          "practice_candidates_level1": [
+            6,
+            1148
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "觸電",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": -40,
+            "cooltime": 40
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 2,
+          "input_mask_candidate": 2,
+          "input_kind": "single",
+          "active_skill": 8,
+          "practice_candidates_level1": [
+            8,
+            1148
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "閃電圍牆",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": -330,
+            "cooltime": 400
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 3,
+          "input_mask_candidate": 4,
+          "input_kind": "single",
+          "active_skill": 463,
+          "practice_candidates_level1": [
+            10
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "電擊盔甲",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -70,
+            "mp": -70,
+            "cooltime": 350
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 4,
+          "input_mask_candidate": 3,
+          "input_kind": "combined",
+          "active_skill": 465,
+          "practice_candidates_level1": [
+            12
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "真爆擊",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -600,
+            "mp": -300,
+            "cooltime": 1200
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 5,
+          "input_mask_candidate": 5,
+          "input_kind": "combined",
+          "active_skill": 466,
+          "practice_candidates_level1": [
+            13
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "電擊煉獄",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -220,
+            "mp": 0,
+            "cooltime": 600
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 6,
+          "input_mask_candidate": 6,
+          "input_kind": "combined",
+          "active_skill": 1287,
+          "practice_candidates_level1": [
+            14,
+            1148
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "召喚電擊球",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": -600,
+            "cooltime": 900
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 7,
+          "input_mask_candidate": null,
+          "input_kind": "special_unclosed",
+          "active_skill": 60,
+          "practice_candidates_level1": [],
+          "activeinfo_exists": true,
+          "name_tc": "集氣 3階段",
+          "level1_signed_costs": {
+            "hp": -90,
+            "sp": 0,
+            "mp": 0,
+            "cooltime": 0
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 8,
+          "input_mask_candidate": null,
+          "input_kind": "special_unclosed",
+          "active_skill": 59,
+          "practice_candidates_level1": [
+            16
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "集氣 2階段",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": 0,
+            "cooltime": 0
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 2,
+          "column": 1,
+          "input_mask_candidate": 1,
+          "input_kind": "single",
+          "active_skill": 9,
+          "practice_candidates_level1": [
+            9,
+            1148
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "閃電束縛",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": -225,
+            "cooltime": 300
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 2,
+          "column": 2,
+          "input_mask_candidate": 2,
+          "input_kind": "single",
+          "active_skill": 464,
+          "practice_candidates_level1": [
+            11,
+            1148
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "能量領域",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": -540,
+            "cooltime": 800
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 2,
+          "column": 3,
+          "input_mask_candidate": 4,
+          "input_kind": "single",
+          "active_skill": 2472,
+          "practice_candidates_level1": [
+            145
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "爆擊進攻",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -600,
+            "mp": 0,
+            "cooltime": 1500
+          }
+        }
+      ]
+    },
+    {
+      "role": 2,
+      "default_matrix": 0,
+      "rows": [
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 1,
+          "input_mask_candidate": 1,
+          "input_kind": "single",
+          "active_skill": 10,
+          "practice_candidates_level1": [
+            17
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "坦基鐵拳",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": 0,
+            "cooltime": 0
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 2,
+          "input_mask_candidate": 2,
+          "input_kind": "single",
+          "active_skill": 11,
+          "practice_candidates_level1": [
+            18
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "蘋果飛彈",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": -20,
+            "cooltime": 40
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 3,
+          "input_mask_candidate": 4,
+          "input_kind": "single",
+          "active_skill": 13,
+          "practice_candidates_level1": [
+            21
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "坦基護甲",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": -40,
+            "cooltime": 400
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 4,
+          "input_mask_candidate": 3,
+          "input_kind": "combined",
+          "active_skill": 14,
+          "practice_candidates_level1": [
+            20
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "迴旋鐵拳",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -45,
+            "mp": -15,
+            "cooltime": 60
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 5,
+          "input_mask_candidate": 5,
+          "input_kind": "combined",
+          "active_skill": 12,
+          "practice_candidates_level1": [
+            19
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "坦基鐵腿",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -50,
+            "mp": -25,
+            "cooltime": 70
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 6,
+          "input_mask_candidate": 6,
+          "input_kind": "combined",
+          "active_skill": 16,
+          "practice_candidates_level1": [
+            23
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "坦基壓頂",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -130,
+            "mp": 0,
+            "cooltime": 300
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 7,
+          "input_mask_candidate": null,
+          "input_kind": "special_unclosed",
+          "active_skill": 61,
+          "practice_candidates_level1": [
+            31
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "集氣 1階段",
+          "level1_signed_costs": {
+            "hp": -50,
+            "sp": 0,
+            "mp": 0,
+            "cooltime": 0
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 8,
+          "input_mask_candidate": null,
+          "input_kind": "special_unclosed",
+          "active_skill": 62,
+          "practice_candidates_level1": [
+            32
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "集氣 2階段",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": 0,
+            "cooltime": 0
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 10,
+          "input_mask_candidate": null,
+          "input_kind": "special_unclosed",
+          "active_skill": 2542,
+          "practice_candidates_level1": [
+            191
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "轉換蘋果＆坦基進階技能",
+          "level1_signed_costs": {
+            "hp": -10,
+            "sp": 0,
+            "mp": 0,
+            "cooltime": 300
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 1,
+          "input_mask_candidate": 1,
+          "input_kind": "single",
+          "active_skill": 17,
+          "practice_candidates_level1": [
+            24
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "火攻",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": -300,
+            "cooltime": 400
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 2,
+          "input_mask_candidate": 2,
+          "input_kind": "single",
+          "active_skill": 19,
+          "practice_candidates_level1": [
+            26
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "蘋果手榴彈 ",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": -360,
+            "cooltime": 600
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 3,
+          "input_mask_candidate": 4,
+          "input_kind": "single",
+          "active_skill": 15,
+          "practice_candidates_level1": [
+            22
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "防護網",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": -110,
+            "cooltime": 400
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 4,
+          "input_mask_candidate": 3,
+          "input_kind": "combined",
+          "active_skill": 2473,
+          "practice_candidates_level1": [
+            146
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "巨型迴旋",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -900,
+            "mp": 0,
+            "cooltime": 1000
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 5,
+          "input_mask_candidate": 5,
+          "input_kind": "combined",
+          "active_skill": 467,
+          "practice_candidates_level1": [
+            27
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "燃火",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": -300,
+            "cooltime": 500
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 6,
+          "input_mask_candidate": 6,
+          "input_kind": "combined",
+          "active_skill": 1289,
+          "practice_candidates_level1": [
+            30
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "集中射擊",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -80,
+            "mp": -300,
+            "cooltime": 500
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 7,
+          "input_mask_candidate": null,
+          "input_kind": "special_unclosed",
+          "active_skill": 63,
+          "practice_candidates_level1": [],
+          "activeinfo_exists": true,
+          "name_tc": "集氣 3階段",
+          "level1_signed_costs": {
+            "hp": -90,
+            "sp": 0,
+            "mp": 0,
+            "cooltime": 0
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 8,
+          "input_mask_candidate": null,
+          "input_kind": "special_unclosed",
+          "active_skill": 62,
+          "practice_candidates_level1": [
+            32
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "集氣 2階段",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": 0,
+            "cooltime": 0
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 2,
+          "column": 1,
+          "input_mask_candidate": 1,
+          "input_kind": "single",
+          "active_skill": 18,
+          "practice_candidates_level1": [
+            25
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "火箭飛拳",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -220,
+            "mp": 0,
+            "cooltime": 300
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 2,
+          "column": 2,
+          "input_mask_candidate": 2,
+          "input_kind": "single",
+          "active_skill": 468,
+          "practice_candidates_level1": [
+            28
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "坦基引力",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -250,
+            "mp": -50,
+            "cooltime": 400
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 2,
+          "column": 3,
+          "input_mask_candidate": 4,
+          "input_kind": "single",
+          "active_skill": 469,
+          "practice_candidates_level1": [
+            29
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "破碎之拳",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -150,
+            "mp": 0,
+            "cooltime": 350
+          }
+        }
+      ]
+    },
+    {
+      "role": 3,
+      "default_matrix": 0,
+      "rows": [
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 1,
+          "input_mask_candidate": 1,
+          "input_kind": "single",
+          "active_skill": 20,
+          "practice_candidates_level1": [
+            33
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "砍擊",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": 0,
+            "cooltime": 0
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 2,
+          "input_mask_candidate": 2,
+          "input_kind": "single",
+          "active_skill": 21,
+          "practice_candidates_level1": [
+            34
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "阻截",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -35,
+            "mp": -25,
+            "cooltime": 40
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 3,
+          "input_mask_candidate": 4,
+          "input_kind": "single",
+          "active_skill": 23,
+          "practice_candidates_level1": [
+            37,
+            1307
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "勝利之意志",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": -100,
+            "cooltime": 250
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 4,
+          "input_mask_candidate": 3,
+          "input_kind": "combined",
+          "active_skill": 24,
+          "practice_candidates_level1": [
+            35
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "獅子劍",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -50,
+            "mp": 0,
+            "cooltime": 60
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 5,
+          "input_mask_candidate": 5,
+          "input_kind": "combined",
+          "active_skill": 22,
+          "practice_candidates_level1": [
+            36
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "旋風斬",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -100,
+            "mp": 0,
+            "cooltime": 100
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 6,
+          "input_mask_candidate": 6,
+          "input_kind": "combined",
+          "active_skill": 26,
+          "practice_candidates_level1": [
+            39
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "獅子吼",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -90,
+            "mp": -90,
+            "cooltime": 300
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 7,
+          "input_mask_candidate": null,
+          "input_kind": "special_unclosed",
+          "active_skill": 64,
+          "practice_candidates_level1": [
+            47
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "勇氣 1階段",
+          "level1_signed_costs": {
+            "hp": -50,
+            "sp": 0,
+            "mp": 0,
+            "cooltime": 0
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 8,
+          "input_mask_candidate": null,
+          "input_kind": "special_unclosed",
+          "active_skill": 65,
+          "practice_candidates_level1": [
+            48
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "勇氣 2階段",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": 0,
+            "cooltime": 0
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 10,
+          "input_mask_candidate": null,
+          "input_kind": "special_unclosed",
+          "active_skill": 2543,
+          "practice_candidates_level1": [
+            192
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "轉換舒博爾進階技能",
+          "level1_signed_costs": {
+            "hp": -10,
+            "sp": 0,
+            "mp": 0,
+            "cooltime": 300
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 1,
+          "input_mask_candidate": 1,
+          "input_kind": "single",
+          "active_skill": 27,
+          "practice_candidates_level1": [
+            40
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "地雷陣",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -240,
+            "mp": 0,
+            "cooltime": 400
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 2,
+          "input_mask_candidate": 2,
+          "input_kind": "single",
+          "active_skill": 471,
+          "practice_candidates_level1": [
+            43,
+            1356
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "強行突破",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -340,
+            "mp": -200,
+            "cooltime": 500
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 3,
+          "input_mask_candidate": 4,
+          "input_kind": "single",
+          "active_skill": 25,
+          "practice_candidates_level1": [
+            38,
+            1030
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "意志之盾",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": -45,
+            "cooltime": 400
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 4,
+          "input_mask_candidate": 3,
+          "input_kind": "combined",
+          "active_skill": 1291,
+          "practice_candidates_level1": [
+            46
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "橫掃",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -150,
+            "mp": -200,
+            "cooltime": 400
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 5,
+          "input_mask_candidate": 5,
+          "input_kind": "combined",
+          "active_skill": 470,
+          "practice_candidates_level1": [
+            42
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "大地的氣溫",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -100,
+            "mp": 0,
+            "cooltime": 600
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 6,
+          "input_mask_candidate": 6,
+          "input_kind": "combined",
+          "active_skill": 2474,
+          "practice_candidates_level1": [
+            147
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "麒麟吼",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -800,
+            "mp": -200,
+            "cooltime": 1300
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 7,
+          "input_mask_candidate": null,
+          "input_kind": "special_unclosed",
+          "active_skill": 66,
+          "practice_candidates_level1": [],
+          "activeinfo_exists": true,
+          "name_tc": "勇氣 3階段",
+          "level1_signed_costs": {
+            "hp": -90,
+            "sp": 0,
+            "mp": 0,
+            "cooltime": 0
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 8,
+          "input_mask_candidate": null,
+          "input_kind": "special_unclosed",
+          "active_skill": 65,
+          "practice_candidates_level1": [
+            48
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "勇氣 2階段",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": 0,
+            "cooltime": 0
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 2,
+          "column": 1,
+          "input_mask_candidate": 1,
+          "input_kind": "single",
+          "active_skill": 28,
+          "practice_candidates_level1": [
+            41
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "憤怒之劍",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -210,
+            "mp": 0,
+            "cooltime": 300
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 2,
+          "column": 2,
+          "input_mask_candidate": 2,
+          "input_kind": "single",
+          "active_skill": 472,
+          "practice_candidates_level1": [
+            44
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "腳震波",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -220,
+            "mp": -280,
+            "cooltime": 700
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 2,
+          "column": 3,
+          "input_mask_candidate": 4,
+          "input_kind": "single",
+          "active_skill": 473,
+          "practice_candidates_level1": [
+            45
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "憤怒一擊",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -150,
+            "mp": 0,
+            "cooltime": 350
+          }
+        }
+      ]
+    },
+    {
+      "role": 4,
+      "default_matrix": 0,
+      "rows": [
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 1,
+          "input_mask_candidate": 1,
+          "input_kind": "single",
+          "active_skill": 29,
+          "practice_candidates_level1": [
+            49
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "斬",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": 0,
+            "cooltime": 0
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 2,
+          "input_mask_candidate": 2,
+          "input_kind": "single",
+          "active_skill": 30,
+          "practice_candidates_level1": [
+            50
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "氣功斬",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -35,
+            "mp": -30,
+            "cooltime": 60
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 3,
+          "input_mask_candidate": 4,
+          "input_kind": "single",
+          "active_skill": 33,
+          "practice_candidates_level1": [
+            51
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "迴旋斬",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -60,
+            "mp": 0,
+            "cooltime": 50
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 4,
+          "input_mask_candidate": 3,
+          "input_kind": "combined",
+          "active_skill": 32,
+          "practice_candidates_level1": [
+            53
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "氣力亂舞",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": -150,
+            "cooltime": 200
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 5,
+          "input_mask_candidate": 5,
+          "input_kind": "combined",
+          "active_skill": 31,
+          "practice_candidates_level1": [
+            52
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "偷襲",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -80,
+            "mp": 0,
+            "cooltime": 80
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 6,
+          "input_mask_candidate": 6,
+          "input_kind": "combined",
+          "active_skill": 35,
+          "practice_candidates_level1": [
+            55
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "疾風斬",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -175,
+            "mp": 0,
+            "cooltime": 300
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 7,
+          "input_mask_candidate": null,
+          "input_kind": "special_unclosed",
+          "active_skill": 67,
+          "practice_candidates_level1": [
+            63
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "覺悟 1階段",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": -50,
+            "cooltime": 0
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 8,
+          "input_mask_candidate": null,
+          "input_kind": "special_unclosed",
+          "active_skill": 68,
+          "practice_candidates_level1": [
+            64
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "覺悟 2階段",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": 0,
+            "cooltime": 0
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 10,
+          "input_mask_candidate": null,
+          "input_kind": "special_unclosed",
+          "active_skill": 2544,
+          "practice_candidates_level1": [
+            193
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "轉換伊希莉亞進階技能",
+          "level1_signed_costs": {
+            "hp": -10,
+            "sp": 0,
+            "mp": 0,
+            "cooltime": 300
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 1,
+          "input_mask_candidate": 1,
+          "input_kind": "single",
+          "active_skill": 36,
+          "practice_candidates_level1": [
+            56
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "月盈斬",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -145,
+            "mp": -145,
+            "cooltime": 400
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 2,
+          "input_mask_candidate": 2,
+          "input_kind": "single",
+          "active_skill": 2475,
+          "practice_candidates_level1": [
+            148
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "月盈舞",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -450,
+            "mp": -450,
+            "cooltime": 1500
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 3,
+          "input_mask_candidate": 4,
+          "input_kind": "single",
+          "active_skill": 34,
+          "practice_candidates_level1": [
+            54
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "迴避",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": -45,
+            "cooltime": 400
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 4,
+          "input_mask_candidate": 3,
+          "input_kind": "combined",
+          "active_skill": 476,
+          "practice_candidates_level1": [
+            60
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "氣力爆發",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -200,
+            "mp": -300,
+            "cooltime": 600
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 5,
+          "input_mask_candidate": 5,
+          "input_kind": "combined",
+          "active_skill": 475,
+          "practice_candidates_level1": [
+            59
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "塞那巴之力",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -120,
+            "mp": 0,
+            "cooltime": 800
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 6,
+          "input_mask_candidate": 6,
+          "input_kind": "combined",
+          "active_skill": 1293,
+          "practice_candidates_level1": [
+            62
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "暴風斬",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -280,
+            "mp": -180,
+            "cooltime": 650
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 7,
+          "input_mask_candidate": null,
+          "input_kind": "special_unclosed",
+          "active_skill": 69,
+          "practice_candidates_level1": [],
+          "activeinfo_exists": true,
+          "name_tc": "覺悟 3階段",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": -90,
+            "cooltime": 0
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 8,
+          "input_mask_candidate": null,
+          "input_kind": "special_unclosed",
+          "active_skill": 68,
+          "practice_candidates_level1": [
+            64
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "覺悟 2階段",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": 0,
+            "cooltime": 0
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 2,
+          "column": 1,
+          "input_mask_candidate": 1,
+          "input_kind": "single",
+          "active_skill": 37,
+          "practice_candidates_level1": [
+            57
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "束縛之斬",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -170,
+            "mp": 0,
+            "cooltime": 300
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 2,
+          "column": 2,
+          "input_mask_candidate": 2,
+          "input_kind": "single",
+          "active_skill": 474,
+          "practice_candidates_level1": [
+            58
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "追擊之斬",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -300,
+            "mp": 0,
+            "cooltime": 500
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 2,
+          "column": 3,
+          "input_mask_candidate": 4,
+          "input_kind": "single",
+          "active_skill": 477,
+          "practice_candidates_level1": [
+            61
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "幻滅之斬",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -150,
+            "mp": -150,
+            "cooltime": 500
+          }
+        }
+      ]
+    },
+    {
+      "role": 5,
+      "default_matrix": 0,
+      "rows": [
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 1,
+          "input_mask_candidate": 1,
+          "input_kind": "single",
+          "active_skill": 38,
+          "practice_candidates_level1": [
+            65
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "砍擊黑影",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": 0,
+            "cooltime": 0
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 2,
+          "input_mask_candidate": 2,
+          "input_kind": "single",
+          "active_skill": 39,
+          "practice_candidates_level1": [
+            66
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "壓制之劍",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -20,
+            "mp": -30,
+            "cooltime": 50
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 3,
+          "input_mask_candidate": 4,
+          "input_kind": "single",
+          "active_skill": 45,
+          "practice_candidates_level1": [
+            68
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "反射",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": -100,
+            "cooltime": 100
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 4,
+          "input_mask_candidate": 3,
+          "input_kind": "combined",
+          "active_skill": 44,
+          "practice_candidates_level1": [
+            71
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "造化之劍",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": -150,
+            "cooltime": 300
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 5,
+          "input_mask_candidate": 5,
+          "input_kind": "combined",
+          "active_skill": 40,
+          "practice_candidates_level1": [
+            67
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "魔力削減",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -75,
+            "mp": -75,
+            "cooltime": 150
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 6,
+          "input_mask_candidate": 6,
+          "input_kind": "combined",
+          "active_skill": 42,
+          "practice_candidates_level1": [
+            69,
+            1536
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "反轉",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -150,
+            "mp": -150,
+            "cooltime": 400
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 7,
+          "input_mask_candidate": null,
+          "input_kind": "special_unclosed",
+          "active_skill": 70,
+          "practice_candidates_level1": [
+            79
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "冥想 1階段",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -50,
+            "mp": 0,
+            "cooltime": 0
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 8,
+          "input_mask_candidate": null,
+          "input_kind": "special_unclosed",
+          "active_skill": 71,
+          "practice_candidates_level1": [
+            80
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "冥想 2階段",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": 0,
+            "cooltime": 0
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 10,
+          "input_mask_candidate": null,
+          "input_kind": "special_unclosed",
+          "active_skill": 2545,
+          "practice_candidates_level1": [
+            194
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "轉換艾洛特進階技能",
+          "level1_signed_costs": {
+            "hp": -10,
+            "sp": 0,
+            "mp": 0,
+            "cooltime": 300
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 1,
+          "input_mask_candidate": 1,
+          "input_kind": "single",
+          "active_skill": 41,
+          "practice_candidates_level1": [
+            73
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "平靜",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -90,
+            "mp": -90,
+            "cooltime": 250
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 2,
+          "input_mask_candidate": 2,
+          "input_kind": "single",
+          "active_skill": 2476,
+          "practice_candidates_level1": [
+            149
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "迴旋砍擊",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -360,
+            "mp": -360,
+            "cooltime": 1200
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 3,
+          "input_mask_candidate": 4,
+          "input_kind": "single",
+          "active_skill": 43,
+          "practice_candidates_level1": [
+            70
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "團隊治癒",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": -95,
+            "cooltime": 70
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 4,
+          "input_mask_candidate": 3,
+          "input_kind": "combined",
+          "active_skill": 478,
+          "practice_candidates_level1": [
+            75
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "巡行陣",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -90,
+            "mp": -90,
+            "cooltime": 450
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 5,
+          "input_mask_candidate": 5,
+          "input_kind": "combined",
+          "active_skill": 1295,
+          "practice_candidates_level1": [
+            78
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "陰陽逆轉",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -150,
+            "mp": -400,
+            "cooltime": 1000
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 6,
+          "input_mask_candidate": 6,
+          "input_kind": "combined",
+          "active_skill": 46,
+          "practice_candidates_level1": [
+            72
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "淨化",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": -115,
+            "cooltime": 150
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 7,
+          "input_mask_candidate": null,
+          "input_kind": "special_unclosed",
+          "active_skill": 72,
+          "practice_candidates_level1": [],
+          "activeinfo_exists": true,
+          "name_tc": "冥想 3階段",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -90,
+            "mp": 0,
+            "cooltime": 0
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 8,
+          "input_mask_candidate": null,
+          "input_kind": "special_unclosed",
+          "active_skill": 71,
+          "practice_candidates_level1": [
+            80
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "冥想 2階段",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": 0,
+            "cooltime": 0
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 2,
+          "column": 1,
+          "input_mask_candidate": 1,
+          "input_kind": "single",
+          "active_skill": 47,
+          "practice_candidates_level1": [
+            74
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "魔法減弱",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -70,
+            "mp": -140,
+            "cooltime": 200
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 2,
+          "column": 2,
+          "input_mask_candidate": 2,
+          "input_kind": "single",
+          "active_skill": 479,
+          "practice_candidates_level1": [
+            76
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "破壞之陣",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -220,
+            "mp": -220,
+            "cooltime": 500
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 2,
+          "column": 3,
+          "input_mask_candidate": 4,
+          "input_kind": "single",
+          "active_skill": 480,
+          "practice_candidates_level1": [
+            77
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "抑制",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -70,
+            "mp": -140,
+            "cooltime": 550
+          }
+        }
+      ]
+    },
+    {
+      "role": 6,
+      "default_matrix": 0,
+      "rows": [
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 1,
+          "input_mask_candidate": 1,
+          "input_kind": "single",
+          "active_skill": 48,
+          "practice_candidates_level1": [
+            81
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "衝撞",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": 0,
+            "cooltime": 0
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 2,
+          "input_mask_candidate": 2,
+          "input_kind": "single",
+          "active_skill": 49,
+          "practice_candidates_level1": [
+            82
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "召喚妖精",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": -30,
+            "cooltime": 30
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 3,
+          "input_mask_candidate": 4,
+          "input_kind": "single",
+          "active_skill": 51,
+          "practice_candidates_level1": [
+            85
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "治癒",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": -30,
+            "cooltime": 50
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 4,
+          "input_mask_candidate": 3,
+          "input_kind": "combined",
+          "active_skill": 52,
+          "practice_candidates_level1": [
+            84
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "治癒之手",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": -80,
+            "cooltime": 150
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 5,
+          "input_mask_candidate": 5,
+          "input_kind": "combined",
+          "active_skill": 50,
+          "practice_candidates_level1": [
+            83
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "競技治癒",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": -130,
+            "cooltime": 100
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 6,
+          "input_mask_candidate": 6,
+          "input_kind": "combined",
+          "active_skill": 54,
+          "practice_candidates_level1": [
+            87
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "艾格里特之魂",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -104,
+            "mp": -104,
+            "cooltime": 250
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 7,
+          "input_mask_candidate": null,
+          "input_kind": "special_unclosed",
+          "active_skill": 73,
+          "practice_candidates_level1": [
+            95
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "冥想 1階段",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -50,
+            "mp": 0,
+            "cooltime": 0
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 8,
+          "input_mask_candidate": null,
+          "input_kind": "special_unclosed",
+          "active_skill": 74,
+          "practice_candidates_level1": [
+            96
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "冥想 2階段",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": 0,
+            "cooltime": 0
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 10,
+          "input_mask_candidate": null,
+          "input_kind": "special_unclosed",
+          "active_skill": 2546,
+          "practice_candidates_level1": [
+            195
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "轉換格芮妮進階技能",
+          "level1_signed_costs": {
+            "hp": -10,
+            "sp": 0,
+            "mp": 0,
+            "cooltime": 300
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 1,
+          "input_mask_candidate": 1,
+          "input_kind": "single",
+          "active_skill": 55,
+          "practice_candidates_level1": [
+            88
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "尖叫",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -110,
+            "mp": -110,
+            "cooltime": 300
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 2,
+          "input_mask_candidate": 2,
+          "input_kind": "single",
+          "active_skill": 57,
+          "practice_candidates_level1": [
+            90
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "綿羊的奔馳",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -180,
+            "mp": -180,
+            "cooltime": 550
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 3,
+          "input_mask_candidate": 4,
+          "input_kind": "single",
+          "active_skill": 53,
+          "practice_candidates_level1": [
+            86
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "團隊治癒",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": -95,
+            "cooltime": 70
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 4,
+          "input_mask_candidate": 3,
+          "input_kind": "combined",
+          "active_skill": 1297,
+          "practice_candidates_level1": [
+            94
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "妖精庇護",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -300,
+            "mp": -200,
+            "cooltime": 400
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 5,
+          "input_mask_candidate": 5,
+          "input_kind": "combined",
+          "active_skill": 481,
+          "practice_candidates_level1": [
+            91
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "格萊特治癒",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": -90,
+            "cooltime": 120
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 6,
+          "input_mask_candidate": 6,
+          "input_kind": "combined",
+          "active_skill": 482,
+          "practice_candidates_level1": [
+            92
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "萊比歐斯之保佑",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -315,
+            "mp": -315,
+            "cooltime": 800
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 7,
+          "input_mask_candidate": null,
+          "input_kind": "special_unclosed",
+          "active_skill": 75,
+          "practice_candidates_level1": [],
+          "activeinfo_exists": true,
+          "name_tc": "冥想 3階段",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -90,
+            "mp": 0,
+            "cooltime": 0
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 8,
+          "input_mask_candidate": null,
+          "input_kind": "special_unclosed",
+          "active_skill": 74,
+          "practice_candidates_level1": [
+            96
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "冥想 2階段",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": 0,
+            "cooltime": 0
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 2,
+          "column": 1,
+          "input_mask_candidate": 1,
+          "input_kind": "single",
+          "active_skill": 56,
+          "practice_candidates_level1": [
+            89
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "妖精龍捲風",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": -225,
+            "cooltime": 300
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 2,
+          "column": 2,
+          "input_mask_candidate": 2,
+          "input_kind": "single",
+          "active_skill": 483,
+          "practice_candidates_level1": [
+            93
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "精靈束縛",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": -260,
+            "cooltime": 550
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 2,
+          "column": 3,
+          "input_mask_candidate": 4,
+          "input_kind": "single",
+          "active_skill": 2478,
+          "practice_candidates_level1": [
+            150
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "納斯普之魂",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -450,
+            "mp": -450,
+            "cooltime": 1500
+          }
+        }
+      ]
+    },
+    {
+      "role": 7,
+      "default_matrix": 0,
+      "rows": [
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 1,
+          "input_mask_candidate": 1,
+          "input_kind": "single",
+          "active_skill": 332,
+          "practice_candidates_level1": [
+            97
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "火焰支柱",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": 0,
+            "cooltime": 20
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 2,
+          "input_mask_candidate": 2,
+          "input_kind": "single",
+          "active_skill": 333,
+          "practice_candidates_level1": [
+            98,
+            1046
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "冰凍弓箭",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": -55,
+            "cooltime": 50
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 3,
+          "input_mask_candidate": 4,
+          "input_kind": "single",
+          "active_skill": 334,
+          "practice_candidates_level1": [
+            100
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "減速",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -25,
+            "mp": -25,
+            "cooltime": 40
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 4,
+          "input_mask_candidate": 3,
+          "input_kind": "combined",
+          "active_skill": 335,
+          "practice_candidates_level1": [
+            99
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "解除魔法",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -30,
+            "mp": -80,
+            "cooltime": 150
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 5,
+          "input_mask_candidate": 5,
+          "input_kind": "combined",
+          "active_skill": 336,
+          "practice_candidates_level1": [
+            101
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "針刺束縛",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -30,
+            "mp": -30,
+            "cooltime": 60
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 6,
+          "input_mask_candidate": 6,
+          "input_kind": "combined",
+          "active_skill": 337,
+          "practice_candidates_level1": [
+            104
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "震動波",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": -185,
+            "cooltime": 250
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 7,
+          "input_mask_candidate": null,
+          "input_kind": "special_unclosed",
+          "active_skill": 341,
+          "practice_candidates_level1": [
+            111
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "冥想 1階段",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -50,
+            "mp": 0,
+            "cooltime": 0
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 8,
+          "input_mask_candidate": null,
+          "input_kind": "special_unclosed",
+          "active_skill": 342,
+          "practice_candidates_level1": [
+            112
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "冥想 2階段",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": 0,
+            "cooltime": 0
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 10,
+          "input_mask_candidate": null,
+          "input_kind": "special_unclosed",
+          "active_skill": 2547,
+          "practice_candidates_level1": [
+            196
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "轉換柯摩托進階技能",
+          "level1_signed_costs": {
+            "hp": -10,
+            "sp": 0,
+            "mp": 0,
+            "cooltime": 300
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 1,
+          "input_mask_candidate": 1,
+          "input_kind": "single",
+          "active_skill": 338,
+          "practice_candidates_level1": [
+            103
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "火焰龍捲風",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": -125,
+            "cooltime": 150
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 2,
+          "input_mask_candidate": 2,
+          "input_kind": "single",
+          "active_skill": 737,
+          "practice_candidates_level1": [
+            106,
+            1046
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "冰凍結晶",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": -260,
+            "cooltime": 220
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 3,
+          "input_mask_candidate": 4,
+          "input_kind": "single",
+          "active_skill": 339,
+          "practice_candidates_level1": [
+            102
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "魔法護盾",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -60,
+            "mp": -120,
+            "cooltime": 300
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 4,
+          "input_mask_candidate": 3,
+          "input_kind": "combined",
+          "active_skill": 738,
+          "practice_candidates_level1": [
+            107
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "召喚愛德華",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -450,
+            "mp": -450,
+            "cooltime": 1100
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 5,
+          "input_mask_candidate": 5,
+          "input_kind": "combined",
+          "active_skill": 1183,
+          "practice_candidates_level1": [
+            108
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "重力場",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -450,
+            "mp": -450,
+            "cooltime": 1000
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 6,
+          "input_mask_candidate": 6,
+          "input_kind": "combined",
+          "active_skill": 2479,
+          "practice_candidates_level1": [
+            151
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "裂地術",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -200,
+            "mp": -800,
+            "cooltime": 1300
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 7,
+          "input_mask_candidate": null,
+          "input_kind": "special_unclosed",
+          "active_skill": 343,
+          "practice_candidates_level1": [],
+          "activeinfo_exists": true,
+          "name_tc": "冥想 3階段",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -90,
+            "mp": 0,
+            "cooltime": 0
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 8,
+          "input_mask_candidate": null,
+          "input_kind": "special_unclosed",
+          "active_skill": 342,
+          "practice_candidates_level1": [
+            112
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "冥想 2階段",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": 0,
+            "cooltime": 0
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 2,
+          "column": 1,
+          "input_mask_candidate": 1,
+          "input_kind": "single",
+          "active_skill": 340,
+          "practice_candidates_level1": [
+            105,
+            1046
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "冰窗",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": -100,
+            "cooltime": 300
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 2,
+          "column": 2,
+          "input_mask_candidate": 2,
+          "input_kind": "single",
+          "active_skill": 1277,
+          "practice_candidates_level1": [
+            109
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "火焰之陣",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": -500,
+            "cooltime": 550
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 2,
+          "column": 3,
+          "input_mask_candidate": 4,
+          "input_kind": "single",
+          "active_skill": 1299,
+          "practice_candidates_level1": [
+            110,
+            1046
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "暴風雪",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": -700,
+            "cooltime": 1000
+          }
+        }
+      ]
+    },
+    {
+      "role": 8,
+      "default_matrix": 0,
+      "rows": [
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 1,
+          "input_mask_candidate": 1,
+          "input_kind": "single",
+          "active_skill": 956,
+          "practice_candidates_level1": [
+            113
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "突刺",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": 0,
+            "cooltime": 0
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 2,
+          "input_mask_candidate": 2,
+          "input_kind": "single",
+          "active_skill": 957,
+          "practice_candidates_level1": [
+            114
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "出血刺擊",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -25,
+            "mp": -30,
+            "cooltime": 50
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 3,
+          "input_mask_candidate": 4,
+          "input_kind": "single",
+          "active_skill": 955,
+          "practice_candidates_level1": [
+            116
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "暗殺",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -60,
+            "mp": -20,
+            "cooltime": 80
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 4,
+          "input_mask_candidate": 3,
+          "input_kind": "combined",
+          "active_skill": 958,
+          "practice_candidates_level1": [
+            115
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "連續突刺",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -40,
+            "mp": -20,
+            "cooltime": 60
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 5,
+          "input_mask_candidate": 5,
+          "input_kind": "combined",
+          "active_skill": 959,
+          "practice_candidates_level1": [
+            117,
+            1823
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "召喚布袋咪咪",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -40,
+            "mp": -100,
+            "cooltime": 80
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 6,
+          "input_mask_candidate": 6,
+          "input_kind": "combined",
+          "active_skill": 961,
+          "practice_candidates_level1": [
+            119
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "迴旋手裏劍",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -125,
+            "mp": -100,
+            "cooltime": 200
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 7,
+          "input_mask_candidate": null,
+          "input_kind": "special_unclosed",
+          "active_skill": 967,
+          "practice_candidates_level1": [
+            127
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "集氣 1階段",
+          "level1_signed_costs": {
+            "hp": -50,
+            "sp": 0,
+            "mp": 0,
+            "cooltime": 0
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 8,
+          "input_mask_candidate": null,
+          "input_kind": "special_unclosed",
+          "active_skill": 968,
+          "practice_candidates_level1": [
+            128
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "集氣 2階段",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": 0,
+            "cooltime": 0
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 10,
+          "input_mask_candidate": null,
+          "input_kind": "special_unclosed",
+          "active_skill": 2548,
+          "practice_candidates_level1": [
+            197
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "轉換露可進階技能",
+          "level1_signed_costs": {
+            "hp": -10,
+            "sp": 0,
+            "mp": 0,
+            "cooltime": 300
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 1,
+          "input_mask_candidate": 1,
+          "input_kind": "single",
+          "active_skill": 964,
+          "practice_candidates_level1": [
+            122
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "覺醒",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -200,
+            "mp": -250,
+            "cooltime": 500
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 2,
+          "input_mask_candidate": 2,
+          "input_kind": "single",
+          "active_skill": 962,
+          "practice_candidates_level1": [
+            120
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "奧義火術",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -100,
+            "mp": -190,
+            "cooltime": 400
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 3,
+          "input_mask_candidate": 4,
+          "input_kind": "single",
+          "active_skill": 960,
+          "practice_candidates_level1": [
+            118
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "腳印地雷",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -30,
+            "mp": -50,
+            "cooltime": 110
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 4,
+          "input_mask_candidate": 3,
+          "input_kind": "combined",
+          "active_skill": 1301,
+          "practice_candidates_level1": [
+            126
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "重力衝擊",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -250,
+            "mp": -150,
+            "cooltime": 500
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 5,
+          "input_mask_candidate": 5,
+          "input_kind": "combined",
+          "active_skill": 965,
+          "practice_candidates_level1": [
+            123
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "精力充沛",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -300,
+            "mp": -240,
+            "cooltime": 600
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 6,
+          "input_mask_candidate": 6,
+          "input_kind": "combined",
+          "active_skill": 2480,
+          "practice_candidates_level1": [
+            152
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "咪咪防禦陣",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -450,
+            "mp": -450,
+            "cooltime": 1200
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 7,
+          "input_mask_candidate": null,
+          "input_kind": "special_unclosed",
+          "active_skill": 969,
+          "practice_candidates_level1": [],
+          "activeinfo_exists": true,
+          "name_tc": "集氣 3階段",
+          "level1_signed_costs": {
+            "hp": -90,
+            "sp": 0,
+            "mp": 0,
+            "cooltime": 0
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 8,
+          "input_mask_candidate": null,
+          "input_kind": "special_unclosed",
+          "active_skill": 968,
+          "practice_candidates_level1": [
+            128
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "集氣 2階段",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": 0,
+            "cooltime": 0
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 2,
+          "column": 1,
+          "input_mask_candidate": 1,
+          "input_kind": "single",
+          "active_skill": 963,
+          "practice_candidates_level1": [
+            121
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "咪咪突進斬",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -170,
+            "mp": -100,
+            "cooltime": 300
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 2,
+          "column": 2,
+          "input_mask_candidate": 2,
+          "input_kind": "single",
+          "active_skill": 966,
+          "practice_candidates_level1": [
+            124
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "咪咪眩惑術",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -200,
+            "mp": -300,
+            "cooltime": 600
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 2,
+          "column": 3,
+          "input_mask_candidate": 4,
+          "input_kind": "single",
+          "active_skill": 1278,
+          "practice_candidates_level1": [
+            125
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "暗襲",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -170,
+            "mp": -100,
+            "cooltime": 200
+          }
+        }
+      ]
+    },
+    {
+      "role": 9,
+      "default_matrix": 0,
+      "rows": [
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 1,
+          "input_mask_candidate": 1,
+          "input_kind": "single",
+          "active_skill": 1403,
+          "practice_candidates_level1": [
+            129
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "砍擊",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": 0,
+            "cooltime": 0
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 2,
+          "input_mask_candidate": 2,
+          "input_kind": "single",
+          "active_skill": 1402,
+          "practice_candidates_level1": [
+            130
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "連續砍擊",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -50,
+            "mp": 0,
+            "cooltime": 80
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 3,
+          "input_mask_candidate": 4,
+          "input_kind": "single",
+          "active_skill": 1405,
+          "practice_candidates_level1": [
+            131
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "正義之盾",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": -60,
+            "cooltime": 50
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 4,
+          "input_mask_candidate": 3,
+          "input_kind": "combined",
+          "active_skill": 1404,
+          "practice_candidates_level1": [
+            132
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "神之庇佑",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": -90,
+            "cooltime": 150
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 5,
+          "input_mask_candidate": 5,
+          "input_kind": "combined",
+          "active_skill": 1408,
+          "practice_candidates_level1": [
+            135
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "懲治之劍",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -112,
+            "mp": 0,
+            "cooltime": 160
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 6,
+          "input_mask_candidate": 6,
+          "input_kind": "combined",
+          "active_skill": 1406,
+          "practice_candidates_level1": [
+            133
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "聖靈爆發",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -88,
+            "mp": -132,
+            "cooltime": 150
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 7,
+          "input_mask_candidate": null,
+          "input_kind": "special_unclosed",
+          "active_skill": 1415,
+          "practice_candidates_level1": [
+            143
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "集氣1階段",
+          "level1_signed_costs": {
+            "hp": -50,
+            "sp": 0,
+            "mp": 0,
+            "cooltime": 0
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 8,
+          "input_mask_candidate": null,
+          "input_kind": "special_unclosed",
+          "active_skill": 1416,
+          "practice_candidates_level1": [
+            144
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "集氣2階段",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": 0,
+            "cooltime": 0
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 0,
+          "column": 10,
+          "input_mask_candidate": null,
+          "input_kind": "special_unclosed",
+          "active_skill": 2549,
+          "practice_candidates_level1": [
+            198
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "轉換艾芬多絲進階技能",
+          "level1_signed_costs": {
+            "hp": -10,
+            "sp": 0,
+            "mp": 0,
+            "cooltime": 300
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 1,
+          "input_mask_candidate": 1,
+          "input_kind": "single",
+          "active_skill": 1411,
+          "practice_candidates_level1": [
+            138
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "刑罰",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": -220,
+            "cooltime": 250
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 2,
+          "input_mask_candidate": 2,
+          "input_kind": "single",
+          "active_skill": 1413,
+          "practice_candidates_level1": [
+            140
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "審判之劍",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -150,
+            "mp": -300,
+            "cooltime": 450
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 3,
+          "input_mask_candidate": 4,
+          "input_kind": "single",
+          "active_skill": 1407,
+          "practice_candidates_level1": [
+            134
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "激勵",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": -110,
+            "cooltime": 120
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 4,
+          "input_mask_candidate": 3,
+          "input_kind": "combined",
+          "active_skill": 1409,
+          "practice_candidates_level1": [
+            136,
+            1054
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "神聖之盾",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": -110,
+            "cooltime": 450
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 5,
+          "input_mask_candidate": 5,
+          "input_kind": "combined",
+          "active_skill": 2482,
+          "practice_candidates_level1": [
+            153
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "支援攻擊",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -336,
+            "mp": -84,
+            "cooltime": 750
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 6,
+          "input_mask_candidate": 6,
+          "input_kind": "combined",
+          "active_skill": 1414,
+          "practice_candidates_level1": [
+            141,
+            1054
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "救援",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": -180,
+            "cooltime": 200
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 7,
+          "input_mask_candidate": null,
+          "input_kind": "special_unclosed",
+          "active_skill": 1417,
+          "practice_candidates_level1": [],
+          "activeinfo_exists": true,
+          "name_tc": "集氣3階段",
+          "level1_signed_costs": {
+            "hp": -90,
+            "sp": 0,
+            "mp": 0,
+            "cooltime": 0
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 1,
+          "column": 8,
+          "input_mask_candidate": null,
+          "input_kind": "special_unclosed",
+          "active_skill": 1416,
+          "practice_candidates_level1": [
+            144
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "集氣2階段",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": 0,
+            "mp": 0,
+            "cooltime": 0
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 2,
+          "column": 1,
+          "input_mask_candidate": 1,
+          "input_kind": "single",
+          "active_skill": 1410,
+          "practice_candidates_level1": [
+            137
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "突進",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -170,
+            "mp": 0,
+            "cooltime": 300
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 2,
+          "column": 2,
+          "input_mask_candidate": 2,
+          "input_kind": "single",
+          "active_skill": 1412,
+          "practice_candidates_level1": [
+            139
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "冰凍召喚",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -252,
+            "mp": -84,
+            "cooltime": 400
+          }
+        },
+        {
+          "matrix": 0,
+          "tier": 2,
+          "column": 3,
+          "input_mask_candidate": 4,
+          "input_kind": "single",
+          "active_skill": 1905,
+          "practice_candidates_level1": [
+            142
+          ],
+          "activeinfo_exists": true,
+          "name_tc": "召喚騎士團",
+          "level1_signed_costs": {
+            "hp": 0,
+            "sp": -300,
+            "mp": -120,
+            "cooltime": 900
+          }
+        }
+      ]
+    }
+  ],
+  "limits": [
+    "Motion/cast mapping remains separate; do not use active ID as motion ID",
+    "Grant each mapped Practice once at level1; avoid learned+preset double-level",
+    "Not all role/matrix/tier cells have learned Practice join",
+    "No original Client launch, attachment, files modified or MEF search"
+  ]
+}
