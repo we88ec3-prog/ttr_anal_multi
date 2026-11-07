@@ -1,3 +1,7 @@
+2026-11-08 時序來源後補：loaded-animation-span-producer-v1.json追到載入entry+4的產生與回呼鏈，主要是動畫資料range終點做signed整數/160後轉float，並非直接證明秒數；完整FPS clock與取消／恢復窗口仍未知。0x24 bytes配置大小已核對為36bytes，不把尾碼B黏成hex0x24B。這是獨立的新增producer範圍，未重掃舊parser／MEF。
+
+2026-11-08 v53來源／政策更新（未部署）：[八項具名家族比較政策](../../../design/runtime-content/NAMED-BASIS-LAB-POLICY.md)新增8項Server選定的Basis測試候選，保留原矩陣與V階段。lab現在165個active／841個slot可比較，78個active仍不可測。歷史87項是原命名缺口紀錄，不表示其他156項已證明官方dispatch；本批亦沒有新證明官方映射或完整玩法。115項正流程通過，實機待使用者稍後測；Host仍v50。後文數量保留歷史狀態。
+
 2026-11-08 候選政策更新（未部署）：[索瑪普攻測試政策](../../../design/runtime-content/SOMA-BASIC-LAB-POLICY.md)新增role1/Practice1/active1專用六clip候選，明確是Server選定的隔離比較方案，並非新找到官方動作映射。lab候選157項／799個矩陣slot，尚不可測86項；來源映射缺口仍87項（索瑪此項仍未閉合），不可混計。新duration查核亦未驗證舊sum((End+Delay)/FPS)為原生時鐘，不能改成End−Start或稱為硬直／cancel權威。後文數量／「未開放」敘述保留歷史狀態。
 
 # 全角色技能開放接續
