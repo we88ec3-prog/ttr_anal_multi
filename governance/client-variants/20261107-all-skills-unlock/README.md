@@ -1,3 +1,5 @@
+2026-11-08 v59未部署：[四項防禦技能政策](../../../design/runtime-content/LAB-DEFENCE-BUFF-POLICY.md)採用新核對BuffExplain同名候選，接上索瑪防禦、坦基裝甲減傷、坦基屏障與意志之盾的自身有限次阻擋；不聲稱原版Active→Buff派送或time單位已證明。物攻／迴避公式與隊友效果待開發。153項正流程通過，現行Host仍v58；178／880候選數不變，正常進村實機仍待測。後文保留歷史狀態。
+
 2026-11-08 現行Host已整批更新至v58，PID30588，來源d2b85b791ce02b250818ddce19b30b77ed398580；取代v53測試版。四個loopback埠、健康與HTTP技能189組／880slots／178個候選獨立核對，巡行陣每2秒補105HP等暫定設定已實際提供。149項HappyPath通過、DB一致備份已核驗。正常建隊進村仍優先且實機待測，未催測；原生MEF、多人與完整技能仍未完成。收據見host-v58-deployment.json；後文未部署／v53敘述為歷史狀態。
 
 2026-11-08 v58未部署：[巡行陣持續治療政策](../../../design/runtime-content/LAB-HEALING-FIELD-POLICY.md)新增固定位置治療陣：Server暫定半徑45、每2秒補血、6秒到期，只接自身；不是原生數值／MEF或多人治療。149項正流程、Host Release與JS語法通過。現行Host仍v53，正常建隊進村實機待測；候選數178／880slots不變。後文保留歷史狀態。
