@@ -1,3 +1,5 @@
+2026-11-08 v58未部署：[巡行陣持續治療政策](../../../design/runtime-content/LAB-HEALING-FIELD-POLICY.md)新增固定位置治療陣：Server暫定半徑45、每2秒補血、6秒到期，只接自身；不是原生數值／MEF或多人治療。149項正流程、Host Release與JS語法通過。現行Host仍v53，正常建隊進村實機待測；候選數178／880slots不變。後文保留歷史狀態。
+
 2026-11-08 v57未部署：[技能攻擊／治療分流政策](../../../design/runtime-content/LAB-SKILL-IMPACT-ROUTING.md)修正治療／防禦輔助技能誤走通用傷害，五項自身補血採明示Server暫用魔攻100與校準公式；不是官方公式、多人治療或完整技能。148項正流程通過，現行Host仍v53，正常建隊進村實機待測。候選數仍178／880slots，65個active未開放。後文為歷史狀態。
 
 2026-11-08 v56未部署：[四項元件線索比較政策](../../../design/runtime-content/FOUR-TOKEN-LAB-POLICY.md)新增幻滅刀影、躍舞手裏劍201、聖靈之盾與正義火焰炮隔離候選。178個lab候選／880slots，65個active尚不可測；不是完整技能或官方映射。128項正流程及Host Release建置通過，Host仍v53、正常建隊進村實機待測。後文保留歷史狀態。
