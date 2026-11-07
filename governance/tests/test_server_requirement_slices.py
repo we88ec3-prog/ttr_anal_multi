@@ -62,12 +62,14 @@ class RequirementSliceTests(unittest.TestCase):
 
     def test_no_approved_runtime_discovery_is_invented(self):
         row = assess(self.root, "SLICE-LOBBY")["slices"][0]
-        self.assertEqual(row["discovery_channels"], ["CODE_ANALYSIS", "GAME_RUNTIME_OBSERVATION"])
+        registry = json.loads((self.root / "design/requirements/index.json").read_text(encoding="utf-8"))
+        self.assertEqual(row["discovery_channels"], [
+            "CODE_ANALYSIS", "GAME_RUNTIME_OBSERVATION", "PLAYER_ADMIN_REQUEST",
+        ])
         # An authorized modified-copy transport failure must not approve the
         # original Client contract or remove the actual lobby blockers.
         self.assertEqual(row["status"], "BLOCKED")
         self.assertIn("REQ-0001=CANDIDATE", row["blockers"])
-        registry = json.loads((self.root / "design/requirements/index.json").read_text(encoding="utf-8"))
         req = next(r for r in registry["items"] if r["id"] == "REQ-0001")
         runtime = next(d for d in req["discoveries"] if d["channel"] == "GAME_RUNTIME_OBSERVATION")
         self.assertEqual(runtime["tested_build_kind"], "MODIFIED_WORKING_COPY_NOT_ORIGINAL_CLIENT")
