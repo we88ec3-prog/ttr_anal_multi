@@ -1,3 +1,5 @@
+2026-11-08 v54未部署：[其餘舊技能比較政策](../../../design/runtime-content/LEGACY-SKILL-COMPARISON-POLICY.md)準備3角色普攻、造化之劍及2個單次完整視效變體比較；171個lab候選／873slots，剩72個新矩陣active尚不可測。121項正流程／Host建置／JS語法通過。這不是171個完整技能或原版選擇規則；現行Host仍v53、正常進村實機待使用者稍後測。後文為歷史狀態。
+
 2026-11-08 現行測試Host已改為v53，PID44028，部署來源8d4638e4a166172040ea8c8f25bdaf460668af95。115項HappyPath通過；四個loopback端口／健康／HTTP技能目錄189組、841可用slot獨立核對。此合併版取代v50測試卡，原正常建隊進村路徑保留；165個lab候選不等於完整技能，實機仍待使用者稍後測。多人加入／邀請仍預設停用，原生MEF仍不支援。
 
 2026-11-08 時序來源後補：loaded-animation-span-producer-v1.json追到載入entry+4的產生與回呼鏈，主要是動畫資料range終點做signed整數/160後轉float，並非直接證明秒數；完整FPS clock與取消／恢復窗口仍未知。0x24 bytes配置大小已核對為36bytes，不把尾碼B黏成hex0x24B。這是獨立的新增producer範圍，未重掃舊parser／MEF。
