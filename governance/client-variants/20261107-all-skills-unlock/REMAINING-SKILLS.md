@@ -1,3 +1,5 @@
+2026-11-08 追加來源核對：台韓索瑪／蘋果＆坦基共326個ABF明示ASD逐bytes相同，未找到台版獨有技能動作連結；visual remap新增writer確認是Avatar服裝SIT/STAND替換（15→255、17→256），不是active→motion。87項缺口維持，沒有以名稱／按鍵借用動畫。另已投影1448筆Practice等級效果係數（涵蓋270個role/active，包括不在243個矩陣active內的條目），1333個ATTACK、78個HEAL；這是數據接線，不是傷害／治療公式或技能開放完成。影片觀察狀態以個別收據為準，後文舊的影片全未看標記為歷史狀態。
+
 # Remaining skill mapping backlog
 
 87項是在主代理審核接納2項等價單clip候選之後的剩餘值，並非87個Client缺檔。72項新矩陣映射、13項基礎命名橋接、2項不等價多Basis仍缺Server動作／行為政策。影片皆為USER_SUPPLIED_NOT_REVIEWED。
