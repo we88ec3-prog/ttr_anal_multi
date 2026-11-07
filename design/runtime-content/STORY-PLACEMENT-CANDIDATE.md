@@ -11,3 +11,7 @@ Server載入時解析配置；進場及入場劇情後重建均使用同一份�
 不改原生封包格式、角色操控、AI權威、HP／傷害、敘事持久化或正式獎勵。不是將檔案傳給Client執行；與未來原生MEF解析器分開。
 
 驗證：舊33節點等價配置、JSON讀取保留顯式配置，以及World實際進場／劇情後重建／清怪顯示出口／指定key互動。維持正流程測試；格式錯誤、安全與重送案例延後。
+
+範例：`encounterSpawns: [{model:1001,x:790,y:740}]`、`portal: {x:820,y:740,radius:6,key:71}`。欄位只屬本地Server JSON；不等同原版檔案或對Client傳送JSON。現有出口封包的radius仍經原生0.8比例處理；Server授權半徑沿用配置值，因此不可將配置半徑誤稱為精確的畫面效果大小。
+
+`materialize_story_placements.py`可把舊程式候選偏移完整實體化成JSON，不改位置／數量；必要參數為input、expected-sha256、output，輸出採新檔，保留舊內容SHA與任務ID lineage。此轉換不驗證靜態碰撞，須再經Server loader；也不宣稱現有候選位置已符合每圖的生成距離或出口要求。

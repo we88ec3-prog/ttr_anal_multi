@@ -1,5 +1,7 @@
 正常主線補證：[角色成長／結算缺口](../client-variants/20261108-mainline-progression/README.md)。22任務原值已核對，19條超過固定顯示5級，第一風險Q120=8；RR-0014查EXP／level發布，不把debug補等級當自然升級。
 
+2026-11-08：v40顯式副本配置已建置（未部署），[設計／轉換工具](../../design/runtime-content/STORY-PLACEMENT-CANDIDATE.md)及[102項正流程／33節點靜態載入收據](evidence/S00-20261108-V40-BUILD-ONLY.json)。保留已核對的v38 PID27096與待回測試卡；不是原生MEF或逐圖位置驗收。
+
 2026-11-08：補齊[Client 額外實體追隨的既有證據接續界線](../client-variants/20261108-extra-control-boundary/README.md)，9原檔區段／4匯出來源核對；不等於敵方自主AI、MEF或傷害權限。RR-0013接續目標已收斂，現行Host不變。
 
 開發準備：[v39後續主線共用AI設定](S00-20261108-V39-SHARED-STORY-AI-PROFILES.md)。補33個node的外部AI接線，先建置／驗證，不中斷v38測試；原生MEF未完成。

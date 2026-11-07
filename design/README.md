@@ -9,3 +9,5 @@
 - [主線遭遇共用AI設定候選](runtime-content/STORY-AI-PROFILE-CANDIDATE.md)：具名profile、SHA及舊資料相容；明示NOT_NATIVE_MEF，未升正式SPEC。
 
 - [正常主線角色成長與結算門檻](runtime-content/NORMAL-PROGRESSION-REQUIREMENTS.md)：區分自然升級、敘事進度及實際發獎，debug不當正式驗收。
+
+- [後續主線顯式生怪／出口配置候選](runtime-content/STORY-PLACEMENT-CANDIDATE.md)
