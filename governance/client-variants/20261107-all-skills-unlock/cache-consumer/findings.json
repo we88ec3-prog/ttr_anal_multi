@@ -1,0 +1,130 @@
+{
+  "schema": "tartaros-skill-cache-consumer-audit-v1",
+  "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+  "direct_refs": [
+    {
+      "site": "0x4e4870",
+      "target": "0x825fa0",
+      "source_function": "0x4e46d0",
+      "kind": "call",
+      "instruction_boundary_verified": true
+    },
+    {
+      "site": "0x4e4a82",
+      "target": "0x825fa0",
+      "source_function": "0x4e48a0",
+      "kind": "call",
+      "instruction_boundary_verified": true
+    },
+    {
+      "site": "0x549ae3",
+      "target": "0x825f70",
+      "source_function": "0x549980",
+      "kind": "call",
+      "instruction_boundary_verified": true
+    },
+    {
+      "site": "0x549b5e",
+      "target": "0x825f70",
+      "source_function": "0x549980",
+      "kind": "call",
+      "instruction_boundary_verified": true
+    }
+  ],
+  "saved_text_queries": {
+    "0x825f70": {
+      "pattern": "FUN_00825f70",
+      "matched_sources": [
+        "anal-multi/kr-bulk-roy/9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91/functions/0x549980.c",
+        "anal-multi/kr-bulk-roy/9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91/functions/0x825f70.c"
+      ],
+      "callee_definition_included": true,
+      "search_completed": true
+    },
+    "0x825fa0": {
+      "pattern": "FUN_00825fa0",
+      "matched_sources": [
+        "anal-multi/kr-bulk-roy/9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91/functions/0x4e46d0.c",
+        "anal-multi/kr-bulk-roy/9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91/functions/0x4e48a0.c",
+        "anal-multi/kr-bulk-roy/9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91/functions/0x825fa0.c"
+      ],
+      "callee_definition_included": true,
+      "search_completed": true
+    },
+    "0x549980": {
+      "pattern": "FUN_00549980",
+      "matched_sources": [
+        "anal-multi/kr-bulk-roy/9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91/functions/0x549980.c",
+        "anal-multi/kr-bulk-roy/9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91/functions/0x54ae70.c"
+      ],
+      "callee_definition_included": true,
+      "search_completed": true
+    }
+  },
+  "positive_findings": [
+    {
+      "id": "CACHE4-COST-ABI",
+      "source": "0x549980",
+      "claim": "The cache word+4 is zero-extended and passed in EAX to530530/5305C0/530650; activeID is ECX. Both query paths use+4, not+6.",
+      "instruction_sites": [
+        "0x549af2",
+        "0x549afc",
+        "0x549afe",
+        "0x549b00",
+        "0x549b05",
+        "0x549b13",
+        "0x549b15",
+        "0x549b17",
+        "0x549b1c",
+        "0x549b2c",
+        "0x549b2e",
+        "0x549b30",
+        "0x549b69",
+        "0x549b77",
+        "0x549b80",
+        "0x549b8e",
+        "0x549b97",
+        "0x549ba7"
+      ]
+    },
+    {
+      "id": "CACHE6-MAX-BOOKKEEPING",
+      "source": "0x825fa0",
+      "claim": "The exact word+6 read826114 and write826123 implement MAX(existingScriptLevel,modifier+8); the initial record DWORD+4=0x10000 initializes word+6=1. This is a writer/bookkeeping read, not a presentation consumer."
+    },
+    {
+      "id": "QUERY-NO-PRESENTATION",
+      "source": "0x549980 ->0x54ae70",
+      "claim": "549980 checks resource affordability and54F270 availability and returns0/1 to its wrapper. No cache+6 action/script/motion or packet field is supplied in this bounded path."
+    }
+  ],
+  "inline_cache_reader_scope": [
+    {
+      "source": "0x4704c0",
+      "use": "Caches word+4 as a byte skill level in UI cells; no identified cache+6 use."
+    },
+    {
+      "source": "0x5cd520",
+      "use": "Loads cache word+4 for cost getters, active IDs and UI vtable+1A4 updates; no identified cache+6 use."
+    },
+    {
+      "source": "0x617b70",
+      "use": "Tests cache word+4 nonzero to set editor availability flag+110; no identified cache+6 use."
+    },
+    {
+      "source": "0x61b0b0",
+      "use": "Iterates hero+1D4 map; forwards word+4 to61AED0 learned-skill UI; no identified cache+6 use."
+    },
+    {
+      "source": "0x61e4a0",
+      "use": "Forwards active DWORD0 and low byte+4 to UI vtable+19C; no identified cache+6 use."
+    }
+  ],
+  "conclusion": "NO_NEW_ACTIVE_TO_MOTION_BRIDGE; remaining scriptLevel+6 presentation consumer remains unresolved.",
+  "limitations": [
+    "Saved text and selected instruction ranges do not prove whole-program field-use absence or indirect-call closure.",
+    "Generic map helper826280 callers include unrelated structures; not all are hero skill-cache readers.",
+    "No official Server motion mapping, learned-level animation thresholds, new skill unlock, Client execution or semantic FULL-PASS follows from these findings.",
+    "An earlier sequential full-folder Python filter was canceled; completed rg queries and explicit selected-source reads are the retained search boundary."
+  ]
+}

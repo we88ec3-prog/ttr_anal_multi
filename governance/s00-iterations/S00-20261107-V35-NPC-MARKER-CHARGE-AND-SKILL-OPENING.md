@@ -43,3 +43,15 @@ Server修正只限明示進度指定：同一Rebuild的兩次5C都使用max(原�
 Host DLL SHA256 `187fcbf5103af3cd027e1310075d154e474879be3e7b7595927a2456e7eee65d`；Network `c034102dbc2a9daa95da7e99ea05968d267d6307b260c8f85f0cd0c8918518d2`。
 獨立重查Host存活及auth／journey／story皆健康。Client維持v7，不啟動／操作遊戲。
 新短卡先測Q133主線標記／第一劇情，再測伊希莉亞進階X、索瑪及蘋果進階X+C退階；結果PENDING。
+
+## 測試期間續作的影片來源
+
+一般web抓取失敗後改用Computer Use的背景瀏覽器，實際打開使用者提供的四份清單，讀得索瑪／蘋果／舒博爾／柯摩托各27支標題及影片URL。共108入口已保存，按role+台版名稱精確連到105個現有技能，其中40個是未開項；影片入口不當作原生動作映射或全技能完成。
+只抽看索瑪電火球的約0/1/2/4秒暫停畫面，記藍色球體與前方亮光impact；沒有由四張畫面推定連段數、motion ID、命中或傷害。沒有下載媒體、操作遊戲或發送留言。
+瀏覽器索引使後續可逐技能直接對照影片，不再只保留四個清單入口；原件資料、影片觀察與Server設計選擇仍分開。
+
+## 測試期間續作的原生cache界線
+
+限定原件指令補上先前因寄存器ABI而保留的成本資料流：549980的兩條查詢均把cache word+4作level送EAX，activeID送ECX至530530／5305C0／530650。這是可施放／費用查詢，不是動畫選擇。
+cache+6在已查825FA0路徑是ScriptLevel的MAX寫回；另外五個已識別inline讀者也未閉合+6→Action/script/motion。查核範圍見[報告](../client-variants/20261107-all-skills-unlock/cache-consumer/README.md)，不把有限未找到擴張成全程無對應，不解鎖87或升T01 FULL-PASS。
+下一批仍需逐技能取得動作映射與播放／命中規則；目前沒有足夠來源把這87項標為可用或整體完成。
