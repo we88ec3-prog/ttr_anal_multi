@@ -1,3 +1,7 @@
+CURRENT: v44 deployed after105 HappyPath pass (51s), native human result pending. Reproduce the corrected opcode arithmetic with python verify_party_opcode_correction_v2.py E:/Tartaros/workspace where original Tartaros.bin/anal/anal-multi are separately available. No original binaries included.
+
+IMPORTANT 2026-11-08 CORRECTION: earlier008B-as-clear and0088-always-cleanup statements are wrong. See registration-arithmetic-v2.json:008B modifies name/capacity,008C clears listing.0089 is cleanup;0088 is not always cleanup. Keep old metadata as historical rejected claims, do not implement from those labels. v43 withdrawn, v44 correction in progress.
+
 # Normal village entry: local eligibility and named party-create producer
 
 2026-11-08. Read-only source work for original KR SHA9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91. No Client execution/attachment/provider retry, resource change, Server restart or shared edits.
