@@ -63,3 +63,17 @@ MEF重新搜尋仍依使用者原排程等Server至少60%，本輪沒有重掃�
 透過作者頁找到另外五個角色清單，九份各27部；[影片來源索引](../client-variants/20261107-all-matrices/video-references.json)。文字工具cache miss後使用瀏覽器，僅核對標題清單及少量示範畫面，**沒有聲稱已逐一看完243部**。影片版本與目前KR完全一致尚未證實，不能以播放清單數量相同當逐技能ID配對證明。
 
 原EXE／STP／ASD／EFF／XML均不推Git，只保留metadata、來源hash、有限指令證據、重現工具及Server規劃。未升級Task native_complete、T01 FULL-PASS、APPROVED REQ或正式SPEC。v31實機短卡已送，結果PENDING_USER，送卡後繼續本文件與證據整合。
+
+逐項完成台帳：[243技能ledger](../client-variants/20261107-skill-completion-ledger/ledger.json)，串接各技能的配置、learned level、Talent script來源、動畫候選與未完成執行／人測。完整完成數目前保留0，避免把154動畫候選算成154完整技能。另讀舊anal CONTROL-AND-SKILL-SOURCE.md、SKILL-MATRIX-CONSUMERS.md及tutorial_skill_cast.py，未找到可直接承接的完整成長／V官方規則；舊稿已有0D動作指定與012A邊界，本輪沿用限制，未重啟舊Server或搜索MEF。
+
+## 測試等待期間完成的成長／特性補證
+
+[伊希莉亞27技能逐項對照](../client-variants/20261107-skill-growth-matrix/ISILIA-27.md)與[三軸matrix](../client-variants/20261107-skill-growth-matrix/growth-matrix.json)已完成有界資料整理，非runtime實作宣告：
+
+- Talent1407／active32：中韓文字都說範圍增加、冷卻減1／2秒；另有明確Consume Cooltime=-10/-20與SkillID32條件，不能只當作scriptLevel效果。
+- Talent1435／active2505：中韓一致目標總數2／3／4；Talent scriptLevel2／3／4，但XML沒有typed目標數欄，不能直接用scriptLevel作目標數公式。
+- Talent1427／active474：KR寫投射物數「增加4／5」，TC為「增加至4／5」，增量／總數仍有翻譯差異，沒有採用台版文字覆蓋韓版行為。
+
+另整理432筆條件式Consume中介資料：420單目標來源形狀、12有額外HaveBuff條件；全部保留學習Requirements、執行Conditions、原始欄位與來源SHA。實際屬性是Cooltime、MPPercent、SPPercent，沒有HP／SP／MP絕對delta，故百分比另欄不冒充扣量。疊加、百分比基準、捨入與觸發時點尚需執行契約；沒有因來源形狀單純就自動套到v31。這是下一版技能成長的具體資料，當前Server仍維持測試中的版本。
+
+矩陣allowlist語意補充：012C只有一個byte vector；012D的兩selector都在此共同vector查驗。v31後private main b6139bf僅更正此註解／文件，實際部署仍2ca60be，不需再次斷線。
