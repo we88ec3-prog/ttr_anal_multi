@@ -1,3 +1,5 @@
+2026-11-08 v61未部署：[額外Buff組成政策](../../../design/runtime-content/LAB-ADDITIONAL-BUFF-POLICY.md)新增強力防禦雙Buff、神聖之盾減傷及反轉受擊回HP的部分玩法；1297不自套，屬性／隊友／native grant與level仍有缺口。V2資料40rows，0077只擴至已核1/2/3/4/8/86/107。160項正流程、Host Release與JS語法通過，現行Host仍v58，正常進村與圖示實機待測；178／880候選數不變。後文保留歷史範圍。
+
 2026-11-08 v60未部署：[原生Buff快照0077接線政策](../../../design/runtime-content/LAB-BUFF-SNAPSHOT-0077-POLICY.md)已核接收lane2／primary可達、actor+3F0替換、ID／level至UI；剩餘時間與高byte語意未證明。技能場接上四防禦Buff套用／到期／耗盡的完整清單，僅發自身已核ID1..4。154項正流程及27組初始化順序追加斷言通過，Host Release通過；圖示／視效仍待實機，現行Host仍v58。後文舊的Buff wire未決／未部署敘述保留其當時範圍。
 
 2026-11-08 v59未部署：[四項防禦技能政策](../../../design/runtime-content/LAB-DEFENCE-BUFF-POLICY.md)採用新核對BuffExplain同名候選，接上索瑪防禦、坦基裝甲減傷、坦基屏障與意志之盾的自身有限次阻擋；不聲稱原版Active→Buff派送或time單位已證明。物攻／迴避公式與隊友效果待開發。153項正流程通過，現行Host仍v58；178／880候選數不變，正常進村實機仍待測。後文保留歷史狀態。
