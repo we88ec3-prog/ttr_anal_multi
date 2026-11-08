@@ -5,6 +5,8 @@ an official damage formula. The source projection contains1448 exact learned-
 level rows;1333 have exactly one ATTACK row and115 have none. Source ratio/rev
 units, stat selection, defense, criticals and native hit/phase timing remain
 unknown. A new normal combat formula is not justified by these tags alone.
+Exact source coefficient projection SHA256:
+`6737fc079e5b8352cb11030e82b73778d4a8acfca205f20214432eb482d4c211`.
 
 Server design: isolated SkillLab selection gains `coefficientDamage`, default
 false, preserved across that lab's V/Tab profile changes. Normal tutorial/story
@@ -24,6 +26,10 @@ Returning-fist outbound prototype damage may use the same comparison value;
 return damage remains0 and pull remains independent. Existing area, delay,
 projectile topology and pulse counts are not inferred from coefficients.
 Target HP caps actual damage normally; lethal cleanup follows the common path.
+The optional comparison plan uses independent schema
+`LOCAL_SKILL_DAMAGE_COMPARISON_V1_NOT_NATIVE_MEF`, with baseAttack100,ratio,
+revision,damage and authority `TEST_HYPOTHESIS_NOT_NATIVE_RATIO_UNITS_OR_DAMAGE_FORMULA`.
+It is omitted when the mode is off; it is not a native wire packet or MEF format.
 
 The page displays an explicit checkbox and numeric comparison preview for each
 selected skill. Existing source coefficients are already available in the cached
