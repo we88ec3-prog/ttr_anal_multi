@@ -1,3 +1,5 @@
+2026-11-08 v70準備（未部署）：[拳套／冰針整段比較](../../../design/runtime-content/PUNCH-ICE-LAB-COMPARISON.md)接入Pipa2995四clip及Crmd3034兩clip，保留原配置／消耗／冷卻，頁面明列往返拉引／多段冰針／凍傷待實作。193項HappyPath、Host建置及來源／投影重現通過；181比較候選／883slots、62項尚無動作候選，不等於完整技能。現行v68，正常進村與技能實機仍待驗。
+
 2026-11-08 v69準備（未部署）：[九角色受擊規則](../../../design/runtime-content/ALL-ROLE-HURT-REACTION-POLICY.md)補上原本只有role4送受擊狀態的缺口。九角色原始ABF／ASD與共用state5入口有界核對；0.15秒反應／0.9秒觸發冷卻與施法保留仍是Server選擇。191項HappyPath及Host建置通過。179候選／881slots、64項未開不變；現行v68，正常進村與實機技能仍待驗。
 
 2026-11-08 現行Host已整批更新v68，PID43752，來源5afda2ef6d76b35afabb91e0564964569f1eb869，取代v63。181項正流程與四個loopback埠／DB備份／實際HTTP目錄及新效果設定已核對；現行179候選／881slots，64項仍未開。頁面新增可選三怪與精簡輪詢，本次未連線狀態回覆472bytes；非遊戲延遲／壓測驗收。正常建房進村與技能實機仍待驗，不重複催測；需重新整理測試頁取得新功能。收據見host-v68-deployment.json，後文準備版敘述保留歷史範圍。
