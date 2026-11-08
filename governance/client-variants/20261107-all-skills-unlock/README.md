@@ -1,3 +1,5 @@
+> **Latest live Host: v74.** Combined returning-fist, expanded frostbite and nine-role raw action preview deployed from private `dc02fe108c929967c26aba8e1662d98fbc08f598`; see `host-v74-deployment.json`. Four exact loopback listeners, consistent backup and HTTP catalogue verified.231 positive cases;11 preview cases retested after final data adjustment. Human normal-village and preview acceptance remain pending. No new visual skill mapping or Client change. Earlier prepared/live statements below are historical snapshots.
+
 2026-11-08 v74準備： [動作預覽與影片對照](../../../design/runtime-content/ACTION-PREVIEW-AND-VIDEO-MATCHING.md)接入9角色294個已核對非循環動作、71數字家族與106影片參考；原始動作和技能ID分開，未建立新配對。空場Z播放、不扣資源／無傷害，同角色換動作原地重置，供實際畫面對照；10～30秒保守復原不是技能硬直。231項正流程通過，等待調整後11項複測及頁面檢查通過。現行v71，正常進村／實機預覽待驗；181技能候選／883slots、62缺動作配對不變。
 
 2026-11-08 v73準備（未部署）：[逐項凍傷採用](../../../design/runtime-content/EXPLICIT-FROSTBITE-SKILL-ADMISSION.md)核對13項完整說明，新增8項現有命中的部分凍傷；排除2項特性前置／2項無動作。1412／2527／2534採自身周圍測試脈衝，1412共用碰撞拉引；340等級6仍可施放但不虛構Buff6。220項HappyPath、Host建置、來源重現、JS／頁面與19筆自製程序集輸出核對通過。仍181候選／883slots、62無動作；現行v71，正常進村及技能實機待驗。
