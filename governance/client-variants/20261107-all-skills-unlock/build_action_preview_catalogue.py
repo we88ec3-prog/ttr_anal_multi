@@ -41,9 +41,8 @@ for n in numeric['numericFamilyRows']:
         'name':m['abf_file'],'asdMember':n['asdMember'],'asdSha256':sha(b),'effectReferences':refs,
         'nominalSeconds':seconds,'recoveryEstimateSeconds':min(30,max(10,seconds+0.5)) if seconds>0 else 10,
         'status':'RESOURCE_VERIFIED_ACTION_PREVIEW_NOT_SKILL_MAPPING'})
-vp=Path(__file__).with_name('video-title-skill-join.json');videoRows=json.loads(vp.read_bytes())['rows']
-videos=[{'role':v['role'],'active':v['active'],'name':v['name'],'url':'https://www.youtube.com/watch?v='+vid}
-    for v in videoRows for vid in v['videoIds']]
+vp=Path(__file__).with_name('video-title-skill-join-v2.json')
+videos=json.loads(vp.read_bytes())['videos']
 videos.append({'role':4,'active':None,'name':'伊希莉亞技能等級變化（使用者參考）','url':'https://www.youtube.com/watch?v=CSKA-ZXu-Z4'})
 out={'schema':'LOCAL_ACTION_PREVIEW_CATALOGUE_V1_NOT_NATIVE_MEF','entries':rows,'videos':videos,'excluded':excluded,
     'videoTitleIndexSha256':sha(vp.read_bytes()),'videoAuthority':'USER_REFERENCE_AND_EXACT_TITLE_JOIN_NOT_VISUAL_MAPPING',

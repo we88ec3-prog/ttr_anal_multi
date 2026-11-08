@@ -1,5 +1,11 @@
 # Resource action preview and video matching — v74
 
+> V76 reference-data correction: `action-preview-catalogue-v2.json` preserves all
+>294 action entries and carries109 video links, adding two whitespace-repaired
+>title joins and retaining one unjoined title with null Active. SHA256
+>`15cdfa769491075e5a5fb78b5885602248b2b8480b62296fd1a5ed79475b4593`.
+>See `PIPA-GRENADE-VIDEO-COMPARISON.md`. V1 counts/hashes below remain historical.
+
 Purpose: close the missing visual comparison layer, rather than equating numeric
 animation names/order or partial effect implementations with confirmed skills.
 Video references can identify the intended pose/effect/movement; they do not
