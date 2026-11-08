@@ -1,3 +1,5 @@
+2026-11-08 現行Host已整批更新v63，PID33620，來源94e60d735bfe90921e6c17e4d16c6996731a4234，取代v58。四個loopback埠、DB一致備份、HTTP個別等級與雙Buff配置均獨立核對；171項正流程結果保留，仍189組／880slots／178候選。正常建房進村及技能圖示實機仍待驗，未重複催測。部署收據見host-v63-deployment.json；下方未部署敘述保留歷史範圍。
+
 2026-11-08 v63未部署：[個別技能等級](../../../design/runtime-content/INDEPENDENT-SKILL-LAB-LEVELS.md)允許依Practice指定等級，0126快取、扣量與係數一致，V／Tab按技能身份保留等級；頁面新增個別選單。171項正流程、Host建置、JS語法與頁面流程模擬通過。仍178個動作候選／880slots，並非完整技能；現行Host仍v58，正常進村與混合等級實機待驗。
 
 2026-11-08 持續回復缺口核對：[八項回復Buff計畫](../../../design/runtime-content/PERIODIC-RESOURCE-BUFF-GAPS.md)區分回復屬性、每次回復量與通用暫定回復。TC475名稱不一致、335第8級無同號Buff說明均保留；測試頁新增未完成效果標示，沒有新增回復數值／Buff授予。Host建置與JS語法通過，現行仍v58，未新增實機通過紀錄。
