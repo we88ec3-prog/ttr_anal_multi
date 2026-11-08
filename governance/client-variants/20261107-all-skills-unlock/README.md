@@ -1,3 +1,5 @@
+2026-11-08 v71準備（未部署）：[凍傷部分效果](../../../design/runtime-content/LAB-FROSTBITE-POLICY.md)對Crmd3034套用Buff28來源攻速下降20～28%／原始時間5～7，移速20%及必定觸發／秒換算明列Server測試選擇。個別怪物移動、攻擊動作與排程減速、到期恢復；群體間隔及其他怪物保留。197項正流程、Host建置、來源重現及頁面顯示檢查通過。181候選／883slots、62未開不變；現行v68，實機仍待驗。
+
 2026-11-08 v70準備（未部署）：[拳套／冰針整段比較](../../../design/runtime-content/PUNCH-ICE-LAB-COMPARISON.md)接入Pipa2995四clip及Crmd3034兩clip，保留原配置／消耗／冷卻，頁面明列往返拉引／多段冰針／凍傷待實作。193項HappyPath、Host建置及來源／投影重現通過；181比較候選／883slots、62項尚無動作候選，不等於完整技能。現行v68，正常進村與技能實機仍待驗。
 
 2026-11-08 v69準備（未部署）：[九角色受擊規則](../../../design/runtime-content/ALL-ROLE-HURT-REACTION-POLICY.md)補上原本只有role4送受擊狀態的缺口。九角色原始ABF／ASD與共用state5入口有界核對；0.15秒反應／0.9秒觸發冷卻與施法保留仍是Server選擇。191項HappyPath及Host建置通過。179候選／881slots、64項未開不變；現行v68，正常進村與實機技能仍待驗。
