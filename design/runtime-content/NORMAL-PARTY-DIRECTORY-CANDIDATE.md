@@ -1,4 +1,6 @@
-2026-11-08 最新：v50已啟用，Host PID5196，私有main來源950b1cd4371509b50977463fd48801f862cd22a5。106項HappyPath通過、0失敗；原介面正常進村實機待測。優先序：正常進村→全角色技能→原生MEF→其他。多人加入／邀請候選預設停用，不影響單人建隊進村；不宣稱多人完成。使用者稍後一起測，不重複催測。
+> 2026-11-08 後補：現行部署為 v76，部署紀錄見 `governance/client-variants/20261107-all-skills-unlock/host-v76-deployment.json`。下列 v50／v44 部署描述保留為歷史。新增 [進村操作意圖與測試範圍](NORMAL-VILLAGE-ENTRY-INTENT-AND-TEST-SCOPE.md)：原有 party helper 直接呼叫 domain connection，不可稱為該段 TCP 驗證；實際 Client 正常建房進村驗收仍待回覆，多人預設停用。
+
+2026-11-08 歷史：v50已啟用，Host PID5196，私有main來源950b1cd4371509b50977463fd48801f862cd22a5。106項HappyPath通過、0失敗；原介面正常進村實機待測。優先序：正常進村→全角色技能→原生MEF→其他。多人加入／邀請候選預設停用，不影響單人建隊進村；不宣稱多人完成。使用者稍後一起測，不重複催測。
 
 最新已提交來源：私有main2428e3342f7fc5e3d72c60be556969e193870ad1（state-refresh／已支援角色切角kit），現行Host仍v44；公開加入／快速加入／邀請admission與多人world不在已完成功能內。
 
