@@ -1,3 +1,5 @@
+2026-11-08 v63未部署：[個別技能等級](../../../design/runtime-content/INDEPENDENT-SKILL-LAB-LEVELS.md)允許依Practice指定等級，0126快取、扣量與係數一致，V／Tab按技能身份保留等級；頁面新增個別選單。171項正流程、Host建置、JS語法與頁面流程模擬通過。仍178個動作候選／880slots，並非完整技能；現行Host仍v58，正常進村與混合等級實機待驗。
+
 2026-11-08 持續回復缺口核對：[八項回復Buff計畫](../../../design/runtime-content/PERIODIC-RESOURCE-BUFF-GAPS.md)區分回復屬性、每次回復量與通用暫定回復。TC475名稱不一致、335第8級無同號Buff說明均保留；測試頁新增未完成效果標示，沒有新增回復數值／Buff授予。Host建置與JS語法通過，現行仍v58，未新增實機通過紀錄。
 
 2026-11-08 v61未部署：[額外Buff組成政策](../../../design/runtime-content/LAB-ADDITIONAL-BUFF-POLICY.md)新增強力防禦雙Buff、神聖之盾減傷及反轉受擊回HP的部分玩法；1297不自套，屬性／隊友／native grant與level仍有缺口。V2資料40rows，0077只擴至已核1/2/3/4/8/86/107。160項正流程、Host Release與JS語法通過，現行Host仍v58，正常進村與圖示實機待測；178／880候選數不變。後文保留歷史範圍。
