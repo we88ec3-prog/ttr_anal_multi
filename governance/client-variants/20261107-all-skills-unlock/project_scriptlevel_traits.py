@@ -7,6 +7,8 @@ sys.path.insert(0,str(R/'anal'));from stp_resources import Archive
 sha=lambda b:hashlib.sha256(b).hexdigest();raw=(D/'all-skills-catalog.json').read_bytes()
 assert sha(raw)=='5f4d8310037f985047e903b102f5240f12ede24311a9e59a7e7f9366c935d14b'
 c=json.loads(raw);practices=[p for p in c['practices'] if any(m.get('Type')=='SkillScriptLevel' for m in p['modifiers'])]
+for key,root in [('original',R.parent/'origin'),('working',R),('taiwan',R.parent/'tc_workspace')]:
+ assert sha((root/'Table.stp').read_bytes())==next(x['sha256'] for x in c['carriers'] if x['kind']==key)
 assert len(practices)==228 and {p['role'] for p in practices}==set(range(1,10))
 assert all(p['category']=='Talent' for p in practices)
 arcs={k:Archive(root/'Table.stp') for k,root in [('original',R.parent/'origin'),('working',R),('taiwan',R.parent/'tc_workspace')]}
@@ -19,6 +21,7 @@ for p in practices:
   if (key,member) not in cache:
    b=a.read(member);cache[key,member]=b;sources.append(dict(version=key,member=member,sha256=sha(b)))
   b=cache[key,member]
+  if key in ('original','working'):assert sha(b)==c['members'][member][key+'_sha256']
   t=next(n for n in E.fromstring(b.decode('utf-8-sig')).findall('Practice') if n.get('ID')==str(p['id']))
   assert t.get('CharID')==str(p['role']) and t.get('Category')=='Talent'
   levels=[]

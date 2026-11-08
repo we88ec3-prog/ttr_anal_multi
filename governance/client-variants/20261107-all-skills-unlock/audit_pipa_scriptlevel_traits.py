@@ -14,6 +14,8 @@ def read(member):
 catalogueRaw=(D/'all-skills-catalog.json').read_bytes()
 assert sha(catalogueRaw)=='5f4d8310037f985047e903b102f5240f12ede24311a9e59a7e7f9366c935d14b'
 catalogue=json.loads(catalogueRaw);rows=[]
+for key,root in roots.items():
+ assert sha((root/'Table.stp').read_bytes())==next(x['sha256'] for x in catalogue['carriers'] if x['kind']==key)
 for tid,aid,pid,stem,levels in [(1227,19,26,'pipa_27',[2,3]),(1251,2996,217,'pipa_51',[2,3,4])]:
  talentMember=f'Table/Skill/Talent/{stem}.xml'
  # The old member name comes from the pinned source catalogue, never a path guess.
