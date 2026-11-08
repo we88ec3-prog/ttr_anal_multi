@@ -1,6 +1,6 @@
 # 伊希莉亞閃避技能：測試場比較規則
 
-2026-11-08，SERVER_DESIGN_CHOICE／SOURCE_BACKED_PARTIAL；尚未部署。範圍補正：Practice54只宣告技能等級1..5，BuffExplain的6..11級不是額外可學等級，實作不接通6..11。
+2026-11-08，SERVER_DESIGN_CHOICE／SOURCE_BACKED_PARTIAL；已部署v80，原版Client驗收待完成。範圍補正：Practice54只宣告技能等級1..5，BuffExplain的6..11級不是額外可學等級，實作不接通6..11。
 
 來源為既有`named-defensive-buff-text-candidates-v1.json`，SHA256
 `e1a10b5ea0fab9eaf52dfaaea46c264f6ce5f3d05aa640db2cb827a22439f419`。
@@ -27,4 +27,4 @@ Buff6宣告`S_Buff_BasisEvasion01.eff`。原件／工作副本的`Effect/Assist/
 
 實作已完成：286項HappyPath通過，0失敗／0略過；Host Release建置0警告／0錯誤，頁面流程檢查通過。新增7項效果案例，保留初版13案例中7項失敗及第一次完整套件的舊狀態預期失敗紀錄，未覆寫成成功。修正來源等級假設與舊測試預期，沒有增加可學等級或刪除原來無泛用傷害的斷言。
 
-[來源查核程式](../../governance/client-variants/20261107-all-skills-unlock/audit_islia_evasion_source.py)、[來源界線](../../governance/client-variants/20261107-all-skills-unlock/islia-evasion-source-boundary-v1.json)、[測試結果](../../governance/client-variants/20261107-all-skills-unlock/v80-evasion-validation.json)。初版語法／工作目錄錯誤未產生來源報告，修正後重現相同SHA；不是原生規則的反證。實際Client的Buff6視效、迴避手感仍待驗收。
+[來源查核程式](../../governance/client-variants/20261107-all-skills-unlock/audit_islia_evasion_source.py)、[來源界線](../../governance/client-variants/20261107-all-skills-unlock/islia-evasion-source-boundary-v1.json)、[測試結果](../../governance/client-variants/20261107-all-skills-unlock/v80-evasion-validation.json)、[v80部署紀錄](../../governance/client-variants/20261107-all-skills-unlock/host-v80-deployment.json)。實際Client的Buff6視效、迴避手感仍待驗收。
