@@ -25,3 +25,10 @@ AI設定仍來自LOCAL_MONSTER_BEHAVIOR_V1_NOT_NATIVE_MEF、nativeMef=false的�
 若只改AiProfile內容本身，須遵守既有content SHA／PreviousVersions規則，不繞過主線版本驗證。本輪程式預設相容既有v34內容，沒有改現行storyJSON或AIJSON／SHA，不需要更動DB或舊歷史來源。
 
 原生MEF完成條件仍是已驗真實樣本、格式、引用及執行鏈；本資料契約不解除該門檻。
+
+## 2026-11-11接續狀態
+
+本文是早期接線契約。現已支援逐出生profile、順序／定時波次及可選索敵／回位；
+以governance/MEF-FUNCTIONAL-COMPLETION.md和當日S00契約為現況。
+使用者目前目標是完整關卡／MEF功能開發，不把官方樣本／格式復原當功能開發前置；
+原生相容性仍獨立列未知。
