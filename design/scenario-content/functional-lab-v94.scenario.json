@@ -1,0 +1,207 @@
+{
+  "schema": "LOCAL_SCENARIO_DEFINITION_V1_NOT_NATIVE_MEF",
+  "nativeMef": false,
+  "authority": "SERVER_RECONSTRUCTION_NOT_NATIVE_MEF",
+  "definitions": [
+    {
+      "id": "content-lab-leash",
+      "entryNode": 1,
+      "authority": "SERVER_RECONSTRUCTION_NOT_NATIVE_MEF",
+      "sources": [
+        {
+          "kind": "ISOLATED_SERVER_FUNCTIONAL_LAB",
+          "reference": "governance/s00-iterations/S00-20261111-CONTENT-FUNCTIONAL-LAB-V94.md",
+          "sha256": "f422342d5c6efc2568f49206044d3015776d4e3c3073908656d4a6ac087349ba",
+          "authority": "SERVER_RECONSTRUCTION_NOT_NATIVE_MEF"
+        }
+      ],
+      "nodes": [
+        {
+          "node": 1,
+          "map": 191,
+          "spawn": {
+            "x": 426,
+            "y": 385
+          },
+          "portal": {
+            "x": 426,
+            "y": 385,
+            "radius": 3,
+            "key": 71
+          },
+          "encounterGroup": "lab-all-waves",
+          "encounters": [
+            {
+              "model": 1001,
+              "x": 402,
+              "y": 385
+            }
+          ],
+          "aiProfile": "lab-leash",
+          "rules": [
+            {
+              "event": "Entry",
+              "action": "SpawnGroup"
+            },
+            {
+              "event": "GroupCleared",
+              "action": "UnlockPortal"
+            },
+            {
+              "event": "InteractZ",
+              "action": "Result"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "content-lab-waves",
+      "entryNode": 1,
+      "authority": "SERVER_RECONSTRUCTION_NOT_NATIVE_MEF",
+      "sources": [
+        {
+          "kind": "ISOLATED_SERVER_FUNCTIONAL_LAB",
+          "reference": "governance/s00-iterations/S00-20261111-CONTENT-FUNCTIONAL-LAB-V94.md",
+          "sha256": "f422342d5c6efc2568f49206044d3015776d4e3c3073908656d4a6ac087349ba",
+          "authority": "SERVER_RECONSTRUCTION_NOT_NATIVE_MEF"
+        }
+      ],
+      "nodes": [
+        {
+          "node": 1,
+          "map": 191,
+          "spawn": {
+            "x": 426,
+            "y": 385
+          },
+          "portal": {
+            "x": 426,
+            "y": 385,
+            "radius": 3,
+            "key": 71
+          },
+          "encounterGroup": "lab-all-waves",
+          "encounters": [
+            {
+              "model": 1001,
+              "x": 402,
+              "y": 385
+            }
+          ],
+          "aiProfile": "lab-stationary",
+          "rules": [
+            {
+              "event": "Entry",
+              "action": "SpawnGroup"
+            },
+            {
+              "event": "GroupCleared",
+              "action": "UnlockPortal"
+            },
+            {
+              "event": "InteractZ",
+              "action": "Result"
+            }
+          ],
+          "timedReinforcements": [
+            {
+              "id": "after-entry",
+              "delaySeconds": 6,
+              "encounters": [
+                {
+                  "model": 1009,
+                  "x": 406,
+                  "y": 385
+                }
+              ]
+            }
+          ],
+          "reinforcements": [
+            {
+              "id": "after-aggregate-clear",
+              "delaySeconds": 1.5,
+              "encounters": [
+                {
+                  "model": 1001,
+                  "x": 402,
+                  "y": 385
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "content-lab-region",
+      "entryNode": 1,
+      "authority": "SERVER_RECONSTRUCTION_NOT_NATIVE_MEF",
+      "sources": [
+        {
+          "kind": "ISOLATED_SERVER_FUNCTIONAL_LAB",
+          "reference": "governance/s00-iterations/S00-20261111-CONTENT-FUNCTIONAL-LAB-V94.md",
+          "sha256": "f422342d5c6efc2568f49206044d3015776d4e3c3073908656d4a6ac087349ba",
+          "authority": "SERVER_RECONSTRUCTION_NOT_NATIVE_MEF"
+        }
+      ],
+      "nodes": [
+        {
+          "node": 1,
+          "map": 191,
+          "spawn": {
+            "x": 426,
+            "y": 385
+          },
+          "portal": {
+            "x": 426,
+            "y": 385,
+            "radius": 3,
+            "key": 71
+          },
+          "encounterGroup": "lab-all-waves",
+          "encounters": [
+            {
+              "model": 1001,
+              "x": 402,
+              "y": 385
+            }
+          ],
+          "aiProfile": "lab-stationary",
+          "rules": [
+            {
+              "event": "Entry",
+              "action": "SpawnGroup"
+            },
+            {
+              "event": "GroupCleared",
+              "action": "UnlockPortal"
+            },
+            {
+              "event": "InteractZ",
+              "action": "Result"
+            }
+          ],
+          "reinforcements": [
+            {
+              "id": "return-to-entry",
+              "delaySeconds": 1.5,
+              "activationRegion": {
+                "x": 426,
+                "y": 385,
+                "radius": 6
+              },
+              "encounters": [
+                {
+                  "model": 1009,
+                  "x": 406,
+                  "y": 385
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
