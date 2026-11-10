@@ -28,7 +28,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:tartaros:local-scenario-definition:v1-not-native-mef",
   "title": "Server reconstruction finite scenario JSON; not native MEF",
-  "$comment": "The typed loader also checks unique node/group event identities, referenced next nodes and finite entry-to-result reachability. It does not recover native MEF semantics.",
+  "$comment": "The typed loader also checks unique node/group event identities, referenced next nodes and finite entry-to-result reachability. It does not recover native MEF semantics. Sequential and timed waves together have at most31 additional waves and255 total actors per node; IDs are unique across both collections.",
   "$defs": {
     "source": {
       "type": "object",
@@ -276,6 +276,15 @@
             "$ref": "#/$defs/wave"
           },
           "description": "Sequential waves in the same encounter group; delay starts when the previous wave is cleared. Server-owned, NOT_NATIVE_MEF."
+        },
+        "timedReinforcements": {
+          "type": "array",
+          "maxItems": 31,
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/wave"
+          },
+          "description": "Independent Server timers since encounter creation, even while enemies are alive; optional current-player region. NOT_NATIVE_MEF."
         }
       },
       "required": [
@@ -358,7 +367,7 @@
             }
           ],
           "default": null,
-          "description": "Optional Server-owned current-position gate, ANDed with clear and delay conditions. Inclusive radius; not an official checkpoint or Client event."
+          "description": "Optional Server-owned current-position gate, ANDed with the collection timer/clear policy. Inclusive radius; not an official checkpoint or Client event."
         }
       },
       "required": [
