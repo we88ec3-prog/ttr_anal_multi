@@ -1,3 +1,5 @@
+2026-11-11 後端接續：[v99直線投射物](S00-20261111-MONSTER-PROJECTILE-VALIDATION.md)，358個正流程通過；視覺／物種尚未確認，不要求人測，線上仍v96a。
+
 2026-11-11 接續：[最新開發索引](S00-CURRENT-DEVELOPMENT-INDEX.md)與[累積批次測試表](../../design/testing/S00-CONTENT-BATCH-TESTS.md)。v98手動互動點準備完成，線上仍v96a；使用者目前不便測，8項待集中排程。下方為歷史紀錄。
 
 # S00 Iterations 14–22 — 原稿保存與交接

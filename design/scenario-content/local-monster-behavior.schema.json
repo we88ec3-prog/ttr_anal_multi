@@ -233,6 +233,17 @@
                       "type": "number",
                       "maximum": 3600,
                       "minimum": 0
+                    },
+                    "projectile": {
+                      "oneOf": [
+                        {
+                          "type": "null"
+                        },
+                        {
+                          "$ref": "#/$defs/projectile"
+                        }
+                      ],
+                      "default": null
                     }
                   }
                 }
@@ -245,5 +256,40 @@
       }
     }
   },
-  "$comment": "Typed loader also checks unique IDs and relations: followDistance < attackRange <= hitRange, windup <= recovery <= attackCooldown, and aggroRange <= leashRadius when both exist. Runtime is Server-owned and no native file compatibility is implied. Attack IDs must be unique per profile; each attack also checks attackRange<=hitRange, windup<=recovery<=cooldown and minimumHealthFraction<=maximumHealthFraction."
+  "$comment": "Typed loader also checks unique IDs and relations: followDistance < attackRange <= hitRange, windup <= recovery <= attackCooldown, and aggroRange <= leashRadius when both exist. Runtime is Server-owned and no native file compatibility is implied. Attack IDs must be unique per profile; each attack also checks attackRange<=hitRange, windup<=recovery<=cooldown and minimumHealthFraction<=maximumHealthFraction.",
+  "$defs": {
+    "projectile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "speed",
+        "maximumDistance",
+        "hitRadius",
+        "maximumLifetimeSeconds"
+      ],
+      "properties": {
+        "speed": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 512
+        },
+        "maximumDistance": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 512
+        },
+        "hitRadius": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 64
+        },
+        "maximumLifetimeSeconds": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 60
+        }
+      },
+      "description": "Server-owned non-homing swept flight. No native entity/opcode/visual claim."
+    }
+  }
 }

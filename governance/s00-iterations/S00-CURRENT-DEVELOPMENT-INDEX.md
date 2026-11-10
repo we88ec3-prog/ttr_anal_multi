@@ -1,3 +1,5 @@
+2026-11-11 後續：[v99怪物直線投射物後端](S00-20261111-MONSTER-PROJECTILE-VALIDATION.md)準備完成，358個受影響HappyPath通過；飛行視覺／物種動作未核對，不新增人測入口、不套主線、不啟用Host。既有8項待集中人測與線上v96a保持原狀。
+
 2026-11-11 最新接續：目前以關卡／MEF功能開發為目標，並非宣稱原生檔案復原。
 線上v96a保留；[v97條件出口](S00-20261111-CONDITIONAL-EXIT-VALIDATION.md)與[v98手動互動點](S00-20261111-MANUAL-INTERACTION-VALIDATION.md)已準備、未啟用。
 最新350個受影響HappyPath通過，Client實機結果仍待回。使用者目前無法測，統一在[批次測試表](../../design/testing/S00-CONTENT-BATCH-TESTS.md)累積8項，不逐列催問。
