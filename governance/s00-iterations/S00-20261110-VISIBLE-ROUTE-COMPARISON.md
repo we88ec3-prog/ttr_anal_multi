@@ -1,0 +1,63 @@
+# S00：可辨識的同路段基準／Client對照
+
+接續原地彈跳退回，不重派相同4單位卡，也不把Server補座標當作Client接手成功。
+此版仍為獨立比較場，NOT_NATIVE_MEF，不改Client、不執行／附加遊戲。
+
+## 已排除及仍未知
+
+原Table與v10沿用的翻譯Table，其`Table/_MapList.xml`逐byte一致，SHA256
+`cd47d8ca42f4297f6584a2c0c8807ae76352e3b353855b3989f660e64fd27f8c`。
+Map191／192的BOUND分別為scenario_pathofpindus01／02。
+目前資源載體確實包含對應兩份BND，其解碼SHA與Server既有pins一致。
+v10工作檔在4B2730、4CA890、4CABE0、4DF1A0、4DF510、82CDF0的限定視窗，
+以及C0CEB0的BoundMap路徑字串，與KR原件相同。
+這些只排除已核對的資料／程式碼差異，不證明執行中的Client成功載入網格。
+
+上述7個程式／字串視窗已加入只讀驗證器的可重現比較模式：
+`verify_client_route_anchors.py --binary <KR原件> --comparison-binary <工作副本> --comparison-sha256 <獨立核對的SHA>`。
+v10與指定only-v2皆通過這7個視窗的逐byte比較；only-v2工作檔SHA為
+`6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c`。
+視窗外差異、資源使用及實機狀態不在此比較的證明範圍。
+
+沿用T09既有來源：
+`kr-temp-roy/20261025-145814-claude-web-roy-T09-boundmap-collision-object-origin.md`，
+碰撞管理物件為holder+0xA0；4DF1A0由Map/BoundMap/<名稱>.bnd建立，
+4DF510從FB74D0按map selector取得名稱。名稱空／開檔失敗與動態狀態仍須區分。
+未將這次靜態複核升為原函式全文驗收或實機指標觀察。
+
+## 兩組共同條件
+
+同一Map191、模型1001、entity257、出生426／385、終點402／385。
+新路段定義ID為phindos-first-monster-visible-left；舊4單位定義保留供歷史重現。
+新路段每0.25單位檢查，共97點，兩個既有靜態BND圖層均可通行。
+Client動態碰撞、實際位置及末端回報仍未知。
+
+兩組共用生成、速度屬性、方向與初始motion訊息。明確補齊與普通測試怪相同的
+property5=100，但CBasicObject建構原本已初始化D0=100，不宣稱此舉修復彈跳。
+網頁套用只準備；必須回遊戲按Z一次才啟動。沒有戰鬥敵人集合、勝利或正常任務提交。
+
+|組別|啟動及後續訊息|診斷界線|
+|---|---|---|
+|Server座標基準組|000B／000C後，以Server單調時鐘在2秒內定期送0016；終點停止|明示SERVER_POSE_BASELINE；位置為Server指定，不是Client接受／自主執行證據|
+|Client終點組|000B／000C後只送一次0018，120更新步|明示NATIVE_SINGLE_TARGET；不送中間0016、不送終點校正、不按計時器宣告到達|
+
+Server的2秒是基準組測試政策，不將Client的120更新步換算為2秒。
+兩組回報分開：能否看見平移、是否仍彈跳、末端是否停下。基準組正常不算Client組通過。
+新增readiness提示會在按鈕旁說明未連線／帳號不符／近期未更新，不放寬原本啟用條件。
+
+## 工程驗證
+
+5項相關正流程通過：既有路段／外部定義及兩組新對照。
+驗證涵蓋套用不啟動、Z後的18／16分流、可辨識目標402／385、基準末端停止、
+Client組持續不補座標、沒有完成ACK／正常勝利。Host與JS語法檢查通過。
+尚未取得兩組實機結果；本文件不宣稱彈跳已修復。
+
+另313項受影響的正常旅程回歸通過。已沿用T09的
+`20261027-142007-claude-web-roy-T09-per-tick-frame-order-490FE0-4E0060-actor-update-loop.md`，
+4E0060先處理輸入、再經4E13F0逐物件呼叫v+20；不能把畫面動畫更新直接當作
+這個邏輯更新。既有0014啟用controller、00DA補輸入額度的分析，也不支持將
+它們直接當作可任意重送的怪物步進指令。本版未新增這類重送。
+
+本工作跨日於2026-11-11啟用v91。Host健康與路段內容身份已核對；
+瀏覽器確認兩個準備按鈕，以及未連線時的原因提示。已發出兩組不同的觀察卡，
+指定only-v2、不重跑主線。兩組實機回覆待收，原v90退回保留。
