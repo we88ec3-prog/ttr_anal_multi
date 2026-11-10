@@ -51,3 +51,12 @@ SHA256為`8e53732a5300cd1bc56f73dce1ddcd4f08da16c42d39fded889730c4978cd60d`。
 本版尚未啟用，現行v91路段對照保留運作，避免零碎換版打斷人測。
 正式關卡尚未新增region內容，也沒有新的實機通過主張。
 並行增援、條件分支、任務旗標／道具條件及Boss階段仍未完成。
+
+## 可交付的內容範例（v92）
+
+新增[區域／順序增援編寫說明](../../design/scenario-content/REGION-WAVE-AUTHORING.md)
+及獨立region-wave-example.scenario.json。範例經v92 typed loader與實例Enter載入成功，
+含第一波、區域條件第二波、純延遲第三波。JSON SHA256：
+`2bf0b3e9fab7e3ab23efc5c7fee1089404db9c47f5bc190e9cf4f307c697498b`。
+這是作者示範，未替換正式內容、未驗證全部BND幾何或Client人測；
+不將載入成功算作原生MEF、完整場景或怪物AI通過。

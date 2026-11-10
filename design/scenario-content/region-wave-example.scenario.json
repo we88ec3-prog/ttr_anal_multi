@@ -1,0 +1,90 @@
+{
+  "schema": "LOCAL_SCENARIO_DEFINITION_V1_NOT_NATIVE_MEF",
+  "nativeMef": false,
+  "authority": "SERVER_RECONSTRUCTION_NOT_NATIVE_MEF",
+  "definitions": [
+    {
+      "id": "authoring-region-wave-example",
+      "entryNode": 1,
+      "authority": "SERVER_RECONSTRUCTION_NOT_NATIVE_MEF",
+      "sources": [
+        {
+          "kind": "AUTHORING_EXAMPLE_NOT_OFFICIAL_CONTENT",
+          "reference": "design/scenario-content/REGION-WAVE-AUTHORING.md",
+          "sha256": "a19212af209416d48e07b4d67f3d07862c9025666644b4030139d5ee623f1be5",
+          "authority": "SERVER_RECONSTRUCTION_NOT_NATIVE_MEF"
+        }
+      ],
+      "nodes": [
+        {
+          "node": 1,
+          "map": 191,
+          "spawn": {
+            "x": 418,
+            "y": 385
+          },
+          "portal": {
+            "x": 430,
+            "y": 385,
+            "radius": 6,
+            "key": 71,
+            "preRegisterClosed": true
+          },
+          "encounterGroup": "example-all-waves",
+          "encounters": [
+            {
+              "model": 1001,
+              "x": 426,
+              "y": 385
+            }
+          ],
+          "aiProfile": "legacy-melee-v1",
+          "reinforcements": [
+            {
+              "id": "region-second",
+              "delaySeconds": 2,
+              "activationRegion": {
+                "x": 430,
+                "y": 385,
+                "radius": 3
+              },
+              "encounters": [
+                {
+                  "model": 1009,
+                  "x": 430,
+                  "y": 393,
+                  "aiProfile": "legacy-melee-v1"
+                }
+              ]
+            },
+            {
+              "id": "delayed-third",
+              "delaySeconds": 1,
+              "encounters": [
+                {
+                  "model": 1001,
+                  "x": 418,
+                  "y": 393
+                }
+              ]
+            }
+          ],
+          "rules": [
+            {
+              "event": "Entry",
+              "action": "SpawnGroup"
+            },
+            {
+              "event": "GroupCleared",
+              "action": "UnlockPortal"
+            },
+            {
+              "event": "InteractZ",
+              "action": "Result"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
