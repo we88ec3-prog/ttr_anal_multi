@@ -59,7 +59,7 @@ Host Release建置0警告／0錯誤。不能把合成通過當作實機驗收。
 
 執行器已隨v90啟用；現行正式故事／scenario內容未新增波次，避免擅改逐圖生怪。
 公開schema與Server使用的schema逐byte相同，SHA256為
-`020f75a7f92788c86383aca904285e93ddb9e515dcc170a4ef055c054f4d4618`。
+`809a76c234b47d1a742fa0b88c7be1c5ca6c4192871abea40e1225772531963b`。
 JSON解析與內部$ref完整性已檢查；typed loader及戰鬥流程由上述合成測試驗證。
 
 本版是清波後順序增援。並行定時增援、進區／血量條件、分支、計數器、
