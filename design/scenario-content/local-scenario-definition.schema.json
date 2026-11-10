@@ -347,12 +347,45 @@
           "items": {
             "$ref": "#/$defs/encounter"
           }
+        },
+        "activationRegion": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/activationRegion"
+            }
+          ],
+          "default": null,
+          "description": "Optional Server-owned current-position gate, ANDed with clear and delay conditions. Inclusive radius; not an official checkpoint or Client event."
         }
       },
       "required": [
         "id",
         "delaySeconds",
         "encounters"
+      ]
+    },
+    "activationRegion": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        },
+        "radius": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      },
+      "required": [
+        "x",
+        "y",
+        "radius"
       ]
     }
   }

@@ -30,7 +30,7 @@ delaySeconds為有限數值0–3600，從Server確認上一波存活怪數為零
 0表示同次Poll末尾生成下一波；本次已結算的命中不會追溯套用到剛生成的怪。
 時間採每實例單調時鐘，沒有背景腳本或任意程式執行。
 
-公開[完整schema](../../design/scenario-content/local-scenario-definition.schema.json)
+本版[順序波次schema](../../design/scenario-content/local-scenario-definition-waves-v1.schema.json)
 另由typed loader檢查唯一ID、累計物件容量與跨節點引用等語意。
 一般故事node也接受相同`reinforcements`欄位，編譯進共用關卡圖；
 載入時核對所有波次地形及AI profile，而非只檢查第一波。
@@ -58,7 +58,7 @@ adapter才可以送出聚合GroupCleared、保存該地圖勝利、開始戰後�
 Host Release建置0警告／0錯誤。不能把合成通過當作實機驗收。
 
 執行器已隨v90啟用；現行正式故事／scenario內容未新增波次，避免擅改逐圖生怪。
-公開schema與Server使用的schema逐byte相同，SHA256為
+初版公開schema與當時Server schema逐byte相同，SHA256為
 `809a76c234b47d1a742fa0b88c7be1c5ca6c4192871abea40e1225772531963b`。
 JSON解析與內部$ref完整性已檢查；typed loader及戰鬥流程由上述合成測試驗證。
 
