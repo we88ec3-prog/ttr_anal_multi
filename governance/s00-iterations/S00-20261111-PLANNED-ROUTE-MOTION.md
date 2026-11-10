@@ -43,3 +43,6 @@ Server排程只保證送出待機訊息；不證明Client已到達、取消目�
 315項受影響正常旅程測試通過；測試數量不代表原生或實機完成。
 公開路段schema：design/scenario-content/local-client-route-definition.schema.json，
 SHA256 `6d9745311186741bc1dac46a0f360f91f2be341e3ac6c6070fb4f9623c33d927`。
+
+v92已啟用，健康與內嵌路段內容身份核對完成；頁面顯示新增組與未連線原因。
+已送出僅針對新增組的人測卡，尚待回覆；不重測已回報的兩組。
