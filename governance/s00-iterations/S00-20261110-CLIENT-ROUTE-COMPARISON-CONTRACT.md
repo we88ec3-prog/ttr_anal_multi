@@ -62,6 +62,10 @@ encounterIndex、targetOffset、updateSteps、nativeMovementSpeed與requireClear
 Server實作提交：私有`ttr_server_roy` main `5214685`；Host Release建置0警告／0錯誤。
 這是v89準備成果，尚未啟用；本輪維持v88，不把準備版寫為實機通過。
 
+後續啟用紀錄：本功能已隨v90整批啟用，v89未單獨換版。
+瀏覽器已確認準備區及無連線時的停用狀態；已發出新的路段觀察卡。
+尚未收到Client移動／末端狀態回報，不變更實機待驗結論。
+
 工程：來源向量逐byte、套用不發目標、遊戲Z一次目標、後續Poll不補怪物座標／動作、
 不發命中／勝利、過再久也不偽造完成、切模式解除。Outbound trace納入固定長度0018，
 沿用SERVER_SEND_COMPLETED_NOT_CLIENT_ACK語意；另納入出口0048。
