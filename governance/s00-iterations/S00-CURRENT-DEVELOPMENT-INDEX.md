@@ -1,3 +1,8 @@
+2026-11-11 最新接續：目前以關卡／MEF功能開發為目標，並非宣稱原生檔案復原。
+線上v96a保留；[v97條件出口](S00-20261111-CONDITIONAL-EXIT-VALIDATION.md)與[v98手動互動點](S00-20261111-MANUAL-INTERACTION-VALIDATION.md)已準備、未啟用。
+最新350個受影響HappyPath通過，Client實機結果仍待回。使用者目前無法測，統一在[批次測試表](../../design/testing/S00-CONTENT-BATCH-TESTS.md)累積8項，不逐列催問。
+原生MEF、完整機關／道具條件、完整物種AI與跨圖效果等尚未完成。下方不同日期的版本、部署與來源描述保留為歷史快照，不能當作現行狀態。
+
 2026-11-08 開發中更新：[共享房間、名稱與角色狀態](../../design/runtime-content/NORMAL-PARTY-DIRECTORY-CANDIDATE.md)私有main2428e3342f7f，106項正流程通過51秒，尚未部署。實際仍v44/PID30596，使用者稍後再測；全角色87項未開、3組新資源family仍無唯一可用變體。
 
 2026-11-08 開發中：[共享正常房間目錄核心](../../design/runtime-content/NORMAL-PARTY-DIRECTORY-CANDIDATE.md)，私有main8da7e540，106項正流程通過；尚未接線／未部署。現行Host仍v44/PID30596，使用者稍後再測。

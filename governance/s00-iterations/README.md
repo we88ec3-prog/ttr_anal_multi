@@ -1,3 +1,5 @@
+2026-11-11 接續：[最新開發索引](S00-CURRENT-DEVELOPMENT-INDEX.md)與[累積批次測試表](../../design/testing/S00-CONTENT-BATCH-TESTS.md)。v98手動互動點準備完成，線上仍v96a；使用者目前不便測，8項待集中排程。下方為歷史紀錄。
+
 # S00 Iterations 14–22 — 原稿保存與交接
 
 最新：[main 分支與 CI 檢核／v28 重啟](S00-20261107-MAIN-BRANCH-AUDIT-AND-V28-RESTART.md)。保留舊分支使用紀錄，確認提交已整合；在 main 修正第三種需求來源的測試斷言。

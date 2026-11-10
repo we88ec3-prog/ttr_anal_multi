@@ -554,6 +554,132 @@
           ]
         }
       ]
+    },
+    {
+      "id": "content-lab-interactions",
+      "entryNode": 1,
+      "authority": "SERVER_RECONSTRUCTION_NOT_NATIVE_MEF",
+      "sources": [
+        {
+          "kind": "ISOLATED_SERVER_MANUAL_INTERACTION",
+          "reference": "governance/s00-iterations/S00-20261111-MANUAL-INTERACTION-CONTRACT.md",
+          "sha256": "fa0d8515b72e083116a2ef38524ad30a78d708d528515b88f23c8397f66037aa",
+          "authority": "SERVER_RECONSTRUCTION_NOT_NATIVE_MEF"
+        }
+      ],
+      "nodes": [
+        {
+          "node": 1,
+          "map": 193,
+          "spawn": {
+            "x": 377.5,
+            "y": 315.5
+          },
+          "portal": {
+            "x": 377.5,
+            "y": 307.5,
+            "radius": 4,
+            "key": 801,
+            "preRegisterClosed": true,
+            "condition": {
+              "requiredFlags": [
+                "point-used"
+              ]
+            }
+          },
+          "encounterGroup": "branch-lab-node1",
+          "encounters": [
+            {
+              "model": 1001,
+              "x": 377.5,
+              "y": 291.5
+            }
+          ],
+          "aiProfile": "lab-stationary",
+          "rules": [
+            {
+              "event": "Entry",
+              "action": "SpawnGroup"
+            },
+            {
+              "event": "GroupCleared",
+              "action": "UnlockPortal"
+            },
+            {
+              "event": "InteractZ",
+              "action": "NextNode",
+              "targetNode": 2
+            }
+          ],
+          "signals": [
+            {
+              "flag": "first-clear",
+              "event": "GroupCleared"
+            },
+            {
+              "flag": "point-used",
+              "event": "CheckpointInteracted",
+              "interaction": {
+                "key": 901,
+                "region": {
+                  "x": 377.5,
+                  "y": 315.5,
+                  "radius": 4
+                },
+                "requireGroupCleared": true,
+                "requiredFlags": [
+                  "first-clear"
+                ],
+                "markerKey": 65001,
+                "markerRadius": 6
+              }
+            }
+          ]
+        },
+        {
+          "node": 2,
+          "map": 194,
+          "spawn": {
+            "x": 383.5,
+            "y": 279.5
+          },
+          "portal": {
+            "x": 383.5,
+            "y": 271.5,
+            "radius": 4,
+            "key": 802,
+            "preRegisterClosed": true,
+            "condition": {
+              "requiredFlags": [
+                "point-used"
+              ]
+            }
+          },
+          "encounterGroup": "branch-lab-node2",
+          "encounters": [
+            {
+              "model": 1009,
+              "x": 383.5,
+              "y": 255.5
+            }
+          ],
+          "aiProfile": "lab-stationary",
+          "rules": [
+            {
+              "event": "Entry",
+              "action": "SpawnGroup"
+            },
+            {
+              "event": "GroupCleared",
+              "action": "UnlockPortal"
+            },
+            {
+              "event": "InteractZ",
+              "action": "Result"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

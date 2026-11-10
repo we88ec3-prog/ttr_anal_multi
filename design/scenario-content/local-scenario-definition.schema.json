@@ -495,7 +495,8 @@
         "event": {
           "enum": [
             "GroupCleared",
-            "RegionEntered"
+            "RegionEntered",
+            "CheckpointInteracted"
           ]
         },
         "region": {
@@ -505,6 +506,16 @@
             },
             {
               "$ref": "#/$defs/activationRegion"
+            }
+          ]
+        },
+        "interaction": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/interaction"
             }
           ]
         }
@@ -535,6 +546,32 @@
           "else": {
             "properties": {
               "region": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "event": {
+                "const": "CheckpointInteracted"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "interaction"
+            ],
+            "properties": {
+              "interaction": {
+                "$ref": "#/$defs/interaction"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "interaction": {
                 "type": "null"
               }
             }
@@ -595,6 +632,61 @@
         }
       ],
       "description": "All required instance flags AND current Server region, after whole encounter clear; latches open. NOT_NATIVE_MEF."
+    },
+    "interaction": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "key": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65535
+        },
+        "region": {
+          "$ref": "#/$defs/activationRegion"
+        },
+        "requireGroupCleared": {
+          "type": "boolean",
+          "default": false
+        },
+        "requiredFlags": {
+          "type": "array",
+          "maxItems": 16,
+          "uniqueItems": true,
+          "default": [],
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,63}$",
+            "minLength": 1,
+            "maxLength": 64,
+            "not": {
+              "pattern": "[^A-Za-z0-9_.-]"
+            }
+          }
+        },
+        "markerKey": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 65535
+            }
+          ]
+        },
+        "markerRadius": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "default": 6
+        }
+      },
+      "required": [
+        "key",
+        "region"
+      ],
+      "description": "Server-authored single-use category1 manual checkpoint, not official save/puzzle policy. Optional category0 closed visual marker."
     }
   }
 }
