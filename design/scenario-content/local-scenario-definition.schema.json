@@ -186,6 +186,17 @@
           "type": "integer",
           "minimum": 1,
           "maximum": 65535
+        },
+        "condition": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/exitCondition"
+            }
+          ],
+          "default": null
         }
       },
       "required": [
@@ -294,6 +305,15 @@
             "$ref": "#/$defs/exit"
           },
           "description": "Additional explicit exits beside the default portal/rule. Server-owned NOT_NATIVE_MEF."
+        },
+        "signals": {
+          "type": "array",
+          "maxItems": 64,
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/signal"
+          },
+          "description": "Unique instance flag producers; no arbitrary Client flag assignment. Catalog additionally checks branch dominance and total64 bound."
         }
       },
       "required": [
@@ -458,6 +478,123 @@
           }
         }
       ]
+    },
+    "signal": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "flag": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,63}$",
+          "minLength": 1,
+          "maxLength": 64,
+          "not": {
+            "pattern": "[^A-Za-z0-9_.-]"
+          }
+        },
+        "event": {
+          "enum": [
+            "GroupCleared",
+            "RegionEntered"
+          ]
+        },
+        "region": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/activationRegion"
+            }
+          ]
+        }
+      },
+      "required": [
+        "flag",
+        "event"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "event": {
+                "const": "RegionEntered"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "region"
+            ],
+            "properties": {
+              "region": {
+                "$ref": "#/$defs/activationRegion"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "region": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "exitCondition": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "requiredFlags": {
+          "type": "array",
+          "maxItems": 16,
+          "uniqueItems": true,
+          "default": [],
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,63}$",
+            "minLength": 1,
+            "maxLength": 64,
+            "not": {
+              "pattern": "[^A-Za-z0-9_.-]"
+            }
+          }
+        },
+        "activationRegion": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/activationRegion"
+            }
+          ]
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "requiredFlags"
+          ],
+          "properties": {
+            "requiredFlags": {
+              "minItems": 1
+            }
+          }
+        },
+        {
+          "required": [
+            "activationRegion"
+          ],
+          "properties": {
+            "activationRegion": {
+              "$ref": "#/$defs/activationRegion"
+            }
+          }
+        }
+      ],
+      "description": "All required instance flags AND current Server region, after whole encounter clear; latches open. NOT_NATIVE_MEF."
     }
   }
 }

@@ -1,0 +1,463 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema": {
+      "const": "LOCAL_SCENARIO_DEFINITION_V1_NOT_NATIVE_MEF"
+    },
+    "nativeMef": {
+      "const": false
+    },
+    "authority": {
+      "const": "SERVER_RECONSTRUCTION_NOT_NATIVE_MEF"
+    },
+    "definitions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/definition"
+      }
+    }
+  },
+  "required": [
+    "schema",
+    "nativeMef",
+    "authority",
+    "definitions"
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:tartaros:local-scenario-definition:v1-not-native-mef",
+  "title": "Server reconstruction finite scenario JSON; not native MEF",
+  "$comment": "The typed loader also checks unique node/group event identities, referenced next nodes and finite entry-to-result reachability. It does not recover native MEF semantics. Sequential and timed waves together have at most31 additional waves and255 total actors per node; IDs are unique across both collections. All default and alternative exit targets form an acyclic graph, every defined node is reachable from entry, and exit keys are unique per node. Overlaps resolve by explicit key, or nearest distance then lowest key when no key is supplied.",
+  "$defs": {
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reference": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9A-Fa-f]{64}$"
+        },
+        "authority": {
+          "const": "SERVER_RECONSTRUCTION_NOT_NATIVE_MEF"
+        }
+      },
+      "required": [
+        "kind",
+        "reference",
+        "sha256",
+        "authority"
+      ]
+    },
+    "rule": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "event": {
+          "enum": [
+            "Entry",
+            "GroupCleared",
+            "InteractZ"
+          ]
+        },
+        "action": {
+          "enum": [
+            "SpawnGroup",
+            "UnlockPortal",
+            "NextNode",
+            "Result"
+          ]
+        },
+        "targetNode": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        }
+      },
+      "required": [
+        "event",
+        "action"
+      ],
+      "oneOf": [
+        {
+          "properties": {
+            "event": {
+              "const": "Entry"
+            },
+            "action": {
+              "const": "SpawnGroup"
+            },
+            "targetNode": {
+              "type": "null"
+            }
+          }
+        },
+        {
+          "properties": {
+            "event": {
+              "const": "GroupCleared"
+            },
+            "action": {
+              "const": "UnlockPortal"
+            },
+            "targetNode": {
+              "type": "null"
+            }
+          }
+        },
+        {
+          "properties": {
+            "event": {
+              "const": "InteractZ"
+            },
+            "action": {
+              "const": "NextNode"
+            },
+            "targetNode": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "required": [
+            "targetNode"
+          ]
+        },
+        {
+          "properties": {
+            "event": {
+              "const": "InteractZ"
+            },
+            "action": {
+              "const": "Result"
+            },
+            "targetNode": {
+              "type": "null"
+            }
+          }
+        }
+      ]
+    },
+    "point": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "x",
+        "y"
+      ]
+    },
+    "portal": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "preRegisterClosed": {
+          "type": "boolean",
+          "default": false,
+          "description": "Opt-in Server comparison: register closed on entry, update existing point on victory; not Client autonomous opening."
+        },
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        },
+        "radius": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "key": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65535
+        }
+      },
+      "required": [
+        "x",
+        "y",
+        "radius",
+        "key"
+      ]
+    },
+    "encounter": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "aiProfile": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "description": "Optional explicit Server profile override; null inherits node aiProfile. Not native MEF."
+        },
+        "model": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65535
+        },
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "model",
+        "x",
+        "y"
+      ]
+    },
+    "node": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "node": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "map": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4294967295
+        },
+        "spawn": {
+          "$ref": "#/$defs/point"
+        },
+        "portal": {
+          "$ref": "#/$defs/portal"
+        },
+        "encounterGroup": {
+          "type": "string",
+          "minLength": 1
+        },
+        "encounters": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/encounter"
+          },
+          "maxItems": 255
+        },
+        "aiProfile": {
+          "type": "string",
+          "minLength": 1
+        },
+        "rules": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": {
+            "$ref": "#/$defs/rule"
+          }
+        },
+        "reinforcements": {
+          "type": "array",
+          "maxItems": 31,
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/wave"
+          },
+          "description": "Sequential waves in the same encounter group; delay starts when the previous wave is cleared. Server-owned, NOT_NATIVE_MEF."
+        },
+        "timedReinforcements": {
+          "type": "array",
+          "maxItems": 31,
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/wave"
+          },
+          "description": "Independent Server timers since encounter creation, even while enemies are alive; optional current-player region. NOT_NATIVE_MEF."
+        },
+        "alternativeExits": {
+          "type": "array",
+          "maxItems": 7,
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/exit"
+          },
+          "description": "Additional explicit exits beside the default portal/rule. Server-owned NOT_NATIVE_MEF."
+        }
+      },
+      "required": [
+        "node",
+        "map",
+        "spawn",
+        "portal",
+        "encounterGroup",
+        "encounters",
+        "aiProfile",
+        "rules"
+      ]
+    },
+    "definition": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "entryNode": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "authority": {
+          "const": "SERVER_RECONSTRUCTION_NOT_NATIVE_MEF"
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/source"
+          }
+        },
+        "nodes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/node"
+          },
+          "maxItems": 256
+        }
+      },
+      "required": [
+        "id",
+        "entryNode",
+        "authority",
+        "sources",
+        "nodes"
+      ]
+    },
+    "wave": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "delaySeconds": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 3600
+        },
+        "encounters": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 255,
+          "items": {
+            "$ref": "#/$defs/encounter"
+          }
+        },
+        "activationRegion": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/activationRegion"
+            }
+          ],
+          "default": null,
+          "description": "Optional Server-owned current-position gate, ANDed with the collection timer/clear policy. Inclusive radius; not an official checkpoint or Client event."
+        }
+      },
+      "required": [
+        "id",
+        "delaySeconds",
+        "encounters"
+      ]
+    },
+    "activationRegion": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        },
+        "radius": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      },
+      "required": [
+        "x",
+        "y",
+        "radius"
+      ]
+    },
+    "exit": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "portal": {
+          "$ref": "#/$defs/portal"
+        },
+        "action": {
+          "enum": [
+            "NextNode",
+            "Result"
+          ]
+        },
+        "targetNode": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        }
+      },
+      "required": [
+        "portal",
+        "action"
+      ],
+      "oneOf": [
+        {
+          "properties": {
+            "action": {
+              "const": "NextNode"
+            },
+            "targetNode": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "required": [
+            "targetNode"
+          ]
+        },
+        {
+          "properties": {
+            "action": {
+              "const": "Result"
+            },
+            "targetNode": {
+              "type": "null"
+            }
+          }
+        }
+      ]
+    }
+  }
+}
