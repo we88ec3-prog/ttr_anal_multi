@@ -160,10 +160,90 @@
             ],
             "default": null,
             "description": "Optional Server-owned policy, NOT_NATIVE_MEF. See S00 monster leash contract."
+          },
+          "attacks": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "array",
+                "maxItems": 16,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "id",
+                    "motion",
+                    "damage",
+                    "attackRange",
+                    "hitRange",
+                    "windupSeconds",
+                    "recoverySeconds",
+                    "cooldownSeconds"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "motion": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 65535
+                    },
+                    "damage": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 1000000
+                    },
+                    "minimumHealthFraction": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1,
+                      "default": 0
+                    },
+                    "maximumHealthFraction": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1,
+                      "default": 1
+                    },
+                    "attackRange": {
+                      "type": "number",
+                      "maximum": 3600,
+                      "exclusiveMinimum": 0
+                    },
+                    "hitRange": {
+                      "type": "number",
+                      "maximum": 3600,
+                      "minimum": 0
+                    },
+                    "windupSeconds": {
+                      "type": "number",
+                      "maximum": 3600,
+                      "minimum": 0
+                    },
+                    "recoverySeconds": {
+                      "type": "number",
+                      "maximum": 3600,
+                      "minimum": 0
+                    },
+                    "cooldownSeconds": {
+                      "type": "number",
+                      "maximum": 3600,
+                      "minimum": 0
+                    }
+                  }
+                }
+              }
+            ],
+            "default": null,
+            "description": "Server-owned ordered attack choices, independent cooldowns and inclusive health bands. Missing/empty retains legacy melee."
           }
         }
       }
     }
   },
-  "$comment": "Typed loader also checks unique IDs and relations: followDistance < attackRange <= hitRange, windup <= recovery <= attackCooldown, and aggroRange <= leashRadius when both exist. Runtime is Server-owned and no native file compatibility is implied."
+  "$comment": "Typed loader also checks unique IDs and relations: followDistance < attackRange <= hitRange, windup <= recovery <= attackCooldown, and aggroRange <= leashRadius when both exist. Runtime is Server-owned and no native file compatibility is implied. Attack IDs must be unique per profile; each attack also checks attackRange<=hitRange, windup<=recovery<=cooldown and minimumHealthFraction<=maximumHealthFraction."
 }
