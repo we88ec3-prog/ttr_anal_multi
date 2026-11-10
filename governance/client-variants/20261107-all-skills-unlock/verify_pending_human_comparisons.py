@@ -26,5 +26,8 @@ for group in queue['readyGroups']:
     assert set(group['firstBatch']) <= set(row['Motions'])
     assert group['status'] in ('WAITING_USER_ENDPOINT_COMPARISON', 'QUEUED_NOT_DISPATCHED')
 assert not seen.intersection((r['role'], r['active']) for r in queue['excluded'])
+observed=[(g['role'],g['active']) for g in queue['completedVisualComparisons']]
+assert len(observed)==len(set(observed))
+assert not seen.intersection(observed)
 assert sum(len(g['firstBatch']) for g in queue['readyGroups'] if g['status'] == 'WAITING_USER_ENDPOINT_COMPARISON') == queue['expectedDispatchedCasts']
 print(str(len(seen))+' remaining groups; '+str(queue['expectedDispatchedCasts'])+' dispatched endpoint casts; '+str(len(queue['completedVisualComparisons']))+' observed pairs excluded. Not full gameplay acceptance.')
