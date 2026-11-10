@@ -28,7 +28,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:tartaros:local-scenario-definition:v1-not-native-mef",
   "title": "Server reconstruction finite scenario JSON; not native MEF",
-  "$comment": "The typed loader also checks unique node/group event identities, referenced next nodes and finite entry-to-result reachability. It does not recover native MEF semantics. Sequential and timed waves together have at most31 additional waves and255 total actors per node; IDs are unique across both collections.",
+  "$comment": "The typed loader also checks unique node/group event identities, referenced next nodes and finite entry-to-result reachability. It does not recover native MEF semantics. Sequential and timed waves together have at most31 additional waves and255 total actors per node; IDs are unique across both collections. All default and alternative exit targets form an acyclic graph, every defined node is reachable from entry, and exit keys are unique per node. Overlaps resolve by explicit key, or nearest distance then lowest key when no key is supplied.",
   "$defs": {
     "source": {
       "type": "object",
@@ -285,6 +285,15 @@
             "$ref": "#/$defs/wave"
           },
           "description": "Independent Server timers since encounter creation, even while enemies are alive; optional current-player region. NOT_NATIVE_MEF."
+        },
+        "alternativeExits": {
+          "type": "array",
+          "maxItems": 7,
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/exit"
+          },
+          "description": "Additional explicit exits beside the default portal/rule. Server-owned NOT_NATIVE_MEF."
         }
       },
       "required": [
@@ -325,7 +334,8 @@
           "minItems": 1,
           "items": {
             "$ref": "#/$defs/node"
-          }
+          },
+          "maxItems": 256
         }
       },
       "required": [
@@ -395,6 +405,58 @@
         "x",
         "y",
         "radius"
+      ]
+    },
+    "exit": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "portal": {
+          "$ref": "#/$defs/portal"
+        },
+        "action": {
+          "enum": [
+            "NextNode",
+            "Result"
+          ]
+        },
+        "targetNode": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        }
+      },
+      "required": [
+        "portal",
+        "action"
+      ],
+      "oneOf": [
+        {
+          "properties": {
+            "action": {
+              "const": "NextNode"
+            },
+            "targetNode": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "required": [
+            "targetNode"
+          ]
+        },
+        {
+          "properties": {
+            "action": {
+              "const": "Result"
+            },
+            "targetNode": {
+              "type": "null"
+            }
+          }
+        }
       ]
     }
   }
