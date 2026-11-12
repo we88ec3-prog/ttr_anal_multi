@@ -1,3 +1,5 @@
+2026-11-13：[巡邏怪繞牆回位](../../design/scenario-content/MONSTER-PATROLS.md#q119-繞牆候選)可依靜態地圖格搜尋回程。375 項 Server 正流程合成通過。Q119 繞牆候選通過 36 張地圖預檢，[PT-02](../../design/testing/S00-CONTENT-BATCH-TESTS.md) 已累積待實機。本機版本未替換。
+
 2026-11-13：[怪物巡邏路線](../../design/scenario-content/MONSTER-PATROLS.md)可逐怪指定，適用初始怪與增援，接上追擊及回位。374 項 Server 正流程合成通過，Q119 路線通過 36 張地圖的資料預檢。[PT-01](../../design/testing/S00-CONTENT-BATCH-TESTS.md) 已累積待實機，本機版本未替換。
 
 2026-11-13：[主線入場計時增援](../../design/scenario-content/NODE-DELAY-SIGNALS.md)可在劇情結束、正式開放戰鬥後計時，支援不清初始怪即觸發增援。372 項 Server 正流程合成通過，Q119 範例通過 36 張地圖預檢。[ND-01](../../design/testing/S00-CONTENT-BATCH-TESTS.md) 已累積待實機，可與 SO-01／SC-01 同輪驗收。本機版本未替換。
