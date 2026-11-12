@@ -93,5 +93,7 @@ TS-07 待實機批次，先核對重置券新疊 metadata 並啟用商品設定�
 
 TS-08 待實機批次，可接續 TS-07。先核對 Product 232 的新疊 metadata，再在馮德斯雜貨買一張 HP 回復卷軸並原格售回。LeeLoo 由 8,200 降至 7,390，再回到 7,471。確認 Battle Point 全程保持 7、售回後格位清空。 [一般商店幣別](../scenario-content/PHINDOS-GROCER-TRADE.md)
 
+TS-09 待實機批次。先核對 Product 2614 的新裝備 metadata，啟用鐵匠市場點及商品表。用首次設定 8,000 LeeLoo 的專用帳號正常進村，開鐵匠貨單，分兩次各買一件 Product 2614。確認兩件分開佔格，LeeLoo 剩 600。將其中一件存入倉庫，重登後取回，再回鐵匠售回該件。應只剩另一件，LeeLoo 回到 970。 [裝備實例與交易規格](../scenario-content/PHINDOS-EQUIPMENT.md)
+
 已通過列僅涵蓋當時指定工作副本與場景，不代表未修改原版全面相容性。
 錯誤／邊界、重送／重登、併發、故障、安全、營運與壓測維持延期；不列入這張待測批次。
