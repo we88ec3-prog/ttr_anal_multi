@@ -680,6 +680,89 @@
           ]
         }
       ]
+    },
+    {
+      "id": "content-lab-clear-delay",
+      "entryNode": 1,
+      "authority": "SERVER_RECONSTRUCTION_NOT_NATIVE_MEF",
+      "sources": [
+        {
+          "kind": "ISOLATED_SERVER_CLEAR_DELAY",
+          "reference": "design/scenario-content/CLEAR-DELAY-SIGNALS.md",
+          "sha256": "0f0002c503b2093ab57a0978d36170d11831c5899be10d1aca1c0daa6335d25d",
+          "authority": "SERVER_RECONSTRUCTION_NOT_NATIVE_MEF"
+        }
+      ],
+      "nodes": [
+        {
+          "node": 1,
+          "map": 193,
+          "spawn": {
+            "x": 377.5,
+            "y": 315.5
+          },
+          "portal": {
+            "x": 377.5,
+            "y": 307.5,
+            "radius": 4,
+            "key": 801,
+            "preRegisterClosed": true,
+            "condition": {
+              "requiredFlags": [
+                "point-used"
+              ]
+            }
+          },
+          "encounterGroup": "clear-delay-lab",
+          "encounters": [
+            {
+              "model": 1001,
+              "x": 377.5,
+              "y": 291.5
+            }
+          ],
+          "aiProfile": "lab-stationary",
+          "rules": [
+            {
+              "event": "Entry",
+              "action": "SpawnGroup"
+            },
+            {
+              "event": "GroupCleared",
+              "action": "UnlockPortal"
+            },
+            {
+              "event": "InteractZ",
+              "action": "Result"
+            }
+          ],
+          "signals": [
+            {
+              "flag": "delay-ready",
+              "event": "ClearDelayElapsed",
+              "delaySeconds": 3
+            },
+            {
+              "flag": "point-used",
+              "event": "CheckpointInteracted",
+              "interaction": {
+                "key": 901,
+                "region": {
+                  "x": 377.5,
+                  "y": 315.5,
+                  "radius": 4
+                },
+                "requireGroupCleared": true,
+                "requiredFlags": [
+                  "delay-ready"
+                ],
+                "markerKey": 65001,
+                "markerRadius": 6
+              }
+            }
+          ]
+        }
+      ]
     }
   ]
 }

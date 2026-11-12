@@ -496,7 +496,8 @@
           "enum": [
             "GroupCleared",
             "RegionEntered",
-            "CheckpointInteracted"
+            "CheckpointInteracted",
+            "ClearDelayElapsed"
           ]
         },
         "region": {
@@ -508,6 +509,11 @@
               "$ref": "#/$defs/activationRegion"
             }
           ]
+        },
+        "delaySeconds": {
+          "type": ["number", "null"],
+          "exclusiveMinimum": 0,
+          "maximum": 3600
         },
         "interaction": {
           "oneOf": [
@@ -575,6 +581,18 @@
                 "type": "null"
               }
             }
+          }
+        },
+        {
+          "if": {
+            "properties": { "event": { "const": "ClearDelayElapsed" } }
+          },
+          "then": {
+            "required": ["delaySeconds"],
+            "properties": { "delaySeconds": { "type": "number" } }
+          },
+          "else": {
+            "properties": { "delaySeconds": { "type": "null" } }
           }
         }
       ]
