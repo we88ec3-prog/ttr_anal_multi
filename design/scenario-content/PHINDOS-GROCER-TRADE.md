@@ -13,7 +13,7 @@
 
 Shop 1 的 232、233、234 同時列出 LeeLoo 810 和 Battle Point 3。KR `Tartaros.bin` 的 `51C61A–51C70F` 將 `LEELOO`、`BATTLE_POINT`、`HOORU` 分別寫入 Product 資料的 `+24`、`+2C`、`+30`。購買確認 `682713–68272D` 讀視窗 context，context 1 走一般 LeeLoo 分支。context 3 讀 `+30`（`682812`），context 4 讀 `+2C`（`6827A7`）。`682A38` 將同一 context 交給 `0027` 封包。這三件商品可先按 810 LeeLoo 交易，Battle Point 專用店仍待開發。
 
-Shop 2、3、4 有 27、3、6 筆 `quan=1`。鐵匠商品 2614 已作為第一筆獨立裝備的買賣候選，其餘 35 筆待核對並開放。 [裝備實例與交易規格](PHINDOS-EQUIPMENT.md)
+Shop 2、3、4 有 27、3、6 筆 `quan=1`，已全部加入獨立物品買賣的商品表。 [裝備實例與交易規格](PHINDOS-EQUIPMENT.md)
 
 啟用既有本機商店模式後，設定 `TARTAROS_LOCAL_TOWN_TRADE_CATALOG_PATH` 及 `TARTAROS_LOCAL_TOWN_TRADE_CATALOG_SHA256`。已設定時，表內的店／商品配對是買賣白名單，Server 在入包前核對價格、數量及新疊 metadata。復活卷軸、支票可沿用各自現有測試設定的欄位。重置券和三種回復卷軸的新疊需在各列提供已核對的 `metadata.field10` 和 `metadata.field14`。公開範例省略這兩欄，避免把合成測試數值當作原服資料。回售以指定格位讀到的 Product 取價。舊疊超出設定上限時仍可售回，但不能再疊加購買。 [商品設定](phindos.town-trade.json) · [JSON Schema](local-town-trade.schema.json)
 

@@ -95,5 +95,9 @@ TS-08 待實機批次，可接續 TS-07。先核對 Product 232 的新疊 metada
 
 TS-09 待實機批次。先核對 Product 2614 的新裝備 metadata，啟用鐵匠市場點及商品表。用首次設定 8,000 LeeLoo 的專用帳號正常進村，開鐵匠貨單，分兩次各買一件 Product 2614。確認兩件分開佔格，LeeLoo 剩 600。將其中一件存入倉庫，重登後取回，再回鐵匠售回該件。應只剩另一件，LeeLoo 回到 970。 [裝備實例與交易規格](../scenario-content/PHINDOS-EQUIPMENT.md)
 
+TS-10 待實機批次。先核對 Product 29022 的新疊欄位，啟用飾品市場點與商品表。用首次設定 8,000 LeeLoo 的專用帳號正常進村，從飾品店分兩次各買一件 Product 29022。確認各佔一格、LeeLoo 剩 3,200，再從其中一格賣回，應只剩另一件、LeeLoo 為 3,440。 [飾品店商品與價格](../scenario-content/PHINDOS-EQUIPMENT.md)
+
+TS-11 待實機批次。先核對 Product 1399 的新疊欄位，啟用鍊金市場點與商品表。用首次設定 8,000 LeeLoo 的專用帳號正常進村，從鍊金店分兩次各買一件 Product 1399。確認各佔一格、LeeLoo 剩 6,600，再從其中一格賣回，應只剩另一件、LeeLoo 為 6,670。 [鍊金店商品與價格](../scenario-content/PHINDOS-EQUIPMENT.md)
+
 已通過列僅涵蓋當時指定工作副本與場景，不代表未修改原版全面相容性。
 錯誤／邊界、重送／重登、併發、故障、安全、營運與壓測維持延期；不列入這張待測批次。
