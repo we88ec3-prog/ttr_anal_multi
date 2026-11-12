@@ -89,5 +89,9 @@ TS-05 待實機批次。用首次設定 100,001,200 LeeLoo、7 Battle Point 的�
 
 TS-06 待實機批次。以專用帳號準備 120 Garnet，測試 Host 設定擴充費為 50。正常進村開倉庫，點擴充並確認一次，記錄原生確認窗顯示的費用。確認可用格由 80 增至 100，重登回村後容量和原有道具仍在。後端帳本應剩 70 Garnet。Garnet 畫面同步另待分析，原版費率尚未確認。 [銀行倉庫規格](../scenario-content/PHINDOS-BANK-VAULT.md)
 
+TS-07 待實機批次，先核對重置券新疊 metadata 並啟用商品設定。用首次設定 55,000 LeeLoo、7 Battle Point 的專用帳號正常進馮德斯，買一張復活卷軸及一張重置券，兩件分別出現在背包，LeeLoo 剩 3,000。重登回村後，從各自格位賣回復活卷軸與重置券，LeeLoo 依次為 3,200、8,200，兩格依次清空。Battle Point 保持 7。 [商品設定與價格依據](../scenario-content/PHINDOS-GROCER-TRADE.md)
+
+TS-08 待實機批次，可接續 TS-07。先核對 Product 232 的新疊 metadata，再在馮德斯雜貨買一瓶該商品並原格售回。LeeLoo 由 8,200 降至 7,390，再回到 7,471。確認 Battle Point 全程保持 7、售回後格位清空。 [一般商店幣別](../scenario-content/PHINDOS-GROCER-TRADE.md)
+
 已通過列僅涵蓋當時指定工作副本與場景，不代表未修改原版全面相容性。
 錯誤／邊界、重送／重登、併發、故障、安全、營運與壓測維持延期；不列入這張待測批次。
