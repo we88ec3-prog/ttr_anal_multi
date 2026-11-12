@@ -20,7 +20,7 @@
 | 13 | u8 | 格位 1–100 |
 | 14 | u32 LE | 寫入格內 `+10h` 的原值 |
 | 18 | u32 LE | 寫入格內 `+14h` 的原值 |
-| 22 | u32 LE | 物品 ID，供 Product 查表，並寫入格內 `+Ch` |
+| 22 | u32 LE | Product 鍵，供 Product 查表，並寫入格內 `+Ch`。對應 Item 由 Product 列解析 |
 | 26 | u8 | 格內數量，0 清除此格 |
 | 27 | 2 bytes | 單格組裝保留為 0，這兩個 byte 的原版語意待查 |
 
@@ -41,7 +41,7 @@ Client 由 `(payloadBytes − 12) / 17` 計算格位記錄數。每筆固定 17 
 |---|---|---|
 | Payload +0、+2、+3 | u16 LE、u8、u8 | `0029`、背包種類 1、容量 |
 | 首列 Payload +4，其後每 16 bytes | u8、u8 | 列內 +0 格位、+1 數量 |
-| 列內 +2、+6、+12 | 各 u32 LE | 物品 metadata +10h、+14h、物品 ID |
+| 列內 +2、+6、+12 | 各 u32 LE | 物品 metadata +10h、+14h、Product 鍵 |
 | 列內 +10 | 2 bytes | 此 handler 未讀取 |
 
 `509C8E..509CC1` 發出與 `002C` 相同的本地更新事件。Client player-state 建構函式 `4E1590` 在 `4E1971..4E19A3` 配置背包物件並存入 `F94300`（player-state 基底 `F8D9E0` + `6920h`），其後才在 `4E1AFF` 呼叫 handler 表初始化 `4E1DA0`。這確認背包配置早於 handler 註冊。原版在哪個登入階段收到完整資料仍待核對。靜態區段 `4E1DCF..4E1DDF` SHA256 `ee9e90e69c7455b634f5eb16f359d227714e988b5c85b4e22d8d622a8c2c621e`，`509C09..509C8E` SHA256 `2366f05649411a576b01f278588bae9921a106ad8303b962b1ee3e99322cb454`，範圍均左閉右開。
