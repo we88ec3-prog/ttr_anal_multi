@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "shopInfoSha256", "layouts"],
+  "properties": {
+    "schema": { "const": "LOCAL_TOWN_MARKETS_V2_NOT_NATIVE_MEF" },
+    "shopInfoSha256": { "const": "2c61fee77c6a8b24bdb350d1639818a2d9f871562c9b97eb51a3d15416699b0b" },
+    "layouts": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["town", "map", "markets"],
+        "properties": {
+          "town": { "enum": [1, 2, 3] },
+          "map": { "enum": [182, 183, 199] },
+          "markets": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 5,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["shop", "npc", "x", "y", "radius"],
+              "properties": {
+                "shop": { "type": "integer", "minimum": 1, "maximum": 72 },
+                "npc": { "type": "integer", "minimum": 1, "maximum": 65535 },
+                "x": { "type": "number" },
+                "y": { "type": "number" },
+                "radius": { "type": "number", "exclusiveMinimum": 0, "maximum": 6 }
+              }
+            }
+          }
+        },
+        "oneOf": [
+          { "properties": { "town": { "const": 1 }, "map": { "const": 182 } } },
+          { "properties": { "town": { "const": 2 }, "map": { "const": 183 } } },
+          { "properties": { "town": { "const": 3 }, "map": { "const": 199 } } }
+        ]
+      }
+    }
+  }
+}
