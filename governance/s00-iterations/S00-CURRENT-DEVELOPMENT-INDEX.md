@@ -1,3 +1,5 @@
+2026-11-13：[主線換圖資源延續](../../design/scenario-content/STORY-SCENARIO-OVERRIDES.md#同一副本內延續玩家資源與冷卻)可逐關卡啟用，涵蓋入場劇情後的戰鬥重建。371 項 Server 正流程合成通過，Host 編譯與 36 張地圖預檢成功。[SC-01](../../design/testing/S00-CONTENT-BATCH-TESTS.md) 已累積待實機。Client 本地生成與自主 AI 的驗證條件已補入[怪物控制界線](S00-20261113-MONSTER-LOCAL-CONTROLLER-BOUNDARY.md#與現行-server-路徑的對照)，候選未啟用。
+
 2026-11-13：[主線外部關卡檔](../../design/scenario-content/STORY-SCENARIO-OVERRIDES.md)可綁定已驗證主線版本並逐任務載入戰鬥編排。Q119 候選與 36 張地圖通過正式讀檔預檢，370 項 Server 正流程合成通過。[SO-01](../../design/testing/S00-CONTENT-BATCH-TESTS.md) 待實機，未啟用。
 
 2026-11-13：[波次血量階段](../../design/scenario-content/WAVE-HEALTH-SIGNALS.md)可用波次合計 HP 在戰鬥中觸發定時增援。369 項 Server 正流程合成通過，Host 編譯與圖 193 靜態座標檢查成功。[WH-01](../../design/testing/S00-CONTENT-BATCH-TESTS.md) 已累積待驗，未啟用。
