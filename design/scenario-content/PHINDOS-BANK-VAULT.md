@@ -35,7 +35,11 @@ Server 已可在同一筆 SQLite 交易內變更共用背包與倉庫，保留�
 
 ## 擴充容量與銀行商店
 
-`5F78BA..5F790A` 讀倉庫容量並建立確認事件 `F43A3`。確認分支 `5F7AC3..5F7AD3 → 5F7A60` 送出僅含 opcode 的 `008C`。player-state `00C4 → 4E2640 → 50AAD0` 在 +2 為 1 時，從 +3 u16 更新容量並觸發 `F4364`。同版 `CommonMessages.xml` 的 `kExpandBank` 說明每次增加 20 格，費用幣別為 Garnet，金額由樣板參數提供。該 XML 的 SHA256 是 `307d8eee122a852843376d4dacce06e25b53bd9914b98aec2955e8b044095cb4`。實際費用來源與 Server 裁決仍待核對。
+`5F78BA..5F790A` 讀倉庫容量並建立確認事件 `F43A3`。確認分支 `5F7AC3..5F7AD3 → 5F7A60` 送出僅含 opcode 的 `008C`。player-state `00C4 → 4E2640 → 50AAD0` 在 +2 為 1 時，從 +3 u16 更新容量並觸發 `F4364`，+2 為 0 時走失敗提示。`5F791B` 選字串 0x1C6，原件表 `D67168..D67170` 對應 `kExpandBank`。同版 `CommonMessages.xml` 說明每次增加 20 格，以 Garnet 計費，金額為樣板參數。該 XML 的 SHA256 是 `307d8eee122a852843376d4dacce06e25b53bd9914b98aec2955e8b044095cb4`。
+
+本機候選使用測試設定指定費用。已同步過倉庫且在銀行 NPC 附近的連線可送 `008C`。同一筆 SQLite 交易扣 Garnet 並加 20 格，容量上限 480。成功提交後送 `00C4` 回傳容量，已存在的道具和其他餘額保留。舊測試帳號新增的 Garnet 欄位預設 0。原版實際費率待查。
+
+`012B → 4E4F30` 的成功分支會用 payload +9 覆寫 Cash 欄 `+6874h`，同時觸發商城成功提示。`00C4` 已確認的欄位只有結果與容量。本機候選只發 `00C4`，獨立的 Garnet 畫面同步尚待查證。
 
 ShopNo 70 唯一商品是 Product 23232，對應 Item 20572「一億 LeeLoo 支票」，原表購買和售回都是 100,000,000 LeeLoo。TYPE 7 開貨單走 `683DBA..683DC6 → 4A36E0`，發出 4-byte C2S `0086`，+2 u16 取自商店視窗 +F8。該欄由 `639320 → F42EA +18 → 5B8580` 從 TalkBox 的 NPC 欄 +84 傳入，對應 NPC 10013。購買 context 仍由商品頁初始化決定，TYPE 7 使用 1。 [原表與商店路徑](../../governance/client-variants/20261109-mef-town-services/shop-services.md)
 
@@ -58,3 +62,5 @@ Server 候選在 NPC 10013 附近收到 `0086` 後綁定銀行商店並同步帳
 | `4A36E0..4A3719` | `d1e04383c726185442f136e924040489e7ca3ca04ae995673a21b599f3f0cb73` |
 | `508D14..508D40` | `b331d58c1dfa3da6ae5ddc3683a8f6db753b913baed8e3c1d454ca36e497dbde` |
 | `51D724..51D7A7` | `022c0db24e8b7c68d09272d4c71ab442f674358ef9a87fbad90db50314d48a20` |
+| `50AAF4..50AB14` | `8810f86febeae39fde6c4121e192fdd5a8f20b9080ca7a1a23ed0b64ba08ab33` |
+| `4E4F5B..4E4F80` | `09b8b6c077430293390f2b7c6876960d40505c5a33fbf35b4940c62213b8722c` |
