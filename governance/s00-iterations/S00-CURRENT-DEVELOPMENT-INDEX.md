@@ -1,3 +1,5 @@
+2026-11-13：[主線外部關卡檔](../../design/scenario-content/STORY-SCENARIO-OVERRIDES.md)可綁定已驗證主線版本並逐任務載入戰鬥編排。Q119 候選與 36 張地圖通過正式讀檔預檢，370 項 Server 正流程合成通過。[SO-01](../../design/testing/S00-CONTENT-BATCH-TESTS.md) 待實機，未啟用。
+
 2026-11-13：[波次血量階段](../../design/scenario-content/WAVE-HEALTH-SIGNALS.md)可用波次合計 HP 在戰鬥中觸發定時增援。369 項 Server 正流程合成通過，Host 編譯與圖 193 靜態座標檢查成功。[WH-01](../../design/testing/S00-CONTENT-BATCH-TESTS.md) 已累積待驗，未啟用。
 
 2026-11-13：[逐波清除訊號](../../design/scenario-content/WAVE-CLEAR-SIGNALS.md)支援初始及具名波次。367 項 Server 正流程合成通過，Host 編譯成功。[WC-01](../../design/testing/S00-CONTENT-BATCH-TESTS.md) 已累積待驗，未啟用。
