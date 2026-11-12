@@ -7,7 +7,7 @@
 | Shop | Product | Item | 道具 | 買入 LeeLoo | 賣回 LeeLoo | `quan` |
 |---:|---:|---:|---|---:|---:|---:|
 | 1 | 183 | 183 | 一般復活卷軸 | 2,000 | 200 | 100 |
-| 1 | 232–234 | 232–234 | 藥水類 | 810 | 81 | 255 |
+| 1 | 232–234 | 232–234 | HP／SP／MP 回復卷軸，依商品號順序 | 810 | 81 | 255 |
 | 1 | 17337 | 15918 | Phase 重置券（依韓文釋義） | 50,000 | 5,000 | 255 |
 | 70 | 23232 | 20572 | 一億 LeeLoo 支票 | 100,000,000 | 100,000,000 | 255 |
 
@@ -15,7 +15,7 @@ Shop 1 的 232、233、234 同時列出 LeeLoo 810 和 Battle Point 3。KR `Tart
 
 其餘 36 筆維持待開發。Shop 2、3、4 的 27、3、6 筆 `quan=1`，需支援同 Product 多個獨立裝備實例、每件屬性與格位，才可加入交易。
 
-啟用既有本機商店模式後，設定 `TARTAROS_LOCAL_TOWN_TRADE_CATALOG_PATH` 及 `TARTAROS_LOCAL_TOWN_TRADE_CATALOG_SHA256`。已設定時，表內的店／商品配對是買賣白名單，Server 在入包前核對價格、數量及新疊 metadata。復活卷軸、支票可沿用各自現有測試設定的欄位。重置券和三種藥水的新疊需在各列提供已核對的 `metadata.field10` 和 `metadata.field14`。公開範例省略這兩欄，避免把合成測試數值當作原服資料。回售以指定格位讀到的 Product 取價。舊疊超出設定上限時仍可售回，但不能再疊加購買。 [商品設定](phindos.town-trade.json) · [JSON Schema](local-town-trade.schema.json)
+啟用既有本機商店模式後，設定 `TARTAROS_LOCAL_TOWN_TRADE_CATALOG_PATH` 及 `TARTAROS_LOCAL_TOWN_TRADE_CATALOG_SHA256`。已設定時，表內的店／商品配對是買賣白名單，Server 在入包前核對價格、數量及新疊 metadata。復活卷軸、支票可沿用各自現有測試設定的欄位。重置券和三種回復卷軸的新疊需在各列提供已核對的 `metadata.field10` 和 `metadata.field14`。公開範例省略這兩欄，避免把合成測試數值當作原服資料。回售以指定格位讀到的 Product 取價。舊疊超出設定上限時仍可售回，但不能再疊加購買。 [商品設定](phindos.town-trade.json) · [JSON Schema](local-town-trade.schema.json)
 
 合成測試依序買入復活卷軸與重置券，重開儲存層後分別售回兩格，再買賣 Product 232，核對各自的成交價、餘額與背包清格。重置券使用效果及 Client 實際名稱、格位顯示與重登均待驗證。 [批次驗收](../testing/S00-CONTENT-BATCH-TESTS.md)
 
