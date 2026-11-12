@@ -511,7 +511,8 @@
             "RegionEntered",
             "CheckpointInteracted",
             "ClearDelayElapsed",
-            "WaveCleared"
+            "WaveCleared",
+            "WaveHealthReached"
           ]
         },
         "region": {
@@ -523,6 +524,11 @@
               "$ref": "#/$defs/activationRegion"
             }
           ]
+        },
+        "healthPercent": {
+          "type": ["integer", "null"],
+          "minimum": 1,
+          "maximum": 99
         },
         "waveId": {
           "type": ["string", "null"],
@@ -616,10 +622,22 @@
         },
         {
           "if": {
-            "properties": { "event": { "const": "WaveCleared" } }
+            "properties": { "event": { "enum": ["WaveCleared", "WaveHealthReached"] } }
           },
           "else": {
             "properties": { "waveId": { "type": "null" } }
+          }
+        },
+        {
+          "if": {
+            "properties": { "event": { "const": "WaveHealthReached" } }
+          },
+          "then": {
+            "required": ["healthPercent"],
+            "properties": { "healthPercent": { "type": "integer" } }
+          },
+          "else": {
+            "properties": { "healthPercent": { "type": "null" } }
           }
         }
       ]

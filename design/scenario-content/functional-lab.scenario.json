@@ -969,6 +969,83 @@
           ]
         }
       ]
+    },
+    {
+      "id": "content-lab-wave-health",
+      "entryNode": 1,
+      "authority": "SERVER_RECONSTRUCTION_NOT_NATIVE_MEF",
+      "sources": [
+        {
+          "kind": "ISOLATED_SERVER_WAVE_HEALTH",
+          "reference": "design/scenario-content/WAVE-HEALTH-SIGNALS.md",
+          "sha256": "010a80471aec698011801846be5bca7dd1d956d02bd44d519c0059265d36e3ce",
+          "authority": "SERVER_RECONSTRUCTION_NOT_NATIVE_MEF"
+        }
+      ],
+      "nodes": [
+        {
+          "node": 1,
+          "map": 193,
+          "spawn": {
+            "x": 377.5,
+            "y": 315.5
+          },
+          "portal": {
+            "x": 377.5,
+            "y": 307.5,
+            "radius": 4,
+            "key": 801,
+            "preRegisterClosed": true
+          },
+          "encounterGroup": "wave-health-lab",
+          "encounters": [
+            {
+              "model": 1001,
+              "x": 377.5,
+              "y": 291.5,
+              "aiProfile": "lab-health-phase"
+            }
+          ],
+          "aiProfile": "lab-stationary",
+          "rules": [
+            {
+              "event": "Entry",
+              "action": "SpawnGroup"
+            },
+            {
+              "event": "GroupCleared",
+              "action": "UnlockPortal"
+            },
+            {
+              "event": "InteractZ",
+              "action": "Result"
+            }
+          ],
+          "signals": [
+            {
+              "flag": "phase-two",
+              "event": "WaveHealthReached",
+              "healthPercent": 75
+            }
+          ],
+          "timedReinforcements": [
+            {
+              "id": "phase-reinforcement",
+              "delaySeconds": 0,
+              "requiredFlags": [
+                "phase-two"
+              ],
+              "encounters": [
+                {
+                  "model": 1001,
+                  "x": 377.5,
+                  "y": 295.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

@@ -1,3 +1,5 @@
+2026-11-13：[波次血量階段](../../design/scenario-content/WAVE-HEALTH-SIGNALS.md)可用波次合計 HP 在戰鬥中觸發定時增援。369 項 Server 正流程合成通過，Host 編譯與圖 193 靜態座標檢查成功。[WH-01](../../design/testing/S00-CONTENT-BATCH-TESTS.md) 已累積待驗，未啟用。
+
 2026-11-13：[逐波清除訊號](../../design/scenario-content/WAVE-CLEAR-SIGNALS.md)支援初始及具名波次。367 項 Server 正流程合成通過，Host 編譯成功。[WC-01](../../design/testing/S00-CONTENT-BATCH-TESTS.md) 已累積待驗，未啟用。
 
 2026-11-13：[旗標增援](../../design/scenario-content/REINFORCEMENT-FLAGS.md)接入一般主線及共用測試場。順序與定時增援可要求實例旗標。365 項 Server 正流程合成通過，Host 編譯成功。[FW-01](../../design/testing/S00-CONTENT-BATCH-TESTS.md) 已累積待驗，未啟用。
