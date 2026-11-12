@@ -1,3 +1,5 @@
+2026-11-13：[巡邏怪繞牆追擊](../../design/scenario-content/MONSTER-PATROLS.md)可在追擊範圍內重新規劃，出招與近戰命中皆檢查靜態牆面。378 項 Server 正流程合成通過，Q119 候選通過 36 張地圖預檢。[PT-03](../../design/testing/S00-CONTENT-BATCH-TESTS.md) 已累積待實機。本機版本未替換。
+
 2026-11-13：[巡邏怪繞牆回位](../../design/scenario-content/MONSTER-PATROLS.md#q119-繞牆候選)可依靜態地圖格搜尋回程。375 項 Server 正流程合成通過。Q119 繞牆候選通過 36 張地圖預檢，[PT-02](../../design/testing/S00-CONTENT-BATCH-TESTS.md) 已累積待實機。本機版本未替換。
 
 2026-11-13：[怪物巡邏路線](../../design/scenario-content/MONSTER-PATROLS.md)可逐怪指定，適用初始怪與增援，接上追擊及回位。374 項 Server 正流程合成通過，Q119 路線通過 36 張地圖的資料預檢。[PT-01](../../design/testing/S00-CONTENT-BATCH-TESTS.md) 已累積待實機，本機版本未替換。
