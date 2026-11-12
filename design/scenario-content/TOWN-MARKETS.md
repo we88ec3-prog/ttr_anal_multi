@@ -10,4 +10,4 @@ Town 1／Map 182 可由獨立 `.town-markets.json` 配置商店互動點。市�
 --town-markets <主線檔絕對路徑> <地圖目錄絕對路徑> <主線SHA> <市場配置絕對路徑> <市場配置SHA>
 ```
 
-TS-01 驗收市場標記、商戶對話與貨單入口，以及既有任務 NPC 可操作。雜貨 183 的買賣已可離線落盤，Client 資產同步、強化及存提款仍待接入。 [批次測試表](../testing/S00-CONTENT-BATCH-TESTS.md) · [雜貨買賣規格](PHINDOS-GROCER-TRADE.md)
+TS-01 驗收市場標記、商戶對話與貨單入口，以及既有任務 NPC 可操作。TS-02 驗收雜貨 183 的買賣與資產重登。銀行道具倉庫已核對存取和格位更新的封包，持久化與實機驗收待接線。 [批次測試表](../testing/S00-CONTENT-BATCH-TESTS.md) · [雜貨買賣規格](PHINDOS-GROCER-TRADE.md) · [銀行道具倉庫](PHINDOS-BANK-VAULT.md)
