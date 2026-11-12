@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "town", "map", "shopInfoSha256", "markets"],
+  "properties": {
+    "schema": { "const": "LOCAL_TOWN_MARKETS_V1_NOT_NATIVE_MEF" },
+    "town": { "const": 1 },
+    "map": { "const": 182 },
+    "shopInfoSha256": { "const": "2c61fee77c6a8b24bdb350d1639818a2d9f871562c9b97eb51a3d15416699b0b" },
+    "markets": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["shop", "npc", "x", "y", "radius"],
+        "properties": {
+          "shop": { "type": "integer" },
+          "npc": { "type": "integer" },
+          "x": { "type": "number" },
+          "y": { "type": "number" },
+          "radius": { "type": "number", "exclusiveMinimum": 0, "maximum": 6 }
+        },
+        "oneOf": [
+          { "properties": { "shop": { "const": 1 }, "npc": { "const": 10028 } } },
+          { "properties": { "shop": { "const": 2 }, "npc": { "const": 10030 } } },
+          { "properties": { "shop": { "const": 3 }, "npc": { "const": 10029 } } },
+          { "properties": { "shop": { "const": 4 }, "npc": { "const": 10031 } } },
+          { "properties": { "shop": { "const": 70 }, "npc": { "const": 10013 } } }
+        ]
+      }
+    }
+  }
+}

@@ -1,3 +1,5 @@
+2026-11-13：[馮德斯村商店入口](../../design/scenario-content/TOWN-MARKETS.md)可獨立配置。五處市場點與九位常駐 NPC 同送完整點位清單，385 項 Server 正流程合成通過，Map 182 資料預檢成功。[TS-01](../../design/testing/S00-CONTENT-BATCH-TESTS.md) 待實機驗證對話及貨單入口，交易仍待開發。
+
 2026-11-13：[持續占點旗標](../../design/scenario-content/REGION-HOLD-SIGNALS.md)可依留在區域的時間觸發增援、屏障與出口。384 項 Server 正流程合成通過，Q119 通過 36 張地圖預檢。[RH-01](../../design/testing/S00-CONTENT-BATCH-TESTS.md) 待實機，本機版本未替換。
 
 2026-11-13：[地形傷害區](../../design/scenario-content/AREA-HAZARDS.md)接入主線節點，可按進區週期扣血並由旗標停用。382 項 Server 正流程合成通過，Q119 候選通過 36 張地圖預檢。[HZ-01](../../design/testing/S00-CONTENT-BATCH-TESTS.md) 待實機，本機版本未替換。
