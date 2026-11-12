@@ -763,6 +763,96 @@
           ]
         }
       ]
+    },
+    {
+      "id": "content-lab-flag-waves",
+      "entryNode": 1,
+      "authority": "SERVER_RECONSTRUCTION_NOT_NATIVE_MEF",
+      "sources": [
+        {
+          "kind": "ISOLATED_SERVER_FLAG_WAVE",
+          "reference": "design/scenario-content/REINFORCEMENT-FLAGS.md",
+          "sha256": "9231721ae9c84dc57497941ac441004ec8e0621ffe50518637b6e88ab8204559",
+          "authority": "SERVER_RECONSTRUCTION_NOT_NATIVE_MEF"
+        }
+      ],
+      "nodes": [
+        {
+          "node": 1,
+          "map": 193,
+          "spawn": {
+            "x": 377.5,
+            "y": 315.5
+          },
+          "portal": {
+            "x": 377.5,
+            "y": 307.5,
+            "radius": 4,
+            "key": 801,
+            "preRegisterClosed": true,
+            "condition": {
+              "requiredFlags": [
+                "point-used"
+              ]
+            }
+          },
+          "encounterGroup": "flag-wave-lab",
+          "encounters": [
+            {
+              "model": 1001,
+              "x": 377.5,
+              "y": 291.5
+            }
+          ],
+          "aiProfile": "lab-stationary",
+          "rules": [
+            {
+              "event": "Entry",
+              "action": "SpawnGroup"
+            },
+            {
+              "event": "GroupCleared",
+              "action": "UnlockPortal"
+            },
+            {
+              "event": "InteractZ",
+              "action": "Result"
+            }
+          ],
+          "signals": [
+            {
+              "flag": "point-used",
+              "event": "CheckpointInteracted",
+              "interaction": {
+                "key": 901,
+                "region": {
+                  "x": 377.5,
+                  "y": 315.5,
+                  "radius": 4
+                },
+                "markerKey": 65001,
+                "markerRadius": 6
+              }
+            }
+          ],
+          "reinforcements": [
+            {
+              "id": "checkpoint-reinforcement",
+              "delaySeconds": 1,
+              "requiredFlags": [
+                "point-used"
+              ],
+              "encounters": [
+                {
+                  "model": 1001,
+                  "x": 377.5,
+                  "y": 291.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

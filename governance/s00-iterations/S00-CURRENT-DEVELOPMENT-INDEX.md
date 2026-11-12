@@ -1,3 +1,5 @@
+2026-11-13：[旗標增援](../../design/scenario-content/REINFORCEMENT-FLAGS.md)接入一般主線及共用測試場。順序與定時增援可要求實例旗標。365 項 Server 正流程合成通過，Host 編譯成功。[FW-01](../../design/testing/S00-CONTENT-BATCH-TESTS.md) 已累積待驗，未啟用。
+
 2026-11-13：[清場後延遲訊號](../../design/scenario-content/CLEAR-DELAY-SIGNALS.md)接入一般主線與測試執行器。363 項 Server 正流程合成通過，Host 編譯成功，Schema 與資料雙庫一致。[CD-01](../../design/testing/S00-CONTENT-BATCH-TESTS.md) 為圖 193 的三秒延遲互動測試，尚未啟用或實機驗收。
 
 2026-11-13：[普通怪本地建立與控制器掛接](S00-20261113-MONSTER-LOCAL-CONTROLLER-BOUNDARY.md)已核對三類 vtable、兩條場景初始化路徑及 20 個原件指令／資料視窗。已知 SubAI 攻擊執行器拒絕模型 1036。普通副本的本地生成觸發、實體身分與自主決策仍待證。正常建隊進村 NV-01 另列於[批次表](../../design/testing/S00-CONTENT-BATCH-TESTS.md)，與先前八項一併等候排程。
