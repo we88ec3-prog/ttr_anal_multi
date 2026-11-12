@@ -1,3 +1,5 @@
+2026-11-13：[逐波清除訊號](../../design/scenario-content/WAVE-CLEAR-SIGNALS.md)支援初始及具名波次。367 項 Server 正流程合成通過，Host 編譯成功。[WC-01](../../design/testing/S00-CONTENT-BATCH-TESTS.md) 已累積待驗，未啟用。
+
 2026-11-13：[旗標增援](../../design/scenario-content/REINFORCEMENT-FLAGS.md)接入一般主線及共用測試場。順序與定時增援可要求實例旗標。365 項 Server 正流程合成通過，Host 編譯成功。[FW-01](../../design/testing/S00-CONTENT-BATCH-TESTS.md) 已累積待驗，未啟用。
 
 2026-11-13：[清場後延遲訊號](../../design/scenario-content/CLEAR-DELAY-SIGNALS.md)接入一般主線與測試執行器。363 項 Server 正流程合成通過，Host 編譯成功，Schema 與資料雙庫一致。[CD-01](../../design/testing/S00-CONTENT-BATCH-TESTS.md) 為圖 193 的三秒延遲互動測試，尚未啟用或實機驗收。

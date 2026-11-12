@@ -510,7 +510,8 @@
             "GroupCleared",
             "RegionEntered",
             "CheckpointInteracted",
-            "ClearDelayElapsed"
+            "ClearDelayElapsed",
+            "WaveCleared"
           ]
         },
         "region": {
@@ -522,6 +523,11 @@
               "$ref": "#/$defs/activationRegion"
             }
           ]
+        },
+        "waveId": {
+          "type": ["string", "null"],
+          "minLength": 1,
+          "pattern": "\\S"
         },
         "delaySeconds": {
           "type": ["number", "null"],
@@ -606,6 +612,14 @@
           },
           "else": {
             "properties": { "delaySeconds": { "type": "null" } }
+          }
+        },
+        {
+          "if": {
+            "properties": { "event": { "const": "WaveCleared" } }
+          },
+          "else": {
+            "properties": { "waveId": { "type": "null" } }
           }
         }
       ]

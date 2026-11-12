@@ -853,6 +853,122 @@
           ]
         }
       ]
+    },
+    {
+      "id": "content-lab-wave-clear",
+      "entryNode": 1,
+      "authority": "SERVER_RECONSTRUCTION_NOT_NATIVE_MEF",
+      "sources": [
+        {
+          "kind": "ISOLATED_SERVER_WAVE_CLEAR",
+          "reference": "design/scenario-content/WAVE-CLEAR-SIGNALS.md",
+          "sha256": "64c8411905606bd8bdfaed1f6d12e949f7c598b04612d269d1bd7cc4c722894a",
+          "authority": "SERVER_RECONSTRUCTION_NOT_NATIVE_MEF"
+        }
+      ],
+      "nodes": [
+        {
+          "node": 1,
+          "map": 193,
+          "spawn": {
+            "x": 377.5,
+            "y": 315.5
+          },
+          "portal": {
+            "x": 377.5,
+            "y": 307.5,
+            "radius": 4,
+            "key": 801,
+            "preRegisterClosed": true,
+            "condition": {
+              "requiredFlags": [
+                "point-used"
+              ]
+            }
+          },
+          "encounterGroup": "wave-clear-lab",
+          "encounters": [
+            {
+              "model": 1001,
+              "x": 377.5,
+              "y": 291.5
+            }
+          ],
+          "aiProfile": "lab-stationary",
+          "rules": [
+            {
+              "event": "Entry",
+              "action": "SpawnGroup"
+            },
+            {
+              "event": "GroupCleared",
+              "action": "UnlockPortal"
+            },
+            {
+              "event": "InteractZ",
+              "action": "Result"
+            }
+          ],
+          "signals": [
+            {
+              "flag": "point-used",
+              "event": "CheckpointInteracted",
+              "interaction": {
+                "key": 901,
+                "region": {
+                  "x": 377.5,
+                  "y": 315.5,
+                  "radius": 4
+                },
+                "markerKey": 65001,
+                "markerRadius": 6,
+                "requiredFlags": [
+                  "initial-defeated"
+                ]
+              }
+            },
+            {
+              "flag": "initial-defeated",
+              "event": "WaveCleared"
+            },
+            {
+              "flag": "second-defeated",
+              "event": "WaveCleared",
+              "waveId": "checkpoint-reinforcement"
+            }
+          ],
+          "reinforcements": [
+            {
+              "id": "checkpoint-reinforcement",
+              "delaySeconds": 1,
+              "requiredFlags": [
+                "point-used"
+              ],
+              "encounters": [
+                {
+                  "model": 1001,
+                  "x": 377.5,
+                  "y": 291.5
+                }
+              ]
+            },
+            {
+              "id": "third-wave",
+              "delaySeconds": 1,
+              "requiredFlags": [
+                "second-defeated"
+              ],
+              "encounters": [
+                {
+                  "model": 1001,
+                  "x": 377.5,
+                  "y": 291.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }
