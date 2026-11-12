@@ -19,6 +19,7 @@
 |入場後計時事件|戰鬥開放後依關卡指定秒數設立旗標，可控制增援、互動及出口。Q119 第一圖有定時增援範例|ND-01 待實機。原版個別關卡的時間與配置仍待來源核對。 [計時旗標規格](../design/scenario-content/NODE-DELAY-SIGNALS.md)|
 |Client自行開門|本地setter存在|能收到該instance清組事件且Server停發開門時仍能完成，尚未證實|
 |旗標控制通行|主線可用既有旗標解除個別副本的屏障，適用 Server 移動、尋路、戰鬥與互動，並能同步既有 Client 點的開關狀態|GB-01、GB-02 待實機。Client 的 3D 門、動畫與本地碰撞待接。 [屏障規格](../design/scenario-content/FLAG-BARRIERS.md)|
+|地形傷害區|主線可配置週期傷害，依玩家位置與旗標開始、重算或停用|HZ-01 待實機。Client 陷阱外觀及跳字待來源。 [地形傷害規格](../design/scenario-content/AREA-HAZARDS.md)|
 |NPC／市場內容|部分城鎮配置與服務路由來源|來源座標、點集合共存、生成身分／服務編排與實機|
 |通用內容執行器交付|有限typed事件與既有packet adapter|功能範圍足夠支援需求關卡，不能只搬常數便算完成|
 |管理／編輯工作台|既有Admin.Web與進度／技能測試頁，功能分開|目前未有關卡內容編輯器；使用者已取消另建簡易帳號頁|

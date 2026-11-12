@@ -1,3 +1,5 @@
+2026-11-13：[地形傷害區](../../design/scenario-content/AREA-HAZARDS.md)接入主線節點，可按進區週期扣血並由旗標停用。382 項 Server 正流程合成通過，Q119 候選通過 36 張地圖預檢。[HZ-01](../../design/testing/S00-CONTENT-BATCH-TESTS.md) 待實機，本機版本未替換。
+
 2026-11-13：[屏障開關標記](../../design/scenario-content/FLAG-BARRIERS.md#遊戲內開關標記)沿用已知 category 0 點位，旗標開啟時同步更新。381 項 Server 正流程合成通過，Q119 標記版通過 36 張地圖預檢。[GB-02](../../design/testing/S00-CONTENT-BATCH-TESTS.md) 待實機外觀，本機版本未替換。
 
 2026-11-13：[旗標控制通行屏障](../../design/scenario-content/FLAG-BARRIERS.md)已接到 Server 位置、怪物尋路、戰鬥和互動判定。380 項正流程合成通過，Q119 候選通過 36 張地圖預檢。[GB-01](../../design/testing/S00-CONTENT-BATCH-TESTS.md) 待實機，Client 的門模型及動畫仍待接，本機版本未替換。
