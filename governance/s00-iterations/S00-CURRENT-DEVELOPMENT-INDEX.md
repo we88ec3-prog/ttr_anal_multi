@@ -1,3 +1,5 @@
+2026-11-13：[怪物巡邏路線](../../design/scenario-content/MONSTER-PATROLS.md)可逐怪指定，適用初始怪與增援，接上追擊及回位。374 項 Server 正流程合成通過，Q119 路線通過 36 張地圖的資料預檢。[PT-01](../../design/testing/S00-CONTENT-BATCH-TESTS.md) 已累積待實機，本機版本未替換。
+
 2026-11-13：[主線入場計時增援](../../design/scenario-content/NODE-DELAY-SIGNALS.md)可在劇情結束、正式開放戰鬥後計時，支援不清初始怪即觸發增援。372 項 Server 正流程合成通過，Q119 範例通過 36 張地圖預檢。[ND-01](../../design/testing/S00-CONTENT-BATCH-TESTS.md) 已累積待實機，可與 SO-01／SC-01 同輪驗收。本機版本未替換。
 
 2026-11-13：[主線換圖資源延續](../../design/scenario-content/STORY-SCENARIO-OVERRIDES.md#同一副本內延續玩家資源與冷卻)可逐關卡啟用，涵蓋入場劇情後的戰鬥重建。371 項 Server 正流程合成通過，Host 編譯與 36 張地圖預檢成功。[SC-01](../../design/testing/S00-CONTENT-BATCH-TESTS.md) 已累積待實機。Client 本地生成與自主 AI 的驗證條件已補入[怪物控制界線](S00-20261113-MONSTER-LOCAL-CONTROLLER-BOUNDARY.md#與現行-server-路徑的對照)，候選未啟用。
