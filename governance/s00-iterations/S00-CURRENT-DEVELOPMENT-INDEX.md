@@ -1,3 +1,5 @@
+2026-11-13：[旗標控制通行屏障](../../design/scenario-content/FLAG-BARRIERS.md)已接到 Server 位置、怪物尋路、戰鬥和互動判定。380 項正流程合成通過，Q119 候選通過 36 張地圖預檢。[GB-01](../../design/testing/S00-CONTENT-BATCH-TESTS.md) 待實機，Client 的門模型及動畫仍待接，本機版本未替換。
+
 2026-11-13：[巡邏怪繞牆追擊](../../design/scenario-content/MONSTER-PATROLS.md)可在追擊範圍內重新規劃，出招與近戰命中皆檢查靜態牆面。378 項 Server 正流程合成通過，Q119 候選通過 36 張地圖預檢。[PT-03](../../design/testing/S00-CONTENT-BATCH-TESTS.md) 已累積待實機。本機版本未替換。
 
 2026-11-13：[巡邏怪繞牆回位](../../design/scenario-content/MONSTER-PATROLS.md#q119-繞牆候選)可依靜態地圖格搜尋回程。375 項 Server 正流程合成通過。Q119 繞牆候選通過 36 張地圖預檢，[PT-02](../../design/testing/S00-CONTENT-BATCH-TESTS.md) 已累積待實機。本機版本未替換。

@@ -313,6 +313,12 @@
           },
           "description": "Additional explicit exits beside the default portal/rule. Server-owned NOT_NATIVE_MEF."
         },
+        "barriers": {
+          "type": ["array", "null"],
+          "minItems": 1,
+          "maxItems": 16,
+          "items": { "$ref": "#/$defs/barrier" }
+        },
         "signals": {
           "type": "array",
           "maxItems": 64,
@@ -654,6 +660,18 @@
           }
         }
       ]
+    },
+    "barrier": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "minX": { "type": "number", "minimum": 0 },
+        "minY": { "type": "number", "minimum": 0 },
+        "maxX": { "type": "number", "exclusiveMinimum": 0 },
+        "maxY": { "type": "number", "exclusiveMinimum": 0 },
+        "opensWithFlag": { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,63}$" }
+      },
+      "required": ["minX", "minY", "maxX", "maxY", "opensWithFlag"]
     },
     "exitCondition": {
       "type": "object",

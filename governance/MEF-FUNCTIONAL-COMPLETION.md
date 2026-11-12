@@ -18,6 +18,7 @@
 |換圖後玩家狀態|一般主線可由外部關卡指定延續 HP、SP、MP、定時回復與剩餘冷卻，涵蓋入場劇情後的戰鬥重建|Q119 的 SC-01 待實機。增益、連段、蓄氣與投射物延續未開放。 [外部關卡規格](../design/scenario-content/STORY-SCENARIO-OVERRIDES.md)|
 |入場後計時事件|戰鬥開放後依關卡指定秒數設立旗標，可控制增援、互動及出口。Q119 第一圖有定時增援範例|ND-01 待實機。原版個別關卡的時間與配置仍待來源核對。 [計時旗標規格](../design/scenario-content/NODE-DELAY-SIGNALS.md)|
 |Client自行開門|本地setter存在|能收到該instance清組事件且Server停發開門時仍能完成，尚未證實|
+|旗標控制通行|主線可用既有旗標解除個別副本的屏障，適用 Server 移動、尋路、戰鬥與互動|GB-01 待實機。Client 的 3D 門、動畫與本地碰撞待接。 [屏障規格](../design/scenario-content/FLAG-BARRIERS.md)|
 |NPC／市場內容|部分城鎮配置與服務路由來源|來源座標、點集合共存、生成身分／服務編排與實機|
 |通用內容執行器交付|有限typed事件與既有packet adapter|功能範圍足夠支援需求關卡，不能只搬常數便算完成|
 |管理／編輯工作台|既有Admin.Web與進度／技能測試頁，功能分開|目前未有關卡內容編輯器；使用者已取消另建簡易帳號頁|
