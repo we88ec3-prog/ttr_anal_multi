@@ -537,7 +537,8 @@
             "ClearDelayElapsed",
             "WaveCleared",
             "WaveHealthReached",
-            "NodeDelayElapsed"
+            "NodeDelayElapsed",
+            "RegionHeld"
           ]
         },
         "region": {
@@ -585,7 +586,7 @@
           "if": {
             "properties": {
               "event": {
-                "const": "RegionEntered"
+                "enum": ["RegionEntered", "RegionHeld"]
               }
             }
           },
@@ -635,7 +636,7 @@
         },
         {
           "if": {
-            "properties": { "event": { "enum": ["ClearDelayElapsed", "NodeDelayElapsed"] } }
+            "properties": { "event": { "enum": ["ClearDelayElapsed", "NodeDelayElapsed", "RegionHeld"] } }
           },
           "then": {
             "required": ["delaySeconds"],
@@ -643,6 +644,14 @@
           },
           "else": {
             "properties": { "delaySeconds": { "type": "null" } }
+          }
+        },
+        {
+          "if": {
+            "properties": { "event": { "const": "RegionHeld" } }
+          },
+          "then": {
+            "properties": { "delaySeconds": { "minimum": 0.25 } }
           }
         },
         {
