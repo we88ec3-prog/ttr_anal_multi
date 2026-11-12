@@ -21,7 +21,7 @@
 |旗標控制通行|主線可用既有旗標解除個別副本的屏障，適用 Server 移動、尋路、戰鬥與互動，並能同步既有 Client 點的開關狀態|GB-01、GB-02 待實機。Client 的 3D 門、動畫與本地碰撞待接。 [屏障規格](../design/scenario-content/FLAG-BARRIERS.md)|
 |地形傷害區|主線可配置週期傷害，依玩家位置與旗標開始、重算或停用|HZ-01 待實機。Client 陷阱外觀及跳字待來源。 [地形傷害規格](../design/scenario-content/AREA-HAZARDS.md)|
 |持續占點|可按區域停留時間設立旗標，接增援、屏障與出口。離區會重算未完成時間|RH-01 待實機。Q119 提供占點開門候選。 [占點規格](../design/scenario-content/REGION-HOLD-SIGNALS.md)|
-|NPC／市場內容|馮德斯常駐 NPC 與五個商店候選已能同送一份點位清單。市場配置獨立載入|TS-01 待實機驗標記、商戶對話與貨單入口。買賣、強化與存提款待交易實作。 [馮德斯市場規格](../design/scenario-content/TOWN-MARKETS.md)|
+|NPC／市場內容|馮德斯常駐 NPC 與五個商店候選已能同送一份點位清單。市場配置獨立載入，雜貨 183 的買賣可離線原子提交錢包與背包|TS-01 待實機驗標記、商戶對話與貨單入口。買賣仍待 Client 資產發布與視窗驗證，強化及存提款待接。 [馮德斯市場規格](../design/scenario-content/TOWN-MARKETS.md)|
 |通用內容執行器交付|有限typed事件與既有packet adapter|功能範圍足夠支援需求關卡，不能只搬常數便算完成|
 |管理／編輯工作台|既有Admin.Web與進度／技能測試頁，功能分開|目前未有關卡內容編輯器；使用者已取消另建簡易帳號頁|
 |完整場景驗證|已有部分正常旅程人測及獨立工程收據|每個新增功能的來源／Server測試／Client人測分開驗收|
