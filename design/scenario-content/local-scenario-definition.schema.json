@@ -669,7 +669,18 @@
         "minY": { "type": "number", "minimum": 0 },
         "maxX": { "type": "number", "exclusiveMinimum": 0 },
         "maxY": { "type": "number", "exclusiveMinimum": 0 },
-        "opensWithFlag": { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,63}$" }
+        "opensWithFlag": { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,63}$" },
+        "marker": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "properties": {
+            "key": { "type": "integer", "minimum": 1, "maximum": 65535 },
+            "x": { "type": "number" },
+            "y": { "type": "number" },
+            "radius": { "type": "number", "exclusiveMinimum": 0 }
+          },
+          "required": ["key", "x", "y", "radius"]
+        }
       },
       "required": ["minX", "minY", "maxX", "maxY", "opensWithFlag"]
     },
