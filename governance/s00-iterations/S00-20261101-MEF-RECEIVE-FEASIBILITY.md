@@ -479,6 +479,10 @@ Server 可以保留玩家的副本選擇，並為每次副本另存 Case 與當�
 
 五圖的模型與數量皆相符。CHART 的節點與子 `Map` 欄位沒有群組鍵，CLUST 的 `OBJECT` 只給 `ID`、`PRE`、`COUNT`，群組沒有地圖鍵。這兩份資料能分別驗證路線與選定群組的成員。原服何時選擇哪個群組、生成座標與波次仍無法由這兩份資料得出。現行五組恰好皆為 PRE1。若將來加入混用 PRE 的群組，驗收須先確認 Client 建怪封包如何選擇 Actor 變體，不能只比對模型與數量。此次為唯讀資料比對。
 
+補核 [W3 的 0007 Actor 資源鍵](../../research/handoffs/s00-phindos-mainline-20261102/W3-RESULT-07-NORMAL-TOWN-BOOTSTRAP.md#51-s2c000726-byte-actor-記錄n)。`4AE5B8` 取 actor key 的低 byte，`4AE5BC` 取記錄 `+2` 的 PRE，`4AE5C0` 取記錄 `+4` 的 model。Client 在資源查找時使用 `((class << 8) | (PRE - 1)) << 16 | model`。怪物分支在 `4AE7D2` 呼叫 `4F7A70` 查這個鍵。核對的原始韓版與指定 v2 視窗 `4AE5B8 + 0x24`、`4AE7C0 + 0x22`、`4F7A70 + 0xF0` 均逐位元組一致。
+
+Server 的 `.scenario.json` 可在初始怪物及增援指定 `pre`（1–255）。未填沿用 PRE1，實際寫入 `0007` 應用資料 `+4`（第一筆記錄 `+2`），與 model、實體 ID 分開。合成流程以相同模型 1009、不同實體驗證 PRE1 初始生成和 PRE3 定時增援。現行 Stage 1 仍使用已核對的五組 PRE1。資源外觀需實機驗證，AI 與技能數值須由各自設定提供。 [關卡 JSON schema](../../design/scenario-content/local-scenario-definition.schema.json)
+
 從韓版 `Map/BoundMap.stp`（SHA-256 `07d8f3a20aa4a396312c60927431a53a89dce6370ef8bb8192bd8d8eca1dd6b8`）解碼地圖 1 起始路線所需的五個碰撞成員。均為 v2、768×768 格及 768×768 世界範圍，只有兩層靜態走路資料。逐檔驗證層偏移連續、zlib 展開長度、檔案耗盡，以及存在同時通過兩層的格子。地圖 7／8 及 11／12 各自共用碰撞，但各自的 `TRIGGER` 名稱不同。副本仍需保留原地圖 ID，才能維持內容差異。
 
 | 地圖 | BND 成員 | 兩層皆可行走格數 | SHA-256 |
