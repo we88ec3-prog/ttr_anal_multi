@@ -308,3 +308,17 @@ REA 開啟原始 KR BIN 並核對上述 SHA，再由同檔 PE `.text` 檢索 `E8
 用唯讀 STPD／EX 解碼器查韓版與繁中版全部 `Field.stp` 成員（分別 1,540、1,504 個）。兩版各有 9 個 MapFlow XML 含 `.mef` 字面，這 9 個成員逐位元組相同。46 筆字面均在 `Node.title`，合計 38 個不同名稱。每個節點下有一筆 `Map` ID；以各版 `_MapList.xml` 對照，41 筆 title 等於該 Map 的 `TRIGGER`，5 筆不同。例如 Map 3865 兩欄皆為 `ObolusCDefence01_01N.mef`；Map 3850 的 title 是 `H_RecoveryChains05_01D.mef`，TRIGGER 卻是 `H_RecoveryChains04_01D.mef`。兩版 Field／Table 封裝索引均無 `.mef` 成員。
 
 已核對的韓版 `53E800` 節點解析取 `arrayx/arrayy/id/type/icon/rotate`，未讀 `title`。因此這份資料可追查特定副本節點與地圖上的原生 MEF 名稱。兩欄不一致的例子必須保留各自來源，不應用 title 覆蓋 TRIGGER。兩版資源均未提供實際檔案，此結果也未建立傳輸時機或哪端執行。繁中主程式的 title 消費仍待定位。
+
+
+### 以 38 個關卡名稱查找兩版完整 STP 索引
+
+以上節 38 個 `Node.title` 名稱為候選，將搜尋從既有的根目錄、Map 與 UI 擴到原始韓版 `origin` 及繁中 `tc_workspace` 的全部子目錄。只讀每個 STPD 的標頭與 STPI 索引，並用既有解碼器交叉核對兩版 `Field.stp` 的完整索引集合。
+
+| 來源 | 成功讀取 STP | 索引成員總數 | `.mef` 或 38 個同主檔名成員 |
+| --- | ---: | ---: | ---: |
+| 韓版 `origin` | 898 | 83,871 | 0 |
+| 繁中 `tc_workspace` | 569 | 70,900 | 0 |
+
+兩版目錄也沒有 `.mef` 散檔。解碼兩版 `Integrity.xml` 後比對 6,504／6,502 個更新項目，沒有相同主檔名。各版磁碟上的 `Tartaros.bin`、`Tartaros.exe`、`Network.dll` 均未命中 38 個完整名稱的 ASCII／UTF-16LE 字面值。繁中 BIN 仍是先前記錄的受保護磁碟映像，這項字面檢查不能判定載入後的功能。
+
+現有來源已涵蓋兩版展開目錄的全部 STP 索引，包含先前未納入的 Avatar、Scenario 等子目錄。尚無證據把這 38 個名字連到這兩版的獨立資源或更新項目。此次未解碼全部成員內容，仍保留內嵌、另名、歷史版本與官方 Server 持有等可能性。優先查有獨立來源的歷史載體或保留的封包，避免重掃同批索引。
