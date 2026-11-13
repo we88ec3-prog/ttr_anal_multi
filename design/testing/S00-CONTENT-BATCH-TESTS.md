@@ -157,3 +157,5 @@ TS-36 待實機。只啟用交易，使用已有背包物品、LeeLoo 和卷軸�
 TS-37 待實機。使用指定 v2 正常建單人隊進馮德斯，以隊長開始一般副本 Stage 1。每圖清怪後進出口。終點擊倒頭目 1086，靠近落點按 Space，確認背包增加一張一般復活卷軸，另記是否看見地面特效。走出口核對結算經驗，確認返回馮德斯；同一角色再完成一次，兩場應分別入帳，主線進度應維持原值。需啟用 Stage 1 經驗與頭目掉落設定。 [頭目掉落規格](../scenario-content/GROUND-LOOT.md#馮德斯一般副本-stage-1)
 
 TS-37 換版前預檢已讀取固定的 Case 1 定義與五份碰撞資源。路線為地圖 1 → 4 → 8 → 12 → 19，起點節點 10。Host 需設定 `TARTAROS_LOCAL_STAGE_ONE_SCENARIO_PATH`、`TARTAROS_LOCAL_STAGE_ONE_BOUNDS_DIR`、正整數 `TARTAROS_LOCAL_STAGE_ONE_COMPLETION_EXP` 和 `TARTAROS_LOCAL_STAGE_ONE_BOSS_DROP=REVIVAL_SCROLL`。沿用本機進度測試模式、經驗政策及 Product 183 背包 metadata。實測卡應填入實際設定的經驗值。指定 v2 SHA-256 為 `6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c`。選關後按開始若無法進場，保留畫面與 `story-trace` 時間戳，後續步驟維持待測。
+
+`Tartaros.LocalTutorialInspect --stage-one <定義絕對路徑> <碰撞資料夾絕對路徑>` 會先核對資源身分與出生點到怪物／出口的靜態可達性，再逐圖以清怪事件和出口中心位置走完定義。已用本機五份原版碰撞資料執行。節點順序為 10 → 7 → 6 → 3 → 2，配置怪物數為 2 → 4 → 4 → 4 → 1，最後一隻為頭目 1086。工具逐圖列出載入與地圖／節點封包，便於比對停在哪個出口。這項檢查直接提交清怪事件，不測戰鬥操作或 Client 顯示。TS-37 維持待實機。
