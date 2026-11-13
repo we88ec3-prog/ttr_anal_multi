@@ -50,9 +50,31 @@ SQLite V7 新增角色裝備格。穿上時同一交易移除背包實例並寫�
 
 `0070 → 4E2400 → 509A80` 更新角色裝備快取。背包的 `0029`、`002C` 發出 `F4365`，`5B7F80 → 59BD80 → 599A80` 派送到背包 UI。Server 因此先更新裝備快取，讓刷新事件到達時能讀取提交後的裝備格。裝備面板是否立即刷新仍待 TS-13、TS-14 與 TS-18 的實機驗收。
 
-同一 KR 版本的 player-state 表 `4E1DA0` 將 `00F9`、`00FA` 分別登錄為 `4E6FD0`、`4E7170`。兩者更新 `+68F9h`／`+68FAh` 的 UI 狀態並發出 `F42D4`，經 `5B7C50 → 5BBF90` 傳至 UI 物件。已確認的分派無法證明這兩個教學封包的 alias／Item 欄位可更新 3D 角色。另確認拖放後的 C2S `00BD` 為 8 bytes，包含 role、slot 與 4-byte 零尾，由 `5E0C40` 送出。該請求的 Server 回覆及 3D 更新的實際入口仍待查證。
+同一 KR 版本的 player-state 表 `4E1DA0` 將 `00F9`、`00FA` 分別登錄為 `4E6FD0`、`4E7170`。這兩個內層 handler 更新 `+68F9h`／`+68FAh` 的 UI 狀態並發出 `F42D4`，經 `5B7C50 → 5BBF90` 傳至 UI 物件。另確認拖放後的 C2S `00BD` 為 8 bytes，包含 role、slot 與 4-byte 零尾，由 `5E0C40` 送出。該請求的 Server 回覆仍待查證。
 
-Server 已將馮德斯 30 筆可穿戴商品的 Product、Item、裝備格、指定角色及最低等級整理成[規則表](phindos-equipment.rules.json)。資料來自相同 SHA 固定的 ShopInfo、Product 及 ItemTable2，以 `USE_LIMIT`、`EQUIP_POS_LIST` 與原程式的 class → slot 表交叉核對。沒有指定角色或最低等級時欄位填 0。四筆有最低等級，Product 9496 需角色 9 達 8 級，Product 29022、29023、29024 需 10 級。Server 目前正常流程等級以角色 2 為 1、角色 4 為 2、其他角色為 5 的既有值檢查。正式角色等級進度仍待接入，測試頁顯示值不作資格依據。
+Server 已將馮德斯 30 筆可穿戴商品的 Product、Item、裝備格、指定角色及最低等級整理成[規則表](phindos-equipment.rules.json)。資料來自相同 SHA 固定的 ShopInfo、Product 及 ItemTable2，以 `USE_LIMIT`、`EQUIP_POS_LIST` 與原程式的 class → slot 表交叉核對。沒有指定角色或最低等級時欄位填 0。四筆有最低等級，Product 9496 需角色 9 達 8 級，Product 29022、29023、29024 需 10 級。
+
+### 外層分派的 3D 更新
+
+`4930E0 → 48AAD0` 以封包首 WORD 選擇 CClient 外層表。表的 root 基底為 `+208h`，每格 `10h`。`493DED–493DFD` 將 `+1198h`（`00F9`）指向 `4962F0`，`493DD6–493DE6` 將 `+11A8h`（`00FA`）指向 `496270`。使用此表時，外層 handler 直接消費這兩個封包。
+
+| 命令 | 原件接收／發送行為 |
+|---|---|
+| S2C `00F9 → 6D6E10` | 2-byte 命令後為 12-byte 列，依序是帳號 alias `u32`、未定義標記 `u32`、角色 `u16`、版本 `u16`。標記或版本改變時將查詢排入佇列並清除 ready。 |
+| C2S `00B6 ← 6D6ED0` | 同一快取的待查資料依大於 250 ms 的計時條件批次送出。每列 8 bytes，依序是 alias `u32`、角色 `u16`、當前版本 `u16`。同號 S2C 是角色頁 UI 通知。 |
+| S2C `00FA → 6D6FF0` | 10-byte 表頭為命令 `u16`、alias `u32`、角色 `u16`、未讀取的 `u16`。之後以 4-byte 列替換模型清單，每列為元件 `u16`、variant `u8`、secondary `u8`，最後標記 ready。 |
+
+`4AE4D0` 建立 CCharacter 時把 actor 列的帳號 alias 交給 `4CD6F0`，並呼叫 vtable `+30h` 的 `4CDBA0`，以 alias 和角色配對到同一快取。`4CDE30` 在版本改變、ready 及模型更新條件成立後呼叫 `4CEDB0`，比對前後模型元件，經 `7A7240` 查模型表 `FE1B60`，最後保存已套用版本。元件鍵需從模型表核對。裝備格、Product 與圖示 ID 各有不同用途。
+
+舊本機 Server 的 `anal/45-inventory-and-packet-switch.md` 記錄使用者回報手動 `F9+FA` 及之後自動遞增版本時外觀會更新。當時只覆蓋少數裝備，單獨卸下、切回與重登未分別驗收。舊 `anal/appearance-catalog.json` 能對上索瑪元件 4，未包含目前代表商品的 Item 2607、2610、9797，仍需核對這三件的正式模型映射。
+
+Server 新增獨立封包編碼並以合成案例核對 alias、角色、版本與多筆元件列。空清單沿用舊實驗的單筆零元件列，實機卸下最後一件仍需驗收。正式穿脫尚待核對三村商品的模型鍵、`00B6` 回覆時序及狀態初始化。批次驗收分別記錄裝備格、同一角色穿戴／卸下時的模型變更，以及切角或重登後的外觀。
+
+| 原始位元組範圍（左閉右開） | SHA-256 |
+|---|---|
+| `493DD6–493E04` | `1214d634bbc0bc8ebdecc38a981ff5ae0c660efe27beaec4661e89d53b814e80` |
+| `6D6E10–6D7110` | `bd2e47bbf8cd31aa895e14850a415d148ff903b87976b3e0e7f394b8ecd6ea1f` |
+| `4CEDB0–4CF2C0` | `00ccbce5ba5be8647642f0111e4b56a02a76ac3e0f36c199fb11bf3cb72b0eca` |
 
 ## 三村穿戴規則
 
