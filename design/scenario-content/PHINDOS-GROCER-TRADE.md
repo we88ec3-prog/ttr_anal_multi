@@ -19,6 +19,10 @@ Shop 2、3、4 有 27、3、6 筆 `quan=1`，已全部加入獨立物品買賣�
 
 合成測試依序買入復活卷軸與重置券，重開儲存層後分別售回兩格，再買賣 Product 232，核對各自的成交價、餘額與背包清格。重置券使用效果及 Client 實際名稱、格位顯示與重登均待驗證。 [批次驗收](../testing/S00-CONTENT-BATCH-TESTS.md)
 
+使用商品表時，每家普通交易店只需要在自己的村莊配置對應的市場點。例如商品表只有爾勒梅斯 Shop 5 時，可只配置 Town 2 的 Shop 5。Product 183 的新疊欄位可直接填在商品列的 `metadata`。任何啟用的 183 商品列省略這組欄位時，使用現有的兩個 `ITEM183_FIELD10`／`ITEM183_FIELD14` 環境設定補值。沿用無商品表的舊模式時仍需馮德斯 Shop 1 與這兩個設定。銀行支票的特殊店入口與既有距離規則相同。
+
+使用 `--town-markets <主線檔> <BND目錄> <主線SHA> <市場檔> <市場SHA> <商品表> <商品表SHA>` 可離線核對市場與商品表的配對，並列出各店的商品筆數。預檢與 Host 共用同一項配對驗證。
+
 ## 原有復活卷軸候選與封包
 
 第一個交易案例限定 Town 1、ShopNo 1、NPC 10028 的商品 183。原 `Product.xml` 對應道具 183，一般復活卷軸。購買單價 2,000 LeeLoo，售回單價 200 LeeLoo。貨單身分與價格來自同版的 `ShopInfo.xml`、`Product.xml`。 [原表與指令查證](../../governance/client-variants/20261109-mef-town-services/shop-services.md)

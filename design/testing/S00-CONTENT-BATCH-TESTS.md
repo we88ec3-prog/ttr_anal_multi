@@ -134,3 +134,5 @@ TS-25 待實機。使用三村座標覆寫範例，正常建隊進入爾勒梅�
 TS-26 待實機。把爾勒梅斯目前主線 NPC 的 `interactionRadius` 設為 3。正常進村後從外側走近，在互動提示出現時按 Z，確認劇情能開始。記錄互動提示位置。 [NPC 半徑規格](../scenario-content/TOWN-MARKETS.md#常駐-npc-座標覆寫)
 
 TS-27 待實機。使用三村座標覆寫範例，正常建隊進入爾勒梅斯村，核對出生點 (696,691)、面向 128，確認角色能走到 NPC 與商店。主線首次抵達該村也核對同一出生點，另以未設覆寫的馮德斯村確認原出生點。 [村莊配置](../scenario-content/TOWN-MARKETS.md#常駐-npc-座標覆寫)
+
+TS-28 待實機。用只含爾勒梅斯 Shop 5 的市場與商品設定，將已核對的 Product 183 metadata 填入商品列。正常建隊進村、開雜貨店，買一張再賣回，確認背包與 LeeLoo 同步。可與 TS-17 的三村配置一起排測。 [商品與市場設定](../scenario-content/PHINDOS-GROCER-TRADE.md)
