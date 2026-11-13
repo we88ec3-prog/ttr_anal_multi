@@ -150,3 +150,5 @@ TS-33 待實機。啟用馮德斯鐵匠開放範例，使用尚未完成 Q117 �
 TS-34 待實機，可接著 TS-33 測。搭配專用商品表，以備有 8,000 LeeLoo 的測試帳號，於鐵匠分兩次各買一件 Product 2614，確認背包各佔一格、餘額 600。選其中一件售回後，餘額應為 970，另一件仍在背包。 [專用商品表](../scenario-content/phindos-shop-unlock.town-trade.json)
 
 TS-35 待實機，可與 TS-33 同時測。完成 Q117 前裝備製作職人 10015 尚未出場，完成後在原位置出現並可選取。同時核對原有主線 NPC 與銀行仍可選取。 [村莊範例](../scenario-content/phindos-shop-unlock.town-placement.json)
+
+TS-36 待實機。只啟用交易，使用已有背包物品、LeeLoo 和卷軸快捷格的專用帳號。登入進廣場後，在開商店前核對背包格位、餘額和卷軸數量。此項可與 TS-32 合併驗收。 [背包發布規格](../scenario-content/PHINDOS-GROCER-TRADE.md)
