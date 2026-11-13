@@ -510,3 +510,11 @@ Server 實作可在開放副本之前，以關卡定義和五份 BND 的 SHA-256
 為查「STP 封裝是否改了副檔名」，以檔頭識別，讀取韓版 `origin` 的 5,614 個及繁中 `tc_workspace` 的 2,239 個非 `.stp` 檔案各前 4 bytes。略過路徑中有點開頭的項目，無讀取錯誤，兩邊均無 `STPD` 檔頭。這個檢查涵蓋原樣改名且從 offset 0 開始的 STPD，尚未涵蓋檔案內嵌、額外包裝或其他容器格式。
 
 原始韓版 `Field.stp` 的 1,540 個成員全為 XML，內有地圖路線和怪物群組。 `Event.stp` 含 1,840 個 `.seq`、3 個 Lua 與 5,535 個相機檔。 `BoundMap.stp` 有 1,296 個 `.bnd`。這些證據確認多份關卡相關資料確實以封裝分發，仍未找到原生 `.mef` 內容。後續查不同格式的容器時，應從讀取器及可識別的關卡鍵往回追來源，例如 `N_mushroom12_01B`，而非只靠副檔名。
+
+### 馮德斯地圖成員與同圖不同 TRIGGER
+
+以既有 STPD／EX 唯讀解碼器，讀取韓版 `origin` 與繁中 `tc_workspace` 的 `Field.stp`、`Table.stp`、`Event.stp`，以及 `Map/Map/` 下的 `01_Phindous.stp`、`Scenario.stp`、`Town.stp`。兩邊分別成功讀完 10,588、10,506 個成員。用 ASCII／UTF-16LE 搜尋 `N_mushroom01_01N`、`N_mushroom12_01B`、`S_pathofpindus01` 及 `town001.mef`，各自只命中兩版的 `Table/_MapList.xml`。較一般的 `.mef` 字串另見於兩版相同的九個 MapFlow XML，仍位於先前已核對的 `Node.title`。成員內容未同時命中 `STPD`、`STPI` 字面；這只篩查已解碼資料中的可見封裝標記。
+
+兩版 `Map/Map/01_Phindous.stp` SHA-256 皆為 `54a99b89bc27f784d7106e53f4c1df36f01d2d48a0dfb94482c58918c7ddf842`，含 45 個 `.fld` 和 45 個 `.mre`。`mushroom12D.fld` 的 XML 主節點為 `Field`、`Object`、`Stamp`、`Environment`，同名 `.mre` 有 `GEOM_RESOURCE V1` 標頭。按兩版 `_MapList.xml` 分組，12 個 Mushroom 地形／碰撞組合中有 11 個對到不同 `TRIGGER`。例如地圖 19、635、934 共用 `mushroom12D` 與 `mushroom12`，分別引用 `N_mushroom12_01B.mef`、`scenario_chicken04.mef`、`R_Phindous03.mef`，且該組合還有其他難度的引用。
+
+因此如果關卡規則存在於另一種容器，讀取路徑應另外有能區分這些變體的資料，例如邏輯地圖 ID、TRIGGER 或副本狀態。現有 `.fld`、`.mre` 和 `.bnd` 的共用關係足以排除用同名地形檔直接判定某個版本的規則。優先追能區分地圖 19／635／934 的消費端。此掃描無法判定無字串的二進位表、額外壓縮或不同容器，也未建立檔案傳輸時機。
