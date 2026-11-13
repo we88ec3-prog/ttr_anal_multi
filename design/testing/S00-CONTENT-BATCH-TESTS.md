@@ -160,6 +160,16 @@ TS-37 換版前預檢已讀取固定的 Case 1 定義與五份碰撞資源。路
 
 `Tartaros.LocalTutorialInspect --stage-one <定義絕對路徑> <碰撞資料夾絕對路徑>` 會先核對資源身分與出生點到怪物／出口的靜態可達性，再逐圖以清怪事件和出口中心位置走完定義。已用本機五份原版碰撞資料執行。節點順序為 10 → 7 → 6 → 3 → 2，配置怪物數為 2 → 4 → 4 → 4 → 1，最後一隻為頭目 1086。工具逐圖列出載入與地圖／節點封包，便於比對停在哪個出口。這項檢查直接提交清怪事件，不測戰鬥操作或 Client 顯示。TS-37 維持待實機。
 
+可從本機韓版的 `Map/BoundMap.stp` 重建預檢用目錄。使用既有 [STP 讀取器](../../governance/client-variants/20261105-zh-tw-v3/tools/stp_resources.py) 的 `Archive.read` 讀取下列完整成員鍵，輸出至獨立資料夾，每份檔案用原有檔名。Host 與預檢工具共用同一份 SHA-256 核對。2026-11-14 從原封裝重新擷取並執行預檢，五圖均通過。原版 BND 只留本機。
+
+| 地圖 ID | 碰撞成員 | 解碼後 SHA-256 |
+| ---: | --- | --- |
+| 1 | `BoundMap/mushroom01.bnd` | `2d6052c29a1045d44c14834a9f8313ae2731861d1014b890dd4d9f8091d6f5d4` |
+| 4 | `BoundMap/mushroom04.bnd` | `bd3dbb89aaf14c59550fe3b42378b1d3c20f4d7f38d661eddbda8c894128ee00` |
+| 8 | `BoundMap/mushroom07.bnd` | `01375baecf167f5d51dcf24e37f380256f7ef9ac0858db1ad4e5c632e20b139c` |
+| 12 | `BoundMap/mushroom09.bnd` | `d60169e1cc26ff742b5db164f9262376755ca0925c34dadc40aa07412d5b5104` |
+| 19 | `BoundMap/mushroom12.bnd` | `0adeeef7c1a183642a3e49a321e80c191b6dd3c8243f4e2f4ff7d16b5290c653` |
+
 正常 Stage 1 各圖的戰鬥實例現在使用與主線副本相同的 Server 裝備能力計算。合成測試使用伊希莉亞已裝備的 Product 2722，在起始圖及頭目圖各核對第一次普攻傷害。進度指定場仍使用測試基準傷害。日後若在 TS-37 使用有裝備的角色，可在第一圖及換圖後附記傷害，與純通關結果一併保存。
 
 TS-37 進村後先確認能移動、NPC 可對話且開始按鈕可操作。第二次通關回村後離隊，確認仍可移動與對話。若開始按鈕反灰、按下沒有反應或離隊後 NPC 無法互動，請記錄步驟與畫面。 [副本大廳與離隊流程](../../governance/s00-iterations/S00-20261101-MEF-RECEIVE-FEASIBILITY.md#馮德斯單人隊伍的副本大廳候選)
