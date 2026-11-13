@@ -33,6 +33,12 @@ S2C `001A` 可按同一 ID 移除地面物件。入口 `0x4B28D0` 在 `0x4B2AB5�
 - Server 依目前單人主線場景及權威位置選取半徑內最近的掉落。成功入包才發布背包更新及 `001A`。背包滿或交易拒絕時保留物件。首次撿取沿用 `0029` 初始化和 `002C` 餘額快照，後續以 `002C` 更新單格。畫面是否正確更新仍待實機確認。
 - 掉落表使用 `.ground-loot.json` 與[獨立 schema](local-ground-loot.schema.json)。一筆規則以 `quest / map / monster` 唯一鍵對應擊殺時的單筆必掉物品。半徑、數量與外觀由設定提供。堆疊類物品的 metadata 必須和同 Product 的既有堆疊一致。Server 啟動時以 `TARTAROS_LOCAL_GROUND_LOOT_PATH` 及 `TARTAROS_LOCAL_GROUND_LOOT_SHA256` 載入，並核對主線關卡、怪物配置與背包儲存。進度跳轉測試與教學首戰未接入此規則。
 
+## 馮德斯一般副本 Stage 1
+
+本機 Server 可用 `TARTAROS_LOCAL_STAGE_ONE_BOSS_DROP=REVIVAL_SCROLL` 啟用頭目掉落。這項 Server 規則在 Case 1 終點地圖 19 的頭目 1086 被擊倒時，建立一張 Product 183，使用上述類別 3 外觀 162。堆疊 metadata 沿用馮德斯雜貨店的同商品設定。頭目 ID 參考 [Case 與群組分析](../../governance/s00-iterations/S00-20261101-MEF-RECEIVE-FEASIBILITY.md)，獎勵品項、必掉一張及拾取半徑 12 均為本機驗收設定。
+
+正常進場才配置掉落。玩家在清怪後、按出口前，可用 Space 撿取，沿用租約、背包與掉落 GUID 的同交易入帳。出口確認後結算經驗，換圖或結算會釋放當前地面清單。進度指定場維持零道具及零經驗。實機批次需確認頭目倒地後能在落點撿取、背包增加一張、再走出口完成通關。外觀效果與原生 `.mef` 接收仍待確認。
+
 ## S00 GAME_RUNTIME_OBSERVATION：撿取入包
 
 1. 地面掉落建立時分配全域唯一的 Server 掉落 ID。每張圖對 Client 發送的 16-bit 物件 ID 用於建立和移除，允許在不同場次重用。
