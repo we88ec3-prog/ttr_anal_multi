@@ -160,6 +160,8 @@ TS-37 換版前預檢已讀取固定的 Case 1 定義與五份碰撞資源。路
 
 啟用測試版後，從本機 Host 的 `/health` 讀取 `localStageOne`。TS-37 需要 `normalEntryEnabled=true`、`bossDropEnabled=true`、Stage 1／Case 1，並用回傳的 `completionExperience` 填入測試卡。`contentSha256` 可與預檢結果對照。`previewEnabled` 只表示測試頁能提供進度指定入口。若 `localStageOne` 為 null，該 Host 未載入此副本設定。這些欄位確認 Host 啟用情形，實際帳號仍要正常進村並建單人隊。
 
+若批次驗收有開本機進度測試模式，可用 `/local-test/progress/status?includeSkillCatalogue=false` 的 `stageOne` 檢查目前場次。它顯示 Server 的大廳狀態、地圖、節點、角色、剩餘怪物總血量與結算是否仍待入帳。`canStartFromWorld` 表示世界狀態允許嘗試入場，隊長與單人成員資格仍在開始請求時核對。讀取狀態不會切換進度。
+
 Host 啟動驗證已使用 Server `4beecb9` 的 Release 建置、新建 SQLite 與本機原版五圖 BND 執行。短暫的 loopback Host 回傳 Stage 1／Case 1、`normalEntryEnabled=true`、`previewEnabled=false`、`bossDropEnabled=true`、`completionExperience=100`，關卡 SHA-256 為 `cb1c550455f75c5305cf2bdd69ac3231cf9d9fee510e4c0c4a5f292e92798229`。100 經驗及卷軸 metadata 12／34 只用於這次啟動驗證。測完已關閉測試 Host，未換正式本機版、未建立測試帳號或執行 Client。
 
 `Tartaros.LocalTutorialInspect --stage-one <定義絕對路徑> <碰撞資料夾絕對路徑>` 會先核對資源身分與出生點到怪物／出口的靜態可達性，再逐圖以清怪事件和出口中心位置走完定義。已用本機五份原版碰撞資料執行。節點順序為 10 → 7 → 6 → 3 → 2，配置怪物數為 2 → 4 → 4 → 4 → 1，最後一隻為頭目 1086。工具逐圖列出載入與地圖／節點封包，便於比對停在哪個出口。這項檢查直接提交清怪事件，不測戰鬥操作或 Client 顯示。TS-37 維持待實機。
