@@ -626,3 +626,9 @@ Server 的本機 S00 觀察記錄擴充為可保留既有 `story-trace` 中的�
 直接讀取 PE32 匯入表及 delay-import 目錄。指定 v2（SHA-256 `6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c`）與原版韓版 BIN 的 delay-import 目錄皆為零，靜態匯入均無 `Network.dll`。兩版 WinINet 唯一匯入 `DeleteUrlCacheEntryW`，在 `4E5ACD` 直接呼叫，屬於已辨識的公告下載路徑。兩版 URLMon 唯一匯入 `URLDownloadToFileW`，以 IAT `BD26E4` 搜尋執行區段中的 `FF 15` 呼叫與 `FF 25` 跳板，均得四處直接呼叫：`4E5AE9` 公告、`4E7E59` 徽章、`4FAB17` 與 `4FAB77` 排行榜。指定 v2 在本次核對的下載入口與原版一致。
 
 工作目錄、韓版原件與繁中版的 `Network.dll` SHA-256 皆為 `cba8930b9ef84002d45fb2555eb773d57b8fc917264cd075d166cd61bdca2517`。DLL 的 88 筆靜態匯入分屬 KERNEL32（30）、USER32（1）、MSVCP80（4）、MSVCR80（37）、WS2_32（16），delay-import 目錄為零。已知匯入涵蓋 Winsock 與 IOCP，未見 HTTP、檔案寫入或動態匯入解析 API。DLL 是否於指定 v2 執行時載入，以及是否可把內容交由呼叫者處理，仍需其他證據。這次只核對 PE 表與直接呼叫形狀，未執行 Client 或聯絡更新服務。
+
+### 換圖時傳入全域資源物件的查找
+
+補查緊鄰 TRIGGER 查詢後的兩處呼叫。換圖在 `4DF5EA` 與 `4DF69B` 呼叫 `4F6E80`，兩處的 EDI 都設為資源物件基址 `FB7470`。這種傳參方式可以在呼叫者看不到 TRIGGER 容器的絕對位址，因此需要核對被呼叫端的欄位。原件指令在 `4F6ED7` 使用 `LEA EAX,[EDI+E0]` 呼叫 `4F8160`，並在 `4F6EE8` 比對 `[EDI+E4]`。這兩個位移對應 `FB7550/FB7554`，與 TRIGGER 的 `FB74C0/FB74C4` 分開。韓版與指定 v2 在 `4DF580+0x130`、`4F6E80+0xD0` 及 `4F4842+0x2C` 的位元組相同。
+
+另以相同方式核對 TRIGGER 容器的直接引用。兩版的執行區段均只有 `4DF586`（換圖查詢）、`4F4843`（清理）及 `4F5814`（表載入）三個 `FB74C0` 立即值。清理端在 `4F4851` 取 `FB74C4`，由 `4F485D` 呼叫 `4F7FE0` 清樹，再釋放容器頭。此輪縮小了換圖函式透過全域物件間接取用 TRIGGER 的範圍。其他基址計算及間接呼叫仍待證。沒有確認新的檔案接收時點。
