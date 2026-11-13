@@ -66,6 +66,8 @@ Q120 原始列只有 Demand119，沒有獎勵。Q121 要求 Lv.9 與 Demand120�
 
 原表的 Q119 LeeLoo 900 可用獨立的 [Server 錢包規則](../../../design/scenario-content/phindos-q119.story-wallet.json) 啟用。設定 `TARTAROS_LOCAL_STORY_WALLET_PATH` 與 `TARTAROS_LOCAL_STORY_WALLET_SHA256`。規則綁定現有經驗政策 SHA，各任務須已有經驗結算項目。Q119 在正常通關、返回村莊並完成劇情後，主線進度、經驗帳本與錢包餘額在同一交易提交，村莊重建時以 `002C` 公布 LeeLoo 與 Battle Point。餘額使用原有買賣錢包。
 
+[兩村主線錢包規則](../../../design/scenario-content/phindos-alsmeer.story-wallet.json) 涵蓋 10 個已有經驗政策的副本。金額取同版 QuestInfo 的 `RewardsEtc` type 4，逐項與 [原表稽核](audit.json) 對照。Q140 的回村劇情清單為空，正常在結果頁按返回便會結算。其餘任務有回村劇情時，以最後一段的完成回報結算。
+
 既有經驗政策檔的 SHA 保持不變。尚未領取經驗且有符合版本的已存副本完成事件時，現有補發流程同時套用錢包規則。已領取該任務經驗的舊紀錄維持原餘額，避免把本次新增規則當成無條件補發。發放時點採 Server 規則，原服的發放時點與 type 3 的用途仍待查。
 
 [原版任務可用性分析](../20261107-town2-npc-marker/README.md)確認 Client 取所有有效角色的最高等級。正常登入名冊會發布已有存檔角色的等級與累積經驗。啟用候選政策時，村莊在更新任務前置前會再發布非當前角色的存檔或初始等級。`0034` 經驗條只更新目前角色。離線驗證枚舉了三名角色在十個副本中的 59,049 種參戰排列，逐步檢查 22 個任務的等級門檻。跨角色切換時的 Client 標記與實際可接取仍待驗收。
