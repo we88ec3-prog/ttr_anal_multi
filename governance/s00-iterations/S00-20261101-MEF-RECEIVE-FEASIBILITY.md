@@ -620,3 +620,9 @@ Server 的本機 S00 觀察記錄擴充為可保留既有 `story-trace` 中的�
 - 換圖尾段 `56CD10` 查 `FB74D0`，該容器由 `4F5640` 的 `BOUND` 欄填入。它組 `Map/Minimap/mushroom12.mmt`，交給 `56E790 → 714550` 查資源。讀取成功後，XML 消費者使用 `Minimap`、`TextureFile` 與 `StaticMarker` 等欄位。兩版 `Map/MiniMap.stp` 皆無含 `mushroom12` 的成員名稱。靜態追查僅確認它會嘗試查找這個名稱，以及失敗時走備援分支。
 
 因此這條後段讀取路徑也按共用的 `BOUND` 選資源，無法用它區分地圖 19 的 `N_mushroom12_01B.mef` 與 635、934 的 TRIGGER。查其他載體時可用這三個邏輯地圖 ID 是否選到不同內容作為驗證條件。此次只核對資源與指令窗，未執行 Client 或確認新的傳檔入口。
+
+### 指定 v2 與 Network.dll 的下載入口核對
+
+直接讀取 PE32 匯入表及 delay-import 目錄。指定 v2（SHA-256 `6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c`）與原版韓版 BIN 的 delay-import 目錄皆為零，靜態匯入均無 `Network.dll`。兩版 WinINet 唯一匯入 `DeleteUrlCacheEntryW`，在 `4E5ACD` 直接呼叫，屬於已辨識的公告下載路徑。兩版 URLMon 唯一匯入 `URLDownloadToFileW`，以 IAT `BD26E4` 搜尋執行區段中的 `FF 15` 呼叫與 `FF 25` 跳板，均得四處直接呼叫：`4E5AE9` 公告、`4E7E59` 徽章、`4FAB17` 與 `4FAB77` 排行榜。指定 v2 在本次核對的下載入口與原版一致。
+
+工作目錄、韓版原件與繁中版的 `Network.dll` SHA-256 皆為 `cba8930b9ef84002d45fb2555eb773d57b8fc917264cd075d166cd61bdca2517`。DLL 的 88 筆靜態匯入分屬 KERNEL32（30）、USER32（1）、MSVCP80（4）、MSVCR80（37）、WS2_32（16），delay-import 目錄為零。已知匯入涵蓋 Winsock 與 IOCP，未見 HTTP、檔案寫入或動態匯入解析 API。DLL 是否於指定 v2 執行時載入，以及是否可把內容交由呼叫者處理，仍需其他證據。這次只核對 PE 表與直接呼叫形狀，未執行 Client 或聯絡更新服務。
