@@ -276,3 +276,12 @@ REA 開啟原始 KR BIN 並核對上述 SHA，再由同檔 PE `.text` 檢索 `E8
 - `53E1B9 → 53E230` 讀 `Field/Cluster/`。已辨識的列舉是 `PRELOADSET/IMAGE`，其結果也供 `0038` 的模型預載使用。雖然函式有查詢 `MON_CLUST` 和 `CLUSTERSET` 節點，這條已檢視的路徑未列舉其中的生怪設定或直接建立怪物。
 
 因此 `0049` 是另一個可定位的本機資源讀取時點，可用於核對一般副本的節點與入場方向。來包資料是節點選擇值，未交付 `.mef` 檔名或內容。`0049` 與倒數的相對順序、旋轉欄位最終如何作用於鏡頭或角色，以及是否另有 `CLUSTERSET` 的生成消費者，仍需獨立核對。
+
+
+### 原始群組資料和 Client 預載的界線
+
+接續 `anal/MAPFLOW-CLUSTER-LOADING.md` 的既有分析，直接核對 `53E2E1..53E381`，補足 Ghidra 偽碼省略的暫存器資料流。`72E2E0` 從 `EAX` 指定的 XML 父節點查子節點。`53E2F2` 保存 `MON_CLUST`，查找 `CLUSTERSET` 後，`53E2FE` 把 `MON_CLUST` 重新放入 `EAX` 再找 `PRELOADSET`。因此此處沒有消費 `CLUSTERSET` 的回傳值，後續只走 `IMAGE` 同層節點並將 `ID` 加入向量。原始 KR BIN 的 PE 節區中，`Field/Cluster/`、`MON_CLUST`、`CLUSTERSET`、`PRELOADSET` 四個字串位址各只有一個 32 位元直接引用，全部落在 `53E230`。這個掃描未涵蓋動態組字或不同模組。
+
+用唯讀 STPD／EX 解碼器核對 `Field.stp`（SHA-256 `18a375bd478133df276df6e97833e03140900454d5f04298ea508d0b67fcb73a`）的 663 個 `Field/Cluster/*.xml`。解碼後全部做 ASCII／UTF-16LE 的 `.mef` 字面搜尋，沒有命中。以 CP949 解析時有 662 個有效 XML。`CLUST_T_Rotrua_01.xml` 含合併衝突標記，排除於欄位統計之外。有效成員中 652 個含 `OBJECT`，540 個至少有一筆 `COUNT>1`，3 個含 `OBJECT` ID 未列在同檔 `PRELOADSET`。例如 `CLUST_battlel_20.xml` 的物件 ID `1941` 未列入該檔預載。
+
+一般副本的生成規劃可取 `OBJECT`／`COUNT` 當群組設定來源。生成時機、波次順序和世界座標仍需其他證據，因為 `53E230` 只為 Client 建立預載清單。這次未找到第二個直接引用 `CLUSTERSET` 的韓版 Client 入口，也未證實 `.mef` 能在該路徑傳入。
