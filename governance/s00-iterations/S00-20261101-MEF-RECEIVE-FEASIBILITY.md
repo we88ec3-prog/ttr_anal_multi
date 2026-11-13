@@ -299,3 +299,12 @@ REA 開啟原始 KR BIN 並核對上述 SHA，再由同檔 PE `.text` 檢索 `E8
 再用唯讀解碼器核對原始 `Event.stp` 的 1,840 個 `.seq` 和 3 個 `.lua`。1,505 個 `.seq` 含 `CreateObject`，例如 `Aisen_01_After.seq`；這類場景呼叫的已辨識 `qbase.lua` 路徑通往 `Q.CreateObject` 與事件角色建構 `4D0B80`，詳見[場景腳本分析](../client-variants/20261109-mef-town-services/scenario-controls.md)。此次掃描在這 1,843 個成員均未命中 `CreateObjectEx`、`CLUSTERSET`、`MON_CLUST` 或 `Field/Cluster/` 的 ASCII／UTF-16LE 字面值。
 
 依目前可驗證的實作，一般副本可在 Server 決定生怪時機後，送 `0007` 物件記錄讓 Client 建立可同步的怪物。封包負責交付實體資料，未見原生 `.mef` 下發與執行。這項反查限直接分支與指定封裝字面值，未排除其他建構方式、間接呼叫或其他版本的腳本。
+
+
+### 關卡圖的 `Node.title` 也保留 MEF 名稱
+
+備份 `origin - 複製` 的 `Tartaros.bin`、`Network.dll` 與既有韓版樣本雜湊相同。備份的 `Table.stp` 與 `origin` 相同（SHA-256 `09e2cc48be98ad491afe394f966feb5812983fbf35da9037a8fa477d9848a442`）。與 workspace 表包相比，兩邊都是 1,026 個同名成員，解碼後有 31 個成員不同，其中沒有 `_MapList.xml` 或 `_CaseList.xml`。
+
+用唯讀 STPD／EX 解碼器查韓版與繁中版全部 `Field.stp` 成員（分別 1,540、1,504 個）。兩版各有 9 個 MapFlow XML 含 `.mef` 字面，這 9 個成員逐位元組相同。46 筆字面均在 `Node.title`，合計 38 個不同名稱。每個節點下有一筆 `Map` ID；以各版 `_MapList.xml` 對照，41 筆 title 等於該 Map 的 `TRIGGER`，5 筆不同。例如 Map 3865 兩欄皆為 `ObolusCDefence01_01N.mef`；Map 3850 的 title 是 `H_RecoveryChains05_01D.mef`，TRIGGER 卻是 `H_RecoveryChains04_01D.mef`。兩版 Field／Table 封裝索引均無 `.mef` 成員。
+
+已核對的韓版 `53E800` 節點解析取 `arrayx/arrayy/id/type/icon/rotate`，未讀 `title`。因此這份資料可追查特定副本節點與地圖上的原生 MEF 名稱。兩欄不一致的例子必須保留各自來源，不應用 title 覆蓋 TRIGGER。兩版資源均未提供實際檔案，此結果也未建立傳輸時機或哪端執行。繁中主程式的 title 消費仍待定位。
