@@ -99,6 +99,8 @@ TS-21 待實機。把 SP／MP 卷軸拖到快捷格，在正式副本施放技�
 
 TS-22 待實機。將回復卷軸綁到快捷格，重登回廣場，確認同一格、圖示及數量。售出或存入倉庫直到背包歸零，再買回或取出，確認原格恢復。手動解除綁定後再重登，確認該格保持空白。 [快捷欄持久化](../scenario-content/PHINDOS-GROCER-TRADE.md#背包格位移動與回復卷軸)
 
+TS-23 待後續排程。正式副本帶一張 Product 183 並先綁快捷格，死亡後按該快捷鍵。確認原地復活、三種資源回滿、扣一張、能正常走動與攻擊、怪物及副本進度保留。 [復活卷軸](../scenario-content/PHINDOS-GROCER-TRADE.md#一般復活卷軸)
+
 TS-09 待實機批次。先核對 Product 2614 的新裝備 metadata，啟用鐵匠市場點及商品表。用首次設定 8,000 LeeLoo 的專用帳號正常進村，開鐵匠貨單，分兩次各買一件 Product 2614。確認兩件分開佔格，LeeLoo 剩 600。將其中一件存入倉庫，重登後取回，再回鐵匠售回該件。應只剩另一件，LeeLoo 回到 970。 [裝備實例與交易規格](../scenario-content/PHINDOS-EQUIPMENT.md)
 
 TS-10 待實機批次。先核對 Product 29022 的新疊欄位，啟用飾品市場點與商品表。用首次設定 8,000 LeeLoo 的專用帳號正常進村，從飾品店分兩次各買一件 Product 29022。確認各佔一格、LeeLoo 剩 3,200，再從其中一格賣回，應只剩另一件、LeeLoo 為 3,440。 [飾品店商品與價格](../scenario-content/PHINDOS-EQUIPMENT.md)
