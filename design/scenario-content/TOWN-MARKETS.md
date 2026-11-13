@@ -28,6 +28,8 @@ TS-01 驗收市場標記、商戶對話與貨單入口，以及既有任務 NPC 
 
 普通商店可在 v3 的市場列填入 `requiresCompletedQuest`。Server 確認該任務存在於主線配置，只在正常進度已完成任務後才把商店加入 `0027`，開店及買賣也套用同一條件。任務完成後的村莊重建會發布更新。進度指定的測試跳轉不解鎖這類商店。省略條件的市場點沿用既有行為，銀行使用自己的服務入口。 [馮德斯鐵匠開放範例](phindos-shop-unlock.town-placement.json)
 
+鐵匠開放範例可搭配 [Product 2614 商品表](phindos-shop-unlock.town-trade.json)。使用既有交易模式，並設 `TARTAROS_LOCAL_TOWN_TRADE_PLAIN_EQUIPMENT_KEYS=SERVER_GENERATED` 為這件普通裝備生成獨立的入包欄位。商品表只開放 2614 的 Server 買賣，Client 仍從自身資料顯示貨架。這組配置也可用來連測 Q117 開店與後續購買、售回。
+
 同一組市場配置參數可載入 `LOCAL_TOWN_PLACEMENT_V3_NOT_NATIVE_MEF`。在對應村莊的 `npcPositions` 加入 `model`、`x`、`y`，即可移動該村既有 NPC。保留任務引用的模型 ID，未列出的 NPC 沿用主線座標。可在同一檔保存商店點，或在僅覆寫 NPC 的村莊填 `markets: []`。格式定義見 [v3 JSON Schema](local-town-placement-v3.schema.json)。
 
 個別 NPC 可在同一列設定 `interactionRadius`，大於 0 且最多 9 個地圖單位。明確設定時，`0027` 的 category 3 互動圈、Server 主線 NPC 與銀行距離判定，以及市場圈重疊檢查均使用該半徑。省略時沿用原設定，預設 Client 6、Server 9。Client 的實際互動距離仍待驗收。
