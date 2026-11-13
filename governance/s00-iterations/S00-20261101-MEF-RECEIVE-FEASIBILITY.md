@@ -205,3 +205,13 @@ REA 開啟原始 KR BIN 並核對上述 SHA，再由同檔 PE `.text` 檢索 `E8
 - 韓版啟動器全檔未見 ASCII／UTF-16LE `.mef` 字面值。這項字面檢查無法排除從遠端清單動態取得檔名。已查到的啟動與更新證據尚未把 `.mef` 連到任何檔案下發時機。
 
 未啟動程式或聯絡舊更新端點。若後續取得歷史 patch manifest 或更新快取，可用檔名、雜湊與實際成員核對啟動前是否曾下發 `.mef`。即使證實曾下發，仍須獨立證明遊戲載入該內容的觸發點。
+
+### 場景表與關卡資源的實際對應
+
+沿用既有唯讀 STPD／EX 解碼器，核對原件 `Event.stp`（SHA-256 `2e68e0202565530e574e0810ad7f758a2fc8d6826a0de0975ccaff12c2d4718b`）。`Event/SceneList.xml` 解碼後 SHA-256 `8d2e6a053b71750bfbd5337545446170f03316b185b2fdd94163bebe7146ba25`。其中 1,687 列有 1,684 個不同的 `funcName`，全部是沒有副檔名的名稱。
+
+- `565720` 組合 `Event/Sequences/`、場景定義的名稱及 `C106E4` 的四個位元組。按 KR BIN 的 PE 節區映射確認這四個位元組是 `.seq`。1,684 個對應 `.seq` 路徑全數存在於同一份原件 `Event.stp`。例如任務 15 的場景 2 和 3 分別對到 `scenario_tuto1_1.seq` 與 `pindos_talkevent.seq`。
+- 解碼並掃描該封裝 `Event/Sequences/` 下全部 1,840 個 `.seq` 成員，未發現 ASCII 或 UTF-16LE `.mef` 字面值。此結果不涵蓋執行時計算的路徑或其他封裝。
+- 原版 `Field.stp` 中教學場與 Field19 的兩組 CHART／CLUST XML 也沒有 `.mef` 字面值。Field19 的成員為 `Field/MapFlow/CHART_S_pathofpindus_01.xml` 和 `Field/Cluster/CLUST_S_pathofpindus_01.xml`，解碼 SHA-256 分別為 `79f79516d68183a0f8efb44664139f2c69813c4c190f5e89bbacfef82e6d5049` 和 `bf3cfce20eb7ef61d6e1961072a7084f09cfe1313f6a21dc04f2bb961767b182`。
+
+已辨識的場景鍵可以解析到實際封裝內的 `.seq`。目前沒有證據能把這條場景載入或所檢視的關卡 XML 接到原生 `.mef`。本輪只核對原件與資源，未執行腳本、遊戲或網路連線。
