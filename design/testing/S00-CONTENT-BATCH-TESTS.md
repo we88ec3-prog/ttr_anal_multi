@@ -159,3 +159,5 @@ TS-37 待實機。使用指定 v2 正常建單人隊進馮德斯，以隊長開�
 TS-37 換版前預檢已讀取固定的 Case 1 定義與五份碰撞資源。路線為地圖 1 → 4 → 8 → 12 → 19，起點節點 10。Host 需設定 `TARTAROS_LOCAL_STAGE_ONE_SCENARIO_PATH`、`TARTAROS_LOCAL_STAGE_ONE_BOUNDS_DIR`、正整數 `TARTAROS_LOCAL_STAGE_ONE_COMPLETION_EXP` 和 `TARTAROS_LOCAL_STAGE_ONE_BOSS_DROP=REVIVAL_SCROLL`。沿用本機進度測試模式、經驗政策及 Product 183 背包 metadata。實測卡應填入實際設定的經驗值。指定 v2 SHA-256 為 `6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c`。選關後按開始若無法進場，保留畫面與 `story-trace` 時間戳，後續步驟維持待測。
 
 `Tartaros.LocalTutorialInspect --stage-one <定義絕對路徑> <碰撞資料夾絕對路徑>` 會先核對資源身分與出生點到怪物／出口的靜態可達性，再逐圖以清怪事件和出口中心位置走完定義。已用本機五份原版碰撞資料執行。節點順序為 10 → 7 → 6 → 3 → 2，配置怪物數為 2 → 4 → 4 → 4 → 1，最後一隻為頭目 1086。工具逐圖列出載入與地圖／節點封包，便於比對停在哪個出口。這項檢查直接提交清怪事件，不測戰鬥操作或 Client 顯示。TS-37 維持待實機。
+
+正常 Stage 1 各圖的戰鬥實例現在使用與主線副本相同的 Server 裝備能力計算。合成測試使用伊希莉亞已裝備的 Product 2722，在起始圖及頭目圖各核對第一次普攻傷害。進度指定場仍使用測試基準傷害。日後若在 TS-37 使用有裝備的角色，可在第一圖及換圖後附記傷害，與純通關結果一併保存。
