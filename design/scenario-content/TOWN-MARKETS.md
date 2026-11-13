@@ -26,6 +26,8 @@ TS-01 驗收市場標記、商戶對話與貨單入口，以及既有任務 NPC 
 
 ## 常駐 NPC 座標覆寫
 
+普通常駐 NPC 也可在 `npcPositions` 設定 `requiresCompletedQuest`。正常主線完成指定任務後，村莊重建才發布 NPC 出場與 category 3 互動圈。銀行 NPC 及主線接取、交付 NPC 保持常駐。設定使用既有 NPC 名冊，出場後的實體編號沿用名冊索引。
+
 普通商店可在 v3 的市場列填入 `requiresCompletedQuest`。Server 確認該任務存在於主線配置，只在正常進度已完成任務後才把商店加入 `0027`，開店及買賣也套用同一條件。任務完成後的村莊重建會發布更新。進度指定的測試跳轉不解鎖這類商店。省略條件的市場點沿用既有行為，銀行使用自己的服務入口。 [馮德斯鐵匠開放範例](phindos-shop-unlock.town-placement.json)
 
 鐵匠開放範例可搭配 [Product 2614 商品表](phindos-shop-unlock.town-trade.json)。使用既有交易模式，並設 `TARTAROS_LOCAL_TOWN_TRADE_PLAIN_EQUIPMENT_KEYS=SERVER_GENERATED` 為這件普通裝備生成獨立的入包欄位。商品表只開放 2614 的 Server 買賣，Client 仍從自身資料顯示貨架。這組配置也可用來連測 Q117 開店與後續購買、售回。
