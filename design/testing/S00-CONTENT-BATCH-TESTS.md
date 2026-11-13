@@ -168,6 +168,8 @@ Host 啟動驗證已使用 Server `4beecb9` 的 Release 建置、新建 SQLite �
 
 `Tartaros.LocalTutorialInspect --stage-one <定義絕對路徑> <碰撞資料夾絕對路徑>` 會先核對資源身分與出生點到怪物／出口的靜態可達性，再逐圖以清怪事件和出口中心位置走完定義。已用本機五份原版碰撞資料執行。節點順序為 10 → 7 → 6 → 3 → 2，配置怪物數為 2 → 4 → 4 → 4 → 1，最後一隻為頭目 1086。工具逐圖列出載入與地圖／節點封包，便於比對停在哪個出口。這項檢查直接提交清怪事件，不測戰鬥操作或 Client 顯示。TS-37 維持待實機。
 
+更新後的預檢另列每個節點的 `GroundDrop`。用現行關卡檔及五份原版碰撞資料驗證時，只有地圖 19 列出頭目 1086、外觀 162、Product 183、數量 1、半徑 12。啟用正式入帳前，既有角色進度資料庫需執行 `Tartaros.LocalExpeditionMigrate --db <既有資料庫絕對路徑> --initialize-role-progress-v1`。已用隔離資料庫副本核對新增的 `applied_experience` 欄位。部署資料庫和指定 Client 仍待驗收。
+
 可從本機韓版的 `Map/BoundMap.stp` 重建預檢用目錄。使用既有 [STP 讀取器](../../governance/client-variants/20261105-zh-tw-v3/tools/stp_resources.py) 的 `Archive.read` 讀取下列完整成員鍵，輸出至獨立資料夾，每份檔案用原有檔名。Host 與預檢工具共用同一份 SHA-256 核對。2026-11-14 從原封裝重新擷取並執行預檢，五圖均通過。原版 BND 只留本機。
 
 | 地圖 ID | 碰撞成員 | 解碼後 SHA-256 |
