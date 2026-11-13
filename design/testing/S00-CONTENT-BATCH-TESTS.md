@@ -95,6 +95,8 @@ TS-08 待實機批次，可接續 TS-07。先核對 Product 232 的新疊 metada
 
 TS-20 待實機。背包開啟後把道具拖到空格，再把兩個不同品項互換。重登後核對格位、數量及錢包。 [0037 與交易規格](../scenario-content/PHINDOS-GROCER-TRADE.md)
 
+TS-21 待實機。把 SP／MP 卷軸拖到快捷格，在正式副本施放技能消耗資源後使用。確認回復最大值的 30%、背包與快捷格減一張。四秒後再使用另一種卷軸，另外可在受傷後驗 HP 卷軸。 [快捷欄與回復規格](../scenario-content/PHINDOS-GROCER-TRADE.md#背包格位移動與回復卷軸)
+
 TS-09 待實機批次。先核對 Product 2614 的新裝備 metadata，啟用鐵匠市場點及商品表。用首次設定 8,000 LeeLoo 的專用帳號正常進村，開鐵匠貨單，分兩次各買一件 Product 2614。確認兩件分開佔格，LeeLoo 剩 600。將其中一件存入倉庫，重登後取回，再回鐵匠售回該件。應只剩另一件，LeeLoo 回到 970。 [裝備實例與交易規格](../scenario-content/PHINDOS-EQUIPMENT.md)
 
 TS-10 待實機批次。先核對 Product 29022 的新疊欄位，啟用飾品市場點與商品表。用首次設定 8,000 LeeLoo 的專用帳號正常進村，從飾品店分兩次各買一件 Product 29022。確認各佔一格、LeeLoo 剩 3,200，再從其中一格賣回，應只剩另一件、LeeLoo 為 3,440。 [飾品店商品與價格](../scenario-content/PHINDOS-EQUIPMENT.md)
