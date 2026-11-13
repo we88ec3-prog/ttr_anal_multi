@@ -215,3 +215,11 @@ REA 開啟原始 KR BIN 並核對上述 SHA，再由同檔 PE `.text` 檢索 `E8
 - 原版 `Field.stp` 中教學場與 Field19 的兩組 CHART／CLUST XML 也沒有 `.mef` 字面值。Field19 的成員為 `Field/MapFlow/CHART_S_pathofpindus_01.xml` 和 `Field/Cluster/CLUST_S_pathofpindus_01.xml`，解碼 SHA-256 分別為 `79f79516d68183a0f8efb44664139f2c69813c4c190f5e89bbacfef82e6d5049` 和 `bf3cfce20eb7ef61d6e1961072a7084f09cfe1313f6a21dc04f2bb961767b182`。
 
 已辨識的場景鍵可以解析到實際封裝內的 `.seq`。目前沒有證據能把這條場景載入或所檢視的關卡 XML 接到原生 `.mef`。本輪只核對原件與資源，未執行腳本、遊戲或網路連線。
+
+### `0038` 的入場預載時點
+
+交叉核對 [Case 103 鍵來源](evidence/t07-phindos-intake-20261103/post-t01/FIELD19-CASE103-ID-CONTRACT.md)、既有 Ghidra 偽碼與 `PRELOAD-BATCH-EXECUTION` 的原件指令記錄。`4B1BF0` 把來包開頭九個位元組複製到場景資料物件的 `+34..+3C`。type 2／6 分支另讀 `WORD +7`，在這次 `0038` 處理內呼叫 `540980` 啟動 Case 預載。這是已核對的入場資料觸發點，尚未還原整份原服封包或 `+5` 的完整用途。
+
+`540980 → 541AE0 → 53E120` 由 Case ID 選擇既有 CHART／CLUST。`53E230` 取 `PRELOADSET/IMAGE` 的 ID，批次只把模型 ID 交給 `5417E0`。`79DCE0` 建立完成事件並提交；`79E083 → 7A03B0` 消費 ID 清單，必要時由 `79D570 → 7AC4C0` 載入模型資源。`79E08E` 設完成事件，`5417E0` 等待該事件後返回後續處理。已核對的資源建構是 `7C3220` 的 `CAvatarBase@IS3D`。
+
+這條鏈解釋了 Client 為何能在收到 `0038` 的 Case ID 後等待資源準備。已核對的工作內容是**本機模型預載**，尚未找到 `.mef` 的名稱或內容從此封包交付。`0038` 適合記為可驗證的入場預載時點。原生 `.mef` 傳入與實際發包時序仍需獨立證據。
