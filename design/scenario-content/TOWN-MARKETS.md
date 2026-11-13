@@ -24,6 +24,14 @@ TS-01 驗收市場標記、商戶對話與貨單入口，以及既有任務 NPC 
 
 第二、三村新點位為 Server 候選，已用原 BND 的兩層靜態可走格核對，各村出生點都有連通路徑。進村只發布目前村莊的市場點與常駐 NPC，兩者合併為一份 `0027`。v2 為 Server 自訂配置。第二、三村的商店標記、對話、貨單及任務互動列入 TS-15，銀行支票與倉庫列入 TS-16。
 
+## 常駐 NPC 座標覆寫
+
+同一組市場配置參數可載入 `LOCAL_TOWN_PLACEMENT_V3_NOT_NATIVE_MEF`。在對應村莊的 `npcPositions` 加入 `model`、`x`、`y`，即可移動該村既有 NPC。保留任務引用的模型 ID，未列出的 NPC 沿用主線座標。可在同一檔保存商店點，或在僅覆寫 NPC 的村莊填 `markets: []`。格式定義見 [v3 JSON Schema](local-town-placement-v3.schema.json)。
+
+Server 以覆寫後的座標驗證 BND 可走性、與商店選取圈的重疊及 `0027` 筆數。同一份有效座標用於人物出場、互動與任務 NPC 判定，主線雜湊和關卡圖雜湊不因座標調整改變。現有 v1、v2 市場配置仍可載入。
+
+[三村範例](phindos-alsmeer-rotrua.town-placement.json)（SHA-256 `4332497a3bf97ad70d587b35de81aae16f9b85aa8165050c178c3fda874c25dd`）保留 15 個市場點，只將爾勒梅斯 NPC 10004 從 (675,647) 移到 (676,647)，用於驗證資料入口。以主線 `14773c3184b201e6a369b753fbf1094972d792c1e2f8e10a4f67587714def50c` 與原 BND 預檢通過。正式 NPC 位置仍以實機及來源核對為準。
+
 ## 三村買賣
 
 [三村商品設定](three-village.town-trade.json)沿用既有交易服務的設定方式，載入時核對檔案 SHA-256 `1bbc4efa629f258bec3b1f7f5cd8ad6fd81d68a95a051f891fe618dfe70ea5bc`。124 筆條目由 `ShopInfo.xml` 的店家商品、`Product.xml` 的 LeeLoo 買賣價格與 `ItemTable2.xml` 的單件資料核對而來。三村雜貨、飾品與煉金貨單相同，鐵匠各有 27 件不同商品。銀行支票沿用三村共用的一筆定價。普通貨單延續已採用的 LeeLoo 政策，回復卷軸的原表 Battle Point 值保留為來源資訊。
