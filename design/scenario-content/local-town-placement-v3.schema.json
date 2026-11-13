@@ -76,8 +76,15 @@
                   "type": "number",
                   "exclusiveMinimum": 0,
                   "maximum": 6
+                },
+                "requiresCompletedQuest": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 65535
                 }
-              }
+              },
+              "if": { "properties": { "shop": { "enum": [70, 71, 72] } } },
+              "then": { "not": { "required": ["requiresCompletedQuest"] } }
             }
           },
           "arrival": {
