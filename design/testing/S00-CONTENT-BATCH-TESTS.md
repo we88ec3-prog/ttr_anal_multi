@@ -138,3 +138,5 @@ TS-27 待實機。使用三村座標覆寫範例，正常建隊進入爾勒梅�
 TS-28 待實機。用只含爾勒梅斯 Shop 5 的市場與商品設定，將已核對的 Product 183 metadata 填入商品列。正常建隊進村、開雜貨店，買一張再賣回，確認背包與 LeeLoo 同步。可與 TS-17 的三村配置一起排測。 [商品與市場設定](../scenario-content/PHINDOS-GROCER-TRADE.md)
 
 TS-29 待實機。啟用主線經驗政策，以正常進度到 Q133，讓已擁有的另一名角色達 Lv.10，使用低於 Lv.10 的角色正常建隊進爾勒梅斯。核對 NPC 10053 的主線標記，靠近按 Z 確認進入第一段劇情。用正常進度與角色等級驗收，因進度指定會抬高顯示等級。 [經驗發布與門檻](../../governance/client-variants/20261108-mainline-progression/experience-publication.md)
+
+TS-30 待實機。啟用 Q119 錢包規則與既有主線經驗政策。正常完成巨大公雞副本，按結果頁返回並看完劇情，確認 LeeLoo 增加 900、角色收到經驗，並可接續 Q120。使用未領取 Q119 經驗的正常進度。 [Q119 LeeLoo 結算](../../governance/client-variants/20261108-mainline-progression/experience-publication.md#q119-leeloo-結算)
