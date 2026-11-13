@@ -48,6 +48,12 @@ SQLite V7 新增角色裝備格。穿上時同一交易移除背包實例並寫�
 
 Server 已將馮德斯 30 筆可穿戴商品的 Product、Item、裝備格、指定角色及最低等級整理成[規則表](phindos-equipment.rules.json)。資料來自相同 SHA 固定的 ShopInfo、Product 及 ItemTable2，以 `USE_LIMIT`、`EQUIP_POS_LIST` 與原程式的 class → slot 表交叉核對。沒有指定角色或最低等級時欄位填 0。四筆有最低等級，Product 9496 需角色 9 達 8 級，Product 29022、29023、29024 需 10 級。Server 目前正常流程等級以角色 2 為 1、角色 4 為 2、其他角色為 5 的既有值檢查。正式角色等級進度仍待接入，測試頁顯示值不作資格依據。
 
+## 三村穿戴規則
+
+[三村規則表](three-village-equipment.rules.json)的 SHA-256 為 `e7716119176450d557db9e405ea513a14217d76e6aed17c5556452dd516ee2ea`。以同版 ShopInfo → Product → ItemTable2 新增 54 筆。爾勒梅斯 Shop 6 的 27 件一律要求 Lv.10，羅特魯亞 Shop 10 的 27 件一律要求 Lv.15。每村有九角色各三件，class 1、2、43 分別對應格 1、2、15。每件以該列的角色限制與唯一的 `EQUIP_POS_LIST` 核對。
+
+Server 穿戴時使用資料庫角色等級，尚無成長紀錄的角色採既有初始值。穿脫、重登快照及獨立物品 ID 沿用既有流程。表格為 Server 自訂規格，分類為 `NOT_NATIVE_MEF`。新品購買仍需要已核對的入包 metadata，裝備能力值與 3D 外觀另待驗收。
+
 正常重登由同一資料庫快照讀取背包與所有已擁有角色的裝備，進廣場時各發一份 15 格快照，換角或換圖重建時刷新目前角色。啟用後正常世界以已保存的裝備欄提供全部格位，空格發送清除列。教學期間仍走原有裝備初始化。測試跳轉不啟用此路徑。
 
 裝備欄顯示、Client 刷新時機、穿脫完成通知和 3D 外觀仍待實機驗收。候選只發送已有證據的本地背包與裝備欄更新。 [裝備實例規格](PHINDOS-EQUIPMENT.md) · [批次驗收 TS-13、TS-14](../testing/S00-CONTENT-BATCH-TESTS.md)
