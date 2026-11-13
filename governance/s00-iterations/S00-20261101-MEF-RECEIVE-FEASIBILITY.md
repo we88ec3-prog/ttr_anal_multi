@@ -285,3 +285,17 @@ REA 開啟原始 KR BIN 並核對上述 SHA，再由同檔 PE `.text` 檢索 `E8
 用唯讀 STPD／EX 解碼器核對 `Field.stp`（SHA-256 `18a375bd478133df276df6e97833e03140900454d5f04298ea508d0b67fcb73a`）的 663 個 `Field/Cluster/*.xml`。解碼後全部做 ASCII／UTF-16LE 的 `.mef` 字面搜尋，沒有命中。以 CP949 解析時有 662 個有效 XML。`CLUST_T_Rotrua_01.xml` 含合併衝突標記，排除於欄位統計之外。有效成員中 652 個含 `OBJECT`，540 個至少有一筆 `COUNT>1`，3 個含 `OBJECT` ID 未列在同檔 `PRELOADSET`。例如 `CLUST_battlel_20.xml` 的物件 ID `1941` 未列入該檔預載。
 
 一般副本的生成規劃可取 `OBJECT`／`COUNT` 當群組設定來源。生成時機、波次順序和世界座標仍需其他證據，因為 `53E230` 只為 Client 建立預載清單。這次未找到第二個直接引用 `CLUSTERSET` 的韓版 Client 入口，也未證實 `.mef` 能在該路徑傳入。
+
+
+### 從怪物建構反查資料來源
+
+固定同一原始 KR BIN SHA，在 `.text` 掃描以 `4D1710` 為目標的 `E8/E9 rel32`，再用反組譯核對命中。兩個命中都為直接呼叫，和既有[怪物權限分析](../client-variants/20261108-monster-authority-boundary/README.md)一致。
+
+| 呼叫點 | 資料來源 |
+| --- | --- |
+| `4AE692` | `4ADD7E` 把 `0007` 登記到 `4AE4D0`。接收器依 26-byte 記錄處理，怪物分支建立 `CMonster`，後續把記錄的 Entity ID 登入 actor 索引。 |
+| `4A0FFE` | `4A0F70` 是本機 Lua 物件建立路徑，由 `lb.CreateObjectEx` 登記使用。另一個 Lua wrapper `4A0B40` 在 `4A0B5F` 呼叫同一函式。此處位置、模型等資料由本機呼叫方提供。 |
+
+再用唯讀解碼器核對原始 `Event.stp` 的 1,840 個 `.seq` 和 3 個 `.lua`。1,505 個 `.seq` 含 `CreateObject`，例如 `Aisen_01_After.seq`；這類場景呼叫的已辨識 `qbase.lua` 路徑通往 `Q.CreateObject` 與事件角色建構 `4D0B80`，詳見[場景腳本分析](../client-variants/20261109-mef-town-services/scenario-controls.md)。此次掃描在這 1,843 個成員均未命中 `CreateObjectEx`、`CLUSTERSET`、`MON_CLUST` 或 `Field/Cluster/` 的 ASCII／UTF-16LE 字面值。
+
+依目前可驗證的實作，一般副本可在 Server 決定生怪時機後，送 `0007` 物件記錄讓 Client 建立可同步的怪物。封包負責交付實體資料，未見原生 `.mef` 下發與執行。這項反查限直接分支與指定封裝字面值，未排除其他建構方式、間接呼叫或其他版本的腳本。
