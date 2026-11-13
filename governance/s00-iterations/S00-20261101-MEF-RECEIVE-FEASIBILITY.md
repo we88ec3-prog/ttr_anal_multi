@@ -611,3 +611,12 @@ Server 的本機 S00 觀察記錄擴充為可保留既有 `story-trace` 中的�
 - `pack.gms` 的 6,900 bytes 中找到 16 個前置 DWORD 等於名稱長度的 ASCII 名稱。首筆從 offset 0 開始，長度 20，名稱 `_gbDefaultStateBlock`。其餘可辨識例子包括 `lightmap`（`0xDEF`）、`map_tile`（`0xF37`）、`offset_alphatest`（`0x1325`）與 `uv_alphablend`（`0x199B`）。這些結構與先前的渲染依賴相符，尚未逐欄解讀所有狀態值。
 
 兩者的已辨識用途把後續調查縮小到其他資源讀取器或具獨立來源的歷史更新包。若找到新載體，先用 `N_mushroom12_01B` 或另一個已知關卡鍵追到實際的成員選擇與內容消費，再核對分發時點。此輪沒有執行或修改 Client，也沒有驗證新的傳檔入口。
+
+### 地圖 19 的模型、碰撞與小地圖讀取
+
+原始韓版與指定 v2 的四個視窗逐位元組一致：`7C1E00+0x200`、`716740+0x150`、`56CD10+0x180`、`56E790+0x180`（位址加視窗長度）。兩版的 `C4FD34` 與 `C107FC` 分別是四個位元組的 `.fld` 與 `.mmt`。
+
+- 模型名稱更新後，`4DF510 → 7C1E00` 組 `mushroom12D.fld`，呼叫 `716740` 查本機資源登錄，再把取得的物件交給模型處理。韓版與繁中版 `Map/Map/01_Phindous.stp` 都有 `01_Phindous/Mushroom/mushroom12D.fld`（63,242 bytes）和同名 `.mre`（34,038 bytes）。相對應的 `BoundMap/mushroom12.bnd`（11,645 bytes）位於 `Map/BoundMap.stp`。三個成員各自跨版本 SHA-256 相同，地圖 19、635、934 都引用這組模型與碰撞鍵。
+- 換圖尾段 `56CD10` 查 `FB74D0`，該容器由 `4F5640` 的 `BOUND` 欄填入。它組 `Map/Minimap/mushroom12.mmt`，交給 `56E790 → 714550` 查資源。讀取成功後，XML 消費者使用 `Minimap`、`TextureFile` 與 `StaticMarker` 等欄位。兩版 `Map/MiniMap.stp` 皆無含 `mushroom12` 的成員名稱。靜態追查僅確認它會嘗試查找這個名稱，以及失敗時走備援分支。
+
+因此這條後段讀取路徑也按共用的 `BOUND` 選資源，無法用它區分地圖 19 的 `N_mushroom12_01B.mef` 與 635、934 的 TRIGGER。查其他載體時可用這三個邏輯地圖 ID 是否選到不同內容作為驗證條件。此次只核對資源與指令窗，未執行 Client 或確認新的傳檔入口。
