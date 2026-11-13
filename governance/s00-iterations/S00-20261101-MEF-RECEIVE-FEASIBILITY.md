@@ -518,3 +518,13 @@ Server 實作可在開放副本之前，以關卡定義和五份 BND 的 SHA-256
 兩版 `Map/Map/01_Phindous.stp` SHA-256 皆為 `54a99b89bc27f784d7106e53f4c1df36f01d2d48a0dfb94482c58918c7ddf842`，含 45 個 `.fld` 和 45 個 `.mre`。`mushroom12D.fld` 的 XML 主節點為 `Field`、`Object`、`Stamp`、`Environment`，同名 `.mre` 有 `GEOM_RESOURCE V1` 標頭。按兩版 `_MapList.xml` 分組，12 個 Mushroom 地形／碰撞組合中有 11 個對到不同 `TRIGGER`。例如地圖 19、635、934 共用 `mushroom12D` 與 `mushroom12`，分別引用 `N_mushroom12_01B.mef`、`scenario_chicken04.mef`、`R_Phindous03.mef`，且該組合還有其他難度的引用。
 
 因此如果關卡規則存在於另一種容器，讀取路徑應另外有能區分這些變體的資料，例如邏輯地圖 ID、TRIGGER 或副本狀態。現有 `.fld`、`.mre` 和 `.bnd` 的共用關係足以排除用同名地形檔直接判定某個版本的規則。優先追能區分地圖 19／635／934 的消費端。此掃描無法判定無字串的二進位表、額外壓縮或不同容器，也未建立檔案傳輸時機。
+
+### 同地形切換時的 ID 與資源消費
+
+再核對換圖函式 `4DF510..4DFA9B`、碰撞載入和兩個音訊入口。四個檢查視窗在原始 KR BIN 與指定 v2 中逐位元組一致。原始反組譯與 Ghidra 偽碼支持以下區分。
+
+- `0012` 的 DWORD 地圖 ID 保存在管理器 `+48`。若新 ID 與當前 ID 完全一致，走尾段 `4DFA49 / 4DFA84` 的音訊更新後返回。若從 19 切到 635，ID 已不同，因此仍走各個地圖表查詢。
+- 地圖模型名在 `4DF74D..4DF777` 與目前模型名比較。只有名稱不同才在 `4DF779..4DF787` 更新名稱並呼叫場景模型載入入口。19、635、934 均為 `mushroom12D`，這條分支可以共用模型。碰撞則在 `4DF9B4..4DF9C7` 另取 BOUND，交由 `4DF1A0` 組 `Map/BoundMap/mushroom12.bnd`。
+- 另外兩個以地圖 ID 查詢的容器 `FB74E0 / FB74F0`，在 `4F5B1E..4F5C07` 由 `_MapMusicList.xml` 的 `MUSIC / ENVSOUND` 欄位填入。原始字串位址 `C0D538 / C0D540` 已重讀。換圖時的 `6D9430 / 6D9580` 以這兩表選音訊，缺值分別退到 `nullsound` 或 `1000.wav`。韓版與繁中表的 19、635、934 都是 `MUSIC_BOSS`，且這三列沒有指定 `ENVSOUND`。
+
+以上辨認出同地形切換時仍保留的邏輯地圖 ID，以及模型、碰撞、音訊各自的消費者。這些入口未從不同的 TRIGGER 值選出可執行資料。接續查核應比對不同場景控制器如何消費同一個邏輯 ID，並保留各副本的 ID 作為 Server 配置索引。
