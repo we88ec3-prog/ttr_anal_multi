@@ -338,3 +338,13 @@ REA 開啟原始 KR BIN 並核對上述 SHA，再由同檔 PE `.text` 檢索 `E8
 另外重核 `anal/native-index/tc-unpacked-region-assessment-20261019.json` 所列四份既存離線快照的 SHA。四份各 1,104,368 bytes，依原紀錄的映射範圍皆是 `0xF06014..0x1013A04`，未覆蓋主遊戲區段。這些快照可重現先前的載入器分析，無法用來定位繁中版的關卡接收器或驗證 `Node.title` 的消費端。
 
 若取得有來源的新證據，先核對繁中映像版本與實際覆蓋範圍，或確認官方封包包含副本入場至首批生成前後的資料。只有把收到的資料接到檔名解析、內容解析與事件執行，才能登記原生 `.mef` 的傳入時機。此輪僅讀既有檔案。
+
+
+### 兩版啟動 Lua 的檔案讀取範圍
+
+沿用 `anal/SHARED-LUA-LOADING-AND-TUTORIAL-BOUNDARY.md` 的韓版原生呼叫位置，核對韓版原始目錄與繁中目錄的檔案內容。兩版的 `boot.lua`、`Logic.lua`、`Coroutine.lua`、`ai.lua` 逐位元組相同。以既有 Lua 5.1 解析器讀完整位元碼，四份分別有 1、1、13、8 個函式原型。這些原型未見檔案載入函式引用、含副檔名的字串常數或 `CONCAT` 指令。
+
+- 韓版啟動處 `48B113..48B13B` 明列載入 `boot.lua`、`Logic.lua`、`Coroutine.lua`。已核對的工作分別是初始化常數與亂數、空腳本、協程管理。`ai.lua` 使用隊形、尋敵與按鍵動作 API，未在這段明列載入；檔案內容本身未提供原生 MEF 讀取時機。
+- 韓版 `48CA07..48CA4D` 載入的 `UI/Lua/LuaUtil.lua` 和 `Table/Lua/Tables.lua` 在兩版內容相同。它們的三個明列 `DoFile` 目標是 UI 角色說明、Table 角色說明和語音表。兩版三個成員均已解碼核對，未見後續 `DoFile`、`LoadFile`、`LoadString`、`require` 或 `.mef` 字面值。
+
+以上縮小了已辨識的啟動 Lua 支線。兩版檔案內容相同未證明繁中版採用同一啟動呼叫鏈，也未涵蓋其他執行期入口。此次只解析資料，沒有執行 Lua 或遊戲。
