@@ -640,3 +640,11 @@ Server 的本機 S00 觀察記錄擴充為可保留既有 `story-trace` 中的�
 原版備份轉儲的 39 個記憶體區段只有一段落在主程式映像，從 `0x810A55` 開始共 256 bytes，包含斷點位置 `0x810AD5`。工作目錄的 `Tartaros.dmp` 為 320,518 bytes，SHA-256 `55da094bee82b24d10d7188abfa3670d0a8cc475264b9bd49d665c8c997b9011`，模組表顯示由 v8 翻譯版產生。59 個記憶體區段中也只有一段落在主程式映像，從 `0x104CFFC` 開始共 256 bytes，包含存取違規位置 `0x104D07C`。
 
 在兩個轉儲的 MemoryList 區段逐段搜尋 ASCII 與 UTF-16LE，均未找到 `.mef`、`N_mushroom12_01B`、`S_pathofpindus01`、`scenario_town000`、`Field.stp` 或 `Event.stp`。涵蓋範圍限既存崩潰快照，無法驗證副本接收器或完整資源資料。後續如取得歷史更新包，可優先用 `59B207C7 / C43000 / BE866A` 辨認這個建置，再比較其關卡接收器與資源讀取器。
+
+### 005E 觸發提示的封裝內容
+
+以保存的 KR BIN Ghidra 偽碼及原件指令核對，`4B3C10` 從來包 `+2` 取一個 WORD 建立 `CTriggerMsgObject`，並發布 `TRIGGER_MESSAGE` UI 事件。`540250` 首次使用時初始化提示表，經 `536280` 讀 `TRIGGERMSG / TRIGGER` 節點，再由 `5366C0` 依整數鍵查找提示資料。原件與指定 v2 的 `4B3C10 + 0x100`、`540250 + 0x170`、`536280 + 0x440` 指令窗逐位元組相同。
+
+用唯讀 STPD／EX 解碼器從兩版 `Table.stp` 讀出 `Table/TriggerMsgList.xml`。韓版有 714 個唯一 ID（0–1588），解碼 SHA-256 為 `6ba620a7185c42333b76624943b9906e4542f102c996fcaceb655865e404501f`。繁中版有 659 個唯一 ID（0–1533），解碼 SHA-256 為 `a22d1ad3e38ff39c2cff8b2c73d515f4ffb18a3e476be4a560340826d2dc1961`。兩版每列都只有 `ID`、`TEXT`、`COLOR` 三欄，ASCII／UTF-16LE 均無 `.mef` 字面。
+
+因此 `005E` 是一個可由 Server 觸發 Client 查本機封裝提示的入口，查找鍵是提示 ID。地圖 `TRIGGER` 名稱由另一條 `_MapList.xml → 4DF58D` 路徑取得。現有資料支持把 `005E` 用於關卡提示，尚無把地圖的 `TRIGGER` 名稱或來包內容交給腳本讀取器的證據。此輪未執行 Client。
