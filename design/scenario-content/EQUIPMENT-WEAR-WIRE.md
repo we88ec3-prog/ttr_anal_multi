@@ -44,7 +44,13 @@
 
 SQLite V7 新增角色裝備格。穿上時同一交易移除背包實例並寫入裝備欄。若目標已有裝備，原裝備回到剛空出的背包格。卸下時選擇第一個可用背包格。GUID、Product 和兩個既有 metadata 欄位原值隨物品移動。交易提交後回傳變更的兩格，讀取接口可在重開資料庫後回讀。舊錢包、背包、倉庫與掉落記錄繼續由原表保存。
 
-合成案例將兩件同款、不同 metadata 的裝備依序穿上，驗證交換、重開讀回及卸下。遊戲接線由 `TARTAROS_LOCAL_EQUIPMENT_MODE=LOCAL_PHINDOS_EQUIPMENT_CANDIDATE` 明確啟用，依賴已保存的廣場流程、主線和共用背包。舊模式名稱 `LOCAL_SOMA_EQUIPMENT_CANDIDATE` 保留為相同模式的別名。一般廣場及村莊處理穿脫請求，提交後依序發送 `002C` 與 `0070` 單格更新。
+合成案例將兩件同款、不同 metadata 的裝備依序穿上，驗證交換、重開讀回及卸下。遊戲接線由 `TARTAROS_LOCAL_EQUIPMENT_MODE=LOCAL_PHINDOS_EQUIPMENT_CANDIDATE` 明確啟用，依賴已保存的廣場流程、主線和共用背包。舊模式名稱 `LOCAL_SOMA_EQUIPMENT_CANDIDATE` 保留為相同模式的別名。一般廣場及村莊處理穿脫請求，提交後先發 `0070` 裝備格，再發 `002C` 更新背包並觸發 Client 刷新。初次發布則先發裝備快照，再發 `0029`／`002C`。
+
+### UI 刷新與 3D 外觀證據
+
+`0070 → 4E2400 → 509A80` 更新角色裝備快取。背包的 `0029`、`002C` 發出 `F4365`，`5B7F80 → 59BD80 → 599A80` 派送到背包 UI。Server 因此先更新裝備快取，讓刷新事件到達時能讀取提交後的裝備格。裝備面板是否立即刷新仍待 TS-13、TS-14 與 TS-18 的實機驗收。
+
+同一 KR 版本的 player-state 表 `4E1DA0` 將 `00F9`、`00FA` 分別登錄為 `4E6FD0`、`4E7170`。兩者更新 `+68F9h`／`+68FAh` 的 UI 狀態並發出 `F42D4`，經 `5B7C50 → 5BBF90` 傳至 UI 物件。已確認的分派無法證明這兩個教學封包的 alias／Item 欄位可更新 3D 角色。另確認拖放後的 C2S `00BD` 為 8 bytes，包含 role、slot 與 4-byte 零尾，由 `5E0C40` 送出。該請求的 Server 回覆及 3D 更新的實際入口仍待查證。
 
 Server 已將馮德斯 30 筆可穿戴商品的 Product、Item、裝備格、指定角色及最低等級整理成[規則表](phindos-equipment.rules.json)。資料來自相同 SHA 固定的 ShopInfo、Product 及 ItemTable2，以 `USE_LIMIT`、`EQUIP_POS_LIST` 與原程式的 class → slot 表交叉核對。沒有指定角色或最低等級時欄位填 0。四筆有最低等級，Product 9496 需角色 9 達 8 級，Product 29022、29023、29024 需 10 級。Server 目前正常流程等級以角色 2 為 1、角色 4 為 2、其他角色為 5 的既有值檢查。正式角色等級進度仍待接入，測試頁顯示值不作資格依據。
 
