@@ -39,6 +39,8 @@ S2C `001A` 可按同一 ID 移除地面物件。入口 `0x4B28D0` 在 `0x4B2AB5�
 
 正常進場才配置掉落。玩家在清怪後、按出口前，可用 Space 撿取，沿用租約、背包與掉落 GUID 的同交易入帳。出口確認後結算經驗，換圖或結算會釋放當前地面清單。進度指定場維持零道具及零經驗。實機批次需確認頭目倒地後能在落點撿取、背包增加一張、再走出口完成通關。外觀效果與原生 `.mef` 接收仍待確認。
 
+Stage 1 的掉落由 `.scenario.json` 的節點 `groundDrop` 提供，包含怪物模型、地面外觀、商品、數量與拾取半徑。綁定的模型須出現在該節點的初始怪物或增援中。Stage 1 的 Host 設定目前只提供 Product 183 的背包 metadata，因此啟用時須核對每筆節點掉落的商品都是 183。Case 1 的節點 2 使用 `{"monster":1086,"visual":162,"product":183,"quantity":1,"pickupRadius":12}`，關卡檔 SHA-256 為 `50f25687385ca48f2caec3dce204531cc7abb14f9938acf7a89cc510445550b7`。這個欄位目前由一般副本的 Server 執行，主線掉落沿用原有掉落表。 [關卡 JSON schema](local-scenario-definition.schema.json)
+
 ## S00 GAME_RUNTIME_OBSERVATION：撿取入包
 
 1. 地面掉落建立時分配全域唯一的 Server 掉落 ID。每張圖對 Client 發送的 16-bit 物件 ID 用於建立和移除，允許在不同場次重用。
