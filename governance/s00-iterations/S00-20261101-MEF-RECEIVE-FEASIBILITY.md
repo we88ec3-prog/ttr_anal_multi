@@ -509,6 +509,8 @@ Server 實作可在開放副本之前，以關卡定義和五份 BND 的 SHA-256
 
 為查「STP 封裝是否改了副檔名」，以檔頭識別，讀取韓版 `origin` 的 5,614 個及繁中 `tc_workspace` 的 2,239 個非 `.stp` 檔案各前 4 bytes。略過路徑中有點開頭的項目，無讀取錯誤，兩邊均無 `STPD` 檔頭。這個檢查涵蓋原樣改名且從 offset 0 開始的 STPD，尚未涵蓋檔案內嵌、額外包裝或其他容器格式。
 
+補查指定 v2 使用的本機 `fcs.flu`、`pack.gms`，兩檔與韓版原件 SHA-256 一致。再比對繁中版本，`pack.gms` 相同，`fcs.flu` 不同。以 ASCII／UTF-16LE 查這些檔案全長，均未見 `STPD`、`STPI`、`.mef` 或三個已知關卡鍵 `N_mushroom01_01N`、`N_mushroom12_01B`、`S_pathofpindus01`。兩版 `Integrity.xml` 均把 `Field.stp`、`Event.stp`、`fcs.flu`、`pack.gms` 列為獨立更新項目，各列含檔名、長度與校驗值。這支持啟動前可按封裝整份更新。此輪僅比對清單與可見位元組，未解碼 FLU／GMS 格式，也未證明指定 v2 直接啟動會走原版啟動器的更新流程。
+
 原始韓版 `Field.stp` 的 1,540 個成員全為 XML，內有地圖路線和怪物群組。 `Event.stp` 含 1,840 個 `.seq`、3 個 Lua 與 5,535 個相機檔。 `BoundMap.stp` 有 1,296 個 `.bnd`。這些證據確認多份關卡相關資料確實以封裝分發，仍未找到原生 `.mef` 內容。後續查不同格式的容器時，應從讀取器及可識別的關卡鍵往回追來源，例如 `N_mushroom12_01B`，而非只靠副檔名。
 
 ### 馮德斯地圖成員與同圖不同 TRIGGER
