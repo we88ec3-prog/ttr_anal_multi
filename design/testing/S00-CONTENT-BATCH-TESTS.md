@@ -155,3 +155,5 @@ TS-35 待實機，可與 TS-33 同時測。完成 Q117 前裝備製作職人 100
 TS-36 待實機。只啟用交易，使用已有背包物品、LeeLoo 和卷軸快捷格的專用帳號。登入進廣場後，在開商店前核對背包格位、餘額和卷軸數量。此項可與 TS-32 合併驗收。 [背包發布規格](../scenario-content/PHINDOS-GROCER-TRADE.md)
 
 TS-37 待實機。使用指定 v2 正常建單人隊進馮德斯，以隊長開始一般副本 Stage 1。每圖清怪後進出口。終點擊倒頭目 1086，靠近落點按 Space，確認背包增加一張一般復活卷軸，另記是否看見地面特效。走出口核對結算經驗，確認返回馮德斯；同一角色再完成一次，兩場應分別入帳，主線進度應維持原值。需啟用 Stage 1 經驗與頭目掉落設定。 [頭目掉落規格](../scenario-content/GROUND-LOOT.md#馮德斯一般副本-stage-1)
+
+TS-37 換版前預檢已讀取固定的 Case 1 定義與五份碰撞資源。路線為地圖 1 → 4 → 8 → 12 → 19，起點節點 10。Host 需設定 `TARTAROS_LOCAL_STAGE_ONE_SCENARIO_PATH`、`TARTAROS_LOCAL_STAGE_ONE_BOUNDS_DIR`、正整數 `TARTAROS_LOCAL_STAGE_ONE_COMPLETION_EXP` 和 `TARTAROS_LOCAL_STAGE_ONE_BOSS_DROP=REVIVAL_SCROLL`。沿用本機進度測試模式、經驗政策及 Product 183 背包 metadata。實測卡應填入實際設定的經驗值。指定 v2 SHA-256 為 `6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c`。選關後按開始若無法進場，保留畫面與 `story-trace` 時間戳，後續步驟維持待測。
