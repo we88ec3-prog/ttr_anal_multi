@@ -28,6 +28,10 @@ TS-01 驗收市場標記、商戶對話與貨單入口，以及既有任務 NPC 
 
 同一組市場配置參數可載入 `LOCAL_TOWN_PLACEMENT_V3_NOT_NATIVE_MEF`。在對應村莊的 `npcPositions` 加入 `model`、`x`、`y`，即可移動該村既有 NPC。保留任務引用的模型 ID，未列出的 NPC 沿用主線座標。可在同一檔保存商店點，或在僅覆寫 NPC 的村莊填 `markets: []`。格式定義見 [v3 JSON Schema](local-town-placement-v3.schema.json)。
 
+個別 NPC 可在同一列設定 `interactionRadius`，大於 0 且最多 9 個地圖單位。明確設定時，`0027` 的 category 3 互動圈、Server 主線 NPC 與銀行距離判定，以及市場圈重疊檢查均使用該半徑。省略時沿用原設定，預設 Client 6、Server 9。Client 的實際互動距離仍待驗收。
+
+互動圈的半徑使用既有 `0027` 每列 `+12` 的 float32。Client 從 category 3 路徑送出 `001C`，內容包含分類及 NPC ID。上限 9 沿用現行 Server 授權距離。 [NPC 互動命令](../../governance/s00-iterations/S00-20261103-PHINDOS-NPC-INTENT.md) · [原設定與使用者需求](../../governance/s00-iterations/S00-20261104-NPC-RANGE-AND-SQUARE-RESUME.md)
+
 Server 以覆寫後的座標驗證 BND 可走性、與商店選取圈的重疊及 `0027` 筆數。同一份有效座標用於人物出場、互動與任務 NPC 判定，主線雜湊和關卡圖雜湊不因座標調整改變。現有 v1、v2 市場配置仍可載入。
 
 v3 載入時也從主線的村莊出生點沿 BND 兩層共同允許的格子搜尋四方向路徑。該村每個有效 NPC 與配置商店的中心都須連通。可繞過牆面，僅以對角相接的格子不算連通。失敗訊息列出村莊、地圖和點位 ID。此檢查也由 `--town-markets` 預檢執行，涵蓋靜態 Server 可走格。Client 的動態阻擋及實際互動仍以 TS-25 驗收。
