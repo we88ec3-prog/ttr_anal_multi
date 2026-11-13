@@ -142,3 +142,5 @@ TS-29 待實機。啟用主線經驗政策，以正常進度到 Q133，讓已擁
 TS-30 待實機。啟用 Q119 錢包規則與既有主線經驗政策。正常完成巨大公雞副本，按結果頁返回並看完劇情，確認 LeeLoo 增加 900、角色收到經驗，並可接續 Q120。使用未領取 Q119 經驗的正常進度。 [Q119 LeeLoo 結算](../../governance/client-variants/20261108-mainline-progression/experience-publication.md#q119-leeloo-結算)
 
 TS-31 待實機。啟用兩村主線錢包規則，沿正常進度在結果頁按返回。Q140 應在回村時增加 1,872 LeeLoo。Q144 應在回村劇情結束、正常抵達下一村時增加 1,980 LeeLoo。各自核對任務進度、經驗與錢包。 [兩村主線錢包規則](../scenario-content/phindos-alsmeer.story-wallet.json)
+
+TS-32 待實機。沿用已完成 TS-30 或 TS-31 的帳號，重新登入並按「進入廣場」，在開任何商店前確認 LeeLoo 與結算後的餘額一致。此項待使用者安排重登測試時與主線結算一併驗收。
