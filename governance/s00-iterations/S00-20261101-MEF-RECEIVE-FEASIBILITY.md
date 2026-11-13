@@ -395,3 +395,16 @@ REA 開啟原始 KR BIN 並核對上述 SHA，再由同檔 PE `.text` 檢索 `E8
 | `70648C`、`706705` | Lua 標準庫 `loadstring`、`load`，分別取 Lua 堆疊字串與 Lua reader 函式。`C0BBD0..C0BBDF` 的登記表確認兩者名稱和函式配對。 |
 
 Lua 標準庫可接收腳本字串或 reader，因而是可再查的執行入口。用既有解析器檢查原始 `Event.stp` 的 1,840 個 `.seq` 和 3 個 `.lua`，文字檔未見 `load`／`loadstring`／`loadfile`／`dofile`／`require` 的直接呼叫，位元碼也未見對應常數。現有 `0047` 只能觸發已封裝的場景，尚未找到該場景把任何 Server 來包欄位送進這兩個 Lua 標準庫入口。這次反查只涵蓋直接原生呼叫和所列腳本，不能推論任意格式的 `.mef` 可由 Lua 解析，或排除其他間接路徑。
+
+
+### 一般副本的場景安裝時點 `005F/type 4`
+
+原始 KR BIN 與指定 v2 的 `4B7EAF`、`4B99C0`、兩層跳表及一般副本初始化視窗逐位元組相同。`005F → 4B99C0` 從 `BYTE +2` 選場景。跳表以 mode 減 2 查 `4B9B74` 的索引，再查 `4B9B54` 的跳轉位址。
+
+| `005F` 場景值 | Client 路徑 |
+| --- | --- |
+| 2 | `4B9A55 → 4C46F0` 建立主線副本 `CScenarioField`。 |
+| 4 | `4B9A76 → 4BC6A0` 建立一般副本 `CMissionField`。安裝後從 vtable `C0705C+10` 執行 `4BC750`，重設同型控制器或建立 `CSingleController`。 |
+| 6 | `4B9A95` 建立決鬥場景。 |
+
+以上分支都經 `4B9B36 → 4B7D50` 安裝場景。`005F/type 4` 的已核對入口只從來包取場景值，可用於 Server 的一般副本場景安裝。其餘地圖、角色及怪物須由各自已知訊息交付。現行 Server 的主線入場仍使用 `KrPhindosBridgeCandidateProtocol.InstallScenario` 所送的 type 2。一般副本選關請求、type 4 安裝與後續 Case／換圖的實機組合尚待驗收。這條安裝路徑沒有辨識出 `.mef` 資料欄位。
