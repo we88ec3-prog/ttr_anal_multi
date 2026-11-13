@@ -195,3 +195,13 @@ REA 開啟原始 KR BIN 並核對上述 SHA，再由同檔 PE `.text` 檢索 `E8
 由這七個初始化函式的 163 筆具名 handler（各表獨立計數）出發，沿既有 Ghidra 偽碼最多五層具名直接呼叫。唯一命中已知 Lua 載入入口的管理器是任務。`0040 → 502270` 在有接取演出定義的分支可以選擇場景，`0045 → 5027D0` 取任務定義的 `CompleteAction`，`0047 → 503040` 直接取來包的任務鍵與場景鍵。三條都經 `561760` 依場景資料選擇本機腳本，再進 `6F4A50`。相關欄位見[接取回覆核對](S00-20261103-PHINDOS-ACCEPTANCE-UI.md)與[劇情啟動介面](evidence/t07-phindos-intake-20261103/post-t01/STORY-AND-FREE-PARTY-INTERFACE.md)。
 
 本輪補到的三個時機是**任務接取、完成、明確啟動劇情時，Client 可按條件讀取既有腳本**。仍沒有可驗證的 `.mef` 名稱或內容傳輸。搜尋範圍限指定的七個管理器、已辨識 Lua 入口與具名直接呼叫，未覆蓋其他虛擬子呼叫或原服實際發包時序。
+
+### 啟動器的版本清單與檔案更新
+
+比對韓版原始啟動器 `Tartaros.exe`（SHA-256 `03771b8e1c1e66248f54585fadf9a5e926eb77228721325bb9be5febc53b3b5f`）及本機留存的更新清單。
+
+- 啟動器 `477144..477183` 依序引用 `Integrity.xml.gz`、`Integrity_new.xml.gz`、`Integrity.xml`、`Integrity_new.xml`。`4788CC..4788F4` 的分支刪除 `Integrity_temp.xml` 與既有 `Integrity.xml`，再呼叫 `MoveFileA` 將 `Integrity_new.xml` 移到 `Integrity.xml`。REA／Ghidra `ev_fdf82b27289a4b17f8edadaef1b164755e94f55208f6ea1f3d83ec6cf8648cfe` 將該分支定位在 `4770B0`，也確認 `44C227` 位於 `CHttpFile` 建構路徑，`44C175` 把 WinINet 回應讀到 caller 提供的緩衝區。這些證據支持啟動器有獨立更新清單的路徑，尚未逐一追出所有下載項目的來源。
+- 韓版 `origin`、`ins`、`workspace` 的 `Integrity.xml` 均為 SHA-256 `ac36b7d55956941929c8451c09f7c23afdb63776b600eb24b50c5abd678916a8`。解碼其 EX 內的 zlib XML 後，Build 45214 的 6,504 個 `FILE` 中沒有 `.mef` 路徑。繁中 Build 43398 的 6,502 個 `FILE` 也沒有 `.mef` 路徑。這兩份清單只代表留存版本，未涵蓋歷史版本或封裝內部成員。
+- 韓版啟動器全檔未見 ASCII／UTF-16LE `.mef` 字面值。這項字面檢查無法排除從遠端清單動態取得檔名。已查到的啟動與更新證據尚未把 `.mef` 連到任何檔案下發時機。
+
+未啟動程式或聯絡舊更新端點。若後續取得歷史 patch manifest 或更新快取，可用檔名、雜湊與實際成員核對啟動前是否曾下發 `.mef`。即使證實曾下發，仍須獨立證明遊戲載入該內容的觸發點。
