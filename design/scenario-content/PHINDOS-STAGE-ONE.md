@@ -103,6 +103,8 @@ Stage 1 的 Server 關卡定義可在節點加上非負整數 `clearExperience`�
 
 ## 擊倒經驗
 
+正常場次的測試頁顯示「已累計、待結算」，合計目前清場與擊倒經驗。固定通關獎勵在最終出口結算時加入。離線四關旅程逐圖核對待結算小計，並確認使用最終出口前，SQLite 角色經驗仍與本場開始時一致。
+
 一般副本的初始怪物、順序增援和計時增援都可逐隻指定 `defeatExperience`。例如頭目出場列可設定 `"defeatExperience": 11`。省略時為 0。Server 在該實體從存活降至零血量時累計一次。跨圖保留同一場的累計，最終出口將擊倒、清場、通關三項合併為同一筆經驗入帳。退出未結算的場次會捨棄暫存的擊倒經驗。進度指定場次沒有經驗入帳。
 
 正常入口依可達通關路線的最低總經驗判定。每條路線的總經驗均為正時，可省略 `completionExperience`，完全由 `defeatExperience` 與 `clearExperience` 提供獎勵。這種設定的 `/health` 會顯示 `normalEntryEnabled=true`、`completionExperience=0` 及 `completionExperienceSource=ROUTE_REWARDS`。本機預檢可用 `-CompletionExperience 0 -ExperienceSource ROUTE_REWARDS`。省略固定獎勵且存在零經驗路線的設定仍只適用測試預覽，並停用掉落。
