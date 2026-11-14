@@ -111,7 +111,7 @@ Stage 1 的 Server 關卡定義可在節點加上非負整數 `clearExperience`�
 
 [Case 1 練等配置](phindos-stage1-case1-leveling.scenario.json)沿用地圖 1 起點與原有五圖、怪物、出口和頭目掉落。14 隻普通怪各 4 EXP，頭目 24 EXP，通關基礎獎勵 20 EXP，每場合計維持 100 EXP。擊倒獎勵在通關前累計，全部經驗仍於最終出口入帳。分配數值是 Server 暫定規則。
 
-Host 保持 Case 1，設定 `TARTAROS_LOCAL_STAGE_ONE_SCENARIO_PATH` 為這份定義的絕對路徑，`TARTAROS_LOCAL_STAGE_ONE_SCENARIO_SHA256=95172edf5d4f543eb36e57d0a2c8bd4682c543953d6a25c9ac3d28f340758e77`，讓經驗取自定義（省略 `TARTAROS_LOCAL_STAGE_ONE_COMPLETION_EXP`），並以 `SCENARIO_CATALOG` 啟用掉落。執行 Host 預檢時，預期的 `CompletionExperience` 是基礎獎勵 20，完整通關的結果是 100。預檢可加上 `-MinimumRouteExperience 100 -MaximumRouteExperience 100`，同時核對兩個總額。
+Host 保持 Case 1，設定 `TARTAROS_LOCAL_STAGE_ONE_SCENARIO_PATH` 為這份定義的絕對路徑，`TARTAROS_LOCAL_STAGE_ONE_SCENARIO_SHA256=9e3af74130568f177b843245a61e2fbf7961ceb22391cf73f3030d0635b6e931`，讓經驗取自定義（省略 `TARTAROS_LOCAL_STAGE_ONE_COMPLETION_EXP`），並以 `SCENARIO_CATALOG` 啟用掉落。執行 Host 預檢時，預期的 `CompletionExperience` 是基礎獎勵 20，完整通關的結果是 100。預檢可加上 `-MinimumRouteExperience 100 -MaximumRouteExperience 100`，同時核對兩個總額。
 
 ### 其他起點與分岔的練等配置
 
@@ -121,15 +121,21 @@ Host 按下表設定 Case、關卡絕對路徑與 SHA-256，並沿用 Case 1 練
 
 | Case | 起點地圖 | 練等配置 | SHA-256 |
 |---:|---:|---|---|
-| 1 | 1 | [配置](phindos-stage1-case1-leveling.scenario.json) | `95172edf5d4f543eb36e57d0a2c8bd4682c543953d6a25c9ac3d28f340758e77` |
-| 1 | 2 | [配置](phindos-stage1-case1-map2-branches-leveling.scenario.json) | `a05fc2c1edb22381e2a66a5de3d0e8bea5a0dc26ce6c42d0a54cf2b80d38db6a` |
-| 1 | 3 | [配置](phindos-stage1-case1-map3-branches-leveling.scenario.json) | `eb7567dda71f175d76b7019119416ecb1faa5dd51ef8872a232d616a75b7fb92` |
-| 2 | 1 | [配置](phindos-stage1-case2-leveling.scenario.json) | `b3ee3461b7ff39e19c6ef15b62f6cf39305eebc564d0a642bfc8759805a6e23e` |
-| 2 | 2 | [配置](phindos-stage1-case2-map2-branches-leveling.scenario.json) | `b37675d7ce36e478ff131c1832b01e1238022138302e9bcae688ac3cdc02e749` |
-| 2 | 3 | [配置](phindos-stage1-case2-map3-branches-leveling.scenario.json) | `35286bdcc07866d015b9c8b1092dc83dedfb7636ee2f2be9c21a2b63fd1cbc95` |
-| 3 | 1 | [配置](phindos-stage1-case3-leveling.scenario.json) | `55937347da8ced41b94cb0f4b89e9d3483c5bcef098919b449b5d5c9407a091c` |
-| 3 | 2 | [配置](phindos-stage1-case3-map2-branches-leveling.scenario.json) | `cd9c76c0ba46cfcc5a15edbab921c4136749f11ae0bfd5889c5bd1cc3c003d18` |
-| 3 | 3 | [配置](phindos-stage1-case3-map3-branches-leveling.scenario.json) | `e1b997b1782412d53ebc557fc0a989c7ae9b3c2793dc69b32961111f49be0dfe` |
-| 4 | 1 | [配置](phindos-stage1-case4-leveling.scenario.json) | `5a2c3fd3cc8838cf936ff667df29a6d91835f3ea12fa6999039e267ed2ea54f7` |
-| 4 | 2 | [配置](phindos-stage1-case4-map2-branches-leveling.scenario.json) | `d068fcf7646146e71913749b7d19cccc889668829da81c09eb812101e265a82a` |
-| 4 | 3 | [配置](phindos-stage1-case4-map3-branches-leveling.scenario.json) | `2f8518cae49ad917bdbe1418224a2c0b519ef2cb0398f82ad03b188569b4b921` |
+| 1 | 1 | [配置](phindos-stage1-case1-leveling.scenario.json) | `9e3af74130568f177b843245a61e2fbf7961ceb22391cf73f3030d0635b6e931` |
+| 1 | 2 | [配置](phindos-stage1-case1-map2-branches-leveling.scenario.json) | `a1480f4ee153f761de124ee74be0c6f4d0e1055972b445d3304463f8c54a1af1` |
+| 1 | 3 | [配置](phindos-stage1-case1-map3-branches-leveling.scenario.json) | `f0e75ca068c11d8a94df5533b9e2d7cab177cbe86018b23b68437b6b36d06407` |
+| 2 | 1 | [配置](phindos-stage1-case2-leveling.scenario.json) | `50d4636ed8c75caf215b7474d81c7256f39da2991e62fec0ee8647895fd0401a` |
+| 2 | 2 | [配置](phindos-stage1-case2-map2-branches-leveling.scenario.json) | `5194fc19fa908cdab862808f222e18b523223dd5cab07cd29347fb8bf6ae50b7` |
+| 2 | 3 | [配置](phindos-stage1-case2-map3-branches-leveling.scenario.json) | `746a8857af553a975a6ab74288b8b6d35e72b373730201b2cb60c0a1ea8de5d8` |
+| 3 | 1 | [配置](phindos-stage1-case3-leveling.scenario.json) | `b897f667564ae7ea2540202912a87de85189bcb90c9256b5484a753d1df0d8fe` |
+| 3 | 2 | [配置](phindos-stage1-case3-map2-branches-leveling.scenario.json) | `4eb59c4d27493020915a317b61e090066abb8e1b9a4eb6ce03e52dc4b76601f8` |
+| 3 | 3 | [配置](phindos-stage1-case3-map3-branches-leveling.scenario.json) | `92f6aa24937670c8a1595982ab72eec2b958e64474d40492931b2dc31a186492` |
+| 4 | 1 | [配置](phindos-stage1-case4-leveling.scenario.json) | `1a438df994e6e66e28287c3e455f47cccd7d38f1eb71fc8214aac1c38e14776c` |
+| 4 | 2 | [配置](phindos-stage1-case4-map2-branches-leveling.scenario.json) | `e8b48ac51870732f9e732d92da7410da94f160f21f83723e0d7845328e1cca06` |
+| 4 | 3 | [配置](phindos-stage1-case4-map3-branches-leveling.scenario.json) | `e945ee24a3ec51c597faa09f906caa0f1b8ae9390b30afb8b7db33159f554f57` |
+
+## 頭目戰鬥設定
+
+12 份練等配置只對地圖 19 的頭目 1086/PRE1 指定 `phindos-stage1-boss-v1`。這份 [行為設定](phindos-stage1.monster-behavior.json) 將頭目 HP 設為 120，普通怪保留 60 HP，沿用既有攻擊與倒地動作。這是暫定的 Server 數值。必要頭目、掉落與通關總經驗仍由關卡定義控制。
+
+Server 可使用內建行為設定。若部署有設定 `TARTAROS_LOCAL_MONSTER_BEHAVIOR_PATH`，須包含 `phindos-stage1-boss-v1`；上方行為設定的 SHA-256 為 `67dadc1ac485c38481d4f84d171b4f9b4e2587f92cabb31022f5802ac1228ef2`。若另外使用自訂怪物配置，應保留其餘已用的行為並更新該檔的雜湊。
