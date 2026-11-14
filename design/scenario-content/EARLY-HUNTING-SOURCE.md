@@ -56,3 +56,23 @@
 原版 BND 與隔離 SQLite 的八條新帳號旅程均通過。Q132 後先在爾勒梅斯完成 Stage 465，再使用同一支隊伍選 Stage 466。兩處分岔分別選出口鍵 1／3、5／6，覆蓋每個 Case 四條路線。各場結算 160 EXP、拾取一張復活卷軸並回原隊伍；接續 Q133 至 Q144 後，角色樣本為 245,612 累計 EXP，背包七張復活卷軸，錢包 3,598 LeeLoo。 [TS-39 批次驗收](../testing/S00-CONTENT-BATCH-TESTS.md#爾勒梅斯一般副本)
 
 隔離 Host 已核對 Stage 465、466 的主 Case 與輪替 Case 可同時載入。Stage 466 兩個 Case 都回報 Town 2、起始圖 3469、每條路線 160 EXP。輪替登記屬 Host 設定驗證，實機連刷時的輪替與畫面仍待驗。
+
+## Stage 467／468 Server 關卡
+
+| Stage／Case | Server 定義 | SHA-256 |
+|---|---|---|
+| 467／703 | [Reservoir 703](alsmeer-stage467-case703.scenario.json) | `01e3745719931800d6b9fe81c91a959cf20aff8ea2718c663eba5fed1d843c1c` |
+| 467／704 | [Reservoir 704](alsmeer-stage467-case704.scenario.json) | `a7f451b3501ad574f8794c0353066ae91696bf2b1595778a661487374767bc1f` |
+| 468／705 | [Keep 705](alsmeer-stage468-case705.scenario.json) | `81d429541061a31b458107ee069e500f17a14e16f372c2ea1a7f4bffee69516a` |
+| 468／706 | [Keep 706](alsmeer-stage468-case706.scenario.json) | `76c1f042c8b9f46e8731ad749c2775d29ef2ca6d6fd0c302e59beb69db45e824` |
+
+- Reservoir 每個 Case 有四條六圖路線，節點依序為 1 → 2 或 3 → 4 → 5 或 6 → 7 → 8。Case 703／704 保留不同的地圖 ID；兩者從圖 3480 開始、在 3489 結算。Server 候選在末圖配置 1087 與 1015，同場清除後才可用出口。每場 140 擊倒 EXP 加 44 結算 EXP，建議戰鬥等級 13。
+- Keep 每個 Case 有兩條六圖路線，節點依序為 1 → 2 → 3→5 或 4→6 → 7 → 8。兩者從圖 3490 開始、在 3501 結算。末圖配置 1086 與 1015。每場 152 擊倒 EXP 加 56 結算 EXP，建議戰鬥等級 14。
+
+兩個 Stage 都在清場後以 Z 進出口，啟用 `SCENARIO_CATALOG` 時首領掉落 Product 183 一張。地圖 ID、節點順序與 BND 雜湊按原表驗證。Model／PRE／COUNT 採各自的 Cluster 資料，出生、出口位置、怪群分配、首領規則與獎勵是 Server 候選。內容標示 `NOT_NATIVE_MEF`。
+
+驗收啟動器分別使用 `-IncludeReservoirHuntingGround`、`-IncludeKeepHuntingGround` 載入兩個 Stage，並登記 Case 704、706 為輪替。可與已驗過的 465、466 同時啟用。共用的 BND 目錄另需 Reservoir 與 Keep 各八份碰撞檔。
+
+八條新帳號離線旅程均使用原版 BND 和隔離 SQLite。同一支爾勒梅斯隊伍依序打完 Stage 465、466、467、468，每場結算回原隊伍。這批覆蓋 Reservoir 的八條六圖路線與 Keep 的四條六圖路線，各場確認一張 Product 183，依序入帳 136、160、184、208 EXP。離隊後續接 Q133 至 Q144，存於 Town 3 圖 199。參戰角色樣本累計 246,004 EXP、背包九張復活卷軸，錢包 3,598 LeeLoo。 [TS-40、TS-41 批次驗收](../testing/S00-CONTENT-BATCH-TESTS.md#爾勒梅斯一般副本)
+
+隔離 Host 預檢已核對四個 Stage 的八個 Case，含各自的輪替登記。Stage 467／468 分別發布 Town 2、入場圖 3480／3490 與 184／208 EXP，預檢結束後關閉隔離 Host。Client 的輪替、分支呈現與操作待實機。
