@@ -243,6 +243,8 @@ Case 693–696 的普通怪和頭目使用專用的 `phindos-hunting-ground-mele
 
 預檢另查 `/health.localHuntingGrounds[].finalExits`，核對每個 Case 都載入一個半徑 16 的結算出口。Case 693／694 的出口在 3438，Case 695／696 在 3448。本機驗收 Host 已通過此檢查，Client 的畫面仍依 TS-37L 驗收。
 
+同一預檢也核對 `finalExits` 的 `requiredBoss` 與 `initialActors`。Case 693 的終點載入頭目 1086 和小怪 1015，Case 694 載入頭目 1086，Cases 695、696 載入頭目 1083。所有列均為 PRE 1。這些資料確認 Host 載入的關卡設定，出場畫面依 TS-37K 實測。
+
 啟動工具會傳入 `-ExpectedMonsterBehaviorSha256`，逐 Case 核對 Host 回報的怪物行為雜湊。四關目前都須符合公開的 `phindos-stage1.monster-behavior.json`，包含索敵 80 與回位 160 的兩個狩獵場行為。這項檢查已在運作中的本機 Host 通過，實際追擊與回位畫面仍依 v2 測試確認。
 
 私有 Server 的 `tools/start-phindos-acceptance-host.ps1` 可重建此部署。先建置 Release Host，再以 PowerShell 7.4 以上執行，指定 `-Workspace`、`-AnalysisDirectory`、`-BoundsDirectory`、`-Database` 和 `-LogDirectory`。資料庫須先具備本機冒險團、教學、主線及經驗儲存元件。先用隔離資料庫執行 `-PreflightOnly`，成功後會關閉該次 Host。正式本機驗收省略該開關，成功後 Host 保持監聽。兩種模式都已用隔離資料庫核對。啟動器為該程序套用固定設定及內容雜湊，遇到既有埠占用會停止啟動。
