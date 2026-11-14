@@ -342,4 +342,6 @@ TS-37D 已通過隔離 Host 部署預檢。Server `e727dac` 使用隔離 SQLite�
 
 TS-37D 的本機取證可從 `story-trace` 查玩家的 `6400CE01` 或 `6400CF01`，並從 `outbound-trace` 查同次操作的 `9A00CE01` 或 `9A00CF01`。選關回覆送出後，開場應接 `005F/type 4`、含同一 Stage 與配置 Case 的 `0038`，以及該場的 `0012` 和 `0049`。若畫面停在大廳，可用這個順序判斷 Server 停在哪一步。出站紀錄表示 Server 完成送出，Client 顯示仍以實機為準。離線雙場工具在原有 `route` 之外以 `alternateRoute` 記錄改選後各圖、分支和掉落。
 
+TS-37D 結算畫面可一併核對關卡獎勵 20、殺戮獎勵 56、總經驗 76。以 Case 693 與 696 離線雙向切換的四場，已逐欄比對 `0022/type 2` 及 SQLite 入帳結果。若實機列名或數字不同，可保留畫面並從 `outbound-trace` 核對應用資料的 `+8`、`+12` 和 `+20` 三個 DWORD。 [結算分項規格](../scenario-content/PHINDOS-STAGE-ONE.md#結算分項)
+
 [Stage 462／Case 693 設定](../scenario-content/PHINDOS-STAGE-ONE.md#馮德斯第一狩獵場-stage-462case-693)

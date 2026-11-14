@@ -174,3 +174,9 @@ Host 可用 `TARTAROS_LOCAL_STAGE_ONE_CASE=693` 載入[關卡定義](phindos-sta
 原有 `TARTAROS_LOCAL_STAGE_ONE_*` 指定第一份配置。加上 `TARTAROS_LOCAL_HUNTING_GROUND_ALTERNATE_PATH`、`TARTAROS_LOCAL_HUNTING_GROUND_ALTERNATE_SHA256` 和 `TARTAROS_LOCAL_HUNTING_GROUND_ALTERNATE_CASE` 指定第二份。兩份須分屬 Stage 462 和 463，可交換順序。共用 BND 目錄、經驗政策與掉落模式。每個 Stage 配置一個 Case。
 
 隊長的 `0064` 選擇狩獵場，`0008` 以當時選擇建立場次。場次固定使用同一份配置處理預載、換圖、怪物、掉落與結算。回村會重新發布原選項，之後可在同一隊伍改選。Host 的 `/health` 會在 `localHuntingGrounds` 列出兩份已載入配置。離線工具可在 `--stage-one-journey` 參數最後加 `--alternate-hunting-ground <關卡檔> <SHA-256> <Case>`，以同一連線依序通關兩個場地。
+
+## 結算分項
+
+一般副本 `0022/type 2` 以應用資料起點計算位移。`+8` 的「關卡獎勵」合計清場與固定通關經驗，`+12` 的「殺戮獎勵」顯示擊倒經驗，`+20` 為 SQLite 實際入帳總額。隊伍與排名欄暫為零。若經驗達上限而只能部分入帳，優先列入擊倒獎勵，剩餘才列為關卡獎勵。進度指定場次維持零獎勵。 [Client 結算欄位證據](../../governance/s00-iterations/S00-20261101-MEF-RECEIVE-FEASIBILITY.md#結算介面的五個數值)
+
+Stage 462／463 目前公開的四份設定，完整通關會顯示關卡獎勵 20、殺戮獎勵 56、總經驗 76。離線工具逐欄核對結算與角色經驗。指定 v2 的文字與畫面待驗。
