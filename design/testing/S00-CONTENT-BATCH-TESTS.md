@@ -491,3 +491,7 @@ TS-39 待指定 v2 實機。可接 TS-38 結算回爾勒梅斯的原隊伍，改
 TS-40 待指定 v2 實機。可由原隊伍改選 Stage 467，在首圖及第三圖分別選一個出口。清怪後走到出口按 Z，末圖擊倒 1087 和 1015 並撿卷軸，再結算回隊。Case 703／704 共八條路線已離線核對，每場 184 EXP、一張 Product 183。 [Reservoir 關卡規格](../scenario-content/EARLY-HUNTING-SOURCE.md#stage-467468-server-關卡)
 
 TS-41 待指定 v2 實機。由原隊伍改選 Stage 468，在第二圖選一個分支。末圖擊倒 1086 和 1015、撿卷軸並結算，核對能回原隊、離隊並續接 Q133。Case 705／706 共四條六圖路線已離線核對，每場 208 EXP、一張 Product 183。 [Keep 關卡規格](../scenario-content/EARLY-HUNTING-SOURCE.md#stage-467468-server-關卡)
+
+## 馮德斯 Stage 464
+
+TS-42 待指定 v2 實機。完成 Q124 後由馮德斯單人隊伍大廳選 Stage 464，可接在 TS-37 的 Stage 462／463 之後。首圖應載入圖 3449，第二圖 3450 清怪後有兩個出口。分次走兩條路，末圖 3459 打倒 1084 與 1015，按 Space 撿卷軸，走到出口按 Z 結算。核對 140 EXP、一張 Product 183、返原隊伍與離隊後的主線進度。兩個 Case 共四條路線已用原版 BND 從新帳號離線走通，之後也都走完爾勒梅斯四個 Stage 並完成 Q144。指定 v2 輪替、出口位置與戰鬥畫面待驗。 [Stage 464 關卡與原表](../scenario-content/EARLY-HUNTING-SOURCE.md#stage-464-server-關卡)

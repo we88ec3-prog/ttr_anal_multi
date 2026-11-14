@@ -76,3 +76,23 @@
 八條新帳號離線旅程均使用原版 BND 和隔離 SQLite。同一支爾勒梅斯隊伍依序打完 Stage 465、466、467、468，每場結算回原隊伍。這批覆蓋 Reservoir 的八條六圖路線與 Keep 的四條六圖路線，各場確認一張 Product 183，依序入帳 136、160、184、208 EXP。離隊後續接 Q133 至 Q144，存於 Town 3 圖 199。參戰角色樣本累計 246,004 EXP、背包九張復活卷軸，錢包 3,598 LeeLoo。 [TS-40、TS-41 批次驗收](../testing/S00-CONTENT-BATCH-TESTS.md#爾勒梅斯一般副本)
 
 隔離 Host 預檢已核對四個 Stage 的八個 Case，含各自的輪替登記。Stage 467／468 分別發布 Town 2、入場圖 3480／3490 與 184／208 EXP，預檢結束後關閉隔離 Host。Client 的輪替、分支呈現與操作待實機。
+
+## Stage 464 Server 關卡
+
+| Case | 關卡定義 | SHA-256 |
+| --- | --- | --- |
+| 697 | [Bluetree 697](phindos-stage464-case697.scenario.json) | `92444e23fadc395f797636c24ea0285ecc0f254891d6e99c9db22d55221bb4c9` |
+| 698 | [Bluetree 698](phindos-stage464-case698.scenario.json) | `e22ba58357ddca420b35071f38a285ebc24fc398a5fc2739cf81f20e8b7415a3` |
+
+從馮德斯（Town 1）原隊伍大廳選 Stage 464。兩個 Case 都在圖 3449 進場、圖 3459 結束，第二圖 3450 分成兩線。
+
+| Case | 第一支線 | 第二支線 |
+| --- | --- | --- |
+| 697 | 3449 → 3450 → 3451 → 3453 → 3456 → 3459 | 3449 → 3450 → 3452 → 3454 → 3457 → 3459 |
+| 698 | 3449 → 3450 → 3451 → 3453 → 3455 → 3459 | 3449 → 3450 → 3452 → 3454 → 3458 → 3459 |
+
+Server 依原表核對九個節點的地圖與出口目標。九份原版 BND 各自固定 SHA-256，載入時驗證出生點、怪物及出口可達。怪種沿用 `CLUST_Re_bluetree_01.xml` 的 Model／PRE／COUNT。分圖、出生位置、首領判定、獎勵與建議戰鬥等級 8 由 Server 設定。末圖的 1084 與 1015 同場。每條路線設為擊倒 112 EXP、通關 28 EXP，啟用 `SCENARIO_CATALOG` 時首領掉落 Product 183。關卡定義為 `NOT_NATIVE_MEF`。原生 MEF、原版解鎖條件及 Client 顯示仍待驗。
+
+驗收 Host 使用 `-IncludeBluetreeHuntingGround`，和 Stage 462／463 及爾勒梅斯四個 Stage 共存。直接設定 Host 時，使用 `TARTAROS_LOCAL_HUNTING_GROUNDS__697__PATH` 和 `TARTAROS_LOCAL_HUNTING_GROUNDS__697__SHA256` 載入主 Case，並以 `TARTAROS_LOCAL_HUNTING_GROUND_ROTATION__698__PATH` 和 `TARTAROS_LOCAL_HUNTING_GROUND_ROTATION__698__SHA256` 登記輪替。
+
+四次離線旅程皆以空白 SQLite 建新帳號，正常完成教學及 Q15。Q124 後從同一隊伍依序選 Stage 462、463、464，各場結算回隊；Stage 464 每路均為六圖、140 EXP 與一張 Product 183。完成 Q132 後，由廣場正常建隊進爾勒梅斯，依序完成 Stage 465～468，再離隊接 Q133 至 Q144。Q144 存檔為 Town 3 圖 199，樣本角色 Lv.16、246,144 EXP，當時有 10 張復活卷軸與 3,598 LeeLoo。 [TS-42 批次驗收](../testing/S00-CONTENT-BATCH-TESTS.md#馮德斯-stage-464)
