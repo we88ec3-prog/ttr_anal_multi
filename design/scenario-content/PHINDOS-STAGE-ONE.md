@@ -48,7 +48,7 @@
 | 4／13 | 16／1 | `mushroom10.bnd` | `674fec0033f6e743db05679385f248cc06cce663da8e167942af15233193d822` |
 | 2／19 | 19／1 | `mushroom12.bnd` | 見上表 |
 
-維持 Host 的 Case 1，將 `TARTAROS_LOCAL_STAGE_ONE_SCENARIO_PATH` 指向[地圖 2 起點定義](phindos-stage1-case1-map2.scenario.json)，並設定 `TARTAROS_LOCAL_STAGE_ONE_SCENARIO_SHA256=3ce4b9115c68fb12767a5d63154511b0380e662f669a1776942d2771a3336e65`。起點隨載入的定義決定，預設的 Case 1 檔案仍使用地圖 1。地圖 3 起點待配置及驗收。
+維持 Host 的 Case 1，將 `TARTAROS_LOCAL_STAGE_ONE_SCENARIO_PATH` 指向[地圖 2 起點定義](phindos-stage1-case1-map2.scenario.json)，並設定 `TARTAROS_LOCAL_STAGE_ONE_SCENARIO_SHA256=3ce4b9115c68fb12767a5d63154511b0380e662f669a1776942d2771a3336e65`。起點隨載入的定義決定，預設的 Case 1 檔案仍使用地圖 1。
 
 離線走圖工具使用五份原版 BND，逐圖執行移動、戰鬥和出口互動，確認生成 3、4、3、1、1 隻、終點選取 Product 183 並產生 100 經驗的待結算狀態。正常建隊、Client 轉場、入包及經驗入帳仍按實機批次驗收。
 
@@ -57,3 +57,14 @@
 `NodeLink` 在節點 1 同時連向節點 4（地圖 13）及節點 5（地圖 17），兩者都接到頭目節點 2。地圖 17 的 `BOUND` 為 `mushroom11`，對應碰撞檔 SHA-256 `c9b1d48580d8c02580d1a4ed66c1cea4053e76225426b4ed20fa80a4669cebd5`。Server 候選設定在該圖使用 CLUST 群組 17 的單隻 `1015/PRE1`。分支出口座標與鍵值屬 Server 配置。
 
 啟用時以[雙出口關卡定義](phindos-stage1-case1-map2-branches.scenario.json)替換 Host 的設定路徑，並指定 SHA-256 `52243d19a1cb5409b6c55bc3237fc69891a932392ecf585d4da9b34bb9aee94e`。清完地圖 9 後，入口側的出口鍵 5 通往地圖 17，較遠的出口鍵 1 通往地圖 13。各路都通往地圖 19。離線走圖工具沿用 `--stage-one <關卡絕對路徑> <BND目錄絕對路徑> <SHA-256> 1` 驗地圖 13，末尾加 `5` 驗地圖 17。兩條路已各自走完五圖，抵達頭目掉落及待結算。實機需另確認兩個出口都顯示且能選擇。
+
+## Case 1 的地圖 3 起點
+
+`CHART_mushroom_01.xml` 另有節點 12 → 9 → 1，對應地圖 **3 → 6 → 9**。從地圖 9 沿相同的節點 4 或 5 前往頭目。下列兩份碰撞成員來自同一個原版 `Map/BoundMap.stp`；群組分配及座標屬 Server 候選規則。
+
+| 節點／地圖 | 群組／怪物數 | 碰撞檔 | SHA-256 |
+|---|---|---|---|
+| 12／3 | 2／3 | `mushroom03.bnd` | `314548da51f6fb958a2ce63a31ce1267f18c47e863b7edb0a2550d6905341f94` |
+| 9／6 | 5／4 | `mushroom06.bnd` | `d90baa75c2ff356dcabb8884a83d1d80e2868a70f0fe2368ea69f2ea422157b1` |
+
+維持 Case 1，改用[地圖 3 雙出口定義](phindos-stage1-case1-map3-branches.scenario.json)和 SHA-256 `a07d76a01c269ece56e8765b49d782b67561e31034f8a47ad065d63f0e08fd66`。沿用上述走圖命令，使用新檔案與雜湊。離線已確認地圖 9 同時發布出口鍵 1 與 5，兩路皆可擊倒頭目、選取 Product 183 並產生 100 EXP 待結算。正常建隊入口、Client 顯示、實際入包及經驗入帳仍需實機。
