@@ -148,11 +148,13 @@ Server 可使用內建行為設定。若部署有設定 `TARTAROS_LOCAL_MONSTER_
 
 ## 馮德斯第一狩獵場 Stage 462／Case 693
 
-Host 可用 `TARTAROS_LOCAL_STAGE_ONE_CASE=693` 載入[關卡定義](phindos-stage462-case693.scenario.json)，SHA-256 為 `ccf0c99c1f45e915e061ff1dffd01419d346c5075ff5a44b70bb99e6269880e3`。沿用原版 BND 目錄與既有 `SCENARIO_CATALOG` 掉落設定。原有 Case 1～4 配置仍可照常使用。
+Host 可用 `TARTAROS_LOCAL_STAGE_ONE_CASE=693` 載入[關卡定義](phindos-stage462-case693.scenario.json)，SHA-256 為 `a1a9dca3e9f5d7eac42585144b1c727d04300dbd49b75fe984ae624d1968e2bf`。沿用原版 BND 目錄與既有 `SCENARIO_CATALOG` 掉落設定。原有 Case 1～4 配置仍可照常使用。
 
 玩家正常建單人隊進馮德斯，在狩獵場面板確認第一個項目。隊長的 `0064` 帶 Stage 462（`6400CE01`），Server 用 `009A` 回填大廳選項。隊長另按開始後，以 `0038` 送 Stage 462、Case 693。回村且維持隊伍時，重建大廳會重新發布選項，離隊或離村後須重新選擇。 [選關與資源證據](../../governance/s00-iterations/S00-20261101-MEF-RECEIVE-FEASIBILITY.md#狩獵場確認送出-0064)
 
 地圖依序為 `3430 → 3431 → 3432 → 3433 或 3435 → 3437 → 3438`，分岔的另一個出口鍵為 6。路線來自 Case 693 圖表，實體地圖分支、出生、出口和群組位置是 Server 候選配置。兩條路各有八隻普通怪與頭目 1086／PRE 1。暫定普通怪每隻 4 EXP、頭目 24 EXP、固定通關 20 EXP，總計 76 EXP。頭目可掉落 Product 183。定義使用 `NOT_NATIVE_MEF` 關卡格式。
+
+首圖 3430 的普通怪 `1004/PRE1` 也使用節點的 `groundDrop`。暫用與頭目相同的 Product 183、外觀 162、數量 1、半徑 12，作為可由關卡作者調整的掉落規則。兩條分支皆已用原版 BND 在離線 Server 驗證首圖及頭目掉落、各自撿取入包、換圖與 76 EXP 結算。指定 v2 的物品外觀與 Space 操作仍待驗收。
 
 ### Case 694
 
