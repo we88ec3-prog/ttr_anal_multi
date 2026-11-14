@@ -110,3 +110,24 @@ Stage 1 的 Server 關卡定義可在節點加上非負整數 `clearExperience`�
 [Case 1 練等配置](phindos-stage1-case1-leveling.scenario.json)沿用地圖 1 起點與原有五圖、怪物、出口和頭目掉落。14 隻普通怪各 4 EXP，頭目 24 EXP，通關基礎獎勵 20 EXP，每場合計維持 100 EXP。擊倒獎勵在通關前累計，全部經驗仍於最終出口入帳。分配數值是 Server 暫定規則。
 
 Host 保持 Case 1，設定 `TARTAROS_LOCAL_STAGE_ONE_SCENARIO_PATH` 為這份定義的絕對路徑，`TARTAROS_LOCAL_STAGE_ONE_SCENARIO_SHA256=95172edf5d4f543eb36e57d0a2c8bd4682c543953d6a25c9ac3d28f340758e77`，讓經驗取自定義（省略 `TARTAROS_LOCAL_STAGE_ONE_COMPLETION_EXP`），並以 `SCENARIO_CATALOG` 啟用掉落。執行 Host 預檢時，預期的 `CompletionExperience` 是基礎獎勵 20，完整通關的結果是 100。預檢可加上 `-MinimumRouteExperience 100 -MaximumRouteExperience 100`，同時核對兩個總額。
+
+### 其他起點與分岔的練等配置
+
+四個 Case 都可選地圖 1、2、3 的練等配置。每隻普通怪 4 EXP、頭目 24 EXP、通關基礎 20 EXP。地圖 2 或 3 起點的路線少三隻普通怪，因此在兩條互斥分支的各自節點加 12 清場 EXP。每場只會經過其中一條分支，完整通關均為 100 EXP。獎勵數值是 Server 暫定規則，沿用對應原配置的出生、戰鬥、出口與頭目掉落。
+
+Host 按下表設定 Case、關卡絕對路徑與 SHA-256，並沿用 Case 1 練等配置的獎勵預檢。地圖內的出口由玩家按 Z 選擇，起點取決於 Host 載入的配置。
+
+| Case | 起點地圖 | 練等配置 | SHA-256 |
+|---:|---:|---|---|
+| 1 | 1 | [配置](phindos-stage1-case1-leveling.scenario.json) | `95172edf5d4f543eb36e57d0a2c8bd4682c543953d6a25c9ac3d28f340758e77` |
+| 1 | 2 | [配置](phindos-stage1-case1-map2-branches-leveling.scenario.json) | `a05fc2c1edb22381e2a66a5de3d0e8bea5a0dc26ce6c42d0a54cf2b80d38db6a` |
+| 1 | 3 | [配置](phindos-stage1-case1-map3-branches-leveling.scenario.json) | `eb7567dda71f175d76b7019119416ecb1faa5dd51ef8872a232d616a75b7fb92` |
+| 2 | 1 | [配置](phindos-stage1-case2-leveling.scenario.json) | `b3ee3461b7ff39e19c6ef15b62f6cf39305eebc564d0a642bfc8759805a6e23e` |
+| 2 | 2 | [配置](phindos-stage1-case2-map2-branches-leveling.scenario.json) | `b37675d7ce36e478ff131c1832b01e1238022138302e9bcae688ac3cdc02e749` |
+| 2 | 3 | [配置](phindos-stage1-case2-map3-branches-leveling.scenario.json) | `35286bdcc07866d015b9c8b1092dc83dedfb7636ee2f2be9c21a2b63fd1cbc95` |
+| 3 | 1 | [配置](phindos-stage1-case3-leveling.scenario.json) | `55937347da8ced41b94cb0f4b89e9d3483c5bcef098919b449b5d5c9407a091c` |
+| 3 | 2 | [配置](phindos-stage1-case3-map2-branches-leveling.scenario.json) | `cd9c76c0ba46cfcc5a15edbab921c4136749f11ae0bfd5889c5bd1cc3c003d18` |
+| 3 | 3 | [配置](phindos-stage1-case3-map3-branches-leveling.scenario.json) | `e1b997b1782412d53ebc557fc0a989c7ae9b3c2793dc69b32961111f49be0dfe` |
+| 4 | 1 | [配置](phindos-stage1-case4-leveling.scenario.json) | `5a2c3fd3cc8838cf936ff667df29a6d91835f3ea12fa6999039e267ed2ea54f7` |
+| 4 | 2 | [配置](phindos-stage1-case4-map2-branches-leveling.scenario.json) | `d068fcf7646146e71913749b7d19cccc889668829da81c09eb812101e265a82a` |
+| 4 | 3 | [配置](phindos-stage1-case4-map3-branches-leveling.scenario.json) | `2f8518cae49ad917bdbe1418224a2c0b519ef2cb0398f82ad03b188569b4b921` |
