@@ -15,6 +15,8 @@
 
 主線與外部檔各自保留版本識別。已完成任務的前綴仍依主線版本讀取，未完成任務依既有規則從 NPC 開始。診斷欄位 `scenarioOverrideSha256` 表示外部檔版本，`scenarioGraphSha256` 表示合併後的關卡圖版本。
 
+主線與一般副本共用靜態可達性檢查。進區、占點及增援或出口的啟用區只要涵蓋可從出生點走到的地格，圓心可位於牆上。怪物出生點、手動互動點和出口本體仍須可達，地形傷害區仍檢查其圓心可站立。Q119 至爾勒梅斯的離線旅程已用原版 BND 回歸，指定 v2 實機仍待驗。
+
 ## Q119 範例
 
 [四節點關卡範例](story-q119-clear-scene.scenario.json)的 SHA-256 是 `fc963e98b9ff73388342d349aeb661ba3b563a1055344c79d8bf0715577e3bd3`，配對[主線候選資料](../../governance/client-variants/20261107-town2-mainline/resources/alsmeer-full-mainline-content-candidate.json)的 `14773c3184b201e6a369b753fbf1094972d792c1e2f8e10a4f67587714def50c`。四張地圖、出生位置、怪物和原出口均來自該候選。只把最後一張圖 635 的出口改為入場時預先登記關閉狀態。
