@@ -160,6 +160,8 @@ TS-37 換版前預檢已讀取固定的 Case 1 定義與五份碰撞資源。路
 
 啟用測試版後，從本機 Host 的 `/health` 讀取 `localStageOne`。TS-37 需要 `normalEntryEnabled=true`、`bossDropEnabled=true`、Stage 1／Case 1，並用回傳的 `completionExperience` 填入測試卡。`contentSha256` 可與預檢結果對照。`previewEnabled` 只表示測試頁能提供進度指定入口。若 `localStageOne` 為 null，該 Host 未載入此副本設定。這些欄位確認 Host 啟用情形，實際帳號仍要正常進村並建單人隊。
 
+Stage 1 關卡資料可用 `TARTAROS_LOCAL_STAGE_ONE_SCENARIO_PATH` 指向絕對路徑的 `.scenario.json`，並以 `TARTAROS_LOCAL_STAGE_ONE_SCENARIO_SHA256` 指定該版雜湊。省略雜湊沿用原 Case 1 固定值。`/health` 回報實際載入的檔案雜湊。可調整怪物配置、掉落和出口條件，五個節點、對應地圖、換圖順序及原版 BND 雜湊須符合現有 Case 1。先用 `--stage-one <定義絕對路徑> <碰撞資料夾絕對路徑> <SHA256>` 跑五圖離線驗證。這是 Server 關卡定義 `NOT_NATIVE_MEF`。
+
 若批次驗收有開本機進度測試模式，可用 `/local-test/progress/status?includeSkillCatalogue=false` 的 `stageOne` 檢查目前場次。它顯示 Server 的大廳狀態、地圖、節點、角色、剩餘怪物總血量與結算是否仍待入帳。`canStartFromWorld` 表示世界狀態允許嘗試入場，隊長與單人成員資格仍在開始請求時核對。讀取狀態不會切換進度。
 
 本機測試頁在偵測到副本大廳或場次時，會在「馮德斯一般副本」區塊顯示上述狀態和已開啟的出口鍵。TS-37 若中途停住，可直接回報這個區塊的內容。驗收正常入口時，請由遊戲內建隊及開始。
