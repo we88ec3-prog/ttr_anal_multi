@@ -267,6 +267,8 @@ Stage 462／463 的「下次開場」會在大廳就緒且 Server 受理狩獵�
 
 啟動工具會傳入 `-ExpectedMonsterBehaviorSha256`，逐 Case 核對 Host 回報的怪物行為雜湊。四關目前都須符合公開的 `phindos-stage1.monster-behavior.json`，包含索敵 80 與回位 160 的兩個狩獵場行為。這項檢查已在運作中的本機 Host 通過，實際追擊與回位畫面仍依 v2 測試確認。
 
+`/health.localHuntingGrounds[].groundDropNodes` 列出各 Case 啟用的掉落節點。四關預檢逐筆核對圖號、怪物與 PRE、商品、外觀、數量、拾取半徑、波次限制及機率。省略 PRE 或機率時分別以 1 和 10000 比對。Case 693 的首圖、第二圖增援和終點頭目都在檢查範圍內。實際生成與拾取依離線副本旅程及 TS-37G 實機驗收。
+
 私有 Server 的 `tools/start-phindos-acceptance-host.ps1` 可重建此部署。先建置 Release Host，再以 PowerShell 7.4 以上執行，指定 `-Workspace`、`-AnalysisDirectory`、`-BoundsDirectory`、`-Database` 和 `-LogDirectory`。資料庫須先具備本機冒險團、教學、主線及經驗儲存元件。先用隔離資料庫執行 `-PreflightOnly`，成功後會關閉該次 Host。正式本機驗收省略該開關，成功後 Host 保持監聽。兩種模式都已用隔離資料庫核對。啟動器為該程序套用固定設定及內容雜湊，遇到既有埠占用會停止啟動。
 
 沿用較早的本機測試資料庫時，先用 SQLite backup 建立獨立副本，並執行 `PRAGMA integrity_check`。若副本缺少 `local_expedition_role_progress`，在私有 Server 根目錄執行 `dotnet run --project tools/Tartaros.LocalExpeditionMigrate -c Release -- --db <副本絕對路徑> --initialize-role-progress-v1`，再執行四關預檢。已以既有測試資料副本實際核對此步驟，帳號、教學進度、馮德斯旅程紀錄及主線場次／事件逐列相同，新增的副本經驗帳本從空白開始。這項結果驗證資料庫可供 Host 啟動，實際角色登入與副本流程仍依 TS-37 驗收。
