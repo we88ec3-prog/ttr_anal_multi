@@ -15,7 +15,9 @@ Shop 1 的 232、233、234 同時列出 LeeLoo 810 和 Battle Point 3。KR `Tart
 
 Shop 2、3、4 有 27、3、6 筆 `quan=1`，已全部加入獨立物品買賣的商品表。 [裝備實例與交易規格](PHINDOS-EQUIPMENT.md)
 
-啟用既有本機商店模式後，設定 `TARTAROS_LOCAL_TOWN_TRADE_CATALOG_PATH` 及 `TARTAROS_LOCAL_TOWN_TRADE_CATALOG_SHA256`。已設定時，表內的店／商品配對是買賣白名單，Server 在入包前核對價格、數量及新疊 metadata。復活卷軸、支票可沿用各自現有測試設定的欄位。重置券由商品列提供兩個欄位，普通回復卷軸也可沿用下節的本機候選。公開商品範例省略未知欄位。回售以指定格位讀到的 Product 取價。舊疊超出設定上限時仍可售回，但不能再疊加購買。 [商品設定](phindos.town-trade.json) · [JSON Schema](local-town-trade.schema.json)
+啟用既有本機商店模式後，設定 `TARTAROS_LOCAL_TOWN_TRADE_CATALOG_PATH` 及 `TARTAROS_LOCAL_TOWN_TRADE_CATALOG_SHA256`。購買依表內的店／商品配對，Server 在入包前核對價格、數量及新疊 metadata。復活卷軸、支票可沿用各自現有測試設定的欄位。重置券由商品列提供兩個欄位，普通回復卷軸也可沿用下節的本機候選。公開商品範例省略未知欄位。回售以指定格位讀到的 Product 取價。舊疊超出設定上限時仍可售回，但不能再疊加購買。 [商品設定](phindos.town-trade.json) · [JSON Schema](local-town-trade.schema.json)
+
+跨村回收採本機 Server 規則。先查目前商店的商品列，缺少時可沿用同類普通商店的已核對售價。例如爾勒梅斯鐵匠販售的 Product 2725，可在馮德斯鐵匠以 630 LeeLoo 售出。交易仍驗證目前村莊、已開啟的店、與店員的距離及指定背包格。銀行支票沿用銀行商品列。KR Client 的賣出請求以格位指定道具，畫面讀取 Product 的 `SELL_LEELOO`，原服跨店回收規則仍待取證。 [賣出請求與 Client 取價](../../governance/client-variants/20261109-mef-town-services/shop-services.md)
 
 合成測試依序買入復活卷軸與重置券，重開儲存層後分別售回兩格，再買賣 Product 232，核對各自的成交價、餘額與背包清格。重置券使用效果及 Client 實際名稱、格位顯示與重登均待驗證。 [批次驗收](../testing/S00-CONTENT-BATCH-TESTS.md)
 
