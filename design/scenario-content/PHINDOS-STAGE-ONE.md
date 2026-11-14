@@ -156,7 +156,7 @@ Server 可使用內建行為設定。若部署有設定 `TARTAROS_LOCAL_MONSTER_
 
 ## 馮德斯第一狩獵場 Stage 462／Case 693
 
-Host 可用 `TARTAROS_LOCAL_STAGE_ONE_CASE=693` 載入[關卡定義](phindos-stage462-case693.scenario.json)，SHA-256 為 `1467633848938400630f4a52903f2c59e384ca9bc6d4e884ebaa6787dee814b6`。沿用原版 BND 目錄與既有 `SCENARIO_CATALOG` 掉落設定。原有 Case 1～4 配置仍可照常使用。
+Host 可用 `TARTAROS_LOCAL_STAGE_ONE_CASE=693` 載入[關卡定義](phindos-stage462-case693.scenario.json)，SHA-256 為 `29941f940580abf7aba208239465d004a7851cf513f36fce28622db667581997`。沿用原版 BND 目錄與既有 `SCENARIO_CATALOG` 掉落設定。原有 Case 1～4 配置仍可照常使用。
 
 玩家正常建單人隊進馮德斯，在狩獵場面板確認第一個項目。隊長的 `0064` 帶 Stage 462（`6400CE01`），Server 用 `009A` 回填大廳選項。隊長另按開始後，以 `0038` 送 Stage 462、Case 693。回村且維持隊伍時，重建大廳會重新發布選項，離隊或離村後須重新選擇。 [選關與資源證據](../../governance/s00-iterations/S00-20261101-MEF-RECEIVE-FEASIBILITY.md#狩獵場確認送出-0064)
 
