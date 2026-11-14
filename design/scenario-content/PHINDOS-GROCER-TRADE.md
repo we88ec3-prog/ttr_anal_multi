@@ -15,7 +15,7 @@ Shop 1 的 232、233、234 同時列出 LeeLoo 810 和 Battle Point 3。KR `Tart
 
 Shop 2、3、4 有 27、3、6 筆 `quan=1`，已全部加入獨立物品買賣的商品表。 [裝備實例與交易規格](PHINDOS-EQUIPMENT.md)
 
-啟用既有本機商店模式後，設定 `TARTAROS_LOCAL_TOWN_TRADE_CATALOG_PATH` 及 `TARTAROS_LOCAL_TOWN_TRADE_CATALOG_SHA256`。已設定時，表內的店／商品配對是買賣白名單，Server 在入包前核對價格、數量及新疊 metadata。復活卷軸、支票可沿用各自現有測試設定的欄位。重置券和三種回復卷軸的新疊需在各列提供已核對的 `metadata.field10` 和 `metadata.field14`。公開範例省略這兩欄，避免把合成測試數值當作原服資料。回售以指定格位讀到的 Product 取價。舊疊超出設定上限時仍可售回，但不能再疊加購買。 [商品設定](phindos.town-trade.json) · [JSON Schema](local-town-trade.schema.json)
+啟用既有本機商店模式後，設定 `TARTAROS_LOCAL_TOWN_TRADE_CATALOG_PATH` 及 `TARTAROS_LOCAL_TOWN_TRADE_CATALOG_SHA256`。已設定時，表內的店／商品配對是買賣白名單，Server 在入包前核對價格、數量及新疊 metadata。復活卷軸、支票可沿用各自現有測試設定的欄位。重置券由商品列提供兩個欄位，普通回復卷軸也可沿用下節的本機候選。公開商品範例省略未知欄位。回售以指定格位讀到的 Product 取價。舊疊超出設定上限時仍可售回，但不能再疊加購買。 [商品設定](phindos.town-trade.json) · [JSON Schema](local-town-trade.schema.json)
 
 合成測試依序買入復活卷軸與重置券，重開儲存層後分別售回兩格，再買賣 Product 232，核對各自的成交價、餘額與背包清格。重置券使用效果及 Client 實際名稱、格位顯示與重登均待驗證。 [批次驗收](../testing/S00-CONTENT-BATCH-TESTS.md)
 
@@ -70,6 +70,10 @@ SQLite 市場元件 V8 以帳號與快捷格保存 Product、圖示，載入正�
 Server 市場元件 V9 保留舊綁定並允許 Product 183。正式副本死亡時，驗證背包後先扣一張，再清除舊輸入及移動，原地回滿 HP／SP／MP，維持現有怪物及副本進度。Client 先收資源更新，再收既有待機狀態作為可操作候選。原版復活動畫、快捷欄冷卻提示及畫面是否重新開放操作列為實機待驗。
 
 市場元件 V10 依帳號及冷卻群組保存可再次使用的 UTC 時間。群組 1 為回復卷軸 4 秒，群組 2 為復活卷軸 300 秒。更新期限及扣除一張卷軸在同一筆交易，未到期限不扣數量。重登、換圖和 Server 重啟後依資料庫期限判定，採 Server 端帳號範圍。既有資料庫升級保留快捷格和物品。
+
+### 普通回復卷軸新疊候選
+
+三村商品表已列 HP／SP／MP 卷軸，但缺少新疊欄位時原本會在成交前拒絕。Server 可用 `TARTAROS_LOCAL_TOWN_TRADE_RECOVERY_SCROLL_KEYS=PLAIN_CANDIDATE`，讓這三種普通卷軸以 Product 232～234 和兩個零值欄位新增背包疊。商品列明訂的欄位優先，舊疊保留原欄位。這是本機候選資產表示，Client `002C` 與 `0029` 會以 Product 查表，已知快捷欄綁定與使用請求也以 Product 辨識。目前沒有原服新疊欄位的取值證據。指定 v2 的圖示、說明和實際施放仍待驗。 [格位解析](../../governance/client-variants/20261109-mef-town-services/shop-asset-sync.md)
 
 馮德斯一般副本的正常場次也具備背包使用資格。沿用原有快捷欄綁定和道具交易，消耗成功後更新背包格、快捷欄數量、角色資源與冷卻。合成驗收從正常建隊入口進場，用測試地形傷害將 HP 降至 475，再消耗一張 Product 232 回到 500，驗證 4 秒冷卻並繼續通關。正式 Case 1 無該測試機關。Client 快捷欄和實際施用仍待指定 v2 驗收。
 
