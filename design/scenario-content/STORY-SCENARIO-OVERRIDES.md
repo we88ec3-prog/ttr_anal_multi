@@ -30,3 +30,9 @@
 [Q119 資源延續範例](story-q119-owner-continuity.scenario.json)的 SHA-256 是 `6bfcea1180ea16c0a17a87704330c1e479cccb5d82e0cfd64895523d9186e2cd`。以相同主線版本配對，沿用上一個範例的四張圖和最後一張出口設定，增加資源延續選項。實機驗收為 [SC-01](../testing/S00-CONTENT-BATCH-TESTS.md)。
 
 [Q119 計時增援版](NODE-DELAY-SIGNALS.md)也保留上述兩項設定，可在同一場驗收計時增援、資源延續與清場劇情後的出口。
+
+## 關卡內的頭目與掉落
+
+主線節點可用 `requiredBoss`、`groundDrop` 或 `groundDrops` 指定必要頭目及地面掉落。掉落以任務及節點辨識，依怪物模型與 PRE 匹配。節點有自訂掉落時使用該節點的整組設定，其他節點沿用既有的 `.ground-loot.json`。啟動時以共用商品目錄解析 Product 的背包欄位與堆疊上限，Product 183 可沿用部署的復活卷軸欄位。正常主線使用共用 SQLite 背包提交，進度指定場不發放道具。 [掉落與拾取](GROUND-LOOT.md)
+
+[Q119 頭目掉落範例](story-q119-ground-loot.scenario.json)沿用四節點關卡範例，在地圖 635 指定模型 1022／PRE 1 為必要頭目，擊倒後生成一張 Product 183。頭目指定與獎勵是 Server 測試配置。設定相同主線版本，外部關卡 SHA-256 使用 `4b4aeb328dacacb16f1134f61668c5a22d3a110ce817f54b60372212c7a648bd`。實機驗收時在清場劇情後按 Space，確認背包增加一張，再按出口進結算。範例尚未啟用於 v2 測試環境。
