@@ -98,3 +98,9 @@ Stage 1 的 Server 關卡定義可在節點加上非負整數 `clearExperience`�
 一般副本的初始怪物、順序增援和計時增援都可逐隻指定 `defeatExperience`。例如頭目出場列可設定 `"defeatExperience": 11`。省略時為 0。Server 在該實體從存活降至零血量時累計一次。跨圖保留同一場的累計，最終出口將擊倒、清場、通關三項合併為同一筆經驗入帳。退出未結算的場次會捨棄暫存的擊倒經驗。進度指定場次沒有經驗入帳。
 
 載入時用通關獎勵加上全部節點的清場和擊倒獎勵做上限檢查，涵蓋未選的分支與全部增援，合計上限為 2,147,483,647。實際只計玩家走過的路線及確實擊倒的怪物。現有公開關卡未配置擊倒經驗，保留原先的通關經驗。此欄位屬 Server 規則。
+
+### 可載入的練等配置
+
+[Case 1 練等配置](phindos-stage1-case1-leveling.scenario.json)沿用地圖 1 起點與原有五圖、怪物、出口和頭目掉落。14 隻普通怪各 4 EXP，頭目 24 EXP，通關基礎獎勵 20 EXP，每場合計維持 100 EXP。擊倒獎勵在通關前累計，全部經驗仍於最終出口入帳。分配數值是 Server 暫定規則。
+
+Host 保持 Case 1，設定 `TARTAROS_LOCAL_STAGE_ONE_SCENARIO_PATH` 為這份定義的絕對路徑，`TARTAROS_LOCAL_STAGE_ONE_SCENARIO_SHA256=95172edf5d4f543eb36e57d0a2c8bd4682c543953d6a25c9ac3d28f340758e77`，讓經驗取自定義（省略 `TARTAROS_LOCAL_STAGE_ONE_COMPLETION_EXP`），並以 `SCENARIO_CATALOG` 啟用掉落。執行 Host 預檢時，預期的 `CompletionExperience` 是基礎獎勵 20，完整通關的結果是 100。
