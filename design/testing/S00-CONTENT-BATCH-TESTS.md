@@ -162,6 +162,14 @@ TS-37 換版前預檢已讀取固定的 Case 1 定義與五份碰撞資源。路
 
 啟用測試版後，從本機 Host 的 `/health` 讀取 `localStageOne`。TS-37 需要 `normalEntryEnabled=true`、`bossDropEnabled=true`、Stage 1／Case 1，並用回傳的 `completionExperience` 填入測試卡。`contentSha256` 可與預檢結果對照。`previewEnabled` 只表示測試頁能提供進度指定入口。若 `localStageOne` 為 null，該 Host 未載入此副本設定。這些欄位確認 Host 啟用情形，實際帳號仍要正常進村並建單人隊。
 
+在 Server 專案根目錄可重跑下列本機檢查。依此次部署填入連接埠、關卡路徑、經驗來源與掉落模式。檢查會用關卡檔雜湊比對 Host，並確認登入監聽、主線流程和一般副本設定已啟用。成功只記為 `HOST_CONFIGURATION_ONLY`。
+
+```powershell
+./tools/check-stage-one-host.ps1 -HealthPort 5082 -LoginPort 8415 `
+    -ScenarioPath ./content/phindos-stage1-case1.scenario.json -CompletionExperience 100 `
+    -ExperienceSource SCENARIO_DEFINITION -DropMode SCENARIO_CATALOG
+```
+
 Server `95cc445` 的 Release 發行版已在獨立 loopback 埠以隔離 SQLite 啟動成功。`/health` 確認正常入口、`SCENARIO_CATALOG` 掉落與 100 通關經驗，預覽關閉。驗收開始前仍需啟用指定 v2 使用的遊戲服務。這次查驗後已關閉隔離 Host，TS-37 保持待實機。
 
 Stage 1 關卡資料可用 `TARTAROS_LOCAL_STAGE_ONE_SCENARIO_PATH` 指向絕對路徑的 `.scenario.json`，並以 `TARTAROS_LOCAL_STAGE_ONE_SCENARIO_SHA256` 指定該版雜湊。省略雜湊沿用原 Case 1 固定值。`/health` 回報實際載入的檔案雜湊。可調整怪物配置、掉落和出口條件，五個節點、對應地圖、換圖順序及原版 BND 雜湊須符合現有 Case 1。先用 `--stage-one <定義絕對路徑> <碰撞資料夾絕對路徑> <SHA256>` 跑五圖離線驗證。這是 Server 關卡定義 `NOT_NATIVE_MEF`。
