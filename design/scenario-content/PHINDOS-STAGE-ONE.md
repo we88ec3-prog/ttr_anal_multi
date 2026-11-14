@@ -21,7 +21,7 @@
 
 從地圖 1 出發時，`CHART_mushroom_02.xml` 的節點順序同為 10 → 7 → 6 → 3 → 2，地圖順序為 **1 → 4 → 7 → 11 → 19**。原始 CHART 成員 SHA-256 為 `58e826c44e8d9169a376c983b2d4521f0a89c3ac8fa627d9afb223a6cc2e69cc`。地圖 7、11 分別與 Case 1 的 8、12 共用上表同節點的 BND，仍保留不同的地圖 ID。怪物、位置、掉落與經驗沿用 Case 1 的 Server 候選配置。 [Case 2 關卡定義](phindos-stage1-case2.scenario.json)
 
-部署端設定 `TARTAROS_LOCAL_STAGE_ONE_CASE=2`、`TARTAROS_LOCAL_STAGE_ONE_SCENARIO_PATH` 及 `TARTAROS_LOCAL_STAGE_ONE_SCENARIO_SHA256`。範例雜湊為 `1c447e047b05a0a1a3a3bdb4332341ef5af48809a813282b0d322c1fbc72eaf8`。入場的 `0038` 安裝 Case 2，換圖用 `0012` 發地圖 ID、`0049` 發節點鍵。開始封包 `0008` 沒有 Case 欄位，Case 由 Host 設定。省略 Case 設定沿用 Case 1。
+部署端設定 `TARTAROS_LOCAL_STAGE_ONE_CASE=2`、`TARTAROS_LOCAL_STAGE_ONE_SCENARIO_PATH` 及 `TARTAROS_LOCAL_STAGE_ONE_SCENARIO_SHA256`。範例雜湊為 `7a98842f1c5a1048ac6f89bbf128bf91ae861c2c655c6d9a57a38b015719b1d8`。入場的 `0038` 安裝 Case 2，換圖用 `0012` 發地圖 ID、`0049` 發節點鍵。開始封包 `0008` 沒有 Case 欄位，Case 由 Host 設定。省略 Case 設定沿用 Case 1。
 
 離線工具可用 `--stage-one <關卡絕對路徑> <BND目錄絕對路徑> <SHA-256> 2` 檢查路線與結算。Host 預檢加上 `-ScenarioCase 2`。Case 2 的實機換圖與連刷另待驗收。
 
@@ -31,8 +31,8 @@
 
 | Case | 路線 | 關卡定義與 SHA-256 |
 |---:|---|---|
-| 3 | 1 → 4 → 8 → 12 → 19 | [Case 3](phindos-stage1-case3.scenario.json) `d806e2148578c12dc401676d280a2db1a27ab6b8855929f35da622d979800248` |
-| 4 | 1 → 4 → 7 → 11 → 19 | [Case 4](phindos-stage1-case4.scenario.json) `52887ee01b039c4308b2e02eef0a70d73412f818466f3ddf35c8b6a88ff22d60` |
+| 3 | 1 → 4 → 8 → 12 → 19 | [Case 3](phindos-stage1-case3.scenario.json) `98f9a8d5445847b309ec7761541003dc264f6095b339ed47e964bb2d30c9b0b0` |
+| 4 | 1 → 4 → 7 → 11 → 19 | [Case 4](phindos-stage1-case4.scenario.json) `e43b8ae38d3cd2a6c7ba7ea8073644e2de743817d3920dcf1871dae0ce5758bd` |
 
 部署改用相應 Case、檔案與雜湊。離線工具最後一個參數與 Host 預檢的 `-ScenarioCase` 使用相同 Case。驗收核對入場 Case 值、五圖 ID、終點掉落及 100 通關經驗；指定 v2 的轉場、建隊與連刷留待實機。
 
@@ -68,3 +68,15 @@
 | 9／6 | 5／4 | `mushroom06.bnd` | `d90baa75c2ff356dcabb8884a83d1d80e2868a70f0fe2368ea69f2ea422157b1` |
 
 維持 Case 1，改用[地圖 3 雙出口定義](phindos-stage1-case1-map3-branches.scenario.json)和 SHA-256 `a07d76a01c269ece56e8765b49d782b67561e31034f8a47ad065d63f0e08fd66`。沿用上述走圖命令，使用新檔案與雜湊。離線已確認地圖 9 同時發布出口鍵 1 與 5，兩路皆可擊倒頭目、選取 Product 183 並產生 100 EXP 待結算。正常建隊入口、Client 顯示、實際入包及經驗入帳仍需實機。
+
+## Case 2～4 的雙出口配置
+
+核對 `CHART_mushroom_02.xml` 至 `CHART_mushroom_04.xml`，地圖 2／3 皆先走對應的地圖 5／6，再由節點 1 分岔至節點 4 或 5，最後抵達地圖 19。各 Case 的節點 ID 相同，分岔處和分支的地圖 ID 依圖表而異。節點 1、4、5 分別沿用上列的 `mushroom08.bnd`、`mushroom10.bnd`、`mushroom11.bnd`。每份定義列出對應圖表的 SHA-256。座標、怪物群組分配及獎勵沿用 Case 1 的 Server 候選配置。
+
+| Case | 分岔圖 → 出口鍵 1／5 | 地圖 2 起點 | 地圖 3 起點 |
+|---|---|---|---|
+| 2 | 10 → 14／16 | [配置](phindos-stage1-case2-map2-branches.scenario.json) | [配置](phindos-stage1-case2-map3-branches.scenario.json) |
+| 3 | 10 → 13／18 | [配置](phindos-stage1-case3-map2-branches.scenario.json) | [配置](phindos-stage1-case3-map3-branches.scenario.json) |
+| 4 | 9 → 15／16 | [配置](phindos-stage1-case4-map2-branches.scenario.json) | [配置](phindos-stage1-case4-map3-branches.scenario.json) |
+
+設定 Host 的 Case、檔案路徑及該檔 SHA-256。兩個出口由玩家在分岔圖內選擇。起點由 Host 選用的設定決定。離線逐一走完四個 Case 的 20 條圖表路線，分岔圖均發布兩個可用出口，每條均擊倒頭目、選取 Product 183 並產生 100 EXP 待結算。
