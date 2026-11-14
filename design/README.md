@@ -15,3 +15,5 @@
 - [後續主線共用事件引擎候選](runtime-content/STORY-EVENT-ENGINE-CANDIDATE.md)
 
 - [怪物碰撞停止通知一致性](runtime-content/MONSTER-COLLISION-MOVEMENT-CANDIDATE.md)
+
+- [馮德斯一般副本 Stage 1／Case 1](scenario-content/PHINDOS-STAGE-ONE.md)：五圖關卡資料、資源身分與實作驗收。
