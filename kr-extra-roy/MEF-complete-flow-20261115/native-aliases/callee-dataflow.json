@@ -1,0 +1,913 @@
+{
+  "schema": "mef-root-callee-dataflow-v1",
+  "analysis_scope": "Incoming MapList root aliases in selected saved ESI/EDI paths; not new MEF caller census.",
+  "chains": [
+    {
+      "id": "root-esi-491FCC",
+      "root_site": "0x491fcc",
+      "register": "ESI",
+      "value": "0xfb7470",
+      "handoff": [
+        "0x4f6b80",
+        "0x804a40",
+        "0x804fc0"
+      ],
+      "caller_terminal": "0x492005 pop esi",
+      "normal_result": "No functional incoming-root use in selected native callees; timeGetTime/CRT boundaries explicitly retained.",
+      "evidence": [
+        "R-491FCC",
+        "F-804A40",
+        "F-804FC0",
+        "F-49AF60",
+        "F-49B000",
+        "F-805460"
+      ]
+    },
+    {
+      "id": "root-edi-53CC33",
+      "root_site": "0x53cc33",
+      "register": "EDI",
+      "value": "0xfb7470",
+      "handoff": [
+        "0x4f6b20",
+        "0x4054c0",
+        "0x587480"
+      ],
+      "caller_terminal": "0x53cc5e mov edi,[ebp-0x48]",
+      "normal_result": "Cold init, fixed vector callbacks and two font virtual targets resolved; no incoming root copied to owner/global.",
+      "evidence": [
+        "R-53CC33",
+        "F-587480",
+        "F-74D990",
+        "F-892003",
+        "F-735850",
+        "F-73CF50",
+        "F-73BB50",
+        "F-73C5B0"
+      ]
+    },
+    {
+      "id": "root-edi-4D607F",
+      "root_site": "0x4d607f",
+      "register": "EDI",
+      "value": "0xfb7470",
+      "handoff": [
+        "0x4f6d20",
+        "0x40f060",
+        "0x4dec90",
+        "0x414680",
+        "0x4a4240"
+      ],
+      "caller_terminal": "0x4d6587 pop edi",
+      "normal_result": "Known FBA7A4 implementations and FBA854 sender concretely resolved; no incoming root field/argument use found.",
+      "evidence": [
+        "R-4D607F",
+        "R-4D6587",
+        "F-4DEC90",
+        "F-4A4240",
+        "F-8069A0",
+        "F-8060D0"
+      ]
+    },
+    {
+      "id": "root-edi-long-4F6E80-callers",
+      "root_sites": [
+        "0x4b4152",
+        "0x4bad73",
+        "0x6d9616"
+      ],
+      "register": "EDI",
+      "value": "0xfb7470",
+      "handoff": [
+        "0x4f6e80",
+        "0x402a70",
+        "0x54f850",
+        "0x6d8e50",
+        "0x6daa70",
+        "0x6d9b30"
+      ],
+      "caller_terminals": [
+        "0x4b421d mov edi,0x10",
+        "0x4baead/0x4baeb4 mov edi,fixed_string",
+        "0x6d9675 pop edi"
+      ],
+      "normal_result": "Resource channel +2C target and nested resource cleanup targets resolved. Math CRT error callbacks/external imports remain bounded leaves.",
+      "evidence": [
+        "R-4B4152",
+        "R-4BAD73",
+        "R-6D9616",
+        "F-6D9B30",
+        "F-80EB30",
+        "F-80FED0",
+        "F-8109A0"
+      ]
+    }
+  ],
+  "overwrites": [
+    {
+      "function": "0x804a40",
+      "register": "ESI",
+      "overwrite_va": "0x804a75",
+      "hex": "8b3558a8fb00",
+      "instruction": "mov    esi,DWORD PTR ds:0xfba858",
+      "interpretation": "mov esi,[FBA858]",
+      "earlier_live_calls": "0x804a4f timeGetTime; 0x804a69 49AF60 / 0x804a70 49B000",
+      "restoration": "0x804c65 pop esi; no following call",
+      "evidence": "F-804A40"
+    },
+    {
+      "function": "0x804fc0",
+      "register": "ESI",
+      "overwrite_va": "0x804fe0",
+      "hex": "8b733c",
+      "instruction": "mov    esi,DWORD PTR [ebx+0x3c]",
+      "interpretation": "mov esi,[ebx+0x3c]",
+      "earlier_live_calls": "none",
+      "restoration": "0x80517f pop esi; no following call",
+      "evidence": "F-804FC0"
+    },
+    {
+      "function": "0x805460",
+      "register": "ESI",
+      "overwrite_va": "0x805488",
+      "hex": "8b7508",
+      "instruction": "mov    esi,DWORD PTR [ebp+0x8]",
+      "interpretation": "mov esi,[ebp+8]",
+      "earlier_live_calls": "none",
+      "restoration": "0x80554b pop esi; no following call",
+      "evidence": "F-805460"
+    },
+    {
+      "function": "0x7703f0",
+      "register": "EDI",
+      "overwrite_va": "0x77041b",
+      "hex": "33ff",
+      "instruction": "xor    edi,edi",
+      "interpretation": "xor edi,edi",
+      "earlier_live_calls": "none",
+      "restoration": "normal epilogue restores caller EDI",
+      "evidence": "F-7703F0"
+    },
+    {
+      "function": "0x5ca940",
+      "register": "EDI",
+      "overwrite_va": "0x5ca968",
+      "hex": "8b7d08",
+      "instruction": "mov    edi,DWORD PTR [ebp+0x8]",
+      "interpretation": "mov edi,[ebp+8]",
+      "earlier_live_calls": "none",
+      "restoration": "normal epilogue restores caller EDI",
+      "evidence": "F-5CA940"
+    },
+    {
+      "function": "0x734ef0",
+      "register": "EDI",
+      "overwrite_va": "0x734f1b",
+      "hex": "33ff",
+      "instruction": "xor    edi,edi",
+      "interpretation": "xor edi,edi",
+      "earlier_live_calls": "none",
+      "restoration": "0x7350be pop edi; then 0x7350c6 security cookie helper",
+      "evidence": "F-734EF0"
+    },
+    {
+      "function": "0x735850",
+      "register": "EDI",
+      "overwrite_va": "0x73587b",
+      "hex": "8d7c241c",
+      "instruction": "lea    edi,[esp+0x1c]",
+      "interpretation": "lea edi,[esp+0x1c]",
+      "earlier_live_calls": "0x73586e virtual +28; both concrete targets checked",
+      "restoration": "0x73589d pop edi; no following call",
+      "evidence": "F-735850"
+    },
+    {
+      "function": "0x73bb50",
+      "register": "EDI",
+      "overwrite_va": "0x73bb6a",
+      "hex": "8bf9",
+      "instruction": "mov    edi,ecx",
+      "interpretation": "mov edi,ecx",
+      "earlier_live_calls": "none",
+      "restoration": "0x73bc7d pop edi; then security cookie helper",
+      "evidence": "F-73BB50"
+    },
+    {
+      "function": "0x73c5b0",
+      "register": "EDI",
+      "overwrite_va": "0x73c5e6",
+      "hex": "bf0f000000",
+      "instruction": "mov    edi,0xf",
+      "interpretation": "mov edi,0xf",
+      "earlier_live_calls": "none",
+      "restoration": "0x73c77d pop edi; then security cookie helper",
+      "evidence": "F-73C5B0"
+    },
+    {
+      "function": "0x7a31c0",
+      "register": "EDI",
+      "overwrite_va": "0x7a31c8",
+      "hex": "8b7e04",
+      "instruction": "mov    edi,DWORD PTR [esi+0x4]",
+      "interpretation": "mov edi,[esi+4]",
+      "earlier_live_calls": "none",
+      "restoration": "normal epilogue restores caller EDI",
+      "evidence": "F-7A31C0"
+    },
+    {
+      "function": "0x6d6be0",
+      "register": "EDI",
+      "overwrite_va": "0x6d6c0b",
+      "hex": "33ff",
+      "instruction": "xor    edi,edi",
+      "interpretation": "xor edi,edi",
+      "earlier_live_calls": "none",
+      "restoration": "normal epilogue restores caller EDI",
+      "evidence": "F-6D6BE0"
+    },
+    {
+      "function": "0x544c40",
+      "register": "EDI",
+      "overwrite_va": "0x544c68",
+      "hex": "8b7d08",
+      "instruction": "mov    edi,DWORD PTR [ebp+0x8]",
+      "interpretation": "mov edi,[ebp+8]",
+      "earlier_live_calls": "none",
+      "restoration": "0x544e13 pop edi; no following call",
+      "evidence": "F-544C40"
+    },
+    {
+      "function": "0x547c80",
+      "register": "EDI",
+      "overwrite_va": "0x547c82",
+      "hex": "8bf9",
+      "instruction": "mov    edi,ecx",
+      "interpretation": "mov edi,ecx",
+      "earlier_live_calls": "none",
+      "restoration": "0x547ce5 pop edi; no following call",
+      "evidence": "F-547C80"
+    },
+    {
+      "function": "0x5486e0",
+      "register": "EDI",
+      "overwrite_va": "0x5486e1",
+      "hex": "8bf9",
+      "instruction": "mov    edi,ecx",
+      "interpretation": "mov edi,ecx",
+      "earlier_live_calls": "none",
+      "restoration": "0x54872c pop edi; no following call",
+      "evidence": "F-5486E0"
+    },
+    {
+      "function": "0x544e80",
+      "register": "EDI",
+      "overwrite_va": "0x544ea8",
+      "hex": "8bf9",
+      "instruction": "mov    edi,ecx",
+      "interpretation": "mov edi,ecx",
+      "earlier_live_calls": "none",
+      "restoration": "0x544f3b pop edi; no following call",
+      "evidence": "F-544E80"
+    },
+    {
+      "function": "0x444300",
+      "register": "EDI",
+      "overwrite_va": "0x444324",
+      "hex": "8b7d08",
+      "instruction": "mov    edi,DWORD PTR [ebp+0x8]",
+      "interpretation": "mov edi,[ebp+8]",
+      "earlier_live_calls": "none",
+      "restoration": "0x44439a pop edi; no following call",
+      "evidence": "F-444300"
+    },
+    {
+      "function": "0x547600",
+      "register": "EDI",
+      "overwrite_va": "0x547633",
+      "hex": "8bbeb8000000",
+      "instruction": "mov    edi,DWORD PTR [esi+0xb8]",
+      "interpretation": "mov edi,[esi+0xb8]",
+      "earlier_live_calls": "none",
+      "restoration": "0x5476bd pop edi; no following call",
+      "evidence": "F-547600"
+    },
+    {
+      "function": "0x548630",
+      "register": "EDI",
+      "overwrite_va": "0x548654",
+      "hex": "8b7d08",
+      "instruction": "mov    edi,DWORD PTR [ebp+0x8]",
+      "interpretation": "mov edi,[ebp+8]",
+      "earlier_live_calls": "none",
+      "restoration": "0x5486ca pop edi; no following call",
+      "evidence": "F-548630"
+    },
+    {
+      "function": "0x8438c0",
+      "register": "EDI",
+      "overwrite_va": "0x8438d8",
+      "hex": "8b3b",
+      "instruction": "mov    edi,DWORD PTR [ebx]",
+      "interpretation": "mov edi,[ebx]",
+      "earlier_live_calls": "none",
+      "restoration": "0x8438f4 pop edi; no following call",
+      "evidence": "F-8438C0"
+    },
+    {
+      "function": "0x8060d0",
+      "register": "EDI",
+      "overwrite_va": "0x80614f",
+      "hex": "bf5833fe00",
+      "instruction": "mov    edi,0xfe3358",
+      "interpretation": "mov edi,0xfe3358",
+      "earlier_live_calls": "optional 0x807120 and atexit",
+      "restoration": "0x806188 pop edi; no following call",
+      "evidence": "F-8060D0"
+    },
+    {
+      "function": "0x807120",
+      "register": "EDI",
+      "overwrite_va": "0x8071db",
+      "hex": "8bf8",
+      "instruction": "mov    edi,eax",
+      "interpretation": "mov edi,eax",
+      "earlier_live_calls": "allocator only; allocation-failure throw paths retained",
+      "restoration": "0x8072a7 pop edi; no following call",
+      "evidence": "F-807120"
+    },
+    {
+      "function": "0x54f850",
+      "register": "EDI",
+      "overwrite_va": "0x54fa92",
+      "hex": "bf1e000000",
+      "instruction": "mov    edi,0x1e",
+      "interpretation": "mov edi,0x1e",
+      "earlier_live_calls": "none",
+      "restoration": "0x550226 pop edi; no following call",
+      "evidence": "F-54F850"
+    },
+    {
+      "function": "0x402a70",
+      "register": "EDI",
+      "overwrite_va": "0x402ad8",
+      "hex": "8b7d0c",
+      "instruction": "mov    edi,DWORD PTR [ebp+0xc]",
+      "interpretation": "mov edi,[ebp+0xc]",
+      "earlier_live_calls": "overlap branch 0x403040",
+      "restoration": "normal epilogue restores caller EDI",
+      "evidence": "F-402A70"
+    },
+    {
+      "function": "0x403040",
+      "register": "EDI",
+      "overwrite_va": "0x40304e",
+      "hex": "8b7910",
+      "instruction": "mov    edi,DWORD PTR [ecx+0x10]",
+      "interpretation": "mov edi,[ecx+0x10]",
+      "earlier_live_calls": "none",
+      "restoration": "normal epilogue restores caller EDI",
+      "evidence": "F-403040"
+    },
+    {
+      "function": "0x6d8d20",
+      "register": "EDI",
+      "overwrite_va": "0x6d8d21",
+      "hex": "33ff",
+      "instruction": "xor    edi,edi",
+      "interpretation": "xor edi,edi",
+      "earlier_live_calls": "none",
+      "restoration": "0x6d8d92 pop edi; no following call",
+      "evidence": "F-6D8D20"
+    },
+    {
+      "function": "0x6d9280",
+      "register": "EDI",
+      "overwrite_va": "0x6d92bf",
+      "hex": "8bfa",
+      "instruction": "mov    edi,edx",
+      "interpretation": "mov edi,edx",
+      "earlier_live_calls": "none",
+      "restoration": "normal epilogue restores caller EDI",
+      "evidence": "F-6D9280"
+    },
+    {
+      "function": "0x6d9b30",
+      "register": "EDI",
+      "overwrite_va": "0x6d9c7a",
+      "hex": "bf01000000",
+      "instruction": "mov    edi,0x1",
+      "interpretation": "mov edi,1",
+      "earlier_live_calls": "strings; optional init; concrete +2C cleanup; EnterCriticalSection",
+      "restoration": "0x6d9caa pop edi; no following call",
+      "evidence": "F-6D9B30"
+    },
+    {
+      "function": "0x80eb30",
+      "register": "EDI",
+      "overwrite_va": "0x80eb41",
+      "hex": "8b3d0423bd00",
+      "instruction": "mov    edi,DWORD PTR ds:0xbd2304",
+      "interpretation": "mov edi,[Sleep IAT]",
+      "earlier_live_calls": "none on branch entering wait",
+      "restoration": "0x80eb51 pop edi occurs BEFORE virtual calls; must continue to 80FED0 and 8109A0",
+      "evidence": "F-80EB30"
+    },
+    {
+      "function": "0x80fed0",
+      "register": "EDI",
+      "overwrite_va": "0x80fedd",
+      "hex": "8d7e10",
+      "instruction": "lea    edi,[esi+0x10]",
+      "interpretation": "lea edi,[esi+0x10]",
+      "earlier_live_calls": "none on active cleanup branch; inactive branch returns without EDI use",
+      "restoration": "0x80ff3b pop edi; no following call",
+      "evidence": "F-80FED0"
+    }
+  ],
+  "virtual_bindings": [
+    {
+      "vtable": "0xc51748",
+      "offset": "0x10",
+      "slot": "0xc51758",
+      "target": "0x8069a0",
+      "receiver_binding": "FBA854 writer 80470F",
+      "evidence": "VT-C51748"
+    },
+    {
+      "vtable": "0xc45f94",
+      "offset": "0x28",
+      "slot": "0xc45fbc",
+      "target": "0x73bb50",
+      "receiver_binding": "FB7B78 writer 735009 via 73CF50",
+      "evidence": "VT-C45F94"
+    },
+    {
+      "vtable": "0xc45fec",
+      "offset": "0x28",
+      "slot": "0xc46014",
+      "target": "0x73c5b0",
+      "receiver_binding": "FB7B78 writer 735009 via 73CF50/73C450",
+      "evidence": "VT-C45FEC"
+    },
+    {
+      "vtable": "0xc0f99c",
+      "offset": "0x24",
+      "slot": "0xc0f9c0",
+      "target": "0x8dc2f0",
+      "receiver_binding": "new FBA7A4 in 4DEC90",
+      "evidence": "VT-C0F99C"
+    },
+    {
+      "vtable": "0xc0f99c",
+      "offset": "0x28",
+      "slot": "0xc0f9c4",
+      "target": "0x8dc2f0",
+      "receiver_binding": "observed FBA7A4 concrete implementation",
+      "evidence": "VT-C0F99C"
+    },
+    {
+      "vtable": "0xc0fa6c",
+      "offset": "0x28",
+      "slot": "0xc0fa94",
+      "target": "0x8dc2f0",
+      "receiver_binding": "observed FBA7A4 concrete implementation",
+      "evidence": "VT-C0FA6C"
+    },
+    {
+      "vtable": "0xc0fa14",
+      "offset": "0x28",
+      "slot": "0xc0fa3c",
+      "target": "0x547c80",
+      "receiver_binding": "observed FBA7A4 concrete implementation",
+      "evidence": "VT-C0FA14"
+    },
+    {
+      "vtable": "0xc0fac4",
+      "offset": "0x28",
+      "slot": "0xc0faec",
+      "target": "0x5486e0",
+      "receiver_binding": "observed FBA7A4 concrete implementation",
+      "evidence": "VT-C0FAC4"
+    },
+    {
+      "vtable": "0xc0fb1c",
+      "offset": "0x28",
+      "slot": "0xc0fb44",
+      "target": "0x8dc2f0",
+      "receiver_binding": "observed FBA7A4 concrete implementation",
+      "evidence": "VT-C0FB1C"
+    },
+    {
+      "vtable": "0xbfb5a4",
+      "offset": "0x28",
+      "slot": "0xbfb5cc",
+      "target": "0x5486e0",
+      "receiver_binding": "observed FBA7A4 concrete implementation",
+      "evidence": "VT-BFB5A4"
+    },
+    {
+      "vtable": "0xc0f99c",
+      "offset": "0x0",
+      "slot": "0xc0f99c",
+      "target": "0x547200",
+      "receiver_binding": "FBA7A4 deleting destructor",
+      "evidence": "VT-C0F99C"
+    },
+    {
+      "vtable": "0xc0fa6c",
+      "offset": "0x0",
+      "slot": "0xc0fa6c",
+      "target": "0x544e50",
+      "receiver_binding": "FBA7A4 deleting destructor",
+      "evidence": "VT-C0FA6C"
+    },
+    {
+      "vtable": "0xc0fa14",
+      "offset": "0x0",
+      "slot": "0xc0fa14",
+      "target": "0x5475d0",
+      "receiver_binding": "FBA7A4 deleting destructor",
+      "evidence": "VT-C0FA14"
+    },
+    {
+      "vtable": "0xc0fac4",
+      "offset": "0x0",
+      "slot": "0xc0fac4",
+      "target": "0x548600",
+      "receiver_binding": "FBA7A4 deleting destructor",
+      "evidence": "VT-C0FAC4"
+    },
+    {
+      "vtable": "0xc0fb1c",
+      "offset": "0x0",
+      "slot": "0xc0fb1c",
+      "target": "0x548c80",
+      "receiver_binding": "FBA7A4 deleting destructor",
+      "evidence": "VT-C0FB1C"
+    },
+    {
+      "vtable": "0xbfb5a4",
+      "offset": "0x0",
+      "slot": "0xbfb5a4",
+      "target": "0x4442d0",
+      "receiver_binding": "FBA7A4 deleting destructor",
+      "evidence": "VT-BFB5A4"
+    },
+    {
+      "vtable": "0xc40fec",
+      "offset": "0x8",
+      "slot": "0xc40ff4",
+      "target": "0x4facd0",
+      "receiver_binding": "worker thunk uses object +8=6D9870",
+      "evidence": "VT-C40FEC"
+    },
+    {
+      "vtable": "0xc51bf4",
+      "offset": "0x2c",
+      "slot": "0xc51c20",
+      "target": "0x80eb30",
+      "receiver_binding": "pool FC16A0 -> channel[0] via 6D9ED6",
+      "evidence": "VT-C51BF4"
+    },
+    {
+      "vtable": "0xc51eec",
+      "offset": "0x8",
+      "slot": "0xc51ef4",
+      "target": "0x80fed0",
+      "receiver_binding": "pool object +14 via 80E78E",
+      "evidence": "VT-C51EEC"
+    },
+    {
+      "vtable": "0xc51f40",
+      "offset": "0x0",
+      "slot": "0xc51f40",
+      "target": "0x8109a0",
+      "receiver_binding": "pool object +10 via 80E9CD",
+      "evidence": "VT-C51F40"
+    }
+  ],
+  "selected_receiver_writers": [
+    {
+      "value": "0xfba854",
+      "operand_va": "0x803f78",
+      "function": "0x803ec0",
+      "instruction_va": "0x803f76",
+      "hex": "891d54a8fb00",
+      "text": "mov    DWORD PTR ds:0xfba854,ebx"
+    },
+    {
+      "value": "0xfba854",
+      "operand_va": "0x8045f0",
+      "function": "0x804460",
+      "instruction_va": "0x8045ee",
+      "hex": "891d54a8fb00",
+      "text": "mov    DWORD PTR ds:0xfba854,ebx"
+    },
+    {
+      "value": "0xfba854",
+      "operand_va": "0x804711",
+      "function": "0x804650",
+      "instruction_va": "0x80470f",
+      "hex": "890d54a8fb00",
+      "text": "mov    DWORD PTR ds:0xfba854,ecx"
+    },
+    {
+      "value": "0xfba7a4",
+      "operand_va": "0x424571",
+      "function": "0x424370",
+      "instruction_va": "0x42456f",
+      "hex": "890da4a7fb00",
+      "text": "mov    DWORD PTR ds:0xfba7a4,ecx"
+    },
+    {
+      "value": "0xfba7a4",
+      "operand_va": "0x436af3",
+      "function": "0x436a30",
+      "instruction_va": "0x436af2",
+      "hex": "a3a4a7fb00",
+      "text": "mov    ds:0xfba7a4,eax"
+    },
+    {
+      "value": "0xfba7a4",
+      "operand_va": "0x456613",
+      "function": "0x456550",
+      "instruction_va": "0x456612",
+      "hex": "a3a4a7fb00",
+      "text": "mov    ds:0xfba7a4,eax"
+    },
+    {
+      "value": "0xfba7a4",
+      "operand_va": "0x4bad17",
+      "function": "0x4ba8c0",
+      "instruction_va": "0x4bad15",
+      "hex": "890da4a7fb00",
+      "text": "mov    DWORD PTR ds:0xfba7a4,ecx"
+    },
+    {
+      "value": "0xfba7a4",
+      "operand_va": "0x4bb759",
+      "function": "0x4bb540",
+      "instruction_va": "0x4bb758",
+      "hex": "a3a4a7fb00",
+      "text": "mov    ds:0xfba7a4,eax"
+    },
+    {
+      "value": "0xfba7a4",
+      "operand_va": "0x4bbd9f",
+      "function": "0x4bbc10",
+      "instruction_va": "0x4bbd9e",
+      "hex": "a3a4a7fb00",
+      "text": "mov    ds:0xfba7a4,eax"
+    },
+    {
+      "value": "0xfba7a4",
+      "operand_va": "0x4bc875",
+      "function": "0x4bc750",
+      "instruction_va": "0x4bc874",
+      "hex": "a3a4a7fb00",
+      "text": "mov    ds:0xfba7a4,eax"
+    },
+    {
+      "value": "0xfba7a4",
+      "operand_va": "0x4bce41",
+      "function": "0x4bcba0",
+      "instruction_va": "0x4bce3f",
+      "hex": "890da4a7fb00",
+      "text": "mov    DWORD PTR ds:0xfba7a4,ecx"
+    },
+    {
+      "value": "0xfba7a4",
+      "operand_va": "0x4bddcd",
+      "function": "0x4bdc10",
+      "instruction_va": "0x4bddcc",
+      "hex": "a3a4a7fb00",
+      "text": "mov    ds:0xfba7a4,eax"
+    },
+    {
+      "value": "0xfba7a4",
+      "operand_va": "0x4be71b",
+      "function": "0x4be4d0",
+      "instruction_va": "0x4be719",
+      "hex": "890da4a7fb00",
+      "text": "mov    DWORD PTR ds:0xfba7a4,ecx"
+    },
+    {
+      "value": "0xfba7a4",
+      "operand_va": "0x4bf4d8",
+      "function": "0x4bf3b0",
+      "instruction_va": "0x4bf4d7",
+      "hex": "a3a4a7fb00",
+      "text": "mov    ds:0xfba7a4,eax"
+    },
+    {
+      "value": "0xfba7a4",
+      "operand_va": "0x4bf8d7",
+      "function": "0x4bf780",
+      "instruction_va": "0x4bf8d5",
+      "hex": "890da4a7fb00",
+      "text": "mov    DWORD PTR ds:0xfba7a4,ecx"
+    },
+    {
+      "value": "0xfba7a4",
+      "operand_va": "0x4c18fa",
+      "function": "0x4c15c0",
+      "instruction_va": "0x4c18f9",
+      "hex": "a3a4a7fb00",
+      "text": "mov    ds:0xfba7a4,eax"
+    },
+    {
+      "value": "0xfba7a4",
+      "operand_va": "0x4c3457",
+      "function": "0x4c32e0",
+      "instruction_va": "0x4c3456",
+      "hex": "a3a4a7fb00",
+      "text": "mov    ds:0xfba7a4,eax"
+    },
+    {
+      "value": "0xfba7a4",
+      "operand_va": "0x4c4813",
+      "function": "0x4c4750",
+      "instruction_va": "0x4c4812",
+      "hex": "a3a4a7fb00",
+      "text": "mov    ds:0xfba7a4,eax"
+    },
+    {
+      "value": "0xfba7a4",
+      "operand_va": "0x4c4d02",
+      "function": "0x4c4b10",
+      "instruction_va": "0x4c4d01",
+      "hex": "a3a4a7fb00",
+      "text": "mov    ds:0xfba7a4,eax"
+    },
+    {
+      "value": "0xfba7a4",
+      "operand_va": "0x4c5bd1",
+      "function": "0x4c59d0",
+      "instruction_va": "0x4c5bcf",
+      "hex": "890da4a7fb00",
+      "text": "mov    DWORD PTR ds:0xfba7a4,ecx"
+    },
+    {
+      "value": "0xfba7a4",
+      "operand_va": "0x4def10",
+      "function": "0x4dec90",
+      "instruction_va": "0x4def0f",
+      "hex": "a3a4a7fb00",
+      "text": "mov    ds:0xfba7a4,eax"
+    },
+    {
+      "value": "0xfb7b78",
+      "operand_va": "0x73500a",
+      "function": "0x734ef0",
+      "instruction_va": "0x735009",
+      "hex": "a3787bfb00",
+      "text": "mov    ds:0xfb7b78,eax"
+    },
+    {
+      "value": "0xfb7b78",
+      "operand_va": "0x7351e7",
+      "function": "0x735190",
+      "instruction_va": "0x7351e5",
+      "hex": "8935787bfb00",
+      "text": "mov    DWORD PTR ds:0xfb7b78,esi"
+    }
+  ],
+  "imports": [
+    {
+      "iat": "0xbd2210",
+      "dll": "KERNEL32.dll",
+      "name": "HeapFree",
+      "name_va": "0xd5f91a",
+      "descriptor_va": "0xd5d8c4"
+    },
+    {
+      "iat": "0xbd2214",
+      "dll": "KERNEL32.dll",
+      "name": "HeapAlloc",
+      "name_va": "0xd5f90e",
+      "descriptor_va": "0xd5d8c4"
+    },
+    {
+      "iat": "0xbd222c",
+      "dll": "KERNEL32.dll",
+      "name": "InitializeCriticalSectionAndSpinCount",
+      "name_va": "0xd5e4be",
+      "descriptor_va": "0xd5d8c4"
+    },
+    {
+      "iat": "0xbd2248",
+      "dll": "KERNEL32.dll",
+      "name": "LeaveCriticalSection",
+      "name_va": "0xd5e44c",
+      "descriptor_va": "0xd5d8c4"
+    },
+    {
+      "iat": "0xbd224c",
+      "dll": "KERNEL32.dll",
+      "name": "EnterCriticalSection",
+      "name_va": "0xd5e434",
+      "descriptor_va": "0xd5d8c4"
+    },
+    {
+      "iat": "0xbd2258",
+      "dll": "KERNEL32.dll",
+      "name": "DecodePointer",
+      "name_va": "0xd5f8e0",
+      "descriptor_va": "0xd5d8c4"
+    },
+    {
+      "iat": "0xbd225c",
+      "dll": "KERNEL32.dll",
+      "name": "EncodePointer",
+      "name_va": "0xd5f8d0",
+      "descriptor_va": "0xd5d8c4"
+    },
+    {
+      "iat": "0xbd2304",
+      "dll": "KERNEL32.dll",
+      "name": "Sleep",
+      "name_va": "0xd5e418",
+      "descriptor_va": "0xd5d8c4"
+    },
+    {
+      "iat": "0xbd25a0",
+      "dll": "WINMM.dll",
+      "name": "timeGetTime",
+      "name_va": "0xd5f00e",
+      "descriptor_va": "0xd5d9dc"
+    },
+    {
+      "iat": "0xbd26c0",
+      "dll": "libvorbisfile.dll",
+      "name": "ov_clear",
+      "name_va": "0xd5f0d0",
+      "descriptor_va": "0xd5da2c"
+    },
+    {
+      "iat": "0xbd23b0",
+      "dll": "OpenAL32.dll",
+      "name": "alSourceStop",
+      "name_va": "0xd5f244",
+      "descriptor_va": "0xd5da40"
+    },
+    {
+      "iat": "0xbd23b4",
+      "dll": "OpenAL32.dll",
+      "name": "alDeleteSources",
+      "name_va": "0xd5f254",
+      "descriptor_va": "0xd5da40"
+    },
+    {
+      "iat": "0xbd23b8",
+      "dll": "OpenAL32.dll",
+      "name": "alDeleteBuffers",
+      "name_va": "0xd5f266",
+      "descriptor_va": "0xd5da40"
+    }
+  ],
+  "remaining_boundaries": [
+    {
+      "id": "B-ALLOC",
+      "site": "0x89e98f",
+      "path": "891268 allocation failure -> 89E977 -> DecodePointer(F8CB78) -> call eax",
+      "status": "not_closed_arbitrary_runtime_callback",
+      "reason": "The exact callback target is a runtime-installed encoded pointer. This package does not certify arbitrary C++ new-handler or exception/unwind behavior as unable to observe a preserved register."
+    },
+    {
+      "id": "B-MATH",
+      "site": "0x8a6531",
+      "path": "6DAA70 -> 6DACB0 -> 8FF5A0/901C69 -> 8A647F -> selected math-error callback",
+      "status": "not_closed_general_CRT_error_paths",
+      "reason": "Normal arithmetic native windows contain no incoming EDI root read; CRT math-error dispatch, its dynamic callback and all exceptional math tails are not a whole-library closure."
+    },
+    {
+      "id": "B-INVALID",
+      "sites": [
+        "0x893343",
+        "0x89c9f0",
+        "0x8a04dc"
+      ],
+      "status": "not_closed_invalid_parameter_exception_corruption_handlers",
+      "reason": "Invalid string arguments, failed constructor allocation and corrupted stack-cookie branches are explicitly outside the regular application-dataflow closure."
+    },
+    {
+      "id": "B-IMPORTS",
+      "sites": [
+        "0xbd25a0",
+        "0xbd2214",
+        "0xbd2210",
+        "0xbd224c",
+        "0xbd2248",
+        "0xbd26c0"
+      ],
+      "status": "named_external_module_boundary",
+      "reason": "PE import identities and caller stack arguments are original evidence. DLL internals were not available/decoded in this package; no whole-process proof is asserted."
+    },
+    {
+      "id": "B-ALIASES",
+      "status": "bounded_receiver_writer_binding",
+      "reason": "Direct literal writers plus traced constructor/field paths establish the concrete implementations listed here. This is not an exhaustive proof about every possible computed write to FBA854, FBA7A4, FB7B78 or FC16A0."
+    }
+  ],
+  "conclusion": "No newly demonstrated application consumer of root+0x50/TRIGGER and no new first-load .mef caller in these selected paths. Callee-save stack preservation was observed and is explicitly not equated with semantic consumption or whole-program closure."
+}
