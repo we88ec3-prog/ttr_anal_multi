@@ -708,3 +708,15 @@ Server 的本機 S00 觀察記錄擴充為可保留既有 `story-trace` 中的�
 用唯讀 STPD／EX 解碼器從兩版 `Table.stp` 讀出 `Table/TriggerMsgList.xml`。韓版有 714 個唯一 ID（0–1588），解碼 SHA-256 為 `6ba620a7185c42333b76624943b9906e4542f102c996fcaceb655865e404501f`。繁中版有 659 個唯一 ID（0–1533），解碼 SHA-256 為 `a22d1ad3e38ff39c2cff8b2c73d515f4ffb18a3e476be4a560340826d2dc1961`。兩版每列都只有 `ID`、`TEXT`、`COLOR` 三欄，ASCII／UTF-16LE 均無 `.mef` 字面。
 
 因此 `005E` 是一個可由 Server 觸發 Client 查本機封裝提示的入口，查找鍵是提示 ID。地圖 `TRIGGER` 名稱由另一條 `_MapList.xml → 4DF58D` 路徑取得。現有資料支持把 `005E` 用於關卡提示，尚無把地圖的 `TRIGGER` 名稱或來包內容交給腳本讀取器的證據。此輪未執行 Client。
+
+### 無副檔名成員的補查
+
+既有索引查核涵蓋下列三個韓版封裝。這次以 `inspect_tutorial_bounds_resource.members` 讀取所有索引成員，使用 `inspect_first_tutorial_cluster.decode` 解開 EX 外層，再以 ASCII 與 UTF-16LE 不分大小寫搜尋 `.mef`、`N_mushroom12_01B`、`S_pathofpindus01`、`scenario_chicken04`、`Re_mushroom07`、`R_Phindous03`、`STPD`、`STPI`。三個封裝在 `origin` 與 `ins` 的 SHA-256 一致。
+
+| 封裝 | SHA-256 | 成員 |
+|---|---|---|
+| `Master.stp` | `f59edc403213de3a3923cc47ebf44eb1812705e8693c3c196d122f51ab0c919d` | 899 個無副檔名 |
+| `Panel.stp` | `0bd6ea9bb68499e15c26910ee991715feea055371bbcb88c74e88b88d75929c2` | 38 個 ETF、15 個 EMF |
+| `Synopsis.stp` | `65fbdd6694a0f7a451f2d06f13901b2ee1089db51cc34d6e97c37d6b19a74486` | 1 個 EIF、4 個 EMF |
+
+957 個成員的上述字面搜尋均無命中。這縮小了已知關卡鍵藏在無副檔名成員或次層 STPD 中的範圍。無字串的格式、其他載體及 Client 接收入口仍待確認。此輪只讀資源，未啟動 Client。
