@@ -501,3 +501,5 @@ TS-42 待指定 v2 實機。完成 Q124 後由馮德斯單人隊伍大廳選 Sta
 AQ-01 待指定 v2 取證。馮德斯 Lv.4 以上，由 NPC 10008 選 Q2843 並按接取。將打開狩獵場面板、確認 Stage 462 及回 NPC 各自分開記錄。核對任務狀態、按鈕與 Server story-trace；本卡不列入實機通關。 [普通任務及追蹤規格](../scenario-content/PHINDOS-ORDINARY-QUEST-2843.md#server-進度與驗收)
 
 AQ-01 Server 候選已有 Q124 至 Q144 離線收據。指定 v2 實機依序核對接取窗、只開選關面板、確認 Stage 462、Ready 通知、回 10008 正常交付。核對 760 EXP、三張卷軸、重登入後主線與完成 key。公會地區名聲另列待實作。 [Q2843 候選流程與限制](../scenario-content/PHINDOS-ORDINARY-QUEST-2843.md#server-候選已接通)
+
+AQ-02 待指定 v2 實機。完成 AQ-01 的 Q2843 後，找馮德斯 NPC 10001 接 Q1。正常建單人隊選 Stage 462，記錄第一隻／兩隻無斯擊倒時任務視窗是否更新，回隊或重登後再核對畫面。可以分批累計 30 隻，到達成提示後回 10001 交付，核對接取角色的 420 EXP、232 LeeLoo、20 個道具及主線仍可接續。原版 BND／SQLite 已驗證 Case 693 的 15 場、2／30 重登保存、30／30 達成、交付與 Q144，Client 顯示及原生交付事件仍待驗。 [Q1 規格](../scenario-content/PHINDOS-ORDINARY-QUEST-2843.md#q1-server-候選)
