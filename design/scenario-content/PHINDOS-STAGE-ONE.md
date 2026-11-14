@@ -35,3 +35,19 @@
 | 4 | 1 → 4 → 7 → 11 → 19 | [Case 4](phindos-stage1-case4.scenario.json) `52887ee01b039c4308b2e02eef0a70d73412f818466f3ddf35c8b6a88ff22d60` |
 
 部署改用相應 Case、檔案與雜湊。離線工具最後一個參數與 Host 預檢的 `-ScenarioCase` 使用相同 Case。驗收核對入場 Case 值、五圖 ID、終點掉落及 100 通關經驗；指定 v2 的轉場、建隊與連刷留待實機。
+
+## Case 1 的地圖 2 起點
+
+`CHART_mushroom_01.xml` 的 `NodeLink` 記載節點 11 → 8 → 1 → 4 → 2，對應地圖 **2 → 5 → 9 → 13 → 19**。下表碰撞成員由 `_MapList.xml` 的 `BOUND` 對應至 `Map/BoundMap.stp`，封裝 SHA-256 為 `07d8f3a20aa4a396312c60927431a53a89dce6370ef8bb8192bd8d8eca1dd6b8`。怪物群取自既有 CLUST 群組。群組分配、座標及獎勵為 Server 候選規則。
+
+| 節點／地圖 | 群組／怪物數 | 碰撞檔 | SHA-256 |
+|---|---|---|---|
+| 11／2 | 2／3 | `mushroom02.bnd` | `b5d6af0e491dae6a02496fad8f6e9716972756eee0827449b72921f00ea99925` |
+| 8／5 | 4／4 | `mushroom05.bnd` | `2c1f23c83659a9da64bb832f08b177bb73ef2fd29cb03ae287bfc50ac8f47611` |
+| 1／9 | 11／3 | `mushroom08.bnd` | `a0be87d1b07d7ba65863d1251fc5435f6255f3f87be1bb8d64031b28d655df13` |
+| 4／13 | 16／1 | `mushroom10.bnd` | `674fec0033f6e743db05679385f248cc06cce663da8e167942af15233193d822` |
+| 2／19 | 19／1 | `mushroom12.bnd` | 見上表 |
+
+維持 Host 的 Case 1，將 `TARTAROS_LOCAL_STAGE_ONE_SCENARIO_PATH` 指向[地圖 2 起點定義](phindos-stage1-case1-map2.scenario.json)，並設定 `TARTAROS_LOCAL_STAGE_ONE_SCENARIO_SHA256=3ce4b9115c68fb12767a5d63154511b0380e662f669a1776942d2771a3336e65`。起點隨載入的定義決定，預設的 Case 1 檔案仍使用地圖 1。圖表還有地圖 3 起點，以及由節點 1 經節點 5 前往頭目的分支，待配置及驗收。
+
+離線走圖工具使用五份原版 BND，逐圖執行移動、戰鬥和出口互動，確認生成 3、4、3、1、1 隻、終點選取 Product 183 並產生 100 經驗的待結算狀態。正常建隊、Client 轉場、入包及經驗入帳仍按實機批次驗收。
