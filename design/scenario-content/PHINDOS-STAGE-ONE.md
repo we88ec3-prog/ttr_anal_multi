@@ -148,7 +148,7 @@ Server 可使用內建行為設定。若部署有設定 `TARTAROS_LOCAL_MONSTER_
 
 ## 馮德斯第一狩獵場 Stage 462／Case 693
 
-Host 可用 `TARTAROS_LOCAL_STAGE_ONE_CASE=693` 載入[關卡定義](phindos-stage462-case693.scenario.json)，SHA-256 為 `ccf0c99c1f45e915e061ff1dffd01419d346c5075ff5a44b70bb99e6269880e3`。沿用原版 BND 目錄與既有 `SCENARIO_CATALOG` 掉落設定。此 Host 一次載入一個 Case，原有 Case 1～4 配置仍可照常使用。
+Host 可用 `TARTAROS_LOCAL_STAGE_ONE_CASE=693` 載入[關卡定義](phindos-stage462-case693.scenario.json)，SHA-256 為 `ccf0c99c1f45e915e061ff1dffd01419d346c5075ff5a44b70bb99e6269880e3`。沿用原版 BND 目錄與既有 `SCENARIO_CATALOG` 掉落設定。原有 Case 1～4 配置仍可照常使用。
 
 玩家正常建單人隊進馮德斯，在狩獵場面板確認第一個項目。隊長的 `0064` 帶 Stage 462（`6400CE01`），Server 用 `009A` 回填大廳選項。隊長另按開始後，以 `0038` 送 Stage 462、Case 693。回村且維持隊伍時，重建大廳會重新發布選項，離隊或離村後須重新選擇。 [選關與資源證據](../../governance/s00-iterations/S00-20261101-MEF-RECEIVE-FEASIBILITY.md#狩獵場確認送出-0064)
 
@@ -168,3 +168,9 @@ Host 可用 `TARTAROS_LOCAL_STAGE_ONE_CASE=693` 載入[關卡定義](phindos-sta
 | [696](phindos-stage463-case696.scenario.json) | 1 → 2 → 3 → 4 → 5 → 8，或 1 → 2 → 6 → 7 → 5 → 8 | `9679e2d7dfed19f5e585fefc5977f76dcd9c7fce8e25be1016517a4b13ffdf84` |
 
 兩份定義逐邊對照原始 `CHART_Re_reed_01/02.xml`。地圖依序為 3439、3440、3441／3442、3444／3445、3446、3448。這些邏輯地圖的模型和 BND 源於 `_MapList.xml`，分支變體 3443、3447 暫不使用。怪物模型、PRE 與數量取自 `CLUST_Re_reed_01.xml`，實際組別分配、出生、出口與獎勵由 Server 暫定。頭目候選為 1083／PRE 1，採用既有 120 HP 頭目配置，掉落 Product 183。每條路八隻普通怪各 4 EXP，加頭目 24 EXP、通關 20 EXP，合計 76 EXP。兩個 Case 的四條分支各離線連刷兩次，指定 v2 實機待驗。
+
+## 同一 Host 開放兩個狩獵場
+
+原有 `TARTAROS_LOCAL_STAGE_ONE_*` 指定第一份配置。加上 `TARTAROS_LOCAL_HUNTING_GROUND_ALTERNATE_PATH`、`TARTAROS_LOCAL_HUNTING_GROUND_ALTERNATE_SHA256` 和 `TARTAROS_LOCAL_HUNTING_GROUND_ALTERNATE_CASE` 指定第二份。兩份須分屬 Stage 462 和 463，可交換順序。共用 BND 目錄、經驗政策與掉落模式。每個 Stage 配置一個 Case。
+
+隊長的 `0064` 選擇狩獵場，`0008` 以當時選擇建立場次。場次固定使用同一份配置處理預載、換圖、怪物、掉落與結算。回村會重新發布原選項，之後可在同一隊伍改選。Host 的 `/health` 會在 `localHuntingGrounds` 列出兩份已載入配置。離線工具可在 `--stage-one-journey` 參數最後加 `--alternate-hunting-ground <關卡檔> <SHA-256> <Case>`，以同一連線依序通關兩個場地。
