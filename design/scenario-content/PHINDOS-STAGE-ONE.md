@@ -139,3 +139,5 @@ Host 按下表設定 Case、關卡絕對路徑與 SHA-256，並沿用 Case 1 練
 12 份練等配置只對地圖 19 的頭目 1086/PRE1 指定 `phindos-stage1-boss-v1`。這份 [行為設定](phindos-stage1.monster-behavior.json) 將頭目 HP 設為 120，普通怪保留 60 HP，沿用既有攻擊與倒地動作。這是暫定的 Server 數值。必要頭目、掉落與通關總經驗仍由關卡定義控制。
 
 Server 可使用內建行為設定。若部署有設定 `TARTAROS_LOCAL_MONSTER_BEHAVIOR_PATH`，須包含 `phindos-stage1-boss-v1`；上方行為設定的 SHA-256 為 `67dadc1ac485c38481d4f84d171b4f9b4e2587f92cabb31022f5802ac1228ef2`。若另外使用自訂怪物配置，應保留其餘已用的行為並更新該檔的雜湊。
+
+頭目血量歸零時即產生設定中的掉落，可以先拾取。清場須等必要頭目的倒地移除訊息列入同一輪或更早的 Server 更新，再開啟出口。這讓設定較長倒地時間的頭目也能完成倒地流程。合成測試用 3 秒移除時間驗證，實機動畫及地面特效仍待確認。
