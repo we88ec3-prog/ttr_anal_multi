@@ -45,6 +45,8 @@ Host 可用 `TARTAROS_LOCAL_STAGE_ONE_BOSS_DROP=SCENARIO_CATALOG` 啟用關卡�
 
 在 `SCENARIO_CATALOG` 模式，若商品表的 Product 183 列省略 metadata，沿用商店購買同商品時使用的 `TARTAROS_LOCAL_TOWN_TRADE_ITEM183_FIELD10`／`TARTAROS_LOCAL_TOWN_TRADE_ITEM183_FIELD14`。先補值，再比較該商品各店的實際入包欄位。商品表須有該 Product，所有列的實際欄位須一致。其他商品仍使用各自商品列提供的 metadata。
 
+再次核對韓版 `Product.xml`、`ItemTable2.xml`、`ItemUsableTable.xml` 的 183 對應列。商品表提供 Product → Item 對應、價格及商品旗標。道具表提供 class 26、堆疊上限 100、gettype 3、冷卻群 2，使用表提供兩個動作條件。這些列尚無可直接對應背包 `+10h`／`+14h` 的資料來源，部署仍使用明示的兩個欄位。 [背包接收欄位](../../governance/client-variants/20261109-mef-town-services/shop-asset-sync.md)
+
 正常入口的合成驗收使用測試商店目錄提供 Product 2614 的背包欄位。由廣場建隊、進村後連打兩場，每場擊倒頭目後送 Space 撿取，核對掉落商品、背包初始化列及地面物件移除。兩場結算並回村後，SQLite 有兩個不同 ID 的裝備實例，各一件，經驗也各自入帳。測試欄位值與地面外觀為合成設定。
 
 一般副本換圖、進結算或離隊回村時，Server 會先以既有 `001A` 清除原圖尚未撿取的地面物件，再結束該圖的掉落狀態。已撿取物品留在背包，結算時不會重送其地面移除。合成驗收核對首圖未撿的三件掉落在換圖前移除，以及頭目掉落保留在地面和先撿取兩種結算順序。指定 v2 的畫面仍待驗收。
