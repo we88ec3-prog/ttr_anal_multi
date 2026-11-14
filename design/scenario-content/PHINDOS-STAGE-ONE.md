@@ -238,3 +238,5 @@ Case 693–696 的普通怪和頭目使用專用的 `phindos-hunting-ground-mele
 沿用較早的本機測試資料庫時，先用 SQLite backup 建立獨立副本，並執行 `PRAGMA integrity_check`。若副本缺少 `local_expedition_role_progress`，在私有 Server 根目錄執行 `dotnet run --project tools/Tartaros.LocalExpeditionMigrate -c Release -- --db <副本絕對路徑> --initialize-role-progress-v1`，再執行四關預檢。已以既有測試資料副本實際核對此步驟，帳號、教學進度、馮德斯旅程紀錄及主線場次／事件逐列相同，新增的副本經驗帳本從空白開始。這項結果驗證資料庫可供 Host 啟動，實際角色登入與副本流程仍依 TS-37 驗收。
 
 啟動工具會把 Release Host 的完整輸出複製到日誌目錄下的獨立部署目錄，從該副本啟動，並在預檢收據回傳 `deploymentDirectory`。可用 `-HostBuildDirectory` 指定另外建置的輸出。日誌目錄需位於建置目錄之外。已由預設建置目錄直接啟動的舊 Host 仍可能持有 DLL 鎖，此時可先用 `dotnet build src/Tartaros.Server.Host -c Release -o <獨立建置目錄>` 產生下一版。
+
+含增援區可達性檢查的 Release 已啟用於指定 v2 的本機測試環境。四個 Case、四個 loopback 埠及部署後的網路組件 SHA-256 均通過預檢，啟動無錯誤輸出。沿用既有隔離測試資料庫，預檢時沒有遊戲連線。指定 v2 的正常建隊、通關與經驗顯示仍依 TS-37 實機驗收。
