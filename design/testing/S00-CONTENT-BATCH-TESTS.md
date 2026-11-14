@@ -154,13 +154,15 @@ TS-35 待實機，可與 TS-33 同時測。完成 Q117 前裝備製作職人 100
 
 TS-36 待實機。只啟用交易，使用已有背包物品、LeeLoo 和卷軸快捷格的專用帳號。登入進廣場後，在開商店前核對背包格位、餘額和卷軸數量。此項可與 TS-32 合併驗收。 [背包發布規格](../scenario-content/PHINDOS-GROCER-TRADE.md)
 
-TS-37 待實機。使用指定 v2 正常建單人隊進馮德斯，以隊長開始一般副本 Stage 1。每圖清怪後進出口。終點擊倒頭目 1086，靠近落點按 Space，確認背包增加一張一般復活卷軸，另記是否看見地面特效。走出口核對結算經驗，確認返回馮德斯；同一角色再完成一次，兩場應分別入帳，主線進度應維持原值。需啟用 Stage 1 經驗與頭目掉落設定。 [頭目掉落規格](../scenario-content/GROUND-LOOT.md#馮德斯一般副本-stage-1)
+TS-37 待實機。使用指定 v2 正常建單人隊進馮德斯，以隊長開始一般副本 Stage 1。每圖清怪後走到出口按 Z。終點擊倒頭目 1086，靠近落點按 Space，確認背包增加一張一般復活卷軸，另記是否看見地面特效。到出口按 Z 核對結算經驗，確認返回馮德斯。同一角色再完成一次，兩場應分別入帳，主線進度應維持原值。需啟用 Stage 1 經驗與頭目掉落設定。 [頭目掉落規格](../scenario-content/GROUND-LOOT.md#馮德斯一般副本-stage-1)
 
 節點可用 `requiredBoss` 明定頭目的模型及 PRE。載入時必須在初始配置與所有增援中恰好找到一隻相符的怪物。Server 核對該實例的血量歸零，並等待所有配置波次生成及清場後，才允許出口進入結算。馮德斯 Case 1 地圖 19 指定 `1086/PRE1`，副本狀態的 `bossDefeated` 可在結算前核對擊倒結果。更新後的關卡 SHA-256 為 `baa48fb43ec35420167be093e331c74fb2cbc0590da720f0626898ff2c6f64d2`。這是 Server 關卡 JSON 定義。
 
 TS-37 換版前預檢已讀取固定的 Case 1 定義與五份碰撞資源。路線為地圖 1 → 4 → 8 → 12 → 19，起點節點 10。Host 需設定 `TARTAROS_LOCAL_STAGE_ONE_SCENARIO_PATH`、`TARTAROS_LOCAL_STAGE_ONE_BOUNDS_DIR`、`TARTAROS_LOCAL_STAGE_ONE_BOSS_DROP=REVIVAL_SCROLL`，並提供正整數通關經驗、經驗政策及 Product 183 背包 metadata。正常建隊入場可在關閉進度指定功能時啟用。批次取證如需 `story-trace`，可另開本機進度測試模式，但 TS-37 的連線全程走正常入口。實測卡應填入實際設定的經驗值。指定 v2 SHA-256 為 `6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c`。選關後按開始若無法進場，保留畫面與操作時間，有開記錄時一併保留 `story-trace`，後續步驟維持待測。
 
 啟用測試版後，從本機 Host 的 `/health` 讀取 `localStageOne`。TS-37 需要 `normalEntryEnabled=true`、`bossDropEnabled=true`、Stage 1／Case 1，並用回傳的 `completionExperience` 填入測試卡。`contentSha256` 可與預檢結果對照。`previewEnabled` 只表示測試頁能提供進度指定入口。若 `localStageOne` 為 null，該 Host 未載入此副本設定。這些欄位確認 Host 啟用情形，實際帳號仍要正常進村並建單人隊。
+
+Server `95cc445` 的 Release 發行版已在獨立 loopback 埠以隔離 SQLite 啟動成功。`/health` 確認正常入口、`SCENARIO_CATALOG` 掉落與 100 通關經驗，預覽關閉。驗收開始前仍需啟用指定 v2 使用的遊戲服務。這次查驗後已關閉隔離 Host，TS-37 保持待實機。
 
 Stage 1 關卡資料可用 `TARTAROS_LOCAL_STAGE_ONE_SCENARIO_PATH` 指向絕對路徑的 `.scenario.json`，並以 `TARTAROS_LOCAL_STAGE_ONE_SCENARIO_SHA256` 指定該版雜湊。省略雜湊沿用原 Case 1 固定值。`/health` 回報實際載入的檔案雜湊。可調整怪物配置、掉落和出口條件，五個節點、對應地圖、換圖順序及原版 BND 雜湊須符合現有 Case 1。先用 `--stage-one <定義絕對路徑> <碰撞資料夾絕對路徑> <SHA256>` 跑五圖離線驗證。這是 Server 關卡定義 `NOT_NATIVE_MEF`。
 
