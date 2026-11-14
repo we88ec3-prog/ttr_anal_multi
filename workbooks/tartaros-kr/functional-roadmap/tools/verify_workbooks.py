@@ -35,7 +35,7 @@ def main():
    assert back is not None and back.get('location')=="'功能總表'!A1",'Missing return navigation'
    for j,st in enumerate(it['steps'],9):
     assert c.get('A'+str(j))==st['id'];assert c.get('B'+str(j))==st['name'];assert c.get('C'+str(j))==st['kind']
-    dev=c.get('D'+str(j));test=c.get('E'+str(j));assert dev in ['待分析','分析中','待開發','開發中','已實作','不列分母'];assert test in ['未測','合成通過','通過','部分通過','未通過','待改善']
+    dev=c.get('D'+str(j));test=c.get('E'+str(j));assert dev in ['待分析','分析中','待開發','開發中','已實作','不列分母'];assert test in ['未測','合成通過','離線通過','通過','部分通過','未通過','待改善']
     if st['kind']=='開發':local[0]+=1;local[1]+=dev=='已實作'
     if st['kind']=='工作副本人測':local[3]+=1;local[2]+=test=='通過'
     steps+=1
