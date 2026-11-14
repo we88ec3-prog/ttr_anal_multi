@@ -208,3 +208,5 @@ Stage 462／463 目前公開的四份設定，完整通關會顯示關卡獎勵 
 使用已有馮德斯、角色經驗、商品目錄與原版 BND 的本機 Host。將 `TARTAROS_LOCAL_STAGE_ONE_CASE` 設為 693，`TARTAROS_LOCAL_HUNTING_GROUND_ALTERNATE_CASE` 設為 695，輪替條目設為 694 與 696。四個路徑各配對相應的關卡檔與 SHA-256，掉落模式用 `SCENARIO_CATALOG`，通關經驗由關卡定義提供。
 
 `/health.localHuntingGrounds` 的 `isRotationCase` 為 true 時表示該配置是輪替 Case。私有 Server 的 `tools/check-phindos-hunting-grounds.ps1` 可一次核對四份關卡。提供 `-HealthPort`、`-LoginPort`、`-ScenarioDirectory`、`-ExperiencePolicyPath`、`-TradeCatalogPath`。預設預期主 Case 為 693、695，並核對各關卡入口、SHA-256、掉落模式及 76 EXP 路線上下限。此預檢已在獨立 loopback Host 通過，實際 Client 操作依 TS-37I 驗收。
+
+指定 v2 的部署再加 `-CheckClientEndpoints`，使用登入 8415、主連線 8416、輔助 8414 與測試頁 5082。預檢確認四個端點只綁在 `127.0.0.1`、由同一 Host 持有，且本機測試頁狀態可讀。隔離 Host 已在這組固定埠通過。尚未開啟 Client 時，測試頁回報 `NO_GAME_CONNECTION`，實際登入與入場仍由實機驗收確認。
