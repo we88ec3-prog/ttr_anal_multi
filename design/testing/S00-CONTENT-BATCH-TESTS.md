@@ -164,6 +164,10 @@ Stage 1 關卡資料可用 `TARTAROS_LOCAL_STAGE_ONE_SCENARIO_PATH` 指向絕對
 
 關卡定義可用正整數 `completionExperience` 設定每場通關經驗。既有 `TARTAROS_LOCAL_STAGE_ONE_COMPLETION_EXP` 有設定時優先。兩處都未指定時僅能啟用進度測試，頭目掉落也保持關閉。正常入場及 SQLite 經驗驗收使用解析後的值，正式數值以 `/health` 的 `localStageOne.completionExperience` 為準。
 
+隨 Server 提供的 Case 1 預設給 100 通關經驗，沿用既有本機驗收值，日後可調整。載入該檔並保留正常主線與經驗政策的前置設定，即可在沒有 Host 經驗覆寫時啟用正常入口。更新後的關卡 SHA-256 為 `15a135a0b9692309de9c9a9911de3ebece9c515c1ad048c903d06da425506bb8`。若部署曾明設舊雜湊，需與關卡檔一起更新。`/health` 新增 `completionExperienceSource`（`SCENARIO_DEFINITION`、`HOST_OVERRIDE` 或 `NONE`）和 `bossDropMode`，可確認實際生效的經驗來源與掉落模式。每場仍在最後一張圖確認出口後，對參戰角色入帳一次。
+
+新建置已用隔離 SQLite 與本機 loopback 啟動查驗。未設 Host 經驗覆寫，`/health` 回傳 `normalEntryEnabled=true`、`previewEnabled=false`、`completionExperience=100`、`completionExperienceSource=SCENARIO_DEFINITION`、`bossDropMode=REVIVAL_SCROLL`、`bossDropEnabled=true`。本輪沿用驗收用卷軸 metadata，查驗後關閉隔離程序。正式本機 Server 尚未換版，TS-37 仍待指定 v2 實機。
+
 若批次驗收有開本機進度測試模式，可用 `/local-test/progress/status?includeSkillCatalogue=false` 的 `stageOne` 檢查目前場次。它顯示 Server 的大廳狀態、地圖、節點、角色、剩餘怪物總血量與結算是否仍待入帳。`canStartFromWorld` 表示世界狀態允許嘗試入場，隊長與單人成員資格仍在開始請求時核對。讀取狀態不會切換進度。
 
 本機測試頁在偵測到副本大廳或場次時，會在「馮德斯一般副本」區塊顯示上述狀態和已開啟的出口鍵。TS-37 若中途停住，可直接回報這個區塊的內容。驗收正常入口時，請由遊戲內建隊及開始。
