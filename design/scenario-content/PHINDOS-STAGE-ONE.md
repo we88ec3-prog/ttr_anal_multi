@@ -202,3 +202,9 @@ Stage 462／463 目前公開的四份設定，完整通關會顯示關卡獎勵 
 同 Stage 輪替的離線驗證連刷三場。以起始累計 100 EXP、每場 76 EXP 的伊希莉亞測試，兩個狩獵場都依序入帳至 176、252、328。第三場結算升到 3 級，第四場載入輪替 Case 時，角色資料與經驗條訊息仍顯示 3 級、328 EXP、本級起點 300 和下一級門檻 600。這組數值沿用目前的 Server 候選經驗政策。
 
 離線工具可在雙狩獵場旅程參數尾端加入 `--rotate-both-hunting-grounds <第一場地輪替檔> <SHA-256> <Case> <第二場地輪替檔> <SHA-256> <Case>`。從同一個冒險團連線交替選場，核對 693、695、694、696 各自通關後，第一個場地回到 693。四場的掉落、背包、結算及回村摘要均已離線核對，累計由 100 增至 404 EXP。
+
+### TS-37I 部署預檢
+
+使用已有馮德斯、角色經驗、商品目錄與原版 BND 的本機 Host。將 `TARTAROS_LOCAL_STAGE_ONE_CASE` 設為 693，`TARTAROS_LOCAL_HUNTING_GROUND_ALTERNATE_CASE` 設為 695，輪替條目設為 694 與 696。四個路徑各配對相應的關卡檔與 SHA-256，掉落模式用 `SCENARIO_CATALOG`，通關經驗由關卡定義提供。
+
+`/health.localHuntingGrounds` 的 `isRotationCase` 為 true 時表示該配置是輪替 Case。私有 Server 的 `tools/check-phindos-hunting-grounds.ps1` 可一次核對四份關卡。提供 `-HealthPort`、`-LoginPort`、`-ScenarioDirectory`、`-ExperiencePolicyPath`、`-TradeCatalogPath`。預設預期主 Case 為 693、695，並核對各關卡入口、SHA-256、掉落模式及 76 EXP 路線上下限。此預檢已在獨立 loopback Host 通過，實際 Client 操作依 TS-37I 驗收。
