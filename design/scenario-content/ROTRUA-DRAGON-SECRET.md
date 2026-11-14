@@ -24,3 +24,5 @@ Field 39 對應 Case 116，Chart 唯一節點的地圖為 813，模型 icecrysta
 Q145 採 QuestInfo type 2 的 51,625 EXP 及 type 4 的 1,809 LeeLoo。type 3 的 180 用途待證。將附表追加至 Q108 版，`version` 設 `rotrua-q145-candidate-v1`，`sourceBaselineSha256` 填附表 SHA，並增加 Q108 舊版任務順序至 `previousVersions`。合併內容 SHA 為 `131139de5e1a341f475bd0fb9f11cc68ce23ec064cbfdc43b84db250eb8a708f`，基線關卡圖 SHA 為 `2e790231f4d60d4a7fb87bf697fcb8d8838cc4b3fdee23882cc87c0e59f83a33`，啟用成長和重綁 Q119 覆寫後為 `0fe3ce4b7795e2c03b4dfd0b7c6eb5fa296bed9aa4563515f3242144c9e0a964`。 [錢包政策](rotrua-q145.story-wallet.json)
 
 從馮德斯正常入口離線走至 Q145，核對交接到指定 NPC 才完成、戰鬥總傷害、劇情次序、獎勵與回城存檔。測試角色結算後達 Lv.21、426,635 EXP、滿血 1,000。指定 v2 的 NPC 標記、對話與實際操作待驗。
+
+交付型任務在第二位 NPC 確認交付時，進度紀錄使用當前選擇的角色。接取所用角色可以和交付角色不同。合成故事流程覆蓋接取後還原已存的交付階段，再由另一角色完成，仍保留第二位 NPC 與下一任務順序。指定 v2 的中途換角、移動與交付畫面待驗。
