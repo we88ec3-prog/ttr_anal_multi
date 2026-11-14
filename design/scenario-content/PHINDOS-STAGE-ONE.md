@@ -160,7 +160,7 @@ Server 可使用內建行為設定。若部署有設定 `TARTAROS_LOCAL_MONSTER_
 
 ## 馮德斯第一狩獵場 Stage 462／Case 693
 
-Host 可用 `TARTAROS_LOCAL_STAGE_ONE_CASE=693` 載入[關卡定義](phindos-stage462-case693.scenario.json)，SHA-256 為 `a1470ce0c9bfafeb510e7d96fa4e8ebe7cafc72471e3d59c5aaa384e733a1a95`。沿用原版 BND 目錄與既有 `SCENARIO_CATALOG` 掉落設定。原有 Case 1～4 配置仍可照常使用。
+Host 可用 `TARTAROS_LOCAL_STAGE_ONE_CASE=693` 載入[關卡定義](phindos-stage462-case693.scenario.json)，SHA-256 為 `594713519e55d88c03573f3ec4e102fcbe0fd6598030a3ab79d414f2d8fa62af`。沿用原版 BND 目錄與既有 `SCENARIO_CATALOG` 掉落設定。原有 Case 1～4 配置仍可照常使用。
 
 玩家正常建單人隊進馮德斯，在狩獵場面板確認第一個項目。隊長的 `0064` 帶 Stage 462（`6400CE01`），Server 用 `009A` 回填大廳選項。隊長另按開始後，以 `0038` 送 Stage 462、Case 693。回村且維持隊伍時，重建大廳會重新發布選項，離隊或離村後須重新選擇。 [選關與資源證據](../../governance/s00-iterations/S00-20261101-MEF-RECEIVE-FEASIBILITY.md#狩獵場確認送出-0064)
 
@@ -172,7 +172,7 @@ TS-37M 的離線旅程用 694 為主 Case、693 為輪替 Case。進入 693 後�
 
 第二圖 3431 的三隻 `1022/PRE1` 改為初始兩隻加一隻順序增援。初始怪物倒下後，Server 依關卡設定等待 1.5 秒再生成第三隻。包含增援在內的三隻都倒地移除後才開出口。每隻仍計 4 EXP，兩條分支的通關總額均為 76。此波次時序是 Server 設定，已用原版 BND 通關驗證，指定 v2 的畫面待實測。
 
-終點圖 3438 增加入場怪 `1015/PRE1`，這隻不配置經驗或掉落。打倒後等待 1.5 秒，才出現原頭目 `1086/PRE1`。頭目配置 24 EXP 與一張 Product 183，並以波次 ID 綁定掉落與結算條件。這是 Server 編排。兩條分支均以原版 BND 驗證出場、戰鬥、拾取與 76 EXP 結算。指定 v2 尚待實機。
+終點圖 3438 入場即生成頭目 `1086/PRE1` 與小怪 `1015/PRE1`。頭目給 24 EXP 並掉落一張 Product 183。小怪沿用零經驗、零掉落的驗收設定，整場合計 76 EXP。兩隻都須倒下並移除才開結算出口。其他關卡可用 `requiredBoss.waveId` 配置延後出場的頭目。
 
 ### Case 694
 
@@ -239,7 +239,7 @@ Case 693–696 的普通怪和頭目使用專用的 `phindos-hunting-ground-mele
 
 指定 v2 的部署再加 `-CheckClientEndpoints`，使用登入 8415、主連線 8416、輔助 8414 與測試頁 5082。預檢確認四個端點只綁在 `127.0.0.1`、由同一 Host 持有，且本機測試頁狀態可讀。隔離 Host 已在這組固定埠通過。尚未開啟 Client 時，測試頁回報 `NO_GAME_CONNECTION`，實際登入與入場仍由實機驗收確認。
 
-四關部署預檢也核對 `/health.localHuntingGrounds[].reinforcementNodes`。Case 693 的地圖 3431 應列出初始 2 隻及順序增援 1 波，地圖 3438 應列出初始 1 隻及順序頭目增援 1 波。其餘三個 Case 應列空陣列。這個欄位反映已載入的關卡定義。波次在 Client 畫面出現的時間與出口行為依 TS-37K 驗收。
+四關部署預檢也核對 `/health.localHuntingGrounds[].reinforcementNodes`。Case 693 只有地圖 3431 列出初始 2 隻及順序增援 1 波。地圖 3438 的頭目與小怪由同一批入場生成。其餘三個 Case 應列空陣列。波次、頭目與出口畫面依 TS-37K 驗收。
 
 預檢另查 `/health.localHuntingGrounds[].finalExits`，核對每個 Case 都載入一個半徑 16 的結算出口。Case 693／694 的出口在 3438，Case 695／696 在 3448。本機驗收 Host 已通過此檢查，Client 的畫面仍依 TS-37L 驗收。
 
