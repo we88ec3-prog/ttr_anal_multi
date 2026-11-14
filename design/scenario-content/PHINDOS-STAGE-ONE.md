@@ -279,4 +279,6 @@ Stage 462／463 的「下次開場」會在大廳就緒且 Server 受理狩獵�
 
 啟動工具會把 Release Host 的完整輸出複製到日誌目錄下的獨立部署目錄，從該副本啟動，並在預檢收據回傳 `deploymentDirectory`。可用 `-HostBuildDirectory` 指定另外建置的輸出。日誌目錄需位於建置目錄之外。已由預設建置目錄直接啟動的舊 Host 仍可能持有 DLL 鎖，此時可先用 `dotnet build src/Tartaros.Server.Host -c Release -o <獨立建置目錄>` 產生下一版。
 
+啟動工具先核對指定 v2 EXE 的 SHA-256，並在收據記錄 `clientSha256` 與實際部署的 Host 組件 `hostSha256`。可先以隔離埠、SQLite 測試副本和 `-IncludeQ119Rewards -IncludeDungeonEquipment -PreflightOnly -IsolatedPorts` 核對四個狩獵場、主線掉落與裝備配置。收據的 `HOST_CONFIGURATION_ONLY` 表示部署檢查範圍，畫面與操作依 TS-37 驗收。
+
 含增援區可達性檢查的 Release 已啟用於指定 v2 的本機測試環境。四個 Case、四個 loopback 埠及部署後的網路組件 SHA-256 均通過預檢，啟動無錯誤輸出。沿用既有隔離測試資料庫，預檢時沒有遊戲連線。指定 v2 的正常建隊、通關與經驗顯示仍依 TS-37 實機驗收。
