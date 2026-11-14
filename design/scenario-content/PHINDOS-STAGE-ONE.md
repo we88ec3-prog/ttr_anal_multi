@@ -1,5 +1,7 @@
 # 馮德斯一般副本 Stage 1／Case 1
 
+後續一般副本原表資料見 [馮德斯 Stage 464 與爾勒梅斯 Stage 465～468](EARLY-HUNTING-SOURCE.md)。
+
 [關卡定義](phindos-stage1-case1.scenario.json)與維護者目前採用的設定逐位元組相同，SHA-256 為 `baa48fb43ec35420167be093e331c74fb2cbc0590da720f0626898ff2c6f64d2`。此範例使用公開的 [Server 關卡 JSON schema](local-scenario-definition.schema.json)，標示 `NOT_NATIVE_MEF`。圖表與群組來源的檔名和雜湊保存在定義內。出生點、怪物配置、出口半徑、必掉卷軸和 100 通關經驗是 Server 的候選規則。 [Case 1 的來源與碰撞分析](../../governance/s00-iterations/S00-20261101-MEF-RECEIVE-FEASIBILITY.md#case-1-的-server-關卡定義候選)
 
 | 節點 | 地圖 | 怪物數 | 碰撞資源 | SHA-256 |
