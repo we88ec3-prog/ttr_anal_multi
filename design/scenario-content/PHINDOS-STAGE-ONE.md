@@ -259,6 +259,8 @@ Stage 462／463 的「下次開場」會在大廳就緒且 Server 受理狩獵�
 
 八條基本路線從廣場建立單人隊後直接進馮德斯。離線工具確認村莊的副本大廳沿用同一隊伍 ID，並發布一名隊長的選取資料，再用遊戲選關及開場訊息走完整場。四關輪替檢查另外保留兩人同入村後、隊員離開才由隊長開場的驗證。
 
+公開單人隊結算返回後，離線工具用「僅列等待中的隊伍」查詢馮德斯隊伍目錄（`0052`），核對回傳隊伍 ID 與大廳一致、成員仍只有隊長，且可繼續開場。隊伍列表與回村畫面仍依指定 v2 實機確認。
+
 使用已有馮德斯、角色經驗、商品目錄與原版 BND 的本機 Host。將 `TARTAROS_LOCAL_STAGE_ONE_CASE` 設為 693，`TARTAROS_LOCAL_HUNTING_GROUND_ALTERNATE_CASE` 設為 695，輪替條目設為 694 與 696。四個路徑各配對相應的關卡檔與 SHA-256，掉落模式用 `SCENARIO_CATALOG`，通關經驗由關卡定義提供。
 
 `/health.localHuntingGrounds` 的 `isRotationCase` 為 true 時表示該配置是輪替 Case。私有 Server 的 `tools/check-phindos-hunting-grounds.ps1` 可一次核對四份關卡。提供 `-HealthPort`、`-LoginPort`、`-ScenarioDirectory`、`-ExperiencePolicyPath`、`-TradeCatalogPath`。預設預期主 Case 為 693、695，並核對各關卡入口、SHA-256、掉落模式及 76 EXP 路線上下限。此預檢已在獨立 loopback Host 通過，實際 Client 操作依 TS-37I 驗收。
