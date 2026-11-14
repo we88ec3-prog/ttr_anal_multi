@@ -157,3 +157,14 @@ Host 可用 `TARTAROS_LOCAL_STAGE_ONE_CASE=693` 載入[關卡定義](phindos-sta
 ### Case 694
 
 同一狩獵場可改用 `TARTAROS_LOCAL_STAGE_ONE_CASE=694` 和 [Case 694 關卡定義](phindos-stage462-case694.scenario.json)，SHA-256 為 `f6c86e34c80db266a831d1571f15c5431f45c062d838992b2313d7d0d830de25`。玩家仍選 Stage 462。Server 在 `0038` 發布 Case 694，並依 `CHART_Re_mushroom_02.xml` 的 `1 → 3 → 4 → 6 或 7 → 5 → 2` 送出節點鍵。分岔的另一個出口鍵為 7。實體地圖、出生與怪物位置沿用 Case 693 的 Server 候選配置，兩條路皆為 76 EXP，頭目掉落 Product 183。預檢使用 `-ScenarioCase 694`。
+
+## 馮德斯第二狩獵場 Stage 463
+
+玩家確認第二個狩獵場時送 `6400CF01`，大廳候選回覆為 `9A00CF01`。Host 須載入下面其中一份關卡，並設定相同的 `TARTAROS_LOCAL_STAGE_ONE_CASE`、定義 SHA-256、原版 BND 目錄和 `SCENARIO_CATALOG` 掉落模式。預檢使用相同 Case。
+
+| Case | 原版圖表節點 | 定義 SHA-256 |
+| --- | --- | --- |
+| [695](phindos-stage463-case695.scenario.json) | 1 → 2 → 3 → 5 → 7 → 9，或 1 → 2 → 4 → 6 → 7 → 9 | `03f3cf01fd4931fb3a89ca6975b76adf56f6f56edbabf6ac4d3d87a9c72ef427` |
+| [696](phindos-stage463-case696.scenario.json) | 1 → 2 → 3 → 4 → 5 → 8，或 1 → 2 → 6 → 7 → 5 → 8 | `9679e2d7dfed19f5e585fefc5977f76dcd9c7fce8e25be1016517a4b13ffdf84` |
+
+兩份定義逐邊對照原始 `CHART_Re_reed_01/02.xml`。地圖依序為 3439、3440、3441／3442、3444／3445、3446、3448。這些邏輯地圖的模型和 BND 源於 `_MapList.xml`，分支變體 3443、3447 暫不使用。怪物模型、PRE 與數量取自 `CLUST_Re_reed_01.xml`，實際組別分配、出生、出口與獎勵由 Server 暫定。頭目候選為 1083／PRE 1，採用既有 120 HP 頭目配置，掉落 Product 183。每條路八隻普通怪各 4 EXP，加頭目 24 EXP、通關 20 EXP，合計 76 EXP。兩個 Case 的四條分支各離線連刷兩次，指定 v2 實機待驗。
