@@ -75,6 +75,8 @@ Case 693 的臨時驗證配置讓末圖小怪 1015 有 50% 機率額外掉落 Pr
 
 [Case 693 裝備驗收配置](phindos-stage462-case693-equipment.scenario.json)供 TS-37P 使用。驗收啟動器的 `-IncludeDungeonEquipment` 會核對兩庫檔案雜湊，啟用普通裝備生成鍵及穿戴。頭目額外必掉一件 Product 2614，這是驗收用配置。兩條路線離線均可拾取並結算 76 EXP。
 
+私有 Server 可用 `tools/check-phindos-offline-routes.ps1 -CheckEquipment` 重跑。工具使用相同驗收配置與原版地形，逐分支核對末圖一張卷軸與一件裝備、全場三張卷軸與一件裝備，以及 76 EXP。實機穿脫依 TS-37P。
+
 編譯主線關卡圖時，沒有指定波次的掉落會省略 `waveId`，使既有內容的序列化與雜湊維持相容。部署已核對 Q119 關卡圖仍為 `f792b3ced0636cb3fea08f52ec985eaf4c5410888519ebf84c34bed84ef70fcd`。Case 693 的出口 6 路線另外在原版地形驗到地圖 3435，首圖、增援及頭目三筆卷軸皆入包，合計 76 EXP。新版已部署到本機 v2 驗收 Host。
 
 馮德斯 Case 693–696 的八條分支均已離線核對 `0021` 的 Product、外觀欄與數量。以原版 BND 檢查每個實際落點與玩家出生點位於同一可達區域，並在離落點約 6 單位且路徑暢通的位置送出 Space 請求。確認道具入包、地面物件移除與結算。指定 v2 的可見性、Space 搜尋範圍與操作仍由 TS-37G 實機核對。
