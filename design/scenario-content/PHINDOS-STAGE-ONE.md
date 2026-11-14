@@ -168,8 +168,10 @@ Host 可用 `TARTAROS_LOCAL_STAGE_ONE_CASE=693` 載入[關卡定義](phindos-sta
 
 | Case | 原版圖表節點 | 定義 SHA-256 |
 | --- | --- | --- |
-| [695](phindos-stage463-case695.scenario.json) | 1 → 2 → 3 → 5 → 7 → 9，或 1 → 2 → 4 → 6 → 7 → 9 | `03f3cf01fd4931fb3a89ca6975b76adf56f6f56edbabf6ac4d3d87a9c72ef427` |
-| [696](phindos-stage463-case696.scenario.json) | 1 → 2 → 3 → 4 → 5 → 8，或 1 → 2 → 6 → 7 → 5 → 8 | `9679e2d7dfed19f5e585fefc5977f76dcd9c7fce8e25be1016517a4b13ffdf84` |
+| [695](phindos-stage463-case695.scenario.json) | 1 → 2 → 3 → 5 → 7 → 9，或 1 → 2 → 4 → 6 → 7 → 9 | `29cf6eee48a7506c26549340ec0b42d2ed39c39c28c09143b17b38d44190c55e` |
+| [696](phindos-stage463-case696.scenario.json) | 1 → 2 → 3 → 4 → 5 → 8，或 1 → 2 → 6 → 7 → 5 → 8 | `d7eda859ea469c45ad64bad5218367301a8885c82ceb22491ee038fae39f717a` |
+
+Case 695、696 的普通怪與頭目生成點沿關卡 Y 軸向內移 24 單位，與各圖玩家出生點的最短直線距離由約 75.4 增至 99.3。這是 Server 的暫定出生配置。兩個 Case 的兩條分支均以原版 BND 驗證生怪、戰鬥、頭目掉落、拾取及 76 EXP 結算。指定 v2 的入場觀感仍待實機核對。
 
 兩份定義逐邊對照原始 `CHART_Re_reed_01/02.xml`。地圖依序為 3439、3440、3441／3442、3444／3445、3446、3448。這些邏輯地圖的模型和 BND 源於 `_MapList.xml`，分支變體 3443、3447 暫不使用。怪物模型、PRE 與數量取自 `CLUST_Re_reed_01.xml`，實際組別分配、出生、出口與獎勵由 Server 暫定。頭目候選為 1083／PRE 1，採用既有 120 HP 頭目配置，掉落 Product 183。每條路八隻普通怪各 4 EXP，加頭目 24 EXP、通關 20 EXP，合計 76 EXP。兩個 Case 的四條分支各離線連刷兩次，指定 v2 實機待驗。
 
