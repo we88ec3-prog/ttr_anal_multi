@@ -170,7 +170,9 @@ Host 啟動驗證已使用 Server `4beecb9` 的 Release 建置、新建 SQLite �
 
 現行 Server `d1afd70` 也已使用升級後的隔離 SQLite 副本、原版五圖 BND、經驗政策 v2 與現行 Case 1 關卡檔啟動。獨立 loopback Host 的 `/health` 回傳 Stage 1／Case 1、`normalEntryEnabled=true`、`previewEnabled=true`、`bossDropEnabled=true`、`completionExperience=100`，關卡 SHA-256 為 `50f25687385ca48f2caec3dce204531cc7abb14f9938acf7a89cc510445550b7`。100 經驗與卷軸 metadata 12／34 仍是啟動驗證值。健康檢查後已關閉此 Host。TS-37 尚需在實機從正常建隊入口驗證。
 
-`Tartaros.LocalTutorialInspect --stage-one <定義絕對路徑> <碰撞資料夾絕對路徑>` 會先核對資源身分與出生點到怪物／出口的靜態可達性，再逐圖以清怪事件和出口中心位置走完定義。已用本機五份原版碰撞資料執行。節點順序為 10 → 7 → 6 → 3 → 2，配置怪物數為 2 → 4 → 4 → 4 → 1，最後一隻為頭目 1086。工具逐圖列出載入與地圖／節點封包，便於比對停在哪個出口。這項檢查直接提交清怪事件，不測戰鬥操作或 Client 顯示。TS-37 維持待實機。
+`Tartaros.LocalTutorialInspect --stage-one <定義絕對路徑> <碰撞資料夾絕對路徑>` 先核對資源身分與靜態可達性，再逐圖列出地圖／節點載入封包和出口結果。已用本機五份原版碰撞資料執行。節點順序為 10 → 7 → 6 → 3 → 2，配置怪物數為 2 → 4 → 4 → 4 → 1，最後一隻為頭目 1086。
+
+同一指令現會在原版 BND 上用 Server 的角色移動函式走完每段路，依序到達 15 個配置怪物位置、頭目配置點北側的撿取位置 `(376,325)` 及五個出口。地圖 19 的撿取位置在半徑 12 內，與配置落點之間有清楚的碰撞路徑；最後使用實際走到的座標提交出口互動。輸出 `Walk` 欄記錄抵達位置與合成方向輸入次數。清怪事件仍由工具提交，實際頭目追擊後的掉落位置、Space 撿取、畫面和入帳仍由 TS-37 驗收。
 
 更新後的預檢另列每個節點的 `GroundDrop`。用現行關卡檔及五份原版碰撞資料驗證時，只有地圖 19 列出頭目 1086、外觀 162、Product 183、數量 1、半徑 12。啟用正式入帳前，既有角色進度資料庫需執行 `Tartaros.LocalExpeditionMigrate --db <既有資料庫絕對路徑> --initialize-role-progress-v1`。已用隔離資料庫副本核對新增的 `applied_experience` 欄位。部署資料庫和指定 Client 仍待驗收。
 
