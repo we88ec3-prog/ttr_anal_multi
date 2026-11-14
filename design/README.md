@@ -17,3 +17,5 @@
 - [怪物碰撞停止通知一致性](runtime-content/MONSTER-COLLISION-MOVEMENT-CANDIDATE.md)
 
 - [馮德斯一般副本 Stage 1／Case 1](scenario-content/PHINDOS-STAGE-ONE.md)：五圖關卡資料、資源身分與實作驗收。
+
+- [角色成長、裝備與怪物血量](scenario-content/ROLE-AND-MONSTER-GROWTH.md)。
