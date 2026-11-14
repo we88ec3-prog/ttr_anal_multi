@@ -142,7 +142,7 @@ Host 按下表設定 Case、關卡絕對路徑與 SHA-256，並沿用 Case 1 練
 
 12 份練等配置只對地圖 19 的頭目 1086/PRE1 指定 `phindos-stage1-boss-v1`。這份 [行為設定](phindos-stage1.monster-behavior.json) 將頭目 HP 設為 120，普通怪保留 60 HP，沿用既有攻擊與倒地動作。這是暫定的 Server 數值。必要頭目、掉落與通關總經驗仍由關卡定義控制。
 
-Server 可使用內建行為設定。若部署有設定 `TARTAROS_LOCAL_MONSTER_BEHAVIOR_PATH`，須包含 `phindos-stage1-boss-v1`；上方行為設定的 SHA-256 為 `67dadc1ac485c38481d4f84d171b4f9b4e2587f92cabb31022f5802ac1228ef2`。若另外使用自訂怪物配置，應保留其餘已用的行為並更新該檔的雜湊。
+Server 可使用內建行為設定。若部署有設定 `TARTAROS_LOCAL_MONSTER_BEHAVIOR_PATH`，須包含 `phindos-stage1-boss-v1`；上方行為設定的 SHA-256 為 `fcd7437c891d6ceff3b7584831eb931ab8fe522156cb3cae69def5324cd38701`。若另外使用自訂怪物配置，應保留其餘已用的行為並更新該檔的雜湊。
 
 頭目血量歸零時即產生設定中的掉落，可以先拾取。清場須等必要頭目的倒地移除訊息列入同一輪或更早的 Server 更新，再開啟出口。這讓設定較長倒地時間的頭目也能完成倒地流程。合成測試用 3 秒移除時間驗證，實機動畫及地面特效仍待確認。
 
@@ -150,7 +150,7 @@ Server 可使用內建行為設定。若部署有設定 `TARTAROS_LOCAL_MONSTER_
 
 ## 馮德斯第一狩獵場 Stage 462／Case 693
 
-Host 可用 `TARTAROS_LOCAL_STAGE_ONE_CASE=693` 載入[關卡定義](phindos-stage462-case693.scenario.json)，SHA-256 為 `a1a9dca3e9f5d7eac42585144b1c727d04300dbd49b75fe984ae624d1968e2bf`。沿用原版 BND 目錄與既有 `SCENARIO_CATALOG` 掉落設定。原有 Case 1～4 配置仍可照常使用。
+Host 可用 `TARTAROS_LOCAL_STAGE_ONE_CASE=693` 載入[關卡定義](phindos-stage462-case693.scenario.json)，SHA-256 為 `072412932c83482c3188e69931c79b12bdb57aef117c0500ab1e61bc599a72ed`。沿用原版 BND 目錄與既有 `SCENARIO_CATALOG` 掉落設定。原有 Case 1～4 配置仍可照常使用。
 
 玩家正常建單人隊進馮德斯，在狩獵場面板確認第一個項目。隊長的 `0064` 帶 Stage 462（`6400CE01`），Server 用 `009A` 回填大廳選項。隊長另按開始後，以 `0038` 送 Stage 462、Case 693。回村且維持隊伍時，重建大廳會重新發布選項，離隊或離村後須重新選擇。 [選關與資源證據](../../governance/s00-iterations/S00-20261101-MEF-RECEIVE-FEASIBILITY.md#狩獵場確認送出-0064)
 
@@ -160,7 +160,7 @@ Host 可用 `TARTAROS_LOCAL_STAGE_ONE_CASE=693` 載入[關卡定義](phindos-sta
 
 ### Case 694
 
-同一狩獵場可改用 `TARTAROS_LOCAL_STAGE_ONE_CASE=694` 和 [Case 694 關卡定義](phindos-stage462-case694.scenario.json)，SHA-256 為 `f6c86e34c80db266a831d1571f15c5431f45c062d838992b2313d7d0d830de25`。玩家仍選 Stage 462。Server 在 `0038` 發布 Case 694，並依 `CHART_Re_mushroom_02.xml` 的 `1 → 3 → 4 → 6 或 7 → 5 → 2` 送出節點鍵。分岔的另一個出口鍵為 7。實體地圖、出生與怪物位置沿用 Case 693 的 Server 候選配置，兩條路皆為 76 EXP，頭目掉落 Product 183。預檢使用 `-ScenarioCase 694`。
+同一狩獵場可改用 `TARTAROS_LOCAL_STAGE_ONE_CASE=694` 和 [Case 694 關卡定義](phindos-stage462-case694.scenario.json)，SHA-256 為 `4f02ee7e67c76dcc61b2b6e2d068d26449f4b87a9536f761dc92f5c576603c71`。玩家仍選 Stage 462。Server 在 `0038` 發布 Case 694，並依 `CHART_Re_mushroom_02.xml` 的 `1 → 3 → 4 → 6 或 7 → 5 → 2` 送出節點鍵。分岔的另一個出口鍵為 7。實體地圖、出生與怪物位置沿用 Case 693 的 Server 候選配置，兩條路皆為 76 EXP，頭目掉落 Product 183。預檢使用 `-ScenarioCase 694`。
 
 ## 馮德斯第二狩獵場 Stage 463
 
@@ -168,8 +168,8 @@ Host 可用 `TARTAROS_LOCAL_STAGE_ONE_CASE=693` 載入[關卡定義](phindos-sta
 
 | Case | 原版圖表節點 | 定義 SHA-256 |
 | --- | --- | --- |
-| [695](phindos-stage463-case695.scenario.json) | 1 → 2 → 3 → 5 → 7 → 9，或 1 → 2 → 4 → 6 → 7 → 9 | `29cf6eee48a7506c26549340ec0b42d2ed39c39c28c09143b17b38d44190c55e` |
-| [696](phindos-stage463-case696.scenario.json) | 1 → 2 → 3 → 4 → 5 → 8，或 1 → 2 → 6 → 7 → 5 → 8 | `d7eda859ea469c45ad64bad5218367301a8885c82ceb22491ee038fae39f717a` |
+| [695](phindos-stage463-case695.scenario.json) | 1 → 2 → 3 → 5 → 7 → 9，或 1 → 2 → 4 → 6 → 7 → 9 | `91e7cf936b3d0573018979d98386cf14bb7ad1ce19302cb1e548d4fa274f6e47` |
+| [696](phindos-stage463-case696.scenario.json) | 1 → 2 → 3 → 4 → 5 → 8，或 1 → 2 → 6 → 7 → 5 → 8 | `3d94c0900aab9c9e5e3cfe8076f5bf4dd7c87f30c30d1446b47af4028f2434d5` |
 
 Case 695、696 的普通怪與頭目生成點沿關卡 Y 軸向內移 24 單位，與各圖玩家出生點的最短直線距離由約 75.4 增至 99.3。這是 Server 的暫定出生配置。兩個 Case 的兩條分支均以原版 BND 驗證生怪、戰鬥、頭目掉落、拾取及 76 EXP 結算。指定 v2 的入場觀感仍待實機核對。
 
@@ -192,6 +192,8 @@ Stage 462／463 目前公開的四份設定，完整通關會顯示關卡獎勵 
 一般副本的關卡定義載入時，Server 檢查所有結算出口都位於該 Case 的最終頭目節點，且該節點的所有出口都進入結算。配合關卡圖的可達性和無循環驗證，任何分支都必須走到最終頭目。頭目倒地移除、其他怪物清除及出口互動仍由各場次的正常流程處理。
 
 ## 同一狩獵場輪替 Case
+
+Case 693–696 的普通怪和頭目使用專用的 `phindos-hunting-ground-melee-v1` 與 `phindos-hunting-ground-boss-v1`。Server 暫定索敵半徑 80、回位半徑 160。四個 Case 入場點到最近怪物都超過索敵半徑。離線逐圖停留三秒，確認怪物維持原位，再靠近並完成戰鬥、拾取與結算。自行指定怪物行為檔時，需要包含這兩組設定。指定 v2 的追擊觀感待實機。
 
 每個已開放的狩獵場可加載另一份原版圖表對應的 Server 關卡。為第二個 Case 設定 `TARTAROS_LOCAL_HUNTING_GROUND_ROTATION__<Case>__PATH` 與 `TARTAROS_LOCAL_HUNTING_GROUND_ROTATION__<Case>__SHA256`。例如主設定為 693、另一狩獵場為 695 時，可分別配置 694 與 696。Host 會驗證每個輪替 Case 與已開放狩獵場同 Stage，並在 `/health.localHuntingGrounds` 列出全部配置。
 
