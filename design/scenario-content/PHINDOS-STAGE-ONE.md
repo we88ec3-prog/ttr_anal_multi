@@ -150,7 +150,7 @@ Server 可使用內建行為設定。若部署有設定 `TARTAROS_LOCAL_MONSTER_
 
 ## 馮德斯第一狩獵場 Stage 462／Case 693
 
-Host 可用 `TARTAROS_LOCAL_STAGE_ONE_CASE=693` 載入[關卡定義](phindos-stage462-case693.scenario.json)，SHA-256 為 `77f3784e75a8e9e95954f9fa4d7b073a1569aaf993e2d906d2b36241a39fe5a5`。沿用原版 BND 目錄與既有 `SCENARIO_CATALOG` 掉落設定。原有 Case 1～4 配置仍可照常使用。
+Host 可用 `TARTAROS_LOCAL_STAGE_ONE_CASE=693` 載入[關卡定義](phindos-stage462-case693.scenario.json)，SHA-256 為 `1467633848938400630f4a52903f2c59e384ca9bc6d4e884ebaa6787dee814b6`。沿用原版 BND 目錄與既有 `SCENARIO_CATALOG` 掉落設定。原有 Case 1～4 配置仍可照常使用。
 
 玩家正常建單人隊進馮德斯，在狩獵場面板確認第一個項目。隊長的 `0064` 帶 Stage 462（`6400CE01`），Server 用 `009A` 回填大廳選項。隊長另按開始後，以 `0038` 送 Stage 462、Case 693。回村且維持隊伍時，重建大廳會重新發布選項，離隊或離村後須重新選擇。 [選關與資源證據](../../governance/s00-iterations/S00-20261101-MEF-RECEIVE-FEASIBILITY.md#狩獵場確認送出-0064)
 
@@ -162,7 +162,7 @@ Host 可用 `TARTAROS_LOCAL_STAGE_ONE_CASE=693` 載入[關卡定義](phindos-sta
 
 ### Case 694
 
-同一狩獵場可改用 `TARTAROS_LOCAL_STAGE_ONE_CASE=694` 和 [Case 694 關卡定義](phindos-stage462-case694.scenario.json)，SHA-256 為 `4f02ee7e67c76dcc61b2b6e2d068d26449f4b87a9536f761dc92f5c576603c71`。玩家仍選 Stage 462。Server 在 `0038` 發布 Case 694，並依 `CHART_Re_mushroom_02.xml` 的 `1 → 3 → 4 → 6 或 7 → 5 → 2` 送出節點鍵。分岔的另一個出口鍵為 7。實體地圖、出生與怪物位置沿用 Case 693 的 Server 候選配置，兩條路皆為 76 EXP，頭目掉落 Product 183。預檢使用 `-ScenarioCase 694`。
+同一狩獵場可改用 `TARTAROS_LOCAL_STAGE_ONE_CASE=694` 和 [Case 694 關卡定義](phindos-stage462-case694.scenario.json)，SHA-256 為 `ba9dc657fa5ca845b0eb732fcbb26fe4949ffea2341a4110c2c78cdfa41a5b16`。玩家仍選 Stage 462。Server 在 `0038` 發布 Case 694，並依 `CHART_Re_mushroom_02.xml` 的 `1 → 3 → 4 → 6 或 7 → 5 → 2` 送出節點鍵。分岔的另一個出口鍵為 7。實體地圖、出生與怪物位置沿用 Case 693 的 Server 候選配置，兩條路皆為 76 EXP，頭目掉落 Product 183。預檢使用 `-ScenarioCase 694`。
 
 ## 馮德斯第二狩獵場 Stage 463
 
@@ -170,8 +170,8 @@ Host 可用 `TARTAROS_LOCAL_STAGE_ONE_CASE=693` 載入[關卡定義](phindos-sta
 
 | Case | 原版圖表節點 | 定義 SHA-256 |
 | --- | --- | --- |
-| [695](phindos-stage463-case695.scenario.json) | 1 → 2 → 3 → 5 → 7 → 9，或 1 → 2 → 4 → 6 → 7 → 9 | `91e7cf936b3d0573018979d98386cf14bb7ad1ce19302cb1e548d4fa274f6e47` |
-| [696](phindos-stage463-case696.scenario.json) | 1 → 2 → 3 → 4 → 5 → 8，或 1 → 2 → 6 → 7 → 5 → 8 | `3d94c0900aab9c9e5e3cfe8076f5bf4dd7c87f30c30d1446b47af4028f2434d5` |
+| [695](phindos-stage463-case695.scenario.json) | 1 → 2 → 3 → 5 → 7 → 9，或 1 → 2 → 4 → 6 → 7 → 9 | `4aa5e5fea54427bd237a745001cdbabf9224a9a72b7a592e4e9eb2e5aef32b24` |
+| [696](phindos-stage463-case696.scenario.json) | 1 → 2 → 3 → 4 → 5 → 8，或 1 → 2 → 6 → 7 → 5 → 8 | `595b38205df40ed8f377ba48e1fc04b67253b7194928b0d120e9b53edb72f1a0` |
 
 Case 695、696 的普通怪與頭目生成點沿關卡 Y 軸向內移 24 單位，與各圖玩家出生點的最短直線距離由約 75.4 增至 99.3。這是 Server 的暫定出生配置。兩個 Case 的兩條分支均以原版 BND 驗證生怪、戰鬥、頭目掉落、拾取及 76 EXP 結算。指定 v2 的入場觀感仍待實機核對。
 
@@ -184,6 +184,8 @@ Case 695、696 的普通怪與頭目生成點沿關卡 Y 軸向內移 24 單位�
 隊長的 `0064` 選擇狩獵場，`0008` 以當時選擇建立場次。場次固定使用同一份配置處理預載、換圖、怪物、掉落與結算。回村會重新發布原選項，之後可在同一隊伍改選。Host 的 `/health` 會在 `localHuntingGrounds` 列出兩份已載入配置。離線工具可在 `--stage-one-journey` 參數最後加 `--alternate-hunting-ground <關卡檔> <SHA-256> <Case>`，以同一連線依序通關兩個場地。
 
 ## 結算分項
+
+Case 693–696 的最終出口互動半徑由 8 擴至 16。出口中心沿用地圖 3438 的 `(392, 532)` 與地圖 3448 的 `(384, 470)`，Server 以 `0027` 發布相同的半徑。離線已用原版 BND 從入口側走到離中心約 12 單位處，停留後按 Z 並完成結算。實機傳送陣的視覺大小與通道底端的位置感待驗。
 
 一般副本 `0022/type 2` 以應用資料起點計算位移。`+8` 的「關卡獎勵」合計清場與固定通關經驗，`+12` 的「殺戮獎勵」顯示擊倒經驗，`+20` 為 SQLite 實際入帳總額。隊伍與排名欄暫為零。若經驗達上限而只能部分入帳，優先列入擊倒獎勵，剩餘才列為關卡獎勵。進度指定場次維持零獎勵。 [Client 結算欄位證據](../../governance/s00-iterations/S00-20261101-MEF-RECEIVE-FEASIBILITY.md#結算介面的五個數值)
 
