@@ -164,6 +164,8 @@ TS-37 換版前預檢已讀取固定的 Case 1 定義與五份碰撞資源。路
 
 本機測試頁在偵測到副本大廳或場次時，會在「馮德斯一般副本」區塊顯示上述狀態和已開啟的出口鍵。TS-37 若中途停住，可直接回報這個區塊的內容。驗收正常入口時，請由遊戲內建隊及開始。
 
+有開本機取證時，可用 `story-trace` 的 `0053`（時間與長度）、`003D`（進村目標）、`0006/0008`（開始）對照 `outbound-trace` 的 `008E/008F`（隊伍鍵與成員旗標）、`0089`（離隊清理）、`0099/3`（村莊大廳）及 `005F/4`、`0038`、`0012`、`0049`（副本安裝、Case、地圖和節點）。隊名與成員 ID 會遮蔽，`ownPartyMemberRow` 以從 0 起算的列序標示本人。送出紀錄只證明 Server 完成送出。若 Client 已送 `0006`，可核對前一份同隊伍鍵的本人列是否有隊長旗標 `0x0002`，以及開始前有無清理訊息。此取證沿用本機測試頁，從正常入口進場時無須指定進度。
+
 Host 啟動驗證已使用 Server `4beecb9` 的 Release 建置、新建 SQLite 與本機原版五圖 BND 執行。短暫的 loopback Host 回傳 Stage 1／Case 1、`normalEntryEnabled=true`、`previewEnabled=false`、`bossDropEnabled=true`、`completionExperience=100`，關卡 SHA-256 為 `cb1c550455f75c5305cf2bdd69ac3231cf9d9fee510e4c0c4a5f292e92798229`。100 經驗及卷軸 metadata 12／34 只用於這次啟動驗證。測完已關閉測試 Host，未換正式本機版、未建立測試帳號或執行 Client。
 
 現行 Server `d1afd70` 也已使用升級後的隔離 SQLite 副本、原版五圖 BND、經驗政策 v2 與現行 Case 1 關卡檔啟動。獨立 loopback Host 的 `/health` 回傳 Stage 1／Case 1、`normalEntryEnabled=true`、`previewEnabled=true`、`bossDropEnabled=true`、`completionExperience=100`，關卡 SHA-256 為 `50f25687385ca48f2caec3dce204531cc7abb14f9938acf7a89cc510445550b7`。100 經驗與卷軸 metadata 12／34 仍是啟動驗證值。健康檢查後已關閉此 Host。TS-37 尚需在實機從正常建隊入口驗證。
