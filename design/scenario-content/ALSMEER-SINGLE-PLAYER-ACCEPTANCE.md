@@ -64,6 +64,8 @@ Server 檢查器的 `--alsmeer-growth-journey` 使用固定關卡、怪物設定
 
 ## 同一帳號的跨村買賣與倉庫收據
 
+新版市場旅程在 Q132 後以 810 LeeLoo 向爾勒梅斯雜貨商買一張 SP 回復卷軸（Product 233），綁定快捷欄第 2 格。Q134 圖 198 施放技能後使用，SP 從 65 回到 95（上限 100），Server 扣除一張、送出快捷格數量歸零與群組 1 的 4 秒冷卻。市場版與雙狩獵場版都完成 Q144，最終餘額為 7,218 LeeLoo。下方 8,028 LeeLoo 為增加這筆消耗前的收據。指定 v2 的 UI 與 HP／MP 的同帳號實際使用仍待驗。 [TS-24 批次驗收](../testing/S00-CONTENT-BATCH-TESTS.md)
+
 `--fresh-alsmeer-journey` 可在錢包參數後加上市場配置路徑與 SHA-256，使用現行三村市場與貨單。不預置貨幣。Q124 後用任務所得在馮德斯雜貨店花 2,000 LeeLoo 購買 Product 183，與 Q119 所得疊成兩張；步行至銀行 NPC 存一張到第 80 格。Q132 轉入爾勒梅斯時確認 Server 發布同一倉庫格位。從當地銀行取回，於雜貨店賣一張取得 200 LeeLoo，再繼續至 Q144。保存結果為原有復活卷軸一張、倉庫為空、餘額 13,698 LeeLoo、主線 EXP 245,164。存取不改變貨幣。實際開窗、拖曳與 Client 顯示仍待指定 v2 驗收。 [市場配置](phindos-alsmeer-rotrua.town-markets.json) · [貨單](three-village.town-trade.json)
 
 市場版旅程再於 Q138 後以 6,300 LeeLoo 買入伊希莉亞的 Product 2725／Item 2718，核對武器槽、物攻 +325、精神攻擊 +318 及外觀訊息。離線完成佩戴中的 Q140，核對首下普攻 47 傷害、回村外觀資料及裝備存檔。卸下後以原本的物品實例售出，收回 630 LeeLoo。市場版現在走到 Q144 時保留一張復活卷軸、245,164 EXP，錢包餘額 8,028 LeeLoo。13,698 LeeLoo 是前一版僅執行卷軸交易的收據。 [裝備規格](EQUIPMENT-WEAR-WIRE.md)
