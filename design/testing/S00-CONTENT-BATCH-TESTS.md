@@ -485,3 +485,5 @@ Q439～Q441 待 v2 批次驗收。由 Grindel 的 NPC 10089 開始，單人完�
 ## 爾勒梅斯一般副本
 
 TS-38 待指定 v2 實機。完成 Q132 後，從世界地圖建單人隊進爾勒梅斯，選 Stage 465 並開始。在第二圖各走一個分支，清怪後到出口按 Z，末圖擊倒首領與小怪後按 Space 撿卷軸，再按出口結算。確認返回圖 183 的原隊伍，離隊後可與 Q133 NPC 正常續接。Case 699／700 的四條六圖路線均已用原版 BND 從新帳號離線跑到 Q144，每場 136 EXP、拾取 Product 183 一張。 [兩份關卡與分支配置](../scenario-content/EARLY-HUNTING-SOURCE.md#stage-465-server-關卡)
+
+TS-39 待指定 v2 實機。可接 TS-38 結算回爾勒梅斯的原隊伍，改選 Stage 466。首圖與第三圖各有兩個分支，可按需要分批走四種組合。每張清怪後到出口按 Z，末圖擊倒 1088 與小怪後按 Space 撿卷軸，再走出口結算。確認回原隊、離隊可接 Q133。Case 701／702 共八條六圖已離線通過，每場 160 EXP、拾取 Product 183 一張。 [Barley 關卡定義](../scenario-content/EARLY-HUNTING-SOURCE.md#stage-466-server-關卡)

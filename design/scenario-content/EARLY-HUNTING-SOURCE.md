@@ -39,3 +39,20 @@
 兩村共用大廳進場與結算流程。狩獵場在建隊進村與結算回原隊時，於場景啟用前送出背包、貨幣與銀行狀態。主線演出或主線副本返回仍使用既有的城鎮載入確認，讓任務、角色與資產在同次切換同步。
 
 四條離線路線均從空白 SQLite 建立帳號，正常打完馮德斯 Stage 462／463，再由 Q132 抵達資格從廣場建隊進爾勒梅斯。Case 699 的分岔圖是 3463／3464，Case 700 是 3462／3465。各場應用層核對 136 EXP、一張復活卷軸、結算回原隊伍、離隊後續接 Q133，最後完成 Q144、圖 199。Q144 當下的參戰角色樣本為 245,452 EXP、背包六張復活卷軸，錢包 3,598 LeeLoo。指定 v2 的正常選關、分支、怪物、結算與回村畫面待實機。 [TS-38 批次驗收](../testing/S00-CONTENT-BATCH-TESTS.md#爾勒梅斯一般副本)
+
+## Stage 466 Server 關卡
+
+| Case | Server 定義 | SHA-256 |
+|---|---|---|
+| 701 | [Barley 701](alsmeer-stage466-case701.scenario.json) | `c439ec3602efc7f0885f240df319538a7f5591e2a27b9ed145171a6fb8118246` |
+| 702 | [Barley 702](alsmeer-stage466-case702.scenario.json) | `39c1ac5a9b745313849db2831f2b12b3f397f04f4891dfdfb1fd1c90e3eb1848` |
+
+兩個 Case 的節點順序皆為 `1 → 2 或 3 → 5 → 4→7 或 6→8 → 9`，每條路六圖。Case 701 的節點 2／3 是地圖 3471／3472，Case 702 是 3470／3473。兩個 Case 均由圖 3469 開始、在圖 3479 結算。Server 啟動時按 Case 檢查全部九個節點、各自可到達的下一節點及原版 BND 雜湊。
+
+兩處分岔的出口可分別選擇。本機候選用 `CLUST_Re_barley_01.xml` 的 Model／PRE／COUNT 設定怪群，首領 1088 在末圖與 1015 同場。出生、出口、怪群分配及首領判定為 Server 配置。每場暫定 128 擊倒 EXP、32 結算 EXP，啟用 `SCENARIO_CATALOG` 時首領掉落一張 Product 183。角色成長使用建議戰鬥等級 12，原服關卡條件仍待取證。這些定義使用 Server JSON，標示 `NOT_NATIVE_MEF`。
+
+既有 Host 驗收啟動器加 `-IncludeBarleyHuntingGround` 會加載 Case 701 與 702 輪替。該選項可與 Stage 465 的 `-IncludeAlsmeerHuntingGround` 一起使用，BND 目錄另需九份 Barley 碰撞檔。直接設定 Host 時，使用 `TARTAROS_LOCAL_HUNTING_GROUNDS__701__PATH` 和 `TARTAROS_LOCAL_HUNTING_GROUNDS__701__SHA256`，Case 702 可使用 `TARTAROS_LOCAL_HUNTING_GROUND_ROTATION__702__PATH` 和 `TARTAROS_LOCAL_HUNTING_GROUND_ROTATION__702__SHA256`。
+
+原版 BND 與隔離 SQLite 的八條新帳號旅程均通過。Q132 後先在爾勒梅斯完成 Stage 465，再使用同一支隊伍選 Stage 466。兩處分岔分別選出口鍵 1／3、5／6，覆蓋每個 Case 四條路線。各場結算 160 EXP、拾取一張復活卷軸並回原隊伍；接續 Q133 至 Q144 後，角色樣本為 245,612 累計 EXP，背包七張復活卷軸，錢包 3,598 LeeLoo。 [TS-39 批次驗收](../testing/S00-CONTENT-BATCH-TESTS.md#爾勒梅斯一般副本)
+
+隔離 Host 已核對 Stage 465、466 的主 Case 與輪替 Case 可同時載入。Stage 466 兩個 Case 都回報 Town 2、起始圖 3469、每條路線 160 EXP。輪替登記屬 Host 設定驗證，實機連刷時的輪替與畫面仍待驗。
