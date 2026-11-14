@@ -4,6 +4,16 @@
 自訂定義沿用自己的schema與副檔名，明示NOT_NATIVE_MEF；原生格式與傳檔相容性
 是獨立研究事項。此表不是已完成宣告，也不以合成測試數量換算完成百分比。
 
+## 2026-11-14 extra/roy1 整合
+
+S00 將 `be56ab2e6`、`2d9896d62`、`0a2503db0` 的研究稿與證據包保留於主線。以本機 KR 原 BIN 及 launcher EXE 重新核對 475 個原件視窗及 28 個錨點的位元組和 PE 映射；兩份 KR 原始 STP 的整檔 SHA-256 亦與來源相同。此處為 S00 限定核對，實機驗收與 T01 全面複核仍各自記錄。
+
+| 問題 | 本次可採用的結論 |
+|---|---|
+| 何時能交付檔案？ | 啟動遊戲前，原版更新器可依相容 HTTP 更新清單下載 gzip 並寫入普通檔案。已有原件靜態呼叫鏈；實機落檔待驗。直接使用指定 v2 EXE 的既有測試流程沒有用到這條更新器路徑。 [交付時機](../kr-extra-roy/20261114-183651-chatgpt-web-roy1-MEF-delivery-windows.md) |
+| 何時會解析原生 MEF？ | 仍未知。Client 有可達的 Lua 解析器與本機資源載入器，已追到 `MapList.TRIGGER` 的名稱存放處，尚缺從該名稱開檔、解析並執行的呼叫鏈。已檢查的遊戲 TCP 路徑也未找到原生 MEF 接收器。 [解析器與儲存](../kr-extra-roy/20261114-190624-chatgpt-web-roy1-MEF-parser-executor-storage.md) |
+| 普通副本能接手哪些工作？ | `0047` 可選擇已配置的有限 Q 劇情，並由共用場景更新協程。Q 執行時可能清除控制器的移動與動作輸入。本地生怪 API 尚缺可供 Server 對齊的物件身分及普通副本的可靠死亡事件。現行生成、AI 判定與清場仍由 Server 處理。 [場景入口與生命週期](../kr-extra-roy/20261114-192949-chatgpt-web-roy1-MEF-entry-lifecycle-events.md) |
+
 |功能需求|目前具體成果|未完成／可驗收的下一步|
 |---|---|---|
 |有版本及來源的內容定義|Scenario／MonsterBehavior JSON、SHA及唯讀目錄。[主線外部關卡檔](../design/scenario-content/STORY-SCENARIO-OVERRIDES.md)可逐任務覆蓋戰鬥編排並檢查來源|擴充條件與動作後持續維護 Schema 和契約。Q119 候選待實機|
