@@ -113,6 +113,8 @@ Stage 1 的 Server 關卡定義可在節點加上非負整數 `clearExperience`�
 
 正常入口依可達通關路線的最低總經驗判定。每條路線的總經驗均為正時，可省略 `completionExperience`，完全由 `defeatExperience` 與 `clearExperience` 提供獎勵。這種設定的 `/health` 會顯示 `normalEntryEnabled=true`、`completionExperience=0` 及 `completionExperienceSource=ROUTE_REWARDS`。本機預檢可用 `-CompletionExperience 0 -ExperienceSource ROUTE_REWARDS`。省略固定獎勵且存在零經驗路線的設定仍只適用測試預覽，並停用掉落。
 
+本機測試頁的「上次通關」會保留實際入帳的關卡與擊倒分項。Server 以 SQLite 收據的入帳總額與本場擊倒累計計算 `appliedStageExperience` 和 `appliedDefeatExperience`，與 `0022/type 2` 結算封包共用結果。回到馮德斯後仍可用這兩欄對照遊戲結算畫面。Case 693 的驗收預期為關卡 20、擊倒 56、合計 76 EXP。
+
 載入時逐條計算可達通關路線的獎勵，包含該路線各圖的清場、普通怪、頭目與全部增援，另加通關基礎經驗。單一路線的合計上限為 2,147,483,647。互斥分支各自計算，共用路段只在同一路線計一次。實際只計玩家走過的路線及確實擊倒的怪物。原有各 Case 配置未設定擊倒經驗，保留原先的通關經驗。此欄位屬 Server 規則。
 
 ### 可載入的練等配置
