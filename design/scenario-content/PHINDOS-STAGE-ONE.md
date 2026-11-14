@@ -210,3 +210,5 @@ Stage 462／463 目前公開的四份設定，完整通關會顯示關卡獎勵 
 `/health.localHuntingGrounds` 的 `isRotationCase` 為 true 時表示該配置是輪替 Case。私有 Server 的 `tools/check-phindos-hunting-grounds.ps1` 可一次核對四份關卡。提供 `-HealthPort`、`-LoginPort`、`-ScenarioDirectory`、`-ExperiencePolicyPath`、`-TradeCatalogPath`。預設預期主 Case 為 693、695，並核對各關卡入口、SHA-256、掉落模式及 76 EXP 路線上下限。此預檢已在獨立 loopback Host 通過，實際 Client 操作依 TS-37I 驗收。
 
 指定 v2 的部署再加 `-CheckClientEndpoints`，使用登入 8415、主連線 8416、輔助 8414 與測試頁 5082。預檢確認四個端點只綁在 `127.0.0.1`、由同一 Host 持有，且本機測試頁狀態可讀。隔離 Host 已在這組固定埠通過。尚未開啟 Client 時，測試頁回報 `NO_GAME_CONNECTION`，實際登入與入場仍由實機驗收確認。
+
+私有 Server 的 `tools/start-phindos-acceptance-host.ps1` 可重建此部署。先建置 Release Host，再以 PowerShell 7.4 以上執行，指定 `-Workspace`、`-AnalysisDirectory`、`-BoundsDirectory`、`-Database` 和 `-LogDirectory`。資料庫須先具備本機冒險團、教學、主線及經驗儲存元件。先用隔離資料庫執行 `-PreflightOnly`，成功後會關閉該次 Host。正式本機驗收省略該開關，成功後 Host 保持監聽。兩種模式都已用隔離資料庫核對。啟動器為該程序套用固定設定及內容雜湊，遇到既有埠占用會停止啟動。
