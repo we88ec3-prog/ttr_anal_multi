@@ -43,6 +43,8 @@ Stage 1 的掉落由 `.scenario.json` 的節點 `groundDrop` 提供，包含怪�
 
 Host 可用 `TARTAROS_LOCAL_STAGE_ONE_BOSS_DROP=SCENARIO_CATALOG` 啟用關卡內配置的商品。每項 Product 必須在已載入的商店資料中有一致且完整的背包 metadata，啟動時即核對。裝備每筆只掉一件，撿取沿用共用的獨立裝備實例與背包交易。原 `REVIVAL_SCROLL` 模式仍支援 Product 183。正式 Case 1 維持復活卷軸，其他商品的地面外觀及實機撿取另驗。
 
+一般副本啟用掉落後，載入關卡時會比對單筆掉落數量與撿取交易使用的堆疊上限。若同一 Product 有多家商店，兩處均取最小值。單筆掉落若連空背包都無法收下，Host 會回報商品和上限並停止載入。實際撿取仍須核對既有堆疊數量及可用格位。
+
 在 `SCENARIO_CATALOG` 模式，若商品表的 Product 183 列省略 metadata，沿用商店購買同商品時使用的 `TARTAROS_LOCAL_TOWN_TRADE_ITEM183_FIELD10`／`TARTAROS_LOCAL_TOWN_TRADE_ITEM183_FIELD14`。先補值，再比較該商品各店的實際入包欄位。商品表須有該 Product，所有列的實際欄位須一致。其他商品仍使用各自商品列提供的 metadata。
 
 再次核對韓版 `Product.xml`、`ItemTable2.xml`、`ItemUsableTable.xml` 的 183 對應列。商品表提供 Product → Item 對應、價格及商品旗標。道具表提供 class 26、堆疊上限 100、gettype 3、冷卻群 2，使用表提供兩個動作條件。這些列尚無可直接對應背包 `+10h`／`+14h` 的資料來源，部署仍使用明示的兩個欄位。 [背包接收欄位](../../governance/client-variants/20261109-mef-town-services/shop-asset-sync.md)
