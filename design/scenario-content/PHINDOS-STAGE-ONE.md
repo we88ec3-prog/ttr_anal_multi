@@ -184,3 +184,11 @@ Stage 462／463 目前公開的四份設定，完整通關會顯示關卡獎勵 
 ## 通關出口驗證
 
 一般副本的關卡定義載入時，Server 檢查所有結算出口都位於該 Case 的最終頭目節點，且該節點的所有出口都進入結算。配合關卡圖的可達性和無循環驗證，任何分支都必須走到最終頭目。頭目倒地移除、其他怪物清除及出口互動仍由各場次的正常流程處理。
+
+## 同一狩獵場輪替 Case
+
+每個已開放的狩獵場可加載另一份原版圖表對應的 Server 關卡。為第二個 Case 設定 `TARTAROS_LOCAL_HUNTING_GROUND_ROTATION__<Case>__PATH` 與 `TARTAROS_LOCAL_HUNTING_GROUND_ROTATION__<Case>__SHA256`。例如主設定為 693、另一狩獵場為 695 時，可分別配置 694 與 696。Host 會驗證每個輪替 Case 與已開放狩獵場同 Stage，並在 `/health.localHuntingGrounds` 列出全部配置。
+
+同一遊戲連線內，各 Stage 從主設定的 Case 開始。每次正常通關並成功入帳後，下次同 Stage 開場改用另一個 Case。放棄場次及進度指定場不推進輪替。這是 Server 的暫定輪替規則，原版 Case 抽選規則仍待證。離線工具的 `--alternate-hunting-ground` 若指定同 Stage 的不同 Case，會驗證主 Case、輪替 Case、回到主 Case 的順序。
+
+隔離 Host 已使用獨立 SQLite 和 loopback 埠同時載入 Case 693–696。四份配置分別通過 `check-stage-one-host.ps1` 預檢。指定 v2 Client 的 TS-37E 實機驗收仍待執行。
