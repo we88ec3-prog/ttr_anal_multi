@@ -109,7 +109,7 @@ Stage 1 的 Server 關卡定義可在節點加上非負整數 `clearExperience`�
 
 正常場次的測試頁顯示「已累計、待結算」，合計目前清場與擊倒經驗。固定通關獎勵在最終出口結算時加入。離線四關旅程逐圖核對待結算小計，並確認使用最終出口前，SQLite 角色經驗仍與本場開始時一致。
 
-一般副本的初始怪物、順序增援和計時增援都可逐隻指定 `defeatExperience`。例如頭目出場列可設定 `"defeatExperience": 11`。省略時為 0。Server 在該實體從存活降至零血量時累計一次。跨圖保留同一場的累計，最終出口將擊倒、清場、通關三項合併為同一筆經驗入帳。退出未結算的場次會捨棄暫存的擊倒經驗。進度指定場次沒有經驗入帳。
+一般副本的初始怪物、順序增援和計時增援都可逐隻指定 `defeatExperience`。例如頭目出場列可設定 `"defeatExperience": 11`。省略時為 0。怪物從存活降至零血量時，Server 將該次世界更新新增的擊倒經驗寫入參戰角色。入帳與收據在同一筆交易中完成，重試沿用同一收據鍵。入帳後在副本內發布 `005C` 與 `0034/type 1`，角色可當場升級，換圖、離隊或重登後保留已入帳經驗。最終出口另行入帳清場與通關獎勵，結算畫面合計兩階段的實際入帳金額。進度指定場次沒有經驗入帳。
 
 正常入口依可達通關路線的最低總經驗判定。每條路線的總經驗均為正時，可省略 `completionExperience`，完全由 `defeatExperience` 與 `clearExperience` 提供獎勵。這種設定的 `/health` 會顯示 `normalEntryEnabled=true`、`completionExperience=0` 及 `completionExperienceSource=ROUTE_REWARDS`。本機預檢可用 `-CompletionExperience 0 -ExperienceSource ROUTE_REWARDS`。省略固定獎勵且存在零經驗路線的設定仍只適用測試預覽，並停用掉落。
 
@@ -119,7 +119,7 @@ Stage 1 的 Server 關卡定義可在節點加上非負整數 `clearExperience`�
 
 ### 可載入的練等配置
 
-[Case 1 練等配置](phindos-stage1-case1-leveling.scenario.json)沿用地圖 1 起點與原有五圖、怪物、出口和頭目掉落。14 隻普通怪各 4 EXP，頭目 24 EXP，通關基礎獎勵 20 EXP，每場合計維持 100 EXP。擊倒獎勵在通關前累計，全部經驗仍於最終出口入帳。分配數值是 Server 暫定規則。
+[Case 1 練等配置](phindos-stage1-case1-leveling.scenario.json)沿用地圖 1 起點與原有五圖、怪物、出口和頭目掉落。14 隻普通怪各 4 EXP，頭目 24 EXP，通關基礎獎勵 20 EXP，每場合計維持 100 EXP。擊倒經驗當場入帳，通關基礎獎勵於最終出口入帳。分配數值是 Server 暫定規則。
 
 Host 保持 Case 1，設定 `TARTAROS_LOCAL_STAGE_ONE_SCENARIO_PATH` 為這份定義的絕對路徑，`TARTAROS_LOCAL_STAGE_ONE_SCENARIO_SHA256=9e3af74130568f177b843245a61e2fbf7961ceb22391cf73f3030d0635b6e931`，讓經驗取自定義（省略 `TARTAROS_LOCAL_STAGE_ONE_COMPLETION_EXP`），並以 `SCENARIO_CATALOG` 啟用掉落。執行 Host 預檢時，預期的 `CompletionExperience` 是基礎獎勵 20，完整通關的結果是 100。預檢可加上 `-MinimumRouteExperience 100 -MaximumRouteExperience 100`，同時核對兩個總額。
 
