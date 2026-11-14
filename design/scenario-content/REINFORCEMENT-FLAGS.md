@@ -21,4 +21,6 @@ Q119 主線合成測試已驗證 `BossDefeated` 旗標在清場重建場景後�
 
 需要延後第一隻怪出場時，可填 `encounters: []`，並至少配置一個非空波次。例如 Boss 關可在入場後計時生成 Boss，並以 `requiredBoss.waveId` 指定該波。等待時維持副本操作，出口仍鎖定，初始空場不計為一波，也不會觸發初始波次的血量旗標。若使用順序波次，第一波的延遲從首次戰鬥更新開始計算。一般 Boss 關仍預設入場生成 Boss，可同批放置小怪。既有主線的初始怪物名單由劇情綁定，沿用原有名單。
 
+私有 Server 的 `check-phindos-offline-routes.ps1 -DelayedBoss` 會從 Case 693 建立臨時關卡檔，把末圖 3438 的 Boss 1086 和小怪 1015 移到五秒後的同一波。兩條路線均以原版 BND 通過，驗證末圖入場無怪、後續兩隻都出場、Boss 掉落能拾取、結算共 76 EXP 並回村。五秒是測試值，正式 Case 693 仍配置兩隻入場同時出現。延後出場的實機畫面待驗。
+
 獨立測試場使用圖 193。先清第一隻怪，回進場提示圈按 Z 取得旗標，第二隻怪才出現。清第二隻後，玩家仍須到出口按 Z 才進結算。地圖座標沿用已檢查的互動測試場。這是 `NOT_NATIVE_MEF` 的 Server 內容定義。 [JSON Schema](local-scenario-definition.schema.json)
