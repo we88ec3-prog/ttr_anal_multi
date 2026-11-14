@@ -499,3 +499,5 @@ TS-42 待指定 v2 實機。完成 Q124 後由馮德斯單人隊伍大廳選 Sta
 ## 馮德斯普通任務
 
 AQ-01 待指定 v2 取證。馮德斯 Lv.4 以上，由 NPC 10008 選 Q2843 並按接取。將打開狩獵場面板、確認 Stage 462 及回 NPC 各自分開記錄。核對任務狀態、按鈕與 Server story-trace；本卡不列入實機通關。 [普通任務及追蹤規格](../scenario-content/PHINDOS-ORDINARY-QUEST-2843.md#server-進度與驗收)
+
+AQ-01 Server 候選已有 Q124 至 Q144 離線收據。指定 v2 實機依序核對接取窗、只開選關面板、確認 Stage 462、Ready 通知、回 10008 正常交付。核對 760 EXP、三張卷軸、重登入後主線與完成 key。公會地區名聲另列待實作。 [Q2843 候選流程與限制](../scenario-content/PHINDOS-ORDINARY-QUEST-2843.md#server-候選已接通)
