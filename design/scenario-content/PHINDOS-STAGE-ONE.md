@@ -105,6 +105,8 @@ Stage 1 的 Server 關卡定義可在節點加上非負整數 `clearExperience`�
 
 一般副本的初始怪物、順序增援和計時增援都可逐隻指定 `defeatExperience`。例如頭目出場列可設定 `"defeatExperience": 11`。省略時為 0。Server 在該實體從存活降至零血量時累計一次。跨圖保留同一場的累計，最終出口將擊倒、清場、通關三項合併為同一筆經驗入帳。退出未結算的場次會捨棄暫存的擊倒經驗。進度指定場次沒有經驗入帳。
 
+正常入口依可達通關路線的最低總經驗判定。每條路線的總經驗均為正時，可省略 `completionExperience`，完全由 `defeatExperience` 與 `clearExperience` 提供獎勵。這種設定的 `/health` 會顯示 `normalEntryEnabled=true`、`completionExperience=0` 及 `completionExperienceSource=ROUTE_REWARDS`。本機預檢可用 `-CompletionExperience 0 -ExperienceSource ROUTE_REWARDS`。省略固定獎勵且存在零經驗路線的設定仍只適用測試預覽，並停用掉落。
+
 載入時逐條計算可達通關路線的獎勵，包含該路線各圖的清場、普通怪、頭目與全部增援，另加通關基礎經驗。單一路線的合計上限為 2,147,483,647。互斥分支各自計算，共用路段只在同一路線計一次。實際只計玩家走過的路線及確實擊倒的怪物。原有各 Case 配置未設定擊倒經驗，保留原先的通關經驗。此欄位屬 Server 規則。
 
 ### 可載入的練等配置
