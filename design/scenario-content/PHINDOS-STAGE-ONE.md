@@ -237,6 +237,8 @@ Case 693–696 的普通怪和頭目使用專用的 `phindos-hunting-ground-mele
 
 ### TS-37I 部署預檢
 
+私有 Server 可先建置 `tools/Tartaros.LocalTutorialInspect` 的 Release，再執行 `tools/check-phindos-offline-routes.ps1`，傳入 `-Workspace`、`-AnalysisDirectory` 和 `-BoundsDirectory`。工具比對兩個專案的關卡檔 SHA-256，使用原版 BND 在臨時資料庫走完四個 Case 的兩條分支，逐條核對圖序、頭目、經驗、拾取與結算，並輸出八筆 JSON 紀錄。此步驟可在 Host 運作時執行，使用獨立資料庫，不要求登入遊戲。
+
 使用已有馮德斯、角色經驗、商品目錄與原版 BND 的本機 Host。將 `TARTAROS_LOCAL_STAGE_ONE_CASE` 設為 693，`TARTAROS_LOCAL_HUNTING_GROUND_ALTERNATE_CASE` 設為 695，輪替條目設為 694 與 696。四個路徑各配對相應的關卡檔與 SHA-256，掉落模式用 `SCENARIO_CATALOG`，通關經驗由關卡定義提供。
 
 `/health.localHuntingGrounds` 的 `isRotationCase` 為 true 時表示該配置是輪替 Case。私有 Server 的 `tools/check-phindos-hunting-grounds.ps1` 可一次核對四份關卡。提供 `-HealthPort`、`-LoginPort`、`-ScenarioDirectory`、`-ExperiencePolicyPath`、`-TradeCatalogPath`。預設預期主 Case 為 693、695，並核對各關卡入口、SHA-256、掉落模式及 76 EXP 路線上下限。此預檢已在獨立 loopback Host 通過，實際 Client 操作依 TS-37I 驗收。
