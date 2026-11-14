@@ -156,11 +156,13 @@ TS-36 待實機。只啟用交易，使用已有背包物品、LeeLoo 和卷軸�
 
 TS-37 待實機。使用指定 v2 正常建單人隊進馮德斯，以隊長開始一般副本 Stage 1。每圖清怪後進出口。終點擊倒頭目 1086，靠近落點按 Space，確認背包增加一張一般復活卷軸，另記是否看見地面特效。走出口核對結算經驗，確認返回馮德斯；同一角色再完成一次，兩場應分別入帳，主線進度應維持原值。需啟用 Stage 1 經驗與頭目掉落設定。 [頭目掉落規格](../scenario-content/GROUND-LOOT.md#馮德斯一般副本-stage-1)
 
-TS-37 換版前預檢已讀取固定的 Case 1 定義與五份碰撞資源。路線為地圖 1 → 4 → 8 → 12 → 19，起點節點 10。Host 需設定 `TARTAROS_LOCAL_STAGE_ONE_SCENARIO_PATH`、`TARTAROS_LOCAL_STAGE_ONE_BOUNDS_DIR`、正整數 `TARTAROS_LOCAL_STAGE_ONE_COMPLETION_EXP` 和 `TARTAROS_LOCAL_STAGE_ONE_BOSS_DROP=REVIVAL_SCROLL`，並提供經驗政策及 Product 183 背包 metadata。正常建隊入場可在關閉進度指定功能時啟用。批次取證如需 `story-trace`，可另開本機進度測試模式，但 TS-37 的連線全程走正常入口。實測卡應填入實際設定的經驗值。指定 v2 SHA-256 為 `6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c`。選關後按開始若無法進場，保留畫面與操作時間，有開記錄時一併保留 `story-trace`，後續步驟維持待測。
+TS-37 換版前預檢已讀取固定的 Case 1 定義與五份碰撞資源。路線為地圖 1 → 4 → 8 → 12 → 19，起點節點 10。Host 需設定 `TARTAROS_LOCAL_STAGE_ONE_SCENARIO_PATH`、`TARTAROS_LOCAL_STAGE_ONE_BOUNDS_DIR`、`TARTAROS_LOCAL_STAGE_ONE_BOSS_DROP=REVIVAL_SCROLL`，並提供正整數通關經驗、經驗政策及 Product 183 背包 metadata。正常建隊入場可在關閉進度指定功能時啟用。批次取證如需 `story-trace`，可另開本機進度測試模式，但 TS-37 的連線全程走正常入口。實測卡應填入實際設定的經驗值。指定 v2 SHA-256 為 `6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c`。選關後按開始若無法進場，保留畫面與操作時間，有開記錄時一併保留 `story-trace`，後續步驟維持待測。
 
 啟用測試版後，從本機 Host 的 `/health` 讀取 `localStageOne`。TS-37 需要 `normalEntryEnabled=true`、`bossDropEnabled=true`、Stage 1／Case 1，並用回傳的 `completionExperience` 填入測試卡。`contentSha256` 可與預檢結果對照。`previewEnabled` 只表示測試頁能提供進度指定入口。若 `localStageOne` 為 null，該 Host 未載入此副本設定。這些欄位確認 Host 啟用情形，實際帳號仍要正常進村並建單人隊。
 
 Stage 1 關卡資料可用 `TARTAROS_LOCAL_STAGE_ONE_SCENARIO_PATH` 指向絕對路徑的 `.scenario.json`，並以 `TARTAROS_LOCAL_STAGE_ONE_SCENARIO_SHA256` 指定該版雜湊。省略雜湊沿用原 Case 1 固定值。`/health` 回報實際載入的檔案雜湊。可調整怪物配置、掉落和出口條件，五個節點、對應地圖、換圖順序及原版 BND 雜湊須符合現有 Case 1。先用 `--stage-one <定義絕對路徑> <碰撞資料夾絕對路徑> <SHA256>` 跑五圖離線驗證。這是 Server 關卡定義 `NOT_NATIVE_MEF`。
+
+關卡定義可用正整數 `completionExperience` 設定每場通關經驗。既有 `TARTAROS_LOCAL_STAGE_ONE_COMPLETION_EXP` 有設定時優先。兩處都未指定時僅能啟用進度測試，頭目掉落也保持關閉。正常入場及 SQLite 經驗驗收使用解析後的值，正式數值以 `/health` 的 `localStageOne.completionExperience` 為準。
 
 若批次驗收有開本機進度測試模式，可用 `/local-test/progress/status?includeSkillCatalogue=false` 的 `stageOne` 檢查目前場次。它顯示 Server 的大廳狀態、地圖、節點、角色、剩餘怪物總血量與結算是否仍待入帳。`canStartFromWorld` 表示世界狀態允許嘗試入場，隊長與單人成員資格仍在開始請求時核對。讀取狀態不會切換進度。
 
@@ -174,7 +176,7 @@ Host 啟動驗證已使用 Server `4beecb9` 的 Release 建置、新建 SQLite �
 
 `Tartaros.LocalTutorialInspect --stage-one <定義絕對路徑> <碰撞資料夾絕對路徑>` 先核對資源身分與靜態可達性，再逐圖列出地圖／節點載入封包和出口結果。已用本機五份原版碰撞資料執行。節點順序為 10 → 7 → 6 → 3 → 2，配置怪物數為 2 → 4 → 4 → 4 → 1，最後一隻為頭目 1086。
 
-同一指令現使用 Server 的一般副本場景處理器，從出生開始送合成方向輸入、普攻及出口互動。五圖均經實際戰鬥清怪後開出口，命中數依序為 6、12、12、12、3。地圖 19 的頭目追擊後在約 `(376.49,321.01)` 掉落 Product 183，角色可依實際站位選中掉落，再經出口進入待結算狀態。離線工具直接建立場次，使用 100 經驗作為測試設定，沒有建隊、連線或資料庫提交。這些前後段仍由既有連線合成測試及 TS-37 實機覆蓋。
+同一指令現使用 Server 的一般副本場景處理器，從出生開始送合成方向輸入、普攻及出口互動。五圖均經實際戰鬥清怪後開出口，命中數依序為 6、12、12、12、3。地圖 19 的頭目追擊後在約 `(376.49,321.01)` 掉落 Product 183，角色可依實際站位選中掉落，再經出口進入待結算狀態。離線工具直接建立場次，核對待結算經驗與關卡設定一致。建隊、連線及 SQLite 入帳由連線合成測試覆蓋，指定 Client 的實際操作由 TS-37 驗收。
 
 更新後的預檢另列每個節點的 `GroundDrop`。用現行關卡檔及五份原版碰撞資料驗證時，只有地圖 19 列出頭目 1086、外觀 162、Product 183、數量 1、半徑 12。啟用正式入帳前，既有角色進度資料庫需執行 `Tartaros.LocalExpeditionMigrate --db <既有資料庫絕對路徑> --initialize-role-progress-v1`。已用隔離資料庫副本核對新增的 `applied_experience` 欄位。部署資料庫和指定 Client 仍待驗收。
 
