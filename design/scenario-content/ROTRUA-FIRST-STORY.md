@@ -52,4 +52,10 @@ Q92 依賴 Q89，Q93 依賴 Q92，兩者 NPC 均為 10056，要求 Lv.17。Q92 �
 
 Q93 Scene 1 是 Blank，Scene 5 After 暫時載入 town003N。Scene 2 建立 1035、1019，來源群組 30 有 1035／PRE 1 × 1，群組 6～11 有不同數量與 PRE 的 1019。Scene 3 的 1020 可在群組 34 找到，1124 僅出現在預載與演出。Server 可先以 1035 為必要頭目候選，與 1019 同場，Lv.17 的候選血量 507／117。逐圖群組與出生、出口、演出觸發時點須在接續實作驗證。
 
-原件與工作目錄的 Chart 解碼 SHA 為 `7b679442a9d47cf4d12b00e273ade33a6b5c183535e6be0a48783db7dd64df74`，Cluster 為 `399a9991d68702f81b783e1a7eee0d5d4693dc55d269372e5a616130bbd17f1a`，兩邊一致。Q92/Q93 目前有資源證據與配置候選。
+原件與工作目錄的 Chart 解碼 SHA 為 `7b679442a9d47cf4d12b00e273ade33a6b5c183535e6be0a48783db7dd64df74`，Cluster 為 `399a9991d68702f81b783e1a7eee0d5d4693dc55d269372e5a616130bbd17f1a`，兩邊一致。
+
+Q93 的前四圖選群組 1、4、15、24，各兩隻 117 HP 普通怪。末圖用群組 30 與 6，1035 為 507 HP，與 117 HP 的 1019 同時入場。末圖入場播 Scene 2、清場播 3 和 4。出口用 Z 進結算，回村播放 Scene 5，提交任務和獎勵。這些為 Server 編排。 [Q92／Q93 五圖配置](rotrua-snowbattle.append.json) · [錢包政策](rotrua-q93.story-wallet.json)
+
+新主線在原 Q89 版本後追加兩個任務及五圖，加入原 Q89 版本作為可接續的存檔來源。附表 SHA-256 為 `9b0cafa0bcf14b9f509c3f08bc2fb71531de450214c403c9cee5326bacd7f23f`，合併時用作 `sourceBaselineSha256`，`version` 設為 `rotrua-q93-candidate-v1`。合併主線 SHA 為 `feedfa432e408ab9edb6da3359d5d782dbeac882a06e549a78a560f22127aa40`。Q119 覆寫改綁該 SHA。主線基線關卡圖為 `9656eeeb40ad91ab175036e69c144bbd7c656d7c2f3e93ae1d4534971595f247`，啟用成長與 Q119 覆寫後為 `8185d93cf51ca9815b7c76db8ed1cbc274c62035a62533803eec00d2a53b31f4`。經驗 v5 延續 v2～v4 的門檻與獎勵；已保存的相容政策角色登入時以累計經驗更新政策版本。
+
+離線從馮德斯進羅特魯亞並打完 Q93。五圖核對擊倒傷害總和、回村地圖 199，並確認入帳 43,273 EXP 和 2,196 LeeLoo。測試角色回村後為 Lv.19、327,560 EXP、滿血 950。v2 實機待驗。
