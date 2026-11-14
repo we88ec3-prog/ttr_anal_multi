@@ -396,4 +396,6 @@ TS-37D 結算畫面可一併核對關卡獎勵 20、殺戮獎勵 56、總經驗 
 
 TS-37D 回到大廳後，本機測試頁顯示最近一次正常通關的 Stage／Case、參戰角色、地圖路線、拾取筆數與入帳經驗。連刷時另保留同一連線最近八場，依完成順序呈現，TS-37I 可在第四場回村後一次核對 693 → 695 → 694 → 696。摘要只在正常場次完成經驗入帳時更新。最近一場可從 `status.stageOne.lastCompletedRun` 讀取，八場內的序列可從 `status.stageOne.completedRunHistory` 讀取。這是本機測試紀錄，重登後由新的連線重新累積。
 
+Release `9974107` 的最新批次已在隔離 loopback 埠與測試資料庫副本完成部署預檢。使用指定 v2 EXE 的雜湊、泳池廣場、四個馮德斯 Case、Case 693 裝備配置及 Q119 掉落。預檢也確認資料庫有正常完成馮德斯抵達的帳號。固定遊戲埠的舊 Host 保持運作，隔離 Host 已關閉。新版畫面及操作仍待實機驗收。
+
 [Stage 462／Case 693 設定](../scenario-content/PHINDOS-STAGE-ONE.md#馮德斯第一狩獵場-stage-462case-693)
