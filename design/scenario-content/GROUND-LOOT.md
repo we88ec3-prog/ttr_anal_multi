@@ -49,6 +49,8 @@ Host 可用 `TARTAROS_LOCAL_STAGE_ONE_BOSS_DROP=SCENARIO_CATALOG` 啟用關卡�
 
 一般副本的 `groundDrop.pre` 預設為 1。Server 載入關卡時會檢查該節點的初始怪物或增援有相同的模型與 PRE，擊倒時依這兩欄決定是否掉落。Case 1 的復活卷軸因此綁定 `1086/PRE1`。這是 Server 關卡規則，原服掉落與指定 v2 實機呈現仍待驗證。
 
+節點可改用 `groundDrops` 配置 1～16 筆，不與單筆 `groundDrop` 同時使用。每筆的模型、PRE、Product 組合須唯一，且依初始怪物與增援計算的整圖掉落總數上限為 255。一次擊倒可發出含多筆記錄的 `0021`。每筆有自己的地面物件、拾取半徑與持久化領取 ID。Space 一次撿一筆範圍內最近且可到達的掉落，同距離依生成順序。正式 Case 1 的配置仍是一張復活卷軸，合成測試另配置 Product 2614 和 183 同場掉落，驗證各自撿取、兩輪回村後的裝備 ID、卷軸數量與經驗。這些規則屬於 Server 關卡格式 `NOT_NATIVE_MEF`。指定 v2 對多筆同時掉落的畫面與拾取仍待驗收。
+
 ## S00 GAME_RUNTIME_OBSERVATION：撿取入包
 
 1. 地面掉落建立時分配全域唯一的 Server 掉落 ID。每張圖對 Client 發送的 16-bit 物件 ID 用於建立和移除，允許在不同場次重用。
