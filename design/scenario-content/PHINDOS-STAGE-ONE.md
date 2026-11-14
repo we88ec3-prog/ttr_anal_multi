@@ -216,3 +216,5 @@ Stage 462／463 目前公開的四份設定，完整通關會顯示關卡獎勵 
 私有 Server 的 `tools/start-phindos-acceptance-host.ps1` 可重建此部署。先建置 Release Host，再以 PowerShell 7.4 以上執行，指定 `-Workspace`、`-AnalysisDirectory`、`-BoundsDirectory`、`-Database` 和 `-LogDirectory`。資料庫須先具備本機冒險團、教學、主線及經驗儲存元件。先用隔離資料庫執行 `-PreflightOnly`，成功後會關閉該次 Host。正式本機驗收省略該開關，成功後 Host 保持監聽。兩種模式都已用隔離資料庫核對。啟動器為該程序套用固定設定及內容雜湊，遇到既有埠占用會停止啟動。
 
 沿用較早的本機測試資料庫時，先用 SQLite backup 建立獨立副本，並執行 `PRAGMA integrity_check`。若副本缺少 `local_expedition_role_progress`，在私有 Server 根目錄執行 `dotnet run --project tools/Tartaros.LocalExpeditionMigrate -c Release -- --db <副本絕對路徑> --initialize-role-progress-v1`，再執行四關預檢。已以既有測試資料副本實際核對此步驟，帳號、教學進度、馮德斯旅程紀錄及主線場次／事件逐列相同，新增的副本經驗帳本從空白開始。這項結果驗證資料庫可供 Host 啟動，實際角色登入與副本流程仍依 TS-37 驗收。
+
+啟動工具會把 Release Host 的完整輸出複製到日誌目錄下的獨立部署目錄，從該副本啟動，並在預檢收據回傳 `deploymentDirectory`。可用 `-HostBuildDirectory` 指定另外建置的輸出。日誌目錄需位於建置目錄之外。已由預設建置目錄直接啟動的舊 Host 仍可能持有 DLL 鎖，此時可先用 `dotnet build src/Tartaros.Server.Host -c Release -o <獨立建置目錄>` 產生下一版。
