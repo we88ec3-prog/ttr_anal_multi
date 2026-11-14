@@ -26,7 +26,9 @@
 | Field/Cluster/CLUST_S_peridot_01.xml | `5c5786b02445acc81b9ee2167e0c497c62d2beef6c1aa09697b101d6db2fc818` |
 | Event/SceneList.xml | `8d2e6a053b71750bfbd5337545446170f03316b185b2fdd94163bebe7146ba25` |
 
-以上成員與五個 BND 實際比對原件及測試工作目錄，解碼後一致。Q89 結算採原表 type 2 的 39,123 EXP，沿用前兩村由參戰角色領取的規則。原表 type 3 的 180、type 4 的 1,566 尚未接入本輪驗收。v4 經驗政策保留 v2/v3 已有門檻與獎勵，僅為新增的主線任務增加獎勵。
+以上成員與五個 BND 實際比對原件及測試工作目錄，解碼後一致。Q89 結算採原表 type 2 的 39,123 EXP，由參戰角色領取。原表 type 4 的 1,566 LeeLoo 發到帳號錢包，與主線進度及經驗同一交易提交。回村劇情結束且場景就緒時，Server 用 `002C` 公布餘額。原表 type 3 的 180 用途待證。 [錢包政策](rotrua-q89.story-wallet.json)
+
+`-IncludeRotruaStory` 同時載入綁定 v4 的錢包政策，SHA-256 為 `ab955b3e5ee294488666d475c9c175c43d236ee983cc27c4d14fb808481aa3a3`。這份設定也包含前兩村十筆已核對的 LeeLoo 獎勵。現有結算只有在該次新發主線經驗時才發 LeeLoo，已領過 Q89 經驗的存檔需要另行處理錢包補發。離線從馮德斯重跑，確認 Q89 餘額增加 1,566、Battle Point 維持原值，且錢包流水只有一筆。
 
 實作時以 [舊主線](../../governance/client-variants/20261107-town2-mainline/resources/alsmeer-full-mainline-content-candidate.json) 為底，將附表的 `maps`、`quests` 依原順序追加，將原主線 SHA 與原任務順序追加至 `previousVersions`。Q119 的成長覆寫須改綁新主線 SHA。合併主線 SHA 為 `86edceb6952ac34dad4f7f15655dfa2553dcdc6fea211afc8b2c9c996eda1962`，啟用成長與 Q119 覆寫後的關卡圖 SHA 為 `93fada6720f966243c49fefbbf0dfdc6d95f37af1cfe4fcc81afac814fb438f9`。BND 從 Client 的 `Map/BoundMap.stp` 讀取 `BoundMap/<檔名>`。
 
