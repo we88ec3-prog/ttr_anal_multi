@@ -19,4 +19,6 @@ Server 自訂關卡的 `reinforcements` 與 `timedReinforcements` 可指定 `req
 
 Q119 主線合成測試已驗證 `BossDefeated` 旗標在清場重建場景後仍保留，並可與其他旗標共同控制出口。實機驗收待進行。
 
+需要延後第一隻怪出場時，可填 `encounters: []`，並至少配置一個非空波次。例如 Boss 關可在入場後計時生成 Boss，並以 `requiredBoss.waveId` 指定該波。等待時維持副本操作，出口仍鎖定，初始空場不計為一波，也不會觸發初始波次的血量旗標。若使用順序波次，第一波的延遲從首次戰鬥更新開始計算。一般 Boss 關仍預設入場生成 Boss，可同批放置小怪。既有主線的初始怪物名單由劇情綁定，沿用原有名單。
+
 獨立測試場使用圖 193。先清第一隻怪，回進場提示圈按 Z 取得旗標，第二隻怪才出現。清第二隻後，玩家仍須到出口按 Z 才進結算。地圖座標沿用已檢查的互動測試場。這是 `NOT_NATIVE_MEF` 的 Server 內容定義。 [JSON Schema](local-scenario-definition.schema.json)
