@@ -156,6 +156,8 @@ TS-36 待實機。只啟用交易，使用已有背包物品、LeeLoo 和卷軸�
 
 TS-37 待實機。使用指定 v2 正常建單人隊進馮德斯，以隊長開始一般副本 Stage 1。每圖清怪後進出口。終點擊倒頭目 1086，靠近落點按 Space，確認背包增加一張一般復活卷軸，另記是否看見地面特效。走出口核對結算經驗，確認返回馮德斯；同一角色再完成一次，兩場應分別入帳，主線進度應維持原值。需啟用 Stage 1 經驗與頭目掉落設定。 [頭目掉落規格](../scenario-content/GROUND-LOOT.md#馮德斯一般副本-stage-1)
 
+節點可用 `requiredBoss` 明定頭目的模型及 PRE。載入時必須在初始配置與所有增援中恰好找到一隻相符的怪物。Server 核對該實例的血量歸零，並等待所有配置波次生成及清場後，才允許出口進入結算。馮德斯 Case 1 地圖 19 指定 `1086/PRE1`，副本狀態的 `bossDefeated` 可在結算前核對擊倒結果。更新後的關卡 SHA-256 為 `baa48fb43ec35420167be093e331c74fb2cbc0590da720f0626898ff2c6f64d2`。這是 Server 關卡 JSON 定義。
+
 TS-37 換版前預檢已讀取固定的 Case 1 定義與五份碰撞資源。路線為地圖 1 → 4 → 8 → 12 → 19，起點節點 10。Host 需設定 `TARTAROS_LOCAL_STAGE_ONE_SCENARIO_PATH`、`TARTAROS_LOCAL_STAGE_ONE_BOUNDS_DIR`、`TARTAROS_LOCAL_STAGE_ONE_BOSS_DROP=REVIVAL_SCROLL`，並提供正整數通關經驗、經驗政策及 Product 183 背包 metadata。正常建隊入場可在關閉進度指定功能時啟用。批次取證如需 `story-trace`，可另開本機進度測試模式，但 TS-37 的連線全程走正常入口。實測卡應填入實際設定的經驗值。指定 v2 SHA-256 為 `6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c`。選關後按開始若無法進場，保留畫面與操作時間，有開記錄時一併保留 `story-trace`，後續步驟維持待測。
 
 啟用測試版後，從本機 Host 的 `/health` 讀取 `localStageOne`。TS-37 需要 `normalEntryEnabled=true`、`bossDropEnabled=true`、Stage 1／Case 1，並用回傳的 `completionExperience` 填入測試卡。`contentSha256` 可與預檢結果對照。`previewEnabled` 只表示測試頁能提供進度指定入口。若 `localStageOne` 為 null，該 Host 未載入此副本設定。這些欄位確認 Host 啟用情形，實際帳號仍要正常進村並建單人隊。
@@ -164,7 +166,7 @@ Stage 1 關卡資料可用 `TARTAROS_LOCAL_STAGE_ONE_SCENARIO_PATH` 指向絕對
 
 關卡定義可用正整數 `completionExperience` 設定每場通關經驗。既有 `TARTAROS_LOCAL_STAGE_ONE_COMPLETION_EXP` 有設定時優先。兩處都未指定時僅能啟用進度測試，頭目掉落也保持關閉。正常入場及 SQLite 經驗驗收使用解析後的值，正式數值以 `/health` 的 `localStageOne.completionExperience` 為準。
 
-隨 Server 提供的 Case 1 預設給 100 通關經驗，沿用既有本機驗收值，日後可調整。載入該檔並保留正常主線與經驗政策的前置設定，即可在沒有 Host 經驗覆寫時啟用正常入口。更新後的關卡 SHA-256 為 `15a135a0b9692309de9c9a9911de3ebece9c515c1ad048c903d06da425506bb8`。若部署曾明設舊雜湊，需與關卡檔一起更新。`/health` 新增 `completionExperienceSource`（`SCENARIO_DEFINITION`、`HOST_OVERRIDE` 或 `NONE`）和 `bossDropMode`，可確認實際生效的經驗來源與掉落模式。每場仍在最後一張圖確認出口後，對參戰角色入帳一次。
+隨 Server 提供的 Case 1 預設給 100 通關經驗，沿用既有本機驗收值，日後可調整。載入該檔並保留正常主線與經驗政策的前置設定，即可在沒有 Host 經驗覆寫時啟用正常入口。更新後的關卡 SHA-256 為 `baa48fb43ec35420167be093e331c74fb2cbc0590da720f0626898ff2c6f64d2`。若部署曾明設舊雜湊，需與關卡檔一起更新。`/health` 新增 `completionExperienceSource`（`SCENARIO_DEFINITION`、`HOST_OVERRIDE` 或 `NONE`）和 `bossDropMode`，可確認實際生效的經驗來源與掉落模式。每場仍在最後一張圖確認出口後，對參戰角色入帳一次。
 
 新建置已用隔離 SQLite 與本機 loopback 啟動查驗。未設 Host 經驗覆寫，`/health` 回傳 `normalEntryEnabled=true`、`previewEnabled=false`、`completionExperience=100`、`completionExperienceSource=SCENARIO_DEFINITION`、`bossDropMode=REVIVAL_SCROLL`、`bossDropEnabled=true`。本輪沿用驗收用卷軸 metadata，查驗後關閉隔離程序。正式本機 Server 尚未換版，TS-37 仍待指定 v2 實機。
 

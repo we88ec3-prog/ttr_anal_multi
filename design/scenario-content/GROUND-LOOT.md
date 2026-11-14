@@ -39,7 +39,7 @@ S2C `001A` 可按同一 ID 移除地面物件。入口 `0x4B28D0` 在 `0x4B2AB5�
 
 正常進場才配置掉落。玩家在清怪後、按出口前，可用 Space 撿取，沿用租約、背包與掉落 GUID 的同交易入帳。出口確認後結算經驗，換圖或結算會釋放當前地面清單。進度指定場維持零道具及零經驗。實機批次需確認頭目倒地後能在落點撿取、背包增加一張、再走出口完成通關。外觀效果與原生 `.mef` 接收仍待確認。
 
-Stage 1 的掉落由 `.scenario.json` 的節點 `groundDrop` 提供，包含怪物模型、地面外觀、商品、數量與拾取半徑。綁定的模型和 PRE 須出現在該節點的初始怪物或增援中。Case 1 的節點 2 使用 `{"monster":1086,"visual":162,"product":183,"quantity":1,"pickupRadius":12}`，含通關經驗預設值的關卡檔 SHA-256 為 `15a135a0b9692309de9c9a9911de3ebece9c515c1ad048c903d06da425506bb8`。主線掉落沿用原有掉落表。 [關卡 JSON schema](local-scenario-definition.schema.json)
+Stage 1 的掉落由 `.scenario.json` 的節點 `groundDrop` 提供，包含怪物模型、地面外觀、商品、數量與拾取半徑。綁定的模型和 PRE 須出現在該節點的初始怪物或增援中。Case 1 的節點 2 使用 `{"monster":1086,"visual":162,"product":183,"quantity":1,"pickupRadius":12}`，含通關經驗預設值的關卡檔 SHA-256 為 `baa48fb43ec35420167be093e331c74fb2cbc0590da720f0626898ff2c6f64d2`。主線掉落沿用原有掉落表。 [關卡 JSON schema](local-scenario-definition.schema.json)
 
 Host 可用 `TARTAROS_LOCAL_STAGE_ONE_BOSS_DROP=SCENARIO_CATALOG` 啟用關卡內配置的商品。每項 Product 必須在已載入的商店資料中有一致且完整的背包 metadata，啟動時即核對。裝備每筆只掉一件，撿取沿用共用的獨立裝備實例與背包交易。原 `REVIVAL_SCROLL` 模式仍支援 Product 183。正式 Case 1 維持復活卷軸，其他商品的地面外觀及實機撿取另驗。
 
