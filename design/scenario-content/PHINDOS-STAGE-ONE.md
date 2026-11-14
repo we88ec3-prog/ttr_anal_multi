@@ -24,3 +24,14 @@
 部署端設定 `TARTAROS_LOCAL_STAGE_ONE_CASE=2`、`TARTAROS_LOCAL_STAGE_ONE_SCENARIO_PATH` 及 `TARTAROS_LOCAL_STAGE_ONE_SCENARIO_SHA256`。範例雜湊為 `1c447e047b05a0a1a3a3bdb4332341ef5af48809a813282b0d322c1fbc72eaf8`。入場的 `0038` 安裝 Case 2，換圖用 `0012` 發地圖 ID、`0049` 發節點鍵。開始封包 `0008` 沒有 Case 欄位，Case 由 Host 設定。省略 Case 設定沿用 Case 1。
 
 離線工具可用 `--stage-one <關卡絕對路徑> <BND目錄絕對路徑> <SHA-256> 2` 檢查路線與結算。Host 預檢加上 `-ScenarioCase 2`。Case 2 的實機換圖與連刷另待驗收。
+
+## Case 3、4
+
+從原始 `Field.stp` 核對 `CHART_mushroom_03.xml`、`CHART_mushroom_04.xml` 的節點連線與地圖。兩者的節點鍵仍是 10 → 7 → 6 → 3 → 2。Case 3 使用 Case 1 的地圖路線，Case 4 使用 Case 2 的地圖路線。每個 Case 保留自己的圖表身分及入場值。兩個新增範例沿用對應路線的 Server 怪物與獎勵設定。
+
+| Case | 路線 | 關卡定義與 SHA-256 |
+|---:|---|---|
+| 3 | 1 → 4 → 8 → 12 → 19 | [Case 3](phindos-stage1-case3.scenario.json) `d806e2148578c12dc401676d280a2db1a27ab6b8855929f35da622d979800248` |
+| 4 | 1 → 4 → 7 → 11 → 19 | [Case 4](phindos-stage1-case4.scenario.json) `52887ee01b039c4308b2e02eef0a70d73412f818466f3ddf35c8b6a88ff22d60` |
+
+部署改用相應 Case、檔案與雜湊。離線工具最後一個參數與 Host 預檢的 `-ScenarioCase` 使用相同 Case。驗收核對入場 Case 值、五圖 ID、終點掉落及 100 通關經驗；指定 v2 的轉場、建隊與連刷留待實機。
