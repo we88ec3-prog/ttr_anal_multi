@@ -117,6 +117,8 @@ Stage 1 的 Server 關卡定義可在節點加上非負整數 `clearExperience`�
 
 一般副本的初始怪物、順序增援和計時增援都可逐隻指定 `defeatExperience`。例如頭目出場列可設定 `"defeatExperience": 11`。省略時為 0。怪物從存活降至零血量時，Server 將該次世界更新新增的擊倒經驗寫入參戰角色。入帳與收據在同一筆交易中完成，重試沿用同一收據鍵。入帳後在副本內發布 `005C` 與 `0034/type 1`，角色可當場升級，換圖、離隊或重登後保留已入帳經驗。最終出口另行入帳清場與通關獎勵，結算畫面合計兩階段的實際入帳金額。進度指定場次沒有經驗入帳。
 
+正常副本須等當圖的擊倒經驗全部入帳，且怪物移除完成，才提交清場並開放符合條件的出口。擊倒掉落仍在怪物血量歸零時生成。離線回歸涵蓋入帳前等待、八條原有路線及兩條延後 Boss 路線。
+
 正常入口依可達通關路線的最低總經驗判定。每條路線的總經驗均為正時，可省略 `completionExperience`，完全由 `defeatExperience` 與 `clearExperience` 提供獎勵。這種設定的 `/health` 會顯示 `normalEntryEnabled=true`、`completionExperience=0` 及 `completionExperienceSource=ROUTE_REWARDS`。本機預檢可用 `-CompletionExperience 0 -ExperienceSource ROUTE_REWARDS`。省略固定獎勵且存在零經驗路線的設定仍只適用測試預覽，並停用掉落。
 
 本機測試頁的「上次通關」會保留實際入帳的關卡與擊倒分項。Server 以 SQLite 收據的入帳總額與本場擊倒累計計算 `appliedStageExperience` 和 `appliedDefeatExperience`，與 `0022/type 2` 結算封包共用結果。回到馮德斯後仍可用這兩欄對照遊戲結算畫面。Case 693 的驗收預期為關卡 20、擊倒 56、合計 76 EXP。
