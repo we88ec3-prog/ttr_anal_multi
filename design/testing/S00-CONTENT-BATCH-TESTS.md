@@ -168,6 +168,8 @@ Stage 1 關卡資料可用 `TARTAROS_LOCAL_STAGE_ONE_SCENARIO_PATH` 指向絕對
 
 新建置已用隔離 SQLite 與本機 loopback 啟動查驗。未設 Host 經驗覆寫，`/health` 回傳 `normalEntryEnabled=true`、`previewEnabled=false`、`completionExperience=100`、`completionExperienceSource=SCENARIO_DEFINITION`、`bossDropMode=REVIVAL_SCROLL`、`bossDropEnabled=true`。本輪沿用驗收用卷軸 metadata，查驗後關閉隔離程序。正式本機 Server 尚未換版，TS-37 仍待指定 v2 實機。
 
+也已用公開的馮德斯商品表與商店位置檔，在隔離 Host 驗證 `SCENARIO_CATALOG` 可沿用卷軸的既有欄位設定。商品表保持省略欄位，`/health` 回報 `bossDropMode=SCENARIO_CATALOG`，正常入口與頭目掉落均啟用。合成的兩輪副本驗證卷軸與裝備入包。隔離 Host 的查驗只涵蓋啟動設定。
+
 若批次驗收有開本機進度測試模式，可用 `/local-test/progress/status?includeSkillCatalogue=false` 的 `stageOne` 檢查目前場次。它顯示 Server 的大廳狀態、地圖、節點、角色、剩餘怪物總血量與結算是否仍待入帳。`canStartFromWorld` 表示世界狀態允許嘗試入場，隊長與單人成員資格仍在開始請求時核對。讀取狀態不會切換進度。
 
 本機測試頁在偵測到副本大廳或場次時，會在「馮德斯一般副本」區塊顯示上述狀態和已開啟的出口鍵。TS-37 若中途停住，可直接回報這個區塊的內容。驗收正常入口時，請由遊戲內建隊及開始。

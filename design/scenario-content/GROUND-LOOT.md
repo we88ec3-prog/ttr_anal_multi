@@ -43,6 +43,8 @@ Stage 1 的掉落由 `.scenario.json` 的節點 `groundDrop` 提供，包含怪�
 
 Host 可用 `TARTAROS_LOCAL_STAGE_ONE_BOSS_DROP=SCENARIO_CATALOG` 啟用關卡內配置的商品。每項 Product 必須在已載入的商店資料中有一致且完整的背包 metadata，啟動時即核對。裝備每筆只掉一件，撿取沿用共用的獨立裝備實例與背包交易。原 `REVIVAL_SCROLL` 模式仍支援 Product 183。正式 Case 1 維持復活卷軸，其他商品的地面外觀及實機撿取另驗。
 
+在 `SCENARIO_CATALOG` 模式，若商品表的 Product 183 列省略 metadata，沿用商店購買同商品時使用的 `TARTAROS_LOCAL_TOWN_TRADE_ITEM183_FIELD10`／`TARTAROS_LOCAL_TOWN_TRADE_ITEM183_FIELD14`。先補值，再比較該商品各店的實際入包欄位。商品表須有該 Product，所有列的實際欄位須一致。其他商品仍使用各自商品列提供的 metadata。
+
 正常入口的合成驗收使用測試商店目錄提供 Product 2614 的背包欄位。由廣場建隊、進村後連打兩場，每場擊倒頭目後送 Space 撿取，核對掉落商品、背包初始化列及地面物件移除。兩場結算並回村後，SQLite 有兩個不同 ID 的裝備實例，各一件，經驗也各自入帳。測試欄位值與地面外觀為合成設定。
 
 一般副本換圖、進結算或離隊回村時，Server 會先以既有 `001A` 清除原圖尚未撿取的地面物件，再結束該圖的掉落狀態。已撿取物品留在背包，結算時不會重送其地面移除。合成驗收核對首圖未撿的三件掉落在換圖前移除，以及頭目掉落保留在地面和先撿取兩種結算順序。指定 v2 的畫面仍待驗收。
