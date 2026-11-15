@@ -22,5 +22,16 @@
 - 隔離驗收 Host 可用 `-IncludeHardKeepHuntingGround`。Stage 145 和 Stage 468 能同時登記。爾斯梅勒單人隊長確認 `0064` Stage 145 後按開始，Server 用既有 `0038` 裝入 Case 315，按圖表依序下發六個節點。
 - 每張清怪後走到出口按 Z。最後一圖首領 1042／PRE 2（성난 보어라이더）和小怪一起出場。離線候選中，前五圖擊倒 132 EXP、首領 40 EXP、通關 72 EXP，共 **244 EXP**。首領掉一張 Product 183，Space 拾取。結算回圖 183 的原隊伍，離隊後主線保存點不變。
 - 原表 Q540、Q541 皆為 Town 2、等級 14、Field 145、type 1／subtype 2，無 Demands。Q540 向 10005 接取及交付，目標是一隻 1042／PRE 2。Q541 向 10006 接取及交付，目標是五隻 1018／PRE 1。兩任務各給 **1,720 EXP、926 LeeLoo**，沒有物品報酬。地區名聲 1 仍待接入。擊倒限定 Stage 145，以免把 Stage 468 的同型 1018 計入。
-- Q2844「사냥터의 난이도」同樣引用 Stage 145，向 10007 接取，報酬是 2,460 EXP 及 Product 5342 ×10。Product 5342 對應 Item 5308 的瞬間移動道具，其使用目的地與操作另需確認。Q2844 此輪仍待實作。
+- Q2844「사냥터의 난이도」也是 Town 2、Lv.14、Stage 145，type 1／subtype 4。NPC 10007 負責接取與交付。目標以 Q2844 內嵌的 Content 2940 為準，擊倒 1042／PRE 2 一隻。交付發 2,460 EXP 和 Product 5342 ×10，type 5 地區名聲 1 待接入。任務進度、交付與背包使用既有普通任務交易流程。背包 metadata 兩欄先使用 Server 候選值 0。
 - `--check-early-ordinary-quests` 在原參數後加上 Case 315 設定路徑、SHA-256、`315`、`-`（直線沒有分支鍵）。同一新帳號正常完成八個狩獵場和兩村 13 項普通任務。三場 Case 315 都走通六圖、拾取、結算與原隊返回，交付 Q540／541、重登，再走完 Q144，留下 Town 3 圖 199、Lv.17／263,368 EXP、90 張復活卷軸、14,112 LeeLoo。指定 v2 的難度選項、換圖、畫面與實際任務操作列 AQ-09。
+
+## Q2844 報酬道具
+
+`Table/QuestTalk.xml`（解碼 SHA-256 `b136fddf1696ff73c5780c269604b5670e35cbb416cd8cce4274aa05865edd28`）引用對話 48231／48236／48237。`Table/TalkTable/05_Alsmeer.xml`（解碼 SHA-256 `970354e31b0853dca3d3be20709bf016bb63d663b2244511c12a42611d127731`）的 48236 明確要求打倒爾斯梅勒前哨 Hard 的首領。Stage 468 的原版 `Re_keep` 與此目標分開。
+
+- `Table/Product.xml`（解碼 SHA-256 `8c9262f81ca4dae6b62be5d3373bd06d6e96e7470b4227fc73c98fda4e88457c`）將 Product 5342 對應到 Item 5308「윙(순간이동)」。背包商品 ID 使用 5342。
+- `Table/ItemTable2.xml`（解碼 SHA-256 `7095f005d26a67694112ce4c89d2725478d2287181e639fb18956b3d0bf5e2e2`）列出 class 13、堆疊上限 255、冷卻群 3。道具說明為瞬間移動到傳送點，須在傳送點已開放時才可用。
+- `Table/ItemUsableTable.xml`（解碼 SHA-256 `30970e8d4cffe80d6ad18552fb93601e4b0a5a8e6cfa2030064fd44192ef038c`）只列 action 10、priority 5，沒有目的地欄位。傳送點的選擇、開放條件、使用請求與扣除時機仍待確認，因此目前接通領取與保存。
+- `Table/_PortalList.xml`（解碼 SHA-256 `3140d4c0703181584de2dcab0a4a48c288cb21de887b692a2f584fc88639fa56`）只對照入口開關狀態及特效檔名。韓文介面的 `kOptionKeyCom1` 起列有 A 起的傳送點移動催促指令。兩處都未提供 Item 5308 的目標選擇規則。
+
+加入 Q2844 後，同一套原版 BND／SQLite 路線已從新帳號完成 14 項普通任務及 Q144。Stage 468 未觸發 Q2844，Stage 145 達成通知只出現一次。離線核對確認 2,460 EXP、十件 Product 5342、錢包無額外入帳，重登後完成紀錄與背包均保留，最後存到圖 199、Lv.17／265,828 EXP。指定 v2 仍待 AQ-10 驗證。
