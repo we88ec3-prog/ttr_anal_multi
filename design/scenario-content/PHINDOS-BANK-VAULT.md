@@ -20,7 +20,7 @@ Q2997 需先完成 Q2857，Lv.13 由爾勒梅斯 NPC 10013 接取、10101 交付
 
 沿用普通任務 `0036` 接取，在爾勒梅斯的銀行 NPC 10013 驗證等級、互動範圍與 Q2857 已完成。`0040` 確認接取，`0042` 登錄自訂文字目標 4070（Content 3070 加 1000 的既有映射），數量 0／1。已接取狀態從 SQLite 回填，重登進泳池廣場圖 1088 後仍可交付。
 
-Server 沿用已核對的普通任務互動 `001C/type 3`。由目標所在城鎮及 Server 當前座標驗證 NPC 10101，第一次有效互動保存 Ready，發布 `0041`／`0045`。後續交付在既有普通任務交易內存入完成旗標及接取角色的 1,910 EXP，回覆 `0046`、前置快照與角色經驗。廣場 Town context 5 與地圖 1088 分別處理，座標沿用現行廣場 NPC 配置。這兩步是 Server 的交付規則，指定 v2 的對話和任務標記待驗。公會地區名聲與 Q2858 的市場使用功能另列。
+Server 沿用已核對的普通任務互動 `001C/type 3`。由目標所在城鎮及 Server 當前座標驗證 NPC 10101，第一次有效互動保存 Ready，發布 `0041`／`0045`。後續交付在既有普通任務交易內存入完成旗標及接取角色的 1,910 EXP，回覆 `0046`、前置快照與角色經驗。廣場 Town context 5 與地圖 1088 分別處理，座標沿用現行廣場 NPC 配置。這兩步是 Server 的交付規則，指定 v2 的對話和任務標記待驗。完成後可向 10101 接 Q2858 的市場開窗教學。 [Q2858 開窗事件](TOWN-SERVICE-TUTORIAL-EVENTS.md#q2858-艾特爾市場開窗)
 
 重跑 `--fresh-alsmeer-journey`，加上 `--check-early-ordinary-quests --check-refine-materials --check-remaining-base-skills --check-equipment-tutorial-chain --check-native-equipment-windows`。標準及輪替新帳號以原版 BND 完成 Q144，並在銀行教學完成後步行接取、重登回廣場、步行找到市場 NPC 交付。核對廣場 `006F` 保留先前全部旗標並增補 Q2997、交付後角色 Lv.19／351,162 EXP，以及再次重登的保存結果。`equipmentTutorialChain.earlyUiTraining.marketIntroduction` 收據 SHA-256 分別為 `3dc4b2803dda0501ca7b43ada404460f64c7b8088949aa9883b8c814773caee1` 和 `4fe1752f467a6313fd7298e0c8441019394697ace7e0a0bd5af1e9f095317471`。 [AQ-33 實機驗收](../testing/S00-CONTENT-BATCH-TESTS.md)
 

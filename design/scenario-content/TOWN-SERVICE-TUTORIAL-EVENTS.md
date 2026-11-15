@@ -38,6 +38,26 @@
 
 在啟用本機進度工具的 Host 上，沿用已完成教學且持有伊莉西亞與蘋果的測試帳號，用正常流程進相應村莊。在進度頁「世界地圖／銀行操作觀察」選取單一步驟。每段最多 15 秒，使用目前正常遊戲連線，在記憶體中保留至多 128 筆 C2S 命令、應用長度、時間及明確形狀中的 Quest ID。一般輸入批次 `000A` 與心跳 `000C` 不列入。每段結果先另存，再開始下一段。工具不提交任務進度或改變場景。
 
-四項已接入一般任務。Server 以原表等級、前置和接取 NPC 開放，登錄 `0042/subtype 11`，收到正常村莊中對應的 `00DF` 才保存 Ready。世界地圖及技能 Phase 在對應村莊判定。技能學習需在技能師、銀行需在使用銀行的 NPC 範圍。回原表交付 NPC 後按既有普通任務交易發 EXP，重登保存。Q2857 完成後可接 Q2997，延續至廣場市場交付。公會地區名聲、Phase 切換及 Q2858 市場操作另列。 [Q2997 跨城鎮交付](PHINDOS-BANK-VAULT.md#q2997-跨城鎮交付)
+四項已接入一般任務。Server 以原表等級、前置和接取 NPC 開放，登錄 `0042/subtype 11`，收到正常村莊中對應的 `00DF` 才保存 Ready。世界地圖及技能 Phase 在對應村莊判定。技能學習需在技能師、銀行需在使用銀行的 NPC 範圍。回原表交付 NPC 後按既有普通任務交易發 EXP，重登保存。Q2857 完成後可接 Q2997，延續至廣場市場交付，再接下列 Q2858。公會地區名聲與 Phase 切換另列。 [Q2997 跨城鎮交付](PHINDOS-BANK-VAULT.md#q2997-跨城鎮交付)
 
 兩組原版 BND 新帳號以 `--check-equipment-tutorial-chain` 完成 Q144 和 Q2853 後，按上表送出開窗回報，驗證四項接取、登錄、Ready、交付與重登保存。兩組最後均為 Lv.19／349,252 EXP。一般及輪替路線收據 SHA-256 分別為 `009745e9c5d482d1b82de06d6fd967a7d0bbe247eac35c3cf80bc1da171f2106` 與 `9b6bfaec5b395820fa29a886a3b5b3bc073f1c73c6efedd1b9accdc54c076db1`。指定 v2 實機見 AQ-28／29 與 SK-P14。 [驗收清單](../testing/S00-CONTENT-BATCH-TESTS.md)
+
+## Q2858 艾特爾市場開窗
+
+同版 `QuestInfo.xml` 的 Q2858 為 Town 5、Lv.13、NPC 10101 接取及交付，前置 Q2997。AcceptAction 為 type 3／param 24，CompleteAction 為 type 1。Content 2954 要求點廣場艾特爾市場的市場按鈕，`QuestTalk.xml` 的接取／途中／交付為 33060／31770／31777。獎勵為 1,910 EXP 與一點公會地區名聲。 [原表版本](PHINDOS-BANK-VAULT.md#爾勒梅斯銀行與市場教學)
+
+按鈕回呼 `6B2B80` 的 `6B2C5C` 比對控制項 `+94h`，在 `6B2C8B` 建立 `F42F0` 本機事件。廣場 UI `5B0760` 接事件，由 `5B0781` 顯示 owner `+308h` 的框架。`5B26C0 → 5B2FF0 → 5B36D0 → 69CE00` 架設 `CAuctionFrameWnd`，vtable `C39C64+0D0h` 指向 `69D700`。在 `69D791` 推入 18、`69D793` 呼叫 `501650`，之後才進入 `6A0110` 的市場清單初始化。
+
+原版 KR 與指定 v2 的下列視窗依各自 PE section 映射，內容一致。
+
+| VA＋十六進位長度 | SHA-256 |
+|---|---|
+| `6B2C5C+46` | `91729679ef499985de5992ed619924aba5929873166e0c11898ef57e4bcdede2` |
+| `5B0760+26` | `35613a4ddf594dca3a14f6f66b4899a885ee97a647f0fcf70c6d56974898f672` |
+| `69CE00+55` | `2b4583c533560373b28c93c87f4d462b3d2c60d217f8840d687eab928a2fc31e` |
+| `C39D34+4` | `aa1de08ee7de6cb96b956c4b590296b96c0a191e6c420b281b194c842a7c422e` |
+| `69D761+43` | `b57f887136fd58785b3873eaed0757cc82cb9e6eed009b500c7dd6c1613d3f8e` |
+
+Server 接取後登錄 `0042/subtype 11` 的目標 3954，事件 18。Client 回報為 `DF 00 2A 0B 12 00`。Server 要求角色在正常廣場、位於 NPC 10101 互動範圍，且已有 Accepted，才保存 Ready 並回覆 `0041`／`0045`。正常對話交付保存完成旗標及 1,910 EXP。這段開窗及任務交付不扣道具或貨幣。市場清單載入、刊登、交易及公會地區名聲另待開發。 [AQ-34 實機驗收](../testing/S00-CONTENT-BATCH-TESTS.md)
+
+標準與輪替兩條使用原版 BND 的新帳號旅程完成 Q144、Q2857 與 Q2997，再於廣場步行至 10101 接取、送出開窗回報並交付 Q2858。兩條均驗證 Ready 及完成狀態重登保存，開窗及交付時背包和貨幣一致，最後為 Lv.19／353,072 EXP。收據的 `equipmentTutorialChain.earlyUiTraining.marketIntroduction.marketTraining` 記錄該段，整份收據 SHA-256 分別為 `f5f26864e4a422a1ac0cf100c3ee79e0595b8ec2551266c7c04f598c532a75d6` 和 `9d413b47609561cfe0a1e7a037549916da61e85bb2fc810e0aec28b231f459ad`。 [重現參數](PHINDOS-BANK-VAULT.md#q2997-跨城鎮交付)
