@@ -29,6 +29,8 @@
 
 ## 普通購買、賣回與強化
 
+強化請求的格位、CustomItem 中的強化等級及前兩村材料費用已續查。見 [鐵匠強化規格](../../../design/scenario-content/BLACKSMITH-EQUIPMENT-ENHANCEMENT.md)。
+
 | 玩家操作 | 原始 Client 發送 | 已證接收效果 | 待開發或再查 |
 |---|---|---|---|
 | 單項購買 | `6823C0` 有 QUANTITYDATA_BUYITEM；`682640` 計價格與本機金額、記 selected product 與 quantity 在 +160/+164。確認事件 F43AC → `682218 → 682A00`，`682A3F → 4A3720` 寫 `0027:u16, windowContext:u8, product:u32, quantity:u8`，8B。context 來自視窗 +D0，未將它猜成 NPC ID | 一般 S2C 表 `4ADFFD` 為 +184→4B3760，即 opcode 0030。取 payload+2 WORD。0x10 分支加 bit0 走字串索引 DF=kShopBuy，部分不成功分支 E0=kShopBuyFail | 單一店的合法商品、數量、價目、可用幣別、足額、入包及餘額落盤。證據未將特定請求與每一種回覆固定配對，也未證 0030 會落帳 |
