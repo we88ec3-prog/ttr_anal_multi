@@ -207,6 +207,53 @@ Server 將防禦增益與普通攻擊分開處理。達到現有施法生效點�
 | 一般路線 | `8733d386e54a292c87a8be4dd05736cee83084ad8114a13dd99f443f10c177cf` |
 | 輪替路線 | `1af421bf88f5f88ac4cb2f0904f80c6d8846c336010f2fc4dd63e247fc240a1a` |
 
+## 正常副本的第一段氣充電
+
+前四個角色的 `Table/Skill/Active/*_charge01.xml` 都只有一個 `LevelData`，`LearnType=Learnable`，角色至少 Lv.10，沒有 `Payment` 需求。從正常流程送 `00D4` 學習，保存 Lv.1、熟練度支出 0。學習後的 `0126` 保留已授予與已學技能。既有已付費紀錄遷移後保留等級與花費。氣充電本身的資源消耗來自 `Table/SkillActiveTable.xml` 的 type 7 行，與學習費用分開。
+
+| 角色 | 氣充電 Practice → Active | 短按 V 消耗 | 首個支援的進階1按鍵／Practice → Active | 首學消耗 | Lv.1 施放 MP／動作 |
+|---|---|---|---|---:|---|
+| 索瑪 | 15 → 58 | 50 HP | Z／6 → 6 | 100 熟練度 | 40／114 |
+| 蘋果＆坦基 | 31 → 61 | 50 HP | C／22 → 15 | 100 熟練度 | 110／116 |
+| 舒博爾 | 47 → 64 | 50 HP | C／38 → 25 | 100 熟練度 | 45／114 |
+| 伊希莉亞 | 63 → 67 | 50 MP | C／54 → 34 | 100 熟練度 | 45／115 |
+
+四招皆由角色 Lv.10 起學。之後的五級資料依原表 Lv.10／20／30／40／50，逐級熟練度 100／150／150／200／200。索瑪另有角色 Lv.84 的第六級，需 200 熟練度。各級 MP 如下。冷卻原值索瑪 40，其餘 400。Server 正常副本換算仍為原值除以 10 秒。
+
+| 進階技能 | MP 依學習等級排列 | 索瑪攻擊 ratio |
+|---|---|---|
+| 索瑪 6 | 40、46、52、58、64、70 | 200、220、240、260、280、300 |
+| 蘋果＆坦基 15 | 110、120、130、140、150 | |
+| 舒博爾 25、伊希莉亞 34 | 45、50、55、60、65 | |
+
+只接入動作列 `000A` 的短放 V 旗標 `0x08`。正常配置 0 須已學氣充電及該角色至少一個本次支援的進階動作。接受短按後送資源與動作 18，玩家參數 4 切至 1。釋放後於氣充電動作結束即可移動。進階技能符合對應按鍵、資源和冷卻才消耗充電，接受當下將參數 4 回到 0，保留已開始的動作與後續命中／Buff。暫不把第二次短按解讀成升段。新圖與復活回基礎配置，換圖仍保留資源、冷卻與已生效防禦 Buff 的原到期點。 [V 輸入與資源分析](../../governance/client-variants/20261107-charge-skills/README.md) · [角色技能列讀取分析](../../governance/client-variants/20261108-v-row-consumers/README.md)
+
+防護網、意志之盾和迴避分別使用既有 Server 候選 Buff 3／4／6。迴避採 20% 基準與原表相對增幅。索瑪 Active 6 使用一般魔攻候選命中，附帶效果仍待分析。Client 實際圖示、剩餘冷卻呈現、長按 V 的氣發散、第二次短按、Tab 配置與 Q2852 任務事件待補證。
+
+### 可重現來源
+
+`Table/Skill/PracticeList.xml` 的 include 指向下表。原表 `SkillActiveTable.xml` 指紋見上節的起始升級表。
+
+| `Table/Skill/Active/` 內檔名 | 解碼 SHA-256 |
+|---|---|
+| `soma_charge01.xml` | `7546ecfb744a356cd69ab6b6e22d34aeeb8e8f55a0f52a792aff03b0016cd64c` |
+| `pipa_charge01.xml` | `9be397ef054afe1f450115642c3ebfbedfa1206129c965e141c6ea63f4efcf32` |
+| `sblm_charge01.xml` | `0f68a21a59be28d10fedd108c400bb61c747d0d831cee7f7dc59427bdeb2b31b` |
+| `isla_charge01.xml` | `3e521243492ee9c75ee023179f04e2967cb51959b0b9a81f43abaf1711010e6e` |
+| `soma_lightningball.xml` | `5c72221dc60f6d987d56564980d5d1cd50545e60a03c5ca5978ca8a918c6c7e3` |
+| `pipa_barrier.xml` | `1cc1d4d01158881347f95b573640c75211252e88a2efb31ee06a3a4ccd336184` |
+| `sblm_shield.xml` | `855016c15a4127f767f14a305fc0fb01dced327319c2d9d878e9424179121df2` |
+| `isla_dodge.xml` | `4ec829f1fb25838384530dd215b4c6865f634eb5d13d5dd001f27a42c16a8958` |
+
+以 `--fresh-alsmeer-journey` 加 `--check-early-ordinary-quests --check-remaining-base-skills` 跑原版 BND 離線一般與輪替路線。兩組新帳號均完成 Q144，Lv.19／333,742 EXP，正常學伊希莉亞 Practice 63、54 後餘 560 熟練度，重登保存兩招。由一般村莊開 Stage 462，核對 `000A/08`、動作 18、參數 4 由 0 變 1、MP 100→50，接 C 時動作 115、參數回 0、MP 50→5，並收到 Buff 6。離線收據指紋如下。指定 v2 另按 SK-P10 驗收。
+
+Release 建置與 537 項 HappyPath 合成通過。新增的四個角色案例涵蓋短按成本、支援按鍵、重按時維持第一段、接受進階動作後立即還原，以及三個防禦 Buff 的跨圖延續。
+
+| 路線 | SHA-256 |
+|---|---|
+| 一般 | `5271013bb22322d3f55b156151ce492cf49719c65db3f9e69ec339aa9c7899cd` |
+| 輪替 | `7d15c139404b7da24bba0fa2ecac521f6ae257d85518074dbfac746713eba196` |
+
 ## 指紋
 
 原版 KR BIN 及指定 v2 的整檔 SHA 見 [版本指紋](../scenario-content/BAG-CAPACITY-EXPANSION.md)。按兩個 PE 的各自區段映射核對下列位元組相同。
