@@ -20,7 +20,7 @@ KR `Product.xml` 與 `ItemTable2.xml` 核對 Product 281～284 分別對到同�
 
 正常完成三個狩獵場並拾取四種符石。取得 40 顆結晶石的一條路徑是以正常貨單在馮德斯鐵匠購買 10 件 Product 10848，每件 910 LeeLoo。到 NPC 10015 依序分解，每件給 4 顆 Product 185 與 1 份 Product 18012 碎片。於同 NPC 確認製作 Product 151 一批，另扣 800 LeeLoo、40 顆結晶石與四種符石各一件，保存 10 顆成品。購買、分解與製作共花 9,900 LeeLoo，碎片保留。 [裝備分解](EARLY-EQUIPMENT-DISMANTLE.md) · [製作規格](PHINDOS-REFINE-STONE-CRAFT.md)
 
-離線驗證在 `--fresh-alsmeer-journey` 加 `--check-refine-materials`，使用原版 BND、三個馮德斯狩獵場與正式貨單。先走新帳號入口、正常狩獵場和 Q144，再用該帳號拾得的材料及任務所得回訪馮德斯，走完整買入、分解、製作及正常重登入場。實機待 EQ-B05，鍊石成品後續使用另依 EQ-B02。 [批次驗收](../testing/S00-CONTENT-BATCH-TESTS.md)
+離線驗證在 `--fresh-alsmeer-journey` 加 `--check-refine-materials`，使用原版 BND、三個馮德斯狩獵場與正式貨單。先走新帳號入口、正常狩獵場和 Q144，再用該帳號拾得的材料及任務所得回訪馮德斯，走完整買入、分解、製作及正常重登入場。實機待 EQ-B05，鍊石成品可接 EQ-B06 驗證普通 +1。 [批次驗收](../testing/S00-CONTENT-BATCH-TESTS.md)
 
 兩個全新帳號分別走一般 Case 693／695／697 與輪替 Case 694／696／698。兩途均完成 Q144 並保存於圖 199、Lv.19／333,742 EXP。開始製作前已拾得 281×43、282×15、283×1、284×1，離線腳本以完整普通任務旅程反覆跑狩獵場，因此前兩種累計多於一顆。各分解 10 件、製作 1 批，核對餘額減 9,900、成品 10、碎片 10、材料扣除與重登保存。
 
