@@ -14,7 +14,15 @@ NPC 10013 的 NPC.TYPE 是 1。初始化 `637335..63739B` 將選項 12 加入 TY
 
 同版 `QuestInfo.xml` 的 Q2857 為 Lv.13、10007 接取、10013 交付，AcceptAction type 3／param 23。Content 2953 和對話 31760 都要求按「銀行利用」。Server 收到開窗事件便可以讓任務進入 Ready，後續向銀行 NPC 交付。倉庫存取和銀行商店走各自的交易流程。
 
-Q2997 需先完成 Q2857，Lv.13 由 10013 接取、10101 交付。對話 31767～31768 指向廣場告示板前的艾特爾市場。 `_TownList.xml`（解碼 SHA-256 `bba254efd72fac0be6c51c6135423601effcbad02448f46aadec3324e449d660`）把 10101 列於 Town 5 廣場 1。`npctable.xml`（`a727fceb64a8b58dc98983619fc73b131c15a6be1eec132c1124f2c57b4aa31d`）列 TYPE 9。Q2997 所需的是跨到廣場向 10101 交付。兩項各給 1,910 EXP 及一點公會地區名聲。待確認 Q2857 原生觸發後，再以原版前置、廣場可達位置及跨場景交付規則接入。 [任務來源版本](ALSMEER-ORDINARY-COLLECTION-EXPANSION.md)
+Q2997 需先完成 Q2857，Lv.13 由爾勒梅斯 NPC 10013 接取、10101 交付。`QuestInfo.xml`（解碼 SHA-256 `5d251415fdfdc453adefbff03114ded5a8ea41b696ce0aab86a23070e0fdca60`）列 Town 2、type 1／subtype 4、AcceptAction 1、CompleteAction 1。Content 3070 要求和艾特爾市場交談。`QuestTalk.xml` 為接取、途中和交付分別登錄 31767、31768、31769。`_TownList.xml`（`bba254efd72fac0be6c51c6135423601effcbad02448f46aadec3324e449d660`）把 10101 列於 Town 5 廣場 1。`npctable.xml`（`a727fceb64a8b58dc98983619fc73b131c15a6be1eec132c1124f2c57b4aa31d`）列 TYPE 9。Q2857 與 Q2997 各有 1,910 EXP 及一點公會地區名聲。 [任務來源版本](ALSMEER-ORDINARY-COLLECTION-EXPANSION.md)
+
+### Q2997 跨城鎮交付
+
+沿用普通任務 `0036` 接取，在爾勒梅斯的銀行 NPC 10013 驗證等級、互動範圍與 Q2857 已完成。`0040` 確認接取，`0042` 登錄自訂文字目標 4070（Content 3070 加 1000 的既有映射），數量 0／1。已接取狀態從 SQLite 回填，重登進泳池廣場圖 1088 後仍可交付。
+
+Server 沿用已核對的普通任務互動 `001C/type 3`。由目標所在城鎮及 Server 當前座標驗證 NPC 10101，第一次有效互動保存 Ready，發布 `0041`／`0045`。後續交付在既有普通任務交易內存入完成旗標及接取角色的 1,910 EXP，回覆 `0046`、前置快照與角色經驗。廣場 Town context 5 與地圖 1088 分別處理，座標沿用現行廣場 NPC 配置。這兩步是 Server 的交付規則，指定 v2 的對話和任務標記待驗。公會地區名聲與 Q2858 的市場使用功能另列。
+
+重跑 `--fresh-alsmeer-journey`，加上 `--check-early-ordinary-quests --check-refine-materials --check-remaining-base-skills --check-equipment-tutorial-chain --check-native-equipment-windows`。標準及輪替新帳號以原版 BND 完成 Q144，並在銀行教學完成後步行接取、重登回廣場、步行找到市場 NPC 交付。核對廣場 `006F` 保留先前全部旗標並增補 Q2997、交付後角色 Lv.19／351,162 EXP，以及再次重登的保存結果。`equipmentTutorialChain.earlyUiTraining.marketIntroduction` 收據 SHA-256 分別為 `3dc4b2803dda0501ca7b43ada404460f64c7b8088949aa9883b8c814773caee1` 和 `4fe1752f467a6313fd7298e0c8441019394697ace7e0a0bd5af1e9f095317471`。 [AQ-33 實機驗收](../testing/S00-CONTENT-BATCH-TESTS.md)
 
 ## C2S 道具存取
 
