@@ -255,6 +255,32 @@ Release 建置與 537 項 HappyPath 合成通過。新增的四個角色案例�
 
 同一 TalkTable 的 Q2853 對話 31739～31741 說明特性要花獨立的特性點，部分會改變動作或攻擊範圍，重置使用特性重置券。QuestInfo 的 Content 2949 只要求開啟特性學習選項。特性購買、重置與效果分開取證。Q2853 的開窗加入本機服務觀察選項。
 
+### 正常副本的 Lv.25 氣發散
+
+`Table/Skill/Active/*_charge02.xml` 各有一級，`LearnType=Learnable`、角色至少 Lv.25，無 `Payment`。原版 `SkillActiveTable.xml`（SHA-256 `1ea831f270df757d760f4ff87d6bf509a64326a23614a305c8d767580f2a2139`）中對應 Active 為 type 7，HP、SP、MP、冷卻皆為零。以下各角色配置 0 的 row 2 首招由既有矩陣資料連到 Z。四招獨立向技能師學習，首學 Lv.25／200 熟練度。後續角色等級門檻為 32、39、46、53、87，逐級費用為 200、200、300、300、300。
+
+| 角色 | 氣發散 Practice → Active | Z Practice → Active | Z Lv.1 消耗／候選動作 |
+|---|---|---|---|
+| 索瑪 | 16 → 59 | 9 → 9 | 225 MP／116 |
+| 蘋果＆坦基 | 32 → 62 | 25 → 18 | 220 SP／115 |
+| 舒博爾 | 48 → 65 | 41 → 28 | 210 SP／113 |
+| 伊希莉亞 | 64 → 68 | 57 → 37 | 170 SP／114 |
+
+| 原版解碼成員 | SHA-256 |
+|---|---|
+| `soma_charge02.xml` | `578b4bd580640941cf1443f2778401faaaeed4f23fe2417075eb45db6c809bb5` |
+| `pipa_charge02.xml` | `fa0f3f92159e2665f4d81b109ef0c8d9e4582ff75fb1dab5f86181d0b8f1209d` |
+| `sblm_charge02.xml` | `2ad27db8d3ff250a81410babd9d8b6061ddf47adaa26a37d198be4b1e0e0eab4` |
+| `isla_charge02.xml` | `2289b98a8a9d88cae7a0383199b2897a16be03b347593d18120d00c909a95955` |
+| `soma_restraint.xml` | `56a1d4db84273511baa98f04794fec63305f0fe9704b9dd04fcc26386c604eb8` |
+| `pipa_roket.xml` | `5079f7aba7a67a0b1c0c97275720658bad48ecaafc93a0688ddd0e40fc609747` |
+| `sblm_throw.xml` | `50d7e298fe6b56ee29944f2aceba2d478685ece77a7f2b9f863cf741ca94808f` |
+| `isla_restraint.xml` | `6dbad5e637c937acd2ad51db624b6a39bacf93cb0b9280ac2f2fc8ffaa7c8c7c` |
+
+正常購買沿用 `00D4 → 0126 → 0128`，保存等級與累計熟練度支出。KR `4E46D0` 用 `(payloadLength−3) >> 2` 讀 `0126` 的四位元組列，依實際列數迴圈。原版 BIN 中由 VA `4E46D0` 起算 `0x90` 位元組的 SHA-256 為 `d84d2184f81e6048be9f186c6fac2d11769dafee95666e0cd992de6a505343fc`。Server 允許同一角色已學六招基礎、短 V 兩列、長 V 兩列，共十列，一次重建快取。
+
+正常單人副本採既有實機工作副本驗過的 FORCE 轉場候選。已學氣發散時，輸入列 `0x80` 停步、Parameter 4 設為 2，進入狀態 12。收到 `0x40` 回狀態 1、Parameter 4 回 0，立即開放移動。已學 Z 時，可在長按期間或同列 `0x40+Z` 施放。通過資源與冷卻檢查即退回基礎快捷列，招式及待執行命中保留。若拒絕施放且放開 V，仍清除長按狀態。上表招式以 Resource／ASD 候選動作、原表逐級消耗及既有 Server 命中規則接入。完整投射物、控制效果、官方判定與指定 v2 實機待驗。第二次短按 V、Tab 矩陣切換及 Q2853 特性點另行取證。 [原生 V 輸入與矩陣](../../governance/client-variants/20261107-charge-skills/README.md) · [FORCE 狀態與釋放](../../governance/client-variants/20261108-v-row-consumers/README.md)
+
 Q2852 的 Content 2948 指定「在狩獵場按 V 使用氣充電」。Server 在正常爾勒梅斯 NPC 10014、冒險團最高角色 Lv.11 以上且 Q2850 完成時，允許接取 Q2852，沿用普通任務 `0036 → 0040 → 0042`。狩獵場實際接受一次短 V 並進入氣充電，才將已接取的任務保存為 Ready，再送目標 3948 的 `0041` 更新與 `0045`。返回 NPC 10014 後以既有普通任務交付候選 (001C/type 3) 提交 2,890 EXP 及完成旗標，本次任務不動主線。原表的公會地區名聲 1 點待公會功能接入。
 
 正常新帳號可先走馮德斯 Q2849／Q2850。Server 以成功分解、強化保存對應的任務目標。原表描述的開窗判定安排獨立取證。 [前置任務與正常路線](../scenario-content/EARLY-EQUIPMENT-DISMANTLE.md#可玩的-server-候選)
