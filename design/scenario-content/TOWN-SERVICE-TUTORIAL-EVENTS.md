@@ -111,4 +111,4 @@ Server 在接取時以 `0042/subtype 11` 登錄目標 3947、事件 9。正常�
 
 兩條新帳號的原版 BND 離線旅程保留 Q144，完成 Q2996 後驗證 Q2851 接取、回報、Ready 重登回填、交付入帳及完成重登保存，背包和錢包一致。均結束於 Lv.20／360,762 EXP。收據位於 `equipmentTutorialChain.earlyUiTraining.marketIntroduction.marketTraining.helpTraining.challengeIntroduction.challengeTraining`，標準與輪替 SHA-256 為 `2255346216346fadfef6a8bbe8936dc2285f2631691be5d63bc438b32138b187` 與 `7f3a9fef82b3a50970018d9354fb7677a5309c9e9d0a8a14d60920e6c3346569`。 [重現參數](PHINDOS-BANK-VAULT.md#q2997-跨城鎮交付)
 
-後續選關取證可用同版 `ChallengeListTable.xml` 的可見一般項目 1、2、3，對應 `RaidInfoTable.xml` 的 RAID 1、2、3。原表最低等級分別是 7、12、17，首次 Stage 是 50、51、52。三筆皆列 `CP_TOTAL=700`、`BOSS_COUNT=3`，獎勵各為 Product 2274、2275、2276 ×1。兩表 SHA-256 依上述順序為 `f59d05228a73dee4f9bab4ded125bc43e3eb4fa4d2e501684c80319193d721e7` 與 `ce86cff3cc41f38ea39fa326323193a6a1a524d3cfe680665ef62f37fb179108`。隊伍人數、CP 判定與地圖交接需另核對。
+前三關的原表、靜態地形離線驗證及挑戰大廳、戰鬥場封包見 [一般挑戰入場交握](EARLY-RAID-ENTRY.md)。
