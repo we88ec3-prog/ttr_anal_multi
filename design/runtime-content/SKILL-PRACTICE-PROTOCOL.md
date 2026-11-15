@@ -16,7 +16,7 @@
 
 ## 原版 Client 結果與快照
 
-`4E21CF` 在 player-state 表 `+0x944` 登記 `4E4AB0`，對應 S→C `0128`。該入口把原封包指標包裝成 UI 事件 `F428F`，經 `59B9E0 → 59DCC0 → 61D6B0` 交付技能學習視窗。視窗從 `+2` 讀取 u32 結果旗標。零值走成功訊息 `kLearnPractice_Success`，並從 `+7` 讀取 DWORD 寫到全域狀態 `F94254`。該欄的精確貨幣語意與 `+6` 尚未核實。錯誤分支可確認 bit `0x04` 選 `kLearnPractice_Invalid_PracticeID`，bit `0x80` 選 `kLearnPractice_Insufficient_SkillPoint`，bit `0x100` 選 `kLearnPractice_Insufficient_SkillExp`，bit `0x200` 選 `kLearnPractice_Insufficient_Money`。多 bit 的顯示依視窗內判斷順序。
+`4E21CF` 在 player-state 表 `+0x944` 登記 `4E4AB0`，對應 S→C `0128`。該入口把原封包指標包裝成 UI 事件 `F428F`，經 `59B9E0 → 59DCC0 → 61D6B0` 交付技能學習視窗。視窗從 `+2` 讀取 u32 結果旗標。零值走成功訊息 `kLearnPractice_Success`，並從 `+7` 讀取 DWORD 寫到全域狀態 `F94254`。該全域欄位由下節核對為技能熟練度餘額，`+6` 尚未核實。錯誤分支可確認 bit `0x04` 選 `kLearnPractice_Invalid_PracticeID`，bit `0x80` 選 `kLearnPractice_Insufficient_SkillPoint`，bit `0x100` 選 `kLearnPractice_Insufficient_SkillExp`，bit `0x200` 選 `kLearnPractice_Insufficient_Money`。多 bit 的顯示依視窗內判斷順序。
 
 同表另有 `0126` 重新接收角色已學 Practice，`0127` 接收配置列。快取重建會收集兩個集合。普通技能等級的同一 grant 只應貢獻一次。另一個確認發送器 `411BD0` 用 `00D6` 和六位元組列，結果入口 `0129` 進另一個 UI 事件 `F4290`。兩條確認路徑各自驗收。 [快取的原件範圍](../../governance/client-variants/20261107-skill-level-dispatch/README.md)
 
@@ -38,7 +38,22 @@
 
 原始 `UI/Component.stp` 的 `Component/Mission_Complete_Dlg.FTC`（解碼 SHA-256 `942286bd04a3118a798dde092c839bf359d8c9af77d9f25cf44f47023d7baf5e`）列出第一組獎勵控制項。主線的 `6BA220` 把標題 EID 11100 綁到視窗 `+F4`，數值 EID 11110 綁到 `+F8`。 `6BA400` 把標題換成 UIText 索引 `0x2C6`（`kSkillExp`），並將狀態 `FE18F8+0x32` 的 DWORD 轉成第一列的十進位數字。 `4C4550` 從 `0022/type 0` 應用負載 `+0x12` 複製到該位置。這個欄位已核對到主線結算的熟練度顯示，實際入帳與一般狩獵場 type 2 的顯示須分開查。
 
-同版 `QuestInfo.xml` 的 RewardsEtc type 3 在 Q119、Q122、Q124、Q132 為 40，Q136 為 100，Q138、Q140、Q142、Q144 為 150。這些是熟練度來源的優先候選，仍須將任務欄位語意、實際入帳時機及結算發送次序與上述 UI 接起來，避免在結算與交付各增加一次。
+原版 `504CEB` 讀 `RewardsEtc`，`504D9E` 依獎勵 type 用 `505554` 表派送。第 3 項指到 `504DEB`，將數值寫到工作列 `[ESP+E8]`。建構並加入任務表時，`505412 → 5064D0` 以 `[ESP+64]` 為來源，保留物件偏移 `+84`。任務資訊 `6351EE..6352B6` 將此欄格式化到 UIText `0x164`（`kQuestRewardSkillExp`）。因此 RewardsEtc type 3 可用於主線熟練度。
+
+| KR 主線任務 | 熟練度 |
+|---|---:|
+| Q119、Q122、Q124、Q132 | 各 40 |
+| Q136 | 100 |
+| Q138、Q140、Q142、Q144 | 各 150 |
+| 走完以上九場 | 860 |
+
+目前 Server 在通過最終出口後的主線結果顯示該場固定值，在完成返回劇情及主線結算交易時入帳。以既有帳號／Quest 的結算記錄保存授予值；戰鬥角色仍記在各筆來源，熟練度查詢按帳號合計。舊資料庫新增該欄時，僅依已結算的帳號／Quest 記錄回填。沒有持久化結算的進度指定、未完成任務及無 type 3 的主線，均無熟練度收入。這是 Server 採用的入帳時點。
+
+## 技能視窗的熟練度餘額
+
+`8168BD` 辨識訓練要求中的 `SkillExp` 屬性，`81694B` 解析數值給 `81AEC0` 的支付物件 `+4`。`612940` 用 UIText 索引 `0x2D6` 將該欄顯示為學習熟練度成本。確認視窗的 `61C71F` 取 `CGlobalStatus+0x6874` 作選擇技能前的餘額，`61D07E` 使用對應訓練列 `+4` 及 `61D120` 更新預估支付。這個全域欄位即 `F94254`。技能學習 `0128` 成功從 `+7` 更新，技能 Phase 成功 `012B → 4E4F30` 從 `+9` 更新並提示 `kSkillPhase_Success`。
+
+正常初始資產候選入口 `002A` 由 `4E1E9F` 登記 `4E2B30`，會從 `+6` 更新相同餘額。這個接收器還寫入其他欄位並觸發狀態事件，須先核對完整初始化資料再發布。現有版本保存熟練度並提供主線結算顯示，技能面板餘額同步、支出與技能成長列待接入。
 
 ## Server 接續與驗收
 
@@ -61,5 +76,23 @@
 | `6BA220+9A` | `a9eaf7c6ab380987647ad2d5feb546a37c0226e83ff82b1329fbda7145f28e5c` |
 | `6BA400+230` | `c1621f1c1dee295d21cf82ea71096645f887d269fa4c25aa687f1ace775dfde9` |
 | `4C4550+E0` | `04466f4f5c1c65e37f0e2362b927bd845a9237a1b8d46b953e2af040fc4d6861` |
+| `504CEB+145` | `1baca6c8c8ccae2f897142f408e37f4ba29accd1e3111e264bc6a9b37a0b75a4` |
+| `505554+18` | `42121164a8411e3bee8473bd227ae709de13b7cecd8937ffad233ac25b4741e2` |
+| `5053FB+69` | `f70d7e540777fd63eab69aee5ac3adbba7b319b88169289be0f9d6ae87d492a3` |
+| `5064D0+150` | `6ff8c0de5e7d91b85c396965c213fa13586d307b2bb29c1582a93fe46599faca` |
+| `6351EE+D0` | `4decb82c04642186575bfa855c6037a26090bbe07b1d35ae4ae8b98d4e9d569a` |
+| `61C71A+37` | `025cb525edba21500fa41489d7576e764859b986f871a2b6aa772478b48ba3c8` |
+| `8168BD+B3` | `5a38c222c9efa4f6cca2bee0ab6880d27b2ad4d17589c3bf91e2d4800e98e9c8` |
+| `4E2B30+130` | `ec3d4d59e7fd84cb95ef065e1bf86bf60957389a2c4dee5879ae3f28a64cf693` |
+| `4E4F30+75` | `fa3c4b08874c3b6da473d05f0364e465ca702e287f0683310e9569ff26acb29f` |
 
 原始解碼 `Table/Skill/PracticeList.xml` SHA-256 `b837e6c695730b9fe597a9af6d18872323f015a20dc519beb4dbc8b70ac71c97`，`Table/Skill/Active/isla_wslash.xml` 為 `7dd414597137b6b8402c0b690a86f836e768c1d8ccb142c1be893f56c1b678df`，`Table/QuestInfo.xml` 為 `5d251415fdfdc453adefbff03114ded5a8ea41b696ce0aab86a23070e0fdca60`。`CommonMessages.xml` 的學習訊息見原始索引表起始位址 `D66C1C`，表項間距 12 bytes。
+
+## 離線驗證
+
+原版 BND 的一般和輪替兩條路線各以新帳號走完八個狩獵場、87 項普通任務及 Q144。兩組都在圖 199 得到 Lv.19／333,742 EXP 與合計 860 熟練度。逐場核對結算封包、結算視窗階段尚未入帳、主線最終提交後增加正確數量，並核對回廣場後讀值一致。由離線收據的暫存資料庫重建缺少熟練度欄位的舊格式，兩次遷移後仍是 860。
+
+| 原版 BND 離線收據 | SHA-256 |
+|---|---|
+| 一般路線 | `4d233b464e63d531a0fb752c74087e12d0b41e1677a26276d6cdd44d91fa98ed` |
+| 輪替路線 | `285ce73b29e3fca49b5ab55e916e5b513cb6d9b7429fe6805782bf1fa2198cc7` |

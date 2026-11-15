@@ -53,7 +53,7 @@ Server 已可在同一筆 SQLite 交易內變更共用背包與倉庫，保留�
 
 本機候選使用測試設定指定費用。已同步過倉庫且在銀行 NPC 附近的連線可送 `008C`。同一筆 SQLite 交易扣 Garnet 並加 20 格，容量上限 480。成功提交後送 `00C4` 回傳容量，已存在的道具和其他餘額保留。舊測試帳號新增的 Garnet 欄位預設 0。原版實際費率待查。
 
-`012B → 4E4F30` 的成功分支會用 payload +9 覆寫 Cash 欄 `+6874h`，同時觸發商城成功提示。`00C4` 已確認的欄位只有結果與容量。本機候選只發 `00C4`，獨立的 Garnet 畫面同步尚待查證。
+`00C4` 已確認的欄位只有結果與容量。本機候選只發 `00C4`，Garnet 畫面同步尚待查證。另經技能支付 UI 核對，`012B → 4E4F30` 更新的是技能熟練度欄 `+6874h`，提示為 `kSkillPhase_Success`。 [技能熟練度欄位](../runtime-content/SKILL-PRACTICE-PROTOCOL.md#技能視窗的熟練度餘額)
 
 ShopNo 70 唯一商品是 Product 23232，對應 Item 20572「一億 LeeLoo 支票」，原表購買和售回都是 100,000,000 LeeLoo。TYPE 7 開貨單走 `683DBA..683DC6 → 4A36E0`，發出 4-byte C2S `0086`，+2 u16 取自商店視窗 +F8。該欄由 `639320 → F42EA +18 → 5B8580` 從 TalkBox 的 NPC 欄 +84 傳入，對應 NPC 10013。購買 context 仍由商品頁初始化決定，TYPE 7 使用 1。 [原表與商店路徑](../../governance/client-variants/20261109-mef-town-services/shop-services.md)
 
