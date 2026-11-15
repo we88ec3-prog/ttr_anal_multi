@@ -13,9 +13,9 @@
 | 3 | `bagSlot:u8` | 視窗 `+F8`，普通背包使用 1–100 |
 | 4 | `primarySelection:u32` | `686E6F` 自第一個子選單取值，選項 0／1／2 對應傳值 0／2／3。其他選項的語意待驗 |
 | 8 | `secondarySelection:u8` | `686EBB` 自第二個子選單取值，無選取分支為 `FF` |
-| 9 | `confirmFlag:u8` | 視窗 `+172h`，事件 `F437A` 確認／取消可寫入 1／0 |
+| 9 | `useRefinementCoupon:u8` | 視窗 `+172h`，事件 `F437A` 確認用券寫入 1、取消用券寫入 0 |
 
-指令證據可確立欄位來源和寬度。兩個選單的實際文字、平常點法帶哪個值，以及優惠券與保護材料的語意，仍需比對指定 v2。請求不含 Product、CustomItem ID、費用或結果。Server 應用背包格讀該件裝備的當前實例，再查等級和材料。
+指令證據可確立欄位來源和寬度。用券及保護材料各欄位的已知資料見末節。兩個選單的預設值與實際請求仍待指定 v2 驗收。請求沒有帶 Product、CustomItem ID、費用或結果。Server 由背包格讀該件裝備的當前實例，再查等級和材料。
 
 ## 裝備等級與結果
 
@@ -215,3 +215,30 @@ Release 建置與 549 項 HappyPath 通過。合成交易驗到武器與下裝�
 |---|---|
 | 標準 | `2d50bcad931433c5150fe85f86af0f096b96e89b63ba143bdd38fe9c9a4f661c` |
 | 輪替 | `79b3c7666a7911976e8a275fe4e4bafe638a5fe12a51e54dc1adc78061edda68` |
+
+## 精煉券與額外材料
+
+`82B20D` 讀取 `ItemLevelUpCoupon` 下面的 `Product / ProductID`，兩筆為 Product 12864、12865。兩個 Product 都指向 Item 4679。Item 說明支援一次免鍊石及手續費的強化，`CommonMessages.xml` 的 `kItemLevelUp_UsedCoupon` 亦確認兩項免除。購物或持有同號的裸 Item 無法代替 Product ID。
+
+`687660` 暫存要強化的背包種類與格位，呼叫 `6891E0` 統計券種類清單的背包總數，有券時建立 `F437A` 確認事件。事件 handler 的 `686E13` 對 0x6A7／0x6A8 將 `+172h` 分別設為 1／0。接受後重新經 `688BF0` 取裝備。預覽在 `688652–688699` 使用同一旗標把鍊石與手續費置零，提交仍由 `686F0B` 將此旗標放進 `00A1 +9`。目前封包沒有攜帶所選券的種類或格位。
+
+Server 在普通背包、primary=0、secondary=FF 的既有入口，接受最後一 byte 的 0／1。0 使用普通費用與鍊石，1 由 Server 取最低格位的一張 Product 12864 或 12865，免其餘強化費用。取券、裝備結果及餘額同步沿用同一筆 SQLite 交易。用券維持該目標級的普通結果權重，結果畫面待指定 v2 驗收。Server 仍要求券存在才能確認用券，前兩村正常發放來源待證。
+
+| 核對資料 | SHA-256 |
+|---|---|
+| `ItemLevelUpCoupon.xml` | `ed17c5e97d97e696551f5dee40b7cb0cb20ebf5ccbbe907e85ef41df5cbbb5fe` |
+| `Messages/CommonMessages.xml` | `307d8eee122a852843376d4dacce06e25b53bd9914b98aec2955e8b044095cb4` |
+| `Messages/UIText.xml` | `9c123f1443dde195dd13999ae0c2b6d0e1a6b700c13c3ac6fa17bb0f1a80cff9` |
+| `82B20D+79` | `6c57867cc47093e6679785773ec8376aab1232e4bc08655d0a3683bc15d2aae8` |
+| `687660+1F0` | `4164ba987991c499e45a2261763d3c33c8af0c581e9a860e8fdcf923010ce54f` |
+| `6891E0+14B` | `4ccea0b7a05659a3684107078991c5fc9f23c1b3722e9cdaa0653629035aa1fd` |
+| `688650+52` | `516878780a46ae038cc09ff8a3343ceec1d407134a1e81b56504751dbe7644a6` |
+| `686E13+19` | `01bf731151c3b8ba4ae8fd097d9aa79b7d20a4f14080445f593380e93031f569` |
+| `688077+12A` | `07e08098426ca96bc598d71985c3d174190d82bd2989d1356406d095c3af2cbf` |
+| `4DC700+80` | `32e1fff450960d37475493cf00cd51d188289a66e95d4462b0cb63f849035896` |
+
+上述 VA 範圍依原版 KR BIN 與指定 v2 的 PE 區段分別讀取，位元組一致。
+
+保護及成功率輔助分別使用 primary 與 secondary 欄位。兩種 Rank 及武器／護甲皆由 `ItemLevelupInfoSet` 的 RankSet 指向 SafetyID 1／AssistanceID 1。SafetyID 1 的 mode 2 需 Item 5489 ×1，其說明為保留裝備並機率降 0～2 級，最多降至安全級。mode 3 需 Item 7659 ×1，說明為保留裝備等級。`688083–688092` 從 CustomItem `+30h` 取目前強化級，`688166–6881A1` 於目前級 ≥15 時重設並停用第一選單。與 Item 的 +15 限制吻合，最後一次可用保護是嘗試升 +15。AssistanceSet 的三筆分別需 Item 13889／13890／13891 各一，表列從破壞權重轉至成功的增量依序為 10,000／14,000／20,000。低破壞率時如何裁切、secondary 實際選值，以及 mode 2 各降級權重仍待確認。這些材料未接入已發佈的用券交易。
+
+Release 建置與 551 項 HappyPath 通過。兩個新增合成案例各使用一種 Product，驗證沒有鍊石及餘額時仍能以券在普通鐵匠成功升 +1，核對扣一張、背包清格或減疊、回覆及 SQLite 保存。標準與輪替原版 BND 路線另回歸至 Q144 並完成已支援的城鎮教學。用券提示及其實際 `00A1` 待 EQ-B11。
