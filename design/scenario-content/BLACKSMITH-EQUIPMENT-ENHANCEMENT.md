@@ -50,6 +50,8 @@ S2C `00D9` 經 `4E3420 → 4DD060` 讀 `+2` 有號結果 byte，再送到強化�
 
 Item 151 為 Grade 1 的 E 級鍊石，原說明指定用於 E 級裝備，可對應 Product 151／2524。2524 在 Shop 31／109 的對戰商店，前兩村現行普通貨單沒有此項。前兩村表列直接獎勵 Product 151 的 Q20、Q107、Q268、Q536～538 都標 Lv.120，早期正常旅程沒有開放。待確認可走的單人材料來源，避免把鍊金商店售賣的各色強化石當成同一品項。
 
+`ItemCompound.xml` 提供另一條來源。Recipe 151 標記費用 800、輸出 10 顆，需 E 級結晶欄位 185 ×40，以及 281／282／283／284 各一。Recipe 2524 的費用欄為 0，輸出 10 顆，需材料欄 14874 ×3。後者在 ItemTable2 指向萬聖節糖果，對應 Product 15778；同號 Product 14874 則是上身鎧甲。這是查證 `MATERIAL item` 鍵空間的直接對照案例。應依製作視窗取表與材料消耗路徑確定實際鍵空間、提供者和前置，再決定可由正常單人路徑使用的配方。
+
 `ItemLevelupSetIDMapping` 將 class 1 對到 Set 1，class 2／43 對到 Set 2。依 Rank 2／3 可各自找到 `ItemLevelupInfoSet` 的 Ratio 1／2，+1 兩組都是 100000／100000 成功。舊 `ItemEnchant` 的 EQUIP 1／LEVEL 1 另列 80／20。兩表不能視為同一強化機率，Server 仍須選定與實際入口相符的裁決表。能力值亦應沿 `ItemTable2` 的各項倍率表 ID 使用 `ItemStatLevelupRatioTable`，先核對累計、四捨五入和對應能力值。
 
 | 解碼後資源 | SHA-256 |
@@ -58,9 +60,10 @@ Item 151 為 Grade 1 的 E 級鍊石，原說明指定用於 E 級裝備，可�
 | `ItemLevelupInfoSet.xml` | `ff2e4ac049a104875f97dd094a84d01417aa6ccb0fdc9ffa084d539d5fced384` |
 | `ItemLevelupSetIDMapping.xml` | `190568c4b3cf00aeea95ad9ed8fdf387980b555cb5f43d897dc93d2584b05b2c` |
 | `ItemStatLevelupRatioTable.xml` | `42e3748490e60ba763e802165c7ee4eb010cd4f68423ff06eede3a67ccdb731f` |
+| `ItemCompound.xml` | `d4691667dabe8d107afc256c865b3f9c784d0bb7f7aa76ad8d2fe5f564a9c106` |
 
 ## Server 接續與驗收
 
-本機進度頁可在正常前兩村各取 15 秒樣本。分開記錄開窗與確認，`00A1` 若符合已核對形狀，保留上述五欄，仍循一般輸入路徑。觀察工具沒有扣款、耗材、修改裝備或發成功回覆。合成 TCP 可驗證從已登入的正常村莊收下此形狀，與實機操作來源分列。
+本機進度頁可在正常前兩村各取 15 秒樣本。分開記錄開窗與確認，`00A1` 若符合已核對形狀，保留上述五欄，仍循一般輸入路徑。觀察工具沒有扣款、耗材、修改裝備或發成功回覆。Release 建置及 505 項 HappyPath 通過，其中合成 TCP 驗證正常進馮德斯後收到 10-byte `00A1` 五欄，接著仍正常回覆隊伍清單。指定 v2 側的實際發送待 EQ-B02。
 
 可用的強化流程需要一筆 SQLite 交易同時核對租約、當前鐵匠、背包實例、目標級、石頭和 LeeLoo，保存結果後再同步物品。成功後穿上要反映能力值，經存倉、取回與重登仍保留同件實例。等材料取得與普通選單形狀有證據後，先串接無保護選項的普通強化，再驗證其他選項。 [EQ-B02 批次取證](../testing/S00-CONTENT-BATCH-TESTS.md)
