@@ -1,0 +1,109 @@
+{
+  "schema": "mef-world-wire-contracts-v1",
+  "application": {
+    "opcode": "0x00eb",
+    "payload_hex": "eb00",
+    "length": 2,
+    "extra_body_reads_in_handler": false,
+    "handler": "0x4b6190",
+    "unlock": "0x562250",
+    "return_value": 0,
+    "has_run_id": false,
+    "has_ack": false
+  },
+  "frames": [
+    {
+      "label": "SYN minimal raw 1A68",
+      "hex": "0200681aeb00",
+      "wire_bytes": 6,
+      "header_bytes": 4,
+      "payload_bytes": 2
+    },
+    {
+      "label": "SYN minimal differential-XOR 0BBB",
+      "hex": "0200bb0beb005deb",
+      "wire_bytes": 8,
+      "header_bytes": 6,
+      "payload_bytes": 2,
+      "checksum": "0x00eb",
+      "seed": "0xb6"
+    }
+  ],
+  "receive_route": [
+    "0x806e08 -> 0x807b40",
+    "0x807d7a -> 0x807e50",
+    "0x807da6 -> 0x489920",
+    "0x807dad -> 0x8040a0",
+    "0x49198a -> 0x804740",
+    "0x80486d vcall -> 0x4930e0",
+    "0x493135 vcall -> 0x48aad0",
+    "0x48ab3b indirect -> 0x494360",
+    "0x4943aa tail -> 0x4fda30",
+    "0x4fda8a indirect -> initialized default 0x4b7ec0",
+    "0x4b7ed8 tail -> current field v+4",
+    "0x4c4694 -> 0x4fda30",
+    "field primary slot+0x75c -> 0x4b6190",
+    "0x4b61e5 -> 0x562250"
+  ],
+  "lane": 2,
+  "lane_origin": "Conn+0xA080; not an on-wire field",
+  "c2s003f": {
+    "builder": "0x4a39a0",
+    "length": 8,
+    "transport_key": 0,
+    "send_guard": "[0xFBA798] == 0",
+    "fields": [
+      {
+        "offset": 0,
+        "type": "u16 LE",
+        "value": "0x003f"
+      },
+      {
+        "offset": 2,
+        "type": "u16 LE",
+        "value": "low16(arg1)"
+      },
+      {
+        "offset": 4,
+        "type": "u16 LE",
+        "value": "low16(arg2)"
+      },
+      {
+        "offset": 6,
+        "type": "u16 LE",
+        "value": 1
+      }
+    ],
+    "direct_call_candidates": [
+      "0x5618c8",
+      "0x561fb0",
+      "0x561fe0"
+    ],
+    "callers": [
+      {
+        "call": "0x5618c8",
+        "context": "Q start already-seen shortcut",
+        "arg1": 0,
+        "arg2": "requested second key",
+        "wait_lock_after": "0x5618cd",
+        "normal_sequence_load_executed": false
+      },
+      {
+        "call": "0x561fb0",
+        "context": "non-review active End; M+38 != 0; CheckConfirmMessage result == 1",
+        "arg1": "M+38",
+        "arg2": "M+3c",
+        "wait_lock_after": null
+      },
+      {
+        "call": "0x561fe0",
+        "context": "non-review active End; M+38 == 0",
+        "arg1": "M+38 (=0)",
+        "arg2": "M+3c",
+        "wait_lock_after": "0x561fe5"
+      }
+    ],
+    "direct_call_scope": "All raw E8-rel32 candidates in original .text, each validated on known native boundaries; indirect callers not exhaustively excluded."
+  },
+  "policy": "Server-designed state correlation; neither official 003F-to-00EB pairing nor runtime success is proved."
+}
