@@ -111,3 +111,16 @@ KR `5FFF60` 的 `600409` 起始區段在 `60040D` 讀取 `[Item+8]` 的類別。
 以已登記的 KR 原件及指定 v2 分別從 PE 位址映射核對，兩處 SHA-256 相同：`600409+E9` 為 `4a4c12ad8c6e22ffc7d5e04483f5d33021269f051f06bcccb2108e15fcd2f697`，`600F60+5E` 為 `a2535299cb73bb6731f941fbe5ffcf0b1e5c7f9b59b494ded227237e60c368a6`。
 
 Server 在正常單人副本依指定背包格與 Product 提交扣除，復活僅允許倒地角色使用。兩個入口共用帳號冷卻、資源更新和已綁定快捷列刷新。Stage 462 的合成回歸透過 `0021` 使用活動回復與復活道具，核對原格、快捷列計數、資源與冷卻，再完成同一場副本。指定 v2 的背包操作與畫面待 EQ-B17。
+
+### 普通與完全復活的商品對照
+
+以原版解碼的 `Product.xml`、`ItemTable2.xml` 及 `ItemUsableTable.xml` 分別比對 Product→Item、類別／說明／群組與使用效果。三份表的 SHA-256 依序為 `8c9262f81ca4dae6b62be5d3373bd06d6e96e7470b4227fc73c98fda4e88457c`、`7095f005d26a67694112ce4c89d2725478d2287181e639fb18956b3d0bf5e2e2`、`30970e8d4cffe80d6ad18552fb93601e4b0a5a8e6cfa2030064fd44192ef038c`。
+
+| Product | Item | 群組／說明冷卻 | `ItemUsableTable.xml` |
+|---:|---:|---|---|
+| 183 一般、2551 活動一般 | 183 | 2／300 秒 | Action 1／priority 5：SkillCast 436 Lv.1。Action 2／priority 8：Rebirth 100。 |
+| 184 完全、248 活動完全 | 184、248 | 3／4 秒 | Action 1／priority 5：SkillCast 437 Lv.1。Action 2／priority 8：Rebirth 100。另有 Action 3／priority 3：`VALUE=-800`，以及 Action 23／priority 2：無參數。 |
+
+兩組皆為 class 26，走同一個 `0021`／`0022` 復活入口。完全卷軸的說明提到恢復死亡懲罰，表內未命名 Action 3 寫入的欄位，也未指明 Action 23 改變的狀態。`ItemUsableTable.xml` 另有 Item 12711（櫻餅）帶 Action 3 卻無 23，Item 15829（紅燈籠）兩者皆有，冷卻說明寫 300 秒而群組欄為 3。這些道具仍需各自核對，數值 `-800` 目前無法據此指定為經驗、疲勞或結算扣分的任何一項。
+
+Server 新增已持有 Product 184／2551 的快捷欄綁定、背包使用與原地回滿資源。184 共用群組 3，2551 共用群組 2，兩者沿用原子扣除及既有倒地資格。市場資料庫 V19 保留舊快捷欄與冷卻。兩個額外 Action 的 Server 效果、SkillCast 437 演出與前兩村正常取得來源仍待取證。實機驗收沿用 EQ-B17 的獨立樣本。
