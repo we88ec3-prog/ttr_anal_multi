@@ -61,3 +61,19 @@
 Server 接取後登錄 `0042/subtype 11` 的目標 3954，事件 18。Client 回報為 `DF 00 2A 0B 12 00`。Server 要求角色在正常廣場、位於 NPC 10101 互動範圍，且已有 Accepted，才保存 Ready 並回覆 `0041`／`0045`。正常對話交付保存完成旗標及 1,910 EXP。這段開窗及任務交付不扣道具或貨幣。市場清單載入、刊登、交易及公會地區名聲另待開發。 [AQ-34 實機驗收](../testing/S00-CONTENT-BATCH-TESTS.md)
 
 標準與輪替兩條使用原版 BND 的新帳號旅程完成 Q144、Q2857 與 Q2997，再於廣場步行至 10101 接取、送出開窗回報並交付 Q2858。兩條均驗證 Ready 及完成狀態重登保存，開窗及交付時背包和貨幣一致，最後為 Lv.19／353,072 EXP。收據的 `equipmentTutorialChain.earlyUiTraining.marketIntroduction.marketTraining` 記錄該段，整份收據 SHA-256 分別為 `f5f26864e4a422a1ac0cf100c3ee79e0595b8ec2551266c7c04f598c532a75d6` 和 `9d413b47609561cfe0a1e7a037549916da61e85bb2fc810e0aec28b231f459ad`。 [重現參數](PHINDOS-BANK-VAULT.md#q2997-跨城鎮交付)
+
+## Q2841 說明集導覽
+
+同版 `QuestInfo.xml` 的 Q2841 為 Town 5、Lv.13，NPC 10101 接取及交付，要求 Q2840 與 Q2858 均已完成。CompleteAction 為 type 1。Content 2937 要求點選選單「說明」，`QuestTalk.xml` 取接取／途中／交付 48226／48229／48230。獎勵為 1,910 EXP 與一點公會地區名聲。對話提到可從「說明」閱讀指南。任務原表沒有道具獎勵。 [原表版本](PHINDOS-BANK-VAULT.md#爾勒梅斯銀行與市場教學)
+
+`5A2570` 建立 `UICachingData<198, CHelpDlg>`，在 `5A25DA` 寫入 `CHelpDlg` vtable `C3A7FC`。該表 `+D0h` 位於 `C3A8CC`，指向 `6A3810`。回呼在 `6A38A1` 推入事件 2，於 `6A38A3` 呼叫共用開窗任務回報函式 `501650`。原版 KR 與指定 v2 依各自 PE section 映射比對，以下範圍一致。
+
+| VA＋十六進位長度 | SHA-256 |
+|---|---|
+| `5A25C4+41` | `8903614f80739496a4045b64ad2e40c461bb2f2b09d6d6036f57e0e0b6f9741f` |
+| `C3A8CC+4` | `e63751c6c8093a75a79667dcb5ef6a91589188cf2ddcf60a5a0d6d51783967f4` |
+| `6A3810+A0` | `20fd956a1d96195d21165d2398a759a117b9743ea8089c7ff41341542a0a5a14` |
+
+Server 接取後傳 `0042/subtype 11` 登錄目標 3937、事件 2。正常廣場載入完成後，已接取者可在廣場任意位置送 `DF 00 19 0B 02 00`。達成時保存 Ready，回覆 `0041`／`0045`，再走回 NPC 10101 交付並保存 1,910 EXP。前置以帳號已完成的兩筆任務紀錄查核。公會地區名聲及其他場景的開窗驗收另列。 [AQ-35 實機驗收](../testing/S00-CONTENT-BATCH-TESTS.md)
+
+標準與輪替兩條原版 BND 新帳號離線流程由 Q144 繼續完成 Q2840、Q2858 及 Q2841。兩條均從市場 NPC 接取，步行離開 NPC 再提交事件，核對 Ready、交付與重登保存，背包及貨幣一致。結束時均為 Lv.19／354,982 EXP。收據位於 `equipmentTutorialChain.earlyUiTraining.marketIntroduction.marketTraining.helpTraining`，兩份 SHA-256 為 `aee388fbd96f6cc44ab6bcd12537532d0f4ced927511db751bef2b1469496990` 與 `82b5ee6131527ce37136b83a654c63b40d47e474bdb1f300618605996272c79f`。 [重現參數](PHINDOS-BANK-VAULT.md#q2997-跨城鎮交付)
