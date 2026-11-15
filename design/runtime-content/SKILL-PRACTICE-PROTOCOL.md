@@ -18,7 +18,7 @@
 
 `4E21CF` 在 player-state 表 `+0x944` 登記 `4E4AB0`，對應 S→C `0128`。該入口把原封包指標包裝成 UI 事件 `F428F`，經 `59B9E0 → 59DCC0 → 61D6B0` 交付技能學習視窗。視窗從 `+2` 讀取 u32 結果旗標。零值走成功訊息 `kLearnPractice_Success`，並從 `+7` 讀取 DWORD 寫到全域狀態 `F94254`。該全域欄位由下節核對為技能熟練度餘額，`+6` 尚未核實。錯誤分支可確認 bit `0x04` 選 `kLearnPractice_Invalid_PracticeID`，bit `0x80` 選 `kLearnPractice_Insufficient_SkillPoint`，bit `0x100` 選 `kLearnPractice_Insufficient_SkillExp`，bit `0x200` 選 `kLearnPractice_Insufficient_Money`。多 bit 的顯示依視窗內判斷順序。
 
-同表另有 `0126` 重新接收角色已學 Practice，`0127` 接收配置列。快取重建會收集兩個集合。普通技能等級的同一 grant 只應貢獻一次。另一個確認發送器 `411BD0` 用 `00D6` 和六位元組列，結果入口 `0129` 進另一個 UI 事件 `F4290`。兩條確認路徑各自驗收。 [快取的原件範圍](../../governance/client-variants/20261107-skill-level-dispatch/README.md)
+同表另有 `0126` 重新接收角色已學 Practice，`0127` 接收配置列。快取重建會收集兩個集合。普通技能等級的同一 grant 只應貢獻一次。特性購買由 `CBuyPracticeTalentWnd` 的確認發送器 `411BD0` 使用 `00D6` 和六位元組列，結果入口 `0129` 進 UI 事件 `F4290`。 [特性購買與開窗任務證據](../scenario-content/ALSMEER-TALENT-TRAINING.md) · [快取的原件範圍](../../governance/client-variants/20261107-skill-level-dispatch/README.md)
 
 ## 早期技能規則
 
@@ -253,7 +253,7 @@ Release 建置與 537 項 HappyPath 合成通過。新增的四個角色案例�
 
 原版 `Table/QuestTalk.xml` 的 Q2852 對話入口是 31732／31735／31737。解碼 SHA-256 為 `b136fddf1696ff73c5780c269604b5670e35cbb416cd8cce4274aa05865edd28`。`Table/TalkTable/02_Lenart.xml` 的 31733 指示從技能學習選單學 Lv.10 氣充電。31735 明確區分按一次 V 的氣充電與一直按住 V 的氣發散。31736 要到狩獵場試用並提醒施作時會受怪物攻擊。31737 指定角色 Lv.25 學氣發散。這組對話沒有解說第二次短按的用途。解碼 SHA-256 為 `2ef48ba17f62a343e5152cf98485d39fa80502f2d50791c1e0ea667a5f348d03`。
 
-同一 TalkTable 的 Q2853 對話 31739～31741 說明特性要花獨立的特性點，部分會改變動作或攻擊範圍，重置使用特性重置券。QuestInfo 的 Content 2949 只要求開啟特性學習選項。特性購買、重置與效果分開取證。Q2853 的開窗加入本機服務觀察選項。
+同一 TalkTable 的 Q2853 對話 31739～31741 說明特性要花獨立的特性點，部分會改變動作或攻擊範圍，重置使用特性重置券。QuestInfo 的 Content 2949 要求開啟特性學習選項，已查明由 `00DF` 的事件 11 回報目標。 [Q2853 開窗任務規格](../scenario-content/ALSMEER-TALENT-TRAINING.md)
 
 ### 正常副本的 Lv.25 氣發散
 
