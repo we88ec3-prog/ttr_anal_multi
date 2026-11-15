@@ -24,6 +24,8 @@
 
 ## Client 封包與 UI
 
+單項與全部放棄的按鈕、請求與回覆候選另見 [普通任務放棄規格](ORDINARY-QUEST-ABANDONMENT.md)。下方保留原先的任務列表分支核對。
+
 原版 KR BIN SHA-256 `9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91`。指定 v2 EXE SHA-256 `6f92ba12d83cd75668353ca175122309ffa5b35a9fa2fee9fe85e2c0350d3b3c`。依各自 PE section 映射比較下列 VA 視窗，兩檔逐位元組一致。既有 Ghidra 偽碼與原指令讀取共同限定以下行為。
 
 | 動作 | Client 路徑與可用欄位 |
@@ -31,7 +33,7 @@
 | 普通任務篩選 | `500950+AD` 讀候選 WORD 向量，依 record `+28` 的 selector 與 `+4 == 1` 篩選。 `635CA0` 消費此清單。 |
 | 任務列表選取、確認接取 | `62ED60+120` 取選定 record ID 並發 UI 事件 `F438A`。沿 `5B7F80 → 5B6C0C → 636520` 開 TalkBox mode 1。`636B70+160 → F4402 → 636E10+C0` 在確認且 sender gate 成立時送 `0036 + QuestId:u16`，Q2843 的對應 body 為 `36 00 1B 0B`。同一 body 另有 `4B3510` relay，Server 需看當前場景及任務狀態。 |
 | Client 接取後 UI 更新 | S2C `0040` 由 `502270+540` 讀 QuestId 和 DWORD status。status 0 送 `F438B`、更新 20 格排除清單及重算候選。AcceptAction type 3 將 param 帶入 `F4306 → 5B9080+53 → 635730+D0` 的本機 UI 路徑。這條路徑還不能限定 Q2843 的交付請求或判定按過狩獵場選擇鍵。 |
-| 任務列表其他分支 | `62EC20` 依內層 action 值分流。值 0 由 `62ECE0+78` 送 `0039 + QuestId:u16`；值 2 經 `62F050+85 → 4A3960+38` 送 `003C + QuestId:u16 + DWORD`。指令 `4A397E` 把 EDX 寫入尾欄，尾欄來源語意及 UI 動作名稱待確認。兩個 request 都先按按鈕與實機流向取證。 |
+| 任務列表其他分支 | `62EC20` 依內層 action 值分流。值 0 由 `62ECE0+78` 送單項放棄 `0039 + QuestId:u16`，指定 v2 畫面待驗。值 2 經 `62F050+85 → 4A3960+38` 送 `003C + QuestId:u16 + DWORD`。指令 `4A397E` 把 EDX 寫入尾欄，尾欄來源語意及其 UI 行為待確認。 |
 | 狩獵場 | 確定難度並確認時才有已證 C2S `0064 + Stage:u16`，再按開始另送 `0008`。只開面板、確認 Stage 及實際進場分三個時間點。 |
 | 任務交付 UI | S2C `0045` 使用 CompleteAction 分流，type 1 可出現 `QUEST_READY` 通知。S2C `0046` 在 `502B40+390` 由 substate 0 清理排除格並依 record gate 更新 prerequisite、發 `F438C`。仍須比對 Q2843 的 record gate、合法交付意圖與重登時的任務快照。 |
 
