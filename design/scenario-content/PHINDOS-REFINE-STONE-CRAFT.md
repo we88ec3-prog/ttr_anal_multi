@@ -23,7 +23,7 @@ S2C `00AD` 的 handler 位址 `4E2670` 由 `4E1F5F` 登記在接收表的 `+0x56
 
 `6767D0` 以配方材料 Item 查物品原表後呼叫 `508F90`，掃描背包格的 Item，累加合資格格位的數量。`508CB0` 以封包內的 Product 查商品表，再在每格分存解析後 Item（`+4`）與 Product（`+0xC`），數量在 `+8`。因此製作材料須先以 Product 映射到 Item，再回寫實際消耗的 Product 格位。Item 185 對應 Product 185。Item 281～284 分別對應一般 Product 281～284 與綁定 Product 23300～23303。Item 14874 是萬聖節糖果，對應 Product 15778；同號 Product 14874 是鎧甲。 [配方資源 SHA 及材料上下游](BLACKSMITH-EQUIPMENT-ENHANCEMENT.md#前兩村材料與費用)
 
-依 Product 鍵掃描同版 `ShopInfo.xml` 的 `SHOP/PRODUCT NO`、`QuestInfo.xml` 的 `Quest/RewardsItem/Item idx`。貨單未列出上述 9 個材料 Product，任務表只在爾勒梅斯 Lv.120 的 Q106 列出 Product 185 一件。前期材料的可取得路徑需查分解及副本獎勵。
+依 Product 鍵掃描同版 `ShopInfo.xml` 的 `SHOP/PRODUCT NO`、`QuestInfo.xml` 的 `Quest/RewardsItem/Item idx`。貨單未列出上述 9 個材料 Product，任務表只在爾勒梅斯 Lv.120 的 Q106 列出 Product 185 一件。前兩村已規劃由裝備分解取得 E 級結晶石，符文副本掉落或寶箱來源仍待閉合。 [裝備分解](EARLY-EQUIPMENT-DISMANTLE.md)
 
 ## Server 進場與驗收
 
