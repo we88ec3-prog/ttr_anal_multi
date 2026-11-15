@@ -64,7 +64,7 @@
 
 ### Q2843 後續殺怪任務的來源核對
 
-`Table/_ActorList.xml` 解碼 SHA-256 `b01ae70817c79126b89292567e32d4c806c3ef31478b6a2eb96dcfd21e2c78f7`。在馮德斯現有 Stage 462 相關模型中，無斯原名 `무스` 對應 1009／PRE 1，石雛雞 `돌병아리` 對應 1022／PRE 1 或 5，`홍키퐁키` 對應 1001／PRE 1。原表有相同顯示名稱的其他 Model，因此計數條件要以實際配置的 Model／PRE 明列。現行 Case 693／694 的候選遭遇都有 1009／PRE 1、1022／PRE 1；兩份 growth 設定均找不到 1001 或同名替代 1303。Q67 須先補第二種目標的出場來源。
+`Table/_ActorList.xml` 解碼 SHA-256 `b01ae70817c79126b89292567e32d4c806c3ef31478b6a2eb96dcfd21e2c78f7`。在馮德斯現有 Stage 462 相關模型中，無斯原名 `무스` 對應 1009／PRE 1，石雛雞 `돌병아리` 對應 1022／PRE 1 或 5，`홍키퐁키` 對應 1001／PRE 1。原表有相同顯示名稱的其他 Model，因此計數條件要以實際配置的 Model／PRE 明列。基礎 Case 693／694 候選遭遇都有 1009／PRE 1、1022／PRE 1。Q67 的 1001／PRE 1 已在這兩個 Case 共用的原版怪物群組表確認，詳見下節。
 
 原版 KR 的 `Table/Product.xml` 解碼 SHA-256 `8c9262f81ca4dae6b62be5d3373bd06d6e96e7470b4227fc73c98fda4e88457c`，`Table/ItemTable2.xml` 解碼 SHA-256 `7095f005d26a67694112ce4c89d2725478d2287181e639fb18956b3d0bf5e2e2`。兩表對齊後，Q40 目標 `무스 로봇 기어` 對應 Product／Item 275，Q43 目標 `반짝거리는 돌` 對應 Product／Item 298，兩件皆為 class 6、gettype 5、堆疊上限 100。QuestInfo 另列 Q40 的交付報酬 420 EXP、277 LeeLoo 與 Product 234 ×3，Q43 為 420 EXP、151 LeeLoo，Q67 為 420 EXP、188 LeeLoo 與 Product 232 ×3，三者皆有 1 點地區名聲。目標物兩項的掉落觸發位置、比率、是否限定接取後掉落及拾取後的 Client 通知仍待取證。
 
@@ -96,3 +96,21 @@ QuestInfo Content 14 要求擊倒無斯以收集 15 個齒輪，Content 81 要�
 每次拾取將道具、拾取識別碼及任務狀態放在同一 SQLite 交易，達標才發 `0045`。候選將收集品保存在共用背包，保留於有界任務內，禁止存入倉庫。Ready 後以既有 NPC 互動候選交付，若同 NPC 有主要劇情交接則先處理主線。Q43 在 Q2843 完成後沿用 10008，交付只推進符合 Ready 的任務。交付交易消耗指定數量，保存完成 key、接取角色 EXP、錢包及道具報酬，再更新畫面。報酬 MP 卷軸沿用普通堆疊資料，能和商店同品項堆疊。兩項的地區名聲暫未接入。
 
 以 `--check-quest-collections` 從空白 SQLite 建新帳號，正常完成 Q2843 後同時接取 Q40、Q43。以原版 BND 離線走八場 Case 693。第一場後重登，保留兩項部分進度。兩項各發一次達成通知，交付後材料清除、EXP／錢包與報酬正確，Q2843、Q40、Q43 完成 key 重登仍在。完成 Q144、Town 3 圖 199 時為 Lv.16／248,352 EXP、37 張復活卷軸、4,026 LeeLoo。工作副本的掉落畫面、收集清單、實際交付事件列 AQ-03、AQ-04 待驗。
+
+## Q67 兩種怪物目標
+
+原始 QuestInfo 的 Q67 為 `몬스터 퇴치`，Town 1、Field 462、Lv.4，前置 Q2843。NPC 10002 接取及交付。Content 71／70 要求擊倒石雛雞與 `홍키퐁키` 各 10 隻。正常 Stage 462 資料鏈如下。
+
+| 原版證據 | 核對結果 |
+| --- | --- |
+| `Table/_CaseList.xml`，SHA-256 `a6282323e287900512e515be01927ae3f75fa0c1540e0261473530eb0487043a` | Stage 462 的 Cases 693、694 都指定 `CLUST_Re_mushroom_01.xml`。 |
+| `Field/Cluster/CLUST_Re_mushroom_01.xml`，SHA-256 `e993f38cd411aa24f6a9e8d70ac186166456d4267482d000152bfbb2b14bc3f3` | ClusterSet 0／Cluster 2 為三隻 1001／PRE 1。Cluster 3 為三隻 1022／PRE 1。預載表包含 1001。 |
+| 兩張 `CHART_Re_mushroom` 圖表及 `Table/_MapList.xml` | 兩條 Case 首圖皆為 3430，對應 `mushroom01` BND，TRIGGER 名稱為 `Re_mushroom01_01N.mef`。已查到的表格給群組成員和圖表連線，群組 2 的出場圖、座標及觸發仍需實際規則檔或觀察。 |
+
+沿用 `-IncludeHuntingQuest`。Q67 已接取時，正常 Stage 462 在圖 3430 候選加入三隻 1001／PRE 1，座標為 (392,392)、(416,368)、(440,392)，沿用該圖的 AI 與每隻 4 EXP，並保留既有 1004。另在圖 3431 擊倒原候選配置的 1022／PRE 1。兩類各自計數與封頂；只接受 Server 判定的玩家擊倒，和戰鬥 EXP 同筆 SQLite 交易，兩類均達 10 才發一次 `0045`。未接取或成為 Ready 後新開的副本沿用原候選遭遇，保留 76 EXP。接取時的四次副本在離線樣本各為 88 EXP。新增三隻的位置與啟用條件為 Server 候選。
+
+若 10002 正承接 Q131／Q132，先走主線，保留 Q67 的 Ready 狀態。Q132 結束後可正常由隊伍入口回馮德斯交付。交付保存兩項計數、完成 key，提供接取角色 420 EXP、共用錢包 188 LeeLoo、三張 Product 232（HP 回復卷軸）。地區名聲仍待實作。
+
+以 `--check-monster-hunt` 從新帳號驗收 Case 693。在第一場後重登保留各 3／10，第四場各達 10 且只發一次通知，第五場驗證候選怪不再加入。Q132 完成後回村交付，再重登核對完成 key，最後完成 Q144、Town 3 圖 199，為 Lv.16／247,752 EXP、28 張復活卷軸、3,786 LeeLoo。指定 v2 的出生、兩個進度欄及交付界面待 AQ-05。
+
+`--check-phindos-ordinary-quests` 已在同一全新帳號走完 Q2843、Q1、Q40、Q43、Q67，保持既有七個單人狩獵場、市場與倉庫流程。Q144 的收據為 Town 3 圖 199、Lv.17／250,760 EXP、97 張復活卷軸及 4,446 LeeLoo。五項完成 key 與主線保存分開核對。原版 BND／SQLite 是本次 Server 離線結果，實機由 AQ-01～05 批次追蹤。
