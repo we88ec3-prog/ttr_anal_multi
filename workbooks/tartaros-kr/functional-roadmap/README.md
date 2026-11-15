@@ -1,6 +1,8 @@
 # Tartaros KR 功能開發規劃
 
-2026-11-15 同步 Q628／Lv.35 的既有離線基準，補錄 Stage 464 四條路線、新帳號連跑七個狩獵場至 Q144，以及 Q2843 接取、交付及重登的 Server 離線收據。504 項 HappyPath 合成結果獨立列示。06 新增 TS-42、AQ-01，指定 Client 累積 101 筆待測，歷史實機通過維持 21 項。Q1 仍在開發，無已提交的驗證結果。 [同步紀錄](../update-history/20261115-s00-q628-seven-grounds-ordinary-quest.json)
+2026-11-15 最新同步保留 Q628／Lv.35 長線基準與 504 項 HappyPath 合成結果。新帳號已在 Server 離線跑通八個狩獵場及 13 項普通任務至 Q144，其中 Stage 145／Case 315 為本機候選。06 累積 109 筆指定 v2 待測，含新增 AQ-02～09。歷史工作副本通過仍為 21 項。 [同步紀錄](../update-history/20261115-s00-q628-eight-grounds-ordinary-quests.json)
+
+2026-11-15 先前同步收錄 Stage 464 四條路線、新帳號七個狩獵場至 Q144，以及 Q2843 接取、交付及重登。06 當時新增 TS-42、AQ-01，共 101 筆待測。 [同步紀錄](../update-history/20261115-s00-q628-seven-grounds-ordinary-quest.json)
 
 2026-11-15 同步 Q628／Lv.35、504 項 HappyPath 合成、爾勒梅斯一般副本 465～468、跨村裝備存取與同槽護甲替換。原版 BND 離線及 Client 實機分列。06 新增 TS-38～41、EQ-B01，累積 99 筆待測，既有實機通過數維持 21。 [同步收據](../update-history/20261115-s00-q628-alsmeer-hunts.json)
 
