@@ -602,3 +602,5 @@ SK-P05 待指定 v2 實機。正常培養伊希莉亞至 Lv.15 且準備 400 熟
 SK-P06 待指定 v2 實機。正常培養至 Lv.15，各用 200 熟練度學索瑪 Practice 7、蘋果＆坦基 Practice 23、舒博爾 Practice 39。用普通切角及一人開狩獵場分別確認索瑪 Z＋X、蘋果＆坦基 X＋C、舒博爾 X＋C 可施放、扣款與重登保存。此外先用未學 39 的舒博爾驗 X、Z＋X、Z＋C 各自的圖示、動作與消耗。保留既有 Practice 35 升級結果。 [前期基礎攻擊規格](../runtime-content/SKILL-PRACTICE-PROTOCOL.md#索瑪蘋果坦基舒博爾的基礎攻擊)
 
 SK-P07 待指定 v2 實機。正常在馮德斯或爾勒梅斯各用 100 熟練度學索瑪 Practice 4（角色 Lv.3）與蘋果＆坦基 Practice 21（角色 Lv.5）。重登後在一人副本基礎配置按 C，比對 MP 分別扣 90／40、Buff 圖示、敵人相同攻擊的傷害及坦基物攻。可在同一副本帶著 Buff 換圖，確認圖示有延續且時間不重算，再回村確認清除。 [基礎防禦規格](../runtime-content/SKILL-PRACTICE-PROTOCOL.md#正常學習與施放基礎防禦)
+
+SK-P08 待指定 v2 實機。各花 100 熟練度首學索瑪 Practice 5（Lv.5）、蘋果＆坦基 Practice 20（Lv.3）、舒博爾 Practice 37（Lv.5）。從正常村莊進單人副本並分別施放 X＋C、Z＋X、C，確認快捷列、Lv.1 消耗及重登。坦基另對同一群怪觀察兩次命中及末擊弱暈。索瑪可在自然升到技能 Lv.6 後比較動作和冷卻。附加效果限制見規格。 [三招基礎攻擊規格](../runtime-content/SKILL-PRACTICE-PROTOCOL.md#連鎖閃電迴旋鐵拳與勝利之意志)
