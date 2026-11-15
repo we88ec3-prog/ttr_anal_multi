@@ -1,6 +1,8 @@
 # Tartaros KR 功能開發規劃
 
-2026-11-15 最新同步補錄前兩村 62 項普通任務與 Q144 的兩組新帳號離線收據。Stage 145／Case 315 已在 Server main。Q628／Lv.35 長線原版 BND 收據、504 項 HappyPath 合成與指定 v2 實機驗收分列。06 新增 AQ-10～19，累積 119 筆指定 v2 待測，歷史工作副本通過仍為 21 項。 [同步紀錄](../update-history/20261115-s00-q628-q144-62-ordinary-quests.json)
+2026-11-15 最新同步涵蓋前兩村八個狩獵場、87 項普通任務與 Q144 的兩組新帳號離線收據。總表和相關功能頁保留 Q628／Lv.35 長線基準，06 分列原版 BND 離線、504 項 HappyPath 合成與指定 v2 實機。新增 AQ-20～27 後累積 127 筆指定 v2 待測，歷史工作副本通過仍為 21 項。 [06 驗收表](../06_測試驗收.xlsx) · [同步收據](../update-history/20261115-s00-q628-q144-87-ordinary-quests.json)
+
+2026-11-15 前一批同步補錄前兩村 62 項普通任務與 Q144 的兩組新帳號離線收據。Stage 145／Case 315 已在 Server main。06 當時新增 AQ-10～19，累積 119 筆指定 v2 待測。 [同步紀錄](../update-history/20261115-s00-q628-q144-62-ordinary-quests.json)
 
 2026-11-15 上一批同步保留 Q628／Lv.35 長線基準與 504 項 HappyPath 合成結果。當時新帳號在 Server 離線跑通八個狩獵場及 13 項普通任務至 Q144，Stage 145／Case 315 當時仍為本機候選。06 當時累積 109 筆指定 v2 待測，含 AQ-02～09。歷史工作副本通過仍為 21 項。 [同步紀錄](../update-history/20261115-s00-q628-eight-grounds-ordinary-quests.json)
 
