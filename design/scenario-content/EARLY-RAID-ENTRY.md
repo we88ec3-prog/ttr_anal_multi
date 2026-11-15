@@ -8,7 +8,7 @@
 | 2 | 12 | 51／89 | 942 → 944 → 948 → 950 → 951 | Product 2275 ×1 |
 | 3 | 17 | 52／90 | 952 → 954 → 957 → 960 → 961 | Product 2276 ×1 |
 
-三筆皆為可見的一般挑戰。原表要求列 CP_TOTAL=700。Stage 各列 TOTAL_CP=700、BOSS_COUNT=3、FAIL_CP=140、START_CP=0，使用時機須再核對。三份 CHART 均為五節點單線，首節點 type 0，末節點 type 3。索引列出 CLUST、15 張圖的原版 BND 雜湊及 _MapList 的 TRIGGER 引用。怪群分配、頭目及波次仍待取證。 [來源索引](early-raid-kr-source.json)
+三筆皆為可見的一般挑戰。原表要求列 CP_TOTAL=700。Stage 各列 TOTAL_CP=700、BOSS_COUNT=3、FAIL_CP=140、START_CP=0，扣除時機須再核對。三份 CHART 均為五節點單線，首節點 type 0，末節點 type 3。索引列出 CLUST、15 張圖的原版 BND 雜湊及 _MapList 的 TRIGGER 引用。原版逐圖怪群分配、頭目位置及波次仍待取證。 [來源索引](early-raid-kr-source.json)
 
 ```powershell
 python -B <分析庫>/design/scenario-content/extract_early_raid_sources.py <KR目錄> <輸出>/early-raid-kr-source.json --bounds <輸出>/raid-bounds
@@ -29,7 +29,7 @@ dotnet <本機檢查器DLL> --early-raid-sources <輸出>/early-raid-kr-source.j
 
 另一個選項視窗的 `426060` 比較目前選擇與 `CGameInfo+5EACh`，變更時發 C2S `01 01 <row+258h> <row+260h>`。S2C `00A7` 經 `4DD8F0` 登錄到 `4DDBF0`，把 offset 3／4 的 byte 寫入 `+5EACh/+5EB0h`。offset 2 為零時處理 offset 5 起的 DWORD 陣列並顯示提示。回覆狀態與發布時機仍待確認。
 
-挑戰 UI 讀取的 CP 由兩個已定位的入口更新。帳號資料 S2C `002A` 經 `4E1E9F → 4E2B30` 讀取 `+39h` 的 WORD，寫入 `CGameInfo+5EB4h`。場景 S2C `00ED` 由 `4AE0ED → 4B5C10` 讀取 `+2` 的 WORD，與現值比較後寫入同一位置。更新函式也依差額顯示提示。這兩處確定了 Client 顯示的餘額欄位。起始值、取得來源、上限和扣除時機仍需原版規則證據。
+挑戰 UI 讀取的 CP 由兩個已定位的入口更新。帳號資料 S2C `002A` 經 `4E1E9F → 4E2B30` 讀取 `+39h` 的 WORD，寫入 `CGameInfo+5EB4h`。場景 S2C `00ED` 由 `4AE0ED → 4B5C10` 讀取 `+2` 的 WORD，與現值比較後寫入同一位置。更新函式也依差額顯示提示。
 
 下列原版 KR BIN 和指定 v2 視窗依個別 PE section 映射後一致。長度以十六進位計。
 
@@ -53,8 +53,40 @@ dotnet <本機檢查器DLL> --early-raid-sources <輸出>/early-raid-kr-source.j
 | `4E1E9F+A` | `7b3dae489f600fc22f96f4804a8a152ad631eccc16d0d11345985e3c36ce8c3e` |
 | `4E2BE4+D` | `b4b000367819b51ef10706d866cc4f47da95ea626093e8575b1ed7177baadd7b` |
 
+## 內容點數（CP）來源
+
+KR 說明表 `Table/Tip.xml` 的類型 2、ID 10 指向 `UI/Texture/Tooltip/0_15.dds`。對應原始 `UI/Texture.stp` 內的 `Texture/Tooltip/0_15.etf`。圖文明示挑戰任務需要內容點數，餘額不足無法使用，並指示從商城取得內容點數書。插圖中的 3,000 是畫面示例，實際起始額與上限待證。
+
+| 來源 | 核對結果 |
+|---|---|
+| KR `UI/Texture.stp` 與 ETF | 封裝 SHA-256 `2a04d6bbb5687a9a680a66d75703ef1cb4a04b941f9501af9ab1b185060c0f67`，member SHA-256 `188313db0403127649b656565ee41549f980f80f486dd76cb31234a1cc488083`。自 STPD 取出後解 gzip、略過 8 byte wrapper 並解開 ETF 前 128 byte，JPEG SHA-256 `616e310ffe06e9d93adceb11b6380a658edfcb95610aa86df10ea16fea17af1a`。 |
+| KR `Table/ItemTable2.xml`、`Product.xml`、`ItemUsableTable.xml` | Product 5410 對應 Item 5376／Class 21。使用動作 11、priority 5、VALUE 500。Product 5454／Item 5420 和 Product 5548／Item 5514 同為動作 11，VALUE 分別為 50、100。商城實際供貨與購買流程待證。 |
+| KR `Table/Messages/UIText.xml` | `kRaidToolTip2` 顯示入場需求，`kRaidToolTip3` 顯示失敗消耗，`kContentsPointTooltip` 有下次回復倒數。Server 自動回復週期及單次點數、失敗與退場的交易時點待證。 |
+
+重現時以 `Archive.read` 讀取原始 `Table.stp`（SHA-256 `ea2af30c9a451dcebcf2318868ec13153f8be5647db4ab84e7a38cd1dba4154c`）的上述表格。原版 ETF 使用同一 STPD 讀取器，再呼叫 `decode_object_member`。本件前綴為 `3f00030000004800`，模式 0，輸出 JPEG 以 `ffd8ff` 開頭。 [STPD 讀取器](../../governance/client-variants/20261105-zh-tw-v3/tools/stp_resources.py) · [ETF 前綴與 XOR 轉換](../../governance/client-variants/20261107-all-skills-unlock/decode_object_envelope.py)
+
+## Case 88 的 Server 關卡候選
+
+候選檔用 `NOT_NATIVE_MEF` schema。五個節點與地圖順序來自 CHART，怪物組成取自 CLUST。逐圖群組分配及出生點、出口座標由 Server 設定。三隻頭目各在所屬圖進場時生成，其中兩圖同時有小怪。採清場後解鎖、到傳送點按 Z，再進下一圖或結果頁。
+
+| 節點／地圖 | 採用的 CLUST 群組 | 生成數 | 頭目 |
+|---|---|---:|---|
+| 1／932 | 2 | 3 | — |
+| 4／934 | 14、19 | 4 | 1155 |
+| 7／936 | 32 | 3 | — |
+| 9／937 | 27、30 | 3 | 1157 |
+| 10／938 | 44、43、45 | 3 | 1159 |
+
+以原版 BND 驗證出生點、怪物與出口在靜態碰撞層可達。Server 離線檢查核對 16 筆怪物生成封包，再以模擬清場推進四次換圖與一次結算動作。原生挑戰進場、實際交戰及獎勵入帳待開發或實機驗收。 [Case 88 候選設定](phindos-raid1-stage50-case88.scenario.json)
+
+```powershell
+dotnet <本機檢查器DLL> --early-raid-case88 <來源清單> 3209d0afff692a7636d8945c96ec4e26b5046ecb0ba39a65bebf1e5489352053 <碰撞目錄> <Case88候選檔> e37997b09e30a425730b1c5a463ef3b6b561914233de90147fac6ac8cfac9a87
+```
+
+輸出狀態為 `STATIC_BOUNDS_SPAWNS_AND_SIMULATED_CLEAR`。本機 JSON 收據 SHA-256 為 `e02840a8e7f1be0957a898a96da52f9e57cc6fb15a1a2e0e6b19d125dc395450`。
+
 ## Server 開發順序
 
-1. 確認選定 RAID 後的挑戰大廳初始化，補齊 RAID 與 CP 快照。核對 CP 來源及隊伍人數，保留模式 8 大廳和模式 9 戰鬥場。
+1. 確認選定 RAID 後的挑戰大廳初始化，補齊 RAID 與 CP 快照。核對點數取得的實際請求及隊伍人數，保留模式 8 大廳和模式 9 戰鬥場。
 2. 由有效連線及隊長提交開場，以房間所選 RAID 查出 Stage／Case。逐步核對首圖載入、就緒和離場握手。
-3. 先為 Case 88 建立可驗證的出生點、遭遇與出口。結算使用核對過的 CP 與獎勵規則，再回廣場恢復主線。尚無挑戰副本實機通過紀錄。
+3. 將 Case 88 候選接上正常挑戰入口，驗證實際戰鬥、換圖及結果頁。結算採已核對的 CP 與獎勵規則，回廣場後恢復主線。
