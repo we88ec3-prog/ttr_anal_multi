@@ -81,13 +81,14 @@ Server 以既有世界地圖返回廣場 `0042/00/00` 或離隊 `005D/00` 接受
 
 ## 內容點數（CP）來源
 
-KR 說明表 `Table/Tip.xml` 的類型 2、ID 10 指向 `UI/Texture/Tooltip/0_15.dds`。對應原始 `UI/Texture.stp` 內的 `Texture/Tooltip/0_15.etf`。圖文明示挑戰任務需要內容點數，餘額不足無法使用，並指示從商城取得內容點數書。插圖中的 3,000 是畫面示例，實際起始額與上限待證。
+KR 說明表 `Table/Tip.xml` 的類型 2、ID 10 指向 `UI/Texture/Tooltip/0_15.dds`。對應原始 `UI/Texture.stp` 內的 `Texture/Tooltip/0_15.etf`。圖文明示挑戰任務需要內容點數，餘額不足無法使用，並指示從商城取得內容點數書。
 
 | 來源 | 核對結果 |
 |---|---|
 | KR `UI/Texture.stp` 與 ETF | 封裝 SHA-256 `2a04d6bbb5687a9a680a66d75703ef1cb4a04b941f9501af9ab1b185060c0f67`，member SHA-256 `188313db0403127649b656565ee41549f980f80f486dd76cb31234a1cc488083`。自 STPD 取出後解 gzip、略過 8 byte wrapper 並解開 ETF 前 128 byte，JPEG SHA-256 `616e310ffe06e9d93adceb11b6380a658edfcb95610aa86df10ea16fea17af1a`。 |
 | KR `Table/ItemTable2.xml`、`Product.xml`、`ItemUsableTable.xml` | Product 5410 對應 Item 5376／Class 21。使用動作 11、priority 5、VALUE 500。Product 5454／Item 5420 和 Product 5548／Item 5514 同為動作 11，VALUE 分別為 50、100。商城實際供貨與購買流程待證。 |
 | KR `Table/Messages/UIText.xml` | `kRaidToolTip2` 顯示入場需求，`kRaidToolTip3` 顯示失敗消耗，`kContentsPointTooltip` 有下次回復倒數。Server 自動回復週期及單次點數、失敗與退場的交易時點待證。 |
+| KR `Table/_LoadDisplay.xml` | SHA-256 `49aba61c484fc27964e2c75ecd487e9a1e6a4fdcf9b52173cbed3088167ee265`。載入提示明載每日早上 7 點更新為 3,000 CP，也說明按在線時間逐步恢復及可用 CP 道具補充。提示未列在線回復的週期或單次點數。 |
 
 重現時以 `Archive.read` 讀取原始 `Table.stp`（SHA-256 `ea2af30c9a451dcebcf2318868ec13153f8be5647db4ab84e7a38cd1dba4154c`）的上述表格。原版 ETF 使用同一 STPD 讀取器，再呼叫 `decode_object_member`。本件前綴為 `3f00030000004800`，模式 0，輸出 JPEG 以 `ffd8ff` 開頭。 [STPD 讀取器](../../governance/client-variants/20261105-zh-tw-v3/tools/stp_resources.py) · [ETF 前綴與 XOR 轉換](../../governance/client-variants/20261107-all-skills-unlock/decode_object_envelope.py)
 
@@ -101,9 +102,13 @@ Class 21 的一般背包使用從 `5FFF60` 進入 `600409`，以 class 減 1 查
 | 5454 | 5420 | 21 | 50 |
 | 5544～5548 | 5510～5514 | 21 | 60／70／80／90／100 |
 
-原版 `ShopInfo.xml`（SHA-256 `2c61fee77c6a8b24bdb350d1639818a2d9f871562c9b97eb51a3d15416699b0b`）把 Product 5410 列在對戰商店 31／109（NPC 10094）及公會商店 32／110（NPC 10051，公會 Lv.1），分別位於 Town 5／23。Product 5410 列上有 `BATTLE_POINT=30` 與 `HOORU=100`，各商店的貨幣選擇仍待核對。商城 `CashProduct.xml` 另列 Product 27461／27462 各一件的價格欄 18／29，對應 Action 11 的 2,000／4,000 CP。這些為原表取得途徑，前兩村新帳號的單人取得方式仍待分析。
+原版 `ShopInfo.xml`（SHA-256 `2c61fee77c6a8b24bdb350d1639818a2d9f871562c9b97eb51a3d15416699b0b`）把 Product 5410 列在對戰商店 31／109（NPC 10094）及公會商店 32／110（NPC 10051，公會 Lv.1），分別位於 Town 5／23。Product 5410 列上有 `BATTLE_POINT=30` 與 `HOORU=100`，各商店的貨幣選擇仍待核對。商城 `CashProduct.xml` 另列 Product 27461／27462 各一件的價格欄 18／29，對應 Action 11 的 2,000／4,000 CP。另以 `QuestInfo.xml`（SHA-256 `5d251415fdfdc453adefbff03114ded5a8ea41b696ce0aab86a23070e0fdca60`）比對前述七個 Product 的 Reward value。找到 11 筆，皆為 Town 12、13 或 28，對應 Product 5544／5547，最低 Lv.48。早期單人帳號可走每日更新。
 
-七項的原表皆指定冷卻群組 6，說明寫明使用後 1 秒內不可再次使用。Server 支援廣場或村莊正常背包使用已持有的上述道具。有效遊戲租約、格位與 Product 皆須吻合。在同一 SQLite 交易扣一件、增加該帳號 CP 並記錄共用冷卻。提交後送背包 `002C`、絕對餘額 `00ED <balance:u16 LE>` 與冷卻 `00B7`。新連線還原一般背包與快捷欄時同步發布正餘額與仍有效的冷卻。V19 遷移至 V20 時，既有帳號 CP 從 0 開始，保留原背包、各類貨幣及既有冷卻。以 32,767 為 Client 有號比較的表示上限，超過時保留道具。遊戲設計的上限、自然取得、定時回復及入場或失敗扣點仍待確認。
+七項的原表皆指定冷卻群組 6，說明寫明使用後 1 秒內不可再次使用。Server 支援廣場或村莊正常背包使用已持有的上述道具。有效遊戲租約、格位與 Product 皆須吻合。在同一 SQLite 交易檢查每日刷新、扣一件、增加該帳號 CP 並記錄共用冷卻。提交後送背包 `002C`、絕對餘額 `00ED <balance:u16 LE>` 與冷卻 `00B7`。V19 遷移至 V20 時，既有帳號 CP 從 0 開始，保留原背包、各類貨幣及既有冷卻。以 32,767 為 Client 有號比較的表示上限，超過時保留道具。遊戲設計的上限、逐步回復及入場或失敗扣點仍待確認。
+
+### 每日刷新
+
+V22 另存記帳日。以 07:00 KST 作為韓版 Server 候選，對應 22:00 UTC 及台灣 06:00，無須更改 Host 時區。第一次進入載入完成的廣場或村莊時，零餘額初始化為 3,000，已持有正餘額的舊存檔保留其數值並記入當天。走到下一個記帳日後，餘額設為 3,000。只要重新進入正常城鎮、選挑戰或開戰，Server 都會檢查記帳日。已在廣場、村莊或挑戰大廳的連線，在日界後的下一次世界更新收到 `00ED`。同一記帳日重連不會再給點，各日也不另外累加。扣點、在線逐步回復、倒數顯示及首次建帳行為的原服逐包內容仍待取證。
 
 以下指令視窗在原版 KR BIN 與指定 v2 依個別 PE 區段對照一致。
 
@@ -208,6 +213,6 @@ Server 候選在載入完成的正常廣場與村莊啟用。接收端以該連�
 
 ## Server 開發順序
 
-1. 核對前兩村新帳號可取得 CP 的來源與自動回復規則。
+1. 驗證早期新帳號每日 CP 刷新以及顯示，核對在線逐步回復規則。
 2. 以指定 v2 驗證 mode 8 至 mode 9 的載入、戰鬥與換圖，以及 mode 3 結果頁、獎勵顯示和返回握手。
 3. 驗證經驗書畫面與等級保存，補上成功／失敗／離場的 CP 交易及各自的持久化行為。
