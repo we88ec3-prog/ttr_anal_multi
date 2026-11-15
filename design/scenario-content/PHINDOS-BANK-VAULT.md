@@ -24,6 +24,8 @@ Server 沿用已核對的普通任務互動 `001C/type 3`。由目標所在城�
 
 重跑 `--fresh-alsmeer-journey`，加上 `--check-early-ordinary-quests --check-refine-materials --check-remaining-base-skills --check-equipment-tutorial-chain --check-native-equipment-windows`。標準及輪替新帳號以原版 BND 完成 Q144，並在銀行教學完成後步行接取、重登回廣場、步行找到市場 NPC 交付。核對廣場 `006F` 保留先前全部旗標並增補 Q2997、交付後角色 Lv.19／351,162 EXP，以及再次重登的保存結果。`equipmentTutorialChain.earlyUiTraining.marketIntroduction` 收據 SHA-256 分別為 `3dc4b2803dda0501ca7b43ada404460f64c7b8088949aa9883b8c814773caee1` 和 `4fe1752f467a6313fd7298e0c8441019394697ace7e0a0bd5af1e9f095317471`。 [AQ-33 實機驗收](../testing/S00-CONTENT-BATCH-TESTS.md)
 
+新增正常村莊直接返回廣場，可在同一登入內交付 Q2997。 [村莊返回廣場的按鈕與協定](VILLAGE-SQUARE-RETURN.md)
+
 ## C2S 道具存取
 
 `60233E..602347` 的背包路徑向 `4A44E0` 傳入方向 1。`5F9D60` 先從倉庫 backing store 讀道具，`5F9E52 → 5FA0F0` 驗背包位置後在 `5FA211..5FA218` 傳入方向 2。兩條路徑使用同一個 8-byte 格式。
