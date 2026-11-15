@@ -77,3 +77,13 @@ Server 接取後登錄 `0042/subtype 11` 的目標 3954，事件 18。Client 回
 Server 接取後傳 `0042/subtype 11` 登錄目標 3937、事件 2。正常廣場載入完成後，已接取者可在廣場任意位置送 `DF 00 19 0B 02 00`。達成時保存 Ready，回覆 `0041`／`0045`，再走回 NPC 10101 交付並保存 1,910 EXP。前置以帳號已完成的兩筆任務紀錄查核。公會地區名聲及其他場景的開窗驗收另列。 [AQ-35 實機驗收](../testing/S00-CONTENT-BATCH-TESTS.md)
 
 標準與輪替兩條原版 BND 新帳號離線流程由 Q144 繼續完成 Q2840、Q2858 及 Q2841。兩條均從市場 NPC 接取，步行離開 NPC 再提交事件，核對 Ready、交付與重登保存，背包及貨幣一致。結束時均為 Lv.19／354,982 EXP。收據位於 `equipmentTutorialChain.earlyUiTraining.marketIntroduction.marketTraining.helpTraining`，兩份 SHA-256 為 `aee388fbd96f6cc44ab6bcd12537532d0f4ced927511db751bef2b1469496990` 與 `82b5ee6131527ce37136b83a654c63b40d47e474bdb1f300618605996272c79f`。 [重現參數](PHINDOS-BANK-VAULT.md#q2997-跨城鎮交付)
+
+## Q2996 挑戰任務負責官介紹
+
+同版 `QuestInfo.xml` 的 Q2996 為 Town 2、Lv.11，前置 Q2853。NPC 10014 接取，NPC 10069 交付。AcceptAction、CompleteAction 均為 type 1。Content 3069 指示與「웨스티」對話。獎勵為 2,890 EXP 與一點公會地區名聲。 `QuestTalk.xml` 的 31721／33058／31722 分別是接取、途中及交付對話。`TalkTable/02_Lenart.xml` 的 33058 指向廣場的 NPC。`_TownList.xml` 的 Town 5 清單包含 10069，`npctable.xml` 確認其為 TYPE 5 挑戰任務負責官，該表 SHA-256 為 `a727fceb64a8b58dc98983619fc73b131c15a6be1eec132c1124f2c57b4aa31d`。 [QuestInfo 版本及同類跨城教學](PHINDOS-BANK-VAULT.md#q2997-跨城鎮交付)
+
+Server 沿用 Q2997 的跨城對話流程。爾勒梅斯的 NPC 10014 受理 `0036` 接取，傳 `0042/subtype 11` 登錄目標 4069。可用世界地圖同次登入回廣場，保留已接取的目標。到 NPC 10069 的互動範圍送 `001C/subtype 3`，保存 Ready 並更新任務進度。再由同 NPC 交付，發布完成旗標、前置快照及 2,890 EXP。獎勵入帳至接取角色，背包和錢包維持原值。公會地區名聲待開發。Q2851 以 Q2996 為前置，另外要求點「挑戰入場」。挑戰開窗的回報及副本流程仍需取證。 [AQ-36 實機驗收](../testing/S00-CONTENT-BATCH-TESTS.md)
+
+標準與輪替新帳號使用原版 BND 離線跑至 Q144，經既有教學後，實走爾勒梅斯接取與直接返回廣場。兩條均核對目標跨城保留、Ready 重登回填、交付入帳及重登後完成，最後為 Lv.20／357,872 EXP。收據位於 `equipmentTutorialChain.earlyUiTraining.marketIntroduction.marketTraining.helpTraining.challengeIntroduction`，兩份 SHA-256 分別為 `30988f6b6719ee68049e37174bd3fb6ce4b293eaec3244b0f5dcbabf8be60381` 與 `a67ca508252cdf578b4225c90c81d957009001b5f2d2f97abcf64d11077eee55`。 [重現參數](PHINDOS-BANK-VAULT.md#q2997-跨城鎮交付)
+
+Q2851 的 QuestInfo Content 2947 指向 NPC 10069 的「挑戰入場」。既有事件 15 呼叫點 `63930A` 受 `6392C9` 的 `0x2884` 比較約束，符合 `npctable.xml` 的 10372（TYPE 6）。原版 KR／指定 v2 的 `6392C6+49` 視窗相同，SHA-256 為 `c1e9ad09483806ee640cc220db7c079d6a84d9d9c6b46c108aedcee3fefb23af`。Q2851 仍需核對 10069 的 TYPE 5 按鈕路徑及其回報。
