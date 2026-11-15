@@ -114,3 +114,21 @@ QuestInfo Content 14 要求擊倒無斯以收集 15 個齒輪，Content 81 要�
 以 `--check-monster-hunt` 從新帳號驗收 Case 693。在第一場後重登保留各 3／10，第四場各達 10 且只發一次通知，第五場驗證候選怪不再加入。Q132 完成後回村交付，再重登核對完成 key，最後完成 Q144、Town 3 圖 199，為 Lv.16／247,752 EXP、28 張復活卷軸、3,786 LeeLoo。指定 v2 的出生、兩個進度欄及交付界面待 AQ-05。
 
 `--check-phindos-ordinary-quests` 已在同一全新帳號走完 Q2843、Q1、Q40、Q43、Q67，保持既有七個單人狩獵場、市場與倉庫流程。Q144 的收據為 Town 3 圖 199、Lv.17／250,760 EXP、97 張復活卷軸及 4,446 LeeLoo。五項完成 key 與主線保存分開核對。原版 BND／SQLite 是本次 Server 離線結果，實機由 AQ-01～05 批次追蹤。
+
+## 馮德斯 Q41、Q42、Q73
+
+同一版 `Table/QuestInfo.xml` 的三項任務均為 Town 1、type 1，皆無 `Demands`。用 `Table/QuestTalk.xml`（解碼 SHA-256 `b136fddf1696ff73c5780c269604b5670e35cbb416cd8cce4274aa05865edd28`）對到 `Table/TalkTable/04_Phindous.xml`（解碼 SHA-256 `91cb3684a6e9bef06ff4f9d454a6d4bfcc81ac41b247e245555dac0d1eda92d4`）。Q41 的 Content 38 要擊倒巨型無斯，對話 309 提到擊倒時自動記錄，原表未列額外消耗品。Q42 的對話 316 指定馮德斯蘆葦地首領，Q73 的對話 218 指出同一區域的精英怪名稱。
+
+| 任務 | 等級／接取及交付 NPC | Server 候選目標 | 原表報酬 |
+| --- | --- | --- | --- |
+| Q41 | 4／10001 | Stage 462，1013／PRE 1 ×1，圖 3433 | 210 EXP、116 LeeLoo、Product 183 ×1 |
+| Q42 | 7／10001 | Stage 463，1083／PRE 1 ×1，末圖 3448 | 1,040 EXP、508 LeeLoo、Product 232 ×3 |
+| Q73 | 7／10003 | Stage 463，1083／PRE 1 ×1，末圖 3448 | 520 EXP、225 LeeLoo、Product 234 ×3 |
+
+Stage 462 的原版 `CLUST_Re_mushroom_01.xml` 群組 6 列 1013／PRE 1 一隻，Cases 693／694 的既有 Server 圖表僅在通往 3433 的分支配置。Stage 463 的 `CLUST_Re_reed_01.xml`（解碼 SHA-256 `be75f6468e4802fd8aaa0494a31c8b2659b14286d90d625309fc9bdcd601c113`）群組 11 列 1083／PRE 1 一隻，配到 Cases 695／696 的圖 3448。Q42 的「首領」和 Q73 的「精英」以該區末圖群組對應，為 Server 候選。兩項已接取時，同一隻有效擊倒可以各推進一次。三項沿用 Stage、Model、PRE 及接取狀態判定，報酬與完成 key 同筆持久化。每項另有 1 點地區名聲待實作。
+
+`--check-early-ordinary-quests` 已分別用 693／695 和 694／696 跑通原版 BND 新帳號旅程。第二組在任務驗收參數前加 `--use-rotating-phindos-cases`，並傳入相應關卡檔與雜湊。兩組皆確認 Stage 462 結算後 Q42／73 仍為 0，後續 Stage 463 一次擊倒同時推進這兩項，各任務只回報一次 Ready。離隊交付後重登核對完成 key、背包與錢包，再走完八個狩獵場、17 項普通任務及 Q144。兩組皆存到圖 199、Lv.17／267,598 EXP、14,961 LeeLoo。Case 693 每場實拾三張復活卷軸，Case 694 每場一張，兩組按各自配置核對。指定 v2 待 AQ-11。
+
+### 後續 Q6
+
+Q6 為 Lv.7、Stage 463，需向 10001 接取、向 10003 交付。Content 6 要收十件 8mm 螺栓。原版群組 8 列兩隻大型 1001／PRE 3，已在兩個蘆葦地 Case 的圖 3442 配置。`Product.xml` 的 293 對應 `ItemTable2.xml` 的 293，class 6、堆疊上限 100。原表報酬為 520 EXP、225 LeeLoo、Product 233 ×3，另有地區名聲 1。接續需支援接取與交付 NPC 分開、收集掉落依 Stage 限定，並確認任務物的原版掉落規則。
