@@ -600,3 +600,5 @@ SK-P04 待指定 v2 實機，接續 SK-P03。以正常養成的 Lv.25 伊希莉�
 SK-P05 待指定 v2 實機。正常培養伊希莉亞至 Lv.15 且準備 400 熟練度，在爾勒梅斯學 Practice 51／53／55 至 Lv.1，確認餘額少 400。重登後從正常村莊開一人狩獵場，確認 C、Z＋X、X＋C 的圖示及各招動作，記錄消耗 60 SP、150 MP、175 SP。資源不夠時等回復再測下一招。這批核對基礎配置 0。 [基礎技能開放規格](../runtime-content/SKILL-PRACTICE-PROTOCOL.md#正常學習伊希莉亞的其餘基礎技能)
 
 SK-P06 待指定 v2 實機。正常培養至 Lv.15，各用 200 熟練度學索瑪 Practice 7、蘋果＆坦基 Practice 23、舒博爾 Practice 39。用普通切角及一人開狩獵場分別確認索瑪 Z＋X、蘋果＆坦基 X＋C、舒博爾 X＋C 可施放、扣款與重登保存。此外先用未學 39 的舒博爾驗 X、Z＋X、Z＋C 各自的圖示、動作與消耗。保留既有 Practice 35 升級結果。 [前期基礎攻擊規格](../runtime-content/SKILL-PRACTICE-PROTOCOL.md#索瑪蘋果坦基舒博爾的基礎攻擊)
+
+SK-P07 待指定 v2 實機。正常在馮德斯或爾勒梅斯各用 100 熟練度學索瑪 Practice 4（角色 Lv.3）與蘋果＆坦基 Practice 21（角色 Lv.5）。重登後在一人副本基礎配置按 C，比對 MP 分別扣 90／40、Buff 圖示、敵人相同攻擊的傷害及坦基物攻。可在同一副本帶著 Buff 換圖，確認圖示有延續且時間不重算，再回村確認清除。 [基礎防禦規格](../runtime-content/SKILL-PRACTICE-PROTOCOL.md#正常學習與施放基礎防禦)
