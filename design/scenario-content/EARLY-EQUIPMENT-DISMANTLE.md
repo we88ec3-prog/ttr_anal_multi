@@ -84,7 +84,7 @@ Q2849 為 Lv.8，於馮德斯 NPC 10015 接取及交付。原表只要求開分�
 2. 同一 NPC 開放 Q2850。使用能取得普通 E 級鍊石的既有馮德斯材料路線，至鐵匠成功強化一次。資源扣除、同一件裝備的強化保存及已接任務 Ready 共用一筆交易。回 NPC 10015 交付獲 2,720 EXP 及 Product 23230 ×1。原表的公會地區名聲兩任務各 1 點，待公會功能接入。
 3. Lv.11 後可到爾勒梅斯 NPC 10014 接 Q2852，依氣充電規格進狩獵場短按 V，再回 NPC 交付。 [Q2852 交付規格](../runtime-content/SKILL-PRACTICE-PROTOCOL.md#氣充電與特性教學)
 
-Product 23230 的 `PACKAGE_LIST` 包含 Product 151 ×200 及 12920 ×1。ItemTable2 的 Item 20567 類別為 29、堆疊上限 1。此輪驗證獎勵入包、數量和重登保存，開啟精煉包另需對應的使用入口和交易驗證。
+Product 23230 的 `PACKAGE_LIST` 包含 Product 151 ×200 及 12920 ×1。ItemTable2 的 Item 20567 類別為 29、堆疊上限 1。開啟精煉包與出售 LeeLoo 袋見獨立規格。 [精煉包規格](REFINEMENT-PACKAGE.md)
 
 使用 `--check-early-ordinary-quests --check-refine-materials --check-remaining-base-skills --check-equipment-tutorial-chain` 跑兩條原版 BND 新帳號路線。兩組先完成 Q144、正常取得材料，之後走分解 → 交付 → 製作鍊石 → 強化 → 交付 → 氣充電，未預置任務或物品。Q2852 交付後均為 Lv.19／342,072 EXP，重登保留主線 Q144、普通任務完成狀態及其資產。指定 v2 依 SK-P11 核對按鈕、提示及原版開窗差異。
 
