@@ -82,8 +82,33 @@ Server 接取後傳 `0042/subtype 11` 登錄目標 3937、事件 2。正常廣�
 
 同版 `QuestInfo.xml` 的 Q2996 為 Town 2、Lv.11，前置 Q2853。NPC 10014 接取，NPC 10069 交付。AcceptAction、CompleteAction 均為 type 1。Content 3069 指示與「웨스티」對話。獎勵為 2,890 EXP 與一點公會地區名聲。 `QuestTalk.xml` 的 31721／33058／31722 分別是接取、途中及交付對話。`TalkTable/02_Lenart.xml` 的 33058 指向廣場的 NPC。`_TownList.xml` 的 Town 5 清單包含 10069，`npctable.xml` 確認其為 TYPE 5 挑戰任務負責官，該表 SHA-256 為 `a727fceb64a8b58dc98983619fc73b131c15a6be1eec132c1124f2c57b4aa31d`。 [QuestInfo 版本及同類跨城教學](PHINDOS-BANK-VAULT.md#q2997-跨城鎮交付)
 
-Server 沿用 Q2997 的跨城對話流程。爾勒梅斯的 NPC 10014 受理 `0036` 接取，傳 `0042/subtype 11` 登錄目標 4069。可用世界地圖同次登入回廣場，保留已接取的目標。到 NPC 10069 的互動範圍送 `001C/subtype 3`，保存 Ready 並更新任務進度。再由同 NPC 交付，發布完成旗標、前置快照及 2,890 EXP。獎勵入帳至接取角色，背包和錢包維持原值。公會地區名聲待開發。Q2851 以 Q2996 為前置，另外要求點「挑戰入場」。挑戰開窗的回報及副本流程仍需取證。 [AQ-36 實機驗收](../testing/S00-CONTENT-BATCH-TESTS.md)
+Server 沿用 Q2997 的跨城對話流程。爾勒梅斯的 NPC 10014 受理 `0036` 接取，傳 `0042/subtype 11` 登錄目標 4069。可用世界地圖同次登入回廣場，保留已接取的目標。到 NPC 10069 的互動範圍送 `001C/subtype 3`，保存 Ready 並更新任務進度。再由同 NPC 交付，發布完成旗標、前置快照及 2,890 EXP。獎勵入帳至接取角色，背包和錢包維持原值。公會地區名聲待開發。 [AQ-36 實機驗收](../testing/S00-CONTENT-BATCH-TESTS.md)
 
 標準與輪替新帳號使用原版 BND 離線跑至 Q144，經既有教學後，實走爾勒梅斯接取與直接返回廣場。兩條均核對目標跨城保留、Ready 重登回填、交付入帳及重登後完成，最後為 Lv.20／357,872 EXP。收據位於 `equipmentTutorialChain.earlyUiTraining.marketIntroduction.marketTraining.helpTraining.challengeIntroduction`，兩份 SHA-256 分別為 `30988f6b6719ee68049e37174bd3fb6ce4b293eaec3244b0f5dcbabf8be60381` 與 `a67ca508252cdf578b4225c90c81d957009001b5f2d2f97abcf64d11077eee55`。 [重現參數](PHINDOS-BANK-VAULT.md#q2997-跨城鎮交付)
 
-Q2851 的 QuestInfo Content 2947 指向 NPC 10069 的「挑戰入場」。既有事件 15 呼叫點 `63930A` 受 `6392C9` 的 `0x2884` 比較約束，符合 `npctable.xml` 的 10372（TYPE 6）。原版 KR／指定 v2 的 `6392C6+49` 視窗相同，SHA-256 為 `c1e9ad09483806ee640cc220db7c079d6a84d9d9c6b46c108aedcee3fefb23af`。Q2851 仍需核對 10069 的 TYPE 5 按鈕路徑及其回報。
+## Q2851 挑戰入場教學
+
+Q2851 由 Town 5 的 NPC 10069 接取及交付，需求 Lv.11 且完成 Q2996。QuestInfo AcceptAction 為 type 3／param 15，CompleteAction 為 type 1。Content 2947 指示點「挑戰入場」。QuestTalk 31723／33059／31725 對應接取、途中及交付。獎勵為 2,890 EXP 與一點公會地區名聲。
+
+KR 對話控制項在 `6387D4` 安裝回呼 `6398D0`。通過 Client 當地狀態檢查後，`639A90` 建立本機事件 `F431C`。廣場 `5B7750` 的跳轉表 `5B7BB1 → 5B7B1C` 將事件分派到 `5B794B`，呼叫 `5B9FA0` 顯示 owner `+230h` 的挑戰視窗。`5B5364 → 5BC4E0 → 5C0890 → 4464C0` 安裝 `CChallengeDialog`，vtable `BFBA3C+D0h` 指向開窗函式 `4474D0`。該函式更新視窗資料，再於 `4476BB` 推入 9，於 `4476BD` 呼叫 `501650`。共用函式依已登錄的未達成目標挑選 Quest ID，再形成 `00DF`。
+
+事件 15 呼叫點 `63930A` 受 `6392C9` 的 `0x2884` 比較約束，符合 `npctable.xml` 的 NPC 10372（TYPE 6）。該回呼發出的本機事件 `F42EA` 開啟 owner `+254h` 的 `CShopTradeWnd`。原版 KR 與指定 v2 的 `6392C6+49` 視窗一致，SHA-256 為 `c1e9ad09483806ee640cc220db7c079d6a84d9d9c6b46c108aedcee3fefb23af`。任務 AcceptAction 參數與開窗回報事件分別依原表和呼叫證據處理。
+
+原版 KR 與指定 v2 依各自 PE section 映射，下列挑戰路徑視窗一致。
+
+| VA＋十六進位長度 | SHA-256 |
+|---|---|
+| `6387D4+A` | `bbe5248e9d6f36230c1cb1725128c6b7543beae377e339c79d2073074183f98c` |
+| `639A90+C` | `99ca913fb81cdb2e4bda738971060ee617d09e5ee54e49ba881aea76f91f1365` |
+| `5B794B+7` | `37548695d148911e375c9b019e52924755807e8da5200051558fa3fefc1e9392` |
+| `5BA17E+4A` | `7af57ac54b278e9057c20ad7fa128039a83da43b1daa2b9e13d28dd5e5982e1a` |
+| `5B5364+14` | `08afb7c548c562ca3e30821d9be669f20fc902653af2146e302b9334d17c3f0d` |
+| `446506+6` | `f82433f90511067a8c53eadb9b2585e20f220140768921bb29560f317d00f949` |
+| `BFBB0C+4` | `85ac3e5c0f17aae442b999c126a12642f40659392b292911fdb3985ace070215` |
+| `4476BB+7` | `f98dc027b9dbb6afee36bafde5bbb767570066ea0fd419f65e52ac8b73cdec7c` |
+
+Server 在接取時以 `0042/subtype 11` 登錄目標 3947、事件 9。正常廣場中，已接取且在 10069 互動範圍內的角色送 `DF 00 23 0B 09 00`，保存 Ready 並回覆 `0041`／`0045`。關窗後與同一 NPC 交付，保存完成及 2,890 EXP。副本選擇、建立與進場以及公會地區名聲仍待分析與開發。 [AQ-37 實機驗收](../testing/S00-CONTENT-BATCH-TESTS.md)
+
+兩條新帳號的原版 BND 離線旅程保留 Q144，完成 Q2996 後驗證 Q2851 接取、回報、Ready 重登回填、交付入帳及完成重登保存，背包和錢包一致。均結束於 Lv.20／360,762 EXP。收據位於 `equipmentTutorialChain.earlyUiTraining.marketIntroduction.marketTraining.helpTraining.challengeIntroduction.challengeTraining`，標準與輪替 SHA-256 為 `2255346216346fadfef6a8bbe8936dc2285f2631691be5d63bc438b32138b187` 與 `7f3a9fef82b3a50970018d9354fb7677a5309c9e9d0a8a14d60920e6c3346569`。 [重現參數](PHINDOS-BANK-VAULT.md#q2997-跨城鎮交付)
+
+後續選關取證可用同版 `ChallengeListTable.xml` 的可見一般項目 1、2、3，對應 `RaidInfoTable.xml` 的 RAID 1、2、3。原表最低等級分別是 7、12、17，首次 Stage 是 50、51、52。三筆皆列 `CP_TOTAL=700`、`BOSS_COUNT=3`，獎勵各為 Product 2274、2275、2276 ×1。兩表 SHA-256 依上述順序為 `f59d05228a73dee4f9bab4ded125bc43e3eb4fa4d2e501684c80319193d721e7` 與 `ce86cff3cc41f38ea39fa326323193a6a1a524d3cfe680665ef62f37fb179108`。隊伍人數、CP 判定與地圖交接需另核對。
