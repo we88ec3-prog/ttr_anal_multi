@@ -29,6 +29,10 @@ dotnet <本機檢查器DLL> --early-raid-sources <輸出>/early-raid-kr-source.j
 
 另一個選項視窗的 `426060` 比較目前選擇與 `CGameInfo+5EACh`，變更時發 C2S `01 01 <row+258h> <row+260h>`。S2C `00A7` 經 `4DD8F0` 登錄到 `4DDBF0`，把 offset 3／4 的 byte 寫入 `+5EACh/+5EB0h`。offset 2 為零時處理 offset 5 起的 DWORD 陣列並顯示提示。回覆狀態與發布時機仍待確認。
 
+`CRaidRoom` 在 `4C5970` 安裝 `00A7 → 424610`，再轉交全域 `CGameInfo`。開始按鈕在 `5B13EB` 取 `CGameInfo+5EACh` 查 RAID 資料，因此正式大廳須先讓 Client 的選定 RAID 與 Server 房間一致；`00A6` 只切場景。開始請求仍從已選且有效的房間判定，請求本身沒有 RAID ID。
+
+mode 9 的 `CRaidField` 在 `4C5520` 註冊覆寫 `0014`、`0031`、`0039～003B`，保留基底的 `0012`、`0038` 與 `0049`。`4ADE41` 註冊的 `0012 → 4B24F0` 在 `4B254D` 讀 `+2` 的實體地圖 DWORD。 `4ADF2D` 註冊的 `0038 → 4B1BF0` 在子型 2 與 6 使用 `+7` 的 Case WORD；`4ADF6D` 註冊的 `0049 → 4B3350` 讀 `+2` 的節點 WORD。這確認可沿用現有欄位形狀，挑戰實際子型、首次載入的送出順序、就緒回報及模式專用結果仍待證。
+
 挑戰 UI 讀取的 CP 由兩個已定位的入口更新。帳號資料 S2C `002A` 經 `4E1E9F → 4E2B30` 讀取 `+39h` 的 WORD，寫入 `CGameInfo+5EB4h`。場景 S2C `00ED` 由 `4AE0ED → 4B5C10` 讀取 `+2` 的 WORD，與現值比較後寫入同一位置。更新函式也依差額顯示提示。
 
 下列原版 KR BIN 和指定 v2 視窗依個別 PE section 映射後一致。長度以十六進位計。
@@ -64,6 +68,33 @@ KR 說明表 `Table/Tip.xml` 的類型 2、ID 10 指向 `UI/Texture/Tooltip/0_15
 | KR `Table/Messages/UIText.xml` | `kRaidToolTip2` 顯示入場需求，`kRaidToolTip3` 顯示失敗消耗，`kContentsPointTooltip` 有下次回復倒數。Server 自動回復週期及單次點數、失敗與退場的交易時點待證。 |
 
 重現時以 `Archive.read` 讀取原始 `Table.stp`（SHA-256 `ea2af30c9a451dcebcf2318868ec13153f8be5647db4ab84e7a38cd1dba4154c`）的上述表格。原版 ETF 使用同一 STPD 讀取器，再呼叫 `decode_object_member`。本件前綴為 `3f00030000004800`，模式 0，輸出 JPEG 以 `ffd8ff` 開頭。 [STPD 讀取器](../../governance/client-variants/20261105-zh-tw-v3/tools/stp_resources.py) · [ETF 前綴與 XOR 轉換](../../governance/client-variants/20261107-all-skills-unlock/decode_object_envelope.py)
+
+### 背包使用與保存
+
+Class 21 的一般背包使用從 `5FFF60` 進入 `600409`，以 class 減 1 查 `600F90`。表項 `600FA4` 值為 3，`600F6C` 指向 `600747`。該分支巡覽使用動作，Action 11 落在另外處理的 13～26 之外。通過使用條件且走無確認分支時，`600ACA → 4A39F0` 送既有 8-byte `0021`，用背包 1、1 起算格位、Product DWORD，尾參數為 0。
+
+| Product | Item | Class | Action 11 點數 |
+|---:|---:|---:|---:|
+| 5410 | 5376 | 21 | 500 |
+| 5454 | 5420 | 21 | 50 |
+| 5544～5548 | 5510～5514 | 21 | 60／70／80／90／100 |
+
+原版 `ShopInfo.xml`（SHA-256 `2c61fee77c6a8b24bdb350d1639818a2d9f871562c9b97eb51a3d15416699b0b`）把 Product 5410 列在對戰商店 31／109（NPC 10094）及公會商店 32／110（NPC 10051，公會 Lv.1），分別位於 Town 5／23。Product 5410 列上有 `BATTLE_POINT=30` 與 `HOORU=100`，各商店的貨幣選擇仍待核對。商城 `CashProduct.xml` 另列 Product 27461／27462 各一件的價格欄 18／29，對應 Action 11 的 2,000／4,000 CP。這些為原表取得途徑，前兩村新帳號的單人取得方式仍待分析。
+
+七項的原表皆指定冷卻群組 6，說明寫明使用後 1 秒內不可再次使用。Server 支援廣場或村莊正常背包使用已持有的上述道具。有效遊戲租約、格位與 Product 皆須吻合。在同一 SQLite 交易扣一件、增加該帳號 CP 並記錄共用冷卻。提交後送背包 `002C`、絕對餘額 `00ED <balance:u16 LE>` 與冷卻 `00B7`。新連線還原一般背包與快捷欄時同步發布正餘額與仍有效的冷卻。V19 遷移至 V20 時，既有帳號 CP 從 0 開始，保留原背包、各類貨幣及既有冷卻。以 32,767 為 Client 有號比較的表示上限，超過時保留道具。遊戲設計的上限、自然取得、定時回復及入場或失敗扣點仍待確認。
+
+以下指令視窗在原版 KR BIN 與指定 v2 依個別 PE 區段對照一致。
+
+| VA＋長度（十六進位） | SHA-256 |
+|---|---|
+| `600409+29` | `2eea2f2a2099549f4d1b582c01a32e07fdfa6a4b5ee817f3cf044581d5d83c25` |
+| `600FA4+1` | `084fed08b978af4d7d196a7446a86b58009e636b611db16211b65a9aadff29c5` |
+| `600F6C+4` | `6dbe44288fb5a2ca0d611a2a459538e37d3e95855485490f94453c1cec4ef27a` |
+| `600ACA+23` | `852094866c3dd4fd82e7b46fda3abd25d94779f6aca5ec02c21fd8e5586d2999` |
+| `4C5970+5C` | `dc453caf797ab5a57433e6aafed7680de79e128f710f4a04b6b5f45bfbdcc069` |
+| `5B13DF+51` | `97d03e59d86f1f5617bb049e55fd86cdfb96cb7478cafdb8fb8ad2783c432531` |
+| `4C5520+6C` | `618acd34e4221f45b712fb7b7653a16e7093e7052e06306f1441841909173228` |
+| `4ADF2D+4A` | `50bc71657b20251ba0826e6c33caec90e9ef8150bfe135ac5ae95ece648f5826` |
 
 ## Case 88 的 Server 關卡候選
 
