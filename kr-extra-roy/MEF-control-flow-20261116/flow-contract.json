@@ -1,0 +1,356 @@
+{
+  "schema": "mef-control-flow-v1",
+  "work_parent": "ad9ea950216923b5e351a7501d38e006df57a4c6",
+  "original_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+  "stages": [
+    {
+      "id": "deliver",
+      "name": "內容發布與落地",
+      "classification": "SERVER_DEVELOPMENT",
+      "owner": "Server/content + original launcher",
+      "evidence": "kr-extra-roy/20261114-183651-chatgpt-web-roy1-MEF-delivery-windows.md",
+      "preconditions": "合法發佈版本及原更新通道",
+      "limits": "HTTP/gzip/ordinary-file stage; not new game TCP blob"
+    },
+    {
+      "id": "resource_index",
+      "name": "資源可見性與索引",
+      "classification": "CLIENT_CONFIRMED_BOUNDED",
+      "owner": "Original resource manager",
+      "evidence": "kr-extra-roy/MEF-complete-flow-20261115/resource-gates/report.md",
+      "preconditions": "package/checksum/fallback與已載入SceneList一致",
+      "limits": "Disk presence does not prove selected resource; no general hot-reload guarantee"
+    },
+    {
+      "id": "request",
+      "name": "0047雙鍵與Q接納",
+      "classification": "CLIENT_CONFIRMED_BOUNDED",
+      "owner": "Original frontend + Q manager",
+      "evidence": "kr-extra-roy/MEF-entry-lifecycle-events-20261114/entry.md",
+      "preconditions": "合法signed-WORD quest/scene、field context、非busy正常路徑",
+      "limits": "Busy does not queue; mode can change before rejection; skip may report without entry"
+    },
+    {
+      "id": "prepass",
+      "name": "獨立VM同步依賴宣告",
+      "classification": "CLIENT_CONFIRMED_BOUNDED",
+      "owner": "Prepass VM FE1EEC",
+      "evidence": "kr-extra-roy/MEF-content-contracts-20261116/bridge/report.md",
+      "preconditions": "原Register binding；有限callback；來源可讀",
+      "limits": "Failure may leave partial collector; return is not dependency success"
+    },
+    {
+      "id": "dependencies",
+      "name": "模型與動作依賴工作",
+      "classification": "CLIENT_CONFIRMED_BOUNDED",
+      "owner": "Original collector and resource jobs",
+      "evidence": "kr-extra-roy/MEF-content-contracts-20261116/bridge/report.md",
+      "preconditions": "WORD keys、first model與正式行為對應",
+      "limits": "Native events/waits do not acknowledge all resource or gameplay success"
+    },
+    {
+      "id": "formal",
+      "name": "正式seq與唯一outer登記",
+      "classification": "DESIGN_CONDITIONAL",
+      "owner": "Formal VM FDF3C8 + original qco",
+      "evidence": "kr-extra-roy/MEF-end-to-end-20261116/entry/report.md",
+      "preconditions": "R9 lexical phase、原binding、正常Register、無重入",
+      "limits": "Two VMs have separate locals/globals; new outer is content design"
+    },
+    {
+      "id": "module",
+      "name": "載入模組與當次export",
+      "classification": "DESIGN_CONDITIONAL",
+      "owner": "New outer + original DoFile",
+      "evidence": "kr-extra-roy/MEF-end-to-end-20261116/entry/report.md",
+      "preconditions": "global DoFile numeric0；有限無yield頂層；驗當次export/version/entry",
+      "limits": "Not a native MapList caller; no module-return table; old export may persist"
+    },
+    {
+      "id": "supervisor",
+      "name": "建立並逐次resume inner",
+      "classification": "DESIGN_CONDITIONAL",
+      "owner": "New content outer coroutine",
+      "evidence": "kr-extra-roy/MEF-control-flow-20261116/supervisor/report.md",
+      "preconditions": "唯一outer、有效child、原coroutine binding、容量足夠、shared context合法",
+      "limits": "Only outer registered; no resume payload from MoCo; not a sandbox or preemptive watchdog"
+    },
+    {
+      "id": "entry",
+      "name": "執行有限entry",
+      "classification": "DESIGN_CONDITIONAL",
+      "owner": "Inner coroutine and selected native APIs",
+      "evidence": "kr-extra-roy/MEF-control-flow-20261116/supervisor/report.md",
+      "preconditions": "inner不改qco/Register/End/Stop、不外洩handle、工作有限",
+      "limits": "Ordinary escaped Lua errors covered; outer/API capacity/native faults not universal catch"
+    },
+    {
+      "id": "wait",
+      "name": "inner暫停後outer讓出",
+      "classification": "DESIGN_CONDITIONAL",
+      "owner": "Original resume ABI + MoCo",
+      "evidence": "kr-extra-roy/MEF-control-flow-20261116/supervisor/report.md",
+      "preconditions": "resume已返回；inner suspended；outer仍有後續pump",
+      "limits": "Yield payload not dt or sleep; no fixed frame interval guarantee"
+    },
+    {
+      "id": "observe",
+      "name": "演出狀態觀察",
+      "classification": "CLIENT_CONFIRMED_BOUNDED",
+      "owner": "Q actors / Prolog / Book / image owners",
+      "evidence": "kr-extra-roy/MEF-control-flow-20261116/world/report.md",
+      "preconditions": "有效typed owner與資源、native frame／UI條件",
+      "limits": "Prolog0 may fail/cancel; Book FB72AC gate; image no public per-image done query; not world death/group"
+    },
+    {
+      "id": "cleanup",
+      "name": "按持有紀錄清理",
+      "classification": "DESIGN_CONDITIONAL",
+      "owner": "Outer + validated effect policy",
+      "evidence": "kr-extra-roy/MEF-control-flow-20261116/presentation/report.md",
+      "preconditions": "本run持有且未被外部覆寫；valid snapshot；balancedcamera；型別化image取消",
+      "limits": "Stop only active; map not stack; pop destructive; pending effects and errors retained"
+    },
+    {
+      "id": "end",
+      "name": "必要條件成立後最後End",
+      "classification": "CLIENT_CONFIRMED_BOUNDED",
+      "owner": "Original Q End",
+      "evidence": "kr-extra-roy/MEF-control-flow-20261116/presentation/report.md",
+      "preconditions": "normal non-review與合法owner；選定policy確認必要cleanup後置條件",
+      "limits": "End not bulk cleanup; no universal 003F; immediate outer return after End"
+    },
+    {
+      "id": "report",
+      "name": "原003F回報",
+      "classification": "CLIENT_CONFIRMED_BOUNDED",
+      "owner": "Original 4A39A0 sender",
+      "evidence": "kr-extra-roy/MEF-world-integration-20261115/wire/report.md",
+      "preconditions": "各分支send guard；nonzeroquest要求convertedCheckConfirmMessage==1",
+      "limits": "8-byte app; keys low16 + WORD1; skip also reports; not success/cleanup ACK"
+    },
+    {
+      "id": "unlock",
+      "name": "適用00EB等待解除",
+      "classification": "CLIENT_CONFIRMED_BOUNDED",
+      "owner": "Original ordinary field handler",
+      "evidence": "kr-extra-roy/MEF-world-integration-20261115/wire/report.md",
+      "preconditions": "已證場景路由與有效context",
+      "limits": "EB00 clears wait/mask0x2, not Q active/list/controller+58"
+    },
+    {
+      "id": "reconcile",
+      "name": "Server權威對帳與下一次run",
+      "classification": "SERVER_DEVELOPMENT",
+      "owner": "Server run/session state",
+      "evidence": "kr-extra-roy/MEF-control-flow-20261116/server-handoff.md",
+      "preconditions": "現有wire與本端權威狀態；合法結果、持久化、排他性",
+      "limits": "New local payload/generation is not an existing wire field; no reward from 003F alone"
+    },
+    {
+      "id": "external_failure",
+      "name": "外部失敗／取消策略",
+      "classification": "SERVER_DEVELOPMENT",
+      "owner": "Existing native lifecycle owner + Server policy",
+      "evidence": "kr-extra-roy/MEF-control-flow-20261116/server-handoff.md",
+      "preconditions": "選定實際可用的合法取消路由，保存未完成與unknown",
+      "limits": "No invented cancel setter; missing route remains integration dependency; outer return may leave active Q"
+    }
+  ],
+  "edges": [
+    {
+      "source": "deliver",
+      "target": "resource_index",
+      "condition": "相符內容交付並被正確resolver選中"
+    },
+    {
+      "source": "resource_index",
+      "target": "request",
+      "condition": "已載入合法SceneList與適用context"
+    },
+    {
+      "source": "request",
+      "target": "prepass",
+      "condition": "normal accepted且路徑可讀"
+    },
+    {
+      "source": "request",
+      "target": "reconcile",
+      "condition": "busy/rejected/skipped由Server分類，沒有假設正式entry"
+    },
+    {
+      "source": "prepass",
+      "target": "dependencies",
+      "condition": "有限宣告與實際collector被選用"
+    },
+    {
+      "source": "prepass",
+      "target": "external_failure",
+      "condition": "有限宣告或依賴前提未達，不能假定完整收集"
+    },
+    {
+      "source": "dependencies",
+      "target": "formal",
+      "condition": "正式路徑可達且設計前提成立"
+    },
+    {
+      "source": "formal",
+      "target": "module",
+      "condition": "合格Q pump首次resume outer"
+    },
+    {
+      "source": "module",
+      "target": "supervisor",
+      "condition": "status==0且當次export/entry驗過"
+    },
+    {
+      "source": "module",
+      "target": "cleanup",
+      "condition": "正常回報載入失敗且outer仍可執行"
+    },
+    {
+      "source": "supervisor",
+      "target": "entry",
+      "condition": "create成功後resume有效inner"
+    },
+    {
+      "source": "supervisor",
+      "target": "external_failure",
+      "condition": "outer/create/capacity故障未被child catch覆蓋"
+    },
+    {
+      "source": "entry",
+      "target": "wait",
+      "condition": "resume true且status suspended"
+    },
+    {
+      "source": "wait",
+      "target": "entry",
+      "condition": "下一次合格outer pump；協作取消未成立"
+    },
+    {
+      "source": "entry",
+      "target": "observe",
+      "condition": "內容呼已證演出API/輪詢"
+    },
+    {
+      "source": "observe",
+      "target": "wait",
+      "condition": "getter仍為其明確running值，內容合法yield"
+    },
+    {
+      "source": "observe",
+      "target": "entry",
+      "condition": "選定演出狀態允許有限內容續行，不等價業務成功"
+    },
+    {
+      "source": "entry",
+      "target": "cleanup",
+      "condition": "normal return、ordinary escaped error或可見協作取消，outer仍可執行"
+    },
+    {
+      "source": "wait",
+      "target": "external_failure",
+      "condition": "外部remove/End/Stop/VM teardown或不再有pump；沒有finally保證"
+    },
+    {
+      "source": "cleanup",
+      "target": "cleanup",
+      "condition": "合法cleanup yield且下一次pump仍存在；不是終止性保證"
+    },
+    {
+      "source": "cleanup",
+      "target": "end",
+      "condition": "policy確認必要cleanup後置條件成立"
+    },
+    {
+      "source": "cleanup",
+      "target": "external_failure",
+      "condition": "cleanup error、必要pending未解或owner不再有效"
+    },
+    {
+      "source": "end",
+      "target": "report",
+      "condition": "原sender分支實際成立"
+    },
+    {
+      "source": "end",
+      "target": "reconcile",
+      "condition": "原End分支未發003F也須保留不確定／適用外部政策"
+    },
+    {
+      "source": "report",
+      "target": "unlock",
+      "condition": "Server按已證路由安排適用等待解除"
+    },
+    {
+      "source": "report",
+      "target": "reconcile",
+      "condition": "回報與當前run對帳，不自動發獎"
+    },
+    {
+      "source": "unlock",
+      "target": "reconcile",
+      "condition": "只確認wait/mask層；其餘owner另驗"
+    },
+    {
+      "source": "external_failure",
+      "target": "reconcile",
+      "condition": "合法外部處置與Server策略有具體結果或保留未完成"
+    }
+  ],
+  "original_mef_entry": {
+    "classification": "CLIENT_UNRESOLVED",
+    "root": "FB74C0 MapList.TRIGGER names",
+    "missing": "Positive first caller -> resource path/buffer -> parser/executor/schema",
+    "restore_map_receiver_is_trigger_root": false
+  },
+  "ordinary_gameplay": {
+    "classification": "CLIENT_UNRESOLVED",
+    "required_joins": [
+      "ordinary callable runner with input/lifecycle ownership",
+      "typed world identity usable by Lua/server",
+      "ordinary death/group/result observer"
+    ]
+  },
+  "failure_boundaries": [
+    {
+      "id": "before_outer",
+      "scope": "parse/Register/DoFile before child exists"
+    },
+    {
+      "id": "outer_failure",
+      "scope": "create/resume API capacity/outer bookkeeping or binding interference"
+    },
+    {
+      "id": "noncooperative",
+      "scope": "inner cannot be preempted before resume returns"
+    },
+    {
+      "id": "external_teardown",
+      "scope": "remove/End/Stop/scene/VM closure does not run suspended tail"
+    },
+    {
+      "id": "cleanup_failure",
+      "scope": "partial owner, destructive pop, overwritten map, deferred effects"
+    },
+    {
+      "id": "observer_scope",
+      "scope": "presentation state is not ordinary world result"
+    },
+    {
+      "id": "protocol_scope",
+      "scope": "003F/00EB do not report new local result/cleanup success"
+    }
+  ],
+  "validation": {
+    "client_executed": false,
+    "lua_executed": false,
+    "server_executed": false,
+    "game_resources_modified": false,
+    "deployable_resources_created": false,
+    "t01_full_pass": false,
+    "rr_accepted": false,
+    "ordinary_mef_replacement_complete": false
+  }
+}

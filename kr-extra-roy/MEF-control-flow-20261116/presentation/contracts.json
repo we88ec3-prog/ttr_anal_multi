@@ -1,0 +1,162 @@
+{
+  "schema": "mef-presentation-cleanup-v1",
+  "classification": "ORIGINAL_NATIVE_FINDINGS_AND_CONDITIONAL_CONTENT_DESIGN",
+  "deployable_resource": false,
+  "runtime_execution_performed": false,
+  "owners": {
+    "q_manager": "0xFB73C0; +0x28 active, +0x2C Q pump mode, +0x30 camera backup pointer, +0x34 map backup",
+    "camera": "pointer at 0xFB76E8; +0xA0/+0xA4 snapshot vector begin/end, 0x48-byte records",
+    "camera_works": "pointer at 0xFB7620; KeyFrame singleton 0xFB7624 or AttachSceneObj 0xFB766C",
+    "world": "0xFAB130; +0x48 current map, +0xA8 render flag, +0xAC independent slow countdown, +0xB0 Q slow flag",
+    "letterbox": "0xFE36E0; +0x0C draw flag",
+    "sepia": "0xFE36D4 phase; 0xFE36D8 converted request argument"
+  },
+  "end_stop": {
+    "scope": "Normal, non-review Q lifecycle with original bindings and valid native context",
+    "end_clears_active_and_coroutine_list": true,
+    "end_performs_stop_bulk_cleanup": false,
+    "stop_bulk_requires_active": true,
+    "stop_bulk_calls_end_last": true,
+    "end_then_stop_repairs_all_presentation": false,
+    "stop_is_public_Q_binding": false,
+    "every_end_emits_003f": false,
+    "003f_proves_cleanup_success": false,
+    "stop_image_action": "G selective sweep 553740 only; does not mark or clear Tutorial tracking",
+    "stop_cancels_all_tutorial_images": false,
+    "native_order_reference": [
+      "CameraWorks.Stop virtual",
+      "RestoreMap",
+      "DeleteAllObject",
+      "EndCameraOverride",
+      "display flags",
+      "G selective sweep",
+      "End"
+    ],
+    "book_active_clear": "0x5625F5 clears FC1C6C within active Stop before RestoreMap",
+    "prolog_close_condition": "within active Stop, nonzero native Stop parameter at 0x5626A2 selects FC1B18 and calls 0x55F8A0 at 0x5626DA",
+    "observer_zero_proves_normal_completion": false
+  },
+  "camera_override": {
+    "record_bytes": 72,
+    "label": "QSceneCam",
+    "restore_and_erase_precede_label_comparison": true,
+    "label_mismatch_continues_popping": true,
+    "unique_per_run_label": false,
+    "unconditional_repeated_pop_is_safe": false,
+    "design_requires_balanced_successful_acquisition": true
+  },
+  "camera_works": {
+    "namespace": "CameraWorks",
+    "stop_target": "0x54E9F0",
+    "stop_virtual_offset": 12,
+    "is_ended_target": "0x54EA00",
+    "is_ended_virtual_offset": 32,
+    "null_is_ended_numeric_result": 1,
+    "detach_clears_current_pointer": true,
+    "detach_pops_camera_override": false,
+    "attach_identity_domain": "Q-local DWORD slot resolved through FB73DC tree, not ordinary world entity ID",
+    "main_tick_dispatch": "0x492410..0x492428 -> current pointer virtual +0x10",
+    "supplies_ordinary_lua_pump": false,
+    "keyframe_virtual_0x10": "0x476430 ret 4; the captured main tick is not a KeyFrame progress producer"
+  },
+  "map_backup": {
+    "kind": "single shared snapshot",
+    "nested_load_preserves_all_prior_maps": false,
+    "restore_maplist_receiver": "0xFB74B0",
+    "restore_maplist_receiver_is_trigger_root_FB74C0": false,
+    "restore_calls_fld_loader": "0x7C1E00",
+    "restore_rewrites_backup_map_id": true,
+    "resource_success_ack_exposed": false,
+    "design_requires_current_run_valid_snapshot": true
+  },
+  "world_presentation": {
+    "render_flag": "0xFAB1D8",
+    "hidden_world_render_means_world_simulation_stopped": false,
+    "q_slow_flag": "0xFAB1E0",
+    "independent_countdown": "0xFAB1DC",
+    "selected_actor_delta_factor": 0.20000000298023224,
+    "selected_actor_delta_factor_display": "approximately 0.2",
+    "end_slow_guarantees_all_world_time_normal": false,
+    "server_time_control": false
+  },
+  "letterbox": {
+    "hide_clears_draw_flag": true,
+    "draw_consumer_checks_flag": true,
+    "rendered_frame_observed": false
+  },
+  "sepia": {
+    "end_request_phase": 4,
+    "subsequent_native_update_phases": [
+      5,
+      6,
+      0
+    ],
+    "native_updates_to_phase_zero": 3,
+    "q_active_required_by_this_update_callsite": false,
+    "native_frame_progress_required": true,
+    "end_request_is_synchronous_visual_completion": false,
+    "requires_integer_marshaller": true,
+    "validated_duration_or_timeout": null
+  },
+  "conditional_cleanup_order": [
+    {
+      "step": "freeze_entry",
+      "precondition": "outer owns entry; no concurrent Q run replaces shared owners",
+      "effect": "stop issuing new content work"
+    },
+    {
+      "step": "stop_owned_camera_works",
+      "precondition": "this run owns current CameraWorks",
+      "effect": "CameraWorks.Stop before optional Q.DetachCamera; neither pops override"
+    },
+    {
+      "step": "restore_owned_map",
+      "precondition": "valid current-run single map backup with required resource context",
+      "effect": "restore once before Q actor deletion, matching the selected native Stop order; no stale backup or retry guarantee"
+    },
+    {
+      "step": "release_owned_q_actors",
+      "precondition": "exclusive Q tree ownership",
+      "effect": "verified DeleteAllObject whole-Q cleanup; never infer ordinary world destruction"
+    },
+    {
+      "step": "release_owned_camera_override",
+      "precondition": "balanced successful acquisition still held by this run",
+      "effect": "pop the owned QSceneCam layer after map restoration and Q actor release; not an unconditional reset"
+    },
+    {
+      "step": "release_owned_display_flags",
+      "precondition": "this run owns each corresponding effect",
+      "effect": "letterbox/render/Q-slow/sepia release separately; retain pending native effects"
+    },
+    {
+      "step": "release_owned_images",
+      "precondition": "validated image type, handle and tracking owner with shared-G effects accounted for",
+      "effect": "select Q or Tutorial cancellation by concrete type; native Stop sweep alone does not mark Tutorial tracking and is not a universal cancellation"
+    },
+    {
+      "step": "end_once",
+      "precondition": "CLEANUP_POLICY confirms required cleanup postconditions; failures or still-required pending effects use the selected external failure policy instead",
+      "effect": "outer invokes normal original End once and immediately returns; neither End nor outer return is a cleanup-success ACK"
+    }
+  ],
+  "design_results": [
+    "entry_outcome",
+    "cleanup_attempted",
+    "cleanup_errors",
+    "pending_native_effects",
+    "original_003f_observed",
+    "server_authoritative_result"
+  ],
+  "forbidden_inferences": [
+    "End equals Stop",
+    "Stop after End repairs presentation",
+    "CameraWorks.IsEnded means Q, world combat, or the server run has completed",
+    "Q-local camera slot is a server entity ID",
+    "RestoreMap loads native MEF via FB74C0",
+    "Hidden world actors have stopped updating",
+    "Clearing Q slow flag resets every slow-motion owner",
+    "EndSepia has visually completed on return",
+    "Static verification PASS implies gameplay, T01 FULL-PASS, RR ACCEPTED, or server implementation"
+  ]
+}
