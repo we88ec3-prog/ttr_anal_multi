@@ -1,0 +1,529 @@
+{
+  "schema": 1,
+  "classification": "CONDITIONAL_DESIGN_NOT_NATIVE_MEF",
+  "deployable_resource": false,
+  "evidence_package": "entry/report.md plus native/lua evidence; symbolic review contract only",
+  "unallocated_parameters": [
+    {
+      "name": "QUEST_KEY",
+      "assigned": false,
+      "value": null
+    },
+    {
+      "name": "SCENE_KEY",
+      "assigned": false,
+      "value": null
+    },
+    {
+      "name": "SEQ_FUNC_NAME",
+      "assigned": false,
+      "value": null
+    },
+    {
+      "name": "MODULE_RESOURCE_PATH",
+      "assigned": false,
+      "value": null
+    },
+    {
+      "name": "CONTENT_VERSION",
+      "assigned": false,
+      "value": null
+    },
+    {
+      "name": "MODULE_EXPORT_KEY",
+      "assigned": false,
+      "value": null
+    },
+    {
+      "name": "DECLARATION_MANIFEST",
+      "assigned": false,
+      "value": null
+    },
+    {
+      "name": "SLOT_MODEL_ACTION_ASSIGNMENTS",
+      "assigned": false,
+      "value": null
+    },
+    {
+      "name": "COORDINATES",
+      "assigned": false,
+      "value": null
+    },
+    {
+      "name": "RUN_CONTEXT",
+      "assigned": false,
+      "value": null
+    },
+    {
+      "name": "CLEANUP_POLICY",
+      "assigned": false,
+      "value": null
+    },
+    {
+      "name": "COMPLETION_POLICY",
+      "assigned": false,
+      "value": null
+    }
+  ],
+  "native_facts": [
+    {
+      "id": "NF1",
+      "claim": "prepass Register同步執行最後一個tag6值，0參數0結果，受保護失敗仍以0個Lua結果返回",
+      "evidence": [
+        "prepass_register",
+        "0x55d59f",
+        "0x55d5d2",
+        "0x55d5d7"
+      ]
+    },
+    {
+      "id": "NF2",
+      "claim": "正式Register一個固定參數，create coroutine後insert；不回成功碼/handle，不直接resume",
+      "evidence": [
+        "qbase P75",
+        "qbase P1",
+        "Coroutine P6",
+        "coroutine_create",
+        "table_insert"
+      ]
+    },
+    {
+      "id": "NF3",
+      "claim": "CLOSURE captures parent local via shared UpVal；RETURN closes surviving TValue to own storage；coroutine receives same closure",
+      "evidence": [
+        "close_and_closure",
+        "find_open_upvalue",
+        "close_upvalues",
+        "return_close",
+        "coroutine_create"
+      ]
+    },
+    {
+      "id": "NF4",
+      "claim": "原普通list強引用thread；thread stack、closure與UpVal有明確GC mark路徑",
+      "evidence": [
+        "Coroutine P3",
+        "raw_seti",
+        "gc_table",
+        "gc_thread_stack_prefix",
+        "gc_closure",
+        "gc_propagate_one",
+        "gc_propagate_all"
+      ]
+    },
+    {
+      "id": "NF5",
+      "claim": "DoFile使用當前state，回一個數字0/1；top-level受保護C呼叫；yield受C深度gate",
+      "evidence": [
+        "global_dofile",
+        "coroutine_yield"
+      ]
+    },
+    {
+      "id": "NF6",
+      "claim": "003F存在skip producer；End的非零quest報告受CheckConfirmMessage==1 gate",
+      "evidence": [
+        "q_start_and_skip",
+        "q_end",
+        "qbase P19"
+      ]
+    }
+  ],
+  "phase_contract": {
+    "scope": "normal_original_bindings_and_successful_nonreentrant_registration",
+    "shared_flag_across_vms": false,
+    "local_name": "formal_after_register",
+    "initial_value": false,
+    "after_normal_Register_return": true,
+    "prepass_observed_value": false,
+    "formal_first_resume_observed_value": true,
+    "required_original_bindings": [
+      "Register",
+      "f_registerCoroutine",
+      "coroutine.create",
+      "qco",
+      "MoCo.registerCoroutine",
+      "table.insert"
+    ],
+    "required_conditions": [
+      "seq top-level completes normally",
+      "no reentrant scheduler/resume through mutated globals/metatables/debug hooks/GC finalizers",
+      "no writer modifies captured local except the single post-Register assignment",
+      "same queued coroutine remains retained and is later visited",
+      "prepass declarations finite and do not call loader/yield/formal APIs"
+    ],
+    "not_guaranteed": [
+      "formal Register success if globals or methods are rebound",
+      "marker assignment after error/interruption during Register",
+      "eventual Q pump under active/pause/loading gates",
+      "prepass declarations complete after swallowed callback error",
+      "runtime proof of any generated Lua source"
+    ]
+  },
+  "module_contract": {
+    "loader": "global DoFile",
+    "success_status": 0,
+    "failure_status": 1,
+    "number_zero_and_one_are_truthy": true,
+    "public_module_return": false,
+    "clear_previous_export_before_load": true,
+    "validate_fresh_export_type_and_version": true,
+    "capture_original_helpers_before_load": true,
+    "finite_top_level": true,
+    "top_level_must_not_yield": true,
+    "invoke_entry_after_DoFile_returns": true,
+    "wrap_yielding_entry_in_pcall": false,
+    "reserved_export_is_not_cross_vm_phase_flag": true,
+    "module_may_register_additional_qco_jobs": false,
+    "entry_may_call_End_independently": false,
+    "bridge_owns_selected_cleanup": true,
+    "error_limit": "A body error bypasses subsequent normal-flow cleanup; numeric DoFile error only covers its own normal error-return path"
+  },
+  "end_contract": {
+    "nonzero_quest_avoids_only_seen_skip": true,
+    "nonzero_quest_003f_condition": "active && !review && converted_CheckConfirmMessage == 1",
+    "qbase_original_check": "g_noTriggered == FALSE && g_yesTriggered != FALSE yields number 1; otherwise number 0",
+    "every_End_emits_003f": false,
+    "003f_proves_module_execution": false,
+    "quest_zero_active_End": "clears active, sends003F, then sets wait mask2/dialog",
+    "report_precedes_removeAll": true,
+    "review_may_chain_next_sequence": true,
+    "removeAll_is_finally": false,
+    "zero_list_auto_End": false,
+    "input_00eb": "Only applicable field mask2/dialog unlock; no Q stop, no run token, no module success ACK"
+  },
+  "states": [
+    {
+      "id": "requested",
+      "meaning": "Server 請求已證 S2C0047 入口；key、版本與資源尚須滿足 gate"
+    },
+    {
+      "id": "rejected_busy",
+      "meaning": "原 Q active／合法前提未滿足；沒有新 caller 成功證據"
+    },
+    {
+      "id": "skipped_seen",
+      "meaning": "quest0 已看分支；本次 seq 未載入，可能003F及等待鎖"
+    },
+    {
+      "id": "prepass",
+      "meaning": "獨立 prepass VM 執行 seq；本次 local=false，同步 Register callback"
+    },
+    {
+      "id": "prepass_partial",
+      "meaning": "callback／loader 錯誤可留下部分 collector；caller 不以 status 擋下"
+    },
+    {
+      "id": "resources",
+      "meaning": "collector 傳入資源工作；event／wait 不聚合全部資源成功"
+    },
+    {
+      "id": "formal_load",
+      "meaning": "正式 VM 執行同 seq，另建本次 local=false"
+    },
+    {
+      "id": "formal_failed",
+      "meaning": "formal loader／Register 未正常完成；不能保證有 runner 或自動 End"
+    },
+    {
+      "id": "queued_armed",
+      "meaning": "原 Register create+insert 後正常返回；local=true；chunk return closes upvalue"
+    },
+    {
+      "id": "paused_or_unpumped",
+      "meaning": "工作已登記但未達 active、unpaused、frame gate；沒有指定延遲上限"
+    },
+    {
+      "id": "module_top",
+      "meaning": "首次合格 Q pump resume callback；讀 true；同步 DoFile 指定模組"
+    },
+    {
+      "id": "module_rejected",
+      "meaning": "DoFile非0／export缺失或不符版本；只可走明確可達的失敗收尾"
+    },
+    {
+      "id": "entry_running",
+      "meaning": "DoFile返回後直接呼 entry；受核定 API／物件／事件能力限制"
+    },
+    {
+      "id": "entry_suspended",
+      "meaning": "entry yield；須後續合格 Q pump resume"
+    },
+    {
+      "id": "entry_error",
+      "meaning": "body Lua error；MoCo可回0並移除，沒有finally或自動End保證"
+    },
+    {
+      "id": "cleanup",
+      "meaning": "entry正常返回或可處理失敗；有界所有權下顯式清export／資源／End"
+    },
+    {
+      "id": "ended_no_report",
+      "meaning": "normal End後未符合003F條件或review；不可判作Server成功"
+    },
+    {
+      "id": "ended_reported",
+      "meaning": "normal End符合已證條件送003F；仍非module成功ACK"
+    },
+    {
+      "id": "wait_unlock",
+      "meaning": "quest0 End／skip設定mask2與等待dialog，等合法後續解除"
+    },
+    {
+      "id": "released",
+      "meaning": "相應mask/dialog已解除；仍須分別核controller、actor、scheduler與Server狀態"
+    },
+    {
+      "id": "cancelled",
+      "meaning": "走所屬場景已證Stop／cleanup路徑；Lua list移除不跑finally"
+    }
+  ],
+  "transitions": [
+    {
+      "from": "requested",
+      "to": "rejected_busy",
+      "condition": "Client busy gate 命中，或Server未滿足合法session/key/phase",
+      "classification": "NATIVE_GATE_AND_SERVER_POLICY"
+    },
+    {
+      "from": "requested",
+      "to": "skipped_seen",
+      "condition": "正常561760：FB92F1!=0、quest=0、mode9/4/25、scene已看",
+      "classification": "NATIVE_FACT"
+    },
+    {
+      "from": "requested",
+      "to": "prepass",
+      "condition": "無skip；存在SceneList row與可讀seq，正式前的prepass loader可達",
+      "classification": "NATIVE_FACT"
+    },
+    {
+      "from": "requested",
+      "to": "cleanup",
+      "condition": "normal Q已active但SceneList row缺失，561D81→End；不能視為任何loader錯誤的通用cleanup",
+      "classification": "NATIVE_FACT"
+    },
+    {
+      "from": "skipped_seen",
+      "to": "wait_unlock",
+      "condition": "5618C8→003F；5618CD→等待；跳過本次正常seq載入",
+      "classification": "NATIVE_FACT"
+    },
+    {
+      "from": "prepass",
+      "to": "prepass_partial",
+      "condition": "同步callback受保護錯誤或loader失敗；55D6A0仍返回collector",
+      "classification": "NATIVE_FACT"
+    },
+    {
+      "from": "prepass",
+      "to": "resources",
+      "condition": "有限宣告正常完成；Register返回後local=true僅屬prepass此次局部值",
+      "classification": "NATIVE_FACT_AND_CONDITIONAL_DESIGN"
+    },
+    {
+      "from": "prepass_partial",
+      "to": "resources",
+      "condition": "原caller沒有依prepass status中止；此支是原生風險，離線內容契約不得當作成功",
+      "classification": "NATIVE_FACT"
+    },
+    {
+      "from": "resources",
+      "to": "formal_load",
+      "condition": "caller走到正式6F4A50；資源event不保證全部模型/動作成功",
+      "classification": "NATIVE_FACT"
+    },
+    {
+      "from": "formal_load",
+      "to": "formal_failed",
+      "condition": "parse/top-level/依賴/正常Register失敗，或append後未能執行marker=true",
+      "classification": "CONDITIONAL_DESIGN"
+    },
+    {
+      "from": "formal_load",
+      "to": "queued_armed",
+      "condition": "原Register→coroutine.create→qco:registerCoroutine→原table.insert；正常返回後marker=true且chunk正常返回",
+      "classification": "CONDITIONAL_DESIGN"
+    },
+    {
+      "from": "queued_armed",
+      "to": "paused_or_unpumped",
+      "condition": "owner active/pause/frame gate暫未滿足",
+      "classification": "NATIVE_FACT"
+    },
+    {
+      "from": "queued_armed",
+      "to": "module_top",
+      "condition": "下一次實際走訪本handle的合格Q pump；閉合local仍為true",
+      "classification": "CONDITIONAL_DESIGN"
+    },
+    {
+      "from": "paused_or_unpumped",
+      "to": "module_top",
+      "condition": "後來owner/frame gate滿足且handle仍在同一qco list",
+      "classification": "CONDITIONAL_DESIGN"
+    },
+    {
+      "from": "module_top",
+      "to": "module_rejected",
+      "condition": "DoFile回數字非0，或其成功但當次export/type/version不合",
+      "classification": "CONDITIONAL_DESIGN"
+    },
+    {
+      "from": "module_top",
+      "to": "entry_running",
+      "condition": "有限無yield top-level完成；DoFile==0；清過舊export後取得當次有效entry",
+      "classification": "CONDITIONAL_DESIGN"
+    },
+    {
+      "from": "module_rejected",
+      "to": "cleanup",
+      "condition": "失敗仍正常返回到bridge且cleanup所有權/依賴可用；不覆蓋allocation/native exception等出口",
+      "classification": "CONDITIONAL_DESIGN"
+    },
+    {
+      "from": "entry_running",
+      "to": "entry_suspended",
+      "condition": "原yield在合法coroutine C深度；沒有包在DoFile/pcall/xpcall內",
+      "classification": "NATIVE_FACT_AND_CONDITIONAL_DESIGN"
+    },
+    {
+      "from": "entry_suspended",
+      "to": "entry_running",
+      "condition": "後續實際走訪；等待條件是否成功另依原observer契約",
+      "classification": "CONDITIONAL_DESIGN"
+    },
+    {
+      "from": "entry_running",
+      "to": "entry_error",
+      "condition": "受保護resume內的Lua error；不假設後續bridge cleanup可達",
+      "classification": "NATIVE_FACT"
+    },
+    {
+      "from": "entry_running",
+      "to": "cleanup",
+      "condition": "entry明確正常返回；bridge驗自己定義的業務結果後收尾",
+      "classification": "CONDITIONAL_DESIGN"
+    },
+    {
+      "from": "cleanup",
+      "to": "ended_reported",
+      "condition": "active && !review && (quest==0 || converted_CheckConfirmMessage==1)",
+      "classification": "NATIVE_FACT"
+    },
+    {
+      "from": "cleanup",
+      "to": "ended_no_report",
+      "condition": "非review inactive，或active非零quest但CheckConfirmMessage轉換值!=1；review另有續播",
+      "classification": "NATIVE_FACT"
+    },
+    {
+      "from": "ended_reported",
+      "to": "wait_unlock",
+      "condition": "非review active End且quest==0，561FE5重置等待mask2/dialog",
+      "classification": "NATIVE_FACT"
+    },
+    {
+      "from": "ended_reported",
+      "to": "released",
+      "condition": "非零quest報告支線不經561FE5；先前input/UI所有權已由選定流程明確處理",
+      "classification": "CONDITIONAL_DESIGN"
+    },
+    {
+      "from": "ended_no_report",
+      "to": "released",
+      "condition": "選定非review流程已收尾，且不等待不存在的003F；非所有owner都由End自動清理",
+      "classification": "CONDITIONAL_DESIGN"
+    },
+    {
+      "from": "wait_unlock",
+      "to": "released",
+      "condition": "適用field/時序收到既有00EB或已證場景init unlock；僅代表該mask/dialog解除",
+      "classification": "NATIVE_FACT"
+    },
+    {
+      "from": "formal_failed",
+      "to": "cancelled",
+      "condition": "外部所屬場景已證Stop/cleanup或Server既有timeout流程；不可依賴不存在的Lua callback",
+      "classification": "CONDITIONAL_DESIGN"
+    },
+    {
+      "from": "entry_error",
+      "to": "cancelled",
+      "condition": "另有外部停止/取消協調；MoCo移除本身沒有End/finally",
+      "classification": "CONDITIONAL_DESIGN"
+    },
+    {
+      "from": "paused_or_unpumped",
+      "to": "cancelled",
+      "condition": "場景切換/選定Stop路線；清排程引用不會resume到cleanup",
+      "classification": "CONDITIONAL_DESIGN"
+    },
+    {
+      "from": "entry_suspended",
+      "to": "cancelled",
+      "condition": "取消使排程引用移除或owner停tick；沒有Lua finally",
+      "classification": "CONDITIONAL_DESIGN"
+    },
+    {
+      "from": "cancelled",
+      "to": "wait_unlock",
+      "condition": "選定Stop後進quest0 End，可能重新置mask2；須檢查Stop後是否另unlock",
+      "classification": "NATIVE_FACT"
+    },
+    {
+      "from": "cancelled",
+      "to": "released",
+      "condition": "選定取消鏈已完成其所有權的cleanup/unlock；不承諾所有場景相同",
+      "classification": "CONDITIONAL_DESIGN"
+    }
+  ],
+  "no_deployment_values_reason": "SceneList key, valid catalog models/actions, coordinates, version/path/export ownership and allowed Server completion policy require concrete integration decisions; this report does not assign them.",
+  "map_trigger": {
+    "status": "CLIENT_NATIVE_FIRST_CALLER_UNPROVEN",
+    "known": "MapList.TRIGGER -> owned name tree FB7470+50/FB74C0; accessor4F7DF0 returns a name",
+    "missing_edge": "Name from the exact TRIGGER node must reach an identified resource-open/parser/executor under a proven native caller; no such edge is established here",
+    "excluded_known_branches": [
+      "4DF58D->4F7DF0 result overwritten at4DF5B9 or fixed initialization path",
+      "Root/accessor alias application branches already bounded in native-root/native-aliases",
+      "CameraWorks/LoadMap/DamageSound strings have other proved consumers",
+      "Fixed named callbacks have existing function semantics, no new filename payload"
+    ],
+    "remaining_static_actions": [
+      "Only follow a newly evidenced computed alias/writer which reaches root+50 or a genuine filename consumer",
+      "Trace new/changed native producer through resource-open/parser/controller ownership",
+      "Do not repeat full root literal, all script or all file scans without changed source/evidence"
+    ],
+    "new_seq_bridge_is_native_MapList_caller": false
+  },
+  "development_requirements": [
+    {
+      "classification": "SERVER_DEVELOPMENT",
+      "item": "Session/instance/key/version eligibility; signed16 network keys and loaded SceneList coherence"
+    },
+    {
+      "classification": "SERVER_DEVELOPMENT",
+      "item": "Content dependency catalog validation and resource/version distribution; not a guessed MEF transfer opcode"
+    },
+    {
+      "classification": "SERVER_DEVELOPMENT",
+      "item": "Track start/skip/cancel/error/end separately; timeout and lawful cleanup when no reliable completion report exists"
+    },
+    {
+      "classification": "SERVER_DEVELOPMENT",
+      "item": "003F is not execution-success evidence; nonzero quest End can report nothing; no fabricated run token in00EB"
+    },
+    {
+      "classification": "CROSS_FUNCTION_INTEGRATION",
+      "item": "Finite scene runner only; Q actor slot, world EntityId and battle observers remain distinct"
+    },
+    {
+      "classification": "PLAY_VALIDATION_PENDING",
+      "item": "No resource generated/deployed, no Lua/client run; authorized integration and play validation remain separate"
+    },
+    {
+      "classification": "CLIENT_REVERSE_ENGINEERING",
+      "item": "Original MapList.TRIGGER first loader caller is still unproven within explicitly bounded prior search"
+    }
+  ]
+}
