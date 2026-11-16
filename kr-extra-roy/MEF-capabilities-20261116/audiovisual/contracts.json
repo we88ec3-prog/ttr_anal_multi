@@ -1,0 +1,1336 @@
+{
+  "schema": "mef-r11-audiovisual-contracts-v1",
+  "scope": "Positive selected audiovisual capability chains; no Lua/Client execution or universal absence claim",
+  "capabilities": [
+    {
+      "id": "AV11-CAMERA-WORK",
+      "entries": [
+        "Q.PlayCameraWorks",
+        "CameraWorks.Load",
+        "CameraWorks.LoadRel",
+        "CameraWorks.Play",
+        "CameraWorks.Stop",
+        "CameraWorks.IsEnded",
+        "Tutorial.StopCameraWorks"
+      ],
+      "bindings": [
+        "B01",
+        "B17",
+        "B18",
+        "B19",
+        "B20",
+        "B21",
+        "B23"
+      ],
+      "capability": "載入原版XML關鍵幀、選用共用current並播放、逐更新插值套相機、停止或查結束。",
+      "inputs": {
+        "Q.PlayCameraWorks": [
+          "path:string",
+          "relative:int"
+        ],
+        "CameraWorks.Load": [
+          "path:string"
+        ],
+        "CameraWorks.LoadRel": [
+          "path:string",
+          "offsetX:float",
+          "offsetY:float",
+          "offsetZ:float"
+        ],
+        "remaining": "no arguments; IsEnded pushes a Lua number"
+      },
+      "actual_consumer": "FB7620 current；KeyFrame FB7624；491CD6 v+14=54E270→797790→frame++→v+4=54E080；797EC0實際相機transform。",
+      "wait_or_observation": "原PlayCamera接WaitForCamera：先yield，再while IsEnded()==0 wait(100)；Load/Play本體不等待。",
+      "conditions_and_limits": [
+        "Q.relative非零用當前相機位置；原PlayCameraNoWait為五參數、LoadRel顯式offset，flag非零才加leader位置。",
+        "491CA7的Client gate須為0，current非null、非空合法keyframes、playing；沒有多個獨立player保證。",
+        "+10 slot對KeyFrame是RET4；+14才增加frame。Apply另檢查增加後frame<=last，不保證最後key pose已顯示。",
+        "IsEnded(null)=1；停止、空keys或自然越尾皆可ended，不是Load成功ACK。"
+      ],
+      "native_records": [
+        "C01",
+        "C02",
+        "C03",
+        "C04",
+        "C05",
+        "C06",
+        "C07",
+        "C08",
+        "C12",
+        "C13",
+        "C14",
+        "C15",
+        "C16",
+        "C17",
+        "C20",
+        "C21",
+        "C22",
+        "C23",
+        "C24",
+        "C25",
+        "C34",
+        "C35",
+        "U02",
+        "V_KEYFRAME"
+      ],
+      "lua_prototypes": [
+        11,
+        14,
+        15
+      ],
+      "server_cooperation": "Server提供既有合法事件／資源版本與流程狀態；本地效果不構成任務或資產完成。"
+    },
+    {
+      "id": "AV11-CAMERA-SKIP",
+      "entries": [
+        "Q.SkipCamera"
+      ],
+      "bindings": [
+        "B02"
+      ],
+      "capability": "調整目前相機工作的播放進度。",
+      "inputs": {
+        "args": [
+          "k:int"
+        ],
+        "formula": "current_frame + trunc(float(k)/R)"
+      },
+      "actual_consumer": "目前工作v+18讀frame、v+1C設定；KeyFrame有尾端上界夾取。",
+      "wait_or_observation": "原SkipCamera只yield一次。",
+      "conditions_and_limits": [
+        "不是絕對frame setter；不是已證毫秒值。",
+        "R來自FBA7CC+1360；CVTTSS2SI向零截斷。KeyFrame未見負值下界夾取。"
+      ],
+      "native_records": [
+        "C09",
+        "C18",
+        "C19",
+        "M28"
+      ],
+      "lua_prototypes": [
+        16
+      ],
+      "server_cooperation": "Server提供既有合法事件／資源版本與流程狀態；本地效果不構成任務或資產完成。"
+    },
+    {
+      "id": "AV11-CAMERA-SETTERS",
+      "entries": [
+        "Q.SetCameraPoint",
+        "Q.MoveCamera",
+        "Q.RotCamera"
+      ],
+      "bindings": [
+        "B04",
+        "B09",
+        "B10"
+      ],
+      "capability": "立即改共用相機位置、兩個角與局部距離。",
+      "inputs": {
+        "SetCameraPoint/MoveCamera": [
+          "x:float",
+          "y:float",
+          "z:float"
+        ],
+        "RotCamera": [
+          "angleZ:float radians",
+          "angleX:float radians",
+          "distance:float"
+        ]
+      },
+      "actual_consumer": "同一562E10寫camera+C/10/14；563970寫+20/+18/+24；797EC0把+24送局部(0,0,distance)。",
+      "wait_or_observation": "原MoveCamera/RotCamera直接呼叫，沒有插值時間。",
+      "conditions_and_limits": [
+        "兩位置API同target；後續current camera work仍可覆寫。",
+        "RotCamera第三參數不是第三旋轉角。"
+      ],
+      "native_records": [
+        "C10",
+        "C11",
+        "C25",
+        "C26",
+        "C27",
+        "C28",
+        "C29"
+      ],
+      "lua_prototypes": [
+        44,
+        45
+      ],
+      "server_cooperation": "Server提供既有合法事件／資源版本與流程狀態；本地效果不構成任務或資產完成。"
+    },
+    {
+      "id": "AV11-CAMERA-EFFECT",
+      "entries": [
+        "Q.CameraEffect"
+      ],
+      "bindings": [
+        "B03"
+      ],
+      "capability": "用既有type10紀錄產生正弦相機位置偏移。",
+      "inputs": {
+        "native": [
+          "limit:int",
+          "a:int",
+          "divisor:int"
+        ],
+        "helper": [
+          "waitFlag",
+          "limit",
+          "a",
+          "divisor"
+        ],
+        "formula": "sin(t)*(a-t)/divisor",
+        "step": 1.0471975803375244
+      },
+      "actual_consumer": "32-entry owner FD8C28；489530更新；type10寫camera+28，再加到第三位置分量。",
+      "wait_or_observation": "helper waitFlag==TRUE時wait(limit*33.333333333333336)，否則yield；估算不構成完成確認。",
+      "conditions_and_limits": [
+        "type>10衝突或無空slot直接返回；無handle/success ACK。",
+        "limit0在native改40.0，helper仍用原0估算；divisor0未驗證。",
+        "多記錄寫同一欄位，後筆覆前筆，不可當加總。"
+      ],
+      "native_records": [
+        "C30",
+        "C31",
+        "C32",
+        "C33_dispatch",
+        "C33_type10",
+        "C33_switch",
+        "C25",
+        "K_EFFECT_STEP",
+        "K_EFFECT_ZERO_DEFAULT"
+      ],
+      "lua_prototypes": [
+        52
+      ],
+      "server_cooperation": "Server提供既有合法事件／資源版本與流程狀態；本地效果不構成任務或資產完成。"
+    },
+    {
+      "id": "AV11-TUTORIAL-CAMERA",
+      "entries": [
+        "Tutorial.PushCamera",
+        "Tutorial.PopCamera",
+        "Tutorial.ApplyDefaultCamera"
+      ],
+      "bindings": [
+        "B24",
+        "B25",
+        "B26"
+      ],
+      "capability": "保存／回退有標籤相機快照；或套既有預設視角。",
+      "inputs": {
+        "PushCamera/PopCamera": [
+          "label:string"
+        ],
+        "ApplyDefaultCamera": []
+      },
+      "actual_consumer": "798900保存0x48-byte快照；7986E0 restore+erase再比label；54C410套設定angle/distance與leader heading。",
+      "wait_or_observation": "同步native操作。",
+      "conditions_and_limits": [
+        "Pop不是非破壞式查找；不合label可能消耗其他frame。",
+        "ApplyDefaultCamera沒有還原snapshot位置，與Pop不同。"
+      ],
+      "native_records": [
+        "U03",
+        "U04",
+        "U05",
+        "U06",
+        "U07",
+        "U08"
+      ],
+      "lua_prototypes": [],
+      "server_cooperation": "Server提供既有合法事件／資源版本與流程狀態；本地效果不構成任務或資產完成。 同一事件持有的camera快照須配對收尾。"
+    },
+    {
+      "id": "AV11-MUSIC-PLAY",
+      "entries": [
+        "Q.PlayMusic",
+        "Tutorial.PlayMusic"
+      ],
+      "bindings": [
+        "B06",
+        "B22"
+      ],
+      "capability": "請求原生音樂播放器載入並播放背景音軌，支援既有loop旗標。",
+      "inputs": {
+        "native": [
+          "path:string",
+          "loop:int"
+        ],
+        "qbase": "PlayMusic(name) adds Sound/ and uses original TRUE"
+      },
+      "actual_consumer": "CMusicPlayer FC0FC8 primary FC0FFC→AlarmedThread callback6D9870→選16-slot CStreamDriver→80E940/COGGStream；main更新v+10處理loop。",
+      "wait_or_observation": "原helper只yield；沒有此API的播放完成事件。",
+      "conditions_and_limits": [
+        "同名case-insensitive比較相等即早退，不會重啟或改loop。",
+        "裝置、檔案、載入及free slot條件；Q/Tutorial gain前處理不完全相同。",
+        "舊voice依設定立即Stop或移fade list；啟動delay不是保證牆鐘時間。"
+      ],
+      "native_records": [
+        "M00",
+        "M01",
+        "U01",
+        "M04",
+        "M05",
+        "M06",
+        "M07",
+        "M08",
+        "M09",
+        "M11",
+        "M12",
+        "M15",
+        "M16",
+        "M17",
+        "M19",
+        "M20",
+        "M21",
+        "M22",
+        "M23",
+        "V_MUSIC_FUNCTOR",
+        "V_STREAM",
+        "V_OGG_STREAM"
+      ],
+      "lua_prototypes": [
+        21
+      ],
+      "server_cooperation": "Server提供既有合法事件／資源版本與流程狀態；本地效果不構成任務或資產完成。"
+    },
+    {
+      "id": "AV11-MUSIC-STOP-FADE",
+      "entries": [
+        "Q.StopMusic",
+        "Q.StopMusicWithFadeOut"
+      ],
+      "bindings": [
+        "B07",
+        "B08"
+      ],
+      "capability": "停止並釋放音樂串流，或只逐次降低音量至靜音。",
+      "inputs": {
+        "StopMusic": [],
+        "StopMusicWithFadeOut": [
+          "ms:int converted /1000.0"
+        ]
+      },
+      "actual_consumer": "6D9CC0對16-slot呼v+2C=80EB30、清pending/fade list/slots；6D9DA0移voice入fade list，6D9A10按1/R/duration降factor，v+4C只改gain。",
+      "wait_or_observation": "兩個原helper只yield；fade至0沒有Stop或完成callback。",
+      "conditions_and_limits": [
+        "fade0不釋放stream，不保證立即可重用slot。",
+        "Sleep33與runtime R參與進度；duration0/負值未有一致合法化。"
+      ],
+      "native_records": [
+        "M02",
+        "M03",
+        "M08",
+        "M10",
+        "M10_switch",
+        "M12",
+        "M13",
+        "M14",
+        "M18",
+        "M21",
+        "M28",
+        "K_MILLISECONDS"
+      ],
+      "lua_prototypes": [
+        22,
+        23
+      ],
+      "server_cooperation": "Server提供既有合法事件／資源版本與流程狀態；本地效果不構成任務或資產完成。 事件取消與音樂owner是否續播須依既有流程決定。"
+    },
+    {
+      "id": "AV11-FINAL-MUSIC",
+      "entries": [
+        "Q.SetFinalMusic"
+      ],
+      "bindings": [
+        "B16"
+      ],
+      "capability": "改寫演出恢復地圖時消費的後續音樂字串。",
+      "inputs": {
+        "args": [
+          "name:string"
+        ],
+        "branches": [
+          "null unchanged",
+          "first character whitespace clears",
+          "otherwise append; empty string does not clear"
+        ]
+      },
+      "actual_consumer": "M+44 std::string；RestoreMap在非空時組Sound/後請求primary loop1，再處理map secondary；Q.Stop另有空字串metadata fallback。",
+      "wait_or_observation": "不立即播放；無等待。",
+      "conditions_and_limits": [
+        "正常End不能一概視為呼RestoreMap。",
+        "重複非空呼叫是追加，內容必須管理舊值。"
+      ],
+      "native_records": [
+        "M24",
+        "M25",
+        "M26",
+        "M27",
+        "M29"
+      ],
+      "lua_prototypes": [
+        64
+      ],
+      "server_cooperation": "Server提供既有合法事件／資源版本與流程狀態；本地效果不構成任務或資產完成。"
+    },
+    {
+      "id": "AV11-SFX",
+      "entries": [
+        "Q.PlaySound",
+        "Q.PlayTalkSound"
+      ],
+      "bindings": [
+        "B11",
+        "B12"
+      ],
+      "capability": "排程一般音效或指定Voice group的語音音效播放。",
+      "inputs": {
+        "args": [
+          "path:string"
+        ],
+        "qbase": "does not add Sound/ prefix"
+      },
+      "actual_consumer": "SoundManager FAB028→cached SoundFile→SoundChannel native command0；worker80B360泵80E100，resource callback80D8B0/80DD00載入，channel80CC90在ready後呼output+18。",
+      "wait_or_observation": "原helper只yield；不回單次ID、完成getter或取消handle。",
+      "conditions_and_limits": [
+        "FBA860==0時新資源受Scenario/、Prologue/、Voice/前綴gate；cache/preload情形另論。",
+        "PlayTalkSound寫SoundFile+8 group，非Book/Prolog全域voice handle，不保證和其等待同owner。",
+        "native update按pending/driver/resource條件回收；非Lua coroutine生命期。"
+      ],
+      "native_records": [
+        "S01",
+        "S02",
+        "S03",
+        "S04",
+        "S05",
+        "S06",
+        "S07",
+        "S08",
+        "S09",
+        "S10",
+        "S11",
+        "S12",
+        "S13",
+        "S14",
+        "S15",
+        "S16",
+        "S17",
+        "S18",
+        "V_SOUND_FILE",
+        "V_SOUND_RESOURCE_CALLBACK",
+        "V_SOUND_CHANNEL",
+        "V_SOUND_FUNCTOR"
+      ],
+      "lua_prototypes": [
+        47,
+        48
+      ],
+      "server_cooperation": "Server提供既有合法事件／資源版本與流程狀態；本地效果不構成任務或資產完成。"
+    },
+    {
+      "id": "AV11-FADE",
+      "entries": [
+        "Q.FadeOut",
+        "Q.FadeIn",
+        "Q.FadeColor",
+        "Fade.Start",
+        "Fade.End"
+      ],
+      "bindings": [
+        "B13",
+        "B14",
+        "B15",
+        "B27",
+        "B28"
+      ],
+      "capability": "在共用全畫面texture上改顏色、逐update增減alpha、保持或清除遮罩。",
+      "inputs": {
+        "Q.FadeOut/Q.FadeIn": [
+          "count:int"
+        ],
+        "Q.FadeColor": [
+          "packedColor:int"
+        ],
+        "Fade.Start": [
+          "dir:int (0=0→255, nonzero=255→0)",
+          "count:int"
+        ],
+        "Fade.End": [
+          "clear:int (nonzero clears alpha)"
+        ]
+      },
+      "actual_consumer": "共同F=FE2744；graphics建立32×32 format0x15 texture；561582→55E790計數更新；55E7F0按texture與alpha>1繪製。",
+      "wait_or_observation": "Q helpers只yield；Phase1/RevPhase1用Start(0/1,30)加wait(30)，沒有完成query。",
+      "conditions_and_limits": [
+        "count是合格更新次數分母，不是毫秒；0未驗證。",
+        "dir0到255不清active；dir非零到0清active。",
+        "End(0)停active但保留alpha，draw不以active gate。",
+        "Q coroutine pause不直接停Fade；Q.update在active/pause檢查前呼Fade tick。"
+      ],
+      "native_records": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08",
+        "F09",
+        "F10",
+        "F11",
+        "F11_import_load",
+        "F11_import_iat",
+        "F11_import_name",
+        "F12",
+        "F13",
+        "F14",
+        "F15",
+        "F16",
+        "K_ALPHA"
+      ],
+      "lua_prototypes": [
+        49,
+        50,
+        51,
+        67,
+        74
+      ],
+      "server_cooperation": "Server提供既有合法事件／資源版本與流程狀態；本地效果不構成任務或資產完成。 Client內容必須按同一遮罩owner配對結束。"
+    },
+    {
+      "id": "AV11-TRANSITION",
+      "entries": [
+        "Q.Transition"
+      ],
+      "bindings": [
+        "B05"
+      ],
+      "capability": "擷取目前畫面為texture，居中多層放大並淡化。",
+      "inputs": {
+        "native": [
+          "layers:int",
+          "fadeRate:int"
+        ],
+        "qbase": [
+          2,
+          120
+        ],
+        "native_defaults": [
+          8,
+          120
+        ],
+        "default_selector": "either input == -1 substitutes both defaults"
+      },
+      "actual_consumer": "X=FD2BB8，enabled gate→defer一次→capture7347F0→738160 delta update→7382F0 draw；first alpha到0釋放capture。",
+      "wait_or_observation": "原helper只yield；所選介面未證公開IsEnded/callback。",
+      "conditions_and_limits": [
+        "graphics setup enabled、有效capture、freeze+134 gate；delta上界0.1。",
+        "scale/alpha陣列各32項；request未驗layers32上界，不能承諾任意數值安全。",
+        "Fade單色overlay、Transition畫面capture、音樂fade為不同owner。"
+      ],
+      "native_records": [
+        "T01",
+        "T02",
+        "T03",
+        "T04",
+        "T05",
+        "T06",
+        "T07",
+        "T08",
+        "T09",
+        "T10",
+        "T11",
+        "K_TRANSITION_SCALE",
+        "K_TRANSITION_MAXDELTA"
+      ],
+      "lua_prototypes": [
+        37,
+        67,
+        74
+      ],
+      "server_cooperation": "Server提供既有合法事件／資源版本與流程狀態；本地效果不構成任務或資產完成。"
+    }
+  ],
+  "direct_edges": [
+    {
+      "record": "C03",
+      "va": "0x54e97f",
+      "target": "0x796ee0",
+      "kind": "call",
+      "role": "Load absolute KeyFrame"
+    },
+    {
+      "record": "C04",
+      "va": "0x54e9c4",
+      "target": "0x7974d0",
+      "kind": "call",
+      "role": "LoadRel explicit offset"
+    },
+    {
+      "record": "C08",
+      "va": "0x562c93",
+      "target": "0x796ee0",
+      "kind": "call",
+      "role": "Q PlayCameraWorks absolute/current-position-relative and immediate Play"
+    },
+    {
+      "record": "C08",
+      "va": "0x562c48",
+      "target": "0x7974d0",
+      "kind": "call",
+      "role": "Q PlayCameraWorks absolute/current-position-relative and immediate Play"
+    },
+    {
+      "record": "C13",
+      "va": "0x7974d2",
+      "target": "0x796ee0",
+      "kind": "call",
+      "role": "Add explicit relative position to each loaded keyframe"
+    },
+    {
+      "record": "C16",
+      "va": "0x54e2a2",
+      "target": "0x797790",
+      "kind": "call",
+      "role": "KeyFrame frame-count tick then virtual apply"
+    },
+    {
+      "record": "C22",
+      "va": "0x491cc6",
+      "target": "0x434130",
+      "kind": "call",
+      "role": "Main update ESI=0, BFCC zero gate, CameraEffect and KeyFrame virtual+14"
+    },
+    {
+      "record": "C22",
+      "va": "0x491cc1",
+      "target": "0x489530",
+      "kind": "call",
+      "role": "Main update ESI=0, BFCC zero gate, CameraEffect and KeyFrame virtual+14"
+    },
+    {
+      "record": "C24",
+      "va": "0x4924a8",
+      "target": "0x797ec0",
+      "kind": "call",
+      "role": "Main visual update applies FB76E8 camera transform"
+    },
+    {
+      "record": "C25",
+      "va": "0x797f08",
+      "target": "0x77f030",
+      "kind": "call",
+      "role": "Camera transform consumes position, angles, distance and effect offset"
+    },
+    {
+      "record": "C25",
+      "va": "0x797f60",
+      "target": "0x790dc0",
+      "kind": "call",
+      "role": "Camera transform consumes position, angles, distance and effect offset"
+    },
+    {
+      "record": "C25",
+      "va": "0x797f7a",
+      "target": "0x790f60",
+      "kind": "call",
+      "role": "Camera transform consumes position, angles, distance and effect offset"
+    },
+    {
+      "record": "C32",
+      "va": "0x4895db",
+      "target": "0x489650",
+      "kind": "call",
+      "role": "Reset current effect offset then evaluate and increment each active record"
+    },
+    {
+      "record": "C33_type10",
+      "va": "0x4898bd",
+      "target": "0x8ff0a0",
+      "kind": "call",
+      "role": "sin(t)*(arg2-t)/arg3 -> current camera+28"
+    },
+    {
+      "record": "U01",
+      "va": "0x4a940c",
+      "target": "0x6d9b30",
+      "kind": "call",
+      "role": "Tutorial music delegates same primary BGM slot"
+    },
+    {
+      "record": "U03",
+      "va": "0x4a9659",
+      "target": "0x798900",
+      "kind": "call",
+      "role": "Tutorial PushCamera(label) snapshot then assign label"
+    },
+    {
+      "record": "U04",
+      "va": "0x4a9701",
+      "target": "0x7986e0",
+      "kind": "call",
+      "role": "Tutorial PopCamera(label) -> destructive labelled pop"
+    },
+    {
+      "record": "U05",
+      "va": "0x4a9726",
+      "target": "0x54c410",
+      "kind": "call",
+      "role": "Tutorial ApplyDefaultCamera() ->54C410(FBAAF8)"
+    },
+    {
+      "record": "M00",
+      "va": "0x6d907b",
+      "target": "0x6d8d20",
+      "kind": "call",
+      "role": "CMusicPlayer constructs functor(receiverFC0FC8, callback6D9870) and AlarmedThread"
+    },
+    {
+      "record": "M00",
+      "va": "0x6d9084",
+      "target": "0x6d8d20",
+      "kind": "call",
+      "role": "CMusicPlayer constructs functor(receiverFC0FC8, callback6D9870) and AlarmedThread"
+    },
+    {
+      "record": "M01",
+      "va": "0x5644d9",
+      "target": "0x6d9b30",
+      "kind": "call",
+      "role": "Q PlayMusic path/int/settings gain"
+    },
+    {
+      "record": "M02",
+      "va": "0x56455c",
+      "target": "0x6d9cc0",
+      "kind": "call",
+      "role": "Q StopMusic shared player"
+    },
+    {
+      "record": "M03",
+      "va": "0x5645ee",
+      "target": "0x6d9da0",
+      "kind": "call",
+      "role": "Q fade argument divided by1000"
+    },
+    {
+      "record": "M04",
+      "va": "0x6d9bc9",
+      "target": "0x6d9280",
+      "kind": "call",
+      "role": "Primary/secondary slot request, same-name early return, delayed start"
+    },
+    {
+      "record": "M08",
+      "va": "0x6d98ce",
+      "target": "0x6d9970",
+      "kind": "call",
+      "role": "Music worker pending start, volume fade and Sleep(33)"
+    },
+    {
+      "record": "M08",
+      "va": "0x6d98d6",
+      "target": "0x6d9970",
+      "kind": "call",
+      "role": "Music worker pending start, volume fade and Sleep(33)"
+    },
+    {
+      "record": "M08",
+      "va": "0x6d98db",
+      "target": "0x6d9a10",
+      "kind": "call",
+      "role": "Music worker pending start, volume fade and Sleep(33)"
+    },
+    {
+      "record": "M08",
+      "va": "0x6d98e3",
+      "target": "0x6d9a10",
+      "kind": "call",
+      "role": "Music worker pending start, volume fade and Sleep(33)"
+    },
+    {
+      "record": "M08",
+      "va": "0x6d98f4",
+      "target": "0x6d9a10",
+      "kind": "call",
+      "role": "Music worker pending start, volume fade and Sleep(33)"
+    },
+    {
+      "record": "M09",
+      "va": "0x6d99db",
+      "target": "0x6d9e10",
+      "kind": "call",
+      "role": "Delayed start decrement1/R then concrete start"
+    },
+    {
+      "record": "M13",
+      "va": "0x6d9dc0",
+      "target": "0x6d9280",
+      "kind": "call",
+      "role": "Fade both slots and clear names/pending delay"
+    },
+    {
+      "record": "M13",
+      "va": "0x6d9df1",
+      "target": "0x6d9280",
+      "kind": "call",
+      "role": "Fade both slots and clear names/pending delay"
+    },
+    {
+      "record": "M16",
+      "va": "0x80e9a2",
+      "target": "0x810710",
+      "kind": "call",
+      "role": "CStreamDriver Play creates COGGStream and starts native output"
+    },
+    {
+      "record": "M23",
+      "va": "0x49133a",
+      "target": "0x80ca10",
+      "kind": "call",
+      "role": "Main update dispatches BGM stream pool"
+    },
+    {
+      "record": "M24",
+      "va": "0x5655a6",
+      "target": "0x401fc0",
+      "kind": "call",
+      "role": "SetFinalMusic null/whitespace/append branches"
+    },
+    {
+      "record": "M24",
+      "va": "0x565588",
+      "target": "0x402a70",
+      "kind": "call",
+      "role": "SetFinalMusic null/whitespace/append branches"
+    },
+    {
+      "record": "M26",
+      "va": "0x56425f",
+      "target": "0x6d9b30",
+      "kind": "call",
+      "role": "RestoreMap uses final-music string and secondary map track"
+    },
+    {
+      "record": "M26",
+      "va": "0x56429c",
+      "target": "0x6d9580",
+      "kind": "call",
+      "role": "RestoreMap uses final-music string and secondary map track"
+    },
+    {
+      "record": "M26",
+      "va": "0x564317",
+      "target": "0x6d9580",
+      "kind": "call",
+      "role": "RestoreMap uses final-music string and secondary map track"
+    },
+    {
+      "record": "M29",
+      "va": "0x56268b",
+      "target": "0x563fa0",
+      "kind": "call",
+      "role": "Native Stop final-music metadata fallback before RestoreMap"
+    },
+    {
+      "record": "S01",
+      "va": "0x564d49",
+      "target": "0x80ab00",
+      "kind": "call",
+      "role": "Q PlaySound resource lookup and virtual Play"
+    },
+    {
+      "record": "S02",
+      "va": "0x564e17",
+      "target": "0x80ab00",
+      "kind": "call",
+      "role": "Q PlayTalkSound then assign Voice/default fallback group to channel resource"
+    },
+    {
+      "record": "S06",
+      "va": "0x80d6cf",
+      "target": "0x80be60",
+      "kind": "call",
+      "role": "Allocate SoundChannel and enqueue native play message"
+    },
+    {
+      "record": "S14",
+      "va": "0x80b3d0",
+      "target": "0x80e100",
+      "kind": "call",
+      "role": "Sound native worker pump and Sleep(5)"
+    },
+    {
+      "record": "F09",
+      "va": "0x5650a1",
+      "target": "0x734470",
+      "kind": "call",
+      "role": "Q FadeColor packed integer"
+    },
+    {
+      "record": "F11",
+      "va": "0x560fc8",
+      "target": "0x734470",
+      "kind": "call",
+      "role": "Graphics create path makes 32x32 texture and fills FF000000"
+    },
+    {
+      "record": "F13",
+      "va": "0x561582",
+      "target": "0x55e790",
+      "kind": "call",
+      "role": "Fade tick precedes Q active/pause checks"
+    },
+    {
+      "record": "F14",
+      "va": "0x56477f",
+      "target": "0x55e7f0",
+      "kind": "call",
+      "role": "Q presentation calls overlay draw"
+    },
+    {
+      "record": "F15",
+      "va": "0x48f469",
+      "target": "0x560aa0",
+      "kind": "call",
+      "role": "Graphics setup calls texture initialization"
+    },
+    {
+      "record": "F16",
+      "va": "0x48fc68",
+      "target": "0x561010",
+      "kind": "call",
+      "role": "Graphics teardown calls texture release"
+    },
+    {
+      "record": "T01",
+      "va": "0x5646d4",
+      "target": "0x738100",
+      "kind": "call",
+      "role": "Q Transition two integers"
+    },
+    {
+      "record": "T04",
+      "va": "0x7381c1",
+      "target": "0x7347f0",
+      "kind": "call",
+      "role": "Deferred capture, layered scaling+alpha delta tick and release"
+    },
+    {
+      "record": "T10",
+      "va": "0x4923cb",
+      "target": "0x738160",
+      "kind": "call",
+      "role": "Native visual update passes real delta to transition tick"
+    },
+    {
+      "record": "T11",
+      "va": "0x492fe6",
+      "target": "0x7382f0",
+      "kind": "call",
+      "role": "Main render calls captured transition draw"
+    }
+  ],
+  "semantic_anchors": [
+    {
+      "record": "C22",
+      "va": "0x491c40",
+      "hex": "33f6",
+      "asm": "xor    esi,esi",
+      "role": "ESI zero value used by gate"
+    },
+    {
+      "record": "C22",
+      "va": "0x491ca7",
+      "hex": "39b7ccbf0000",
+      "asm": "cmp    DWORD PTR [edi+0xbfcc],esi",
+      "role": "Camera tick BFCC==0 gate"
+    },
+    {
+      "record": "C22",
+      "va": "0x491cad",
+      "hex": "7554",
+      "asm": "jne    0x491d03",
+      "role": "Nonzero gate skips selected camera update"
+    },
+    {
+      "record": "C22",
+      "va": "0x491cd3",
+      "hex": "8b5014",
+      "asm": "mov    edx,DWORD PTR [eax+0x14]",
+      "role": "Current work progress virtual slot+14"
+    },
+    {
+      "record": "C22",
+      "va": "0x491cd6",
+      "hex": "ffd2",
+      "asm": "call   edx",
+      "role": "Actual progress indirect dispatch"
+    },
+    {
+      "record": "C16",
+      "va": "0x54e2a7",
+      "hex": "ff4744",
+      "asm": "inc    DWORD PTR [edi+0x44]",
+      "role": "Increment frame after interpolation"
+    },
+    {
+      "record": "C17",
+      "va": "0x54e0c8",
+      "hex": "3b4e44",
+      "asm": "cmp    ecx,DWORD PTR [esi+0x44]",
+      "role": "Apply checks incremented frame versus last key"
+    },
+    {
+      "record": "C35",
+      "va": "0x476430",
+      "hex": "c20400",
+      "asm": "ret    0x4",
+      "role": "KeyFrame+10 no-op RET4"
+    },
+    {
+      "record": "C09",
+      "va": "0x562da8",
+      "hex": "f30f2c742410",
+      "asm": "cvttss2si esi,DWORD PTR [esp+0x10]",
+      "role": "Skip CVTTSS2SI truncates input/rate"
+    },
+    {
+      "record": "C09",
+      "va": "0x562dae",
+      "hex": "03f0",
+      "asm": "add    esi,eax",
+      "role": "Skip adds current frame"
+    },
+    {
+      "record": "C11",
+      "va": "0x563a4b",
+      "hex": "f30f114024",
+      "asm": "movss  DWORD PTR [eax+0x24],xmm0",
+      "role": "Rot third parameter stored at camera+24 distance"
+    },
+    {
+      "record": "C33_type10",
+      "va": "0x4898e5",
+      "hex": "d95a28",
+      "asm": "fstp   DWORD PTR [edx+0x28]",
+      "role": "Effect writes camera+28"
+    },
+    {
+      "record": "M00",
+      "va": "0x6d9067",
+      "hex": "c700ec0fc400",
+      "asm": "mov    DWORD PTR [eax],0xc40fec",
+      "role": "Music native functor vptr"
+    },
+    {
+      "record": "M00",
+      "va": "0x6d906d",
+      "hex": "c74004c80ffc00",
+      "asm": "mov    DWORD PTR [eax+0x4],0xfc0fc8",
+      "role": "Music native functor receiver"
+    },
+    {
+      "record": "M00",
+      "va": "0x6d9074",
+      "hex": "c7400870986d00",
+      "asm": "mov    DWORD PTR [eax+0x8],0x6d9870",
+      "role": "Music native functor callback"
+    },
+    {
+      "record": "M07",
+      "va": "0x4facd2",
+      "hex": "8b4804",
+      "asm": "mov    ecx,DWORD PTR [eax+0x4]",
+      "role": "Functor receiver +4"
+    },
+    {
+      "record": "M07",
+      "va": "0x4facd5",
+      "hex": "8b4008",
+      "asm": "mov    eax,DWORD PTR [eax+0x8]",
+      "role": "Functor callback +8"
+    },
+    {
+      "record": "S02",
+      "va": "0x564ef9",
+      "hex": "8b4e04",
+      "asm": "mov    ecx,DWORD PTR [esi+0x4]",
+      "role": "Talk channel->resource"
+    },
+    {
+      "record": "S02",
+      "va": "0x564efc",
+      "hex": "894108",
+      "asm": "mov    DWORD PTR [ecx+0x8],eax",
+      "role": "Talk group writes resource+8"
+    },
+    {
+      "record": "S13",
+      "va": "0x80b051",
+      "hex": "c7400860b38000",
+      "asm": "mov    DWORD PTR [eax+0x8],0x80b360",
+      "role": "Sound native worker callback"
+    },
+    {
+      "record": "F04",
+      "va": "0x55e775",
+      "hex": "89410c",
+      "asm": "mov    DWORD PTR [ecx+0xc],eax",
+      "role": "Fade.End always clears active"
+    },
+    {
+      "record": "F04",
+      "va": "0x55e77b",
+      "hex": "7403",
+      "asm": "je     0x55e780",
+      "role": "Fade.End zero preserves alpha"
+    },
+    {
+      "record": "F04",
+      "va": "0x55e77d",
+      "hex": "894110",
+      "asm": "mov    DWORD PTR [ecx+0x10],eax",
+      "role": "Fade.End nonzero clears alpha"
+    },
+    {
+      "record": "F06",
+      "va": "0x55e7fc",
+      "hex": "83781001",
+      "asm": "cmp    DWORD PTR [eax+0x10],0x1",
+      "role": "Fade draw alpha>1 gate"
+    },
+    {
+      "record": "F05",
+      "va": "0x55e79a",
+      "hex": "ff461c",
+      "asm": "inc    DWORD PTR [esi+0x1c]",
+      "role": "Fade increments eligible update count"
+    },
+    {
+      "record": "F05",
+      "va": "0x55e7a6",
+      "hex": "da7618",
+      "asm": "fidiv  DWORD PTR [esi+0x18]",
+      "role": "Fade floating divide by count"
+    },
+    {
+      "record": "F05",
+      "va": "0x55e7e4",
+      "hex": "c74610ff000000",
+      "asm": "mov    DWORD PTR [esi+0x10],0xff",
+      "role": "FadeOut alpha clamps255 without active clear"
+    },
+    {
+      "record": "F13",
+      "va": "0x561587",
+      "hex": "837f2800",
+      "asm": "cmp    DWORD PTR [edi+0x28],0x0",
+      "role": "Q active check after Fade update"
+    },
+    {
+      "record": "F11_import_load",
+      "va": "0x560e48",
+      "hex": "8b3d1826bd00",
+      "asm": "mov    edi,DWORD PTR ds:0xbd2618",
+      "role": "D3DXCreateTexture import load"
+    },
+    {
+      "record": "T03",
+      "va": "0x738100",
+      "hex": "833e00",
+      "asm": "cmp    DWORD PTR [esi],0x0",
+      "role": "Transition enabled gate"
+    },
+    {
+      "record": "T03",
+      "va": "0x738105",
+      "hex": "83f9ff",
+      "asm": "cmp    ecx,0xffffffff",
+      "role": "Transition -1 arg1 default selector"
+    },
+    {
+      "record": "T03",
+      "va": "0x73810a",
+      "hex": "83f8ff",
+      "asm": "cmp    eax,0xffffffff",
+      "role": "Transition -1 arg2 default selector"
+    },
+    {
+      "record": "T04",
+      "va": "0x7381e7",
+      "hex": "399e34010000",
+      "asm": "cmp    DWORD PTR [esi+0x134],ebx",
+      "role": "Transition freeze gate"
+    },
+    {
+      "record": "T09",
+      "va": "0x48d704",
+      "hex": "c705bc2bfd0008000000",
+      "asm": "mov    DWORD PTR ds:0xfd2bbc,0x8",
+      "role": "Transition default8 layers"
+    },
+    {
+      "record": "T09",
+      "va": "0x48d70e",
+      "hex": "c705c02bfd0078000000",
+      "asm": "mov    DWORD PTR ds:0xfd2bc0,0x78",
+      "role": "Transition default120 rate"
+    }
+  ],
+  "typed_virtual_targets": [
+    {
+      "vtable": "V_KEYFRAME",
+      "va": "0xc0fd20",
+      "offset": "0x4",
+      "target": "0x54e080",
+      "role": "interpolated pose apply"
+    },
+    {
+      "vtable": "V_KEYFRAME",
+      "va": "0xc0fd20",
+      "offset": "0x8",
+      "target": "0x54e230",
+      "role": "Play"
+    },
+    {
+      "vtable": "V_KEYFRAME",
+      "va": "0xc0fd20",
+      "offset": "0xc",
+      "target": "0x54e260",
+      "role": "Stop"
+    },
+    {
+      "vtable": "V_KEYFRAME",
+      "va": "0xc0fd20",
+      "offset": "0x10",
+      "target": "0x476430",
+      "role": "delta no-op"
+    },
+    {
+      "vtable": "V_KEYFRAME",
+      "va": "0xc0fd20",
+      "offset": "0x14",
+      "target": "0x54e270",
+      "role": "frame progress"
+    },
+    {
+      "vtable": "V_KEYFRAME",
+      "va": "0xc0fd20",
+      "offset": "0x18",
+      "target": "0x54e2c0",
+      "role": "frame getter"
+    },
+    {
+      "vtable": "V_KEYFRAME",
+      "va": "0xc0fd20",
+      "offset": "0x1c",
+      "target": "0x54e2d0",
+      "role": "frame setter"
+    },
+    {
+      "vtable": "V_KEYFRAME",
+      "va": "0xc0fd20",
+      "offset": "0x20",
+      "target": "0x54e310",
+      "role": "IsEnded"
+    },
+    {
+      "vtable": "V_STREAM",
+      "va": "0xc51bf4",
+      "offset": "0x10",
+      "target": "0x80e7d0",
+      "role": "loop update"
+    },
+    {
+      "vtable": "V_STREAM",
+      "va": "0xc51bf4",
+      "offset": "0x14",
+      "target": "0x80e940",
+      "role": "Play stream"
+    },
+    {
+      "vtable": "V_STREAM",
+      "va": "0xc51bf4",
+      "offset": "0x2c",
+      "target": "0x80eb30",
+      "role": "Stop stream"
+    },
+    {
+      "vtable": "V_STREAM",
+      "va": "0xc51bf4",
+      "offset": "0x30",
+      "target": "0x80ed00",
+      "role": "busy"
+    },
+    {
+      "vtable": "V_STREAM",
+      "va": "0xc51bf4",
+      "offset": "0x48",
+      "target": "0x80eb90",
+      "role": "gain"
+    },
+    {
+      "vtable": "V_STREAM",
+      "va": "0xc51bf4",
+      "offset": "0x4c",
+      "target": "0x80ebc0",
+      "role": "factor no Stop"
+    },
+    {
+      "vtable": "V_SOUND_FILE",
+      "va": "0xc51b20",
+      "offset": "0x10",
+      "target": "0x80d590",
+      "role": "positional Play"
+    },
+    {
+      "vtable": "V_SOUND_FILE",
+      "va": "0xc51b20",
+      "offset": "0x14",
+      "target": "0x80d550",
+      "role": "no-position Play"
+    },
+    {
+      "vtable": "V_SOUND_RESOURCE_CALLBACK",
+      "va": "0xc51b48",
+      "offset": "0x0",
+      "target": "0x80d8b0",
+      "role": "resource load callback"
+    },
+    {
+      "vtable": "V_SOUND_CHANNEL",
+      "va": "0xc519d8",
+      "offset": "0x0",
+      "target": "0x80cc90",
+      "role": "channel queued callback"
+    },
+    {
+      "vtable": "V_MUSIC_FUNCTOR",
+      "va": "0xc40fec",
+      "offset": "0x8",
+      "target": "0x4facd0",
+      "role": "saved callback thunk"
+    },
+    {
+      "vtable": "V_SOUND_FUNCTOR",
+      "va": "0xc5194c",
+      "offset": "0x8",
+      "target": "0x4facd0",
+      "role": "saved callback thunk"
+    }
+  ],
+  "abi_common": {
+    "integer": "Lua number or parseable numeric string -> x87 FISTP; rounding follows control word; other types ->0",
+    "float": "number/parseable numeric string -> native float; unsupported ->0",
+    "side_effect_returns": "C closure result count1 is not a newly pushed success/completion ACK; original helpers discard return values",
+    "camera_ended": "IsEnded closure pushes Lua number"
+  },
+  "authority_boundaries": {
+    "server": "既有資源版本、合法事件狀態、完成／取消政策與權威任務／資產更新屬Server需求。",
+    "client": "未證的額外getter/callback、原生MEF首次入口／格式與具體內容效果須由Client研究或實際驗收，不能猜造wire。"
+  }
+}

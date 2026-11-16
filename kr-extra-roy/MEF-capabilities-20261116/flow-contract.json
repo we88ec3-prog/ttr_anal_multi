@@ -1,0 +1,201 @@
+{
+  "schema": "mef-capability-flow-v1",
+  "work_parent": "af97bbd29c892e031eef7a3bc3a98cb79f1be729",
+  "stages": [
+    {
+      "id": "content",
+      "classification": "SERVER_DEVELOPMENT",
+      "operation": "內容版本與各型別key／依賴",
+      "owner": "Server／內容工具",
+      "preconditions": "有來源的合法資料",
+      "limits": "不能以名稱猜schema、模型或座標",
+      "evidence": "server-handoff.md"
+    },
+    {
+      "id": "delivery",
+      "classification": "CLIENT_CONFIRMED_BOUNDED",
+      "operation": "launcher交付與resource選路",
+      "owner": "launcher／resource loader",
+      "preconditions": "正確manifest、包與檔案優先",
+      "limits": "落地與實際被選取不同",
+      "evidence": "../MEF-complete-flow-20261115/resource-gates/report.md"
+    },
+    {
+      "id": "entry",
+      "classification": "CLIENT_CONFIRMED_BOUNDED",
+      "operation": "既有scene／Tutorial入口",
+      "owner": "Q／Tutorial manager",
+      "preconditions": "正確雙鍵、controller與busy條件",
+      "limits": "原生MEF首載入另列未證",
+      "evidence": "../MEF-end-to-end-20261116/entry/report.md"
+    },
+    {
+      "id": "prepass",
+      "classification": "CLIENT_CONFIRMED_BOUNDED",
+      "operation": "依賴prepass",
+      "owner": "獨立VM",
+      "preconditions": "有限同步宣告",
+      "limits": "不可在prepass等待；錯誤可能部分收集",
+      "evidence": "../MEF-content-contracts-20261116/bridge/report.md"
+    },
+    {
+      "id": "module",
+      "classification": "DESIGN_CONDITIONAL",
+      "operation": "新內容caller／export與phase",
+      "owner": "正式VM內容adapter",
+      "preconditions": "沿已證caller及export檢查設計",
+      "limits": "自訂整合不是官方MEF語法",
+      "evidence": "../MEF-end-to-end-20261116/entry/report.md"
+    },
+    {
+      "id": "schedule",
+      "classification": "CLIENT_CONFIRMED_BOUNDED",
+      "operation": "正式coroutine登記與pump",
+      "owner": "qco／Q",
+      "preconditions": "合格active context",
+      "limits": "return、End、removeAll不同",
+      "evidence": "../MEF-runtime-contracts-20261115/scheduler/report.md"
+    },
+    {
+      "id": "effects",
+      "classification": "CLIENT_CONFIRMED_BOUNDED",
+      "operation": "執行角色／鏡頭／音訊／UI等能力",
+      "owner": "各native owner",
+      "preconditions": "依121列條件選取真正效果",
+      "limits": "stub與missing data不可當成功",
+      "evidence": "capability-catalog.md"
+    },
+    {
+      "id": "observe",
+      "classification": "CLIENT_CONFIRMED_BOUNDED",
+      "operation": "讀同owner狀態／等待",
+      "owner": "native predicate／Lua helper",
+      "preconditions": "正確getter及writer",
+      "limits": "取消、未建立與自然完成不同",
+      "evidence": "control/report.md"
+    },
+    {
+      "id": "supervisor",
+      "classification": "DESIGN_CONDITIONAL",
+      "operation": "一般Lua error接回與選定收尾",
+      "owner": "私有inner＋qco outer",
+      "preconditions": "R10已證thread設計前提",
+      "limits": "native crash／外部移除等不能保證接回",
+      "evidence": "../MEF-control-flow-20261116/supervisor/report.md"
+    },
+    {
+      "id": "cleanup",
+      "classification": "DESIGN_CONDITIONAL",
+      "operation": "依取得紀錄還原資源",
+      "owner": "內容adapter及native owner",
+      "preconditions": "實際持有紀錄與必要後置條件",
+      "limits": "共享owner、非冪等pop、deferred effects",
+      "evidence": "../MEF-control-flow-20261116/presentation/report.md"
+    },
+    {
+      "id": "end",
+      "classification": "CLIENT_CONFIRMED_BOUNDED",
+      "operation": "原生End及原回報",
+      "owner": "Q manager／wire",
+      "preconditions": "需要的confirmation及context",
+      "limits": "003F不是所有業務成功ACK",
+      "evidence": "../MEF-world-integration-20261115/wire/report.md"
+    },
+    {
+      "id": "commit",
+      "classification": "SERVER_DEVELOPMENT",
+      "operation": "對帳、保存、下一節點",
+      "owner": "Server",
+      "preconditions": "合法run／context與業務結果",
+      "limits": "不把新增run token塞入原wire",
+      "evidence": "server-handoff.md"
+    }
+  ],
+  "edges": [
+    {
+      "source": "content",
+      "target": "delivery",
+      "condition": "發布選定內容與依賴"
+    },
+    {
+      "source": "delivery",
+      "target": "entry",
+      "condition": "resource實際可見且入口可達"
+    },
+    {
+      "source": "entry",
+      "target": "prepass",
+      "condition": "演出獲接納"
+    },
+    {
+      "source": "prepass",
+      "target": "module",
+      "condition": "若採新相容內容設計"
+    },
+    {
+      "source": "prepass",
+      "target": "schedule",
+      "condition": "既有內容登記正式coroutine"
+    },
+    {
+      "source": "module",
+      "target": "schedule",
+      "condition": "export／phase通過"
+    },
+    {
+      "source": "schedule",
+      "target": "effects",
+      "condition": "一次合格resume"
+    },
+    {
+      "source": "effects",
+      "target": "observe",
+      "condition": "需要同owner完成條件"
+    },
+    {
+      "source": "observe",
+      "target": "schedule",
+      "condition": "條件未滿足且仍可pump"
+    },
+    {
+      "source": "effects",
+      "target": "supervisor",
+      "condition": "採新adapter時的return／一般error"
+    },
+    {
+      "source": "observe",
+      "target": "cleanup",
+      "condition": "選定正常結束條件成立"
+    },
+    {
+      "source": "supervisor",
+      "target": "cleanup",
+      "condition": "可達且允許的清理"
+    },
+    {
+      "source": "cleanup",
+      "target": "end",
+      "condition": "必要後置條件成立"
+    },
+    {
+      "source": "end",
+      "target": "commit",
+      "condition": "依既有回報與權威狀態對帳"
+    }
+  ],
+  "original_mef_entry": {
+    "classification": "CLIENT_UNRESOLVED",
+    "scope": "TRIGGER name to original first loader/grammar/executor remains unproved"
+  },
+  "acceptance": {
+    "focus": "Per-capability correct effect, resources, state and Server integration",
+    "requires_total_ordinary_battle_replacement": false
+  },
+  "validation": {
+    "client_executed": false,
+    "lua_executed": false,
+    "server_executed": false,
+    "gameplay_verified": false,
+    "formal_acceptance_changed": false
+  }
+}

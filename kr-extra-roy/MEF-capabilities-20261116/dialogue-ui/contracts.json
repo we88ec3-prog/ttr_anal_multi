@@ -1,0 +1,697 @@
+{
+  "schema": "mef-r11-dialogue-capability-contracts-v1",
+  "scope": "Native facts for this pinned build plus explicitly marked conservative content policy; no new playable game resource",
+  "capabilities": [
+    {
+      "name": "Q.InsertText",
+      "arguments": [
+        {
+          "name": "text",
+          "type": "literal narrow string",
+          "policy": "validate configured codepage conversion; <=255 UTF-16 units after conversion, NUL excluded"
+        }
+      ],
+      "visible_effect": "Screen-space queued text, up to six retained rows",
+      "native_window_flow": [
+        "Q_InsertText_registrar",
+        "Q_InsertText_closure",
+        "q_convert_string",
+        "q_insert_text",
+        "narrow_to_wide_configured",
+        "text_queue_insert",
+        "text_queue_tick",
+        "text_queue_draw",
+        "font_cached_draw",
+        "main_text_update",
+        "main_text_draw"
+      ],
+      "wait_contract": "No selected completion query; tick-count fade is not a duration in seconds",
+      "preconditions": [
+        "Formal normal binding; font/render context ready"
+      ],
+      "limits": [
+        "Fixed 0x200-byte text buffer; native copy lacks length check",
+        "Codepage FBA808 value not established",
+        "Neither actor label nor TalkTable key"
+      ],
+      "authority": "Client presentation; authoritative gameplay result is separate"
+    },
+    {
+      "name": "Q.Prolog",
+      "arguments": [
+        {
+          "name": "key",
+          "type": "int32",
+          "policy": "existing Prolog.xml idx and complete resources"
+        }
+      ],
+      "visible_effect": "Interactive Prolog text/page presentation",
+      "native_window_flow": [
+        "Q_Prolog_registrar",
+        "Q_Prolog_closure",
+        "q_convert_one_int",
+        "prolog_table_load"
+      ],
+      "wait_contract": "Original DoProlog -> WaitForProlog polls Q.IsPrologRunning()==1 after initial yield",
+      "preconditions": [
+        "Published R10 Prolog typed UI and update consumer; bound formal VM"
+      ],
+      "limits": [
+        "Idle includes missing key/close; not success ACK",
+        "Shared voice handle coordination required"
+      ],
+      "authority": "Client presentation; authoritative gameplay result is separate"
+    },
+    {
+      "name": "Q.IsPrologRunning",
+      "arguments": [],
+      "visible_effect": "Observes Prolog active state",
+      "native_window_flow": [
+        "Q_IsPrologRunning_registrar",
+        "Q_IsPrologRunning_closure"
+      ],
+      "wait_contract": "Numeric 0/1, compare numerically",
+      "preconditions": [
+        "Same Prolog owner as initiating call"
+      ],
+      "limits": [
+        "0 does not identify completion reason"
+      ],
+      "authority": "Client presentation; authoritative gameplay result is separate"
+    },
+    {
+      "name": "Prolog.OnClose",
+      "arguments": [],
+      "visible_effect": "Closes Prolog owner and posts its internal UI event",
+      "native_window_flow": [
+        "Prolog_OnClose_registrar",
+        "Prolog_OnClose_closure"
+      ],
+      "wait_contract": "Explicit action, not a business ACK",
+      "preconditions": [
+        "Published R10 owner/call order"
+      ],
+      "limits": [
+        "qbase PrologCloseCallback is defined; automatic native name caller not closed"
+      ],
+      "authority": "Client presentation; authoritative gameplay result is separate"
+    },
+    {
+      "name": "Q.Book",
+      "arguments": [
+        {
+          "name": "ignored_integer",
+          "type": "int32 ABI",
+          "policy": "not a content selection key"
+        }
+      ],
+      "visible_effect": "Original fixed book model/voice sequence",
+      "native_window_flow": [
+        "Q_Book_registrar",
+        "Q_Book_closure",
+        "q_convert_one_int"
+      ],
+      "wait_contract": "Original Book -> WaitForBook polls Q.IsBookFlying()==1; final/stop/missing readiness need separate cause",
+      "preconditions": [
+        "Published R10 Book states; Table/Book.txt two vectors; model and audio readiness"
+      ],
+      "limits": [
+        "Native ignores passed integer",
+        "Shared voice handle can gate state 2",
+        "No inventory/book-item operation"
+      ],
+      "authority": "Client presentation; authoritative gameplay result is separate"
+    },
+    {
+      "name": "Q.IsBookFlying",
+      "arguments": [],
+      "visible_effect": "Observes book owner active flag",
+      "native_window_flow": [
+        "Q_IsBookFlying_registrar",
+        "Q_IsBookFlying_closure"
+      ],
+      "wait_contract": "Numeric 0/1, compare numerically",
+      "preconditions": [
+        "Same Book owner"
+      ],
+      "limits": [
+        "0 alone does not establish normal completion"
+      ],
+      "authority": "Client presentation; authoritative gameplay result is separate"
+    },
+    {
+      "name": "Q.Dialogue",
+      "arguments": [
+        {
+          "name": "prolog_key",
+          "type": "int32",
+          "policy": "existing Prolog.xml idx"
+        }
+      ],
+      "visible_effect": "Synopsis frame with Prolog literal lines and Prologue voice clips",
+      "native_window_flow": [
+        "Q_Dialogue_registrar",
+        "Q_Dialogue_closure",
+        "q_convert_one_int",
+        "q_dialogue",
+        "prolog_table_load",
+        "dialogue_start",
+        "dialogue_pop_row",
+        "prologue_voice_start",
+        "voice_channel_replace",
+        "voice_manager_tick",
+        "dialogue_tick",
+        "dialogue_draw",
+        "dialogue_text_draw",
+        "font_glyph_draw",
+        "font_cached_draw"
+      ],
+      "wait_contract": "Original Dialogue helper yields once only; no Q dialogue-complete predicate proved",
+      "preconditions": [
+        "Synopsis/SynopsisFrame.eif, fonts, table and voice resources ready"
+      ],
+      "limits": [
+        "XML literal UTF-8, no actor/Q slot selected",
+        "Shared FB72AC handle, not Boolean",
+        "A null sound resource does not necessarily clear previous voice",
+        "PicturePath is read into table rows but this Dialogue consumer does not use it to promise per-row pictures"
+      ],
+      "authority": "Client presentation; authoritative gameplay result is separate"
+    },
+    {
+      "name": "Q.BalloonTalk",
+      "arguments": [
+        {
+          "name": "arg1",
+          "type": "int32"
+        },
+        {
+          "name": "arg2",
+          "type": "int32"
+        }
+      ],
+      "visible_effect": "No effect in normal static target",
+      "native_window_flow": [
+        "Q_BalloonTalk_registrar",
+        "Q_BalloonTalk_closure",
+        "q_convert_two_int",
+        "balloon_talk_stub"
+      ],
+      "wait_contract": "Original helper yields once; does not create a bubble",
+      "preconditions": [
+        "Normal target 0x550450"
+      ],
+      "limits": [
+        "RET 8 only; both arguments ignored",
+        "Do not assign actor/text semantic roles to ignored arguments"
+      ],
+      "authority": "Client presentation; authoritative gameplay result is separate"
+    },
+    {
+      "name": "Q.NumberPanel",
+      "arguments": [
+        {
+          "name": "q_slot",
+          "type": "int32",
+          "policy": "live Q manager slot, not world entity id"
+        },
+        {
+          "name": "style",
+          "type": "int32",
+          "policy": "0..5"
+        },
+        {
+          "name": "display_value",
+          "type": "int32",
+          "policy": "nonzero, exclude INT32_MIN"
+        }
+      ],
+      "visible_effect": "Floating digit panel at Q object position with third coordinate +7",
+      "native_window_flow": [
+        "Q_NumberPanel_registrar",
+        "Q_NumberPanel_closure",
+        "q_convert_three_int",
+        "q_number_panel",
+        "fieldpanel_manager_ctor",
+        "digit_model_loader",
+        "number_panel_consumer",
+        "fieldpanel_descriptor",
+        "fieldpanel_instantiate",
+        "fieldpanel_animation_start",
+        "fieldpanel_tick",
+        "fieldpanel_manager_tick",
+        "fieldpanel_enqueue",
+        "render_pipeline_dispatch_prefix",
+        "render_pipeline_bucket_19_21",
+        "fieldpanel_render_forward"
+      ],
+      "wait_contract": "Original NumberPanel helper yields once; panel animation independently ticks/removes",
+      "preconditions": [
+        "Live Q slot with position virtual+4C",
+        "Digit models, known texture family and normal render pipeline"
+      ],
+      "limits": [
+        "Zero displays nothing",
+        "Negative becomes absolute digits and style remap, not a minus glyph",
+        "Style indexing lacks early bounds gate",
+        "No HP/currency mutation"
+      ],
+      "authority": "Client presentation; authoritative gameplay result is separate"
+    },
+    {
+      "name": "Q.BattlePanel",
+      "arguments": [
+        {
+          "name": "q_slot",
+          "type": "int32",
+          "policy": "live Q slot"
+        },
+        {
+          "name": "style",
+          "type": "int32",
+          "policy": "0..3"
+        }
+      ],
+      "visible_effect": "Floating Miss/Block family panel at Q object anchor",
+      "native_window_flow": [
+        "Q_BattlePanel_registrar",
+        "Q_BattlePanel_closure",
+        "q_convert_two_int",
+        "q_battle_panel",
+        "battle_panel_consumer",
+        "fieldpanel_enqueue",
+        "render_pipeline_bucket_19_21",
+        "fieldpanel_render_forward"
+      ],
+      "wait_contract": "No own qbase global BattlePanel; qbase NumberPanel modes 0..3 dispatch here then yield",
+      "preconditions": [
+        "Live Q slot; panel resources"
+      ],
+      "limits": [
+        "Table indexed before unsigned range check: prevalidate",
+        "Does not calculate hit/block/damage"
+      ],
+      "authority": "Client presentation; authoritative gameplay result is separate"
+    },
+    {
+      "name": "Q.BurstStruck",
+      "arguments": [
+        {
+          "name": "show_kills",
+          "type": "int32 0/nonzero"
+        },
+        {
+          "name": "show_critical",
+          "type": "int32 0/nonzero"
+        },
+        {
+          "name": "kill_count",
+          "type": "int32",
+          "policy": "positive bounded count when show_kills!=0"
+        }
+      ],
+      "visible_effect": "Screen-space Kills+count and/or Critical+Critical_Line overlays",
+      "native_window_flow": [
+        "Q_BurstStruck_registrar",
+        "Q_BurstStruck_closure",
+        "q_convert_three_int",
+        "q_burst_struck",
+        "burst_textures",
+        "burst_tick",
+        "burst_draw",
+        "main_burst_update",
+        "main_burst_draw"
+      ],
+      "wait_contract": "Original helper yields once; counters use native update counts (60,36,14), not seconds",
+      "preconditions": [
+        "UI texture setup and draw gate; no actor/Q slot argument"
+      ],
+      "limits": [
+        "Lua booleans are not numeric switches for this converter",
+        "Does not set AttackedFX gate",
+        "Does not award kills or apply combat outcome"
+      ],
+      "authority": "Client presentation; authoritative gameplay result is separate"
+    },
+    {
+      "name": "ScenarioTalkTable.open",
+      "arguments": [
+        {
+          "name": "id",
+          "type": "int32 scene-catalog key"
+        },
+        {
+          "name": "scene",
+          "type": "int32 scene-catalog key"
+        },
+        {
+          "name": "manual",
+          "type": "Lua Boolean",
+          "policy": "true for manual; false for auto; numeric 0 is true"
+        }
+      ],
+      "visible_effect": "Multi-row portrait/name/text/face dialogue from catalog",
+      "native_window_flow": [
+        "talkbox_factory",
+        "talkbox_ctor",
+        "talk_namespace",
+        "ScenarioTalkTable_open_registrar",
+        "ScenarioTalkTable_open_closure",
+        "talk_open_converter",
+        "scenario_table_reader",
+        "talkbox_open",
+        "talkbox_start",
+        "talkbox_display_row",
+        "talk_table_set_loader",
+        "talk_table_loader",
+        "talkbox_next",
+        "talkbox_hide"
+      ],
+      "wait_contract": "qbase sets g_scenePlaying=TRUE, opens then WaitForScene; native hide invokes OnEndTalk to set FALSE",
+      "preconditions": [
+        "CScenarioTalkBox instantiated in formal VM",
+        "Unique nonempty (id,scene), all talk keys and actor/face/image data present",
+        "Compatible page update for auto"
+      ],
+      "limits": [
+        "Last duplicate key wins",
+        "Missing pair returns without callback: qbase can remain waiting",
+        "Missing talk row can reach null payload+24 access",
+        "kind 0/1 is parsed but selected display consumer does not branch on it",
+        "msg end branch is not proven choice UI; original selected data has no msg",
+        "Auto 1500ms measured since open; no per-line reset in checked consumers"
+      ],
+      "authority": "Client presentation; authoritative gameplay result is separate"
+    },
+    {
+      "name": "ScenarioTalkTable.start",
+      "arguments": [],
+      "visible_effect": "Restarts selected scenario row sequence",
+      "native_window_flow": [
+        "ScenarioTalkTable_start_registrar",
+        "ScenarioTalkTable_start_closure",
+        "talkbox_start",
+        "talkbox_display_row"
+      ],
+      "wait_contract": "Does not itself set Lua g_scenePlaying",
+      "preconditions": [
+        "Existing valid selected row and same live UI object"
+      ],
+      "limits": [
+        "No-op when no selection; not a general arbitrary-dialogue constructor"
+      ],
+      "authority": "Client presentation; authoritative gameplay result is separate"
+    },
+    {
+      "name": "ScenarioTalkTable.hideOtherUI",
+      "arguments": [],
+      "visible_effect": "Hides currently visible nonexempt children and records their IDs",
+      "native_window_flow": [
+        "ScenarioTalkTable_hideOtherUI_registrar",
+        "ScenarioTalkTable_hideOtherUI_closure",
+        "talkbox_hide_other_ui",
+        "hide_other_ui_page_gate",
+        "hide_visible_page_children"
+      ],
+      "wait_contract": "Synchronous UI state operation",
+      "preconditions": [
+        "Current page virtual+4 == 0xD6D8; same owner lifetime"
+      ],
+      "limits": [
+        "Exceptions 0xD4,0xD3,0x93,0x92,0x11C",
+        "Not nested ownership stack"
+      ],
+      "authority": "Client presentation; authoritative gameplay result is separate"
+    },
+    {
+      "name": "ScenarioTalkTable.showOtherUI",
+      "arguments": [],
+      "visible_effect": "Restores children whose IDs are in same page saved set; clears set",
+      "native_window_flow": [
+        "ScenarioTalkTable_showOtherUI_registrar",
+        "ScenarioTalkTable_showOtherUI_closure",
+        "talkbox_show_other_ui",
+        "restore_other_ui_page_gate",
+        "restore_saved_page_children"
+      ],
+      "wait_contract": "Synchronous saved-set restoration",
+      "preconditions": [
+        "Same supported page as hide"
+      ],
+      "limits": [
+        "Cannot restore old page after page replacement",
+        "Not a universal UI reset"
+      ],
+      "authority": "Client presentation; authoritative gameplay result is separate"
+    },
+    {
+      "name": "ScenarioTalkTable.hide",
+      "arguments": [],
+      "visible_effect": "Requests dialogue voice stop, calls OnEndTalk, hides window, clears selected row",
+      "native_window_flow": [
+        "ScenarioTalkTable_hide_registrar",
+        "ScenarioTalkTable_hide_closure",
+        "talkbox_hide",
+        "voice_stop_request"
+      ],
+      "wait_contract": "OnEndTalk changes scene-playing flag; not yes/no/quest result",
+      "preconditions": [
+        "Live normal bound dialogue UI; formal callback available"
+      ],
+      "limits": [
+        "Voice stop request is not synchronous sound destruction",
+        "Does not call showOtherUI",
+        "Not an authorization or task-completion ACK"
+      ],
+      "authority": "Client presentation; authoritative gameplay result is separate"
+    }
+  ],
+  "namespaces": {
+    "Q": {
+      "receiver_slot": "0xfe2778"
+    },
+    "ScenarioTalkTable": {
+      "receiver_slot": "0xfe3180",
+      "wrapper_slot": "0xfe317c",
+      "formal_wrapper": "0xfdf3c8",
+      "gameplay_bindings": 5,
+      "administrative_rebind_excluded": true
+    }
+  },
+  "number_styles": [
+    {
+      "style": 0,
+      "texture": "DamageEnemy.dds",
+      "negative_style": 2
+    },
+    {
+      "style": 1,
+      "texture": "DamageNumber.dds",
+      "negative_style": 2
+    },
+    {
+      "style": 2,
+      "texture": "NumberHeal.dds",
+      "negative_style": 1
+    },
+    {
+      "style": 3,
+      "texture": "NumberSP.dds",
+      "negative_style": 3
+    },
+    {
+      "style": 4,
+      "texture": "NumberMP.dds",
+      "negative_style": 4
+    },
+    {
+      "style": 5,
+      "texture": "DamageEnemy.dds",
+      "extra": "Critical.dds",
+      "negative_style": 5
+    }
+  ],
+  "battle_styles": [
+    {
+      "style": 0,
+      "texture": "miss.dds"
+    },
+    {
+      "style": 1,
+      "texture": "block.dds"
+    },
+    {
+      "style": 2,
+      "texture": "EnemyMiss.dds"
+    },
+    {
+      "style": 3,
+      "texture": "block.dds"
+    }
+  ],
+  "qbase_number_panel": {
+    "argument_order": [
+      "q_slot",
+      "helper_mode",
+      "display_value"
+    ],
+    "battle_modes": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "number_modes": [
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "number_native_style": "helper_mode - 4",
+    "battle_ignores_third": true,
+    "post_call": "one scheduling yield"
+  },
+  "scenario_row_schema": {
+    "stride": "0x20",
+    "fields": {
+      "+0": "id",
+      "+4": "scene",
+      "+8": "has_msg",
+      "+0xC": "msg id",
+      "+0x10..0x18": "Talk vector"
+    },
+    "talk_stride": "0xC",
+    "talk_fields": {
+      "+0": "char/npc display actor key",
+      "+4": "talk key",
+      "+8": "kind char=0/npc=1, not consumed by selected display routine"
+    }
+  },
+  "scenario_state_machine": [
+    {
+      "from_state": "not_instantiated",
+      "event": "factory constructs UI 0xD4 and registers namespace",
+      "to_state": "idle",
+      "windows": [
+        "talkbox_factory",
+        "talkbox_ctor",
+        "talk_namespace"
+      ]
+    },
+    {
+      "from_state": "idle_or_selected",
+      "event": "open(valid id,scene,bool)",
+      "to_state": "first_row",
+      "effects": [
+        "select last matching row",
+        "save mode",
+        "save open timestamp",
+        "show and reset row index"
+      ],
+      "windows": [
+        "talkbox_open",
+        "talkbox_start"
+      ]
+    },
+    {
+      "from_state": "idle_or_selected",
+      "event": "open(missing pair)",
+      "to_state": "no_selection",
+      "effects": [
+        "return without OnEndTalk"
+      ],
+      "risk": "qbase already set scenePlaying and may remain waiting",
+      "windows": [
+        "talkbox_open"
+      ]
+    },
+    {
+      "from_state": "first_or_middle_row",
+      "event": "manual Enter/UI event OR compatible auto updater after open elapsed>1500ms",
+      "to_state": "next_row",
+      "effects": [
+        "increment index",
+        "choose portrait/text/face/voice"
+      ],
+      "windows": [
+        "talkbox_next",
+        "talkbox_key",
+        "talkbox_event",
+        "auto_talk_update_1",
+        "auto_talk_update_2"
+      ]
+    },
+    {
+      "from_state": "last_row",
+      "event": "advance and no msg",
+      "to_state": "idle",
+      "effects": [
+        "voice stop request",
+        "OnEndTalk",
+        "hide",
+        "selected=null"
+      ],
+      "windows": [
+        "talkbox_next",
+        "talkbox_hide"
+      ]
+    },
+    {
+      "from_state": "last_row",
+      "event": "advance and msg present",
+      "to_state": "message_displayed",
+      "effects": [
+        "show msg text"
+      ],
+      "risk": "No close or yes/no caller proved on this branch; original selected table has zero msg attributes",
+      "windows": [
+        "talkbox_next"
+      ]
+    },
+    {
+      "from_state": "selected",
+      "event": "explicit hide/cancellation path that calls hide while owner is live",
+      "to_state": "idle",
+      "effects": [
+        "OnEndTalk then hide; UI restoration separately owned"
+      ],
+      "windows": [
+        "talkbox_hide"
+      ]
+    }
+  ],
+  "confirmation": {
+    "source": "published R8 named-calls/events plus original selected qbase",
+    "scene_end_sets_yes": false,
+    "check_confirm": "no flag non-FALSE =>0; else yes flag non-FALSE=>1; else0",
+    "wait_reset_order": "WaitAndCheckConfirmMessage yields once before clearing yes/no; an earlier trigger can be lost",
+    "on_yes_wire_scope": "004E -> F43DA named callback proved for MissionLobby4/Tutorial15, not arbitrary page",
+    "on_no_native_caller": "not closed in bounded reused evidence",
+    "end_ack": "Normal non-review, active, nonzero-quest End sends 003F only if converted CheckConfirmMessage is exactly 1. Normal active quest0 End and seen-skip can also send 003F without this confirmation gate; review and inactive paths differ. Talk completion alone is not confirmation or successful-run evidence."
+  },
+  "shared_voice": {
+    "owner": "0xfb72a8",
+    "handle_slot": "0xfb72ac",
+    "meaning": "playback handle pointer",
+    "replace": "new valid resource can stop/replace prior channel; null new resource does not guarantee prior handle is cleared",
+    "release": "voice_manager_tick clears handle when handle+0x24<=0 and backend absent or backend virtual+0x10 returns 0",
+    "content_policy": "serialize or explicitly coordinate Dialogue/Prolog/Book/ScenarioTalk sharing this channel; do not infer audio result from unrelated UI state"
+  },
+  "server_development_requirements": [
+    "Define story/session/quest admission and idempotent business result separately from Client presentation.",
+    "Validate selected scenario pair uniqueness, nonempty rows, all talk/actor/portrait/face resources, page and callback readiness before publish/start.",
+    "Keep world EntityId, Q slot, display actor key, talk key, Prolog idx and quest/scene selection keys in distinct schemas.",
+    "Assign confirmed, correlated decision input if choices or transactions are needed; OnEndTalk is not a choice and msg is not a proven option schema.",
+    "Keep HP/hit/kill/currency/inventory/quest rewards authoritative; display panels only present supplied results.",
+    "Define cancellation/timeouts/reentry and UI/audio ownership; release acquired state before Q.End as in the presentation package.",
+    "Handle original End003F conditions and world/scene acknowledgement separately; absence of ACK must not be interpreted as success."
+  ],
+  "exclusions": [
+    "No claim that native .mef parser accepts general Lua",
+    "No native MapList/TRIGGER caller gap silently closed",
+    "No ordinary-world gameplay replacement or automatic server reward inferred",
+    "No dynamic execution, deployment, T01 FULL-PASS or RR ACCEPTED claim"
+  ]
+}
