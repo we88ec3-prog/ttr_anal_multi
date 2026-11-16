@@ -1,0 +1,394 @@
+{
+  "schema": "mef-observer-contracts-v1",
+  "status": "bounded-static-evidence; not FULL-PASS or runtime result",
+  "normal_owner": {
+    "Q": "0xfb73c0",
+    "Q_binding_slot": "0xfe2778",
+    "Tutorial": "0xfc0f84",
+    "Tutorial_binding_slot": "0xfe1804",
+    "current_controller_slot": "0xfba7a4"
+  },
+  "q_observer": {
+    "name": "Q.IsAllObjectsStopped",
+    "native": "0x564880",
+    "result_type": "Lua number (tag3)",
+    "pending_result": 0,
+    "all_clear_result": 1,
+    "empty_tree_result": 1,
+    "tree_offset": "0x18",
+    "sentinel_pointer_offset": "0x1c",
+    "node_actor_pointer_offset": "0x10",
+    "actor_word_offset": "0xe2",
+    "mask": "0x8000",
+    "scope": "all entries of Q indexed actors, not world entities or a supplied group",
+    "writers": [
+      "event_actor_walk_request",
+      "event_actor_walk_tick",
+      "q_stop_native",
+      "q_warp_native"
+    ],
+    "owner_lifecycle_dependency": "../actors/report.md"
+  },
+  "walk_native": {
+    "name": "Q.WalkObject",
+    "argument_count": 6,
+    "stack_indices": [
+      -6,
+      -5,
+      -4,
+      -3,
+      -2,
+      -1
+    ],
+    "arguments": [
+      "slot_integer",
+      "x_float",
+      "y_float",
+      "animation_gate_integer",
+      "motion_integer",
+      "speed_multiplier_float"
+    ],
+    "numeric_boolean_required": true,
+    "extra_arguments_shift_trailing_indices": true,
+    "missing_slot_effect": "no actor created; early return",
+    "animation_gate_zero": "movement request still set; previous speedMultiplier retained",
+    "no_new_operation_ack_pushed": true
+  },
+  "walk_global": {
+    "name": "WalkObject",
+    "prototype": 26,
+    "formal_arguments": 7,
+    "native_argument_source_positions_1based": [
+      1,
+      2,
+      3,
+      5,
+      6,
+      7
+    ],
+    "default_motion_if_minus_one": 4,
+    "speedstep_map": {
+      "0": 1,
+      "1": 1.2,
+      "2": 0.5,
+      "3": 0.25,
+      "4": 0.125,
+      "5": 0
+    },
+    "yield_count_after_native_call": 1,
+    "waits_for_all_objects": false
+  },
+  "movement_tick": {
+    "native": "0x4d0dd0",
+    "gates": [
+      "actor+D4 == 0",
+      "actor+E2 & 0x8000 != 0"
+    ],
+    "tick_factor": 0.03333333507180214,
+    "finite_values_continue_if": [
+      "distance_squared <= previous_distance_squared",
+      "3 * step_squared <= distance_squared"
+    ],
+    "continue": [
+      "write previous_distance_squared",
+      "actor v+54(step)"
+    ],
+    "finish": [
+      "actor v+44(target,1)",
+      "actor v+68(1,1.0)",
+      "WORD actor+E2 &= 0x7fff"
+    ],
+    "not_a_death_event": true
+  },
+  "q_update": {
+    "native": "0x561520",
+    "qco_gates": [
+      "M+28 != 0",
+      "M+2C == 0"
+    ],
+    "actor_loop_is_after_qco_gates": true,
+    "native_actor_slot": "v+0x20",
+    "does_not_establish_ordinary_background_lua_runner": true
+  },
+  "wait_global": {
+    "name": "WaitForObjectsStop",
+    "prototype": 24,
+    "initial_yield": true,
+    "poll_until": "Q.IsAllObjectsStopped() != 0",
+    "requires_resumeable_coroutine": true,
+    "not_monster_clear": true
+  },
+  "tutorial_dialog": {
+    "native": "0x54e740",
+    "field": "normal Tutorial owner+38 = FC0FBC",
+    "result_type": "Lua number (tag3)",
+    "normal_initial_value": 0,
+    "selected_event": "0x000f42dd",
+    "page_type": "CTutorialPage@FUI",
+    "page_vptr": "0xc1f5f4",
+    "writer": "0x5c34b0",
+    "show_helper_can_return_without_showing": "0x596e00",
+    "flag_does_not_guarantee_visible": true,
+    "not_server_packet_or_death_result": true
+  },
+  "tutorial_state": {
+    "native": "0x4a9fd0",
+    "receiver": "[FBA7A4], not FE1804 binding owner",
+    "offset": "0x134",
+    "tutorial_constructor_initial_value": 0,
+    "post_init_writer": "not closed",
+    "not_safe_to_assume_all_controller_layouts": true
+  },
+  "native_instruction_assertions": [
+    {
+      "va": "0x564880",
+      "hex": "8b511c",
+      "asm": "mov    edx,DWORD PTR [ecx+0x1c]",
+      "meaning": "Q sentinel pointer is owner+1C"
+    },
+    {
+      "va": "0x564890",
+      "hex": "8b4110",
+      "asm": "mov    eax,DWORD PTR [ecx+0x10]",
+      "meaning": "Q tree node+10 is actor pointer"
+    },
+    {
+      "va": "0x564898",
+      "hex": "6685b0e2000000",
+      "asm": "test   WORD PTR [eax+0xe2],si",
+      "meaning": "getter tests WORD actor+E2"
+    },
+    {
+      "va": "0x56489f",
+      "hex": "7551",
+      "asm": "jne    0x5648f2",
+      "meaning": "pending goes to return0"
+    },
+    {
+      "va": "0x5648eb",
+      "hex": "b801000000",
+      "asm": "mov    eax,0x1",
+      "meaning": "empty/end returns1"
+    },
+    {
+      "va": "0x5648f2",
+      "hex": "33c0",
+      "asm": "xor    eax,eax",
+      "meaning": "pending returns0"
+    },
+    {
+      "va": "0x569917",
+      "hex": "8b0d7827fe00",
+      "asm": "mov    ecx,DWORD PTR ds:0xfe2778",
+      "meaning": "normal indirect Q receiver"
+    },
+    {
+      "va": "0x56991d",
+      "hex": "ff151828fe00",
+      "asm": "call   DWORD PTR ds:0xfe2818",
+      "meaning": "registered target call"
+    },
+    {
+      "va": "0x56992c",
+      "hex": "c7400803000000",
+      "asm": "mov    DWORD PTR [eax+0x8],0x3",
+      "meaning": "Lua number tag3"
+    },
+    {
+      "va": "0x4d0d7b",
+      "hex": "66094c2412",
+      "asm": "or     WORD PTR [esp+0x12],cx",
+      "meaning": "set bit8000 in high word"
+    },
+    {
+      "va": "0x4d0db6",
+      "hex": "898ee0000000",
+      "asm": "mov    DWORD PTR [esi+0xe0],ecx",
+      "meaning": "write E0 / E2 high word"
+    },
+    {
+      "va": "0x5633a1",
+      "hex": "f30f118634040000",
+      "asm": "movss  DWORD PTR [esi+0x434],xmm0",
+      "meaning": "conditional multiplier434 write"
+    },
+    {
+      "va": "0x4d0dd9",
+      "hex": "83bed400000000",
+      "asm": "cmp    DWORD PTR [esi+0xd4],0x0",
+      "meaning": "D4 gate"
+    },
+    {
+      "va": "0x4d0dec",
+      "hex": "668586e2000000",
+      "asm": "test   WORD PTR [esi+0xe2],ax",
+      "meaning": "pending-bit gate"
+    },
+    {
+      "va": "0x4d0e8e",
+      "hex": "7745",
+      "asm": "ja     0x4d0ed5",
+      "meaning": "distance grew branch"
+    },
+    {
+      "va": "0x4d0eb2",
+      "hex": "7723",
+      "asm": "ja     0x4d0ed7",
+      "meaning": "threshold branch"
+    },
+    {
+      "va": "0x4d0ece",
+      "hex": "ffd2",
+      "asm": "call   edx",
+      "meaning": "continue movement v+54"
+    },
+    {
+      "va": "0x4d0ee1",
+      "hex": "ffd2",
+      "asm": "call   edx",
+      "meaning": "snap v+44"
+    },
+    {
+      "va": "0x4d0ef9",
+      "hex": "662186e2000000",
+      "asm": "and    WORD PTR [esi+0xe2],ax",
+      "meaning": "pending clear"
+    },
+    {
+      "va": "0x56158b",
+      "hex": "7453",
+      "asm": "je     0x5615e0",
+      "meaning": "inactive qco skips to native actor loop"
+    },
+    {
+      "va": "0x5615cb",
+      "hex": "7513",
+      "asm": "jne    0x5615e0",
+      "meaning": "paused qco skips to native actor loop"
+    },
+    {
+      "va": "0x5615d8",
+      "hex": "e8f3371900",
+      "asm": "call   0x6f4dd0",
+      "meaning": "named qco call"
+    },
+    {
+      "va": "0x5615e0",
+      "hex": "8b7f1c",
+      "asm": "mov    edi,DWORD PTR [edi+0x1c]",
+      "meaning": "native tree iteration after qco gates"
+    },
+    {
+      "va": "0x5615f5",
+      "hex": "8b4220",
+      "asm": "mov    eax,DWORD PTR [edx+0x20]",
+      "meaning": "native actor v+20 slot"
+    },
+    {
+      "va": "0x5615f8",
+      "hex": "ffd0",
+      "asm": "call   eax",
+      "meaning": "native actor call"
+    },
+    {
+      "va": "0x563821",
+      "hex": "66218ee2000000",
+      "asm": "and    WORD PTR [esi+0xe2],cx",
+      "meaning": "StopObject direct clear"
+    },
+    {
+      "va": "0x563409",
+      "hex": "25ff7f0000",
+      "asm": "and    eax,0x7fff",
+      "meaning": "WarpObject high-word mask"
+    },
+    {
+      "va": "0x563429",
+      "hex": "898ee0000000",
+      "asm": "mov    DWORD PTR [esi+0xe0],ecx",
+      "meaning": "WarpObject state writeback"
+    },
+    {
+      "va": "0x4ca7ad",
+      "hex": "899ed4000000",
+      "asm": "mov    DWORD PTR [esi+0xd4],ebx",
+      "meaning": "base D4 initialization"
+    },
+    {
+      "va": "0x4ca7e7",
+      "hex": "899ee0000000",
+      "asm": "mov    DWORD PTR [esi+0xe0],ebx",
+      "meaning": "base E0 initialization"
+    },
+    {
+      "va": "0x54e740",
+      "hex": "8b4138",
+      "asm": "mov    eax,DWORD PTR [ecx+0x38]",
+      "meaning": "Tutorial owner+38 reader"
+    },
+    {
+      "va": "0x47afa7",
+      "hex": "8935bc0ffc00",
+      "asm": "mov    DWORD PTR ds:0xfc0fbc,esi",
+      "meaning": "normal Tutorial owner constructor initialization"
+    },
+    {
+      "va": "0x5c3576",
+      "hex": "c705bc0ffc0000000000",
+      "asm": "mov    DWORD PTR ds:0xfc0fbc,0x0",
+      "meaning": "Tutorial UI recorded-close writer0"
+    },
+    {
+      "va": "0x5c35f4",
+      "hex": "891dbc0ffc00",
+      "asm": "mov    DWORD PTR ds:0xfc0fbc,ebx",
+      "meaning": "Tutorial UI recorded-open writer1"
+    },
+    {
+      "va": "0x596e13",
+      "hex": "0f859d000000",
+      "asm": "jne    0x596eb6",
+      "meaning": "show helper early return gate"
+    },
+    {
+      "va": "0x4a9fd0",
+      "hex": "a1a4a7fb00",
+      "asm": "mov    eax,ds:0xfba7a4",
+      "meaning": "current controller pointer read"
+    },
+    {
+      "va": "0x4a9fd5",
+      "hex": "8b8034010000",
+      "asm": "mov    eax,DWORD PTR [eax+0x134]",
+      "meaning": "controller+134 read"
+    },
+    {
+      "va": "0x548b99",
+      "hex": "898634010000",
+      "asm": "mov    DWORD PTR [esi+0x134],eax",
+      "meaning": "Tutorial controller+134 initialization"
+    }
+  ],
+  "unresolved": [
+    {
+      "classification": "Client待逆向",
+      "question": "ordinary death/group/result to registered Lua getter or callback, with correct owner, type, writer and reset"
+    },
+    {
+      "classification": "Client待逆向",
+      "question": "current controller+134 post-init producer and value semantics"
+    },
+    {
+      "classification": "Server待開發",
+      "question": "authoritative objective / cancellation / instance generation rules"
+    },
+    {
+      "classification": "跨功能待整合",
+      "question": "content prepass, Q slots, VM entry and observer in one minimal deliverable"
+    },
+    {
+      "classification": "待遊玩驗證",
+      "question": "selected happy path and lifecycle behavior; none executed here"
+    }
+  ]
+}
