@@ -54,7 +54,17 @@ class PhaseBWorklistTests(unittest.TestCase):
             self.assertEqual(row["delivery_mapping"], "MILESTONE")
             self.assertIn("B-CHAR", row["milestone_ids"])
         self.assertTrue(all(not x["has_submission"] for x in result["requests"]))
-        self.assertEqual(result["summary"]["research_backlog_without_milestone"], 1)
+        # The canonical RR registry can gain research-only requests without
+        # changing the Phase B milestone roadmap. Derive their expected
+        # membership from the independent roadmap source instead of freezing
+        # the historical one-request count.
+        roadmap = json.loads((self.root / "governance/s00-roadmap.json").read_text(encoding="utf-8"))
+        milestone_rr_ids = {rid for m in roadmap["milestones"] for rid in m.get("rr_ids", [])}
+        expected_backlog = expected_ids - milestone_rr_ids
+        actual_backlog = {x["rr_id"] for x in result["requests"]
+                          if x["delivery_mapping"] == "RESEARCH_BACKLOG"}
+        self.assertEqual(actual_backlog, expected_backlog)
+        self.assertEqual(result["summary"]["research_backlog_without_milestone"], len(expected_backlog))
         self.assertEqual(next(x for x in result["requests"] if x["rr_id"] == "RR-0006")["delivery_mapping"],
                          "RESEARCH_BACKLOG")
         self.assertTrue(all(x["blocked_milestones"] for x in result["requests"]

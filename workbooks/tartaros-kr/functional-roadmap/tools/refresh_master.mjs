@@ -21,6 +21,9 @@ for(const f of plan.features){
  records.push({id:f.id,development_steps:counts[0],implemented:counts[1],human_pass:counts[2],human_targets:counts[3],file_sha256:crypto.createHash('sha256').update(await fs.readFile(path.join(root,f.file))).digest('hex')});
 }
 summary.getRange('A3').values=[['最後彙整（台北）：'+new Intl.DateTimeFormat('sv-SE',{timeZone:'Asia/Taipei',dateStyle:'short',timeStyle:'short'}).format(new Date())]];
+// Optional current-milestone text; do not leave a superseded launch goal above
+// otherwise refreshed statistics. Unspecified text/manual notes stay intact.
+if(process.argv[4])summary.getRange('A7').values=[[process.argv[4]]];
 master.recalculate();
 const target=path.join(root,'00_開發功能總表.xlsx'),backup=path.join(root,'backup','master-'+Date.now());
 await fs.mkdir(backup,{recursive:true});await fs.copyFile(target,path.join(backup,'00_開發功能總表.xlsx'));

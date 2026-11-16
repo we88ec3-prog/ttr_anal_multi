@@ -1,0 +1,102 @@
+{
+  "schema": "LOCAL_SCENARIO_DEFINITION_V1_NOT_NATIVE_MEF",
+  "nativeMef": false,
+  "authority": "SERVER_RECONSTRUCTION_NOT_NATIVE_MEF",
+  "definitions": [
+    {
+      "id": "authoring-timed-wave-example",
+      "entryNode": 1,
+      "authority": "SERVER_RECONSTRUCTION_NOT_NATIVE_MEF",
+      "sources": [
+        {
+          "kind": "AUTHORING_EXAMPLE_NOT_OFFICIAL_CONTENT",
+          "reference": "governance/s00-iterations/S00-20261111-TIMED-REINFORCEMENTS.md",
+          "sha256": "b06f0962d7c96ee398cac15223c40abec6db6014ea56560e3bf21d449ccafd25",
+          "authority": "SERVER_RECONSTRUCTION_NOT_NATIVE_MEF"
+        }
+      ],
+      "nodes": [
+        {
+          "node": 1,
+          "map": 191,
+          "spawn": {
+            "x": 418,
+            "y": 385
+          },
+          "portal": {
+            "x": 430,
+            "y": 385,
+            "radius": 6,
+            "key": 71,
+            "preRegisterClosed": true
+          },
+          "encounterGroup": "example-all-waves",
+          "encounters": [
+            {
+              "model": 1001,
+              "x": 426,
+              "y": 385
+            }
+          ],
+          "aiProfile": "legacy-melee-v1",
+          "reinforcements": [
+            {
+              "id": "after-aggregate-clear",
+              "delaySeconds": 1,
+              "encounters": [
+                {
+                  "model": 1001,
+                  "x": 418,
+                  "y": 393
+                }
+              ]
+            }
+          ],
+          "rules": [
+            {
+              "event": "Entry",
+              "action": "SpawnGroup"
+            },
+            {
+              "event": "GroupCleared",
+              "action": "UnlockPortal"
+            },
+            {
+              "event": "InteractZ",
+              "action": "Result"
+            }
+          ],
+          "timedReinforcements": [
+            {
+              "id": "entry-two-seconds",
+              "delaySeconds": 2,
+              "encounters": [
+                {
+                  "model": 1009,
+                  "x": 430,
+                  "y": 393
+                }
+              ]
+            },
+            {
+              "id": "entry-region",
+              "delaySeconds": 6,
+              "activationRegion": {
+                "x": 430,
+                "y": 385,
+                "radius": 3
+              },
+              "encounters": [
+                {
+                  "model": 1001,
+                  "x": 426,
+                  "y": 385
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

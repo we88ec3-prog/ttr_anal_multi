@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Phindos LeeLoo offers",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "shopInfoSha256", "productSha256", "itemTableSha256", "offers"],
+  "properties": {
+    "schema": { "const": "LOCAL_PHINDOS_TRADE_OFFERS_V1_NOT_NATIVE_MEF" },
+    "shopInfoSha256": { "type": "string", "pattern": "^[0-9a-fA-F]{64}$" },
+    "productSha256": { "type": "string", "pattern": "^[0-9a-fA-F]{64}$" },
+    "itemTableSha256": { "type": "string", "pattern": "^[0-9a-fA-F]{64}$" },
+    "offers": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 42,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["shop", "product", "buyLeeLoo", "sellLeeLoo", "stackLimit"],
+        "properties": {
+          "shop": { "enum": [1, 2, 3, 4, 70] },
+          "product": {
+            "enum": [183, 232, 233, 234, 17337, 2614, 2650, 2686, 2722, 2758, 2794, 2830, 5666, 9496,
+              9642, 9776, 9910, 10044, 10178, 10312, 10446, 10580, 10714, 10848, 10982, 11116, 11250, 11384, 11518, 11652, 11786, 11920,
+              29022, 29023, 29024, 1399, 1406, 1413, 1420, 1427, 5537, 23232]
+          },
+          "buyLeeLoo": { "type": "integer", "minimum": 1, "maximum": 100000000 },
+          "sellLeeLoo": { "type": "integer", "minimum": 1, "maximum": 100000000 },
+          "stackLimit": { "type": "integer", "minimum": 1, "maximum": 255 },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["field10", "field14"],
+            "properties": {
+              "field10": { "type": "integer", "minimum": 0, "maximum": 4294967295 },
+              "field14": { "type": "integer", "minimum": 0, "maximum": 4294967295 }
+            }
+          }
+        }
+      }
+    }
+  }
+}

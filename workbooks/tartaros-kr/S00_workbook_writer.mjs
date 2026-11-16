@@ -34,6 +34,11 @@ async function edit(file, rows, fields=[], fieldValues=[]){
  if(file==='00_儀表板.xlsx'){
   set(1,0,'本表為正式台帳的增量同步視圖；未用跨檔公式，功能人工進度與驗收不自動升格。','SYNC_METADATA');
   set(2,0,`資料版本：分析 ${plan.analysis_sha.slice(0,12)} / Server ${plan.server_sha.slice(0,12)}；完整來源與同步紀錄見 update-history/${plan.timestamp}.json。`,'SYNC_METADATA');
+ }else if(fields.length){
+  // Count/version labels belong to the formal view too. Keeping the first
+  // publication's "9 requirements" above a newer table is misleading.
+  set(1,0,`${rows.length} 筆正式來源記錄；候選／分析／合成結果不代表正式批准或遊戲驗收。`,'SYNC_METADATA');
+  set(2,0,`資料版本：分析 ${plan.analysis_sha.slice(0,12)} / Server ${plan.server_sha.slice(0,12)}；完整來源與同步紀錄見 update-history/${plan.timestamp}.json。`,'SYNC_METADATA');
  }
  const extra=[];
  for(const f of fields){

@@ -1,0 +1,100 @@
+# 馮德斯與爾勒梅斯裝備分解
+
+## 原版入口與結果
+
+韓版 `_TownList.xml` 在 Town 1 與 Town 2 均列出 NPC 10015。該 NPC 在 `npctable.xml` 是裝備製作職人、TYPE 6。Client `639890` 建立本地事件 `F4313`，`5B7750` 的對應分支以 `+0x278` 開啟分解窗。放入物品時，`6797B0` 接受背包 1、格位 1～100，讀 Product 記錄 `+0x3C` 的可分解欄位，再記住選取格位。此欄位由 `CProductTable` 讀取 `CAN_BE_DISMANTLED`。Client 另檢查背包空格並對帶有特定 CustomItem 狀態的物品顯示確認。
+
+| 方向 | 格式 | Client 用途 |
+|---|---|---|
+| C2S `0067` | 命令 u16 LE、`+2` 背包種類 u8、`+3` 1 起算的格位 u8，共 4 bytes。 | 確認分解後由 `678DD0` 送出。 |
+| S2C `00AE` | 命令 u16 LE、`+2` signed status。成功狀態為 0，其後每筆 8 bytes，首 4 bytes 為 Product，末 2 bytes 為數量。 | `4E2690 → 50A5F0` 用 `(len − 3) / 8` 算筆數，對每筆派送 `F428A`，再以 `F4289` 送狀態。每筆中間 2 bytes 未被此路徑讀取。 |
+| S2C `002C` | 既有背包格位及錢包更新。 | 分解結果窗只讀產出明細，實際物品由背包同步更新。 |
+
+`4E1F6F` 將 `4E2690` 登記在接收表 `+0x574`，依 `4+8×command` 對應 `00AE`。`5B9120 → 679150` 以 Product 查物品後繪製產出圖示與數量，`5B90D0 → 678EF0` 完成提示與成功動作。未提交的候選結果使用 1，走通用失敗顯示。S2C `0067` 的既有快捷欄清除是另一方向與長度。 [背包同步](../../governance/client-variants/20261109-mef-town-services/shop-asset-sync.md)
+
+## 來源與暫定產量
+
+`TalkTable/04_Phindous.xml` 的 31710 說明分解固定產出碎片與結晶石，31711 列出有機率取得額外強化／鍊石。原版每件裝備的確切數量、可選掉落機率和格位排序未取得。連接 `ShopInfo → Product → ItemTable2`，馮德斯 Shop 2 及爾勒梅斯 Shop 6 各有 27 件 E 級武器、上裝或下裝，均標記可分解，Rank 分別為 2 和 3。E 級結晶石是 Item／Product 185。Item 16466 是 E 級裝備碎片，Product 為 18012。兩者堆疊上限皆為 255。
+
+| 承認的來源 | Server 暫定結晶石 | Server 暫定裝備碎片 |
+|---|---:|---:|
+| 馮德斯 Shop 2，Rank 2 | 4 | 1 |
+| 爾勒梅斯 Shop 6，Rank 3 | 6 | 1 |
+
+首版在正常 Town 1／2、角色可操作且靠近該 NPC 時，接受目前背包內這 54 個 Product 的普通獨立實例。綁在角色身上的裝備與帶有未支援 CustomItem 狀態的裝備不進入拆解交易。單一有效租約交易刪除原裝備、發放兩種材料並複用可用空格，全部成功才保存。無額外費用。提交後先送 `002C`，再以 `00AE` 顯示本次增量。2×Rank 結晶石和固定一枚碎片是進度與經濟測試用的 Server 規則。機率產物待另案核對。
+
+Q2849（Lv.8）的目標是按開裝備分解按鈕，Q2850 需要 Q2849 且目標是開鐵匠升級視窗。保留兩個按鈕事件的獨立驗收，分解物品只驗本身的資產與畫面。鍊石配方 151 的另一組材料為 Item 281～284。`ItemRandomCapsule.xml` 的 NO 12714（Product 12981，符文箱）列這四種輸出，現有普通商店與普通任務報酬均無此箱。重建 Server 的早期單人來源另以馮德斯狩獵場實作。 [材料路線](PHINDOS-REFINE-MATERIAL-ROUTE.md)
+
+## 版本與實機
+
+資料來源 SHA-256 為 KR `_TownList.xml` `bba254efd72fac0be6c51c6135423601effcbad02448f46aadec3324e449d660`、`TalkTable/04_Phindous.xml` `91cb3684a6e9bef06ff4f9d454a6d4bfcc81ac41b247e245555dac0d1eda92d4`、`ItemRandomCapsule.xml` `5d29ada7df7cb094adb0367eac504df62eaa44d34d5dbf6c6bf4c6d780ac79ea`。 [基礎商品資料](BLACKSMITH-EQUIPMENT-ENHANCEMENT.md)
+
+原版 KR BIN 與指定 v2 以下視窗各依 PE 區段映射核對一致。 [版本 SHA](ORDINARY-QUEST-READY-RESTORE.md)
+
+| VA＋長度 | 共同 SHA-256 |
+|---|---|
+| `639890+38` | `e7c2ffcd0bc01c1db511edf23ba593345e8d541547759754abe25456f121e2fe` |
+| `6797B0+240` | `4e636effe8d841f481e91fc14bf4462461b7ac0f9a709055896b077dc0df4e38` |
+| `678DD0+118` | `95aeb08cd544abe5860248535c519c00f13d62f04ecbd30b48c440f5f9022d25` |
+| `4E1F6F+14` | `75e043e93718ab48340e5eab40ee9dd7c85c69c6ca0425238f807491e9fede3d` |
+| `4E2690+18` | `2741f0cac3540cc321f8347ee4e38d79581d60e7b04838b9b6b0be850bf55989` |
+| `50A5F0+FA` | `544ef3fd714507c843bd829a9b311be480a5490fcb14bc8bdfa938f39da45033` |
+| `5B90D0+47` | `e54bdebd9c7f8fbd94fc7516d6dee20de20a0110e0b79525845b17e2f4f5eb9b` |
+| `5B9120+52` | `187b910efd0f62d95301884a1f10400a539c0a63734198c7ac7f03bb6398f01f` |
+| `678EF0+155` | `01ade9a2579086173b46dad65afbc825b38564d0b756f77339bfb59697849a15` |
+
+EQ-B04 先核對分解開窗，接著以可拆普通裝備確認資產及重登。馮德斯 Q2849／2850 的開窗事件及指定 v2 的圖示、提示仍待查。 [批次驗收](../testing/S00-CONTENT-BATCH-TESTS.md)
+
+## 已強化的早期裝備
+
+`6797B0` 用背包格的兩個查詢鍵找 CustomItem。若 `+30h` 的強化等級大於零，就設分解視窗 `+125h`。附加能力則由另一個欄位 `+124h` 表示。按分解時，`67A010` 看到任一標誌會開確認對話。回覆經 `F4423`，代碼 `06A7` 進入 `679220` 啟動確認後流程，`06A8` 恢復按鈕。實際分解請求仍是 `678DD0` 的 4-byte `0067`，只有背包種類及格位。
+
+| 原版 BIN 與指定 v2 相同的視窗 | SHA-256 |
+|---|---|
+| `67A010+190` | `e3456c2ca2450c1eeb6f09cb343bb95957f9c0c07b7319ead9ef2da03fdbbcb9` |
+| `679220+36` | `2b65f01cb6dfab53479f7b1a7a1c7ae967f025b931f57973e26a3d4ac7624229` |
+
+Server 允許已支援的 Rank 2／3 早期裝備用同一正常分解入口。裝備需在背包，實例與查詢鍵須相符。同一交易刪除裝備及其強化列，發放結晶石與碎片。提交後先更新背包 `002C`，再用 `007D` 刪除同件 CustomItem，最後送 `00AE` 結果。普通裝備沿用 `002C → 00AE`。Server 暫按同階級的基礎分解產量，原版依強化等級是否增加產出或回收用過的鍊石仍待查。其他附加能力型態維持各自的證據範圍。 [CustomItem 刪除入口](EQUIPMENT-WEAR-WIRE.md)
+
+Release 建置及 510 項 HappyPath 通過，兩村合成案例涵蓋普通及 +1 裝備。兩組從空白資料庫開始的原版 BND 路線分別走一般與輪替 Case，皆完成 Q144、Lv.19／333,742 EXP。各用正常取得的材料製出鍊石，把馮德斯 Product 2722 強化為 +1，跨村存取並穿戴，再卸下到爾勒梅斯 NPC 10015 分解。Rank 2 武器分解得到 4 顆結晶石與 1 份碎片，LeeLoo 和剩餘鍊石維持原值。重登確認材料保存且無該件 `007B` 回填。指定 v2 的分解確認對話、圖示及結果窗仍待 EQ-B04。
+
+| 原版 BND 離線收據 | SHA-256 |
+|---|---|
+| 一般路線 | `7d9f1aef92a1a2aa438e7af7baa2ba9cd45841348b656f2538acc3fc0d261c8d` |
+| 輪替路線 | `5792a837c902c57ac1e232efe2547ca53d67aacb3678cdc1d858a2648b1b5856` |
+
+## 開窗任務的取證
+
+Q2849 為 Lv.8，於馮德斯 NPC 10015 接取及交付。原表只要求開分解窗，報酬為 2,720 EXP 和 1 點公會地區名聲。Q2850 同 NPC 接取及交付，需先完成 Q2849，目標是鐵匠的裝備升級按鈕，報酬同為 2,720 EXP、1 點名聲，另給 Product 23230（Item 20567，裝備精煉包）。Q2852 的氣充電教學以 Q2850 為前置。先分開觀察工匠選單等待、開分解窗和確認分解。記錄器只採樣收到的命令與時間，對 4-byte `0067` 額外顯示背包種類／格位。確認消耗裝備的事件與開窗分開判讀，避免把交易當成任務要求。 [EQ-B04](../testing/S00-CONTENT-BATCH-TESTS.md)
+
+既存反編譯的 `5B7750` 在 `F4313` 呼叫 UI 顯示函式 `596E00`。分解視窗 vtable `C35FB4+D0h → 679430`，由 `6794CA` 呼叫 `501650(7)`。鐵匠裝備升級功能 29 開啟的 `CShopLevelupWnd` 用 vtable `C3718C+D0h → 687880`，於 `68791A` 呼叫 `501650(8)`。該發送器依已登錄目標分別送 `DF 00 21 0B 07 00` 和 `DF 00 22 0B 08 00`。任務列表 action 2 的 `003C` 另走 `62EC20 → 62F050 → 4A3960`。下表是原版 KR BIN 與指定 v2 依各自 PE 區段映射核對的相同視窗。 [鐵匠選單](../../governance/client-variants/20261109-mef-town-services/shop-services.md) · [開窗回報形狀](ALSMEER-TALENT-TRAINING.md)
+
+| VA＋長度 | 兩版共用 SHA-256 |
+|---|---|
+| `5B7750+278` | `5ebe0c3721dbc0e2d3514d09cc352ab412cd1fba3d73d56ab86369e6ab327379` |
+| `596E00+90` | `90ee33902a64f5d616e6c05d85ecb74423f7af09db8c6ba14305e02c4be9bb3f` |
+| `62F050+85` | `6454288a4103287f6dd002209376f99fe6729e4b7b373116c2a1b01bc6bde46c` |
+| `4A3960+38` | `f478b3ed56c53799c9e135f24c623b593717e12abcb391b8351759cdc6176980` |
+| `679430+AE` | `f7bceb5ca17ad09205f59809d91acc3fbad384a0000cc524767a2465bdc663a1` |
+| `687880+A6` | `eb8fdd96c01ade166a33452feeb0c9dd291ff2474e7dd5017887e35638db6d3c` |
+
+### 可玩的 Server 候選
+
+原版對話鼓勵實際操作，任務目標由開窗回報達成。Server 先透過 `0042/subtype 11` 登錄開窗事件，再確認正常馮德斯場景、服務位置與 Accepted 狀態。只開窗即保存 Ready 並送 `0041 → 0045`。已存在的成功分解、強化交易仍可推進尚未達成的任務。
+
+1. 冒險團最高角色達 Lv.8，在馮德斯 NPC 10015 接 Q2849，於工匠開啟分解視窗。回 NPC 10015 交付獲 2,720 EXP。
+2. 同一 NPC 開放 Q2850。到馮德斯鐵匠 NPC 10030（市場 shop 2）開啟裝備升級視窗，再回 NPC 10015 交付，獲 2,720 EXP 及 Product 23230 ×1。原表的公會地區名聲兩任務各 1 點，待公會功能接入。
+3. Lv.11 後可到爾勒梅斯 NPC 10014 接 Q2852，依氣充電規格進狩獵場短按 V，再回 NPC 交付。 [Q2852 交付規格](../runtime-content/SKILL-PRACTICE-PROTOCOL.md#氣充電與特性教學)
+
+Product 23230 的 `PACKAGE_LIST` 包含 Product 151 ×200 及 12920 ×1。ItemTable2 的 Item 20567 類別為 29、堆疊上限 1。開啟精煉包與出售 LeeLoo 袋見獨立規格。 [精煉包規格](REFINEMENT-PACKAGE.md)
+
+使用 `--check-early-ordinary-quests --check-refine-materials --check-remaining-base-skills --check-equipment-tutorial-chain` 跑兩條原版 BND 新帳號路線。兩組先完成 Q144、正常取得材料，之後走分解 → 交付 → 製作鍊石 → 強化 → 交付 → 氣充電，未預置任務或物品。Q2852 交付後均為 Lv.19／342,072 EXP，重登保留主線 Q144、普通任務完成狀態及其資產。指定 v2 依 SK-P11 核對按鈕、提示及原版開窗差異。
+
+在上述參數末端加 `--check-native-equipment-windows`，一般原版 BND 路線驗證 Q2843／Q2849／Q2850 各自的開窗回報先通過，後續選場或服務成功時不會再次發 Ready。兩個裝備開窗事件驗證背包及餘額原值，後續另測實際交易。輪替路線保留原先相容觸發，兩路線均完成 Q144、Q2853 及其餘開窗教學，重登為 Lv.19／349,252 EXP。收據 SHA-256 為 `c2368de2e605bb02af3a760da2fd97af41cfa7826a0875a5f3e2b2781cc99dd7`（開窗）和 `4eee69fa3e1ea65f7616753cdf02340eada381b96b1c7f748b90e6d251f25835`（相容）。
+
+Release 建置與 538 項 HappyPath 合成通過。
+
+| 原版 BND 離線收據 | SHA-256 |
+|---|---|
+| 一般路線 | `dc26d1c384b71072c67c2541e124a07fb3408e8fd72878c78de6c798f241292c` |
+| 輪替路線 | `d8ff327e3fbc4cf68a6d2da67804ae0ff097d7f9d51479ab8fa2bcdc8519b698` |

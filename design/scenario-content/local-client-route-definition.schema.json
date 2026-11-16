@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:tartaros:local-client-route:v1-not-native-mef",
+  "title": "Server route comparison content; not native MEF",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "nativeMef",
+    "authority",
+    "definitions"
+  ],
+  "properties": {
+    "schema": {
+      "const": "LOCAL_CLIENT_ROUTE_DEFINITION_V1_NOT_NATIVE_MEF"
+    },
+    "nativeMef": {
+      "const": false
+    },
+    "authority": {
+      "const": "SERVER_RECONSTRUCTION_NOT_NATIVE_MEF"
+    },
+    "definitions": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 32,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "scenarioId",
+          "node",
+          "map",
+          "encounterIndex",
+          "targetOffset",
+          "updateSteps",
+          "nativeMovementSpeed",
+          "requireClearPath"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "scenarioId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "node": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "map": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "encounterIndex": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "targetOffset": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "x",
+              "y"
+            ],
+            "properties": {
+              "x": {
+                "type": "number",
+                "minimum": -1000,
+                "maximum": 1000
+              },
+              "y": {
+                "type": "number",
+                "minimum": -1000,
+                "maximum": 1000
+              }
+            }
+          },
+          "updateSteps": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 65535
+          },
+          "nativeMovementSpeed": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 65535
+          },
+          "requireClearPath": {
+            "type": "boolean"
+          },
+          "stopMotionAfterSeconds": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "maximum": 60
+              }
+            ],
+            "description": "Optional Server-owned motion stop schedule. Not native arrival acknowledgement or proof of target cancellation."
+          }
+        }
+      }
+    }
+  },
+  "$comment": "Typed loader also checks unique IDs, nonblank names, nonzero target offset and SHA. World checks scenario/node/map, anchor index and walkable endpoints; no native step-to-time relation is asserted."
+}
