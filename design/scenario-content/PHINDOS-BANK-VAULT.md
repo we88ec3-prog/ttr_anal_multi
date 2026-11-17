@@ -45,6 +45,10 @@ Server 沿用已核對的普通任務互動 `001C/type 3`。由目標所在城�
 
 已卸下的獨立裝備也走 `008D`。每次搬一件，使用空的目的格，保留 Server 裝備實例 ID、Product 和兩個物品欄位。Q140 的實際任務所得購裝旅程驗證爾勒梅斯存入、重登前往馮德斯、載入時發布原格、取回原實例及後續售出；存取期間 LeeLoo 與 Battle Point 不變。 [單人離線收據](ALSMEER-SINGLE-PLAYER-ACCEPTANCE.md)
 
+2026-11-18 補驗換下的護甲。新帳號正常完成 Q144 後，先從兩村鐵匠購入伊希莉亞護甲 Product 11250／11262，直接換裝並重登。將換下的 11250 存入馮德斯銀行第 79 格，再重登、正常建隊到爾勒梅斯，核對場景啟用前發布原倉庫格。取回後重新穿上該件，再換回 11262，核對兩件獨立 ID、物品欄位及背包交換位置。最後卸下售出兩件，原有背包與倉庫格位保留，LeeLoo 為兩次買賣後的預期餘額。此流程使用現行 NPC 商店、穿戴及倉庫協定。
+
+離線收據 `equipmentSwapReceipt` 記錄 `replacedArmorStoredAcrossVillages=true`、`vaultSlot=79` 與 `withdrawnArmorWornAgain=true`。完整收據 SHA-256 為 `f8af14b5134e9e0b8dbbc97815424ee70643b3b75f4712a4e9b310b2f003a4fe`。指定 v2 的拖曳、銀行分頁與取回後換裝待 TS-18 批次驗收。
+
 ## S2C 倉庫格位
 
 player-state 表 `4E1FCF..4E1FFF` 登錄 `00C2 → 4E2600 → 50A890`、`00C3 → 4E2620 → 50A9B0`。初始 `00C2` 有 4-byte 頭部，+2 u16 寫入倉庫容量 `+50B8h`，其值由 `5FA3E8..5FA410` 用來限制每頁可用格數。`00C3` 有 2-byte 頭部，直接接格位資料。
