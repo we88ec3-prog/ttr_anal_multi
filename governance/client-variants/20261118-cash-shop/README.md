@@ -1,5 +1,7 @@
 # 點數商城購物車與保管箱的收發接線
 
+完全復活卷軸接續：[付費取得與戰鬥串接](../../../design/scenario-content/CASH-COMPLETE-REVIVAL.md)、[原表核對](verify_revival.py)與[來源收據](revival-source-verification.json)。付款／領取／復活資源與保存有離線證據，原視聽、死亡懲罰／評級恢復及指定 v2 仍未完成。
+
 髮型／染髮接續：[商城髮型與染髮用品](../../../design/scenario-content/CASH-HAIR-STYLE-AND-DYE.md)提供原 Action 13／14、0070 頭部語意、原 Hair.ipk／描述檔的來源及獨立 Server 投影；用途、交易、正常驗證及實機待測分開記錄。
 
 2026-11-18 S00 限定來源核對。工作基準為本庫 `02758e1a027fcd1a69dcb94ef3073990eaded7eb`、Server `94b4ddc61e08101afd2334d0916ed0d0bca2df43`。本批將商城來源導航推進到購物車請求、結果 consumer 與保管箱領取請求。Server 付款及入包接線仍待後述條件閉合。
