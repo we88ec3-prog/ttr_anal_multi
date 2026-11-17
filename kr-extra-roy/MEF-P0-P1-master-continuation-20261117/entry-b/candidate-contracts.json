@@ -1,0 +1,475 @@
+{
+  "schema": "mef-entry-b-typed-contracts/v1",
+  "status": {
+    "selected_static_analysis": "COMPLETE",
+    "ordinary_entry_B": "NOT_CLOSED",
+    "runtime_ready": false,
+    "formal_acceptance": "UNCHANGED"
+  },
+  "definition": "保留普通 Mission/Scenario current field/page 與一般輸入，由原版可達入口第一次載入或註冊本次內容，在同一 VM 持續 pump，具有 owner/取消/重入契約。",
+  "new_candidates": [
+    {
+      "id": "CB-01",
+      "candidate": "普通頁面建立 ScenarioTalkTable 是否直接提供首次腳本入口",
+      "outcome": "TYPED_OWNER_CLOSED_NOT_SCRIPT_ENTRY",
+      "evidence": [
+        "B01",
+        "B02",
+        "B03",
+        "B04",
+        "B05",
+        "B16",
+        "B17",
+        "B18",
+        "B19",
+        "B21",
+        "B22",
+        "B23",
+        "B24",
+        "B25",
+        "D04",
+        "D05",
+        "D06"
+      ],
+      "result": "page+B4 與 FE3180 正常來源是同一 cached CScenarioTalkBox；ctor 建 namespace / C closures，不載入新內容也不建立 ordinary pump。"
+    },
+    {
+      "id": "CB-02",
+      "candidate": "Lua Rebind 是否是具體 native 新 owner producer",
+      "outcome": "EXCLUDED_AS_FIRST_ENTRY",
+      "evidence": [
+        "B05",
+        "B07",
+        "B08"
+      ],
+      "result": "已在 Lua 中的 Rebind 讀最後參數，number/numeric-string 經 FISTP 成整數後直接寫 FE3180；沒有配置、RTTI 驗證、script loader 或 pump 設定。"
+    },
+    {
+      "id": "CB-03",
+      "candidate": "繼承的 XML 載入是否另存 talk selected+9C",
+      "outcome": "DIRECT_RECEIVER_WRITER_SCOPE_CLOSED",
+      "evidence": [
+        "B09",
+        "B10",
+        "B20",
+        "B31",
+        "B32",
+        "D01",
+        "D03"
+      ],
+      "result": "this=EBX 的整個 reader body 及明確 helper 只處理 base fields / child pointers；沒有新 selected+9C writer 或 first Lua caller。保留動態 child/resource 子圖邊界。"
+    },
+    {
+      "id": "CB-04",
+      "candidate": "繼承的 clone/copy 是否複製 selected 或建立另個 talk callback owner",
+      "outcome": "EXCLUDED_FOR_TYPED_CLONE",
+      "evidence": [
+        "B11",
+        "B12",
+        "B13",
+        "B14",
+        "B15",
+        "D02",
+        "RTTI_dummy_TYPE"
+      ],
+      "result": "clone 分配 0x80，vptr 是 FXUIDummy；base copy 不複製 +9C。不是新的 CScenarioTalkBox owner。"
+    },
+    {
+      "id": "CB-05",
+      "candidate": "Master 新原件是否含可立即連接 B 的腳本",
+      "outcome": "CARRIER_DECLARATION_CLOSED_PAYLOAD_AND_CALLER_MISSING",
+      "evidence": [
+        "M01",
+        "M02",
+        "M03",
+        "M04",
+        "M05"
+      ],
+      "result": "Field/AttachedPackage=Field 且 PackingRules 明列 xml/mef；UI/LUA 規則含 lua。此為來源容器宣告，沒有該容器內腳本 bytes/實際 reader/caller/pump 的證據。"
+    }
+  ],
+  "normal_owner": {
+    "mission_page": {
+      "code": 5,
+      "vtable": "0xc1d1ac",
+      "onload": "0x5acea0"
+    },
+    "scenario_page": {
+      "code": 7,
+      "vtable": "0xc1d62c",
+      "onload": "0x5afc30"
+    },
+    "chain": [
+      "5AC3E0",
+      "598890",
+      "5A3980",
+      "596010",
+      "597BC0",
+      "597D20",
+      "6BCE70",
+      "6BDA20"
+    ],
+    "page_slot": "+B4",
+    "descriptor_singleton": "FE2C5C",
+    "descriptor_vtable": "C1B514",
+    "descriptor_resource_id": "0xD4",
+    "descriptor_window_slot": "+C",
+    "talk_bytes": "0xAC",
+    "talk_vtable": "C3EB44",
+    "binding_receiver": "FE3180",
+    "binding_wrapper": "FE317C",
+    "formal_wrapper": "FDF3C8"
+  },
+  "absolute_receiver_references": [
+    {
+      "literal": "0x6bd006",
+      "instruction": "0x6bd004",
+      "role": "destructor zero store",
+      "window": "B06"
+    },
+    {
+      "literal": "0x6bda2c",
+      "instruction": "0x6bda2b",
+      "role": "native ctor namespace install store",
+      "window": "B05"
+    },
+    {
+      "literal": "0x6bde2b",
+      "instruction": "0x6bde2a",
+      "role": "Lua Rebind store",
+      "window": "B07"
+    },
+    {
+      "literal": "0x6bdf48",
+      "instruction": "0x6bdf46",
+      "role": "marshaller read",
+      "window": "B26"
+    },
+    {
+      "literal": "0x6bdfa8",
+      "instruction": "0x6bdfa6",
+      "role": "marshaller read",
+      "window": "B27"
+    },
+    {
+      "literal": "0x6be008",
+      "instruction": "0x6be006",
+      "role": "marshaller read",
+      "window": "B28"
+    },
+    {
+      "literal": "0x6be068",
+      "instruction": "0x6be066",
+      "role": "marshaller read",
+      "window": "B29"
+    },
+    {
+      "literal": "0x6be098",
+      "instruction": "0x6be096",
+      "role": "marshaller read",
+      "window": "B30"
+    }
+  ],
+  "inherited_read_direct_this_stores": [
+    {
+      "va": "0x748c97",
+      "offset": "0x20",
+      "width": 4,
+      "asm": "mov    DWORD PTR [ebx+0x20],eax"
+    },
+    {
+      "va": "0x748cb9",
+      "offset": "0x48",
+      "width": 4,
+      "asm": "mov    DWORD PTR [ebx+0x48],eax"
+    },
+    {
+      "va": "0x748ccb",
+      "offset": "0x28",
+      "width": 4,
+      "asm": "mov    DWORD PTR [ebx+0x28],eax"
+    },
+    {
+      "va": "0x748cd5",
+      "offset": "0x28",
+      "width": 4,
+      "asm": "or     DWORD PTR [ebx+0x28],0x3"
+    },
+    {
+      "va": "0x748cdc",
+      "offset": "0x5c",
+      "width": 2,
+      "asm": "mov    WORD PTR [ebx+0x5c],ax"
+    },
+    {
+      "va": "0x748cfb",
+      "offset": "0x28",
+      "width": 4,
+      "asm": "mov    DWORD PTR [ebx+0x28],eax"
+    },
+    {
+      "va": "0x748d0d",
+      "offset": "0x28",
+      "width": 4,
+      "asm": "mov    DWORD PTR [ebx+0x28],eax"
+    },
+    {
+      "va": "0x748d1f",
+      "offset": "0x28",
+      "width": 4,
+      "asm": "mov    DWORD PTR [ebx+0x28],eax"
+    },
+    {
+      "va": "0x748db8",
+      "offset": "0x1c",
+      "width": 4,
+      "asm": "mov    DWORD PTR [ebx+0x1c],esi"
+    },
+    {
+      "va": "0x748dd7",
+      "offset": "0x1c",
+      "width": 4,
+      "asm": "mov    DWORD PTR [ebx+0x1c],esi"
+    },
+    {
+      "va": "0x749190",
+      "offset": "0x68",
+      "width": 4,
+      "asm": "mov    DWORD PTR [ebx+0x68],0x0"
+    },
+    {
+      "va": "0x7493c3",
+      "offset": "0x3c",
+      "width": 4,
+      "asm": "mov    DWORD PTR [ebx+0x3c],esi"
+    }
+  ],
+  "inherited_copy_direct_destination_stores": [
+    {
+      "va": "0x404dea",
+      "offset": "0x4",
+      "width": 4,
+      "asm": "mov    DWORD PTR [edi+0x4],eax"
+    },
+    {
+      "va": "0x404df0",
+      "offset": "0x8",
+      "width": 4,
+      "asm": "mov    DWORD PTR [edi+0x8],ecx"
+    },
+    {
+      "va": "0x404df6",
+      "offset": "0xc",
+      "width": 4,
+      "asm": "mov    DWORD PTR [edi+0xc],edx"
+    },
+    {
+      "va": "0x404dfc",
+      "offset": "0x10",
+      "width": 4,
+      "asm": "mov    DWORD PTR [edi+0x10],eax"
+    },
+    {
+      "va": "0x404e02",
+      "offset": "0x14",
+      "width": 4,
+      "asm": "mov    DWORD PTR [edi+0x14],ecx"
+    },
+    {
+      "va": "0x404e08",
+      "offset": "0x18",
+      "width": 4,
+      "asm": "mov    DWORD PTR [edi+0x18],edx"
+    },
+    {
+      "va": "0x404e0e",
+      "offset": "0x1c",
+      "width": 4,
+      "asm": "mov    DWORD PTR [edi+0x1c],eax"
+    },
+    {
+      "va": "0x404e14",
+      "offset": "0x20",
+      "width": 4,
+      "asm": "mov    DWORD PTR [edi+0x20],ecx"
+    },
+    {
+      "va": "0x404e1a",
+      "offset": "0x24",
+      "width": 4,
+      "asm": "mov    DWORD PTR [edi+0x24],edx"
+    },
+    {
+      "va": "0x404e20",
+      "offset": "0x28",
+      "width": 4,
+      "asm": "mov    DWORD PTR [edi+0x28],eax"
+    },
+    {
+      "va": "0x404e26",
+      "offset": "0x2c",
+      "width": 4,
+      "asm": "mov    DWORD PTR [edi+0x2c],ecx"
+    },
+    {
+      "va": "0x404e2c",
+      "offset": "0x30",
+      "width": 4,
+      "asm": "mov    DWORD PTR [edi+0x30],edx"
+    },
+    {
+      "va": "0x404e32",
+      "offset": "0x34",
+      "width": 4,
+      "asm": "mov    DWORD PTR [edi+0x34],eax"
+    },
+    {
+      "va": "0x404e38",
+      "offset": "0x38",
+      "width": 4,
+      "asm": "mov    DWORD PTR [edi+0x38],ecx"
+    },
+    {
+      "va": "0x404e3e",
+      "offset": "0x3c",
+      "width": 4,
+      "asm": "mov    DWORD PTR [edi+0x3c],edx"
+    },
+    {
+      "va": "0x404e44",
+      "offset": "0x40",
+      "width": 4,
+      "asm": "mov    DWORD PTR [edi+0x40],eax"
+    },
+    {
+      "va": "0x404e4a",
+      "offset": "0x44",
+      "width": 4,
+      "asm": "mov    DWORD PTR [edi+0x44],ecx"
+    },
+    {
+      "va": "0x404e57",
+      "offset": "0x48",
+      "width": 4,
+      "asm": "mov    DWORD PTR [edi+0x48],edx"
+    },
+    {
+      "va": "0x404e7d",
+      "offset": "0x5c",
+      "width": 2,
+      "asm": "mov    WORD PTR [edi+0x5c],ax"
+    },
+    {
+      "va": "0x404e8a",
+      "offset": "0x60",
+      "width": 4,
+      "asm": "mov    DWORD PTR [edi+0x60],ecx"
+    },
+    {
+      "va": "0x404ea3",
+      "offset": "0x70",
+      "width": 4,
+      "asm": "mov    DWORD PTR [edi+0x70],eax"
+    }
+  ],
+  "inherited_reader_indirect_boundaries": [
+    {
+      "site": "0x748dc7",
+      "receiver": "original talk",
+      "slot": "+64",
+      "target": "746FD0 → dock factory",
+      "status": "native dock subobject; not selected store"
+    },
+    {
+      "site": "0x74902b",
+      "receiver": "original talk",
+      "slot": "+60",
+      "target": "746FE0 → 747000",
+      "status": "resource-selected native child factory; child original resource tree not newly proven"
+    },
+    {
+      "site": "0x749019",
+      "receiver": "talk+18 owner, distinct from talk",
+      "slot": "+110",
+      "status": "resource owner lookup; no receiver conflation"
+    },
+    {
+      "site": "0x7492c2",
+      "receiver": "original talk",
+      "slot": "+70",
+      "target": "746640",
+      "status": "attach native child / parent links"
+    },
+    {
+      "site": "0x749427",
+      "receiver": "original talk",
+      "slot": "+50",
+      "target": "749890",
+      "status": "native attached graphic object"
+    },
+    {
+      "site": "0x749433",
+      "receiver": "original talk",
+      "slot": "+114",
+      "target": "6BD4F0",
+      "status": "four fixed child lookups only; exact type codes/one-pointer stores included"
+    }
+  ],
+  "ordinary_B_required_edges": [
+    {
+      "edge": "selected original payload bytes / grammar",
+      "state": "MISSING",
+      "next_source": "Master-declared Field.stp or other exact caller-selected original member; do not assume Lua from extension"
+    },
+    {
+      "edge": "normal typed producer → first content loader/callback",
+      "state": "MISSING",
+      "next_source": "specific live caller with filename/buffer/value provenance, ordinary field/page identity, no prior Q takeover"
+    },
+    {
+      "edge": "same VM and namespace owner for known talk callbacks",
+      "state": "PROVEN_FOR_EXISTING_TALK_ONLY",
+      "evidence": [
+        "B04",
+        "B05"
+      ]
+    },
+    {
+      "edge": "ongoing normal scene scheduling without Q exclusivity",
+      "state": "MISSING",
+      "next_source": "normal frame/event source actually resuming correct task after first invocation, with cancellation/generation ownership"
+    },
+    {
+      "edge": "ordinary input and context preserved throughout",
+      "state": "NOT_PROVEN_FOR_NEW_ENTRY",
+      "next_source": "instruction order and controller / input / page gate along actual new chain"
+    }
+  ],
+  "development_split": {
+    "Client_reverse": [
+      "Field payload/reader/grammar",
+      "first ordinary native caller and same-VM continuing pump",
+      "exact unknown incoming wire cannot be invented"
+    ],
+    "Server_development": [
+      "authoritative ordinary event scheduling / progression",
+      "instance/entity/generation ownership, cancellation and idempotence",
+      "use verified wire and finite existing content entrances for presentation"
+    ],
+    "integration": [
+      "content capability whitelist must reject ordinary_B until missing edges are proven",
+      "do not publish raw-pointer Rebind as game-content API",
+      "pin declared archive and actual resource bytes separately"
+    ],
+    "gameplay_validation": [
+      "after static chain exists, verify normal input/camera/current-field unchanged",
+      "observe cancellation, repeated triggers and frame scheduling; not substitute for missing static evidence"
+    ]
+  },
+  "scope_limitations": [
+    "No whole-program computed-alias proof.",
+    "A native child/owner callback whose target is selected by an unavailable UI resource is not silently declared impossible.",
+    "No runtime execution, original edits, arbitrary native invocation, injected Lua or Server code.",
+    "Evidence PASS is not B feature completion / T01 FULL-PASS."
+  ]
+}
