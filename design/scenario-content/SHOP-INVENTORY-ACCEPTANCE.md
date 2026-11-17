@@ -15,6 +15,8 @@
 
 NPC 商店、裝備、倉庫與銷毀已有各自規格及離線收據。點數商城也已接入共用資產交易，詳見 [付款與領取](CASH-SHOP-CHECKOUT-AND-CLAIM.md)。整體可用性仍須指定 v2 正常操作證據，不能將離線通過視為完整商城驗收。
 
+最新接續 [商城道具使用](CASH-SHOP-CONSUMABLES.md)：5238 全資源回復、27461／27462 的 CP 入帳與商品冷卻已接；多格快捷總量、銷毀後保留計數及正常 TCP 使用入帳有專項覆蓋。時裝容量與套裝加成仍待開發。
+
 [NPC 買賣](PHINDOS-GROCER-TRADE.md) · [裝備穿戴](EQUIPMENT-WEAR-WIRE.md) · [倉庫](PHINDOS-BANK-VAULT.md) · [銷毀](BAG-ITEM-DESTRUCTION.md) · [批次驗收](../testing/S00-CONTENT-BATCH-TESTS.md)
 
 ## 點數商城來源導航

@@ -31,6 +31,8 @@
 
 ## 保留的未完成
 
+後續 [商城道具使用](CASH-SHOP-CONSUMABLES.md) 已在同一 TCP 路線加入 27461 的正常背包使用，最終 CP 5,000 且書已扣除；另補兩本 CP 書及 5238 回復書的正常使用，最新套件為 569 項。上文 566 項與未使用書籍的末狀態保留為當時版本證據，不能視為最新版本仍無法使用。
+
 最終 Host／檢查器 Release 建置各 0 warning、0 error，完整 HappyPath **566/566** 通過。獨立 TCP 案例通過 1 項，完整套件收據 SHA 為 `2413b5d7dd330f736dfdb0023868e71566ea4f9a8cd2f8cbc0df4fd06a741cec`。[摘要收據](cash-shop-tcp-validation.json)保留初次銀行操作失敗、修正通過與最終完整套件各自 TRX hash／計數；原始檔留私有本機 TestResults。
 
 指定 v2 的商城實際開窗、價格選項、結果／保管箱 UI、拖曳與模型顯示仍待 CS-01。限時／促銷、class 30 直接效果、其他特殊商品及時裝 OPTION_LIST／套裝數值仍待開發；未知模型鍵保留。原生 MEF、官方付款與官方 Server 規則不因本輪 socket 通過而成立。正式 REQ／RR 與驗收狀態不自動提升。
