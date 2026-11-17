@@ -1,5 +1,7 @@
 # 點數商城購物車與保管箱的收發接線
 
+強化保護材料接續：[付款與鐵匠串接](../../../design/scenario-content/CASH-ENHANCEMENT-PROTECTION.md)、[來源驗證器](verify_protection.py)及[收據](protection-source-verification.json)。已分開六種材料的 Grade／SafetyID 與價格；5523／27484 有付費使用合成證據，高品級裝備路線及指定 v2 仍待完成。
+
 完全復活卷軸接續：[付費取得與戰鬥串接](../../../design/scenario-content/CASH-COMPLETE-REVIVAL.md)、[原表核對](verify_revival.py)與[來源收據](revival-source-verification.json)。付款／領取／復活資源與保存有離線證據，原視聽、死亡懲罰／評級恢復及指定 v2 仍未完成。
 
 髮型／染髮接續：[商城髮型與染髮用品](../../../design/scenario-content/CASH-HAIR-STYLE-AND-DYE.md)提供原 Action 13／14、0070 頭部語意、原 Hair.ipk／描述檔的來源及獨立 Server 投影；用途、交易、正常驗證及實機待測分開記錄。
