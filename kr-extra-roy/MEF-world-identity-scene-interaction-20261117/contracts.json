@@ -1,0 +1,270 @@
+{
+  "schema": "mef-world-scene-contract-v1",
+  "classification": "BOUNDED_STATIC_NATIVE_AND_EXPLICIT_COMPATIBLE_DESIGN_NOT_NATIVE_MEF",
+  "binary_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+  "identity_domains": {
+    "world_entity": {
+      "width_bits": 16,
+      "owner": "0xFAB130",
+      "tree": "owner+0x08",
+      "actor_field": "+0x04",
+      "type_discriminator": "low byte participates in 0007 factory and 001A preamble"
+    },
+    "q_slot": {
+      "width_bits": 32,
+      "owner": "0xFB73C0",
+      "tree": "owner+0x1C",
+      "not_world_entity": true
+    },
+    "point": {
+      "key_bits": 16,
+      "category": "signed-byte normalized to WORD",
+      "identity": [
+        "category",
+        "key"
+      ],
+      "owner": "0xFB79F0"
+    },
+    "control_relation": {
+      "source": "S2C 000A +2 DWORD",
+      "lookup": "world owner+0x18",
+      "not_proven_monster_wave_id": true
+    },
+    "server_generation": {
+      "origin": "compatible Server design",
+      "present_in_native_packets": false
+    }
+  },
+  "native_contracts": {
+    "tutorial_delete_object": {
+      "native": "0x4A9FE0",
+      "registrar": "0x4AB580",
+      "closure": "0x4AC7D0",
+      "converter": "0x4ACB70",
+      "key_formula": "(converted_int & 255) << 8",
+      "world_erase": "0x4DFBC0",
+      "arbitrary_world_id": false,
+      "new_lua_ack_pushed": false,
+      "same_001A_controller_preclear": false,
+      "conditions": [
+        "normal formal VM and binding",
+        "known valid target lifetime/type",
+        "valid world/controller",
+        "no unaccounted controller or other references"
+      ],
+      "scope": "No controller-kind-4 check in selected native body; not proof of universal safe use"
+    },
+    "s2c_000A_control_association": {
+      "handler": "0x4AF920",
+      "direction": "S2C",
+      "minimum_view_formula": "7+4*N for nonnegative signed-byte count",
+      "fields": [
+        [
+          0,
+          "u16",
+          "opcode"
+        ],
+        [
+          2,
+          "u32",
+          "relationKey"
+        ],
+        [
+          6,
+          "i8",
+          "rowCount"
+        ],
+        [
+          7,
+          "u16",
+          "first actorId"
+        ],
+        [
+          9,
+          "u16",
+          "first relationId"
+        ]
+      ],
+      "row_stride": 4,
+      "missing_relation": "return 0x80004005",
+      "missing_actor": "skip row; no delayed replay",
+      "local_relation_preamble": "controller v+0x14, then v+0x0C",
+      "not_c2s_input_packet": true,
+      "not_spawn_or_group_clear_ack": true
+    },
+    "s2c_000C_state": {
+      "minimum_view_formula": "2+3*N",
+      "row": [
+        "u16 EntityId",
+        "i8 stateId"
+      ],
+      "cmonster_state3": "CDeadState",
+      "same_state_reentry_skipped": false,
+      "implies_world_erase": false,
+      "ordinary_lua_result_bridge": "UNPROVED"
+    },
+    "s2c_001A_remove": {
+      "minimum_view_formula": "4+2*N",
+      "word_at_2": "business meaning not assigned here",
+      "controller_hit_action": "clear the checked controller slot collection, not only the matched slot",
+      "erase_target": "0x4DFBC0",
+      "death_or_group_clear": false
+    },
+    "s2c_0012_map": {
+      "handler": "0x4B24F0",
+      "minimum_view_bytes": 6,
+      "map_key": [
+        2,
+        "u32"
+      ],
+      "ordered_calls": [
+        "0x5449A0 point clear",
+        "0x544F50 controller reset",
+        "0x4DF510 map load"
+      ],
+      "same_key_still_runs_preamble": true,
+      "whole_world_clear_guaranteed": false,
+      "handler_return": "0x100; not a network success ACK"
+    },
+    "lb_change_map": {
+      "native": "0x4A0AC0",
+      "target": "0x4DF510",
+      "same_point_controller_preamble": false
+    },
+    "world_map_load": {
+      "native": "0x4DF510",
+      "current_key": "world+0x48",
+      "same_key": "music tail only",
+      "different_key_store_before_resources": true,
+      "map_string_cache": "world+0x4C",
+      "graphics": "MAP -> 0x7C1E00",
+      "bounds": "BOUND -> 0x4DF1A0",
+      "minimap": "0x56CD10",
+      "TRIGGER_to_MEF_execution": "UNPROVED"
+    },
+    "q_map": {
+      "load": "0x563C40",
+      "restore": "0x563FA0",
+      "camera_backup_dwords": 11,
+      "backup_map_key": "Q+0x34",
+      "backup_count": 1,
+      "restore_writes_world_current_key": false,
+      "restore_refreshes_backup_key_from_world": true,
+      "ordinary_bounds_minimap_point_restore_guaranteed": false
+    },
+    "loading_brackets": {
+      "0023": {
+        "handler": "0x494860",
+        "write": "Client+0xBFD4=1"
+      },
+      "0024": {
+        "handler": "0x494A90",
+        "write": "Client+0xBFD4=0"
+      },
+      "world_binding_or_lua_ack": false,
+      "post_0024_4E0590": "map audio finalization, not entity acknowledgement"
+    },
+    "s2c_0014_ready": {
+      "minimum_view_bytes": 2,
+      "dispatcher": "0x4C5930 -> current field v+0x2C",
+      "scenario": "0x4C4910 -> 0x4B2570",
+      "mission": "0x4230F0 -> 0x4B2570 (+ F4262)",
+      "controller_write": "+0x04=1",
+      "mask_clear_if_q_inactive": 1,
+      "clears_q_wait_mask_2": false,
+      "clears_controller_busy_58": false
+    },
+    "checkpoint": {
+      "snapshot": "0027 replaces full collection",
+      "delta": "0048 modifies first (category,key), no upsert",
+      "lua_setter": "Tutorial.SetCheckPointStatus -> 0x544940 -> 0x543B30",
+      "expected_status_values": [
+        0,
+        1
+      ],
+      "wire_generation": false,
+      "001C": "some category fallback intent only"
+    }
+  },
+  "server_design_partial_order": [
+    [
+      "prevalidated context and resources",
+      "map transition operations"
+    ],
+    [
+      "explicit old actor retention/removal policy",
+      "new actor/binding publication"
+    ],
+    [
+      "0012",
+      "0027 new point snapshot"
+    ],
+    [
+      "known relation record and world actor",
+      "S2C000A references"
+    ],
+    [
+      "0027 target exists",
+      "0048 or Lua point change"
+    ],
+    [
+      "valid controller binding/context",
+      "0014 readiness policy"
+    ],
+    [
+      "corresponding Q End/wait",
+      "appropriate 00EB"
+    ],
+    [
+      "authoritative Server result",
+      "persistent quest/service/reward commit"
+    ]
+  ],
+  "unresolved": [
+    {
+      "id": "WORLD-LUA-EVENT",
+      "edge": "typed world state/death/erase -> ordinary Lua accessible state/callback",
+      "not_satisfied_by": [
+        "Q slot",
+        "Tutorial progress",
+        "Book/Prolog/image completion",
+        "tree count"
+      ]
+    },
+    {
+      "id": "LOCAL-SPAWN-IDENTITY",
+      "edge": "lb.CreateObjectEx per-run actor -> reliable Lua/Server ID correlation",
+      "not_satisfied_by": [
+        "predicted counter",
+        "0007 duplicate",
+        "sporadic C2S input row"
+      ]
+    },
+    {
+      "id": "TRANSITION-DATA",
+      "edge": "real portal typed key -> approved target map/spawn/formation data",
+      "available": "MapList/CaseList/BND member identities and inherited W2 graph mapping",
+      "not_assigned_here": [
+        "portal key",
+        "spawn coordinates",
+        "formation token schema"
+      ]
+    },
+    {
+      "id": "NATIVE-MEF",
+      "edge": "MapList.TRIGGER first loader/grammar",
+      "status": "UNPROVED"
+    },
+    {
+      "id": "UNINTERRUPTED-ENTRY",
+      "edge": "ordinary legal first Lua entry without Q/UI takeover",
+      "status": "UNPROVED"
+    }
+  ],
+  "runtime": {
+    "client_executed": false,
+    "lua_executed": false,
+    "server_executed": false,
+    "gameplay_accepted": false
+  }
+}

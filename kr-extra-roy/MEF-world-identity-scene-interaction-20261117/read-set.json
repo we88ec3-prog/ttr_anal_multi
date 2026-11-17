@@ -1,0 +1,535 @@
+{
+  "schema": "mef-world-scene-readset-v1",
+  "goals": [
+    "typed world identity -> create/bind/update/death/remove; identify actual Lua observation edge",
+    "field/map/visual backup/point/control/loading/ready distinction and necessary transition order"
+  ],
+  "new_or_refined": [
+    {
+      "topic": "Tutorial.DeleteObject",
+      "windows": [
+        "tutorial_delete_object",
+        "tutorial_delete_registrar",
+        "tutorial_delete_closure",
+        "delete_numeric_converter",
+        "world_erase",
+        "controller_slot_get"
+      ],
+      "result": "low-byte-zero projected world ID; no new Lua ACK; not the 001A controller preclear"
+    },
+    {
+      "topic": "S2C000A relation dependencies",
+      "windows": [
+        "s2c000a_binding",
+        "common_primary",
+        "controller_clear",
+        "formation_clear"
+      ],
+      "result": "relation record and actors must exist; local binding preclear and missing-row skip"
+    },
+    {
+      "topic": "001A versus Lua cleanup",
+      "windows": [
+        "delete001a",
+        "world_erase",
+        "controller_clear",
+        "formation_clear",
+        "monster_delete",
+        "monster_cleanup"
+      ],
+      "result": "network path can clear all controller slots before erase; direct Lua projected erase differs"
+    },
+    {
+      "topic": "0012/lb same-map distinction",
+      "windows": [
+        "s2c0012_map",
+        "lb_change_map",
+        "world_map_load",
+        "controller_reset",
+        "point_clear"
+      ],
+      "result": "0012 clears points/slots before same-map resource skip; not complete reset or universal world-clear"
+    },
+    {
+      "topic": "Q visual map backup",
+      "windows": [
+        "q_loadmap",
+        "q_restoremap",
+        "graphics_map_load"
+      ],
+      "result": "single backup; visual loading not ordinary map/BOUND/minimap transition"
+    },
+    {
+      "topic": "loading and ready",
+      "windows": [
+        "frontend_init",
+        "frontend_callback",
+        "client_loading_begin",
+        "client_loading_end",
+        "map_audio_finalize",
+        "mission_secondary",
+        "scenario_secondary",
+        "field_dispatch",
+        "scenario_ready",
+        "mission_ready",
+        "field_ready_common",
+        "common_ready_delegate"
+      ],
+      "result": "0023/24 loading state; 0014 controller ready + conditional mask1 clear; not Q mask2 unlock"
+    }
+  ],
+  "reused_not_claimed_new": [
+    "0007 typed factory and duplicate skip",
+    "lb creation missing ID push and unique-map collision consequences",
+    "Q slot separate CEventActor domain",
+    "000C -> CDeadState visual enter/update vs 001A deletion",
+    "005F ordinary field/controller/page replacement without qco cancellation guarantee",
+    "0027 snapshot / 0048 delta / Lua shared point setter",
+    "00EB Q wait release distinct from active and controller busy",
+    "W2 Case103 nodes1/2 -> map191/192"
+  ],
+  "native_intervals": [
+    {
+      "id": "lb_change_map",
+      "va": "0x4a0ac0",
+      "end": "0x4a0b3c",
+      "bytes": 124,
+      "sha256": "cc2def6a56400c5081242e16e2976bf5ec582ec296f9e4e1b5731f53f45ac382",
+      "scope": "selected contiguous native interval; not whole-callgraph certification"
+    },
+    {
+      "id": "world_map_load",
+      "va": "0x4df510",
+      "end": "0x4dfa9d",
+      "bytes": 1421,
+      "sha256": "1566cf3bbd17d702cd6fcd1ce3b31eccf20c5d771a02f6d2d3997e8ae3cb1513",
+      "scope": "selected contiguous native interval; not whole-callgraph certification"
+    },
+    {
+      "id": "s2c0012_map",
+      "va": "0x4b24f0",
+      "end": "0x4b2566",
+      "bytes": 118,
+      "sha256": "e46c4fa6a9cd974b8aac6b803f4c73f3171bd803e70ca9cb69985eee8b7ac425",
+      "scope": "selected contiguous native interval; not whole-callgraph certification"
+    },
+    {
+      "id": "world_erase",
+      "va": "0x4dfbc0",
+      "end": "0x4dfc2c",
+      "bytes": 108,
+      "sha256": "21ae8dd896a0efbf2fc1719b9b2af83daf1fc550fdb8d3c10097a2a4c642baf8",
+      "scope": "selected contiguous native interval; not whole-callgraph certification"
+    },
+    {
+      "id": "world_clear",
+      "va": "0x4dfe90",
+      "end": "0x4dff23",
+      "bytes": 147,
+      "sha256": "5a5931599c04e6a52f0602868f4fbe48ff1d349acfd7124873a3870c3af92663",
+      "scope": "selected contiguous native interval; not whole-callgraph certification"
+    },
+    {
+      "id": "delete001a",
+      "va": "0x4b28d0",
+      "end": "0x4b2af0",
+      "bytes": 544,
+      "sha256": "77862701c7d9722afe96ff9681e24fa67fef370c922e6813f19e4a441fe13ff4",
+      "scope": "selected contiguous native interval; not whole-callgraph certification"
+    },
+    {
+      "id": "controller_reset",
+      "va": "0x544f50",
+      "end": "0x54503a",
+      "bytes": 234,
+      "sha256": "dadd12921a65f34299f9506ece76e5b6675d37a07047a1566def018984b4daa1",
+      "scope": "selected contiguous native interval; not whole-callgraph certification"
+    },
+    {
+      "id": "controller_clear",
+      "va": "0x545210",
+      "end": "0x54525b",
+      "bytes": 75,
+      "sha256": "e67566d1fbaaeed7c9f2a92d91d2887b09c9854fce3713f8341dfba04fc5f72d",
+      "scope": "selected contiguous native interval; not whole-callgraph certification"
+    },
+    {
+      "id": "common_primary",
+      "va": "0x4add50",
+      "end": "0x4ae380",
+      "bytes": 1584,
+      "sha256": "f9cee5546de393ee1584d8c621e067d56f218559a800556f9b1bdcacc1a6d0f7",
+      "scope": "selected contiguous native interval; not whole-callgraph certification"
+    },
+    {
+      "id": "frontend_callback",
+      "va": "0x4930e0",
+      "end": "0x493170",
+      "bytes": 144,
+      "sha256": "fa3ddb856a41b94391c879bdcbba36c988d543cfa1115304c8a327b37cdace8c",
+      "scope": "selected contiguous native interval; not whole-callgraph certification"
+    },
+    {
+      "id": "s2c000a_binding",
+      "va": "0x4af920",
+      "end": "0x4afaf0",
+      "bytes": 464,
+      "sha256": "303719e82e2e738761415e7e564311bfc5daff03e823895f4e4b86e8c6551d17",
+      "scope": "selected contiguous native interval; not whole-callgraph certification"
+    },
+    {
+      "id": "map_resource_select",
+      "va": "0x4df1a0",
+      "end": "0x4df510",
+      "bytes": 880,
+      "sha256": "0dfb0093212ace8a65251bec897b32ff3a2583bb2d51ac0efddcb63da7bca69a",
+      "scope": "selected contiguous native interval; not whole-callgraph certification"
+    },
+    {
+      "id": "scenario_ready",
+      "va": "0x4c4910",
+      "end": "0x4c4919",
+      "bytes": 9,
+      "sha256": "eae51a936685a059169cc316b6d2ad82fc3925d55cdaf06c139e453f776cb7ba",
+      "scope": "selected contiguous native interval; not whole-callgraph certification"
+    },
+    {
+      "id": "mission_ready",
+      "va": "0x4230f0",
+      "end": "0x42317a",
+      "bytes": 138,
+      "sha256": "b4a47db0284c95a0ef0e53aae15e5e7a24eefce3a737eabc0f6a467f2344d5a5",
+      "scope": "selected contiguous native interval; not whole-callgraph certification"
+    },
+    {
+      "id": "state_packet",
+      "va": "0x4b0130",
+      "end": "0x4b01bf",
+      "bytes": 143,
+      "sha256": "8c455f0159324b40abd9ea1ca240572e9ef169f270961ce32d4e0e5c21d6147b",
+      "scope": "selected contiguous native interval; not whole-callgraph certification"
+    },
+    {
+      "id": "fsm_transition",
+      "va": "0x4ca060",
+      "end": "0x4ca0ab",
+      "bytes": 75,
+      "sha256": "2bef145cdcd604a8197d7838922ae2e06e3fe2822a9e8d2b4c682aeabe729231",
+      "scope": "selected contiguous native interval; not whole-callgraph certification"
+    },
+    {
+      "id": "formation_clear",
+      "va": "0x547750",
+      "end": "0x54780a",
+      "bytes": 186,
+      "sha256": "d7092631f921d0c23b6fd84b7aedd6a2c97797926c3bbdc350508086357c8cb1",
+      "scope": "selected contiguous native interval; not whole-callgraph certification"
+    },
+    {
+      "id": "field_ready_common",
+      "va": "0x4b2570",
+      "end": "0x4b2615",
+      "bytes": 165,
+      "sha256": "6b4339872f50c37744f41598488c54d23e36a7915d4c066bcbb59314acb04292",
+      "scope": "selected contiguous native interval; not whole-callgraph certification"
+    },
+    {
+      "id": "q_loadmap",
+      "va": "0x563c40",
+      "end": "0x563fa0",
+      "bytes": 864,
+      "sha256": "1e99c3897b57d900290b508aa83099f40754807af9713d75ee1435442f6a2fe0",
+      "scope": "selected contiguous native interval; not whole-callgraph certification"
+    },
+    {
+      "id": "q_restoremap",
+      "va": "0x563fa0",
+      "end": "0x5643bd",
+      "bytes": 1053,
+      "sha256": "693ed5e79dd68fbad0adacd08ab767ffc3f6e067155c862b58fe4f321fcbc5bf",
+      "scope": "selected contiguous native interval; not whole-callgraph certification"
+    },
+    {
+      "id": "graphics_map_load",
+      "va": "0x7c1e00",
+      "end": "0x7c2064",
+      "bytes": 612,
+      "sha256": "672378b0519ad827520e0d67e1afcbc8ca86206a44b053ee77ee3329ba21fc66",
+      "scope": "selected contiguous native interval; not whole-callgraph certification"
+    },
+    {
+      "id": "local_world_create",
+      "va": "0x4a0f70",
+      "end": "0x4a1230",
+      "bytes": 704,
+      "sha256": "19f1361623fcbd9d251539c9224d44fe10f5f6995b525a8748ac7c3909848d5e",
+      "scope": "selected contiguous native interval; not whole-callgraph certification"
+    },
+    {
+      "id": "client_loading_begin",
+      "va": "0x494860",
+      "end": "0x494a82",
+      "bytes": 546,
+      "sha256": "ac163a4174d54fdae80f9b16ed1e32e47fba6d59a4facf0fd77cea6fb8fc586b",
+      "scope": "selected contiguous native interval; not whole-callgraph certification"
+    },
+    {
+      "id": "client_loading_end",
+      "va": "0x494a90",
+      "end": "0x494c39",
+      "bytes": 425,
+      "sha256": "8a58a70ea2b9dceada8bb7b68044e52fc1e47213d8a63c59af73fdbbede5caf0",
+      "scope": "selected contiguous native interval; not whole-callgraph certification"
+    },
+    {
+      "id": "tutorial_delete_object",
+      "va": "0x4a9fe0",
+      "end": "0x4aa06e",
+      "bytes": 142,
+      "sha256": "6cd9ae43af722042847b8a9c5f9972beac001a57c103cffbf2e67263c2c083c7",
+      "scope": "selected contiguous native interval; not whole-callgraph certification"
+    },
+    {
+      "id": "world_avatar_api",
+      "va": "0x4a0b80",
+      "end": "0x4a0dd0",
+      "bytes": 592,
+      "sha256": "6cb531ccc18a941ec688a5bba0d6f6ceb63681fffc724c6096370f055b9ad7c5",
+      "scope": "selected contiguous native interval; not whole-callgraph certification"
+    },
+    {
+      "id": "actor_map_insert",
+      "va": "0x4dff30",
+      "end": "0x4dffaa",
+      "bytes": 122,
+      "sha256": "3f117a1e4bbff0df9e40958c1e7d3af22bdfe8c05860d441437b37af52d18295",
+      "scope": "selected contiguous native interval; not whole-callgraph certification"
+    },
+    {
+      "id": "frontend_init",
+      "va": "0x493170",
+      "end": "0x494356",
+      "bytes": 4582,
+      "sha256": "4f0b7fa15699c519d70d8636e6478d15dc87f475fc71972e5bb41ad5d038d3ae",
+      "scope": "selected contiguous native interval; not whole-callgraph certification"
+    },
+    {
+      "id": "tutorial_delete_registrar",
+      "va": "0x4ab580",
+      "end": "0x4ab61a",
+      "bytes": 154,
+      "sha256": "ff45e9a5d83abbd9aa78db593af45fcc6aee4efd78b021a3624112f7969eb78f",
+      "scope": "selected contiguous native interval; not whole-callgraph certification"
+    },
+    {
+      "id": "tutorial_delete_closure",
+      "va": "0x4ac7d0",
+      "end": "0x4ac82c",
+      "bytes": 92,
+      "sha256": "c6506e7175fa2296ef07be9a992df0bebeedd6cdf0fd2ce6f2eadbed309c6d1c",
+      "scope": "selected contiguous native interval; not whole-callgraph certification"
+    },
+    {
+      "id": "controller_slot_get",
+      "va": "0x545290",
+      "end": "0x5452ac",
+      "bytes": 28,
+      "sha256": "3655bd98c5647734210172057589ff991795bf2a451d8707908727dd660b9f4b",
+      "scope": "selected contiguous native interval; not whole-callgraph certification"
+    },
+    {
+      "id": "point_clear",
+      "va": "0x5449a0",
+      "end": "0x544a00",
+      "bytes": 96,
+      "sha256": "f6ad4aff258ed89dcd0611e6e7c6f766027b04bc35a56d782102c5ace3d795cf",
+      "scope": "selected contiguous native interval; not whole-callgraph certification"
+    },
+    {
+      "id": "state_dead_update",
+      "va": "0x4cb710",
+      "end": "0x4cb7d0",
+      "bytes": 192,
+      "sha256": "e93a33eba2c76f4a4e26266a34a1ba14f98f850f6b8cd550b9fdee86f74ae8e9",
+      "scope": "selected contiguous native interval; not whole-callgraph certification"
+    },
+    {
+      "id": "state_dead_enter",
+      "va": "0x4cb590",
+      "end": "0x4cb710",
+      "bytes": 384,
+      "sha256": "9917db82c62b8039619de6749d575bad7cf2565c83f9c73d060d616f95827610",
+      "scope": "selected contiguous native interval; not whole-callgraph certification"
+    },
+    {
+      "id": "mission_secondary",
+      "va": "0x4bc6e0",
+      "end": "0x4bc750",
+      "bytes": 112,
+      "sha256": "77cd615ad1ce0cae9c77d07298744ad097033ece2c14fceaed3e6a033967b874",
+      "scope": "selected contiguous native interval; not whole-callgraph certification"
+    },
+    {
+      "id": "scenario_secondary",
+      "va": "0x4c46f0",
+      "end": "0x4c4750",
+      "bytes": 96,
+      "sha256": "8f998f48e982fbbe6256e2ee301e1f679f76032d55620b5f3b1c8c739840533b",
+      "scope": "selected contiguous native interval; not whole-callgraph certification"
+    },
+    {
+      "id": "field_dispatch",
+      "va": "0x4c4670",
+      "end": "0x4c46f0",
+      "bytes": 128,
+      "sha256": "2deecc04ff570b803612ebcd2157d86b0659367b80cc081f6a10de1a9c8c5223",
+      "scope": "selected contiguous native interval; not whole-callgraph certification"
+    },
+    {
+      "id": "common_ready_delegate",
+      "va": "0x4c5930",
+      "end": "0x4c5935",
+      "bytes": 5,
+      "sha256": "87fdb8f5c96d84f261623daf2dcbc4e09b759ff4afac405e443e9d4cf0bb1554",
+      "scope": "selected contiguous native interval; not whole-callgraph certification"
+    },
+    {
+      "id": "world_accessor",
+      "va": "0x40f060",
+      "end": "0x40f0e5",
+      "bytes": 133,
+      "sha256": "fc9bce48d1e1d8295f7cc3c0b4dc10bebd59e2434a2090ef5bc04993b43da480",
+      "scope": "selected contiguous native interval; not whole-callgraph certification"
+    },
+    {
+      "id": "delete_numeric_converter",
+      "va": "0x4acb70",
+      "end": "0x4acbe3",
+      "bytes": 115,
+      "sha256": "3dc7ee03ab0c5cb15c58d7bede4c152112acd04d8aae1d2b3cf95671994f55be",
+      "scope": "selected contiguous native interval; not whole-callgraph certification"
+    },
+    {
+      "id": "point_lookup_setter",
+      "va": "0x544940",
+      "end": "0x5449a0",
+      "bytes": 96,
+      "sha256": "6966d1baf8702cf64ad48e8d678062a598aed754c00fac42f746f77fb9891c03",
+      "scope": "selected contiguous native interval; not whole-callgraph certification"
+    },
+    {
+      "id": "point_set_status",
+      "va": "0x543b30",
+      "end": "0x544020",
+      "bytes": 1264,
+      "sha256": "b803c5f50cf0547d7bb9cee3986b63af5727d23422a7202b223312715404c904",
+      "scope": "selected contiguous native interval; not whole-callgraph certification"
+    },
+    {
+      "id": "checkpoint_delta_packet",
+      "va": "0x4b32e0",
+      "end": "0x4b3350",
+      "bytes": 112,
+      "sha256": "d9d2c574eb94cbb8400c2d27f6a407b3fed47bcf58e61438515a2bff0d982a21",
+      "scope": "selected contiguous native interval; not whole-callgraph certification"
+    },
+    {
+      "id": "map_audio_finalize",
+      "va": "0x4e0590",
+      "end": "0x4e0642",
+      "bytes": 178,
+      "sha256": "8b7e26adc92440d1182c2d37fb9cef81d28efff38fb53e01d3216bede170b02b",
+      "scope": "selected contiguous native interval; not whole-callgraph certification"
+    },
+    {
+      "id": "monster_ctor",
+      "va": "0x4d1710",
+      "end": "0x4d18d0",
+      "bytes": 448,
+      "sha256": "41cc95ca5aa7aac20573d3aea111d56f8c53b7c97bb1025dad2185dad5c51577",
+      "scope": "selected contiguous native interval; not whole-callgraph certification"
+    },
+    {
+      "id": "monster_delete",
+      "va": "0x4d18d0",
+      "end": "0x4d1901",
+      "bytes": 49,
+      "sha256": "2cf47102808191c44ba4d7c2f615c10bb0b0defa8c1a7fed2156648514092e0b",
+      "scope": "selected contiguous native interval; not whole-callgraph certification"
+    },
+    {
+      "id": "monster_cleanup",
+      "va": "0x4d1f80",
+      "end": "0x4d1f88",
+      "bytes": 8,
+      "sha256": "ffa540291c94665ee3eaf406cc0f5c54388c0bc0ad71a865bf179a53719187fb",
+      "scope": "selected contiguous native interval; not whole-callgraph certification"
+    },
+    {
+      "id": "minimap_dispatch",
+      "va": "0x56cd10",
+      "end": "0x56cf01",
+      "bytes": 497,
+      "sha256": "cfff3e355d897cf03d2c45a9103a19f5491af76ffd3bce7bf516f892e596e5b6",
+      "scope": "selected contiguous native interval; not whole-callgraph certification"
+    }
+  ],
+  "xref_scope": {
+    "E8_candidate_targets": [
+      "0x4df510",
+      "0x4dfbc0",
+      "0x4dfe90",
+      "0x5449a0"
+    ],
+    "literal_targets": [
+      "0xf7de04"
+    ],
+    "limitations": "Raw literal/rel32 candidates in stated sections; not all instruction boundaries, computed aliases or external modules. Only selected candidate call chains were semantically analyzed."
+  },
+  "resources": {
+    "parsed_members": [
+      "Table/_MapList.xml",
+      "Table/_CaseList.xml",
+      "BoundMap/scenario_pathofpindus01.bnd",
+      "BoundMap/scenario_pathofpindus02.bnd"
+    ],
+    "xml_selected_rows_only_published": true,
+    "BND_geometry_not_reanalysed": true,
+    "referenced_graph_members": "Exact names absent from attached Table/Event indices; inherited W2 graph remains valid as a pinned prior result",
+    "not_scanned": "No exhaustive resource payload search or full game install scan"
+  },
+  "next_edges": [
+    {
+      "id": "W-LUA",
+      "producer": "000C -> actor+F0/4CA060/CDeadState; 001A -> world erase",
+      "missing": "actual ordinary-context native event/state -> registered Lua value/callback with typed identity",
+      "rule": "Do not revisit excluded Tutorial/Q/image result predicates without a new concrete producer connection"
+    },
+    {
+      "id": "RELATION-PRODUCER",
+      "producer": "4AF920 lookup world+0x18, key at packet+2",
+      "missing": "source record producer and actual formation data for selected normal transition",
+      "rule": "Reuse existing T03/T10 world roster/group work before bounded writer search"
+    },
+    {
+      "id": "REAL-TRANSITION-BINDING",
+      "producer": "_CaseList Case103 MAPFLOW/CLUSTER and existing W2 manifest",
+      "missing": "pin the original graph carrier and legal portal/spawn/binding data",
+      "rule": "Do not infer coordinates/portal key from map ID or invent schema"
+    },
+    {
+      "id": "WORLD-CLEAR-CALLER",
+      "producer": "bounded 4DFE90 call candidates",
+      "missing": "which exact chosen transition should preserve or retire actors",
+      "rule": "Analyze the one selected normal transition caller; do not treat all candidate calls as identical"
+    }
+  ],
+  "not_done": [
+    "gameplay/runtime acceptance",
+    "official MEF grammar",
+    "uninterrupted-entry B",
+    "ordinary world event bridge",
+    "complete whole-program indirect-call closure"
+  ],
+  "completion_policy": "Stop this bounded topic at a documented native contract or precise missing edge; do not mark all MEF functions complete"
+}
