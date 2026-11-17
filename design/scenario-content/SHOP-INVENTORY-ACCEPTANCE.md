@@ -28,6 +28,8 @@ NPC 商店、裝備、倉庫與銷毀已有各自規格及離線收據。整體�
 | `5DBAF0` | `FUI::CItemSlotCashShopCart` 建構 | `b646e5efba83fff11d1246b68d3a2c41f83a94dc51fcc1dbb68233f4cb7610ad` |
 | `5DBD40` | `FUI::CItemSlotCashShopInven` 建構 | `74cfc657b510f8da0b46374a5be4064c41d7808fbeccec0a51a73b5ed322a428` |
 
+2026-11-18 追加 [購物車與保管箱收發核對](../../governance/client-variants/20261118-cash-shop/README.md)。原件與指定 v2 的 13 個視窗位元組相同，購物車 `00AC`、專用 S2C `00DF`、一般保管箱領取 C2S `00AD` 及相關結果 consumer 已定位。來源檢查同時核對原表 1,311 筆商品。付款幣別、保管箱身分、初始化及領取入包仍待接續，Server checkout 尚未實作。
+
 來源索引為 `kr-bulk-roy/<BIN SHA>/index.jsonl`，每個地址的 raw 路徑與 SHA 可由 `lookup.py <address> --metadata-only` 讀取。使用前沿用 [大量反編譯的審核邊界](../../shared/integrations/T01-BULK-20261026-02/README.md)。
 
 ## 點數商城接線前需閉合的流程
