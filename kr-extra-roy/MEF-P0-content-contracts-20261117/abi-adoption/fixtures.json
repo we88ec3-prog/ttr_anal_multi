@@ -1,0 +1,1335 @@
+{
+  "schema": "ttr-mef-p0-abi-policy-fixtures-v1",
+  "scope": "Synthetic JSON authoring validation only; no actual Client/Server behavior test",
+  "cases": [
+    {
+      "name": "numeric_integer_switch",
+      "scope": "SYN_AUTHORING_POLICY_ONLY",
+      "plan": {
+        "schema": "ttr-mef-p0-native-call-plan-v1",
+        "format": "NOT_NATIVE_MEF",
+        "target": {
+          "client_version": "kr",
+          "bin_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "abi_contract_sha256": "a09195efd91d50390088fd10cfc46b2ae806dae0c968643ff50e17b599f19916"
+        },
+        "calls": [
+          {
+            "name": "Tutorial.SetKeymapEnabled",
+            "args": [
+              1
+            ],
+            "result": {
+              "mode": "discard"
+            }
+          }
+        ]
+      },
+      "expected_status": "AUTHORING_CONTRACT_PASS_ONLY",
+      "required_error_codes": [],
+      "required_effects": []
+    },
+    {
+      "name": "native_boolean_true_numeric_zero_is_rejected",
+      "scope": "SYN_AUTHORING_POLICY_ONLY",
+      "plan": {
+        "schema": "ttr-mef-p0-native-call-plan-v1",
+        "format": "NOT_NATIVE_MEF",
+        "target": {
+          "client_version": "kr",
+          "bin_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "abi_contract_sha256": "a09195efd91d50390088fd10cfc46b2ae806dae0c968643ff50e17b599f19916"
+        },
+        "calls": [
+          {
+            "name": "Tutorial.SetKeymapEnabled",
+            "args": [
+              true
+            ],
+            "result": {
+              "mode": "discard"
+            }
+          }
+        ]
+      },
+      "expected_status": "REJECTED",
+      "required_error_codes": [
+        "NUMERIC_ABI"
+      ],
+      "required_effects": []
+    },
+    {
+      "name": "manual_boolean_false",
+      "scope": "SYN_AUTHORING_POLICY_ONLY",
+      "plan": {
+        "schema": "ttr-mef-p0-native-call-plan-v1",
+        "format": "NOT_NATIVE_MEF",
+        "target": {
+          "client_version": "kr",
+          "bin_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "abi_contract_sha256": "a09195efd91d50390088fd10cfc46b2ae806dae0c968643ff50e17b599f19916"
+        },
+        "calls": [
+          {
+            "name": "ScenarioTalkTable.open",
+            "args": [
+              12,
+              11,
+              false
+            ],
+            "result": {
+              "mode": "discard"
+            }
+          }
+        ]
+      },
+      "expected_status": "AUTHORING_CONTRACT_PASS_ONLY",
+      "required_error_codes": [],
+      "required_effects": []
+    },
+    {
+      "name": "manual_numeric_zero_is_truthy",
+      "scope": "SYN_AUTHORING_POLICY_ONLY",
+      "plan": {
+        "schema": "ttr-mef-p0-native-call-plan-v1",
+        "format": "NOT_NATIVE_MEF",
+        "target": {
+          "client_version": "kr",
+          "bin_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "abi_contract_sha256": "a09195efd91d50390088fd10cfc46b2ae806dae0c968643ff50e17b599f19916"
+        },
+        "calls": [
+          {
+            "name": "ScenarioTalkTable.open",
+            "args": [
+              12,
+              11,
+              0
+            ],
+            "result": {
+              "mode": "discard"
+            }
+          }
+        ]
+      },
+      "expected_status": "REJECTED",
+      "required_error_codes": [
+        "BOOLEAN_ABI"
+      ],
+      "required_effects": []
+    },
+    {
+      "name": "explicit_nil_is_not_approved_numeric",
+      "scope": "SYN_AUTHORING_POLICY_ONLY",
+      "plan": {
+        "schema": "ttr-mef-p0-native-call-plan-v1",
+        "format": "NOT_NATIVE_MEF",
+        "target": {
+          "client_version": "kr",
+          "bin_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "abi_contract_sha256": "a09195efd91d50390088fd10cfc46b2ae806dae0c968643ff50e17b599f19916"
+        },
+        "calls": [
+          {
+            "name": "Q.ShowObject",
+            "args": [
+              0,
+              null
+            ],
+            "result": {
+              "mode": "discard"
+            }
+          }
+        ]
+      },
+      "expected_status": "REJECTED",
+      "required_error_codes": [
+        "NUMERIC_ABI"
+      ],
+      "required_effects": []
+    },
+    {
+      "name": "missing_suffix_argument",
+      "scope": "SYN_AUTHORING_POLICY_ONLY",
+      "plan": {
+        "schema": "ttr-mef-p0-native-call-plan-v1",
+        "format": "NOT_NATIVE_MEF",
+        "target": {
+          "client_version": "kr",
+          "bin_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "abi_contract_sha256": "a09195efd91d50390088fd10cfc46b2ae806dae0c968643ff50e17b599f19916"
+        },
+        "calls": [
+          {
+            "name": "Q.ShowObject",
+            "args": [
+              0
+            ],
+            "result": {
+              "mode": "discard"
+            }
+          }
+        ]
+      },
+      "expected_status": "REJECTED",
+      "required_error_codes": [
+        "EXACT_ARITY"
+      ],
+      "required_effects": []
+    },
+    {
+      "name": "extra_suffix_argument",
+      "scope": "SYN_AUTHORING_POLICY_ONLY",
+      "plan": {
+        "schema": "ttr-mef-p0-native-call-plan-v1",
+        "format": "NOT_NATIVE_MEF",
+        "target": {
+          "client_version": "kr",
+          "bin_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "abi_contract_sha256": "a09195efd91d50390088fd10cfc46b2ae806dae0c968643ff50e17b599f19916"
+        },
+        "calls": [
+          {
+            "name": "Q.ShowObject",
+            "args": [
+              0,
+              1,
+              2
+            ],
+            "result": {
+              "mode": "discard"
+            }
+          }
+        ]
+      },
+      "expected_status": "REJECTED",
+      "required_error_codes": [
+        "EXACT_ARITY"
+      ],
+      "required_effects": []
+    },
+    {
+      "name": "helper_seven_args_are_not_native_walk_abi",
+      "scope": "SYN_AUTHORING_POLICY_ONLY",
+      "plan": {
+        "schema": "ttr-mef-p0-native-call-plan-v1",
+        "format": "NOT_NATIVE_MEF",
+        "target": {
+          "client_version": "kr",
+          "bin_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "abi_contract_sha256": "a09195efd91d50390088fd10cfc46b2ae806dae0c968643ff50e17b599f19916"
+        },
+        "calls": [
+          {
+            "name": "Q.WalkObject",
+            "args": [
+              0,
+              373,
+              465,
+              20,
+              1,
+              4,
+              3
+            ],
+            "result": {
+              "mode": "discard"
+            }
+          }
+        ]
+      },
+      "expected_status": "REJECTED",
+      "required_error_codes": [
+        "EXACT_ARITY"
+      ],
+      "required_effects": []
+    },
+    {
+      "name": "original_revphase1_zeroarg_endsepia_is_flagged",
+      "scope": "SYN_AUTHORING_POLICY_ONLY",
+      "plan": {
+        "schema": "ttr-mef-p0-native-call-plan-v1",
+        "format": "NOT_NATIVE_MEF",
+        "target": {
+          "client_version": "kr",
+          "bin_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "abi_contract_sha256": "a09195efd91d50390088fd10cfc46b2ae806dae0c968643ff50e17b599f19916"
+        },
+        "calls": [
+          {
+            "name": "Q.EndSepia",
+            "args": [],
+            "result": {
+              "mode": "discard"
+            }
+          }
+        ]
+      },
+      "expected_status": "REJECTED",
+      "required_error_codes": [
+        "EXACT_ARITY"
+      ],
+      "required_effects": []
+    },
+    {
+      "name": "disabled_Q.DeleteObject",
+      "scope": "SYN_AUTHORING_POLICY_ONLY",
+      "plan": {
+        "schema": "ttr-mef-p0-native-call-plan-v1",
+        "format": "NOT_NATIVE_MEF",
+        "target": {
+          "client_version": "kr",
+          "bin_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "abi_contract_sha256": "a09195efd91d50390088fd10cfc46b2ae806dae0c968643ff50e17b599f19916"
+        },
+        "calls": [
+          {
+            "name": "Q.DeleteObject",
+            "args": [
+              0
+            ],
+            "result": {
+              "mode": "discard"
+            }
+          }
+        ]
+      },
+      "expected_status": "REJECTED",
+      "required_error_codes": [
+        "NONFUNCTIONAL_ENTRY"
+      ],
+      "required_effects": []
+    },
+    {
+      "name": "disabled_Q.BalloonTalk",
+      "scope": "SYN_AUTHORING_POLICY_ONLY",
+      "plan": {
+        "schema": "ttr-mef-p0-native-call-plan-v1",
+        "format": "NOT_NATIVE_MEF",
+        "target": {
+          "client_version": "kr",
+          "bin_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "abi_contract_sha256": "a09195efd91d50390088fd10cfc46b2ae806dae0c968643ff50e17b599f19916"
+        },
+        "calls": [
+          {
+            "name": "Q.BalloonTalk",
+            "args": [
+              0,
+              0
+            ],
+            "result": {
+              "mode": "discard"
+            }
+          }
+        ]
+      },
+      "expected_status": "REJECTED",
+      "required_error_codes": [
+        "NONFUNCTIONAL_ENTRY"
+      ],
+      "required_effects": []
+    },
+    {
+      "name": "disabled_Tutorial.InsertObject",
+      "scope": "SYN_AUTHORING_POLICY_ONLY",
+      "plan": {
+        "schema": "ttr-mef-p0-native-call-plan-v1",
+        "format": "NOT_NATIVE_MEF",
+        "target": {
+          "client_version": "kr",
+          "bin_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "abi_contract_sha256": "a09195efd91d50390088fd10cfc46b2ae806dae0c968643ff50e17b599f19916"
+        },
+        "calls": [
+          {
+            "name": "Tutorial.InsertObject",
+            "args": [
+              0
+            ],
+            "result": {
+              "mode": "discard"
+            }
+          }
+        ]
+      },
+      "expected_status": "REJECTED",
+      "required_error_codes": [
+        "NONFUNCTIONAL_ENTRY"
+      ],
+      "required_effects": []
+    },
+    {
+      "name": "disabled_lb.PrintCurrSceneID",
+      "scope": "SYN_AUTHORING_POLICY_ONLY",
+      "plan": {
+        "schema": "ttr-mef-p0-native-call-plan-v1",
+        "format": "NOT_NATIVE_MEF",
+        "target": {
+          "client_version": "kr",
+          "bin_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "abi_contract_sha256": "a09195efd91d50390088fd10cfc46b2ae806dae0c968643ff50e17b599f19916"
+        },
+        "calls": [
+          {
+            "name": "lb.PrintCurrSceneID",
+            "args": [],
+            "result": {
+              "mode": "discard"
+            }
+          }
+        ]
+      },
+      "expected_status": "REJECTED",
+      "required_error_codes": [
+        "NONFUNCTIONAL_ENTRY"
+      ],
+      "required_effects": []
+    },
+    {
+      "name": "count_name_is_not_count",
+      "scope": "SYN_AUTHORING_POLICY_ONLY",
+      "plan": {
+        "schema": "ttr-mef-p0-native-call-plan-v1",
+        "format": "NOT_NATIVE_MEF",
+        "target": {
+          "client_version": "kr",
+          "bin_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "abi_contract_sha256": "a09195efd91d50390088fd10cfc46b2ae806dae0c968643ff50e17b599f19916"
+        },
+        "calls": [
+          {
+            "name": "lb.GetObjectCount",
+            "args": [],
+            "result": {
+              "mode": "discard"
+            }
+          }
+        ]
+      },
+      "expected_status": "REJECTED",
+      "required_error_codes": [
+        "NONFUNCTIONAL_ENTRY"
+      ],
+      "required_effects": []
+    },
+    {
+      "name": "setter_result_is_not_spawn_id",
+      "scope": "SYN_AUTHORING_POLICY_ONLY",
+      "plan": {
+        "schema": "ttr-mef-p0-native-call-plan-v1",
+        "format": "NOT_NATIVE_MEF",
+        "target": {
+          "client_version": "kr",
+          "bin_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "abi_contract_sha256": "a09195efd91d50390088fd10cfc46b2ae806dae0c968643ff50e17b599f19916"
+        },
+        "calls": [
+          {
+            "name": "Q.ShowObject",
+            "args": [
+              0,
+              1
+            ],
+            "result": {
+              "mode": "read_number",
+              "purpose": "LOCAL_OBSERVATION_ONLY",
+              "context": null
+            }
+          }
+        ]
+      },
+      "expected_status": "REJECTED",
+      "required_error_codes": [
+        "NO_VALUE_PRODUCER"
+      ],
+      "required_effects": []
+    },
+    {
+      "name": "query_truthiness_is_not_zero_comparison",
+      "scope": "SYN_AUTHORING_POLICY_ONLY",
+      "plan": {
+        "schema": "ttr-mef-p0-native-call-plan-v1",
+        "format": "NOT_NATIVE_MEF",
+        "target": {
+          "client_version": "kr",
+          "bin_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "abi_contract_sha256": "a09195efd91d50390088fd10cfc46b2ae806dae0c968643ff50e17b599f19916"
+        },
+        "calls": [
+          {
+            "name": "CameraWorks.IsEnded",
+            "args": [],
+            "result": {
+              "mode": "truthiness"
+            }
+          }
+        ]
+      },
+      "expected_status": "REJECTED",
+      "required_error_codes": [
+        "RESULT_MODE"
+      ],
+      "required_effects": []
+    },
+    {
+      "name": "camera_explicit_local_observation",
+      "scope": "SYN_AUTHORING_POLICY_ONLY",
+      "plan": {
+        "schema": "ttr-mef-p0-native-call-plan-v1",
+        "format": "NOT_NATIVE_MEF",
+        "target": {
+          "client_version": "kr",
+          "bin_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "abi_contract_sha256": "a09195efd91d50390088fd10cfc46b2ae806dae0c968643ff50e17b599f19916"
+        },
+        "calls": [
+          {
+            "name": "CameraWorks.IsEnded",
+            "args": [],
+            "result": {
+              "mode": "compare_number",
+              "purpose": "LOCAL_OBSERVATION_ONLY",
+              "context": "CameraWorks.IsEnded:camera_completion",
+              "operator": "==",
+              "value": 1
+            }
+          }
+        ]
+      },
+      "expected_status": "AUTHORING_CONTRACT_PASS_ONLY",
+      "required_error_codes": [],
+      "required_effects": []
+    },
+    {
+      "name": "numeric_predicate_does_not_accept_false",
+      "scope": "SYN_AUTHORING_POLICY_ONLY",
+      "plan": {
+        "schema": "ttr-mef-p0-native-call-plan-v1",
+        "format": "NOT_NATIVE_MEF",
+        "target": {
+          "client_version": "kr",
+          "bin_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "abi_contract_sha256": "a09195efd91d50390088fd10cfc46b2ae806dae0c968643ff50e17b599f19916"
+        },
+        "calls": [
+          {
+            "name": "CameraWorks.IsEnded",
+            "args": [],
+            "result": {
+              "mode": "compare_number",
+              "purpose": "LOCAL_OBSERVATION_ONLY",
+              "context": "CameraWorks.IsEnded:camera_completion",
+              "operator": "==",
+              "value": false
+            }
+          }
+        ]
+      },
+      "expected_status": "REJECTED",
+      "required_error_codes": [
+        "NUMERIC_COMPARISON"
+      ],
+      "required_effects": []
+    },
+    {
+      "name": "local_query_is_not_world_death",
+      "scope": "SYN_AUTHORING_POLICY_ONLY",
+      "plan": {
+        "schema": "ttr-mef-p0-native-call-plan-v1",
+        "format": "NOT_NATIVE_MEF",
+        "target": {
+          "client_version": "kr",
+          "bin_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "abi_contract_sha256": "a09195efd91d50390088fd10cfc46b2ae806dae0c968643ff50e17b599f19916"
+        },
+        "calls": [
+          {
+            "name": "Q.IsAllObjectsStopped",
+            "args": [],
+            "result": {
+              "mode": "compare_number",
+              "purpose": "WORLD_GROUP_DEATH",
+              "context": "Q.IsAllObjectsStopped:q_all_stopped",
+              "operator": "==",
+              "value": 1
+            }
+          }
+        ]
+      },
+      "expected_status": "REJECTED",
+      "required_error_codes": [
+        "RESULT_PURPOSE"
+      ],
+      "required_effects": []
+    },
+    {
+      "name": "fixed_roster_query_not_arbitrary_entity_context",
+      "scope": "SYN_AUTHORING_POLICY_ONLY",
+      "plan": {
+        "schema": "ttr-mef-p0-native-call-plan-v1",
+        "format": "NOT_NATIVE_MEF",
+        "target": {
+          "client_version": "kr",
+          "bin_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "abi_contract_sha256": "a09195efd91d50390088fd10cfc46b2ae806dae0c968643ff50e17b599f19916"
+        },
+        "calls": [
+          {
+            "name": "Tutorial.IsCharacterAvailable",
+            "args": [
+              123
+            ],
+            "result": {
+              "mode": "read_number",
+              "purpose": "LOCAL_OBSERVATION_ONLY",
+              "context": "world:entity123"
+            }
+          }
+        ]
+      },
+      "expected_status": "REJECTED",
+      "required_error_codes": [
+        "OBSERVATION_CONTEXT"
+      ],
+      "required_effects": []
+    },
+    {
+      "name": "loader_diagnostic_only",
+      "scope": "SYN_AUTHORING_POLICY_ONLY",
+      "plan": {
+        "schema": "ttr-mef-p0-native-call-plan-v1",
+        "format": "NOT_NATIVE_MEF",
+        "target": {
+          "client_version": "kr",
+          "bin_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "abi_contract_sha256": "a09195efd91d50390088fd10cfc46b2ae806dae0c968643ff50e17b599f19916"
+        },
+        "calls": [
+          {
+            "name": "lb.DoFile",
+            "args": [
+              "example.lua"
+            ],
+            "result": {
+              "mode": "read_number",
+              "purpose": "LOADER_DIAGNOSTIC_ONLY",
+              "context": "lb.DoFile:open_failure_and_execution_success_share_zero"
+            }
+          }
+        ]
+      },
+      "expected_status": "AUTHORING_CONTRACT_PASS_ONLY",
+      "required_error_codes": [],
+      "required_effects": []
+    },
+    {
+      "name": "loader_zero_must_not_be_success_predicate",
+      "scope": "SYN_AUTHORING_POLICY_ONLY",
+      "plan": {
+        "schema": "ttr-mef-p0-native-call-plan-v1",
+        "format": "NOT_NATIVE_MEF",
+        "target": {
+          "client_version": "kr",
+          "bin_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "abi_contract_sha256": "a09195efd91d50390088fd10cfc46b2ae806dae0c968643ff50e17b599f19916"
+        },
+        "calls": [
+          {
+            "name": "lb.DoFile",
+            "args": [
+              "example.lua"
+            ],
+            "result": {
+              "mode": "compare_number",
+              "purpose": "LOADER_DIAGNOSTIC_ONLY",
+              "context": "lb.DoFile:open_failure_and_execution_success_share_zero",
+              "operator": "==",
+              "value": 0
+            }
+          }
+        ]
+      },
+      "expected_status": "REJECTED",
+      "required_error_codes": [
+        "LOADER_NOT_SUCCESS_PREDICATE"
+      ],
+      "required_effects": []
+    },
+    {
+      "name": "invalid_leader_component",
+      "scope": "SYN_AUTHORING_POLICY_ONLY",
+      "plan": {
+        "schema": "ttr-mef-p0-native-call-plan-v1",
+        "format": "NOT_NATIVE_MEF",
+        "target": {
+          "client_version": "kr",
+          "bin_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "abi_contract_sha256": "a09195efd91d50390088fd10cfc46b2ae806dae0c968643ff50e17b599f19916"
+        },
+        "calls": [
+          {
+            "name": "Q.GetLeaderPosN",
+            "args": [
+              3
+            ],
+            "result": {
+              "mode": "read_number",
+              "purpose": "LOCAL_OBSERVATION_ONLY",
+              "context": "Q.GetLeaderPosN:leader_position_component"
+            }
+          }
+        ]
+      },
+      "expected_status": "REJECTED",
+      "required_error_codes": [
+        "LEADER_COMPONENT"
+      ],
+      "required_effects": []
+    },
+    {
+      "name": "outside_tutorial_layout",
+      "scope": "SYN_AUTHORING_POLICY_ONLY",
+      "plan": {
+        "schema": "ttr-mef-p0-native-call-plan-v1",
+        "format": "NOT_NATIVE_MEF",
+        "target": {
+          "client_version": "kr",
+          "bin_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "abi_contract_sha256": "a09195efd91d50390088fd10cfc46b2ae806dae0c968643ff50e17b599f19916"
+        },
+        "calls": [
+          {
+            "name": "Tutorial.GetControlStatus",
+            "args": [
+              32
+            ],
+            "result": {
+              "mode": "read_number",
+              "purpose": "LOCAL_OBSERVATION_ONLY",
+              "context": "Tutorial.GetControlStatus:control_progress"
+            }
+          }
+        ]
+      },
+      "expected_status": "REJECTED",
+      "required_error_codes": [
+        "CONTROL_INDEX"
+      ],
+      "required_effects": []
+    },
+    {
+      "name": "empty_final_music_retains",
+      "scope": "SYN_AUTHORING_POLICY_ONLY",
+      "plan": {
+        "schema": "ttr-mef-p0-native-call-plan-v1",
+        "format": "NOT_NATIVE_MEF",
+        "target": {
+          "client_version": "kr",
+          "bin_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "abi_contract_sha256": "a09195efd91d50390088fd10cfc46b2ae806dae0c968643ff50e17b599f19916"
+        },
+        "calls": [
+          {
+            "name": "Q.SetFinalMusic",
+            "args": [
+              ""
+            ],
+            "result": {
+              "mode": "discard"
+            }
+          }
+        ]
+      },
+      "expected_status": "AUTHORING_CONTRACT_PASS_ONLY",
+      "required_error_codes": [],
+      "required_effects": [
+        "APPEND_ZERO_RETAINS_CURRENT_FINAL_MUSIC"
+      ]
+    },
+    {
+      "name": "space_final_music_clears",
+      "scope": "SYN_AUTHORING_POLICY_ONLY",
+      "plan": {
+        "schema": "ttr-mef-p0-native-call-plan-v1",
+        "format": "NOT_NATIVE_MEF",
+        "target": {
+          "client_version": "kr",
+          "bin_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "abi_contract_sha256": "a09195efd91d50390088fd10cfc46b2ae806dae0c968643ff50e17b599f19916"
+        },
+        "calls": [
+          {
+            "name": "Q.SetFinalMusic",
+            "args": [
+              " "
+            ],
+            "result": {
+              "mode": "discard"
+            }
+          }
+        ]
+      },
+      "expected_status": "AUTHORING_CONTRACT_PASS_ONLY",
+      "required_error_codes": [],
+      "required_effects": [
+        "CLEAR_ON_LEADING_ASCII_SPACE"
+      ]
+    },
+    {
+      "name": "two_final_music_names_append",
+      "scope": "SYN_AUTHORING_POLICY_ONLY",
+      "plan": {
+        "schema": "ttr-mef-p0-native-call-plan-v1",
+        "format": "NOT_NATIVE_MEF",
+        "target": {
+          "client_version": "kr",
+          "bin_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "abi_contract_sha256": "a09195efd91d50390088fd10cfc46b2ae806dae0c968643ff50e17b599f19916"
+        },
+        "calls": [
+          {
+            "name": "Q.SetFinalMusic",
+            "args": [
+              "a.ogg"
+            ],
+            "result": {
+              "mode": "discard"
+            }
+          },
+          {
+            "name": "Q.SetFinalMusic",
+            "args": [
+              "b.ogg"
+            ],
+            "result": {
+              "mode": "discard"
+            }
+          }
+        ]
+      },
+      "expected_status": "AUTHORING_CONTRACT_PASS_ONLY",
+      "required_error_codes": [],
+      "required_effects": [
+        "APPEND_NOT_REPLACE_REQUIRES_PRIOR_STATE_REVIEW",
+        "APPEND_NOT_REPLACE_REQUIRES_PRIOR_STATE_REVIEW"
+      ]
+    },
+    {
+      "name": "unicode_whitespace_not_native_ascii_policy",
+      "scope": "SYN_AUTHORING_POLICY_ONLY",
+      "plan": {
+        "schema": "ttr-mef-p0-native-call-plan-v1",
+        "format": "NOT_NATIVE_MEF",
+        "target": {
+          "client_version": "kr",
+          "bin_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "abi_contract_sha256": "a09195efd91d50390088fd10cfc46b2ae806dae0c968643ff50e17b599f19916"
+        },
+        "calls": [
+          {
+            "name": "Q.SetFinalMusic",
+            "args": [
+              " "
+            ],
+            "result": {
+              "mode": "discard"
+            }
+          }
+        ]
+      },
+      "expected_status": "REJECTED",
+      "required_error_codes": [
+        "UNREVIEWED_WHITESPACE"
+      ],
+      "required_effects": []
+    },
+    {
+      "name": "empty_audio_path_is_not_special_clear",
+      "scope": "SYN_AUTHORING_POLICY_ONLY",
+      "plan": {
+        "schema": "ttr-mef-p0-native-call-plan-v1",
+        "format": "NOT_NATIVE_MEF",
+        "target": {
+          "client_version": "kr",
+          "bin_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "abi_contract_sha256": "a09195efd91d50390088fd10cfc46b2ae806dae0c968643ff50e17b599f19916"
+        },
+        "calls": [
+          {
+            "name": "Q.PlaySound",
+            "args": [
+              ""
+            ],
+            "result": {
+              "mode": "discard"
+            }
+          }
+        ]
+      },
+      "expected_status": "REJECTED",
+      "required_error_codes": [
+        "STRING_ABI"
+      ],
+      "required_effects": []
+    },
+    {
+      "name": "nul_string_is_rejected",
+      "scope": "SYN_AUTHORING_POLICY_ONLY",
+      "plan": {
+        "schema": "ttr-mef-p0-native-call-plan-v1",
+        "format": "NOT_NATIVE_MEF",
+        "target": {
+          "client_version": "kr",
+          "bin_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "abi_contract_sha256": "a09195efd91d50390088fd10cfc46b2ae806dae0c968643ff50e17b599f19916"
+        },
+        "calls": [
+          {
+            "name": "Q.PlaySound",
+            "args": [
+              "a\u0000b.wav"
+            ],
+            "result": {
+              "mode": "discard"
+            }
+          }
+        ]
+      },
+      "expected_status": "REJECTED",
+      "required_error_codes": [
+        "STRING_ABI"
+      ],
+      "required_effects": []
+    },
+    {
+      "name": "two_images_are_replacements",
+      "scope": "SYN_AUTHORING_POLICY_ONLY",
+      "plan": {
+        "schema": "ttr-mef-p0-native-call-plan-v1",
+        "format": "NOT_NATIVE_MEF",
+        "target": {
+          "client_version": "kr",
+          "bin_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "abi_contract_sha256": "a09195efd91d50390088fd10cfc46b2ae806dae0c968643ff50e17b599f19916"
+        },
+        "calls": [
+          {
+            "name": "Q.FlyingObject",
+            "args": [
+              "a.dds",
+              0,
+              0,
+              100,
+              100,
+              100,
+              1
+            ],
+            "result": {
+              "mode": "discard"
+            }
+          },
+          {
+            "name": "Q.FlyingObject",
+            "args": [
+              "b.dds",
+              0,
+              0,
+              100,
+              100,
+              100,
+              1
+            ],
+            "result": {
+              "mode": "discard"
+            }
+          }
+        ]
+      },
+      "expected_status": "AUTHORING_CONTRACT_PASS_ONLY",
+      "required_error_codes": [],
+      "required_effects": [
+        "CANCEL_PREVIOUS_Q_TRACKED_IMAGE_BEFORE_ALLOCATION",
+        "CANCEL_PREVIOUS_Q_TRACKED_IMAGE_BEFORE_ALLOCATION"
+      ]
+    },
+    {
+      "name": "fractional_integer_no_fpu_rounding_dependency",
+      "scope": "SYN_AUTHORING_POLICY_ONLY",
+      "plan": {
+        "schema": "ttr-mef-p0-native-call-plan-v1",
+        "format": "NOT_NATIVE_MEF",
+        "target": {
+          "client_version": "kr",
+          "bin_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "abi_contract_sha256": "a09195efd91d50390088fd10cfc46b2ae806dae0c968643ff50e17b599f19916"
+        },
+        "calls": [
+          {
+            "name": "Tutorial.SetKeymapEnabled",
+            "args": [
+              0.5
+            ],
+            "result": {
+              "mode": "discard"
+            }
+          }
+        ]
+      },
+      "expected_status": "REJECTED",
+      "required_error_codes": [
+        "NUMERIC_ABI"
+      ],
+      "required_effects": []
+    },
+    {
+      "name": "integer_overflow",
+      "scope": "SYN_AUTHORING_POLICY_ONLY",
+      "plan": {
+        "schema": "ttr-mef-p0-native-call-plan-v1",
+        "format": "NOT_NATIVE_MEF",
+        "target": {
+          "client_version": "kr",
+          "bin_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "abi_contract_sha256": "a09195efd91d50390088fd10cfc46b2ae806dae0c968643ff50e17b599f19916"
+        },
+        "calls": [
+          {
+            "name": "Q.FadeColor",
+            "args": [
+              4294967295
+            ],
+            "result": {
+              "mode": "discard"
+            }
+          }
+        ]
+      },
+      "expected_status": "REJECTED",
+      "required_error_codes": [
+        "NUMERIC_ABI"
+      ],
+      "required_effects": []
+    },
+    {
+      "name": "huge_integer_must_reject_without_crash",
+      "scope": "SYN_AUTHORING_POLICY_ONLY",
+      "plan": {
+        "schema": "ttr-mef-p0-native-call-plan-v1",
+        "format": "NOT_NATIVE_MEF",
+        "target": {
+          "client_version": "kr",
+          "bin_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "abi_contract_sha256": "a09195efd91d50390088fd10cfc46b2ae806dae0c968643ff50e17b599f19916"
+        },
+        "calls": [
+          {
+            "name": "Q.FadeColor",
+            "args": [
+              10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+            ],
+            "result": {
+              "mode": "discard"
+            }
+          }
+        ]
+      },
+      "expected_status": "REJECTED",
+      "required_error_codes": [
+        "NUMERIC_ABI"
+      ],
+      "required_effects": []
+    },
+    {
+      "name": "float32_overflow",
+      "scope": "SYN_AUTHORING_POLICY_ONLY",
+      "plan": {
+        "schema": "ttr-mef-p0-native-call-plan-v1",
+        "format": "NOT_NATIVE_MEF",
+        "target": {
+          "client_version": "kr",
+          "bin_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "abi_contract_sha256": "a09195efd91d50390088fd10cfc46b2ae806dae0c968643ff50e17b599f19916"
+        },
+        "calls": [
+          {
+            "name": "Q.MoveCamera",
+            "args": [
+              3.5e+38,
+              0,
+              0
+            ],
+            "result": {
+              "mode": "discard"
+            }
+          }
+        ]
+      },
+      "expected_status": "REJECTED",
+      "required_error_codes": [
+        "NUMERIC_ABI"
+      ],
+      "required_effects": []
+    },
+    {
+      "name": "float32_subnormal_underflow_is_numeric_policy_only",
+      "scope": "SYN_AUTHORING_POLICY_ONLY",
+      "plan": {
+        "schema": "ttr-mef-p0-native-call-plan-v1",
+        "format": "NOT_NATIVE_MEF",
+        "target": {
+          "client_version": "kr",
+          "bin_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "abi_contract_sha256": "a09195efd91d50390088fd10cfc46b2ae806dae0c968643ff50e17b599f19916"
+        },
+        "calls": [
+          {
+            "name": "Q.MoveCamera",
+            "args": [
+              1e-100,
+              0,
+              0
+            ],
+            "result": {
+              "mode": "discard"
+            }
+          }
+        ]
+      },
+      "expected_status": "AUTHORING_CONTRACT_PASS_ONLY",
+      "required_error_codes": [],
+      "required_effects": []
+    },
+    {
+      "name": "numeric_string_not_authoring_policy",
+      "scope": "SYN_AUTHORING_POLICY_ONLY",
+      "plan": {
+        "schema": "ttr-mef-p0-native-call-plan-v1",
+        "format": "NOT_NATIVE_MEF",
+        "target": {
+          "client_version": "kr",
+          "bin_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "abi_contract_sha256": "a09195efd91d50390088fd10cfc46b2ae806dae0c968643ff50e17b599f19916"
+        },
+        "calls": [
+          {
+            "name": "Tutorial.SetKeymapEnabled",
+            "args": [
+              "1"
+            ],
+            "result": {
+              "mode": "discard"
+            }
+          }
+        ]
+      },
+      "expected_status": "REJECTED",
+      "required_error_codes": [
+        "NUMERIC_ABI"
+      ],
+      "required_effects": []
+    },
+    {
+      "name": "non_ascii_string_has_encoding_gate",
+      "scope": "SYN_AUTHORING_POLICY_ONLY",
+      "plan": {
+        "schema": "ttr-mef-p0-native-call-plan-v1",
+        "format": "NOT_NATIVE_MEF",
+        "target": {
+          "client_version": "kr",
+          "bin_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "abi_contract_sha256": "a09195efd91d50390088fd10cfc46b2ae806dae0c968643ff50e17b599f19916"
+        },
+        "calls": [
+          {
+            "name": "Q.PlaySound",
+            "args": [
+              "音效.wav"
+            ],
+            "result": {
+              "mode": "discard"
+            }
+          }
+        ]
+      },
+      "expected_status": "AUTHORING_CONTRACT_PASS_ONLY",
+      "required_error_codes": [],
+      "required_effects": []
+    },
+    {
+      "name": "empty_plan_not_a_certificate",
+      "scope": "SYN_AUTHORING_POLICY_ONLY",
+      "plan": {
+        "schema": "ttr-mef-p0-native-call-plan-v1",
+        "format": "NOT_NATIVE_MEF",
+        "target": {
+          "client_version": "kr",
+          "bin_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "abi_contract_sha256": "a09195efd91d50390088fd10cfc46b2ae806dae0c968643ff50e17b599f19916"
+        },
+        "calls": []
+      },
+      "expected_status": "REJECTED",
+      "required_error_codes": [
+        "CALL_LIST"
+      ],
+      "required_effects": []
+    },
+    {
+      "name": "wrong_target",
+      "scope": "SYN_AUTHORING_POLICY_ONLY",
+      "plan": {
+        "schema": "ttr-mef-p0-native-call-plan-v1",
+        "format": "NOT_NATIVE_MEF",
+        "target": {
+          "client_version": "kr",
+          "bin_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+          "abi_contract_sha256": "a09195efd91d50390088fd10cfc46b2ae806dae0c968643ff50e17b599f19916"
+        },
+        "calls": [
+          {
+            "name": "Q.EndCutScene",
+            "args": [],
+            "result": {
+              "mode": "discard"
+            }
+          }
+        ]
+      },
+      "expected_status": "REJECTED",
+      "required_error_codes": [
+        "TARGET_IDENTITY"
+      ],
+      "required_effects": []
+    },
+    {
+      "name": "unknown_readiness_claim",
+      "scope": "SYN_AUTHORING_POLICY_ONLY",
+      "plan": {
+        "schema": "ttr-mef-p0-native-call-plan-v1",
+        "format": "NOT_NATIVE_MEF",
+        "target": {
+          "client_version": "kr",
+          "bin_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "abi_contract_sha256": "a09195efd91d50390088fd10cfc46b2ae806dae0c968643ff50e17b599f19916"
+        },
+        "calls": [
+          {
+            "name": "Q.EndCutScene",
+            "args": [],
+            "result": {
+              "mode": "discard"
+            }
+          }
+        ],
+        "deployment_ready": true
+      },
+      "expected_status": "REJECTED",
+      "required_error_codes": [
+        "EXACT_FIELDS"
+      ],
+      "required_effects": []
+    },
+    {
+      "name": "unknown_call_success_claim",
+      "scope": "SYN_AUTHORING_POLICY_ONLY",
+      "plan": {
+        "schema": "ttr-mef-p0-native-call-plan-v1",
+        "format": "NOT_NATIVE_MEF",
+        "target": {
+          "client_version": "kr",
+          "bin_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "abi_contract_sha256": "a09195efd91d50390088fd10cfc46b2ae806dae0c968643ff50e17b599f19916"
+        },
+        "calls": [
+          {
+            "name": "Q.EndCutScene",
+            "args": [],
+            "result": {
+              "mode": "discard"
+            },
+            "success": true
+          }
+        ]
+      },
+      "expected_status": "REJECTED",
+      "required_error_codes": [
+        "EXACT_FIELDS"
+      ],
+      "required_effects": []
+    },
+    {
+      "name": "argument_string_not_array",
+      "scope": "SYN_AUTHORING_POLICY_ONLY",
+      "plan": {
+        "schema": "ttr-mef-p0-native-call-plan-v1",
+        "format": "NOT_NATIVE_MEF",
+        "target": {
+          "client_version": "kr",
+          "bin_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "abi_contract_sha256": "a09195efd91d50390088fd10cfc46b2ae806dae0c968643ff50e17b599f19916"
+        },
+        "calls": [
+          {
+            "name": "Q.EndCutScene",
+            "args": "",
+            "result": {
+              "mode": "discard"
+            }
+          }
+        ]
+      },
+      "expected_status": "REJECTED",
+      "required_error_codes": [
+        "ARGUMENT_SHAPE"
+      ],
+      "required_effects": []
+    },
+    {
+      "name": "nonstring_result_mode_rejected",
+      "scope": "SYN_AUTHORING_POLICY_ONLY",
+      "plan": {
+        "schema": "ttr-mef-p0-native-call-plan-v1",
+        "format": "NOT_NATIVE_MEF",
+        "target": {
+          "client_version": "kr",
+          "bin_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+          "abi_contract_sha256": "a09195efd91d50390088fd10cfc46b2ae806dae0c968643ff50e17b599f19916"
+        },
+        "calls": [
+          {
+            "name": "Q.EndCutScene",
+            "args": [],
+            "result": {
+              "mode": [
+                "discard"
+              ]
+            }
+          }
+        ]
+      },
+      "expected_status": "REJECTED",
+      "required_error_codes": [
+        "RESULT_MODE"
+      ],
+      "required_effects": []
+    }
+  ],
+  "json_rejections": [
+    {
+      "name": "duplicate_keys",
+      "text": "{\"calls\":[],\"calls\":[1]}"
+    },
+    {
+      "name": "nan_extension",
+      "text": "{\"x\":NaN}"
+    },
+    {
+      "name": "infinity_extension",
+      "text": "{\"x\":Infinity}"
+    },
+    {
+      "name": "lone_surrogate_key",
+      "text": "{\"\\ud800\":0}"
+    }
+  ]
+}

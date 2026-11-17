@@ -1,0 +1,136 @@
+{
+  "schema": "ttr-mef-p0-original-zeroarg-compatibility-v1",
+  "id": "ORIGINAL-REVPHASE1-ENDSEPIA-ZERO",
+  "format": "NOT_NATIVE_MEF",
+  "scope": "Only this original zero-user-argument CALL to the unchanged normal Q.EndSepia C binding",
+  "source_bin_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+  "source_member": {
+    "carrier": "06-Event.stp",
+    "carrier_sha256": "2e68e0202565530e574e0810ad7f758a2fc8d6826a0de0975ccaff12c2d4718b",
+    "path": "Event/qbase.lua",
+    "block_id": 7378,
+    "stored_offset": 10618896,
+    "stored_length": 11836,
+    "first_block": 10370,
+    "last_block": 10381,
+    "stored_sha256": "d6e01d85194f452d56961252d797a0e671d7e34a11fe07e96155220f27ee4cc3",
+    "decoded_length": 11836,
+    "decoded_sha256": "d6e01d85194f452d56961252d797a0e671d7e34a11fe07e96155220f27ee4cc3",
+    "prefix": "1b4c75615100010404040800"
+  },
+  "original_call": {
+    "prototype": 74,
+    "helper": "RevPhase1",
+    "selected_instructions": [
+      {
+        "pc": 36,
+        "raw_offset": 11236,
+        "word": "0x5",
+        "op": "GETGLOBAL",
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "constant": "Q"
+      },
+      {
+        "pc": 37,
+        "raw_offset": 11240,
+        "word": "0x434006",
+        "op": "GETTABLE",
+        "A": 0,
+        "B": 0,
+        "C": 269,
+        "RK_C": {
+          "constant": "EndSepia"
+        }
+      },
+      {
+        "pc": 38,
+        "raw_offset": 11244,
+        "word": "0x80401c",
+        "op": "CALL",
+        "A": 0,
+        "B": 1,
+        "C": 1
+      }
+    ]
+  },
+  "binding": {
+    "name": "Q.EndSepia",
+    "registrar": "0x5684a0",
+    "closure": "0x56a100",
+    "marshaller": "0x56a430",
+    "native": "0x565600",
+    "formal_arguments": 1,
+    "actual_user_arguments": 0
+  },
+  "preconditions": [
+    "The original Q.EndSepia lookup still denotes the registered C closure (function TValue tag 6, C flag nonzero).",
+    "The selected original Lua CALL B=1 is executed with a valid ordinary Lua frame.",
+    "No enabled debug hook changes the frame/top/callee. Fresh native state sets hook mask to zero; later mutation is not excluded.",
+    "Any required allocation returns normally through the ordinary allocator with valid retained stack content. Allocation failure/stack error is not a successful call.",
+    "No runtime replacement of the native callback slot, allocator, bytecode, globals, or corrupt memory is claimed by this static contract."
+  ],
+  "proof_steps": [
+    {
+      "id": "Z1",
+      "source": "helper-bridge-evidence.json",
+      "anchor": "qbase P74 PC36..38",
+      "claim": "GETGLOBAL Q; GETTABLE EndSepia; CALL A=0 B=1 C=1; zero user args, zero requested results."
+    },
+    {
+      "id": "Z2",
+      "source": "SUPERVISOR_NATIVE:vm_call",
+      "anchor": "0x6fd029..0x6fd045",
+      "claim": "B=1 sets L.top=ra+16; ra is the callee TValue, then passes ra and L to precall."
+    },
+    {
+      "id": "Z3",
+      "source": "SUPERVISOR_NATIVE:precall",
+      "anchor": "0x6fe1c6;0x6fe1ec;0x6fe2e6..0x6fe360",
+      "claim": "Original callee is tag6/C closure. C path sets ci.func=ra, ci.base=ra+16 and ci.top=L.top+320; it does not append user args or change L.top on the no-growth/no-hook path."
+    },
+    {
+      "id": "Z4",
+      "source": "native-evidence.json:F_006FDCB0,F_006FDC30,F_006FDD90,F_006FDD10,F_00700880,F_006F7170,F_006F74B0,F_00897A66",
+      "anchor": "0x6fdc3c;0x6fe321;IAT0xbd21e0",
+      "claim": "Stack growth relocates top and frame addresses by the same old-stack/new-stack displacement. CI growth relocates CallInfo only. Default allocator reaches KERNEL32.HeapReAlloc; normal successful growth preserves the referenced callee value. No broad allocator/error-handler certification."
+    },
+    {
+      "id": "Z5",
+      "source": "ABI_NATIVE:F_0056A100",
+      "anchor": "0x56a125..0x56a140",
+      "claim": "Closure passes the same L to marshaller without adding Lua values."
+    },
+    {
+      "id": "Z6",
+      "source": "ABI_NATIVE:F_006F50F0,F_0056A430",
+      "anchor": "0x6f510f..0x6f5115;0x56a43f..0x56a499",
+      "claim": "Index -1 resolves to L.top-16=callee. Tag6 is neither number3 nor string4, therefore the explicit default branch pushes native integer0."
+    },
+    {
+      "id": "Z7",
+      "source": "native-evidence.json:F_00565600",
+      "anchor": "0x565608..0x565635",
+      "claim": "Native function writes FE36D4=4, sets FE36DC bit1 if absent and writes the supplied zero to FE36D8 on both flag branches."
+    }
+  ],
+  "derived_native_argument": {
+    "kind": "integer32",
+    "value": 0,
+    "source_lua_value_kind": "function",
+    "source_is_explicit_nil": false
+  },
+  "native_effect": {
+    "state_at_FE36D4": 4,
+    "bit_at_FE36DC_set": 1,
+    "parameter_at_FE36D8": 0,
+    "immediate_visual_completion_proved": false
+  },
+  "original_compatibility_review": "BOUNDED_NATIVE_ZERO_DERIVED",
+  "new_authoring_policy": "REQUIRE_ONE_EXPLICIT_INTEGER; original special-case compatibility does not relax exact arity",
+  "general_missing_argument_policy": "UNKNOWN_UNLESS_SPECIFIC_FRAME_PROOF; never equate arbitrary missing args to nil",
+  "deployment_ready": false,
+  "lua_executed": false,
+  "formal_status_changed": false
+}

@@ -1,0 +1,134 @@
+{
+  "schema": "ttr-mef-p0-helper-adoption-rules-v1",
+  "format": "NOT_NATIVE_MEF",
+  "source": "helper-bridge-evidence.json",
+  "scope": "Source-derived typed transfer rules, not a compiler or Lua runtime",
+  "rules": [
+    {
+      "id": "HELPER-CREATE",
+      "helper": "CreateObject",
+      "prototype": 62,
+      "parameter_count": 9,
+      "native": "Q.CreateObject",
+      "native_parameter_count": 9,
+      "transfers": {
+        "1": "arg1 content slot",
+        "2": "arg2 model identity",
+        "3": "arg3",
+        "4": "arg4",
+        "5": "arg5",
+        "6": "number0 becomes number1; otherwise arg6",
+        "7": "number1 iff arg7 Lua-equals number0, else number0; written/read through global isVisible",
+        "8": "arg8",
+        "9": "arg9; nonzero is item/appearance context, not another Q actor slot"
+      },
+      "conditions": [
+        "Original binding/global environment; no intervening hook mutation of isVisible.",
+        "Boot FALSE is number0 only after its prefix executes and before later writes."
+      ],
+      "native_argument_7_kind": "integer32",
+      "counterexamples": [
+        {
+          "input": {
+            "lua_type": "number",
+            "value": 0
+          },
+          "equals_number_zero": true,
+          "native_argument_7": 1
+        },
+        {
+          "input": {
+            "lua_type": "boolean",
+            "value": false
+          },
+          "equals_number_zero": false,
+          "native_argument_7": 0
+        },
+        {
+          "input": {
+            "lua_type": "nil",
+            "value": null
+          },
+          "equals_number_zero": false,
+          "native_argument_7": 0
+        },
+        {
+          "input": {
+            "lua_type": "number",
+            "value": 1
+          },
+          "equals_number_zero": false,
+          "native_argument_7": 0
+        }
+      ]
+    },
+    {
+      "id": "HELPER-WALK",
+      "helper": "WalkObject",
+      "prototype": 26,
+      "parameter_count": 7,
+      "native": "Q.WalkObject",
+      "native_parameter_count": 6,
+      "transfers": [
+        "arg1",
+        "arg2",
+        "arg3",
+        "arg5 (arg4 direction is not forwarded)",
+        "arg6 == -1 becomes4; otherwise arg6",
+        "P25 speed-step conversion of arg7"
+      ],
+      "speed_conversion": {
+        "0": 1,
+        "1": 1.2,
+        "2": 0.5,
+        "3": 0.25,
+        "4": 0.125,
+        "5": 0,
+        "other": "diagnostic and number1"
+      },
+      "condition": "Formal qbase helper only, Lua type-sensitive comparisons; do not coerce boolean/nil/string into a speed step.",
+      "prepass_boundary": "Prepass temporarily rebinds WalkObject at 55D6A0 to 55CED0; its 55D188..55D18C negative-integer normalization to4 is a distinct contract. See sibling content-dependencies; do not replace formal ==-1 with prepass <0."
+    },
+    {
+      "id": "HELPER-TALK",
+      "helper": "OpenTalkScene/OpenAutoTalkScene",
+      "prototypes": [
+        17,
+        18
+      ],
+      "native": "ScenarioTalkTable.open",
+      "third_argument": "LOADBOOL true for P17, LOADBOOL false for P18; these are not the Boot numeric TRUE/FALSE globals",
+      "side_effect": "Sets g_scenePlaying from global TRUE before native call; then WaitForScene."
+    },
+    {
+      "id": "HELPER-MUSIC",
+      "helper": "PlayMusic",
+      "prototype": 21,
+      "native": "Q.PlayMusic",
+      "transfers": [
+        "prepend literal Sound/ to name",
+        "global TRUE as integer loop flag"
+      ],
+      "condition": "Baseline Boot yields number1; later global mutation remains possible; follows with coroutine yield."
+    },
+    {
+      "id": "HELPER-FLYING",
+      "helper": "FlyingObject",
+      "prototype": 38,
+      "native": "Q.FlyingObject",
+      "parameter_count": 7,
+      "transfers": "Seven arguments pass through; then coroutine yield; native replacement ownership contract still applies."
+    },
+    {
+      "id": "HELPER-ENDSEPIA",
+      "helper": "RevPhase1",
+      "prototype": 74,
+      "native": "Q.EndSepia",
+      "pc": 38,
+      "original_compatibility": "zeroarg-endsepia-contract.json#ORIGINAL-REVPHASE1-ENDSEPIA-ZERO",
+      "new_authoring_policy": "Explicit one integer required."
+    }
+  ],
+  "deployment_ready": false,
+  "lua_executed": false
+}

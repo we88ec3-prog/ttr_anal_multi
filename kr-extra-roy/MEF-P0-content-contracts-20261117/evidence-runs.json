@@ -1,0 +1,100 @@
+{
+  "schema": "MEF_P0_EVIDENCE_RUNS_V1",
+  "runs": [
+    {
+      "cwd": "abi-adoption",
+      "receipt": "abi-adoption/verification-result.json",
+      "argv": [
+        "{python}",
+        "-B",
+        "verify_evidence.py",
+        "--repo",
+        "{repo}",
+        "--sources",
+        "{sources}"
+      ],
+      "required_fields": {
+        "status": "PASS_REPRODUCIBLE_BOUNDED_RESEARCH",
+        "deployment_ready": false,
+        "client_executed": false,
+        "lua_executed": false,
+        "server_executed": false,
+        "formal_status_changed": false
+      },
+      "name": "abi",
+      "stdout_format": "json"
+    },
+    {
+      "cwd": "content-dependencies",
+      "receipt": "content-dependencies/verification-result.json",
+      "argv": [
+        "{python}",
+        "-B",
+        "verify_evidence.py",
+        "--repo",
+        "{repo}",
+        "--sources",
+        "{sources}",
+        "--supplemental",
+        "{supplemental}"
+      ],
+      "required_fields": {
+        "status": "PASS_REPRODUCIBLE_BOUNDED_ANALYSIS",
+        "ready": false,
+        "full_transitive_payload_enumeration_complete": false,
+        "exact_runtime_selection": "BLOCKED_MISSING_ORIGINAL_SOURCE",
+        "target_lua_client_server_execution": false,
+        "formal_T01_RR_S00_status_changed": false
+      },
+      "name": "resources",
+      "stdout_format": "json"
+    },
+    {
+      "cwd": "execution-lifecycle",
+      "receipt": "execution-lifecycle/verification-result.json",
+      "argv": [
+        "{python}",
+        "-B",
+        "verify_evidence.py",
+        "--repo",
+        "{repo}",
+        "--bin",
+        "{sources}/02-Tartaros.bin",
+        "--event",
+        "{sources}/06-Event.stp"
+      ],
+      "required_fields": {
+        "all_matched": true,
+        "deployment_ready": false,
+        "selected_original_image_zero_fadeout_branch_closed": true,
+        "client_executed": false,
+        "lua_executed": false,
+        "server_executed": false,
+        "formal_status_changed": false
+      },
+      "name": "lifecycle",
+      "stdout_format": "json"
+    },
+    {
+      "cwd": "integration",
+      "receipt": "integration/verification-result.json",
+      "argv": [
+        "{python}",
+        "-B",
+        "verify_context.py",
+        "--repo",
+        "{repo}"
+      ],
+      "required_fields": {
+        "status": "PASS",
+        "deployment_ready": false,
+        "client_executed": false,
+        "lua_executed": false,
+        "server_executed": false,
+        "formal_status_changed": false
+      },
+      "name": "integration",
+      "stdout_format": "json"
+    }
+  ]
+}

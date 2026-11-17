@@ -1,0 +1,205 @@
+{
+  "schema": "ttr-mef-p0-errata-adoption-v1",
+  "source": "REUSE_ERRATA",
+  "followup_source": "REUSE_FOLLOWUP_ERRATA",
+  "records": [
+    {
+      "id": "ERRATA-01",
+      "published_entry": {
+        "path": "kr-extra-roy/MEF-feature-lifecycle-20261117/REPORT.md",
+        "location": "§1 永久停留圖片列、§6.1 第二段",
+        "status": "SUPERSEDED",
+        "old_claim": "再次建立圖片沒有先取消舊M+40，只覆寫最後handle。",
+        "correction": "0x56496A先call0x564A60，取消舊handle後才配置／發布新圖；串行永久圖不是因此保留未取消舊圖。"
+      },
+      "adoption_rule": "E-IMAGE",
+      "required_action": "所有新索引與工具採 create先取消舊圖、再配置／發布；串行替換不等同多圖並存或同步回收。撤銷舊模型之相反語義，保留歷史結果與原始ASM。",
+      "adoption_status": "ADOPTED_WITH_ORIGINAL_BOUNDARIES"
+    },
+    {
+      "id": "ERRATA-02",
+      "published_entry": {
+        "path": "kr-extra-roy/MEF-feature-lifecycle-20261117/REPORT.md",
+        "location": "§6.4 最後一句、§11 SYN測試適用性",
+        "status": "QUALIFIED_AND_PARTLY_SUPERSEDED",
+        "old_claim": "用handle覆寫推論舊圖不在清理範圍；模型PASS可支持該推論。",
+        "correction": "單次Del仍只查目前handle，但先前create已標舊圖alive=0；物理回收要合格manager pass。指定錯誤SYN預期不能支持native語義。"
+      },
+      "adoption_rule": "E-IMAGE",
+      "required_action": "所有新索引與工具採 create先取消舊圖、再配置／發布；串行替換不等同多圖並存或同步回收。撤銷舊模型之相反語義，保留歷史結果與原始ASM。",
+      "adoption_status": "ADOPTED_WITH_ORIGINAL_BOUNDARIES"
+    },
+    {
+      "id": "ERRATA-03",
+      "published_entry": {
+        "path": "kr-extra-roy/MEF-feature-lifecycle-20261117/capability-lifecycle.tsv",
+        "location": "Q.FlyingObject的ABI/語義欄；Q.FlyingObject/Q.DelFlyingObject的cleanup解讀",
+        "status": "SUPERSEDED_OR_QUALIFIED",
+        "old_claim": "新建只覆蓋Q保存的最後handle；不能清所有歷史圖。",
+        "correction": "新建先取消再發布。Del不是共享圖片全掃仍成立，但不可推成串行Q建立留下未取消舊圖。"
+      },
+      "adoption_rule": "E-IMAGE",
+      "required_action": "所有新索引與工具採 create先取消舊圖、再配置／發布；串行替換不等同多圖並存或同步回收。撤銷舊模型之相反語義，保留歷史結果與原始ASM。",
+      "adoption_status": "ADOPTED_WITH_ORIGINAL_BOUNDARIES"
+    },
+    {
+      "id": "ERRATA-04",
+      "published_entry": {
+        "path": "kr-extra-roy/MEF-feature-lifecycle-20261117/feature-families.json",
+        "location": "id=flying_image owner/cleanup及缺口解讀",
+        "status": "QUALIFIED",
+        "old_claim": "只有最近handle，不能清所有歷史圖。",
+        "correction": "owner範圍仍正確；補create前綴取消，撤銷對串行多圖無取消的推論。"
+      },
+      "adoption_rule": "E-IMAGE",
+      "required_action": "所有新索引與工具採 create先取消舊圖、再配置／發布；串行替換不等同多圖並存或同步回收。撤銷舊模型之相反語義，保留歷史結果與原始ASM。",
+      "adoption_status": "ADOPTED_WITH_ORIGINAL_BOUNDARIES"
+    },
+    {
+      "id": "ERRATA-05",
+      "published_entry": {
+        "path": "kr-extra-roy/MEF-feature-lifecycle-20261117/CAPABILITIES.md",
+        "location": "Q飛行圖片列",
+        "status": "QUALIFIED",
+        "old_claim": "不能清所有歷史圖。",
+        "correction": "保留不是全共享owner sweep的限制；加入create先取消上張。"
+      },
+      "adoption_rule": "E-IMAGE",
+      "required_action": "所有新索引與工具採 create先取消舊圖、再配置／發布；串行替換不等同多圖並存或同步回收。撤銷舊模型之相反語義，保留歷史結果與原始ASM。",
+      "adoption_status": "ADOPTED_WITH_ORIGINAL_BOUNDARIES"
+    },
+    {
+      "id": "ERRATA-06",
+      "published_entry": {
+        "path": "kr-extra-roy/MEF-feature-lifecycle-20261117/SERVER-HANDOFF.md",
+        "location": "圖片策略列",
+        "status": "QUALIFIED",
+        "old_claim": "不得多張hold靠一次Del。",
+        "correction": "若需求同時多張Q永久圖則新建會取代上張，不能保證並存；若只是串行替換，先前圖片已有取消，不再以洩漏前提拒絕。"
+      },
+      "adoption_rule": "E-IMAGE",
+      "required_action": "所有新索引與工具採 create先取消舊圖、再配置／發布；串行替換不等同多圖並存或同步回收。撤銷舊模型之相反語義，保留歷史結果與原始ASM。",
+      "adoption_status": "ADOPTED_WITH_ORIGINAL_BOUNDARIES"
+    },
+    {
+      "id": "ERRATA-07",
+      "published_entry": {
+        "path": "kr-extra-roy/MEF-feature-lifecycle-20261117/models.py",
+        "location": "ImageHolder.create",
+        "status": "SUPERSEDED",
+        "old_claim": "create直接插入images並更新last_handle，不先cancel_last。",
+        "correction": "本包reference_model.QImageOwner先begin_replacement/cancel_last，再publish_replacement。"
+      },
+      "adoption_rule": "E-IMAGE",
+      "required_action": "所有新索引與工具採 create先取消舊圖、再配置／發布；串行替換不等同多圖並存或同步回收。撤銷舊模型之相反語義，保留歷史結果與原始ASM。",
+      "adoption_status": "ADOPTED_WITH_ORIGINAL_BOUNDARIES"
+    },
+    {
+      "id": "ERRATA-08",
+      "published_entry": {
+        "path": "kr-extra-roy/MEF-feature-lifecycle-20261117/test_models.py",
+        "location": "SyntheticOwnerTests.test_last_handle_does_not_delete_first",
+        "status": "SUPERSEDED",
+        "old_claim": "createA/createB/cancelLast/sweep後A不deleted，B deleted。",
+        "correction": "在所選正常串行條件，A在createB前綴取消，B由explicitDel取消；各合格sweep後兩者都可回收。"
+      },
+      "adoption_rule": "E-IMAGE",
+      "required_action": "所有新索引與工具採 create先取消舊圖、再配置／發布；串行替換不等同多圖並存或同步回收。撤銷舊模型之相反語義，保留歷史結果與原始ASM。",
+      "adoption_status": "ADOPTED_WITH_ORIGINAL_BOUNDARIES"
+    },
+    {
+      "id": "ERRATA-09",
+      "published_entry": {
+        "path": "kr-extra-roy/MEF-feature-lifecycle-20261117/models.py",
+        "location": "check_plan image_hold_count>1；test_models.py::PlanTests.test_two_persistent_images_rejected",
+        "status": "INTERPRETATION_RESTRICTED",
+        "old_claim": "image_hold_count>1不區分同時持有和串行替換。",
+        "correction": "只可作同時並存多張Q持久圖片的規格限制；不能用它否定依正確cancel-before-create完成的串行替換。"
+      },
+      "adoption_rule": "E-IMAGE",
+      "required_action": "所有新索引與工具採 create先取消舊圖、再配置／發布；串行替換不等同多圖並存或同步回收。撤銷舊模型之相反語義，保留歷史結果與原始ASM。",
+      "adoption_status": "ADOPTED_WITH_ORIGINAL_BOUNDARIES"
+    },
+    {
+      "id": "ERRATA-10",
+      "published_entry": {
+        "path": "kr-extra-roy/MEF-feature-lifecycle-20261117/verification-result.json",
+        "location": "合成測試PASS／整體all_matched對語義的用途",
+        "status": "HISTORICAL_RESULT_NOT_NATIVE_AUTHORITY",
+        "old_claim": "過去測試曾PASS。",
+        "correction": "保留歷史執行事實；其中指定SYN case的前提錯誤已撤銷，本輪不把舊合成總PASS當native驗證。"
+      },
+      "adoption_rule": "E-IMAGE",
+      "required_action": "所有新索引與工具採 create先取消舊圖、再配置／發布；串行替換不等同多圖並存或同步回收。撤銷舊模型之相反語義，保留歷史結果與原始ASM。",
+      "adoption_status": "ADOPTED_WITH_ORIGINAL_BOUNDARIES"
+    },
+    {
+      "id": "ERRATA-11",
+      "published_entry": {
+        "path": "kr-extra-roy/MEF-feature-lifecycle-20261117/native-evidence.asm",
+        "location": "q_flying_create 0x564940..0x564A5B，特別0x56496A",
+        "status": "RETAINED_VALID_EVIDENCE",
+        "old_claim": "完整ASM已含call0x564A60。",
+        "correction": "原始字節無更正；本輪修正其解讀。"
+      },
+      "adoption_rule": "E-IMAGE",
+      "required_action": "所有新索引與工具採 create先取消舊圖、再配置／發布；串行替換不等同多圖並存或同步回收。撤銷舊模型之相反語義，保留歷史結果與原始ASM。",
+      "adoption_status": "ADOPTED_WITH_ORIGINAL_BOUNDARIES"
+    },
+    {
+      "id": "ERRATA-12",
+      "published_entry": {
+        "path": "kr-extra-roy/MEF-full-surface-native-continuation-20261116/audit.py",
+        "location": "PARSER_SHA",
+        "status": "HISTORICAL_PIN_MISMATCH",
+        "old_claim": "parser SHA為3a7e2751274b9c1cc43f514e8ab13a5b48ff5983251f847334e213baab0381d2。",
+        "correction": "基準Git實存parser SHA為8eb16bbc06940769197b2a3446c66a024a3e98d1c44f035ce69c4fee36212a56；完整審讀後本包pin真實版本，只匯入data reader。未聲稱舊aggregate重跑PASS。"
+      },
+      "adoption_rule": "E-PARSER",
+      "required_action": "只匯入本輪manifest固定的原Git parser；不聲稱舊aggregate已重跑通過，不以歷史PARSER_SHA覆蓋目前來源。",
+      "adoption_status": "ADOPTED_WITH_ORIGINAL_BOUNDARIES"
+    },
+    {
+      "id": "ERRATA-13",
+      "published_entry": {
+        "path": "reuse/report.md",
+        "location": "§1、§5.1–5.3、§6.2–6.3、§8",
+        "status": "REVISED_BEFORE_PUBLICATION_AFTER_FOLLOWUP",
+        "old_claim": "只有預載層已證；catalog+54非空時的CDoll回載尚未閉合，仍保留actor可能因該層替換而失去資源的過寬推論。",
+        "correction": "追加證明CDoll有獨立R+5C引用、有效request同R回載、release對稱與原D callback強持有；正常保留Doll不因僅減level3便卸載。level event不是全queue drain。詳../reuse-followup/report.md。"
+      },
+      "adoption_rule": "E-DOLL",
+      "required_action": "保留Doll獨立引用／同R有效request回載／對稱release／callback強持有；層級event不等於全queue drain，zero-Doll投影不得預測有Doll場景。",
+      "adoption_status": "ADOPTED_WITH_ORIGINAL_BOUNDARIES"
+    },
+    {
+      "id": "ERRATA-14",
+      "published_entry": {
+        "path": "reuse/reference_model.py",
+        "location": "former LevelLeases and four layer-only SYN cases",
+        "status": "RESTRICTED_ZERO_DOLL_PROJECTION",
+        "old_claim": "layer-only resident集合若被用來預測保留Doll，遺漏Doll引用。",
+        "correction": "改為ZeroDollLayerProjection並改名4case，明示沒有Doll/其他引用。正常保留Doll、同R回載與callback案例在../reuse-followup/reference_model.py。"
+      },
+      "adoption_rule": "E-DOLL",
+      "required_action": "保留Doll獨立引用／同R有效request回載／對稱release／callback強持有；層級event不等於全queue drain，zero-Doll投影不得預測有Doll場景。",
+      "adoption_status": "ADOPTED_WITH_ORIGINAL_BOUNDARIES"
+    },
+    {
+      "id": "ERRATA-15",
+      "published_entry": {
+        "path": "kr-extra-roy/MEF-capabilities-20261116/world-npc/report.md",
+        "location": "base/Q vtable+30=4C8050→4C7DF0(actor,0) 的外推用途",
+        "status": "SLOT_FACT_RETAINED_ACTUAL_Q_DIRECT_CALL_REFINED",
+        "old_claim": "槽資料若被外推成Q.CreateObject實際一律非immediate。",
+        "correction": "槽資料仍真實；實際Q.CreateObject在56322E直接call4D0FE0，4D0FE1 push1傳共同初始化。不得以槽內容替代實際caller。"
+      },
+      "adoption_rule": "E-IMMEDIATE",
+      "required_action": "Q.CreateObject實際direct caller56322E→4D0FE0→push1優先於base/Q vtable槽；不把其他receiver同槽的0當本路呼叫值。",
+      "adoption_status": "ADOPTED_WITH_ORIGINAL_BOUNDARIES"
+    }
+  ],
+  "historical_files_modified": false,
+  "historical_test_pass_is_native_authority": false,
+  "formal_status_changed": false
+}

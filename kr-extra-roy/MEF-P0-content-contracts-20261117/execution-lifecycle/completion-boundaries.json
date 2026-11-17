@@ -1,0 +1,124 @@
+{
+  "schema": "ttr-mef-p0-lifecycle-completion-v1",
+  "analysis_goal": "Close same-context ownership, real selected normal cleanup, item/lease release and three run-strategy contracts; do not prove arbitrary all-engine cancellation or deploy without missing input.",
+  "obligations": [
+    {
+      "id": "L01",
+      "question": "Which owner/state is acquired and who releases it?",
+      "status": "BOUNDED_ANALYSIS_COMPLETE",
+      "evidence": [
+        "owner-ledger.json",
+        "source-manifest.json"
+      ]
+    },
+    {
+      "id": "L02",
+      "question": "What happens before actor destruction and how are parts/old D held?",
+      "status": "BOUNDED_NATIVE_JOIN_COMPLETE",
+      "evidence": [
+        "N01_doll_release_before_actor_delete",
+        "N02_item_install_marks_dirty",
+        "N03_item_remove_marks_dirty",
+        "N04_item_selection_dispatch",
+        "doll_native"
+      ]
+    },
+    {
+      "id": "L03",
+      "question": "What is a legal cleanup order including map and camera restore?",
+      "status": "BOUNDED_ANALYSIS_COMPLETE",
+      "evidence": [
+        "cleanup-order.json",
+        "selected-scene-lifecycle.json",
+        "selected-image-contract.json",
+        "qbase-lifecycle.json",
+        "presentation"
+      ]
+    },
+    {
+      "id": "L04",
+      "question": "Does empty final music clear and does Start clear by same helper?",
+      "status": "BOUNDED_NATIVE_JOIN_COMPLETE",
+      "evidence": [
+        "N05_string_assign",
+        "N06_first_char_space_test",
+        "N07_locale_space_test",
+        "audiovisual_native",
+        "reuse_native"
+      ]
+    },
+    {
+      "id": "L05",
+      "question": "Can current qco removal or level job be a global completion barrier?",
+      "status": "BOUNDED_NEGATIVE_AND_POSITIVE_CONTRACT_COMPLETE",
+      "evidence": [
+        "scheduler",
+        "entry",
+        "doll",
+        "run-contracts.json"
+      ]
+    },
+    {
+      "id": "L06",
+      "question": "Are finite, same-run and two-run choices explicit and non-interchangeable?",
+      "status": "DESIGN_ANALYSIS_COMPLETE_CONTENT_BINDING_PENDING",
+      "evidence": [
+        "run-contracts.json"
+      ]
+    },
+    {
+      "id": "L07",
+      "question": "What exactly must Server/integration/gameplay still supply?",
+      "status": "HANDOFF_DEFINED_NOT_IMPLEMENTED",
+      "evidence": [
+        "SERVER-HANDOFF.md",
+        "run-contracts.json"
+      ]
+    }
+  ],
+  "remaining_by_layer": {
+    "client_reverse_engineering": [
+      {
+        "scope": "If a future feature requires native all-queue cancellation/drain ACK or state3 same-object recovery",
+        "current_evidence": "Selected level-job wait, original-D strong holds and result budget do not implement such a contract; selected tick excludes state3; cleanup state1 gate does not reset3.",
+        "searched": [
+          "Q Start/DeleteAll level-job wait and worker 79DEA0 priority/queues",
+          "7A8E70 request -> 79E980 worker -> 79DB10 result budget -> 7A90F0 original-D apply",
+          "7AA9A0 request strong-pair release -> 7A51C0 state1 destructor release",
+          "4C8360 -> D+8.v+8 -> 7A57C0 state1 cleanup gate; non1 skips state reset",
+          "7A5C50 dirty/state2/state3 request gate and prior 7A63C0 draw gates"
+        ],
+        "excluded_candidates": [
+          "Qreq+4 is first-load, not cancel",
+          "level-job signal is selected job completion, not all queues empty",
+          "normal End / qco removeAll has no native all-owner finally",
+          "7A57C0 does not change state2 or3 via its state1 block",
+          "render is not a proved retry producer"
+        ],
+        "next_required": "For a newly required all-drain contract: reachable queue-empty + in-flight + apply/release consumer on the same manager/context and corresponding observation. For same-object state3 recovery: another reachable D+24 writer or proven replace/recreate policy. No new static candidate is supplied by the selected scenes; do not invent ACK or call an address.",
+        "p0_policy": "No supplied run profile claims this capability; full-engine absence is not proved."
+      }
+    ],
+    "server_development": [
+      "Adopt per-Client serialized run/content-version ownership policy and existing REQ-0019/0021 pipeline",
+      "Separate dispatch/report/cleanup-pending/business result; record no-ACK/unknown explicitly",
+      "Close exact compatible selector pair and replay/seen policy when implementing two runs"
+    ],
+    "integration": [
+      "Bind real payloads/runtime selection and same-page/current-owner baseline",
+      "Original EndSepia zero-arg native0 and Q2440 fadeout0 guarded skip are statically closed; keep these original compatibility behaviors separate from explicit-arity authoring validation",
+      "Use only existing legal entry/delivery, no Client modification in this batch"
+    ],
+    "gameplay": [
+      "Normal selected scene audio/visual/input/return flow on exact Client version",
+      "Actual paired run only after entries and assets are bound"
+    ]
+  },
+  "no_completion_promotion": {
+    "deployment_ready": false,
+    "gameplay_verified": false,
+    "formal_rr_changed": false,
+    "t01_full_pass_changed": false,
+    "s00_acceptance_changed": false
+  }
+}

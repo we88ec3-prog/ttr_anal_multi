@@ -1,0 +1,178 @@
+{
+  "schema": "ttr-mef-p0-cleanup-dag-v1",
+  "classification": "NOT_NATIVE_MEF_AUTHORING_POLICY",
+  "nodes": [
+    "acquire_context",
+    "phase_work",
+    "camera_stop",
+    "camera_detach_if_chosen",
+    "talk_hide",
+    "ui_restore",
+    "image_cancel_if_chosen",
+    "final_music_policy",
+    "map_restore_if_acquired",
+    "q_tree_clear_if_exclusive",
+    "snapshot_pop_if_acquired",
+    "world_restore_if_changed",
+    "slow_end_if_changed",
+    "letterbox_hide_if_changed",
+    "sepia_end_if_changed",
+    "input_enable",
+    "normal_end",
+    "return_without_yield",
+    "next_start"
+  ],
+  "conditional_edges": [
+    {
+      "before": "acquire_context",
+      "after": "phase_work",
+      "reason": "Known context/ownership before use"
+    },
+    {
+      "before": "phase_work",
+      "after": "camera_stop",
+      "reason": "Stop new actor/camera production before release"
+    },
+    {
+      "before": "camera_stop",
+      "after": "camera_detach_if_chosen",
+      "reason": "Detach destroys public current access; Stop first"
+    },
+    {
+      "before": "camera_stop",
+      "after": "q_tree_clear_if_exclusive",
+      "reason": "Attach lookup must no longer consume deleted Q actors"
+    },
+    {
+      "before": "camera_stop",
+      "after": "map_restore_if_acquired",
+      "reason": "Avoid active camera work overwriting restored pose"
+    },
+    {
+      "before": "camera_stop",
+      "after": "snapshot_pop_if_acquired",
+      "reason": "Avoid active work overwriting snapshot"
+    },
+    {
+      "before": "talk_hide",
+      "after": "ui_restore",
+      "reason": "Hide talk and restore own recorded UI on same page"
+    },
+    {
+      "before": "final_music_policy",
+      "after": "map_restore_if_acquired",
+      "reason": "RestoreMap consumes final-music policy"
+    },
+    {
+      "before": "map_restore_if_acquired",
+      "after": "snapshot_pop_if_acquired",
+      "reason": "Map restore writes camera; final matching snapshot must be last pose restore"
+    },
+    {
+      "before": "q_tree_clear_if_exclusive",
+      "after": "normal_end",
+      "reason": "Finish full-tree cleanup while legal coroutine entry remains"
+    },
+    {
+      "before": "snapshot_pop_if_acquired",
+      "after": "normal_end",
+      "reason": "No pop after killed scheduler is promised"
+    },
+    {
+      "before": "ui_restore",
+      "after": "normal_end",
+      "reason": "No cleanup finally on removeAll"
+    },
+    {
+      "before": "image_cancel_if_chosen",
+      "after": "normal_end",
+      "reason": "Only if image is not intentionally left to finite native life"
+    },
+    {
+      "before": "world_restore_if_changed",
+      "after": "normal_end",
+      "reason": "Known display baseline restored before End"
+    },
+    {
+      "before": "slow_end_if_changed",
+      "after": "normal_end",
+      "reason": "Clear owned slow flag; independent countdown remains"
+    },
+    {
+      "before": "letterbox_hide_if_changed",
+      "after": "normal_end",
+      "reason": "Release owned letterbox flag"
+    },
+    {
+      "before": "sepia_end_if_changed",
+      "after": "normal_end",
+      "reason": "Request native completion, not completed drain"
+    },
+    {
+      "before": "input_enable",
+      "after": "normal_end",
+      "reason": "Original RevPhase1 explicitly enables own mask before End"
+    },
+    {
+      "before": "normal_end",
+      "after": "return_without_yield",
+      "reason": "End does not unwind active callback; no new work/yield after it"
+    },
+    {
+      "before": "return_without_yield",
+      "after": "next_start",
+      "reason": "Server gates next run independently; report alone is not proof this point was reached"
+    }
+  ],
+  "unconstrained_pair": {
+    "nodes": [
+      "q_tree_clear_if_exclusive",
+      "map_restore_if_acquired"
+    ],
+    "reason": "Original two selected SEQ: clear then restore. Native active Stop: restore then clear. Do not invent a universal opposite ordering requirement."
+  },
+  "original_selected_sequence": [
+    "camera_stop",
+    "q_tree_clear_if_exclusive",
+    "map_restore_if_acquired",
+    "snapshot_pop_if_acquired",
+    "letterbox_hide_if_changed",
+    "sepia_end_if_changed",
+    "slow_end_if_changed",
+    "talk_hide",
+    "ui_restore",
+    "world_restore_if_changed",
+    "input_enable",
+    "normal_end",
+    "return_without_yield"
+  ],
+  "native_active_stop_sequence": [
+    "camera_stop",
+    "map_restore_if_acquired",
+    "q_tree_clear_if_exclusive",
+    "snapshot_pop_if_acquired",
+    "letterbox_hide_if_changed",
+    "sepia_end_if_changed",
+    "slow_end_if_changed",
+    "world_restore_if_changed",
+    "input_enable",
+    "normal_end"
+  ],
+  "completion_classes": [
+    "CALL_RETURNED",
+    "OWNER_FLAG_CHANGED",
+    "NATIVE_DEFERRED_WORK_PENDING",
+    "ORIGINAL_REPORT_OBSERVED",
+    "SERVER_BUSINESS_COMMITTED",
+    "HUMAN_GAMEPLAY_VERIFIED"
+  ],
+  "forbidden_equivalence": [
+    "level_job_event == all_doll_queues_drained",
+    "003F == all_cleanup_success",
+    "IsEnded == natural_camera_finish",
+    "Lua yield == graphics_or_audio_completed",
+    "normal_End == full_owner_reset"
+  ],
+  "optional_nodes_require_acquisition_or_exclusive_baseline_authority": true,
+  "original_sequence_projection_note": "Original RevPhase1 unconditionally EndSepia/EndSlowMotion/EnableInput: fixed normal-baseline policy, not snapshots of arbitrary old flags. The original sequences map calls to DAG nodes; conditional new-authoring nodes need actual acquisition or exclusive authority for that known baseline."
+}
