@@ -1,0 +1,1136 @@
+{
+  "schema": "mef-r11-world-npc-contracts-v1",
+  "boundaries": [
+    "Normal statically registered Lua targets only.",
+    "Exactly specified argument count: conversion reads the last N stack values; numeric strings may convert; other types fall back to zero.",
+    "Whole-program absence, successful gameplay, and T01 ACCEPTED are not claimed."
+  ],
+  "types": [
+    {
+      "name": "CNPC",
+      "vtable": "0xc0ca9c",
+      "col": "0xc6acf0",
+      "type_descriptor": "0xf7e870",
+      "rtti": ".?AVCNPC@@",
+      "selected_slots": {
+        "0x0": "0x4d2280",
+        "0x20": "0x4d2890",
+        "0x24": "0x4d28c0",
+        "0x28": "0x4d2a80",
+        "0x30": "0x4d2820",
+        "0x3c": "0x4c6fb0",
+        "0x44": "0x4c8b90",
+        "0x58": "0x4c8c30",
+        "0x5c": "0x4c8c40",
+        "0x68": "0x4c8da0",
+        "0x6c": "0x4c9550"
+      }
+    },
+    {
+      "name": "CEventActor",
+      "vtable": "0xc0c824",
+      "col": "0xc6abac",
+      "type_descriptor": "0xf7e838",
+      "rtti": ".?AVCEventActor@@",
+      "selected_slots": {
+        "0x0": "0x4d0ca0",
+        "0x20": "0x4d0f80",
+        "0x24": "0x4d0fa0",
+        "0x28": "0x4d0fc0",
+        "0x30": "0x4c8050",
+        "0x3c": "0x4c6fb0",
+        "0x44": "0x4c8b90",
+        "0x58": "0x4c8c30",
+        "0x60": "0x4d0f50",
+        "0x68": "0x4c8da0",
+        "0x6c": "0x4c9550"
+      }
+    },
+    {
+      "name": "IS3D::CDoll",
+      "vtable": "0xc4f67c",
+      "col": "0xc7fa7c",
+      "type_descriptor": "0xf8a718",
+      "rtti": ".?AVCDoll@IS3D@@",
+      "selected_slots": {
+        "0x0": "0x7a4ff0",
+        "0x4": "0x77b4e0",
+        "0x8": "0x7a63c0",
+        "0xc": "0x550450"
+      }
+    },
+    {
+      "name": "IS3D::CItem",
+      "vtable": "0xc500b8",
+      "col": "0xc800b8",
+      "type_descriptor": "0xf8a974",
+      "rtti": ".?AVCItem@IS3D@@",
+      "selected_slots": {
+        "0x0": "0x7d2940",
+        "0x4": "0x5cb520",
+        "0x8": "0x7d2c60"
+      }
+    }
+  ],
+  "apis": [
+    {
+      "name": "lb.CreateObject",
+      "arity": 4,
+      "arguments": [
+        "model:i32",
+        "x:f32",
+        "y:f32",
+        "attach:i32"
+      ],
+      "effect": "Ex(model,x,y,12,0,attach)",
+      "scope": "world actor; local allocation",
+      "evidence": [
+        "lb_create_wrapper",
+        "lb_create_marshaller",
+        "lb_create_ex"
+      ],
+      "limits": [
+        "No freshly pushed Lua entity ID; counter is not a stable public handle API."
+      ]
+    },
+    {
+      "name": "lb.CreateObjectEx",
+      "arity": 6,
+      "arguments": [
+        "model:i32",
+        "x:f32",
+        "y:f32",
+        "scale:i32",
+        "direction:i32->low BYTE",
+        "attach:i32"
+      ],
+      "effect": "model<10 -> CPlayer; 10..10000 -> CMonster; >10000 -> CNPC; allocates local entity then indexes world",
+      "scope": "world; model range alone does not certify resource validity",
+      "evidence": [
+        "lb_create_ex",
+        "lb_create_ex_marshaller",
+        "npc_ctor",
+        "actor_model_id",
+        "actor_initialize_doll"
+      ],
+      "limits": [
+        "model signed range precedes low WORD model packing.",
+        "Scale uses existing global factor; no claim of meters or pixels.",
+        "Nonzero attach invokes current controller hooks; not NPC shop attachment."
+      ]
+    },
+    {
+      "name": "lb.SetActorAvatar",
+      "arity": 3,
+      "arguments": [
+        "world_entity_key:i32/full DWORD lookup",
+        "part:i32->u16",
+        "variant:i32->u16"
+      ],
+      "effect": "actor+388=low WORD variant; valid CDoll modifies requested avatar map +4C, unless loaded model descriptor +BC==0",
+      "scope": "world entity with active rendering; supported model avatar variants",
+      "evidence": [
+        "lb_avatar",
+        "doll_avatar",
+        "avatar_map_find",
+        "avatar_map_insert",
+        "doll_prepare_avatar_items",
+        "doll_apply"
+      ],
+      "limits": [
+        "Cannot name a new skin filename or invent missing avatar resources.",
+        "A+388 write is not a general NPC service or inventory change."
+      ]
+    },
+    {
+      "name": "lb.AttachActorItem",
+      "arity": 2,
+      "arguments": [
+        "world_entity_key:i32/full DWORD lookup",
+        "appearance_item:i32->u16"
+      ],
+      "effect": "query render descriptor with actor-model low WORD, fallback common model key0; put item key under descriptor-derived attachment key",
+      "scope": "visual attachment; CDoll required",
+      "evidence": [
+        "lb_attach",
+        "doll_attach",
+        "doll_attachment_replace",
+        "doll_item_materialize",
+        "doll_apply"
+      ],
+      "limits": [
+        "No Product lookup, currency debit or inventory grant in this selected operation chain.",
+        "Item appearance key differs from descriptor attachment key used for detach."
+      ]
+    },
+    {
+      "name": "lb.DetachActorItem",
+      "arity": 2,
+      "arguments": [
+        "world_entity_key:i32/full DWORD lookup",
+        "attachment_key:i32/full DWORD"
+      ],
+      "effect": "erase key and key+0x10 from requested attachment map+5C; dirty rebuild",
+      "scope": "visual attachment map",
+      "evidence": [
+        "lb_detach",
+        "doll_detach",
+        "doll_update_enqueue",
+        "doll_apply"
+      ],
+      "limits": [
+        "Do not pass the attached item ID merely because the two API names are symmetric."
+      ]
+    },
+    {
+      "name": "Q.AniObject",
+      "arity": 3,
+      "arguments": [
+        "Q_slot:i32",
+        "motion_id:i32",
+        "rate:f32"
+      ],
+      "effect": "actor+38C motion; CDoll+A8 action, +104 animation rate; select resource action and animate in native tick",
+      "scope": "Q-local CEventActor",
+      "evidence": [
+        "q_ani",
+        "q_ani_marshaller",
+        "actor_ani",
+        "doll_ani",
+        "doll_tick_motion_face"
+      ],
+      "limits": [
+        "Action must exist in model resource; no success or animation-finished observer established here."
+      ]
+    },
+    {
+      "name": "Q.AniSkip",
+      "arity": 2,
+      "arguments": [
+        "Q_slot:i32",
+        "step:i32"
+      ],
+      "effect": "advance animation time by step/[FBA7CC]+1360 and clamp at motion length",
+      "scope": "Q-local actor with loaded rendering/motion",
+      "evidence": [
+        "q_ani_skip",
+        "q_two_integer_marshaller",
+        "doll_ani_seek"
+      ],
+      "limits": [
+        "Setting-dependent numeric step; no universal milliseconds assumption."
+      ]
+    },
+    {
+      "name": "Q.RotateObject",
+      "arity": 3,
+      "arguments": [
+        "Q_slot:i32",
+        "direction:i32->low BYTE",
+        "smooth:i32"
+      ],
+      "effect": "set desired direction; third arg0 takes immediate yaw path when actor+3A8==0; nonzero retains normal direction update",
+      "scope": "Q-local actor orientation",
+      "evidence": [
+        "q_rotate",
+        "actor_direction",
+        "actor_direction_tick"
+      ],
+      "limits": [
+        "Byte direction domain, not proven degrees.",
+        "Not the FaceObject facial-expression operation."
+      ]
+    },
+    {
+      "name": "Q.SpeedObject",
+      "arity": 2,
+      "arguments": [
+        "Q_slot:i32",
+        "movement_multiplier:f32"
+      ],
+      "effect": "write CEventActor+434 consumed by movement speed virtual+60",
+      "scope": "Q-local movement; separate from AniObject animation rate",
+      "evidence": [
+        "q_speed",
+        "q_speed_marshaller",
+        "event_actor_speed"
+      ],
+      "limits": [
+        "No bound/clamp established; finite sensible content values required."
+      ]
+    },
+    {
+      "name": "Q.FaceObject",
+      "arity": 3,
+      "arguments": [
+        "Q_slot:i32",
+        "face_id:i32",
+        "duration_override:i32"
+      ],
+      "effect": "negative third arg uses face resource duration; nonnegative becomes f32 override; face controller updates skin values",
+      "scope": "Q actor with CDoll+A0 face controller and face resource key",
+      "evidence": [
+        "q_face",
+        "actor_face",
+        "face_select",
+        "face_tick",
+        "doll_face_skin",
+        "Face_SKIN_string"
+      ],
+      "limits": [
+        "Not actor heading or look-at-world-object.",
+        "No complete per-model face ID catalogue; no claim all models support it."
+      ]
+    },
+    {
+      "name": "Q.FlashObject",
+      "arity": 3,
+      "arguments": [
+        "Q_slot:i32",
+        "mode:i32",
+        "ticks:i32"
+      ],
+      "effect": "write flash mode +40C, duration +410 and remaining +414; common update applies selected mode to render color and decrements",
+      "scope": "Q actor visual flash modes supported by4C9140",
+      "evidence": [
+        "q_flash",
+        "actor_flash_tick",
+        "actor_flash_modes"
+      ],
+      "limits": [
+        "Count is consumed by native common updates; not a stable millisecond timer or gameplay damage."
+      ]
+    },
+    {
+      "name": "Tutorial.SetCheckPointStatus",
+      "arity": 3,
+      "arguments": [
+        "key:i32->u16",
+        "category:i32->signed BYTE then WORD comparison",
+        "status:i32->low BYTE"
+      ],
+      "effect": "find first existing point by category+key and write enabled byte+105",
+      "scope": "existing checkpoint manager; category2 ShopNo, category3 NPC key",
+      "evidence": [
+        "tutorial_status",
+        "checkpoint_status_lookup",
+        "checkpoint_status_write",
+        "checkpoint_interaction_gate"
+      ],
+      "limits": [
+        "Does not allocate point, choose XY, add products or create arbitrary merchant service.",
+        "Category2/3 enabled flag does not imply category0 portal visual effects."
+      ]
+    },
+    {
+      "name": "Tutorial.InsertIsilia",
+      "arity": 0,
+      "arguments": [],
+      "effect": "layout entry3 -> fixed CActor model4 at layout XY, direction0, avatar1, world entityF000",
+      "scope": "fixed Tutorial layout and concrete CActor",
+      "evidence": [
+        "tutorial_isilia"
+      ],
+      "limits": [
+        "No arbitrary NPC/model/XY API.",
+        "Repeated fixed key is not certified safe replacement."
+      ]
+    }
+  ],
+  "chains": [
+    {
+      "id": "world-placement",
+      "entry": [
+        "lb.CreateObject",
+        "lb.CreateObjectEx"
+      ],
+      "windows": [
+        "lb_create_wrapper",
+        "lb_create_ex",
+        "npc_ctor",
+        "actor_model_id",
+        "npc_initialize_doll",
+        "actor_initialize_doll_entry",
+        "actor_initialize_doll",
+        "doll_ctor_prefix",
+        "world_animate",
+        "world_animate_executor",
+        "npc_slow_tick",
+        "actor_doll_tick",
+        "world_draw",
+        "world_draw_iterator",
+        "npc_draw",
+        "actor_doll_draw",
+        "doll_draw_main"
+      ],
+      "result": "local typed actor, model-dependent rendering/name/quest marker capabilities"
+    },
+    {
+      "id": "avatar-item-render",
+      "entry": [
+        "lb.SetActorAvatar",
+        "lb.AttachActorItem",
+        "lb.DetachActorItem"
+      ],
+      "windows": [
+        "lb_avatar",
+        "lb_attach",
+        "lb_detach",
+        "doll_avatar",
+        "doll_attach",
+        "doll_attachment_replace",
+        "doll_detach",
+        "doll_tick_dirty",
+        "doll_update_enqueue",
+        "doll_enqueue_manager",
+        "doll_worker_take",
+        "worker_doll_process",
+        "doll_worker_process",
+        "doll_prepare_avatar_items",
+        "doll_item_materialize",
+        "doll_apply_deferred",
+        "doll_apply",
+        "doll_draw_main"
+      ],
+      "result": "requested appearance maps become native render model/active attachment state subject to resources"
+    },
+    {
+      "id": "Q-actions",
+      "entry": [
+        "Q.AniObject",
+        "Q.AniSkip",
+        "Q.RotateObject",
+        "Q.SpeedObject",
+        "Q.FaceObject",
+        "Q.FlashObject"
+      ],
+      "windows": [
+        "q_ani",
+        "q_ani_skip",
+        "q_rotate",
+        "q_speed",
+        "q_face",
+        "q_flash",
+        "actor_ani",
+        "doll_ani",
+        "doll_ani_seek",
+        "actor_direction",
+        "actor_direction_tick",
+        "event_actor_speed",
+        "actor_face",
+        "face_select",
+        "face_tick",
+        "actor_flash_tick",
+        "actor_flash_modes"
+      ],
+      "result": "script-owned choreography with distinct movement/animation/face/color state"
+    },
+    {
+      "id": "checkpoint-shop-ui",
+      "entry": [
+        "Tutorial.SetCheckPointStatus",
+        "existing category2/3 point interaction"
+      ],
+      "windows": [
+        "tutorial_status",
+        "checkpoint_status_lookup",
+        "checkpoint_status_write",
+        "checkpoint_interaction_gate",
+        "checkpoint_market_interaction",
+        "checkpoint_npc_interaction",
+        "shop_lookup_key",
+        "shop_lookup_town_npc",
+        "shop_parser_fields",
+        "shop_type_to_npc_type",
+        "town_talk_consumer",
+        "town_talk_dispatch",
+        "talkbox_menu_type",
+        "menu_blacksmith",
+        "menu_enhance_delegate",
+        "menu_click",
+        "open_enhance_event",
+        "open_enhance_consumer",
+        "open_trade_event",
+        "open_trade_consumer",
+        "trade_open_request"
+      ],
+      "result": "existing category/key/table/context select TalkBox and trade/enhancement UI"
+    },
+    {
+      "id": "shop-transactions",
+      "entry": [
+        "existing trade/enhancement UI confirmations"
+      ],
+      "windows": [
+        "trade_context",
+        "buy_request",
+        "sell_request",
+        "enhance_request",
+        "trade_feedback",
+        "enhance_result_bridge",
+        "enhance_result_ui",
+        "asset_update_balance",
+        "asset_update_slots"
+      ],
+      "result": "existing Server request/result and authoritative displayed asset update contracts; reuse prior caller chains"
+    }
+  ],
+  "direct_calls": [
+    {
+      "window": "lb_create_ex",
+      "site": "0x4a103c",
+      "target": "0x4d2120",
+      "target_window": "npc_ctor"
+    },
+    {
+      "window": "lb_create_ex",
+      "site": "0x4a10ca",
+      "target": "0x7a6ea0",
+      "target_window": "doll_avatar"
+    },
+    {
+      "window": "lb_avatar",
+      "site": "0x4a0c2e",
+      "target": "0x7a6ea0",
+      "target_window": "doll_avatar"
+    },
+    {
+      "window": "lb_attach",
+      "site": "0x4a0cf8",
+      "target": "0x7a7240",
+      "target_window": "doll_attach"
+    },
+    {
+      "window": "lb_detach",
+      "site": "0x4a0db3",
+      "target": "0x7a7620",
+      "target_window": "doll_detach"
+    },
+    {
+      "window": "npc_initialize_doll",
+      "site": "0x4d2827",
+      "target": "0x4c7df0",
+      "target_window": "actor_initialize_doll"
+    },
+    {
+      "window": "npc_initialize_doll",
+      "site": "0x4d282f",
+      "target": "0x4d2360",
+      "target_window": "npc_quest_marker"
+    },
+    {
+      "window": "actor_initialize_doll_entry",
+      "site": "0x4c8053",
+      "target": "0x4c7df0",
+      "target_window": "actor_initialize_doll"
+    },
+    {
+      "window": "actor_initialize_doll",
+      "site": "0x4c7e5d",
+      "target": "0x7a4c50",
+      "target_window": "doll_ctor_prefix"
+    },
+    {
+      "window": "actor_initialize_doll",
+      "site": "0x4c7ed9",
+      "target": "0x7a6ea0",
+      "target_window": "doll_avatar"
+    },
+    {
+      "window": "actor_initialize_doll",
+      "site": "0x4c7eed",
+      "target": "0x7a8e70",
+      "target_window": "doll_update_enqueue"
+    },
+    {
+      "window": "doll_avatar",
+      "site": "0x7a6f3a",
+      "target": "0x7a0b10",
+      "target_window": "avatar_map_find"
+    },
+    {
+      "window": "doll_avatar",
+      "site": "0x7a6f83",
+      "target": "0x7a0a90",
+      "target_window": "avatar_map_insert"
+    },
+    {
+      "window": "doll_attach",
+      "site": "0x7a73a4",
+      "target": "0x7a7510",
+      "target_window": "doll_attachment_replace"
+    },
+    {
+      "window": "doll_attach",
+      "site": "0x7a73c5",
+      "target": "0x7a0c00",
+      "target_window": "doll_attachment_find"
+    },
+    {
+      "window": "doll_attach",
+      "site": "0x7a73d3",
+      "target": "0x7a7620",
+      "target_window": "doll_detach"
+    },
+    {
+      "window": "doll_attach",
+      "site": "0x7a74cb",
+      "target": "0x7a7510",
+      "target_window": "doll_attachment_replace"
+    },
+    {
+      "window": "doll_attachment_replace",
+      "site": "0x7a75b9",
+      "target": "0x7a0c00",
+      "target_window": "doll_attachment_find"
+    },
+    {
+      "window": "doll_attachment_replace",
+      "site": "0x7a75c7",
+      "target": "0x7a7620",
+      "target_window": "doll_detach"
+    },
+    {
+      "window": "doll_detach",
+      "site": "0x7a7662",
+      "target": "0x7a0c00",
+      "target_window": "doll_attachment_find"
+    },
+    {
+      "window": "doll_update_enqueue",
+      "site": "0x7a906b",
+      "target": "0x79da70",
+      "target_window": "doll_enqueue_manager"
+    },
+    {
+      "window": "doll_worker_process",
+      "site": "0x79ea6a",
+      "target": "0x7a90f0",
+      "target_window": "doll_apply"
+    },
+    {
+      "window": "doll_worker_process",
+      "site": "0x79eb15",
+      "target": "0x79fbc0",
+      "target_window": "doll_prepare_avatar_items"
+    },
+    {
+      "window": "doll_worker_process",
+      "site": "0x79ec3c",
+      "target": "0x7a90f0",
+      "target_window": "doll_apply"
+    },
+    {
+      "window": "doll_prepare_avatar_items",
+      "site": "0x79fd48",
+      "target": "0x7a0c00",
+      "target_window": "doll_attachment_find"
+    },
+    {
+      "window": "doll_prepare_avatar_items",
+      "site": "0x79febe",
+      "target": "0x7a0a90",
+      "target_window": "avatar_map_insert"
+    },
+    {
+      "window": "doll_prepare_avatar_items",
+      "site": "0x7a0185",
+      "target": "0x7a0a90",
+      "target_window": "avatar_map_insert"
+    },
+    {
+      "window": "doll_prepare_avatar_items",
+      "site": "0x7a01f5",
+      "target": "0x7a0a90",
+      "target_window": "avatar_map_insert"
+    },
+    {
+      "window": "doll_apply_deferred",
+      "site": "0x79dc5e",
+      "target": "0x7a90f0",
+      "target_window": "doll_apply"
+    },
+    {
+      "window": "doll_apply",
+      "site": "0x7a9333",
+      "target": "0x7a6830",
+      "target_window": "doll_ani_seek"
+    },
+    {
+      "window": "doll_apply",
+      "site": "0x7a933f",
+      "target": "0x7a6830",
+      "target_window": "doll_ani_seek"
+    },
+    {
+      "window": "actor_doll_tick",
+      "site": "0x4c87fa",
+      "target": "0x7a5c50",
+      "target_window": "doll_tick_dirty"
+    },
+    {
+      "window": "q_ani_skip",
+      "site": "0x563619",
+      "target": "0x7a6830",
+      "target_window": "doll_ani_seek"
+    },
+    {
+      "window": "q_ani_skip",
+      "site": "0x56363f",
+      "target": "0x7a6830",
+      "target_window": "doll_ani_seek"
+    },
+    {
+      "window": "actor_ani",
+      "site": "0x4c8dc8",
+      "target": "0x7a6970",
+      "target_window": "doll_ani"
+    },
+    {
+      "window": "actor_face",
+      "site": "0x4c9576",
+      "target": "0x7d6730",
+      "target_window": "face_select"
+    },
+    {
+      "window": "tutorial_status",
+      "site": "0x4a94b6",
+      "target": "0x544940",
+      "target_window": "checkpoint_status_lookup"
+    },
+    {
+      "window": "checkpoint_status_lookup",
+      "site": "0x544993",
+      "target": "0x543b30",
+      "target_window": "checkpoint_status_write"
+    },
+    {
+      "window": "tutorial_isilia",
+      "site": "0x4aa1b9",
+      "target": "0x7a6ea0",
+      "target_window": "doll_avatar"
+    },
+    {
+      "window": "npc_tick",
+      "site": "0x4d289c",
+      "target": "0x4d2360",
+      "target_window": "npc_quest_marker"
+    },
+    {
+      "window": "npc_slow_tick",
+      "site": "0x4d2a2a",
+      "target": "0x4c87d0",
+      "target_window": "actor_doll_tick"
+    },
+    {
+      "window": "npc_draw",
+      "site": "0x4d2ab9",
+      "target": "0x4c88f0",
+      "target_window": "actor_doll_draw"
+    },
+    {
+      "window": "world_animate",
+      "site": "0x4e0265",
+      "target": "0x79db10",
+      "target_window": "doll_apply_deferred"
+    },
+    {
+      "window": "world_draw",
+      "site": "0x4e0576",
+      "target": "0x4e1470",
+      "target_window": "world_draw_iterator"
+    },
+    {
+      "window": "lb_create_wrapper",
+      "site": "0x4a0b5f",
+      "target": "0x4a0f70",
+      "target_window": "lb_create_ex"
+    },
+    {
+      "window": "doll_tick_dirty",
+      "site": "0x7a5ca7",
+      "target": "0x7a8e70",
+      "target_window": "doll_update_enqueue"
+    },
+    {
+      "window": "doll_tick_motion_face",
+      "site": "0x7a5ebe",
+      "target": "0x7d65a0",
+      "target_window": "face_tick"
+    },
+    {
+      "window": "worker_queue_branch",
+      "site": "0x79dfca",
+      "target": "0x79e7c0",
+      "target_window": "doll_worker_take"
+    },
+    {
+      "window": "worker_doll_process",
+      "site": "0x79e21b",
+      "target": "0x79e980",
+      "target_window": "doll_worker_process"
+    },
+    {
+      "window": "actor_flash_tick",
+      "site": "0x4c878b",
+      "target": "0x4c9140",
+      "target_window": "actor_flash_modes"
+    },
+    {
+      "window": "checkpoint_packet",
+      "site": "0x4b2bd5",
+      "target": "0x543700",
+      "target_window": "checkpoint_ctor"
+    },
+    {
+      "window": "checkpoint_ctor",
+      "site": "0x5437f0",
+      "target": "0x4fb910",
+      "target_window": "shop_lookup_key"
+    },
+    {
+      "window": "checkpoint_market_interaction",
+      "site": "0x544491",
+      "target": "0x4fb910",
+      "target_window": "shop_lookup_key"
+    },
+    {
+      "window": "town_talk_dispatch",
+      "site": "0x5b7fb7",
+      "target": "0x5b6b70",
+      "target_window": "town_talk_consumer"
+    },
+    {
+      "window": "trade_open_request",
+      "site": "0x683d9b",
+      "target": "0x4fb960",
+      "target_window": "shop_lookup_town_npc"
+    },
+    {
+      "window": "frame_world_animate",
+      "site": "0x4925a5",
+      "target": "0x4e0200",
+      "target_window": "world_animate"
+    },
+    {
+      "window": "closure_lb_CreateObject",
+      "site": "0x4a1fea",
+      "target": "0x4a2460",
+      "target_window": "lb_create_marshaller"
+    },
+    {
+      "window": "closure_lb_CreateObjectEx",
+      "site": "0x4a204a",
+      "target": "0x4a25f0",
+      "target_window": "lb_create_ex_marshaller"
+    },
+    {
+      "window": "closure_lb_SetActorAvatar",
+      "site": "0x4a20b1",
+      "target": "0x4a2850",
+      "target_window": "lb_avatar_marshaller"
+    },
+    {
+      "window": "closure_lb_AttachActorItem",
+      "site": "0x4a2111",
+      "target": "0x4a2990",
+      "target_window": "lb_item_marshaller"
+    },
+    {
+      "window": "closure_lb_DetachActorItem",
+      "site": "0x4a2171",
+      "target": "0x4a2990",
+      "target_window": "lb_item_marshaller"
+    },
+    {
+      "window": "closure_Q_AniObject",
+      "site": "0x56943a",
+      "target": "0x56b0e0",
+      "target_window": "q_ani_marshaller"
+    },
+    {
+      "window": "closure_Q_AniSkip",
+      "site": "0x5694a1",
+      "target": "0x56a220",
+      "target_window": "q_two_integer_marshaller"
+    },
+    {
+      "window": "closure_Q_RotateObject",
+      "site": "0x569501",
+      "target": "0x56a4b0",
+      "target_window": "q_three_integer_marshaller"
+    },
+    {
+      "window": "closure_Q_SpeedObject",
+      "site": "0x56955a",
+      "target": "0x56b210",
+      "target_window": "q_speed_marshaller"
+    },
+    {
+      "window": "closure_Q_FaceObject",
+      "site": "0x5695c1",
+      "target": "0x56a4b0",
+      "target_window": "q_three_integer_marshaller"
+    },
+    {
+      "window": "closure_Q_FlashObject",
+      "site": "0x5696e1",
+      "target": "0x56a4b0",
+      "target_window": "q_three_integer_marshaller"
+    }
+  ],
+  "instruction_anchors": [
+    {
+      "window": "lb_create_wrapper",
+      "site": "0x4a0b4f",
+      "hex": "6a0c",
+      "asm": "push   0xc",
+      "role": "default fourth Ex argument=12"
+    },
+    {
+      "window": "lb_create_ex",
+      "site": "0x4a105f",
+      "hex": "66894604",
+      "asm": "mov    WORD PTR [esi+0x4],ax",
+      "role": "local entity ID truncated to WORD"
+    },
+    {
+      "window": "lb_create_ex",
+      "site": "0x4a109a",
+      "hex": "0bca",
+      "asm": "or     ecx,edx",
+      "role": "class byte OR low WORD model"
+    },
+    {
+      "window": "lb_create_ex",
+      "site": "0x4a11b6",
+      "hex": "e875ed0300",
+      "asm": "call   0x4dff30",
+      "role": "world registration call"
+    },
+    {
+      "window": "lb_avatar",
+      "site": "0x4a0c14",
+      "hex": "66899088030000",
+      "asm": "mov    WORD PTR [eax+0x388],dx",
+      "role": "actor avatar WORD writer"
+    },
+    {
+      "window": "doll_avatar",
+      "site": "0x7a6f2e",
+      "hex": "745f",
+      "asm": "je     0x7a6f8f",
+      "role": "loaded model +BC==0 rejects map update"
+    },
+    {
+      "window": "doll_avatar",
+      "site": "0x7a6f88",
+      "hex": "668930",
+      "asm": "mov    WORD PTR [eax],si",
+      "role": "variant WORD map value write"
+    },
+    {
+      "window": "doll_avatar",
+      "site": "0x7a6f8b",
+      "hex": "c6432801",
+      "asm": "mov    BYTE PTR [ebx+0x28],0x1",
+      "role": "dirty flag producer"
+    },
+    {
+      "window": "doll_detach",
+      "site": "0x7a7656",
+      "hex": "83c610",
+      "asm": "add    esi,0x10",
+      "role": "second detach key offset10"
+    },
+    {
+      "window": "doll_update_enqueue",
+      "site": "0x7a8f36",
+      "hex": "e80586ffff",
+      "asm": "call   0x7a1540",
+      "role": "snapshot avatar map"
+    },
+    {
+      "window": "doll_update_enqueue",
+      "site": "0x7a8f61",
+      "hex": "e8fa86ffff",
+      "asm": "call   0x7a1660",
+      "role": "snapshot attachment map"
+    },
+    {
+      "window": "doll_update_enqueue",
+      "site": "0x7a8ffa",
+      "hex": "c6432800",
+      "asm": "mov    BYTE PTR [ebx+0x28],0x0",
+      "role": "clear dirty after request snapshot"
+    },
+    {
+      "window": "doll_update_enqueue",
+      "site": "0x7a8ffe",
+      "hex": "c7432402000000",
+      "asm": "mov    DWORD PTR [ebx+0x24],0x2",
+      "role": "load state2 while queued"
+    },
+    {
+      "window": "doll_update_enqueue",
+      "site": "0x7a906b",
+      "hex": "e8004affff",
+      "asm": "call   0x79da70",
+      "role": "publish into actual manager"
+    },
+    {
+      "window": "world_animate",
+      "site": "0x4e0265",
+      "hex": "e8a6d82b00",
+      "asm": "call   0x79db10",
+      "role": "apply completed model jobs on animation frame"
+    },
+    {
+      "window": "world_animate",
+      "site": "0x4e02e2",
+      "hex": "c745e82ccfc000",
+      "asm": "mov    DWORD PTR [ebp-0x18],0xc0cf2c",
+      "role": "AnimateExecuter vptr fixed"
+    },
+    {
+      "window": "world_animate_executor",
+      "site": "0x4e052d",
+      "hex": "8b4224",
+      "asm": "mov    eax,DWORD PTR [edx+0x24]",
+      "role": "actor virtual24 consumer"
+    },
+    {
+      "window": "actor_pool_worker",
+      "site": "0x6ee56f",
+      "hex": "8b4e38",
+      "asm": "mov    ecx,DWORD PTR [esi+0x38]",
+      "role": "same pool executor+38"
+    },
+    {
+      "window": "actor_pool_worker",
+      "site": "0x6ee577",
+      "hex": "8b440308",
+      "asm": "mov    eax,DWORD PTR [ebx+eax*1+0x8]",
+      "role": "same per-slot actor pointer"
+    },
+    {
+      "window": "world_draw_iterator",
+      "site": "0x4e1485",
+      "hex": "8b5028",
+      "asm": "mov    edx,DWORD PTR [eax+0x28]",
+      "role": "actor virtual28 draw"
+    },
+    {
+      "window": "q_rotate",
+      "site": "0x563699",
+      "hex": "837d1000",
+      "asm": "cmp    DWORD PTR [ebp+0x10],0x0",
+      "role": "third numeric argument zero chooses immediate path"
+    },
+    {
+      "window": "q_face",
+      "site": "0x563769",
+      "hex": "0f98c3",
+      "asm": "sets   bl",
+      "role": "negative duration -> null override"
+    },
+    {
+      "window": "q_face",
+      "site": "0x56376f",
+      "hex": "f30f2ac0",
+      "asm": "cvtsi2ss xmm0,eax",
+      "role": "integer duration to float override"
+    },
+    {
+      "window": "actor_flash_tick",
+      "site": "0x4c8790",
+      "hex": "ff8b14040000",
+      "asm": "dec    DWORD PTR [ebx+0x414]",
+      "role": "native update decrements flash counter"
+    },
+    {
+      "window": "checkpoint_status_write",
+      "site": "0x543b77",
+      "hex": "888b05010000",
+      "asm": "mov    BYTE PTR [ebx+0x105],cl",
+      "role": "enabled flag writer"
+    },
+    {
+      "window": "checkpoint_market_interaction",
+      "site": "0x544491",
+      "hex": "e87a74fbff",
+      "asm": "call   0x4fb910",
+      "role": "ShopNo -> shop row"
+    },
+    {
+      "window": "checkpoint_market_interaction",
+      "site": "0x5444aa",
+      "hex": "e8612bfeff",
+      "asm": "call   0x527010",
+      "role": "shop NPC key -> NPC row"
+    },
+    {
+      "window": "shop_type_to_npc_type",
+      "site": "0x4fbd2b",
+      "hex": "83c10a",
+      "asm": "add    ecx,0xa",
+      "role": "shop type1..4 -> NPC type11..14"
+    },
+    {
+      "window": "menu_enhance_delegate",
+      "site": "0x638810",
+      "hex": "c7814c010000f09e6300",
+      "asm": "mov    DWORD PTR [ecx+0x14c],0x639ef0",
+      "role": "operation29 delegate"
+    },
+    {
+      "window": "open_enhance_event",
+      "site": "0x639f17",
+      "hex": "c74010f6420f00",
+      "asm": "mov    DWORD PTR [eax+0x10],0xf42f6",
+      "role": "F42F6 producer"
+    },
+    {
+      "window": "open_enhance_consumer",
+      "site": "0x5b77f2",
+      "hex": "8b8364020000",
+      "asm": "mov    eax,DWORD PTR [ebx+0x264]",
+      "role": "actual enhancement window owner+264"
+    }
+  ],
+  "classification": {
+    "direct_client_capabilities": [
+      "local typed actor placement",
+      "model-supported avatar and visual attachments",
+      "Q movement, orientation, body/face animation and flash",
+      "fixed Tutorial actor placement",
+      "toggle existing checkpoint status"
+    ],
+    "requires_existing_context_and_tables": [
+      "NPC/town/shop lookup",
+      "talk menu",
+      "trade/enhancement UI",
+      "valid model/action/avatar/item resources"
+    ],
+    "server_development_requirements": [
+      "authoritative shop inventory, pricing and availability",
+      "validate and commit buy/sell/enhancement transactions",
+      "return existing result feedback and asset/bag updates consistently"
+    ],
+    "client_research_remaining": [
+      "specific ordinary-scene first caller for an arbitrary newly named .mef",
+      "a public way to obtain a fresh lb-created world ID beyond the known counter/no-return contract",
+      "complete per-model avatar/attachment/face resource ID catalogue"
+    ],
+    "cross_feature_integration": [
+      "bridge loaded script module and resource prepass",
+      "coordinate visible actor and interactive checkpoint category/key",
+      "use active page and UI context that accept the service flow"
+    ],
+    "play_validation": [
+      "actual new scene/NPC/shop setup and resource success",
+      "appearance and facial animation correctness",
+      "buy/sell/enhancement UI with consistent Server asset results"
+    ]
+  }
+}

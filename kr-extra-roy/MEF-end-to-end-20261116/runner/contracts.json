@@ -1,0 +1,348 @@
+{
+  "schema": "mef-runner-closure-contracts-v1",
+  "status": "bounded_static_closure_only",
+  "ordinary_background_runner": "not_established",
+  "runtime_executed": false,
+  "new_findings": [
+    {
+      "id": "R9-HOOK-CLOCK",
+      "status": "confirmed_native",
+      "contract": "debug hook count counts Lua instruction dispatches; it is not a wall-clock timer and has no autonomous Client pump in the closed producer set.",
+      "records": [
+        "H01",
+        "H02",
+        "H05",
+        "H06",
+        "H07",
+        "H08",
+        "H09",
+        "H10"
+      ]
+    },
+    {
+      "id": "R9-HOOK-OWNER",
+      "status": "confirmed_native_plus_scoped_inference",
+      "contract": "Hook registry lookup is keyed by the currently executing thread. newthread copies native mask/count/callback fields but does not copy the per-thread Lua hook table entry in the captured construction path.",
+      "records": [
+        "H02",
+        "H03",
+        "H04",
+        "H11",
+        "H12",
+        "H13"
+      ]
+    },
+    {
+      "id": "R9-INPUT-TYPE",
+      "status": "confirmed_native",
+      "contract": "The two input alias closures read stack index -1; number/string convert through x87 FISTP; Lua boolean/other tags go to native zero. For SetKeymapEnabled, native nonzero enables input by clearing mask bit 2; native zero sets bit 2.",
+      "records": [
+        "I01",
+        "I02",
+        "I03",
+        "I04",
+        "I05",
+        "I06",
+        "I07",
+        "I08",
+        "I10"
+      ]
+    },
+    {
+      "id": "R9-INPUT-RETURN",
+      "status": "scoped_stack_inference",
+      "contract": "Both closures return C result count 1 but their converter/native calls do not push a new Lua result on the successful captured path; the caller must not treat the echoed last argument as an enable/runner acknowledgement.",
+      "records": [
+        "I02",
+        "I03",
+        "I04",
+        "I06",
+        "I07",
+        "I08",
+        "I09"
+      ]
+    },
+    {
+      "id": "R9-KEYMAP-COPY",
+      "status": "confirmed_native",
+      "contract": "ChangeKeymapType native accepts 0/1, copies 40 vector rows from FB8834+type*0x280 to FB8D34, and has no controller+58 or Q+2C store in that captured operation.",
+      "records": [
+        "I08",
+        "I09"
+      ]
+    },
+    {
+      "id": "R9-Q-PAUSE",
+      "status": "bounded_literal_result",
+      "contract": "The raw-backed .text/.rdata/.data absolute FB73EC literal census yields one operand: constructor zero store. Q tick checks relative +2C only after setting controller+58, so pause would not free ordinary input even if a legal writer were later found.",
+      "records": [
+        "Q01",
+        "Q02"
+      ]
+    }
+  ],
+  "hook_events": [
+    {
+      "name": "call",
+      "event": 0,
+      "mask_bit": "0x1",
+      "producer_sites": [
+        "0x6fe2d1",
+        "0x6fe34c"
+      ],
+      "line_arg": -1
+    },
+    {
+      "name": "return",
+      "event": 1,
+      "mask_bit": "0x2",
+      "producer_sites": [
+        "0x6fe3c3"
+      ],
+      "line_arg": -1
+    },
+    {
+      "name": "line",
+      "event": 2,
+      "mask_bit": "0x4",
+      "producer_sites": [
+        "0x6fb6e7"
+      ],
+      "line_arg": "prototype line or zero when absent"
+    },
+    {
+      "name": "count",
+      "event": 3,
+      "mask_bit": "0x8",
+      "producer_sites": [
+        "0x6fb68e"
+      ],
+      "line_arg": -1
+    },
+    {
+      "name": "tail return",
+      "event": 4,
+      "mask_bit": "0x2",
+      "producer_sites": [
+        "0x6fe478"
+      ],
+      "line_arg": -1
+    }
+  ],
+  "hook_fields": {
+    "0x38": "mask byte",
+    "0x39": "allow-hook/reentry guard byte",
+    "0x3c": "base instruction count",
+    "0x40": "remaining instruction count",
+    "0x44": "native hook callback pointer"
+  },
+  "input_aliases": [
+    {
+      "name": "Tutorial.SetKeymapEnabled",
+      "registrar": "0x4aa900",
+      "slot": "0xfe1818",
+      "closure": "0x4ac030",
+      "converter": "0x4acb70",
+      "native": "0x4a94c0",
+      "argument": "last Lua argument; integer-like number preferred",
+      "zero": "mask |= 2",
+      "nonzero": "mask &= ~2",
+      "does_not_establish": [
+        "Q pause writer",
+        "controller+58 release",
+        "independent Lua pump"
+      ]
+    },
+    {
+      "name": "lb.ChangeKeymapType",
+      "registrar": "0x4a1dd0",
+      "slot": "0xfe17b0",
+      "closure": "0x4a2380",
+      "converter": "0x4a23e0",
+      "native": "0x4a1440",
+      "argument": "last Lua argument; native accepts 0 or 1",
+      "destination": "0xfb8d34",
+      "source_formula": "0xfb8834 + type * 0x280",
+      "rows": 40,
+      "row_stride": 16
+    }
+  ],
+  "relations": [
+    {
+      "from": "debug.sethook",
+      "to": "thread hook fields",
+      "via": [
+        "0x701510",
+        "0x7016a8",
+        "0x7016ab",
+        "0x7016ae",
+        "0x7016b1"
+      ],
+      "records": [
+        "H01",
+        "H02",
+        "H03",
+        "D02",
+        "S06"
+      ]
+    },
+    {
+      "from": "Lua opcode fetch",
+      "to": "count / line producer",
+      "via": [
+        "0x6fc59e",
+        "0x6fc5ae",
+        "0x6fb660"
+      ],
+      "records": [
+        "H05",
+        "H06"
+      ]
+    },
+    {
+      "from": "Lua/C function precall",
+      "to": "event 0 call",
+      "via": [
+        "0x6fe2d1",
+        "0x6fe34c"
+      ],
+      "records": [
+        "H08"
+      ]
+    },
+    {
+      "from": "Lua/C function return",
+      "to": "event 1 and 4",
+      "via": [
+        "0x6fe4d3",
+        "0x6fe3c3",
+        "0x6fe478"
+      ],
+      "records": [
+        "H09",
+        "H10"
+      ]
+    },
+    {
+      "from": "hook dispatcher",
+      "to": "registered Lua callable",
+      "via": [
+        "0x6fde87",
+        "0x701320",
+        "0x7013ec"
+      ],
+      "records": [
+        "H04",
+        "H07",
+        "D01"
+      ]
+    },
+    {
+      "from": "coroutine.create",
+      "to": "new thread native hook fields",
+      "via": [
+        "0x707380",
+        "0x6f7390",
+        "0x6f7437",
+        "0x6f744c"
+      ],
+      "records": [
+        "H11",
+        "H12",
+        "H13"
+      ]
+    },
+    {
+      "from": "Tutorial.SetKeymapEnabled",
+      "to": "input mask bit 2",
+      "via": [
+        "0x4aa918",
+        "0x4ac030",
+        "0x4acb70",
+        "0x4a94c0"
+      ],
+      "records": [
+        "I01",
+        "I02",
+        "I03",
+        "I04",
+        "I10",
+        "S07"
+      ]
+    },
+    {
+      "from": "lb.ChangeKeymapType",
+      "to": "current keymap vector rows",
+      "via": [
+        "0x4a1de8",
+        "0x4a2380",
+        "0x4a23e0",
+        "0x4a1440",
+        "0x6d1be0"
+      ],
+      "records": [
+        "I05",
+        "I06",
+        "I07",
+        "I08",
+        "I09",
+        "I10",
+        "S08"
+      ]
+    },
+    {
+      "from": "Q active",
+      "to": "controller+58 then optional f_doCoTask",
+      "via": [
+        "0x561587",
+        "0x5615c4",
+        "0x5615c7",
+        "0x5615d8"
+      ],
+      "records": [
+        "Q02",
+        "S09"
+      ]
+    }
+  ],
+  "development_ready": [
+    "Use the existing scene start/pump/end and Server scene/confirmation state machines with their known ownership restrictions.",
+    "Represent Lua instruction hook events separately from elapsed milliseconds or Client frames in offline tooling.",
+    "Enforce numeric input-alias arguments and never use returned argument as input-ready or scene-complete evidence.",
+    "List Server authoritative rules and state/reply/cancel behavior within already-proven entity/quest protocols as Server development requirements. Unresolved Client trigger/query/result-observer or callback interfaces remain Client reverse-engineering gaps; do not invent wire support."
+  ],
+  "open_edges": [
+    {
+      "id": "ordinary-entry",
+      "required": "real ordinary-field-reachable Lua/MEF producer and concrete fixed name/path/dataflow",
+      "not_satisfied_by": "arbitrary function pointer or replacing native/global memory"
+    },
+    {
+      "id": "ordinary-pump",
+      "required": "native time/update source that invokes the ordinary task while Q inactive and without Tutorial/review UI owner",
+      "not_satisfied_by": "debug.sethook registration or manual coroutine.resume inside a suspended task"
+    },
+    {
+      "id": "input-ownership",
+      "required": "legal API/owner contract that preserves both input mask and ordinary controller command assembly during task execution",
+      "not_satisfied_by": "SetKeymapEnabled(1), ChangeKeymapType(0/1), or a hypothetical Q pause setter"
+    },
+    {
+      "id": "ordinary-stop",
+      "required": "reachable stop/cancel/owner teardown for map switch, death, disconnect and callback reentry, with original field restoration",
+      "not_satisfied_by": "shared VM globals surviving or MoCo list removal alone"
+    },
+    {
+      "id": "q-pause-alias",
+      "required": "specific native writer provenance to M+2C through a concrete alias, if relied upon",
+      "not_satisfied_by": "the limited absolute-literal census; even a found pause writer does not remove earlier controller+58 store"
+    }
+  ],
+  "claims_not_made": [
+    "Client-wide runner nonexistence",
+    "computed alias completeness",
+    "runtime gameplay success",
+    "new Server opcode support",
+    "T01 FULL-PASS"
+  ]
+}

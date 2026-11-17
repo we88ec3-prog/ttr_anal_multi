@@ -1,0 +1,150 @@
+{
+  "schema": "kr-mef-checkpoint-r12-v1",
+  "scope": "Only application-level payloads for verified original KR client handlers. Not full TCP framing nor original MEF file transfer.",
+  "original_bin_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+  "identityDomains": {
+    "pointKey": "16-bit key meaningful only with category",
+    "category": "signed BYTE normalized to WORD; category2 maps ShopNo; category3 NPC key",
+    "worldEntityId": "distinct native world actor key",
+    "Qslot": "distinct Q scene actor slot",
+    "ShopNo": "distinct from NPC model and world ID"
+  },
+  "s2c_0027": {
+    "opcode": 39,
+    "handler": "0x4B2AF0",
+    "dispatcher_offset": "0x13C",
+    "applicationPrefixBytes": 2,
+    "rowBytes": 18,
+    "countFormula": "floor((applicationLength-2)/18)",
+    "clearsExistingPoints": true,
+    "rows": [
+      {
+        "offset": 0,
+        "name": "key",
+        "wire": "u16",
+        "pointOffset": "0xF6"
+      },
+      {
+        "offset": 2,
+        "name": "category",
+        "wire": "i8",
+        "pointOffset": "0xF4 WORD"
+      },
+      {
+        "offset": 3,
+        "name": "enabled",
+        "wire": "u8",
+        "pointOffset": "0x105"
+      },
+      {
+        "offset": 4,
+        "name": "x",
+        "wire": "float32",
+        "pointOffset": "0xA0"
+      },
+      {
+        "offset": 8,
+        "name": "y",
+        "wire": "float32",
+        "pointOffset": "0xA4"
+      },
+      {
+        "offset": 12,
+        "name": "radius",
+        "wire": "float32",
+        "pointOffset": "0xFC"
+      },
+      {
+        "offset": 16,
+        "name": "tail0",
+        "wire": "u8",
+        "pointOffset": "0x100"
+      },
+      {
+        "offset": 17,
+        "name": "tail1",
+        "wire": "u8",
+        "pointOffset": "0xF8"
+      }
+    ],
+    "note": "Full snapshot. Missing or fractional tail rows are not reliable extension behavior."
+  },
+  "s2c_0048": {
+    "opcode": 72,
+    "handler": "0x4B32E0",
+    "dispatcher_offset": "0x244",
+    "applicationBytes": 6,
+    "fields": [
+      {
+        "offset": 0,
+        "name": "opcode",
+        "wire": "u16",
+        "value": "0x0048"
+      },
+      {
+        "offset": 2,
+        "name": "pointKey",
+        "wire": "u16"
+      },
+      {
+        "offset": 4,
+        "name": "category",
+        "wire": "u8"
+      },
+      {
+        "offset": 5,
+        "name": "status",
+        "wire": "u8"
+      }
+    ],
+    "nativeSetter": "0x544940 -> 0x543B30",
+    "createsPoint": false,
+    "updatesOnlyFirstMatch": true
+  },
+  "luaSetter": {
+    "name": "Tutorial.SetCheckPointStatus",
+    "native": "0x4A9460",
+    "arguments": [
+      "pointKey",
+      "category",
+      "status"
+    ],
+    "nativeSetter": "0x544940 -> 0x543B30",
+    "returnsReliableAck": false,
+    "createsPoint": false,
+    "recommendedStatusValues": [
+      0,
+      1
+    ]
+  },
+  "c2s_001c": {
+    "opcode": 28,
+    "producer": "0x544020",
+    "applicationBytes": 6,
+    "fields": [
+      {
+        "offset": 0,
+        "name": "opcode",
+        "wire": "u16",
+        "value": "0x001C"
+      },
+      {
+        "offset": 2,
+        "name": "category",
+        "wire": "u16"
+      },
+      {
+        "offset": 4,
+        "name": "pointKey",
+        "wire": "u16"
+      }
+    ],
+    "limitation": "Only specific native fallback; not guaranteed for each NPC, shop, tutorial click."
+  },
+  "validationLimits": [
+    "Not an official .mef schema",
+    "No proof of original MapList.TRIGGER first loader",
+    "No gameplay or Server execution",
+    "Only specified bounded static native dataflow verified"
+  ]
+}

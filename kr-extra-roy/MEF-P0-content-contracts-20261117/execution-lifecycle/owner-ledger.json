@@ -1,0 +1,301 @@
+{
+  "schema": "ttr-mef-p0-owner-ledger-v1",
+  "classification": "NOT_NATIVE_MEF_ANALYSIS_CONTRACT",
+  "scope": "Same KR original Client context and original bindings; bounded owners needed by P0 contracts. Server bookkeeping names are design, not native fields.",
+  "owners": [
+    {
+      "id": "q_execution",
+      "identity": "Q manager FB73C0; formal VM FDF3C8 and qco; active M+28; pause M+2C",
+      "acquire_or_update": "Accepted native Start; prepass uses its separate retained VM and synchronous Register",
+      "release_or_handoff": "Normal active End clears active and invokes original qco removeAll; currently running callback is not unwound",
+      "completion_limit": "End report/active is not callback, resource, input or business success; do not yield/new work after End",
+      "evidence": [
+        "entry",
+        "scheduler",
+        "reuse",
+        "feature"
+      ],
+      "adoption_precondition": "Client context, actual selector, no busy overlap, normal/review branch chosen",
+      "native_run_token_proved": false
+    },
+    {
+      "id": "q_actor_tree",
+      "identity": "M+18 tree, root M+1C; DWORD Q slot, not world EntityId",
+      "acquire_or_update": "Q.CreateObject once per unused slot; raw model/slot narrowing retained",
+      "release_or_handoff": "Q.DeleteAllObject cleans EVERY Q actor then tree; Q.DeleteObject is stub",
+      "completion_limit": "Clear has full-tree scope; no per-run ownership token, cannot selectively free another owner",
+      "evidence": [
+        "actors",
+        "reuse",
+        "N01_doll_release_before_actor_delete"
+      ],
+      "adoption_precondition": "All extant Q actors owned by this content; stop dependent camera first",
+      "native_run_token_proved": false
+    },
+    {
+      "id": "model_preload_layer3",
+      "identity": "FC0E90 layer jobs; model record+54 -> R; R+5C common ref count",
+      "acquire_or_update": "Start prepass model set -> level3 replace before formal script; actual CDoll has independent leases",
+      "release_or_handoff": "DeleteAllObject submits empty level3 replace and waits its event; new Start also replaces layer3",
+      "completion_limit": "Level-job event is not drain of doll requests/results/releases; raw record+54 is not resident proof",
+      "evidence": [
+        "reuse",
+        "doll"
+      ],
+      "adoption_precondition": "Distinguish prepass slots, model keys, desired actions and actual payload",
+      "native_run_token_proved": false
+    },
+    {
+      "id": "doll_and_parts",
+      "identity": "Actor A+15C/+160; D.state+24, D.instance+1C; desired parts+5C, applied parts+6C",
+      "acquire_or_update": "Q actual immediate init; default D.model+31000 and explicit-item lookups are attempts. Only reaching the selected install/remove setters changes desired parts/dirty; selected variant0 double miss returns0 without those writes.",
+      "release_or_handoff": "A.v+14 -> D+8.v+8 -> 7A57C0: state1 queues old instance/applied-parts release, clears instance, state0, dirty1; actor destructor drops strong pair",
+      "completion_limit": "Normal initial Q immediate1 returns after apply; state2 discussion is conditional on an actual non-immediate producer or abnormal return. Selected item dirty writers preserve D+20. Release jobs still remain asynchronous; original D strong holds do not redirect by new Q slot",
+      "evidence": [
+        "doll",
+        "actors",
+        "N01_doll_release_before_actor_delete",
+        "N02_item_install_marks_dirty",
+        "N03_item_remove_marks_dirty",
+        "N04_item_selection_dispatch"
+      ],
+      "adoption_precondition": "Stable catalog identity and normal worker/apply/release, not arbitrary failure recovery",
+      "native_run_token_proved": false
+    },
+    {
+      "id": "camera_work",
+      "identity": "Current FB7620; KeyFrame FB7624 or Attach FB766C with Q slot FB7670",
+      "acquire_or_update": "Load/Play or Attach replaces shared current; Attach is Q slot dependent",
+      "release_or_handoff": "CameraWorks.Stop stops current; Q.DetachCamera only nulls current, optional after Stop",
+      "completion_limit": "IsEnded=1 includes NULL/stop; no success or snapshot restore; cannot Stop old work after detaching its only current access",
+      "evidence": [
+        "presentation",
+        "feature"
+      ],
+      "adoption_precondition": "Current still belongs to this content and camera type/slot remains valid",
+      "native_run_token_proved": false
+    },
+    {
+      "id": "camera_snapshot",
+      "identity": "[FB76E8]+A0 vector of 0x48-byte frames; QSceneCam label shared",
+      "acquire_or_update": "Q.BeginCameraOverride / original Phase1; Tutorial.PushCamera has same stack",
+      "release_or_handoff": "EndCameraOverride/Pop restores and erases before label comparison, scanning backward until match or exhausted",
+      "completion_limit": "Not idempotent; same label is not unique run identity; never blind retry or consume another owner frame",
+      "evidence": [
+        "presentation"
+      ],
+      "adoption_precondition": "Balanced acquisition on same camera, no external pop/replacement; map restore before final pop if both used",
+      "native_run_token_proved": false
+    },
+    {
+      "id": "map_backup",
+      "identity": "M+30 single 11-DWORD camera buffer; M+34 single saved map ID",
+      "acquire_or_update": "LoadMap stores current camera/map and invokes FLD loader",
+      "release_or_handoff": "RestoreMap resolves saved ID, music policy, writes current map back to M+34, loads saved file, applies M+30 camera",
+      "completion_limit": "Not nested snapshot or idempotent restore; no Lua payload-ready ACK; a second LoadMap overwrites the only backup",
+      "evidence": [
+        "presentation",
+        "audiovisual"
+      ],
+      "adoption_precondition": "Exactly one paired backup unless a separate proven composition; table/member/current context intact",
+      "native_run_token_proved": false
+    },
+    {
+      "id": "q_flying_image",
+      "identity": "M+40 one tracked handle in shared image manager FB7358",
+      "acquire_or_update": "Q.FlyingObject cancels prior tracked image BEFORE creating next",
+      "release_or_handoff": "Del sets alive0 and clears handle; qualified manager later release/delete/erase; finite native phases may continue after End",
+      "completion_limit": "No multi-image lease or completion token; replaced previous image cannot be promised natural fade-out",
+      "evidence": [
+        "reuse",
+        "feature"
+      ],
+      "adoption_precondition": "Declare replace vs natural completion; finite counts and real DDS; shared owner remains valid",
+      "native_run_token_proved": false
+    },
+    {
+      "id": "tutorial_images",
+      "identity": "Tutorial tracking and shared FB7358 manager; separate from M+40",
+      "acquire_or_update": "Tutorial image registration/creation owns its own tracked objects",
+      "release_or_handoff": "Tutorial.DestroyFlyingObjects marks its tracked lifetime; shared selective sweep differs",
+      "completion_limit": "Q image cancel/Stop selective sweep is not universal Tutorial cancellation",
+      "evidence": [
+        "presentation"
+      ],
+      "adoption_precondition": "Use only the relevant tracking owner, no global purge assumption",
+      "native_run_token_proved": false
+    },
+    {
+      "id": "fade",
+      "identity": "FE2744; active+0C, alpha+10, dir+14, count+18",
+      "acquire_or_update": "Q.Fade or Fade.Start replaces one shared overlay",
+      "release_or_handoff": "Finite fade-in can clear; Fade.End(nonzero) clears active+alpha; End(0) preserves alpha",
+      "completion_limit": "Q End/paused qco does not stop native fade; count is update denominator not wall time",
+      "evidence": [
+        "audiovisual"
+      ],
+      "adoption_precondition": "Graphics ready; known own overlay and valid denominator; original zero parameters preserved as risks",
+      "native_run_token_proved": false
+    },
+    {
+      "id": "sepia",
+      "identity": "Phase FE36D4, argument FE36D8",
+      "acquire_or_update": "StartSepia sets phase1; changes are native update driven",
+      "release_or_handoff": "EndSepia requests phase4; qualified 4->5->6->0 takes three updater calls",
+      "completion_limit": "Call return is not completed restoration. Original RevPhase1 always calls zero-user-argument EndSepia; the selected original C frame/marshaller proves native argument0 (sibling zeroarg contract). New authoring requires explicit integer; baseline ownership still required.",
+      "evidence": [
+        "presentation",
+        "qbase-lifecycle"
+      ],
+      "adoption_precondition": "Native tick/renderer remains valid; strict new authoring supplies one explicit integer, original helper compatibility debt kept",
+      "native_run_token_proved": false
+    },
+    {
+      "id": "letterbox",
+      "identity": "FE36E0+0C",
+      "acquire_or_update": "ShowLetterbox, including Phase1 transition type2",
+      "release_or_handoff": "HideLetterbox, including RevPhase1 transition type2",
+      "completion_limit": "Persists after normal End; independent of input mask and world visibility",
+      "evidence": [
+        "feature",
+        "audiovisual"
+      ],
+      "adoption_precondition": "Own change from known baseline; do not remove another presentation owner",
+      "native_run_token_proved": false
+    },
+    {
+      "id": "world_render",
+      "identity": "FAB130+A8",
+      "acquire_or_update": "DisableObjRender; Phase1 if g_hideOrigObjs !=0",
+      "release_or_handoff": "EnableObjRender; RevPhase1 matching flag",
+      "completion_limit": "Only selected world render route, not simulation; normal End alone does not restore",
+      "evidence": [
+        "feature",
+        "presentation"
+      ],
+      "adoption_precondition": "Known visible baseline, same owner and no external change",
+      "native_run_token_proved": false
+    },
+    {
+      "id": "world_slow",
+      "identity": "FAB130+B0 slow flag and independent +AC countdown",
+      "acquire_or_update": "StartSlowMotion sets B0; other native paths own countdown",
+      "release_or_handoff": "EndSlowMotion clears B0 only",
+      "completion_limit": "Positive countdown may still scale selected animation delta; neither Server time nor all controls reset",
+      "evidence": [
+        "feature",
+        "presentation"
+      ],
+      "adoption_precondition": "Treat countdown independently; original RevPhase1 clears the Q flag unconditionally as a known normal-baseline policy. Require acquisition or exclusive authority; no promise of immediate global speed reset.",
+      "native_run_token_proved": false
+    },
+    {
+      "id": "input_and_controller",
+      "identity": "Q mask value0x2, other input masks, world controller+58, current page capture",
+      "acquire_or_update": "Phase1 DisableInput; active Q tick sets controller+58 before qco pump",
+      "release_or_handoff": "RevPhase1 EnableInput then End; 00EB applicable wait handling remains separate",
+      "completion_limit": "Clearing0x2 or observing003F does not prove controller-ready, no UI capture, world control or all cleanup",
+      "evidence": [
+        "input",
+        "entry",
+        "one_shot"
+      ],
+      "adoption_precondition": "Correct controller/page; no busy content; existing packet/owner policies preserved",
+      "native_run_token_proved": false
+    },
+    {
+      "id": "scenario_talk",
+      "identity": "Current typed CScenarioTalkBox, selected row+9C; qbase g_scenePlaying",
+      "acquire_or_update": "OpenTalkScene/ScenarioTalkTable.open binds table keys and same-page UI",
+      "release_or_handoff": "hide requests shared voice stop, calls OnEndTalk, hides and clears selected; natural last-row/no-msg also hide",
+      "completion_limit": "g_scenePlaying0 includes explicit hide; not mission/player-choice result and hide does not show other UI",
+      "evidence": [
+        "dialogue",
+        "queries"
+      ],
+      "adoption_precondition": "Correct page/manual or proven auto updater; valid selected rows/text/portrait/voice",
+      "native_run_token_proved": false
+    },
+    {
+      "id": "hidden_page_children",
+      "identity": "Current typed page+ A0 saved visible child-ID set",
+      "acquire_or_update": "hideOtherUI records visible nonexempt IDs; Tutorial.HideUI uses empty exclusions",
+      "release_or_handoff": "showOtherUI restores saved IDs on current compatible page then clears saved set",
+      "completion_limit": "Not nested per-run owner stack; page replacement does not transfer prior saved set",
+      "evidence": [
+        "dialogue"
+      ],
+      "adoption_precondition": "Same page owns saved set, external UI changes/capture independently managed",
+      "native_run_token_proved": false
+    },
+    {
+      "id": "shared_voice",
+      "identity": "FB72AC sound handle shared by ScenarioTalk, Dialogue, Prolog and Book",
+      "acquire_or_update": "Dialog/play calls replace or inspect same shared voice context",
+      "release_or_handoff": "Hide/close is stop request; native sound update later completes handle lifecycle",
+      "completion_limit": "UI inactive/next-line/yield is not all voice drain; owners must serialize or coordinate",
+      "evidence": [
+        "dialogue"
+      ],
+      "adoption_precondition": "Correct source, sound context and sequencing; no invented per-voice token",
+      "native_run_token_proved": false
+    },
+    {
+      "id": "bgm_pool",
+      "identity": "CMusicPlayer FC0FC8; primary FC0FFC, secondary and16 stream slots",
+      "acquire_or_update": "PlayMusic queues worker start; same case-insensitive name can keep previous playback/loop",
+      "release_or_handoff": "StopMusic stops entire pool and clears names/pending; FadeOut lowers gain without proving release; RestoreMap can select final/map tracks",
+      "completion_limit": "Normal End does not stop BGM; no per-run/per-track Lua handle or completion ACK",
+      "evidence": [
+        "audiovisual",
+        "feature"
+      ],
+      "adoption_precondition": "Choose preserve, target-track switch or whole-pool stop policy; actual tracks/resources required",
+      "native_run_token_proved": false
+    },
+    {
+      "id": "final_music",
+      "identity": "Q M+44 string, length M+54; data policy not active music handle",
+      "acquire_or_update": "Accepted Start assigns empty via402A70; SetFinalMusic nonspace appends via401FC0; empty retains",
+      "release_or_handoff": "RestoreMap reads nonempty for Sound/+name primary request and handles map secondary; Stop may fill fallback when empty",
+      "completion_limit": "Empty setter is not clear; locale predicate differs from generic Unicode whitespace; Start/Stop/Restore are different transitions",
+      "evidence": [
+        "audiovisual",
+        "N05_string_assign",
+        "N06_first_char_space_test",
+        "N07_locale_space_test"
+      ],
+      "adoption_precondition": "One known content policy; use actual assign/reset provenance, no hidden concatenation",
+      "native_run_token_proved": false
+    },
+    {
+      "id": "prolog_book",
+      "identity": "Prolog FC1B18, Synopsis FC1B90, Book FC1BF8 are distinct owners",
+      "acquire_or_update": "Q.Prolog/Dialogue/Book with their native readers",
+      "release_or_handoff": "Prolog OnClose / normal consumption, Book native completion; active Stop cancels selected owners under gates",
+      "completion_limit": "Observer0 does not distinguish success/missing/cancel; normal End is not universal close",
+      "evidence": [
+        "dialogue",
+        "queries",
+        "presentation"
+      ],
+      "adoption_precondition": "Select correct owner/resource and UI context; shared voice gate applies",
+      "native_run_token_proved": false
+    },
+    {
+      "id": "text_and_panels",
+      "identity": "Subtitle queue FC1C84, native panel lists/render buckets, separate owner from Q actor tree",
+      "acquire_or_update": "InsertText/NumberPanel/BattlePanel produce presentation items",
+      "release_or_handoff": "Selected native lifetime/update release; not removed merely by qco disappearance",
+      "completion_limit": "Q actor deletion is not universal text/panel reset; presented number is not HP/loot authority",
+      "evidence": [
+        "dialogue"
+      ],
+      "adoption_precondition": "Finite valid style/text encoding and target context; payload/deferred work are not result ACK",
+      "native_run_token_proved": false
+    }
+  ],
+  "runtime_readiness_proved": false,
+  "formal_status_changed": false,
+  "original_helper_baseline_policy": "Original cleanup is not a generic state transaction: some display/input flags are reset to a predetermined normal baseline, while camera/map explicitly save prior state. Shared-owner authority remains a precondition."
+}

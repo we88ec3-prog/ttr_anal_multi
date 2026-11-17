@@ -1,0 +1,143 @@
+{
+  "schema": "COMPAT-TRANSITION-PROFILE-1",
+  "model_kind": "NOT_NATIVE_MEF",
+  "analysis_status": "PARAMETERIZED_DEPENDENCIES_CLOSED; LIVE_BINDINGS_BLOCKED",
+  "deployable": false,
+  "case_id": 103,
+  "field_id": 19,
+  "from_node": 1,
+  "from_map": 191,
+  "to_node": 2,
+  "to_map": 192,
+  "field_kind": "CScenarioField",
+  "controller_kind": "Formation",
+  "retains_field_if_already_correct": true,
+  "map_resources": {
+    "from_map": "scenario_pathofpindus01D",
+    "to_map": "scenario_pathofpindus02D"
+  },
+  "required_binding": {
+    "portal_key": null,
+    "portal_geometry": null,
+    "approved_spawn": null,
+    "relation_record": null,
+    "world_actor_snapshot": null,
+    "resource_release_hash": null
+  },
+  "prior_W3_spawn_candidates": [
+    {
+      "map": 191,
+      "xy": [
+        308.5,
+        437.5
+      ],
+      "status": "UNAPPROVED_STATIC_CANDIDATE"
+    },
+    {
+      "map": 192,
+      "xy": [
+        394.5,
+        307.5
+      ],
+      "status": "UNAPPROVED_STATIC_CANDIDATE"
+    }
+  ],
+  "release_order_policy": {
+    "origin": "PROPOSED_SERVER_PARTIAL_ORDER_NOT_OFFICIAL_CAPTURE",
+    "steps": [
+      "server_authorizes_edge",
+      "finish_old_q",
+      "invalidate_old_generation",
+      "loading_begin",
+      "reconcile_old_world",
+      "select_or_retain_field",
+      "load_target_map",
+      "publish_world_actors",
+      "publish_relation_records",
+      "bind_control_slots",
+      "publish_complete_points",
+      "loading_end",
+      "ready",
+      "optional_A1"
+    ],
+    "required_before": [
+      [
+        "server_authorizes_edge",
+        "finish_old_q"
+      ],
+      [
+        "finish_old_q",
+        "invalidate_old_generation"
+      ],
+      [
+        "invalidate_old_generation",
+        "loading_begin"
+      ],
+      [
+        "loading_begin",
+        "reconcile_old_world"
+      ],
+      [
+        "reconcile_old_world",
+        "select_or_retain_field"
+      ],
+      [
+        "select_or_retain_field",
+        "load_target_map"
+      ],
+      [
+        "load_target_map",
+        "publish_world_actors"
+      ],
+      [
+        "load_target_map",
+        "publish_relation_records"
+      ],
+      [
+        "publish_world_actors",
+        "bind_control_slots"
+      ],
+      [
+        "publish_relation_records",
+        "bind_control_slots"
+      ],
+      [
+        "load_target_map",
+        "publish_complete_points"
+      ],
+      [
+        "bind_control_slots",
+        "loading_end"
+      ],
+      [
+        "publish_complete_points",
+        "loading_end"
+      ],
+      [
+        "loading_end",
+        "ready"
+      ],
+      [
+        "ready",
+        "optional_A1"
+      ]
+    ]
+  },
+  "constraints": [
+    "No 000A before matching 0008 relation and 0007 actor",
+    "No point snapshot before 0012 clear",
+    "No next-generation late delta while transitioning",
+    "No claim 0014 clears Q mask2",
+    "No claim loading_end proves graphic resource success",
+    "No client group-clear callback assumed"
+  ],
+  "A1": {
+    "stage": "after current world/relations/points published and local controller ready, old Q resolved",
+    "key": [
+      0,
+      32760
+    ],
+    "key_origin": "existing A1 candidate only; actual merged index and consumed-boot state required",
+    "not_general_repeatable_event_runner": true
+  }
+}

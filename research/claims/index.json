@@ -16476,6 +16476,846 @@
       "review_ref": "research/handoffs/t01-20261101-extra-roy1-roy2-r0-r2/README.md",
       "integration_status": "CONFLICT_CHECKED; PARTIAL_BOUNDED; NOT_FULL_PASS",
       "quality_inheritance": false
+    },
+    {
+      "id": "CLM-MEF-0001",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/20261115-001734-chatgpt-web-roy1-MEF-trigger-callers.md",
+      "source_blob_sha": "61c42e79beb963411adf2e3ec2ddbe9a56200274",
+      "source_intake_id": "SRC-0803",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "§1: S2C 0012 -> 4B24F0 -> 4DF510 -> 4F7DF0 TRIGGER name query, contrasted with SceneList 0047 selection and fixed Tutorial/Synopsis entry.",
+      "assertion": "所列地圖路徑會查 MapList.TRIGGER 名稱，但 getter 返回值在已核分支被覆寫，未接到該名稱的 reader/parser；0047 的既有 SceneList 雙鍵選取則指向固定規則的 sequence。這兩者不能合稱任意 MEF 路徑或 bytes 的首次執行介面。",
+      "limitations": [
+        "只限定所列 caller/consumer，並非全 Client 無 MEF 執行能力的陰性證明。",
+        "官方 MEF 首次 reader/grammar 仍屬 Client 證據缺口；不得以 Server 新 opcode 補猜。",
+        "本條為來源限定 R1 整合；R2 僅涵蓋本批 REPORT 與子審核明列範圍，未完成全文 R3，不代表 FULL-PASS、S00 接受、Server 實作或遊玩通過。"
+      ],
+      "conflicts": [],
+      "related_claim_ids": [
+        "CLM-SCENE-0004",
+        "CLM-SCENE-0006"
+      ],
+      "affected_spec_ids": [
+        "SPEC-SCENE-0001"
+      ],
+      "review_ref": "research/handoffs/t01-20261117-extra-roy1-mef-sync/REPORT.md",
+      "integration_status": "R1 bounded extraction; selected R2 in review_ref; NOT_FULL_PASS",
+      "quality_inheritance": false,
+      "claim_kind": "NATIVE_SOURCE_DERIVED",
+      "source_evidence_refs": [
+        "kr-extra-roy/MEF-trigger-callers-20261115/native-root/report.md"
+      ],
+      "related_requirement_ids": [
+        "REQ-0019",
+        "REQ-0021"
+      ],
+      "server_development_handoff": "保留可見檔案、合法 selector、解析與首次執行的不同狀態；使用已證 scene 介面安排內容。"
+    },
+    {
+      "id": "CLM-MEF-0002",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/MEF-comprehensive-contracts-20261117/REPORT.md",
+      "source_blob_sha": "2467da8d39c6c65dc3655560d3f58b2917941b0c",
+      "source_intake_id": "SRC-1001",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "§2 and abi/ catalogue: 121 known normal bindings, 33 marshallers; final-N Lua stack reads and result-slot semantics.",
+      "assertion": "所列121個正常 binding 的 marshaller 由 Lua stack 最後 N 格取參數，未見通用 argc 防線；closure EAX=1 表示結果槽數，不是 native 成功。17個 binding 有新 number producer（16 query 與 lb.DoFile），其餘104個未產生新的 binding 值。",
+      "limitations": [
+        "121是指定正常註冊讀集，不是全引擎或所有動態 binding 的完備性證明。",
+        "少傳不能一般化為補 nil/0，多傳尾參數會改讀取窗口；命令返回值不作完成 ACK。",
+        "本條為來源限定 R1 整合；R2 僅涵蓋本批 REPORT 與子審核明列範圍，未完成全文 R3，不代表 FULL-PASS、S00 接受、Server 實作或遊玩通過。"
+      ],
+      "conflicts": [],
+      "related_claim_ids": [
+        "CLM-CLIENT-0063",
+        "CLM-CLIENT-0064"
+      ],
+      "affected_spec_ids": [
+        "SPEC-SCENE-0001"
+      ],
+      "review_ref": "research/handoffs/t01-20261117-extra-roy1-mef-sync/REPORT.md",
+      "integration_status": "R1 bounded extraction; selected R2 in review_ref; NOT_FULL_PASS",
+      "quality_inheritance": false,
+      "claim_kind": "NATIVE_SOURCE_DERIVED",
+      "source_evidence_refs": [
+        "kr-extra-roy/MEF-comprehensive-contracts-20261117/abi/report.md",
+        "kr-extra-roy/MEF-comprehensive-contracts-20261117/abi/abi-contracts.json"
+      ],
+      "related_requirement_ids": [
+        "REQ-0019",
+        "REQ-0021"
+      ],
+      "server_development_handoff": "內容建置端綁 Client/ABI 版本、參數個數與結果用途；預驗通過不當部署完成。",
+      "bounded_review_refs": [
+        "research/handoffs/t01-20261117-extra-roy1-mef-sync/native-review/report.md"
+      ]
+    },
+    {
+      "id": "CLM-MEF-0003",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/MEF-comprehensive-contracts-20261117/REPORT.md",
+      "source_blob_sha": "2467da8d39c6c65dc3655560d3f58b2917941b0c",
+      "source_intake_id": "SRC-1001",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "§2: normal numeric marshallers contrasted with ScenarioTalkTable.open third argument; four named stubs and GetObjectCount result limitation.",
+      "assertion": "一般整數/float 模板接受 number 或可解析 numeric string，boolean在這些數值模板轉0；ScenarioTalkTable.open 的第三參數另採 Lua truthiness。四個列名 stub 與 lb.GetObjectCount 缺少新 count producer 的限制須分別保留。",
+      "limitations": [
+        "此處不是所有 Lua API 的共同型別規則；數字0在 Lua truthiness 與一般數值模板的意義不同。",
+        "CK-CLIENT-SCRIPT-REGISTRATION-ZERO-STUB-01 只驗 8DC2F0 三byte；不能由該既有 FULL-PASS 推121 binding均通過。",
+        "本條為來源限定 R1 整合；R2 僅涵蓋本批 REPORT 與子審核明列範圍，未完成全文 R3，不代表 FULL-PASS、S00 接受、Server 實作或遊玩通過。"
+      ],
+      "conflicts": [],
+      "related_claim_ids": [
+        "CLM-CLIENT-0063",
+        "CLM-CLIENT-0064"
+      ],
+      "affected_spec_ids": [
+        "SPEC-SCENE-0001"
+      ],
+      "review_ref": "research/handoffs/t01-20261117-extra-roy1-mef-sync/REPORT.md",
+      "integration_status": "R1 bounded extraction; selected R2 in review_ref; NOT_FULL_PASS",
+      "quality_inheritance": false,
+      "claim_kind": "NATIVE_SOURCE_DERIVED",
+      "source_evidence_refs": [
+        "kr-extra-roy/MEF-comprehensive-contracts-20261117/abi/report.md"
+      ],
+      "related_requirement_ids": [
+        "REQ-0019",
+        "REQ-0021"
+      ],
+      "server_development_handoff": "將每一binding的獨立型別規則與不可用stub列為內容工具規則，不能靠函式名稱推能力。"
+    },
+    {
+      "id": "CLM-MEF-0004",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/MEF-comprehensive-contracts-20261117/REPORT.md",
+      "source_blob_sha": "2467da8d39c6c65dc3655560d3f58b2917941b0c",
+      "source_intake_id": "SRC-1001",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "§3 and events/observation-catalog.json: all 16 known numeric queries, selected fixed-owner/key predicates and stop-prefix writer.",
+      "assertion": "16個已列 query 的數值結果各受 owner/key/phase 限制；IsCharacterAvailable 固定看第三筆 roster，IsIsiliaFound 固定 world key F000 並另過 camera/距離/投影 gate；IsSynopsisSkipped 的特定 writer 早於 active gate。它們不能互換為任意 actor 存活、死亡、建立成功或當次run完成事件。",
+      "limitations": [
+        "GetLeaderPosN 的0可是真座標、無領隊或無效selector；query名稱不能補足身份與成功語義。",
+        "不將所列16項以外的 indirect/query 路線判為不存在。",
+        "本條為來源限定 R1 整合；R2 僅涵蓋本批 REPORT 與子審核明列範圍，未完成全文 R3，不代表 FULL-PASS、S00 接受、Server 實作或遊玩通過。"
+      ],
+      "conflicts": [],
+      "related_claim_ids": [],
+      "affected_spec_ids": [
+        "SPEC-SCENE-0001"
+      ],
+      "review_ref": "research/handoffs/t01-20261117-extra-roy1-mef-sync/REPORT.md",
+      "integration_status": "R1 bounded extraction; selected R2 in review_ref; NOT_FULL_PASS",
+      "quality_inheritance": false,
+      "claim_kind": "NATIVE_SOURCE_DERIVED",
+      "source_evidence_refs": [
+        "kr-extra-roy/MEF-comprehensive-contracts-20261117/events/report.md",
+        "kr-extra-roy/MEF-comprehensive-contracts-20261117/events/observation-catalog.json"
+      ],
+      "related_requirement_ids": [
+        "REQ-0016",
+        "REQ-0019",
+        "REQ-0021"
+      ],
+      "server_development_handoff": "普通world條件、清場與任務結果由可靠Server身份維護；現有本地query只用其限定條件。"
+    },
+    {
+      "id": "CLM-MEF-0005",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/MEF-comprehensive-contracts-20261117/REPORT.md",
+      "source_blob_sha": "2467da8d39c6c65dc3655560d3f58b2917941b0c",
+      "source_intake_id": "SRC-1001",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "§4: Q.FlyingObject 564940..564A5B, 56496A calls 564A60 before allocation; published errata scopes.",
+      "assertion": "所列正常 Q.FlyingObject 路徑先取消同Q receiver追蹤的上一張圖，將alive清零並清handle，再配置/發布新圖；新圖替換與manager實體回收是不同階段。舊「只覆寫handle、不先取消」敘述及對應SYN預期已由作者明確撤回。",
+      "limitations": [
+        "不代表共享圖片全掃、同步destructor、建立失敗後恢復舊圖或Lua完成token。",
+        "本R1萃取只採明列替換語義；原ASM、歷史執行收據與其他未涉及主張仍保留。",
+        "本條為來源限定 R1 整合；R2 僅涵蓋本批 REPORT 與子審核明列範圍，未完成全文 R3，不代表 FULL-PASS、S00 接受、Server 實作或遊玩通過。"
+      ],
+      "conflicts": [
+        "kr-extra-roy/MEF-feature-lifecycle-20261117/REPORT.md §6.1 的舊取消推論；按 comprehensive/reuse/errata.json 精確範圍處理。"
+      ],
+      "related_claim_ids": [],
+      "affected_spec_ids": [
+        "SPEC-SCENE-0001"
+      ],
+      "review_ref": "research/handoffs/t01-20261117-extra-roy1-mef-sync/REPORT.md",
+      "integration_status": "R1 bounded extraction; selected R2 in review_ref; NOT_FULL_PASS",
+      "quality_inheritance": false,
+      "claim_kind": "NATIVE_SOURCE_DERIVED",
+      "source_evidence_refs": [
+        "kr-extra-roy/MEF-comprehensive-contracts-20261117/reuse/report.md",
+        "kr-extra-roy/MEF-comprehensive-contracts-20261117/reuse/errata.json"
+      ],
+      "related_requirement_ids": [
+        "REQ-0019",
+        "REQ-0021"
+      ],
+      "server_development_handoff": "區分串行替換與同時並存多圖；不得以舊錯誤SYN PASS支持洩漏推論。",
+      "bounded_review_refs": [
+        "research/handoffs/t01-20261117-extra-roy1-mef-sync/native-review/report.md"
+      ]
+    },
+    {
+      "id": "CLM-MEF-0006",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/MEF-comprehensive-contracts-20261117/REPORT.md",
+      "source_blob_sha": "2467da8d39c6c65dc3655560d3f58b2917941b0c",
+      "source_intake_id": "SRC-1001",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "§5: level3 preload versus CDoll R+5C references; 79EB03, 79F045 -> 7C5BE0 and release paths.",
+      "assertion": "模型level3預載不是唯一資源引用；所列CDoll路徑持有獨立R+5C引用，對同resource的有效request可在非resident時回載，並有對應release。單憑Start替換level3不能推出仍存活Doll必然失去模型。",
+      "limitations": [
+        "只限有效request、引用與owner前提；不保證所有pending/callback、失敗state或render結果。",
+        "level-job signal 不等於全引擎工作佇列drain；zero-Doll投影不可預測有Doll場景。",
+        "本條為來源限定 R1 整合；R2 僅涵蓋本批 REPORT 與子審核明列範圍，未完成全文 R3，不代表 FULL-PASS、S00 接受、Server 實作或遊玩通過。"
+      ],
+      "conflicts": [
+        "早期layer-only模型若套到存活Doll將遺漏獨立引用；followup縮小而非抹除風險。"
+      ],
+      "related_claim_ids": [],
+      "affected_spec_ids": [
+        "SPEC-SCENE-0001"
+      ],
+      "review_ref": "research/handoffs/t01-20261117-extra-roy1-mef-sync/REPORT.md",
+      "integration_status": "R1 bounded extraction; selected R2 in review_ref; NOT_FULL_PASS",
+      "quality_inheritance": false,
+      "claim_kind": "NATIVE_SOURCE_DERIVED",
+      "source_evidence_refs": [
+        "kr-extra-roy/MEF-comprehensive-contracts-20261117/reuse-followup/report.md"
+      ],
+      "related_requirement_ids": [
+        "REQ-0019",
+        "REQ-0021"
+      ],
+      "server_development_handoff": "跨run交接須分別紀錄預載層、Doll持有與排釋放，不以單一job訊號當總回收ACK。"
+    },
+    {
+      "id": "CLM-MEF-0007",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/MEF-comprehensive-contracts-20261117/REPORT.md",
+      "source_blob_sha": "2467da8d39c6c65dc3655560d3f58b2917941b0c",
+      "source_intake_id": "SRC-1001",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "§6: 540B10 ActorList ID -> FILE model key; PRE exclusion and FILE+.abf lookup in CHA_ABF.",
+      "assertion": "所列模型註冊鏈以Actor.ID作key，PRE解析結果不參與這條Q模型key；再以FILE加.abf查CHA_ABF。Base內同basename descriptor的存在，不證明runtime所選完整路徑或mount。",
+      "limitations": [
+        "僅限所列模型註冊/查找鏈，不把world Cluster PRE的其他用途消去。",
+        "同版本cache、directory、mount與實際載體仍須另綁；不把Mon候選路徑自動補成Character/Mon。",
+        "本條為來源限定 R1 整合；R2 僅涵蓋本批 REPORT 與子審核明列範圍，未完成全文 R3，不代表 FULL-PASS、S00 接受、Server 實作或遊玩通過。"
+      ],
+      "conflicts": [],
+      "related_claim_ids": [],
+      "affected_spec_ids": [
+        "SPEC-SCENE-0001"
+      ],
+      "review_ref": "research/handoffs/t01-20261117-extra-roy1-mef-sync/REPORT.md",
+      "integration_status": "R1 bounded extraction; selected R2 in review_ref; NOT_FULL_PASS",
+      "quality_inheritance": false,
+      "claim_kind": "NATIVE_SOURCE_DERIVED",
+      "source_evidence_refs": [
+        "kr-extra-roy/MEF-comprehensive-contracts-20261117/resource-selection/report.md"
+      ],
+      "related_requirement_ids": [
+        "REQ-0019",
+        "REQ-0021"
+      ],
+      "server_development_handoff": "保留模型ID、FILE、候選basename、catalog entry與實際選檔結果為不同欄位。"
+    },
+    {
+      "id": "CLM-MEF-0008",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/MEF-P0-content-contracts-20261117/REPORT.md",
+      "source_blob_sha": "2950cbe49742e7f05865ef32195e2cdce3309e61",
+      "source_intake_id": "SRC-0827",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "§2.2: pinned Boot/Logic/Coroutine bytes, qbase CreateObject and WalkObject helper transforms.",
+      "assertion": "指定Boot原bytecode將TRUE/FALSE設為number1/0。CreateObject helper把action0改1，並僅在第7參數等於number0時轉native show integer1；WalkObject helper的direction未轉交，action=-1另轉4。",
+      "limitations": [
+        "以前述bootstrap載入成功且global未被後續改寫為前提；不是Lua boolean語義。",
+        "此helper轉換不能外推至同名但不同版本的腳本或全部negative action。",
+        "本條為來源限定 R1 整合；R2 僅涵蓋本批 REPORT 與子審核明列範圍，未完成全文 R3，不代表 FULL-PASS、S00 接受、Server 實作或遊玩通過。"
+      ],
+      "conflicts": [],
+      "related_claim_ids": [],
+      "affected_spec_ids": [
+        "SPEC-SCENE-0001"
+      ],
+      "review_ref": "research/handoffs/t01-20261117-extra-roy1-mef-sync/REPORT.md",
+      "integration_status": "R1 bounded extraction; selected R2 in review_ref; NOT_FULL_PASS",
+      "quality_inheritance": false,
+      "claim_kind": "NATIVE_SOURCE_DERIVED",
+      "source_evidence_refs": [
+        "kr-extra-roy/MEF-P0-content-contracts-20261117/abi-adoption/bootstrap-global-contract.json",
+        "kr-extra-roy/MEF-P0-content-contracts-20261117/abi-adoption/helper-adoption-rules.json"
+      ],
+      "related_requirement_ids": [
+        "REQ-0019",
+        "REQ-0021"
+      ],
+      "server_development_handoff": "原內容審讀與新內容嚴格作者規則分開；發布需保留bootstrap和helper版本。"
+    },
+    {
+      "id": "CLM-MEF-0009",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/MEF-P0-content-contracts-20261117/REPORT.md",
+      "source_blob_sha": "2950cbe49742e7f05865ef32195e2cdce3309e61",
+      "source_intake_id": "SRC-0827",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "§2.3: selected original RevPhase1 Q.EndSepia() CALL B=1, normal C frame and marshaller index -1.",
+      "assertion": "指定原始零參數Q.EndSepia()在正常C closure/frame及無改寫hook前提下，marshaller的index -1讀到callee function，tag6經非number/string default分支傳native integer0；565600因此寫state4及零參數。",
+      "limitations": [
+        "這是特定call frame的有界結果，不能泛化為所有缺參數等於nil或0。",
+        "不證明視覺效果立即完成；新內容仍要求顯式一個integer。",
+        "本條為來源限定 R1 整合；R2 僅涵蓋本批 REPORT 與子審核明列範圍，未完成全文 R3，不代表 FULL-PASS、S00 接受、Server 實作或遊玩通過。"
+      ],
+      "conflicts": [],
+      "related_claim_ids": [],
+      "affected_spec_ids": [
+        "SPEC-SCENE-0001"
+      ],
+      "review_ref": "research/handoffs/t01-20261117-extra-roy1-mef-sync/REPORT.md",
+      "integration_status": "R1 bounded extraction; selected R2 in review_ref; NOT_FULL_PASS",
+      "quality_inheritance": false,
+      "claim_kind": "NATIVE_SOURCE_DERIVED",
+      "source_evidence_refs": [
+        "kr-extra-roy/MEF-P0-content-contracts-20261117/abi-adoption/zeroarg-endsepia-contract.json"
+      ],
+      "related_requirement_ids": [
+        "REQ-0019",
+        "REQ-0021"
+      ],
+      "server_development_handoff": "驗證工具須區分原始相容特例與新內容作者政策，不把此特例放寬成一般缺參數容錯。",
+      "bounded_review_refs": [
+        "research/handoffs/t01-20261117-extra-roy1-mef-sync/native-review/report.md"
+      ]
+    },
+    {
+      "id": "CLM-MEF-0010",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/MEF-P0-content-contracts-20261117/REPORT.md",
+      "source_blob_sha": "2950cbe49742e7f05865ef32195e2cdce3309e61",
+      "source_intake_id": "SRC-0827",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "§3.1/3.3: complete selected Q119/3 and Q2440/5 body calls; 108 calls, 17 creates, 15 model identities; explicit dependency frontier.",
+      "assertion": "兩個選定原函式的108次呼叫已被來源包逐項列出（Q119/3共46、Q2440/5共62），涉及17次Create與15個不同模型；現有材料只解析兩個所選descriptor，其餘13個及多類payload/索引/mount仍缺。這個已到達依賴圖不等於完整遞迴資源或runtime選檔完成，ready維持false。",
+      "limitations": [
+        "原函式完整讀集不代表所有分支、整個Quest旅程或全資源庫已完成。",
+        "缺descriptor時不虛造其後代texture/animation/effect；不得用Base830筆index冒稱全部descriptor已解析。",
+        "本條為來源限定 R1 整合；R2 僅涵蓋本批 REPORT 與子審核明列範圍，未完成全文 R3，不代表 FULL-PASS、S00 接受、Server 實作或遊玩通過。"
+      ],
+      "conflicts": [],
+      "related_claim_ids": [],
+      "affected_spec_ids": [
+        "SPEC-SCENE-0001"
+      ],
+      "review_ref": "research/handoffs/t01-20261117-extra-roy1-mef-sync/REPORT.md",
+      "integration_status": "R1 bounded extraction; selected R2 in review_ref; NOT_FULL_PASS",
+      "quality_inheritance": false,
+      "claim_kind": "RESOURCE_SOURCE_DERIVED",
+      "source_evidence_refs": [
+        "kr-extra-roy/MEF-P0-content-contracts-20261117/content-dependencies/scene-dependencies.json",
+        "kr-extra-roy/MEF-P0-content-contracts-20261117/content-dependencies/dependency-frontier.json"
+      ],
+      "related_requirement_ids": [
+        "REQ-0019",
+        "REQ-0021"
+      ],
+      "server_development_handoff": "把缺件、候選與真實選取分層；缺必要來源時不啟用內容，亦不阻擋其他已具資料的Server功能。",
+      "bounded_review_refs": [
+        "research/handoffs/t01-20261117-extra-roy1-mef-sync/native-review/report.md"
+      ]
+    },
+    {
+      "id": "CLM-MEF-0011",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/MEF-P0-content-contracts-20261117/REPORT.md",
+      "source_blob_sha": "2950cbe49742e7f05865ef32195e2cdce3309e61",
+      "source_intake_id": "SRC-0827",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "§3.2: Actor.ID admitted-row overwrite; normalized CHA_ABF/MAP_FLD duplicate preservation; successful Master directory/AttachedPackage rebinding.",
+      "assertion": "三層重複處理不同：Actor.ID的後續admitted row覆寫FILE；CHA_ABF/MAP_FLD正規化basename索引保留既有entry並釋放新重複entry；Master directory後續成功binding可替換provider。不能以單一「先/後者優先」規則涵蓋三層。",
+      "limitations": [
+        "每層均以來源描述的正常解析/成功條件成立為前提。",
+        "未取得實際Master/cache/所選entry時，規則本身不足以選定當次資源。",
+        "本條為來源限定 R1 整合；R2 僅涵蓋本批 REPORT 與子審核明列範圍，未完成全文 R3，不代表 FULL-PASS、S00 接受、Server 實作或遊玩通過。"
+      ],
+      "conflicts": [],
+      "related_claim_ids": [],
+      "affected_spec_ids": [
+        "SPEC-SCENE-0001"
+      ],
+      "review_ref": "research/handoffs/t01-20261117-extra-roy1-mef-sync/REPORT.md",
+      "integration_status": "R1 bounded extraction; selected R2 in review_ref; NOT_FULL_PASS",
+      "quality_inheritance": false,
+      "claim_kind": "NATIVE_SOURCE_DERIVED",
+      "source_evidence_refs": [
+        "kr-extra-roy/MEF-P0-content-contracts-20261117/content-dependencies/report.md"
+      ],
+      "related_requirement_ids": [
+        "REQ-0019",
+        "REQ-0021"
+      ],
+      "server_development_handoff": "內容resolver預驗需沿每層實際去重與mount規則計算，不能只比basename。"
+    },
+    {
+      "id": "CLM-MEF-0012",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/MEF-P0-content-contracts-20261117/REPORT.md",
+      "source_blob_sha": "2950cbe49742e7f05865ef32195e2cdce3309e61",
+      "source_intake_id": "SRC-0827",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "§3.2: selected model initialization action1/action4 requests, default item query, and Walk prepass/formal negative-action transforms.",
+      "assertion": "模型正常初始化除顯式action外亦可能請求action1/4；所選模型有default item查詢，其key為(modelLowWord+31000)&65535，查詢可miss。Walk預掃描collector把任意負action改4，正式qbase P26僅把number-1改4。",
+      "limitations": [
+        "查詢嘗試不等於附件必須存在，也不保證完整外觀可用。",
+        "prepass與formal是不同consumer；不能將兩者規則合併成所有負值相同處理。",
+        "本條為來源限定 R1 整合；R2 僅涵蓋本批 REPORT 與子審核明列範圍，未完成全文 R3，不代表 FULL-PASS、S00 接受、Server 實作或遊玩通過。"
+      ],
+      "conflicts": [],
+      "related_claim_ids": [],
+      "affected_spec_ids": [
+        "SPEC-SCENE-0001"
+      ],
+      "review_ref": "research/handoffs/t01-20261117-extra-roy1-mef-sync/REPORT.md",
+      "integration_status": "R1 bounded extraction; selected R2 in review_ref; NOT_FULL_PASS",
+      "quality_inheritance": false,
+      "claim_kind": "NATIVE_SOURCE_DERIVED",
+      "source_evidence_refs": [
+        "kr-extra-roy/MEF-P0-content-contracts-20261117/content-dependencies/report.md"
+      ],
+      "related_requirement_ids": [
+        "REQ-0019",
+        "REQ-0021"
+      ],
+      "server_development_handoff": "依賴分析須納入引擎隱含請求並保留phase差異，不只掃顯式內容action。"
+    },
+    {
+      "id": "CLM-MEF-0013",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/MEF-P0-content-contracts-20261117/REPORT.md",
+      "source_blob_sha": "2950cbe49742e7f05865ef32195e2cdce3309e61",
+      "source_intake_id": "SRC-0827",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "§4.1: actual Q.Create direct caller 56322E -> 4D0FE0 -> immediate1 and normal apply.",
+      "assertion": "正常Q.Create實際direct caller傳immediate1，正常返回前apply；所選兩個原場景的初次Create不能因一般base/Q vtable槽或deferred producer而被判定必留state2。",
+      "limitations": [
+        "此結論不涵蓋所有一般延後request、old-D callback、失敗或未知producer。",
+        "apply正常返回不等於所有render/payload成功，亦不代表release worker已完成。",
+        "本條為來源限定 R1 整合；R2 僅涵蓋本批 REPORT 與子審核明列範圍，未完成全文 R3，不代表 FULL-PASS、S00 接受、Server 實作或遊玩通過。"
+      ],
+      "conflicts": [
+        "MEF-capabilities/world-npc的槽事實不可外推為Q.Create實際一律immediate0；slot本身保留。"
+      ],
+      "related_claim_ids": [],
+      "affected_spec_ids": [
+        "SPEC-SCENE-0001"
+      ],
+      "review_ref": "research/handoffs/t01-20261117-extra-roy1-mef-sync/REPORT.md",
+      "integration_status": "R1 bounded extraction; selected R2 in review_ref; NOT_FULL_PASS",
+      "quality_inheritance": false,
+      "claim_kind": "NATIVE_SOURCE_DERIVED",
+      "source_evidence_refs": [
+        "kr-extra-roy/MEF-P0-content-contracts-20261117/execution-lifecycle/report.md"
+      ],
+      "related_requirement_ids": [
+        "REQ-0019",
+        "REQ-0021"
+      ],
+      "server_development_handoff": "採用actual caller的immediate契約，deferred風險按producer另列。",
+      "bounded_review_refs": [
+        "research/handoffs/t01-20261117-extra-roy1-mef-sync/native-review/report.md"
+      ]
+    },
+    {
+      "id": "CLM-MEF-0014",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/MEF-P0-content-contracts-20261117/REPORT.md",
+      "source_blob_sha": "2950cbe49742e7f05865ef32195e2cdce3309e61",
+      "source_intake_id": "SRC-0827",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "§4.1: Q.DeleteAllObject -> actor.v+14 -> D+8.v+8 -> 7A57C0 for applied state1 Doll.",
+      "assertion": "所列state1 Doll清理先排instance/parts release，再清instance、改state0/dirty，actor destructor之後放下強引用；在此正常鏈上不再經同一state1路徑重複排同一release。",
+      "limitations": [
+        "secondary receiver偏移須先換回D基址，不混用欄位偏移。",
+        "排release與worker實際完成不同；不宣稱任意alias、其他state或全佇列生命期已閉合。",
+        "本條為來源限定 R1 整合；R2 僅涵蓋本批 REPORT 與子審核明列範圍，未完成全文 R3，不代表 FULL-PASS、S00 接受、Server 實作或遊玩通過。"
+      ],
+      "conflicts": [],
+      "related_claim_ids": [],
+      "affected_spec_ids": [
+        "SPEC-SCENE-0001"
+      ],
+      "review_ref": "research/handoffs/t01-20261117-extra-roy1-mef-sync/REPORT.md",
+      "integration_status": "R1 bounded extraction; selected R2 in review_ref; NOT_FULL_PASS",
+      "quality_inheritance": false,
+      "claim_kind": "NATIVE_SOURCE_DERIVED",
+      "source_evidence_refs": [
+        "kr-extra-roy/MEF-P0-content-contracts-20261117/execution-lifecycle/report.md"
+      ],
+      "related_requirement_ids": [
+        "REQ-0019",
+        "REQ-0021"
+      ],
+      "server_development_handoff": "為內容退出記錄持有、取消、排釋放與實際觀察完成，不能以DeleteAll返回當總完成。",
+      "bounded_review_refs": [
+        "research/handoffs/t01-20261117-extra-roy1-mef-sync/native-review/report.md"
+      ]
+    },
+    {
+      "id": "CLM-MEF-0015",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/MEF-P0-content-contracts-20261117/REPORT.md",
+      "source_blob_sha": "2950cbe49742e7f05865ef32195e2cdce3309e61",
+      "source_intake_id": "SRC-0827",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "§4.2: selected Q2440/5 FlyingObject fadeOut0 phase4 JLE-before-division, later alive0/manager cleanup.",
+      "assertion": "Q2440/5所選圖片的fade-out=0在phase4先測remaining，零值分支跳往alpha0/phase0而繞過除法；後續合格update才清alive，再由manager續作release/delete/erase。",
+      "limitations": [
+        "依正常配置、初始化返回、owner及合格update前提；不提供wall-clock完成保證。",
+        "不等於函式返回時已釋放；texture可見性與生命期推進另驗。",
+        "本條為來源限定 R1 整合；R2 僅涵蓋本批 REPORT 與子審核明列範圍，未完成全文 R3，不代表 FULL-PASS、S00 接受、Server 實作或遊玩通過。"
+      ],
+      "conflicts": [],
+      "related_claim_ids": [],
+      "affected_spec_ids": [
+        "SPEC-SCENE-0001"
+      ],
+      "review_ref": "research/handoffs/t01-20261117-extra-roy1-mef-sync/REPORT.md",
+      "integration_status": "R1 bounded extraction; selected R2 in review_ref; NOT_FULL_PASS",
+      "quality_inheritance": false,
+      "claim_kind": "NATIVE_SOURCE_DERIVED",
+      "source_evidence_refs": [
+        "kr-extra-roy/MEF-P0-content-contracts-20261117/execution-lifecycle/selected-image-contract.json"
+      ],
+      "related_requirement_ids": [
+        "REQ-0019",
+        "REQ-0021"
+      ],
+      "server_development_handoff": "不因zero fade-out推定必除零，也不因phase變更推定已完成實體回收。",
+      "bounded_review_refs": [
+        "research/handoffs/t01-20261117-extra-roy1-mef-sync/native-review/report.md"
+      ]
+    },
+    {
+      "id": "CLM-MEF-0016",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/MEF-P0-content-contracts-20261117/REPORT.md",
+      "source_blob_sha": "2950cbe49742e7f05865ef32195e2cdce3309e61",
+      "source_intake_id": "SRC-0827",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "§4.3: SetFinalMusic empty append versus accepted Start assignment; selected RevPhase1 and cleanup partial order.",
+      "assertion": "SetFinalMusic(空字串)追加零bytes而保留既值；accepted Start另以assign清空。原RevPhase1會回復已知效果基準而非任意舊狀態snapshot；原scene與active Stop的清理順序亦不同，應保留條件式偏序。",
+      "limitations": [
+        "不能將空append作clear，亦不能把原場景回復政策外推成所有owner共享狀態的通用rollback。",
+        "End、qco removal、003F、level-job或時間流逝不是22類owner共同完成ACK。",
+        "本條為來源限定 R1 整合；R2 僅涵蓋本批 REPORT 與子審核明列範圍，未完成全文 R3，不代表 FULL-PASS、S00 接受、Server 實作或遊玩通過。"
+      ],
+      "conflicts": [],
+      "related_claim_ids": [],
+      "affected_spec_ids": [
+        "SPEC-SCENE-0001"
+      ],
+      "review_ref": "research/handoffs/t01-20261117-extra-roy1-mef-sync/REPORT.md",
+      "integration_status": "R1 bounded extraction; selected R2 in review_ref; NOT_FULL_PASS",
+      "quality_inheritance": false,
+      "claim_kind": "NATIVE_SOURCE_DERIVED",
+      "source_evidence_refs": [
+        "kr-extra-roy/MEF-P0-content-contracts-20261117/execution-lifecycle/owner-ledger.json",
+        "kr-extra-roy/MEF-P0-content-contracts-20261117/execution-lifecycle/cleanup-order.json"
+      ],
+      "related_requirement_ids": [
+        "REQ-0017",
+        "REQ-0019",
+        "REQ-0021"
+      ],
+      "server_development_handoff": "以有權owner或已知基準設計收尾；演出回覆、控制恢復、資源釋放及業務提交分開記錄。"
+    },
+    {
+      "id": "CLM-MEF-0017",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/MEF-world-identity-scene-interaction-20261117/REPORT.md",
+      "source_blob_sha": "67c3d2e879f342dfd02b635a56af362c15576589",
+      "source_intake_id": "SRC-1358",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "§2/3: Tutorial.DeleteObject low-byte projection and common world erase versus 001A controller preclear.",
+      "assertion": "Tutorial.DeleteObject使用(arg&255)<<8作world key，故不是任意EntityId刪除入口；其直接共用erase不具001A命中受控槽時先清controller整槽的同等前綴。",
+      "limitations": [
+        "240可投影F000，但直接傳F000會投影0；僅能規劃已知layout/引用前提的lowbyte0目標。",
+        "沒有新成功ACK；world tree移除、死亡呈現與控制器重綁不是同一狀態。",
+        "本條為來源限定 R1 整合；R2 僅涵蓋本批 REPORT 與子審核明列範圍，未完成全文 R3，不代表 FULL-PASS、S00 接受、Server 實作或遊玩通過。"
+      ],
+      "conflicts": [],
+      "related_claim_ids": [],
+      "affected_spec_ids": [],
+      "review_ref": "research/handoffs/t01-20261117-extra-roy1-mef-sync/REPORT.md",
+      "integration_status": "R1 bounded extraction; selected R2 in review_ref; NOT_FULL_PASS",
+      "quality_inheritance": false,
+      "claim_kind": "NATIVE_SOURCE_DERIVED",
+      "source_evidence_refs": [
+        "kr-extra-roy/MEF-world-identity-scene-interaction-20261117/WORLD-IDENTITY-EVENTS.md"
+      ],
+      "related_requirement_ids": [
+        "REQ-0016",
+        "REQ-0019",
+        "REQ-0021"
+      ],
+      "server_development_handoff": "維護typed worldId/generation/instance及控制槽；不以Lua erase替代全部網路移除契約。"
+    },
+    {
+      "id": "CLM-MEF-0018",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/MEF-world-identity-scene-interaction-20261117/REPORT.md",
+      "source_blob_sha": "67c3d2e879f342dfd02b635a56af362c15576589",
+      "source_intake_id": "SRC-1358",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "§2/3: 0012 same-MapID prefix, lb.ChangeMap, loading0023/24, ready0014, Q00EB and Q visual backup domains.",
+      "assertion": "0012即使同MapID仍先清points及控制槽，而同ID loader可只走音樂尾段；lb.ChangeMap不含相同前清理。loading欄位、0014 controller-ready與Q等待00EB分屬不同狀態；Q.LoadMap/RestoreMap的單份視覺backup不是世界/Server整體rollback。",
+      "limitations": [
+        "0014只在Q inactive時清mask1，不能泛稱清mask2/controller+58或所有資源成功。",
+        "不把重送同MapID當完整reset，不把視覺restore當actors/points/bounds/minimap/Server節點共同恢復。",
+        "本條為來源限定 R1 整合；R2 僅涵蓋本批 REPORT 與子審核明列範圍，未完成全文 R3，不代表 FULL-PASS、S00 接受、Server 實作或遊玩通過。"
+      ],
+      "conflicts": [],
+      "related_claim_ids": [],
+      "affected_spec_ids": [
+        "SPEC-SCENE-0001",
+        "SPEC-FLOW-0001"
+      ],
+      "review_ref": "research/handoffs/t01-20261117-extra-roy1-mef-sync/REPORT.md",
+      "integration_status": "R1 bounded extraction; selected R2 in review_ref; NOT_FULL_PASS",
+      "quality_inheritance": false,
+      "claim_kind": "NATIVE_SOURCE_DERIVED",
+      "source_evidence_refs": [
+        "kr-extra-roy/MEF-world-identity-scene-interaction-20261117/SCENE-INTERACTION.md"
+      ],
+      "related_requirement_ids": [
+        "REQ-0010",
+        "REQ-0017",
+        "REQ-0019",
+        "REQ-0021"
+      ],
+      "server_development_handoff": "按原生不同consumer安排發布偏序；map key已寫、loading已清或handler返回不當作整體ready。"
+    },
+    {
+      "id": "CLM-MEF-0019",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/MEF-transition-actor-event-20261117/REPORT.md",
+      "source_blob_sha": "f3172a078e473d35812f8dcaf8cb311af77931f6",
+      "source_intake_id": "SRC-1294",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "§1/2/4: 0008 22-byte relation producer and reset effects -> 000A existing relation/world-actor control binding.",
+      "assertion": "來源補到0008全部22-byte relation欄位及reset副作用，再接000A控制綁定；0008不能稱world spawn。000A需要當時可查到的relation與world actor，缺失不暫存，晚到建立不補播。",
+      "limitations": [
+        "Case103/Map191->192的具體出口key、位置、spawn及當次session relation raw值仍未綁定。",
+        "發布偏序是有條件相容設計，不是已觀察官方唯一wire時序或可部署配置。",
+        "本條為來源限定 R1 整合；R2 僅涵蓋本批 REPORT 與子審核明列範圍，未完成全文 R3，不代表 FULL-PASS、S00 接受、Server 實作或遊玩通過。"
+      ],
+      "conflicts": [],
+      "related_claim_ids": [],
+      "affected_spec_ids": [
+        "SPEC-FLOW-0001"
+      ],
+      "review_ref": "research/handoffs/t01-20261117-extra-roy1-mef-sync/REPORT.md",
+      "integration_status": "R1 bounded extraction; selected R2 in review_ref; NOT_FULL_PASS",
+      "quality_inheritance": false,
+      "claim_kind": "NATIVE_SOURCE_DERIVED",
+      "source_evidence_refs": [
+        "kr-extra-roy/MEF-transition-actor-event-20261117/TRANSITION.md",
+        "kr-extra-roy/MEF-transition-actor-event-20261117/contracts.json"
+      ],
+      "related_requirement_ids": [
+        "REQ-0010",
+        "REQ-0019",
+        "REQ-0021"
+      ],
+      "server_development_handoff": "先準備可靠actor/relation，再發控制綁定；合法spawn與實例資料屬Server待綁定/開發，不猜官方值。"
+    },
+    {
+      "id": "CLM-MEF-0020",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/MEF-transition-actor-event-20261117/REPORT.md",
+      "source_blob_sha": "f3172a078e473d35812f8dcaf8cb311af77931f6",
+      "source_intake_id": "SRC-1294",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "§1/2: selected SetActorAvatar world lookup -> metadata/render gate -> CDoll consumer and restoration prerequisites.",
+      "assertion": "所選SetActorAvatar鏈中metadata更新和CDoll處理/render結果是分開的gate；同variant不保證重試先前失敗載入。可建立一次有可靠worldId的本地操作參數契約，但當次avatar descriptor/worldId/新舊variant未齊，尚無可見效果驗收。",
+      "limitations": [
+        "尚未綁定資源與run資料，不以合成檢查或metadata改動當實際外觀成功。",
+        "Q slot、model、worldId及A1point鍵各自型別，不能交換。",
+        "本條為來源限定 R1 整合；R2 僅涵蓋本批 REPORT 與子審核明列範圍，未完成全文 R3，不代表 FULL-PASS、S00 接受、Server 實作或遊玩通過。"
+      ],
+      "conflicts": [],
+      "related_claim_ids": [],
+      "affected_spec_ids": [],
+      "review_ref": "research/handoffs/t01-20261117-extra-roy1-mef-sync/REPORT.md",
+      "integration_status": "R1 bounded extraction; selected R2 in review_ref; NOT_FULL_PASS",
+      "quality_inheritance": false,
+      "claim_kind": "NATIVE_SOURCE_DERIVED",
+      "source_evidence_refs": [
+        "kr-extra-roy/MEF-transition-actor-event-20261117/ACTOR-OPERATION.md"
+      ],
+      "related_requirement_ids": [
+        "REQ-0019",
+        "REQ-0021"
+      ],
+      "server_development_handoff": "為已知actor配置版本化外觀資料與退出還原策略；metadata、apply及可視結果分別記錄。"
+    },
+    {
+      "id": "CLM-MEF-0021",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/MEF-transition-actor-event-20261117/REPORT.md",
+      "source_blob_sha": "f3172a078e473d35812f8dcaf8cb311af77931f6",
+      "source_intake_id": "SRC-1294",
+      "evidence_level": "UNKNOWN",
+      "evidence_scope": "§1/2: 000E -> ordinary-field virtual dispatch -> scenario result wrapper -> CAIControl state -> native actor reader; missing Lua edge.",
+      "assertion": "所列普通結果已接到CAIControl保存及native actor reader，但仍沒有普通死亡/群清到Lua的可靠typed介面。CAIControl目標記憶不是死亡事件queue，4C96B0不是可憑名稱視為IsAlive的predicate，000D->00DF亦未證成Lua/死亡ACK。",
+      "limitations": [
+        "UNKNOWN針對尚未閉合的world結果到Lua介面；保留已有native資料鏈，不宣稱不存在所有其他路徑。",
+        "RR-0013是T13的既有QUEUED研究，這份旁證不等於認領或結案。",
+        "本條為來源限定 R1 整合；R2 僅涵蓋本批 REPORT 與子審核明列範圍，未完成全文 R3，不代表 FULL-PASS、S00 接受、Server 實作或遊玩通過。"
+      ],
+      "conflicts": [],
+      "related_claim_ids": [],
+      "affected_spec_ids": [],
+      "review_ref": "research/handoffs/t01-20261117-extra-roy1-mef-sync/REPORT.md",
+      "integration_status": "R1 bounded extraction; selected R2 in review_ref; NOT_FULL_PASS",
+      "quality_inheritance": false,
+      "claim_kind": "CLIENT_EVIDENCE_GAP",
+      "source_evidence_refs": [
+        "kr-extra-roy/MEF-transition-actor-event-20261117/WORLD-EVENTS.md"
+      ],
+      "related_requirement_ids": [
+        "REQ-0016",
+        "REQ-0019",
+        "REQ-0021"
+      ],
+      "server_development_handoff": "普通怪物AI、清場、任務與獎勵仍由Server權威處理；Client未知出口另列而非阻擋Server自身規則開發。"
+    },
+    {
+      "id": "CLM-MEF-0022",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/MEF-A-minimal-spec-20261116/README.md",
+      "source_blob_sha": "218bf1d87ac3f76082f7bd52c167f028ceafcb26",
+      "source_intake_id": "SRC-0814",
+      "evidence_level": "INFERRED",
+      "evidence_scope": "A1 v1 declared compatibility design: existing unique point0->1, candidate quest0 selector and 003F/00EB lifecycle.",
+      "assertion": "A1提出允許有限插播的一次既有point切換相容內容契約；候選(0,32760)與compat_point_once_a_v1.seq只是在固定原讀集未占用的設計鍵，非官方或跨Agent保留鍵。0047不提供任意point參數，必須建置時綁point並在執行時核對快照。",
+      "limitations": [
+        "屬NOT_NATIVE_MEF設計輸入，沒有現場RunBinding、新sequence部署或正常遊玩驗收。",
+        "不代表保持普通操控的B入口；003F不是point成功ACK，00EB只解除原有等待。",
+        "本條為來源限定 R1 整合；R2 僅涵蓋本批 REPORT 與子審核明列範圍，未完成全文 R3，不代表 FULL-PASS、S00 接受、Server 實作或遊玩通過。"
+      ],
+      "conflicts": [],
+      "related_claim_ids": [],
+      "affected_spec_ids": [
+        "SPEC-SCENE-0001"
+      ],
+      "review_ref": "research/handoffs/t01-20261117-extra-roy1-mef-sync/REPORT.md",
+      "integration_status": "R1 bounded extraction; selected R2 in review_ref; NOT_FULL_PASS",
+      "quality_inheritance": false,
+      "claim_kind": "SERVER_DESIGN_CANDIDATE",
+      "source_evidence_refs": [
+        "kr-extra-roy/MEF-A-minimal-spec-20261116/SPEC.md"
+      ],
+      "related_requirement_ids": [
+        "REQ-0019",
+        "REQ-0021"
+      ],
+      "server_development_handoff": "實作版本化內容建置、單次排程與持久used-key帳；正式發布前在實際合併索引查重。"
+    },
+    {
+      "id": "CLM-MEF-0023",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/MEF-one-shot-followup-20261116/REPORT.md",
+      "source_blob_sha": "2da37c55922e47815b9041533f6e3070f7df34f3",
+      "source_intake_id": "SRC-1232",
+      "evidence_level": "UNKNOWN",
+      "evidence_scope": "§1/4-9: bounded OnYes/F43DA, OnEndTalk/F434E and selected dialogue/global-method candidate set for ordinary first entry B.",
+      "assertion": "已列候選尚未提供普通Mission/Scenario不中斷操控的首次Lua入口B：OnYes普通page路由不達callback；F434E已識別producer來自active Q Stop；正常對話完成需先有selected/open；另兩個GetExplain callsite屬遠征/結算/教學。",
+      "limitations": [
+        "這是限定正常candidate set的未閉合結果，不是全Client不存在computed/indirect producer的證明。",
+        "OnEndTalk在普通page可達的正向邊仍保留；callback返回後hide/selected清零不等於callback前已完成全部清理。",
+        "本條為來源限定 R1 整合；R2 僅涵蓋本批 REPORT 與子審核明列範圍，未完成全文 R3，不代表 FULL-PASS、S00 接受、Server 實作或遊玩通過。"
+      ],
+      "conflicts": [],
+      "related_claim_ids": [],
+      "affected_spec_ids": [
+        "SPEC-SCENE-0001"
+      ],
+      "review_ref": "research/handoffs/t01-20261117-extra-roy1-mef-sync/REPORT.md",
+      "integration_status": "R1 bounded extraction; selected R2 in review_ref; NOT_FULL_PASS",
+      "quality_inheritance": false,
+      "claim_kind": "CLIENT_EVIDENCE_GAP",
+      "source_evidence_refs": [
+        "kr-extra-roy/MEF-comprehensive-contracts-20261117/events/report.md"
+      ],
+      "related_requirement_ids": [
+        "REQ-0019",
+        "REQ-0021"
+      ],
+      "server_development_handoff": "A有限插播可獨立開發；B首次合法producer與同生命期VM載入另作Client研究，不編造UI event封包。"
+    },
+    {
+      "id": "CLM-MEF-0024",
+      "client_version": "kr",
+      "target_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+      "source_file": "kr-extra-roy/MEF-P0-content-contracts-20261117/integration/README.md",
+      "source_blob_sha": "e276a1c7e92445e95d477d54052610058695a76a",
+      "source_intake_id": "SRC-0882",
+      "evidence_level": "PARTIAL",
+      "evidence_scope": "Fixed main03b3ea5e context: Q119 candidate node/scene mapping, external scenario schema four strict object levels, REQ0019/21 status.",
+      "assertion": "固定主線候選把Q119末圖入場、清場、返回分為119/3、119/4、119/5；外部scenario現有event/action集合沒有任意PlayScene/Lua命令，且四層禁止額外欄位。P0內容契約不能直接作未聲明欄位塞入既有schema，REQ-0019/0021仍CANDIDATE。",
+      "limitations": [
+        "是固定公開資料/設計狀態的核對，不是官方trigger次序或Server程式執行證明。",
+        "Q model1086與Server候選末圖encounter模型屬不同集合，不能擅改候選boss或場景政策。",
+        "本條為來源限定 R1 整合；R2 僅涵蓋本批 REPORT 與子審核明列範圍，未完成全文 R3，不代表 FULL-PASS、S00 接受、Server 實作或遊玩通過。"
+      ],
+      "conflicts": [],
+      "related_claim_ids": [],
+      "affected_spec_ids": [
+        "SPEC-SCENE-0001",
+        "SPEC-FLOW-0001",
+        "SPEC-CHAR-0001"
+      ],
+      "review_ref": "research/handoffs/t01-20261117-extra-roy1-mef-sync/REPORT.md",
+      "integration_status": "R1 bounded extraction; selected R2 in review_ref; NOT_FULL_PASS",
+      "quality_inheritance": false,
+      "claim_kind": "SERVER_CONTEXT_SOURCE_DERIVED",
+      "source_evidence_refs": [
+        "kr-extra-roy/MEF-P0-content-contracts-20261117/integration/server-context.json",
+        "kr-extra-roy/MEF-P0-content-contracts-20261117/SERVER-ADOPTION.md"
+      ],
+      "related_requirement_ids": [
+        "REQ-0019",
+        "REQ-0021"
+      ],
+      "server_development_handoff": "沿既有REQ維護線去重接入ABI/資源/owner檢查；必要schema擴充需版本化，Server權威業務結果與演出回覆分開。"
     }
   ]
 }

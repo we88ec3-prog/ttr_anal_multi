@@ -1,0 +1,255 @@
+{
+  "schema": "ttr-mef-p0-adoption-rules-v1",
+  "format": "NOT_NATIVE_MEF",
+  "rules": [
+    {
+      "id": "A01",
+      "name": "固定原件／121正常名稱",
+      "claim_kind": "NATIVE_IDENTITY_AND_TOOL_POLICY",
+      "expected_outcome": "名稱/版本/hash不符或來源污染→REJECTED；空calls不得PASS",
+      "fixture_names": [
+        "wrong_target",
+        "empty_plan_not_a_certificate"
+      ],
+      "sources": [
+        "ABI",
+        "FUNCTIONS"
+      ]
+    },
+    {
+      "id": "A02",
+      "name": "固定欄位／明示結果用途",
+      "claim_kind": "AUTHORING_POLICY",
+      "expected_outcome": "未知ready/success欄位、未明示result或未知mode→REJECTED",
+      "fixture_names": [
+        "unknown_readiness_claim",
+        "unknown_call_success_claim",
+        "nonstring_result_mode_rejected"
+      ],
+      "sources": [
+        "OLD_PREFLIGHT"
+      ]
+    },
+    {
+      "id": "A03",
+      "name": "last-N精確arity",
+      "claim_kind": "NATIVE_SELECTION_WITH_STRICT_POLICY",
+      "expected_outcome": "missing/extra/把7參數helper當6參數native→REJECTED；不自補nil",
+      "fixture_names": [
+        "missing_suffix_argument",
+        "extra_suffix_argument",
+        "helper_seven_args_are_not_native_walk_abi"
+      ],
+      "sources": [
+        "ABI"
+      ]
+    },
+    {
+      "id": "A04",
+      "name": "整數欄位",
+      "claim_kind": "NATIVE_NUMERIC_COERCION_WITH_STRICT_POLICY",
+      "expected_outcome": "bool/nil/數字字串/小數/超signed32/巨大整數→REJECTED；明確有限signed32整數→PASS_ONLY",
+      "fixture_names": [
+        "numeric_integer_switch",
+        "native_boolean_true_numeric_zero_is_rejected",
+        "explicit_nil_is_not_approved_numeric",
+        "fractional_integer_no_fpu_rounding_dependency",
+        "integer_overflow",
+        "huge_integer_must_reject_without_crash",
+        "numeric_string_not_authoring_policy"
+      ],
+      "sources": [
+        "ABI"
+      ]
+    },
+    {
+      "id": "A05",
+      "name": "float32欄位",
+      "claim_kind": "AUTHORING_POLICY_ALLOWS_FLOAT32_ROUNDING",
+      "expected_outcome": "非有限或超最大float32→REJECTED；允許捨入／subnormal／underflow，非物理效果保證",
+      "fixture_names": [
+        "float32_overflow",
+        "float32_subnormal_underflow_is_numeric_policy_only"
+      ],
+      "sources": [
+        "ABI"
+      ]
+    },
+    {
+      "id": "A06",
+      "name": "Lua truthiness欄位",
+      "claim_kind": "NATIVE_TYPE_DISTINCTION_WITH_STRICT_POLICY",
+      "expected_outcome": "只准明示boolean；number0/空string原生為true但作者政策拒絕",
+      "fixture_names": [
+        "manual_boolean_false",
+        "manual_numeric_zero_is_truthy"
+      ],
+      "sources": [
+        "ABI"
+      ]
+    },
+    {
+      "id": "A07",
+      "name": "字串payload",
+      "claim_kind": "AUTHORING_POLICY",
+      "expected_outcome": "拒NUL/孤立surrogate/一般空字串；Unicode可記錄但必留Client encoding gate",
+      "fixture_names": [
+        "empty_audio_path_is_not_special_clear",
+        "nul_string_is_rejected",
+        "non_ascii_string_has_encoding_gate"
+      ],
+      "sources": [
+        "ABI",
+        "AV_NATIVE"
+      ]
+    },
+    {
+      "id": "A08",
+      "name": "104無新值綁定",
+      "claim_kind": "NATIVE_RESULT_PRODUCTION",
+      "expected_outcome": "只可discard；callback return-count1不可升成功/ID/ACK",
+      "fixture_names": [
+        "setter_result_is_not_spawn_id"
+      ],
+      "sources": [
+        "ABI"
+      ]
+    },
+    {
+      "id": "A09",
+      "name": "16個number query",
+      "claim_kind": "NATIVE_LOCAL_OBSERVATION_WITH_TOOL_SCOPE",
+      "expected_outcome": "只准明示數值用途與exact context token；禁止truthiness/boolean比較/world death目的",
+      "fixture_names": [
+        "query_truthiness_is_not_zero_comparison",
+        "camera_explicit_local_observation",
+        "numeric_predicate_does_not_accept_false",
+        "local_query_is_not_world_death",
+        "fixed_roster_query_not_arbitrary_entity_context"
+      ],
+      "sources": [
+        "OBSERVATIONS"
+      ]
+    },
+    {
+      "id": "A10",
+      "name": "lb.DoFile零歧義",
+      "claim_kind": "NATIVE_STATUS_AMBIGUITY",
+      "expected_outcome": "只記diagnostic；工具拒把任意數字比較當成功predicate",
+      "fixture_names": [
+        "loader_diagnostic_only",
+        "loader_zero_must_not_be_success_predicate"
+      ],
+      "sources": [
+        "ABI",
+        "EVENTS_NATIVE"
+      ]
+    },
+    {
+      "id": "A11",
+      "name": "四stub與偽count",
+      "claim_kind": "NATIVE_NONFUNCTIONAL_CAPABILITY",
+      "expected_outcome": "無論型別正確均REJECTED",
+      "fixture_names": [
+        "disabled_Q.DeleteObject",
+        "disabled_Q.BalloonTalk",
+        "disabled_Tutorial.InsertObject",
+        "disabled_lb.PrintCurrSceneID",
+        "count_name_is_not_count"
+      ],
+      "sources": [
+        "ABI",
+        "FUNCTIONS"
+      ]
+    },
+    {
+      "id": "A12",
+      "name": "有限selector政策",
+      "claim_kind": "AUTHORING_POLICY",
+      "expected_outcome": "Tutorial control0..31／leader component0..2；越界REJECTED",
+      "fixture_names": [
+        "outside_tutorial_layout",
+        "invalid_leader_component"
+      ],
+      "sources": [
+        "OBSERVATIONS"
+      ]
+    },
+    {
+      "id": "A13",
+      "name": "FlyingObject勘誤",
+      "claim_kind": "NATIVE_OWNERSHIP_ORDER",
+      "expected_outcome": "每次create記先cancel舊圖；兩次create=替換，非同時持有證明",
+      "fixture_names": [
+        "two_images_are_replacements"
+      ],
+      "sources": [
+        "REUSE_ERRATA",
+        "REUSE_NATIVE"
+      ]
+    },
+    {
+      "id": "A14",
+      "name": "SetFinalMusic狀態",
+      "claim_kind": "NATIVE_STATE_WITH_EXPLICIT_ASCII_POLICY",
+      "expected_outcome": "空字串retain；literalASCIIspace在已證defaultctype條件clear；一般字串append而非replace；其他空白拒絕",
+      "fixture_names": [
+        "empty_final_music_retains",
+        "space_final_music_clears",
+        "two_final_music_names_append",
+        "unicode_whitespace_not_native_ascii_policy"
+      ],
+      "sources": [
+        "AV_NATIVE",
+        "AV_REPORT"
+      ]
+    },
+    {
+      "id": "A15",
+      "name": "原RevPhase1零arg EndSepia",
+      "claim_kind": "BOUNDED_NATIVE_COMPATIBILITY_SEPARATE_FROM_AUTHORING",
+      "expected_outcome": "原特定frame→tag6→native0；新作者仍exact1arg；不泛化missing=nil",
+      "fixture_names": [
+        "original_revphase1_zeroarg_endsepia_is_flagged"
+      ],
+      "sources": [
+        "ABI_NATIVE",
+        "SUPERVISOR_NATIVE",
+        "zeroarg-endsepia-contract.json"
+      ]
+    },
+    {
+      "id": "A16",
+      "name": "helper型別語義與Boot",
+      "claim_kind": "ORIGINAL_SOURCE_TRANSFER_CONTRACT",
+      "expected_outcome": "保留number1/0與boolean差異；Create arg7 number0→native1，booleanfalse/nil→native0；Walk7→native6，不直接搬args",
+      "fixture_names": [],
+      "sources": [
+        "helper-adoption-rules.json",
+        "bootstrap-global-contract.json"
+      ]
+    },
+    {
+      "id": "A17",
+      "name": "來源與資料流反例",
+      "claim_kind": "VERIFICATION_TOOL_POLICY",
+      "expected_outcome": "改source hash、歧義前驅、kill、未支援closure/SETLIST構型都不得產生肯定callee證明",
+      "fixture_names": [],
+      "sources": [
+        "fixture-results.json"
+      ]
+    },
+    {
+      "id": "A18",
+      "name": "不得升級可玩／正式狀態",
+      "claim_kind": "RESEARCH_BOUNDARY",
+      "expected_outcome": "工具結果永不填ready/client_executed/lua_executed/server_executed/gameplay_verified=true；Server採用另接既有REQ-0019/0021",
+      "fixture_names": [],
+      "sources": [
+        "README.md"
+      ]
+    }
+  ],
+  "all_rule_outcomes_require_source_context": true,
+  "deployment_ready": false
+}

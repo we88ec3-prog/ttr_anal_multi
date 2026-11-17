@@ -1,5 +1,15 @@
 # T01 現有成果來源審核
 
+## 2026-11-17 extra/roy1 → main：MEF 整合檢核
+
+本批依使用者明確要求將 `extra/roy1@534746f194a889ebb34dda7471c2ae62d30a1dd1` 同步到 `main`，保留17筆來源提交及608份新增研究檔案，另保存T01檢核。
+
+- [完整審核與Server開發需求](../../../research/handoffs/t01-20261117-extra-roy1-mef-sync/REPORT.md)：R0全件身份／格式，R1有界主張，R2重點原件／勘誤複驗。
+- [來源清單](../../../research/handoffs/t01-20261117-extra-roy1-mef-sync/source-provenance.json)：SRC-0803～1410；CLM-MEF-0001～0024，21 PARTIAL／2 UNKNOWN／1 INFERRED。
+- 19個MEF目錄包的指定驗證已重跑；封裝parser的來源選取問題已解除，舊FlyingObject合成語義仍須依勘誤排除。
+- 未新增FULL-PASS／NATIVE_VERIFIED；既有RR、S00接受、其他Task owner及歷史退回保持原狀。原件缺口、Server開發、跨功能整合與遊玩驗證分列。
+
+
 <!-- S00-DISPATCH-BOOTSTRAP:v1 -->
 ## S00 研究請求開工檢查（正式）
 

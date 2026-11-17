@@ -1,0 +1,838 @@
+{
+  "schema": "mef-functional-owner-ledger-v1",
+  "not_native_mef": true,
+  "scope": "121 named normal bindings in the previously bounded registration census; not all possible Client or native MEF functions",
+  "families": [
+    {
+      "id": "diagnostics",
+      "title": "診斷、時鐘與顯示設定",
+      "methods": [
+        "lb.SetDebugLevel",
+        "lb.GetTime",
+        "lb.ChangeResolution"
+      ],
+      "owner": "診斷欄位／WINMM import／renderer",
+      "context": "既有初始化與渲染環境",
+      "execution_class": "AUXILIARY",
+      "completion": "回傳本地時計或設定；不表示遊戲進度",
+      "cleanup": "顯示重設依原生renderer；不與任務成功混用",
+      "server_development": "不要拿Client本地clock作Server權威時間",
+      "remaining": "不是新增玩法入口；顯示設定的合法值及環境驗收另行確認",
+      "inherited_source": "kr-extra-roy/MEF-capabilities-20261116/control/report.md",
+      "current_native_records": [],
+      "native_status": "BOUNDED_EFFECTS_REUSED",
+      "deployment": "NOT_DEPLOYED",
+      "gameplay": "NOT_TESTED"
+    },
+    {
+      "id": "invalid_queries",
+      "title": "不可採用的計數查詢",
+      "methods": [
+        "lb.GetObjectCount"
+      ],
+      "owner": "沒有可靠世界數量返回契約",
+      "context": "正常binding",
+      "execution_class": "UNRELIABLE_QUERY",
+      "completion": "不能據此判斷清怪／群組完成",
+      "cleanup": "不適用",
+      "server_development": "Server保存權威群組狀態",
+      "remaining": "需真正world writer→typed observer，不從函式名猜功能",
+      "inherited_source": "kr-extra-roy/MEF-control-flow-20261116/world/report.md",
+      "current_native_records": [],
+      "native_status": "BOUNDED_EFFECTS_REUSED",
+      "deployment": "NOT_DEPLOYED",
+      "gameplay": "NOT_TESTED"
+    },
+    {
+      "id": "stubs",
+      "title": "已確認空操作",
+      "methods": [
+        "lb.PrintCurrSceneID",
+        "Tutorial.InsertObject",
+        "Q.DeleteObject",
+        "Q.BalloonTalk"
+      ],
+      "owner": "各正常native target",
+      "context": "本KR build正常註冊",
+      "execution_class": "STUB",
+      "completion": "不產生名稱所暗示效果",
+      "cleanup": "不能用stub清理物件",
+      "server_development": "不要用它們作任務／對話／生怪依據",
+      "remaining": "如產品需要該功能，另找合法實作入口；不把新設計當原生",
+      "inherited_source": "kr-extra-roy/MEF-capabilities-20261116/capability-catalog.md",
+      "current_native_records": [],
+      "native_status": "BOUNDED_EFFECTS_REUSED",
+      "deployment": "NOT_DEPLOYED",
+      "gameplay": "NOT_TESTED"
+    },
+    {
+      "id": "loader",
+      "title": "載入相容Lua內容",
+      "methods": [
+        "lb.DoFile"
+      ],
+      "owner": "正式Lua wrapper FDF3C8",
+      "context": "必須已有合法Lua caller及資源可見性",
+      "execution_class": "LOAD_EXECUTE",
+      "completion": "native回傳個數不等於載入成功；與全域DoFile契約不同",
+      "cleanup": "新exports/相同VM跨run須管理",
+      "server_development": "版本、依賴、發布及合法啟動",
+      "remaining": "官方MEF first loader/grammar未證；檔案可讀不等於外部觸發已接通",
+      "inherited_source": "kr-extra-roy/MEF-parser-executor-storage-20261114/parser.md",
+      "current_native_records": [],
+      "native_status": "BOUNDED_EFFECTS_REUSED",
+      "deployment": "NOT_DEPLOYED",
+      "gameplay": "NOT_TESTED"
+    },
+    {
+      "id": "map",
+      "title": "本地換圖與演出地圖備份",
+      "methods": [
+        "lb.ChangeMap",
+        "Q.LoadMap",
+        "Q.RestoreMap"
+      ],
+      "owner": "世界地圖owner／Q單份backup",
+      "context": "有效map與同一次演出生命週期",
+      "execution_class": "MAP_STATE",
+      "completion": "畫面載入不是Server轉場完成",
+      "cleanup": "有取得才Restore；backup不是可巢狀stack",
+      "server_development": "轉場、角色與points重發、ready、持久化",
+      "remaining": "完整Server轉場需整合；不將任意mapID視作合法",
+      "inherited_source": "kr-extra-roy/MEF-capabilities-20261116/control/report.md",
+      "current_native_records": [],
+      "native_status": "BOUNDED_EFFECTS_REUSED",
+      "deployment": "NOT_DEPLOYED",
+      "gameplay": "NOT_TESTED"
+    },
+    {
+      "id": "minimap",
+      "title": "小地圖重載",
+      "methods": [
+        "lb.LoadMinimap"
+      ],
+      "owner": "FDF3C4已安裝UI元件",
+      "context": "map→BOUND→mmt/texture/symbols有效",
+      "execution_class": "LOCAL_RESOURCE",
+      "completion": "沒有新成功ACK",
+      "cleanup": "UI元件owner生命周期",
+      "server_development": "map資料與發布依賴",
+      "remaining": "不能把load等於補齊缺少descriptor／碰撞／主場景",
+      "inherited_source": "kr-extra-roy/MEF-capabilities-20261116/control/report.md",
+      "current_native_records": [],
+      "native_status": "BOUNDED_EFFECTS_REUSED",
+      "deployment": "NOT_DEPLOYED",
+      "gameplay": "NOT_TESTED"
+    },
+    {
+      "id": "world_create",
+      "title": "本地世界角色建立",
+      "methods": [
+        "lb.CreateObject",
+        "lb.CreateObjectEx"
+      ],
+      "owner": "world tree FAB130／本地counter",
+      "context": "有效model/XY/context",
+      "execution_class": "LOCAL_ENTITY",
+      "completion": "可到CDoll更新／draw；不回新EntityId",
+      "cleanup": "世界owner的既有生命周期；不是Q slot cleanup",
+      "server_development": "網路EntityId一致性、合法座標、spawn與保存",
+      "remaining": "本地ID不回Lua；要代替網路spawn仍缺身分／回收契約",
+      "inherited_source": "kr-extra-roy/MEF-capabilities-20261116/world-npc/report.md",
+      "current_native_records": [],
+      "native_status": "BOUNDED_EFFECTS_REUSED",
+      "deployment": "NOT_DEPLOYED",
+      "gameplay": "NOT_TESTED"
+    },
+    {
+      "id": "world_appearance",
+      "title": "世界角色外觀與掛件",
+      "methods": [
+        "lb.SetActorAvatar",
+        "lb.AttachActorItem",
+        "lb.DetachActorItem"
+      ],
+      "owner": "world actor→CDoll",
+      "context": "已有正確world key及模型支持descriptor",
+      "execution_class": "NATIVE_RESOURCE_WORK",
+      "completion": "worker/apply完成才有表現；無通用Lua ACK",
+      "cleanup": "detach按attachment key，不以appearanceItem代替",
+      "server_development": "資產與裝備權威、版本和物件同步",
+      "remaining": "視覺附件不授予背包物品；無效descriptor不保證顯示",
+      "inherited_source": "kr-extra-roy/MEF-capabilities-20261116/world-npc/report.md",
+      "current_native_records": [],
+      "native_status": "BOUNDED_EFFECTS_REUSED",
+      "deployment": "NOT_DEPLOYED",
+      "gameplay": "NOT_TESTED"
+    },
+    {
+      "id": "input",
+      "title": "鍵位與輸入mask",
+      "methods": [
+        "lb.ChangeKeymapType",
+        "Tutorial.SetKeymapEnabled",
+        "Q.EnableInput",
+        "Q.DisableInput"
+      ],
+      "owner": "FB8830 input mask；controller+58另層",
+      "context": "合法場景與既有控制器",
+      "execution_class": "INPUT_STATE",
+      "completion": "清mask不清controller busy／UI capture",
+      "cleanup": "只清自己持有的mask；需既有End/release流程",
+      "server_development": "啟動排他與正常輸入恢復驗收",
+      "remaining": "Q native tick仍會寫busy；不能據此宣稱B不中斷",
+      "inherited_source": "kr-extra-roy/MEF-runtime-contracts-20261115/input-lifecycle/report.md",
+      "current_native_records": [],
+      "native_status": "BOUNDED_EFFECTS_REUSED",
+      "deployment": "NOT_DEPLOYED",
+      "gameplay": "NOT_TESTED"
+    },
+    {
+      "id": "q_lifecycle",
+      "title": "有限Q啟停",
+      "methods": [
+        "Q.StartCutScene",
+        "Q.EndCutScene",
+        "Q.IsCutSceneRunning",
+        "Tutorial.StartCutScene",
+        "Tutorial.IsCutSceneRunning",
+        "Tutorial.StopCutScene"
+      ],
+      "owner": "FB73C0 Q／qco；current controller",
+      "context": "A有限插播；原始binding/qbase/正常context",
+      "execution_class": "FINITE_SCRIPT",
+      "completion": "running0不是成功；003F可來自skip；Stop與End不同",
+      "cleanup": "必要cleanup在End之前；End不是所有owner reset",
+      "server_development": "合法scene鍵、發布、排他、003F/00EB狀態機與保存",
+      "remaining": "A1規格未部署；B首次入口仍未接通；跨owner資源契約逐項做",
+      "inherited_source": "kr-extra-roy/MEF-A-minimal-spec-20261116/SPEC.md",
+      "current_native_records": [
+        "normal_and_review_end",
+        "active_stop"
+      ],
+      "native_status": "BOUNDED_EFFECTS_REUSED_WITH_CURRENT_JOIN",
+      "deployment": "NOT_DEPLOYED",
+      "gameplay": "NOT_TESTED"
+    },
+    {
+      "id": "checkpoint",
+      "title": "既有出口／NPC／市場點狀態",
+      "methods": [
+        "Tutorial.SetCheckPointStatus"
+      ],
+      "owner": "FB79F0 checkpoint vector",
+      "context": "普通Mission/Scenario也可用setter；先有唯一(category,key)",
+      "execution_class": "STATE_WRITE",
+      "completion": "命中第一個既有點；沒有可靠成功值",
+      "cleanup": "0/1狀態與0027重建分開；不能建立新點",
+      "server_development": "完整0027快照、0048排序、合法point、開放條件與保存",
+      "remaining": "A1已具最小規格，發布品與實機未做；不能把003F當setter命中",
+      "inherited_source": "kr-extra-roy/MEF-checkpoint-20261116/server-handoff.md",
+      "current_native_records": [],
+      "native_status": "BOUNDED_EFFECTS_REUSED",
+      "deployment": "NOT_DEPLOYED",
+      "gameplay": "NOT_TESTED"
+    },
+    {
+      "id": "tutorial_point",
+      "title": "教學提示點建立",
+      "methods": [
+        "Tutorial.InsertTutorialCheckPoint"
+      ],
+      "owner": "Tutorial資料表→category4 point",
+      "context": "已知Tutorial資料/context",
+      "execution_class": "TUTORIAL_LOCAL",
+      "completion": "成功Insert不清舊progress，也不是upsert",
+      "cleanup": "point.enabled/latch/controller.progress三者獨立",
+      "server_development": "合法教學場景、資料版本、權威教學進度",
+      "remaining": "不是任意座標產生器；普通地圖progress不得套用",
+      "inherited_source": "kr-extra-roy/20261116-191747-chatgpt-web-roy1-MEF-tutorial-observation.md",
+      "current_native_records": [],
+      "native_status": "BOUNDED_EFFECTS_REUSED",
+      "deployment": "NOT_DEPLOYED",
+      "gameplay": "NOT_TESTED"
+    },
+    {
+      "id": "tutorial_progress",
+      "title": "教學可觀察狀態",
+      "methods": [
+        "Tutorial.SetControlStatus",
+        "Tutorial.GetControlStatus",
+        "Tutorial.GetTutorialState"
+      ],
+      "owner": "CTutorialController進度B4..130／UI state134",
+      "context": "已證Tutorial控制器、索引不碰撞0/10",
+      "execution_class": "TUTORIAL_OBSERVER",
+      "completion": "GetControlStatus回number，0在Lua仍truthy；UI state另域",
+      "cleanup": "重建points不重置controller progress",
+      "server_development": "教學／任務權威續接、重入資料",
+      "remaining": "不作普通死亡／清組getter；native無bounds不代表可越界",
+      "inherited_source": "kr-extra-roy/20261116-191747-chatgpt-web-roy1-MEF-tutorial-observation.md",
+      "current_native_records": [],
+      "native_status": "BOUNDED_EFFECTS_REUSED",
+      "deployment": "NOT_DEPLOYED",
+      "gameplay": "NOT_TESTED"
+    },
+    {
+      "id": "tutorial_scenario",
+      "title": "教學scenario請求與等待",
+      "methods": [
+        "Tutorial.RequestStartScenario",
+        "Tutorial.IsScenarioEnded"
+      ],
+      "owner": "Tutorial owner flags FC0F88",
+      "context": "CTutorial接收004C；ordinary不走此writer",
+      "execution_class": "SERVER_REQUEST_OBSERVER",
+      "completion": "0040意圖；004C指定key=1可供Lua輪詢",
+      "cleanup": "owner場景clear按原生生命週期",
+      "server_development": "合法scenario與權威結果、回覆",
+      "remaining": "004C普通field為invalid；不能當普通通用事件",
+      "inherited_source": "kr-extra-roy/MEF-world-integration-20261115/events/report.md",
+      "current_native_records": [],
+      "native_status": "BOUNDED_EFFECTS_REUSED",
+      "deployment": "NOT_DEPLOYED",
+      "gameplay": "NOT_TESTED"
+    },
+    {
+      "id": "tutorial_actor",
+      "title": "固定教學角色／可用性查詢",
+      "methods": [
+        "Tutorial.DeleteObject",
+        "Tutorial.InsertIsilia",
+        "Tutorial.IsIsiliaFound",
+        "Tutorial.CheckLeader",
+        "Tutorial.IsCharacterAvailable"
+      ],
+      "owner": "固定Isilia／leader／roster",
+      "context": "各target的固定對象、編碼及context",
+      "execution_class": "TUTORIAL_ENTITY",
+      "completion": "不是任意world EntityId／HP／死亡query",
+      "cleanup": "Delete的參數編碼需引用原件，不把F000原樣套用",
+      "server_development": "原角色資料／世界身分與教學流程",
+      "remaining": "不能從固定角色結果外推一般敵怪群組",
+      "inherited_source": "kr-extra-roy/MEF-capabilities-20261116/world-npc/report.md",
+      "current_native_records": [],
+      "native_status": "BOUNDED_EFFECTS_REUSED",
+      "deployment": "NOT_DEPLOYED",
+      "gameplay": "NOT_TESTED"
+    },
+    {
+      "id": "tutorial_ui",
+      "title": "特定UI、教學頁面與記錄",
+      "methods": [
+        "Tutorial.PostUIMessage_EmployChar",
+        "Tutorial.PostUIMessage_TutoMsg",
+        "Tutorial.HideUI",
+        "Tutorial.SetUIPage",
+        "Tutorial.IsLeaderDialogOpened",
+        "Tutorial.IsSynopsisSkipped"
+      ],
+      "owner": "typed current page／Tutorial記錄",
+      "context": "頁面型別與各固定event契約",
+      "execution_class": "CONTEXT_UI",
+      "completion": "記錄flag不必然等於當幀visible；skip非通用成功",
+      "cleanup": "同owner還原UI；不可任意SetUIPage取代",
+      "server_development": "流程與選項、狀態保存",
+      "remaining": "固定page15/固定event，沒有任意PostUIMessage介面",
+      "inherited_source": "kr-extra-roy/MEF-capabilities-20261116/control/report.md",
+      "current_native_records": [],
+      "native_status": "BOUNDED_EFFECTS_REUSED",
+      "deployment": "NOT_DEPLOYED",
+      "gameplay": "NOT_TESTED"
+    },
+    {
+      "id": "tutorial_images",
+      "title": "教學追蹤圖片",
+      "methods": [
+        "Tutorial.RegisterSkipMessage",
+        "Tutorial.RegisterScalingObject",
+        "Tutorial.DestroyFlyingObjects"
+      ],
+      "owner": "Tutorial tracking＋共用flying manager",
+      "context": "已有texture、正確UI/context",
+      "execution_class": "NATIVE_IMAGE",
+      "completion": "圖像不是callback註冊；取消與實體釋放不同時點",
+      "cleanup": "Destroy只按其tracking/owner語意，不當所有Q圖清除",
+      "server_development": "內容資源／UI共享排他",
+      "remaining": "與Q最後handle不同；跨owner sweep影響須按原型別處理",
+      "inherited_source": "kr-extra-roy/MEF-control-flow-20261116/runner/report.md",
+      "current_native_records": [],
+      "native_status": "BOUNDED_EFFECTS_REUSED",
+      "deployment": "NOT_DEPLOYED",
+      "gameplay": "NOT_TESTED"
+    },
+    {
+      "id": "q_actor",
+      "title": "Q演出物件",
+      "methods": [
+        "Q.CreateObject",
+        "Q.MoveObject",
+        "Q.WalkObject",
+        "Q.WarpObject",
+        "Q.AniObject",
+        "Q.AniSkip",
+        "Q.RotateObject",
+        "Q.SpeedObject",
+        "Q.FaceObject",
+        "Q.StopObject",
+        "Q.ShowObject",
+        "Q.FlashObject",
+        "Q.DeleteAllObject",
+        "Q.IsAllObjectsStopped"
+      ],
+      "owner": "M+1C Q tree／CEventActor slot",
+      "context": "A合法入口、依賴預掃描、同場景保留",
+      "execution_class": "NATIVE_ENTITY",
+      "completion": "到點清movement bit；AllStopped空樹亦true；Stop不delete",
+      "cleanup": "DeleteAll涵蓋全部Q樹且等待模型job；DeleteObject是stub",
+      "server_development": "內容slot與依賴、排他、與world entity分域",
+      "remaining": "後續合法cleanup入口和跨run模型替換仍要整合；不是網路怪",
+      "inherited_source": "kr-extra-roy/MEF-content-contracts-20261116/actors/report.md",
+      "current_native_records": [
+        "q_stop_object",
+        "q_delete_all",
+        "q_all_stopped"
+      ],
+      "native_status": "BOUNDED_EFFECTS_REUSED_WITH_CURRENT_JOIN",
+      "deployment": "NOT_DEPLOYED",
+      "gameplay": "NOT_TESTED"
+    },
+    {
+      "id": "leader_position",
+      "title": "領隊位置分量",
+      "methods": [
+        "Q.GetLeaderPosN"
+      ],
+      "owner": "current controller leader",
+      "context": "有效controller/leader與分量索引",
+      "execution_class": "LOCAL_QUERY",
+      "completion": "位置數值不是物件handle或群組結果",
+      "cleanup": "不適用",
+      "server_development": "需要權威位置時仍由Server處理",
+      "remaining": "不提供一般世界實體枚舉",
+      "inherited_source": "kr-extra-roy/MEF-content-contracts-20261116/observers/report.md",
+      "current_native_records": [],
+      "native_status": "BOUNDED_EFFECTS_REUSED",
+      "deployment": "NOT_DEPLOYED",
+      "gameplay": "NOT_TESTED"
+    },
+    {
+      "id": "camera_work",
+      "title": "KeyFrame相機工作",
+      "methods": [
+        "CameraWorks.Load",
+        "CameraWorks.LoadRel",
+        "CameraWorks.Play",
+        "CameraWorks.Stop",
+        "CameraWorks.IsEnded",
+        "Q.PlayCameraWorks",
+        "Q.SkipCamera",
+        "Tutorial.StopCameraWorks"
+      ],
+      "owner": "current FB7620；KeyFrame FB7624",
+      "context": "有效XML/初始化相機；共享work排他",
+      "execution_class": "NATIVE_CAMERA",
+      "completion": "IsEnded涵蓋stopped/null/空資料，不是資源成功；Stop使apply停止",
+      "cleanup": "停止/解除current/配對snapshot還原分開；不能盲pop",
+      "server_development": "內容與相機owner協調、正常戰鬥視角政策",
+      "remaining": "End後仍可寫相機；最後一幀與替換owner、退出還原須選定內容",
+      "inherited_source": "kr-extra-roy/MEF-capabilities-20261116/audiovisual/report.md",
+      "current_native_records": [
+        "camera_load",
+        "camera_play_stop_query",
+        "keyframe_play",
+        "keyframe_stop",
+        "keyframe_tick",
+        "keyframe_apply",
+        "keyframe_ended",
+        "camera_frame_edge"
+      ],
+      "native_status": "BOUNDED_EFFECTS_REUSED_WITH_CURRENT_JOIN",
+      "deployment": "NOT_DEPLOYED",
+      "gameplay": "NOT_TESTED"
+    },
+    {
+      "id": "camera_attach",
+      "title": "Q角色相機跟隨",
+      "methods": [
+        "Q.AttachCamera",
+        "Q.DetachCamera"
+      ],
+      "owner": "current FB7620；AttachSceneObj FB766C",
+      "context": "Q slot及模型CAMERA_DUMMY01",
+      "execution_class": "NATIVE_CAMERA",
+      "completion": "stop gate與model node存在分開",
+      "cleanup": "Stop先對正確current，Detach僅清指標；配對Pop另行",
+      "server_development": "角色/鏡頭共用生命周期",
+      "remaining": "解除指標不是舊鏡頭復原；world EntityId不能代slot",
+      "inherited_source": "kr-extra-roy/MEF-capabilities-20261116/audiovisual/report.md",
+      "current_native_records": [
+        "camera_attach",
+        "camera_detach",
+        "camera_attach_stop",
+        "camera_attach_apply",
+        "camera_attach_tick"
+      ],
+      "native_status": "BOUNDED_EFFECTS_REUSED_WITH_CURRENT_JOIN",
+      "deployment": "NOT_DEPLOYED",
+      "gameplay": "NOT_TESTED"
+    },
+    {
+      "id": "camera_snapshot",
+      "title": "相機快照與預設視角",
+      "methods": [
+        "Q.BeginCameraOverride",
+        "Q.EndCameraOverride",
+        "Tutorial.PushCamera",
+        "Tutorial.PopCamera",
+        "Tutorial.ApplyDefaultCamera"
+      ],
+      "owner": "共享camera snapshot stack",
+      "context": "實際取得紀錄及相同owner",
+      "execution_class": "CAMERA_STATE",
+      "completion": "Pop先restore/erase再比label；不是冪等查找",
+      "cleanup": "只有自己的push才可pop，ApplyDefault不等同snapshot",
+      "server_development": "相機取得與還原政策",
+      "remaining": "與其他work同時寫入時需定序；不由End自動補足",
+      "inherited_source": "kr-extra-roy/MEF-capabilities-20261116/audiovisual/report.md",
+      "current_native_records": [],
+      "native_status": "BOUNDED_EFFECTS_REUSED",
+      "deployment": "NOT_DEPLOYED",
+      "gameplay": "NOT_TESTED"
+    },
+    {
+      "id": "camera_direct",
+      "title": "鏡頭位置、角度、震動",
+      "methods": [
+        "Q.SetCameraPoint",
+        "Q.MoveCamera",
+        "Q.RotCamera",
+        "Q.CameraEffect"
+      ],
+      "owner": "共享相機欄位／effect32槽",
+      "context": "有效camera及合法數值",
+      "execution_class": "CAMERA_STATE_EFFECT",
+      "completion": "Move/Set同target；第三Rot參數距離；effect無成功handle",
+      "cleanup": "既有快照或預設策略；effect有自己limit",
+      "server_development": "合法內容參數、視角衝突管理",
+      "remaining": "效果估算wait不等於完成；除數非零/資料有效性需工具檢查",
+      "inherited_source": "kr-extra-roy/MEF-capabilities-20261116/audiovisual/report.md",
+      "current_native_records": [],
+      "native_status": "BOUNDED_EFFECTS_REUSED",
+      "deployment": "NOT_DEPLOYED",
+      "gameplay": "NOT_TESTED"
+    },
+    {
+      "id": "music",
+      "title": "共享背景音樂",
+      "methods": [
+        "Q.PlayMusic",
+        "Tutorial.PlayMusic",
+        "Q.StopMusic",
+        "Q.StopMusicWithFadeOut",
+        "Q.SetFinalMusic"
+      ],
+      "owner": "CMusicPlayer FC0FC8／16-stream pool",
+      "context": "音訊初始化、可讀資源、共享音軌",
+      "execution_class": "NATIVE_AUDIO",
+      "completion": "淡至0不等於Stop/release；同名Play可不重啟",
+      "cleanup": "StopMusic清整個pool及雙slot，不是只停自己的track",
+      "server_development": "資源發布、音軌切換/恢復與owner政策",
+      "remaining": "沒有單次播放Lua完成handle；Stop可能等待native worker",
+      "inherited_source": "kr-extra-roy/MEF-capabilities-20261116/audiovisual/report.md",
+      "current_native_records": [
+        "music_functor_thunk",
+        "music_worker",
+        "music_worker_binding",
+        "music_stop_all",
+        "music_stream_stop",
+        "q_music_stop"
+      ],
+      "native_status": "BOUNDED_EFFECTS_REUSED_WITH_CURRENT_JOIN",
+      "deployment": "NOT_DEPLOYED",
+      "gameplay": "NOT_TESTED"
+    },
+    {
+      "id": "sounds",
+      "title": "一般音效與voice group",
+      "methods": [
+        "Q.PlaySound",
+        "Q.PlayTalkSound"
+      ],
+      "owner": "SoundManager FAB028／SoundFile cache／SoundChannel",
+      "context": "資源、group、裝置與原前綴條件",
+      "execution_class": "NATIVE_AUDIO",
+      "completion": "helper只yield；沒有單次完成值或ID",
+      "cleanup": "native channel回收；本組無單次停止binding",
+      "server_development": "內容依賴與語音/聲音共享政策",
+      "remaining": "PlayTalkSound group改cached resource，非每聲獨立；不能當台詞播完",
+      "inherited_source": "kr-extra-roy/MEF-capabilities-20261116/audiovisual/report.md",
+      "current_native_records": [],
+      "native_status": "BOUNDED_EFFECTS_REUSED",
+      "deployment": "NOT_DEPLOYED",
+      "gameplay": "NOT_TESTED"
+    },
+    {
+      "id": "fade",
+      "title": "全畫面淡幕",
+      "methods": [
+        "Fade.Start",
+        "Fade.End",
+        "Q.FadeIn",
+        "Q.FadeOut",
+        "Q.FadeColor"
+      ],
+      "owner": "FE2744 shared overlay",
+      "context": "graphics已建texture；正數count",
+      "execution_class": "NATIVE_OVERLAY",
+      "completion": "FadeIn到0自清active；FadeOut到255保留；count不是ms",
+      "cleanup": "Fade.End(nonzero)清alpha；End(0)可保留覆蓋",
+      "server_development": "發布合法節奏與視覺恢復政策",
+      "remaining": "前輪native-continuation已證；無Lua完成ACK，任意count不保證可見過程",
+      "inherited_source": "kr-extra-roy/MEF-capabilities-20261116/audiovisual/report.md",
+      "current_native_records": [],
+      "native_status": "BOUNDED_EFFECTS_REUSED",
+      "deployment": "NOT_DEPLOYED",
+      "gameplay": "NOT_TESTED"
+    },
+    {
+      "id": "transition",
+      "title": "擷取畫面轉場",
+      "methods": [
+        "Q.Transition"
+      ],
+      "owner": "FD2BB8 capture owner",
+      "context": "enabled renderer／有效layers/rate",
+      "execution_class": "NATIVE_OVERLAY",
+      "completion": "native capture/update完成後release；helper只yield",
+      "cleanup": "依原生phase及renderer teardown",
+      "server_development": "內容數值與畫面資源",
+      "remaining": "freeze/capture失敗、前後owner須按實際路徑驗收",
+      "inherited_source": "kr-extra-roy/MEF-capabilities-20261116/audiovisual/report.md",
+      "current_native_records": [],
+      "native_status": "BOUNDED_EFFECTS_REUSED",
+      "deployment": "NOT_DEPLOYED",
+      "gameplay": "NOT_TESTED"
+    },
+    {
+      "id": "sepia",
+      "title": "褐色色調",
+      "methods": [
+        "Q.StartSepia",
+        "Q.EndSepia"
+      ],
+      "owner": "FE36D4",
+      "context": "有效renderer/context",
+      "execution_class": "NATIVE_OVERLAY",
+      "completion": "EndSepia要求phase4，後續4→5→6→0",
+      "cleanup": "獨立phase機制；不清其他overlay",
+      "server_development": "內容排他與收尾",
+      "remaining": "前輪已接End後tick；不是立即全部復原",
+      "inherited_source": "kr-extra-roy/MEF-control-flow-20261116/presentation/report.md",
+      "current_native_records": [],
+      "native_status": "BOUNDED_EFFECTS_REUSED",
+      "deployment": "NOT_DEPLOYED",
+      "gameplay": "NOT_TESTED"
+    },
+    {
+      "id": "world_visibility",
+      "title": "世界角色繪製閘門",
+      "methods": [
+        "Q.DisableObjRender",
+        "Q.EnableObjRender"
+      ],
+      "owner": "FAB130+A8",
+      "context": "ordinary world owner已初始化",
+      "execution_class": "STICKY_STATE",
+      "completion": "只控制選定controller/world-tree draw，不等於停simulation",
+      "cleanup": "持有者明確Enable；normal End不清該flag",
+      "server_development": "不因Client不可見停止權威戰鬥；記錄既有baseline",
+      "remaining": "共享flag沒有Luaowner token，不得盲目清他人狀態",
+      "inherited_source": "kr-extra-roy/MEF-capabilities-20261116/world-npc/report.md",
+      "current_native_records": [
+        "world_visibility_off",
+        "world_visibility_on",
+        "world_draw",
+        "world_draw_frame",
+        "world_owner",
+        "normal_and_review_end"
+      ],
+      "native_status": "BOUNDED_EFFECTS_REUSED_WITH_CURRENT_JOIN",
+      "deployment": "NOT_DEPLOYED",
+      "gameplay": "NOT_TESTED"
+    },
+    {
+      "id": "slowmotion",
+      "title": "特定actor動畫縮放",
+      "methods": [
+        "Q.StartSlowMotion",
+        "Q.EndSlowMotion"
+      ],
+      "owner": "FAB130+B0 flag與+AC countdown",
+      "context": "world animate consumer",
+      "execution_class": "STICKY_STATE",
+      "completion": "flag非0或countdown>0才用約0.2 delta；不是Server clock",
+      "cleanup": "EndSlowMotion只清flag；countdown須分開",
+      "server_development": "正常演出與權威時間分離、收尾",
+      "remaining": "即使清flag不保證本次delta立即正常；native其他writer可能仍有效",
+      "inherited_source": "kr-extra-roy/MEF-capabilities-20261116/world-npc/report.md",
+      "current_native_records": [
+        "slow_motion_on",
+        "slow_motion_off",
+        "world_animate",
+        "world_animation_executor",
+        "world_animation_frame"
+      ],
+      "native_status": "BOUNDED_EFFECTS_REUSED_WITH_CURRENT_JOIN",
+      "deployment": "NOT_DEPLOYED",
+      "gameplay": "NOT_TESTED"
+    },
+    {
+      "id": "letterbox",
+      "title": "上下黑邊",
+      "methods": [
+        "Q.ShowLetterbox",
+        "Q.HideLetterbox"
+      ],
+      "owner": "FE36E0+C",
+      "context": "texture及native draw有效",
+      "execution_class": "STICKY_STATE",
+      "completion": "以獨立flag繪製；normal End不清",
+      "cleanup": "持有者Hide，非End自動清理",
+      "server_development": "有限插播UI恢復驗收",
+      "remaining": "不要把只清輸入當畫面恢復",
+      "inherited_source": "kr-extra-roy/MEF-control-flow-20261116/presentation/report.md",
+      "current_native_records": [
+        "letterbox_on",
+        "letterbox_off",
+        "letterbox_draw",
+        "presentation_draw",
+        "draw_post_q_effects"
+      ],
+      "native_status": "BOUNDED_EFFECTS_REUSED_WITH_CURRENT_JOIN",
+      "deployment": "NOT_DEPLOYED",
+      "gameplay": "NOT_TESTED"
+    },
+    {
+      "id": "flying_image",
+      "title": "Q飛行圖片",
+      "methods": [
+        "Q.FlyingObject",
+        "Q.DelFlyingObject"
+      ],
+      "owner": "shared FB7358 trees；Q只存M+40最近handle",
+      "context": "texture有效；同場景native tick仍可達",
+      "execution_class": "NATIVE_IMAGE",
+      "completion": "finite phase→alpha0→phase0→alive0→release/delete/erase；-1 hold不自結束",
+      "cleanup": "Del只標記最近handle，下一合格manager tick回收；不能清所有歷史圖",
+      "server_development": "合法texture/生命期、單一持有或可追清理",
+      "remaining": "可作A擴充候選，不是已配置發布品；無自然完成Lua回報",
+      "inherited_source": "kr-extra-roy/MEF-control-flow-20261116/world/report.md",
+      "current_native_records": [
+        "q_flying_create",
+        "q_flying_cancel",
+        "flying_lifecycle",
+        "flying_manager_tick",
+        "flying_alive",
+        "flying_release",
+        "flying_deleting_dtor",
+        "flying_draw",
+        "flying_image_draw",
+        "post_q_effect_calls",
+        "draw_post_q_effects"
+      ],
+      "native_status": "BOUNDED_EFFECTS_REUSED_WITH_CURRENT_JOIN",
+      "deployment": "NOT_DEPLOYED",
+      "gameplay": "NOT_TESTED"
+    },
+    {
+      "id": "scenario_dialogue",
+      "title": "多句頭像對話",
+      "methods": [
+        "ScenarioTalkTable.open",
+        "ScenarioTalkTable.start",
+        "ScenarioTalkTable.hideOtherUI",
+        "ScenarioTalkTable.showOtherUI",
+        "ScenarioTalkTable.hide"
+      ],
+      "owner": "CScenarioTalkBox binding/UI owner",
+      "context": "有效雙鍵、非空資料/文字/頭像、typed page",
+      "execution_class": "NATIVE_UI",
+      "completion": "OnEndTalk先於native隱藏尾段；g_scenePlaying不是業務結果",
+      "cleanup": "hide/show同owner配對；voice共用；資料清理不同於任務提交",
+      "server_development": "對白/選項/Server續接與表資源發布",
+      "remaining": "callback入口循環限制沿用；不能宣稱B首次入口",
+      "inherited_source": "kr-extra-roy/MEF-capabilities-20261116/dialogue-ui/report.md",
+      "current_native_records": [],
+      "native_status": "BOUNDED_EFFECTS_REUSED",
+      "deployment": "NOT_DEPLOYED",
+      "gameplay": "NOT_TESTED"
+    },
+    {
+      "id": "prolog",
+      "title": "序章文字與語音",
+      "methods": [
+        "Q.Prolog",
+        "Q.Dialogue",
+        "Q.IsPrologRunning",
+        "Prolog.OnClose"
+      ],
+      "owner": "FC1B18/Prolog表與typed panel",
+      "context": "合法表/頁面/聲音",
+      "execution_class": "NATIVE_UI",
+      "completion": "inactive可能完成/失敗/取消；Q.Dialogue不是世界頭上聊天",
+      "cleanup": "Prolog.OnClose native action；不是callback註冊",
+      "server_development": "內容與UI/voice協調",
+      "remaining": "與普通戰鬥結果無關；所需特定完成語意須另定",
+      "inherited_source": "kr-extra-roy/MEF-control-flow-20261116/world/report.md",
+      "current_native_records": [],
+      "native_status": "BOUNDED_EFFECTS_REUSED",
+      "deployment": "NOT_DEPLOYED",
+      "gameplay": "NOT_TESTED"
+    },
+    {
+      "id": "book",
+      "title": "固定書本演出",
+      "methods": [
+        "Q.Book",
+        "Q.IsBookFlying"
+      ],
+      "owner": "FC1BF8＋四CBookState",
+      "context": "Table/Book與模型、voice gate",
+      "execution_class": "NATIVE_UI",
+      "completion": "參數被忽略；最後state完成才clear；voice gate可阻塞",
+      "cleanup": "Stop/自然結束不同；不可用active0猜原因",
+      "server_development": "合法內容/語音與續接",
+      "remaining": "固定內容不是任意book selector；最小整合仍未部署",
+      "inherited_source": "kr-extra-roy/MEF-control-flow-20261116/world/report.md",
+      "current_native_records": [],
+      "native_status": "BOUNDED_EFFECTS_REUSED",
+      "deployment": "NOT_DEPLOYED",
+      "gameplay": "NOT_TESTED"
+    },
+    {
+      "id": "panels",
+      "title": "字幕與數字／Miss／Block／擊殺字樣",
+      "methods": [
+        "Q.InsertText",
+        "Q.NumberPanel",
+        "Q.BattlePanel",
+        "Q.BurstStruck"
+      ],
+      "owner": "字幕queue／Qslot position／native面板",
+      "context": "合法style/value、字串長度、Qslot",
+      "execution_class": "PRESENTATION",
+      "completion": "helper yield不是播完；數字不修改HP",
+      "cleanup": "各native owner消費與回收，非Server結果ACK",
+      "server_development": "命中/HP/獎勵皆Server權威",
+      "remaining": "樣式bounds與字串容量依既有契約；不能從顯示推權威結果",
+      "inherited_source": "kr-extra-roy/MEF-capabilities-20261116/dialogue-ui/report.md",
+      "current_native_records": [],
+      "native_status": "BOUNDED_EFFECTS_REUSED",
+      "deployment": "NOT_DEPLOYED",
+      "gameplay": "NOT_TESTED"
+    }
+  ],
+  "all_functions_complete": false,
+  "formal_status_changed": false
+}

@@ -1,0 +1,506 @@
+{
+  "schema": "mef-outer-inner-supervisor-contract-v1",
+  "classification": "CONDITIONAL_DESIGN_NOT_NATIVE_MEF",
+  "deployable_resource": false,
+  "work_parent": "ad9ea950216923b5e351a7501d38e006df57a4c6",
+  "native_scope": "Original fixed KR build, original bindings, valid thread/owner, available capacity, no reentrant/debug/GC hook interference",
+  "core_claim": "An ordinary Lua error escaping the inner body can return false,error to the still-running outer, making effect-aware cleanup selection reachable without wrapping a yielding entry in same-thread pcall.",
+  "old_R9_statement_refinement": "Direct entry-call cleanup after a raised error was not reachable. The additional protected child resume supplies a new caller path; external cancellation and outer failures remain uncovered.",
+  "scheduling": {
+    "registered_threads": [
+      "outer_only"
+    ],
+    "inner_registered_in_qco": false,
+    "outer_moco_resume_arguments": 0,
+    "inner_resume_arguments": 0,
+    "inner_context_delivery": "Lua adapter captures RUN_CONTEXT and calls entry(RUN_CONTEXT)",
+    "inner_steps_per_outer_visit_max": 1,
+    "outer_yield_after_child_yield": true,
+    "outer_yield_values": 0,
+    "child_yield_values_required": 0,
+    "child_yield_values_if_present": "Ignored; never interpreted as sleep or forwarded as future arguments",
+    "resumed_yield_return_arguments": 0,
+    "return_payload_slots": 1,
+    "normal_return_false_is_resume_error": false,
+    "normal_return_is_business_success": false,
+    "numeric_delay_from_yield_payload": false,
+    "fixed_frame_delay_guaranteed": false,
+    "same_handle_duplicate_or_scheduler_reentry_allowed": false
+  },
+  "native_thread_fields": {
+    "owner": "lua_State only; not Q manager offsets",
+    "status": "0x06",
+    "top": "0x08",
+    "base": "0x0c",
+    "global_state": "0x10",
+    "callinfo": "0x14",
+    "base_callinfo": "0x28",
+    "nCcalls": "0x34",
+    "baseCcalls": "0x36",
+    "global_environment_tvalue": "0x48",
+    "error_frame": "0x70"
+  },
+  "boundaries": {
+    "copy_caller_depth_to_child": "0x7071c3..0x7071c7",
+    "child_sets_own_depth_baseline": "0x6fe70e..0x6fe713",
+    "yield_checks_current_child_only": "0x70748b..0x707496",
+    "wrapper_yield_only_after_resume_returns": true,
+    "wrap_yielding_entry_in_pcall": false,
+    "wrap_yielding_outer_loop_in_pcall": false,
+    "yield_from_DoFile_top_level": false,
+    "same_global_state_and_environment": true,
+    "thread_is_sandbox": false,
+    "error_object_must_be_string": false,
+    "all_api_failures_caught": false,
+    "all_native_failures_caught": false
+  },
+  "inner_constraints": [
+    "Finite work between cooperative yields; no scheduler reentry or duplicate registration",
+    "No direct Register/qco-list mutation, no End/Stop/removeAll/remove of outer",
+    "No surviving/external child handle references or later resume after cleanup",
+    "No mutation of shared original coroutine/MoCo/qbase/Q/helper bindings",
+    "Own export and shared context only; record actual partial effects for selected cleanup",
+    "No dependence on coroutine.running() being the scheduler-registered outer",
+    "Bounded zero-value yield and at most one result payload; native API supports more but this adapter does not proxy them"
+  ],
+  "cancellation": {
+    "cooperative_flag": "Design-owned local context flag with a concrete producer still to be assigned; not a new native/Server API",
+    "requires_outer_execution": true,
+    "observed_only_between_child_resumes": true,
+    "inner_preemption": false,
+    "external_remove_runs_cleanup": false,
+    "external_End_Stop_guarantees_outer_tail": false,
+    "dropped_suspended_child_is_dead": false,
+    "garbage_collection_is_game_cleanup": false
+  },
+  "cleanup": {
+    "owner": "outer supervisor and a separately validated effect policy",
+    "presentation_companion": "../presentation/report.md",
+    "call_RevPhase1_after_any_error": false,
+    "ledger_is_transaction": false,
+    "release_only_acquired_effects": true,
+    "complete_before_End": true,
+    "End_then_Stop_is_recovery": false,
+    "cleanup_may_yield": true,
+    "cleanup_yield_requires_future_pump": true,
+    "cleanup_error_automatically_caught": false,
+    "all_cleanup_steps_synchronous": false,
+    "cleanup_requested_equals_restored": false,
+    "End_last_and_immediate_return": true,
+    "unknown_partial_effects_require_external_policy": true,
+    "selected_cleanup_policy_contains_End": false,
+    "original_RevPhase1_contains_own_End": true,
+    "repeat_End_after_RevPhase1_allowed": false
+  },
+  "protocol": {
+    "every_End_emits_003f": false,
+    "nonzero_quest_003f_condition": "active && !review && converted_CheckConfirmMessage == 1",
+    "resume_true_proves_business_completion": false,
+    "return_payload_is_wire_ACK": false,
+    "packet_003f_proves_module_success": false,
+    "packet_00eb_stops_Q": false,
+    "new_opcode_or_run_token_invented": false
+  },
+  "unallocated_parameters": [
+    {
+      "name": "SCENE_KEYS",
+      "assigned": false,
+      "value": null
+    },
+    {
+      "name": "SEQ_FUNC_NAME",
+      "assigned": false,
+      "value": null
+    },
+    {
+      "name": "MODULE_RESOURCE_PATH",
+      "assigned": false,
+      "value": null
+    },
+    {
+      "name": "MODULE_EXPORT_KEY",
+      "assigned": false,
+      "value": null
+    },
+    {
+      "name": "CONTENT_VERSION",
+      "assigned": false,
+      "value": null
+    },
+    {
+      "name": "RUN_CONTEXT_SCHEMA",
+      "assigned": false,
+      "value": null
+    },
+    {
+      "name": "RESULT_POLICY",
+      "assigned": false,
+      "value": null
+    },
+    {
+      "name": "EFFECT_LEDGER_SCHEMA",
+      "assigned": false,
+      "value": null
+    },
+    {
+      "name": "CLEANUP_POLICY",
+      "assigned": false,
+      "value": null
+    },
+    {
+      "name": "COOPERATIVE_CANCEL_PRODUCER",
+      "assigned": false,
+      "value": null
+    },
+    {
+      "name": "SERVER_TIMEOUT_POLICY",
+      "assigned": false,
+      "value": null
+    }
+  ],
+  "states": [
+    {
+      "id": "formal_bridge",
+      "meaning": "已在原正式 Q coroutine 執行；R9 phase/registration 前提成立"
+    },
+    {
+      "id": "module_ready",
+      "meaning": "global DoFile 已回數字 0，當次 export/version/entry 已核"
+    },
+    {
+      "id": "load_failed",
+      "meaning": "DoFile 回 1 或當次 export 契約拒絕，outer 尚能正常執行"
+    },
+    {
+      "id": "child_created",
+      "meaning": "create 成功；inner 只由 outer local 保留，未登記 qco"
+    },
+    {
+      "id": "resume_child",
+      "meaning": "outer 對有效 suspended child 呼 public resume，零參數"
+    },
+    {
+      "id": "child_yielded",
+      "meaning": "resume true 且 child status suspended"
+    },
+    {
+      "id": "outer_yielded",
+      "meaning": "child resume 已返回，outer 自己呼 yield"
+    },
+    {
+      "id": "await_pump",
+      "meaning": "outer suspended，等待下一次符合 native gate 的排程"
+    },
+    {
+      "id": "entry_returned",
+      "meaning": "resume true 且 status dead；保留至多一個內容結果"
+    },
+    {
+      "id": "entry_error",
+      "meaning": "resume false 且拿到原 error TValue；不再 resume child"
+    },
+    {
+      "id": "cooperative_cancel",
+      "meaning": "已存在的新內容本地取消旗標在可執行邊界被看見"
+    },
+    {
+      "id": "unexpected_state",
+      "meaning": "正常 resume 後非 suspended/dead，違反本設計不變條件"
+    },
+    {
+      "id": "cleanup_selected",
+      "meaning": "依 outcome、effect ledger 與仍有效的 owner 選定收尾"
+    },
+    {
+      "id": "cleanup_running",
+      "meaning": "outer 按選定的原介面執行收尾；未 End"
+    },
+    {
+      "id": "cleanup_yielded",
+      "meaning": "收尾本身合法讓出，仍需要 outer 後續 pump"
+    },
+    {
+      "id": "cleanup_done",
+      "meaning": "選定的必要清理條件已逐項成立；不是只呼過請求 API"
+    },
+    {
+      "id": "cleanup_failed",
+      "meaning": "清理錯誤或必要後置條件未成立；不得標 restored"
+    },
+    {
+      "id": "end_called",
+      "meaning": "原 End 依本 run policy 作最後一步；不等於成功 ACK"
+    },
+    {
+      "id": "outer_returned",
+      "meaning": "End 後立即 return，沒有再 yield/Register/遊戲操作"
+    },
+    {
+      "id": "outer_failed",
+      "meaning": "create/resume wrapper/status/outer 本身失敗，沒有這個 inner catch"
+    },
+    {
+      "id": "external_removed",
+      "meaning": "外部 End/Stop/removeAll/remove 或 ownership loss，無 automatic finally"
+    },
+    {
+      "id": "vm_destroyed",
+      "meaning": "VM/scene owner 關閉，不再承諾原 coroutine 可達"
+    },
+    {
+      "id": "native_fault",
+      "meaning": "OOM/panic/native exception 等超出已證普通 Lua body error 範圍"
+    },
+    {
+      "id": "await_server_resolution",
+      "meaning": "由 Server 自己的 run 狀態/timeout/相容回覆規則對帳"
+    }
+  ],
+  "transitions": [
+    {
+      "source": "formal_bridge",
+      "target": "module_ready",
+      "condition": "DoFile == numeric 0 and this-run export validated"
+    },
+    {
+      "source": "formal_bridge",
+      "target": "load_failed",
+      "condition": "DoFile == numeric 1 or export validation rejects; no outer exception"
+    },
+    {
+      "source": "formal_bridge",
+      "target": "outer_failed",
+      "condition": "Outer loader/helper operation raises outside successful return"
+    },
+    {
+      "source": "module_ready",
+      "target": "child_created",
+      "condition": "Original coroutine.create on a Lua adapter returns a thread"
+    },
+    {
+      "source": "module_ready",
+      "target": "outer_failed",
+      "condition": "Child create/adapter setup raises before protected child body exists"
+    },
+    {
+      "source": "module_ready",
+      "target": "native_fault",
+      "condition": "Allocator/panic/native failure prevents ordinary control return"
+    },
+    {
+      "source": "child_created",
+      "target": "resume_child",
+      "condition": "No cooperative cancellation; ownership and scheduler invariants hold"
+    },
+    {
+      "source": "child_created",
+      "target": "cooperative_cancel",
+      "condition": "Owned local cancel flag already set; no child execution required"
+    },
+    {
+      "source": "resume_child",
+      "target": "child_yielded",
+      "condition": "resume boolean true and status(child) == suspended"
+    },
+    {
+      "source": "resume_child",
+      "target": "entry_returned",
+      "condition": "resume boolean true and status(child) == dead"
+    },
+    {
+      "source": "resume_child",
+      "target": "entry_error",
+      "condition": "resume boolean false; ordinary escaped child error or rejected child state"
+    },
+    {
+      "source": "resume_child",
+      "target": "outer_failed",
+      "condition": "Public API argument/capacity/status helper raises on outer"
+    },
+    {
+      "source": "resume_child",
+      "target": "native_fault",
+      "condition": "Native failure or allocator panic outside child protected body"
+    },
+    {
+      "source": "resume_child",
+      "target": "unexpected_state",
+      "condition": "Success with a state outside suspended/dead; corrupted/reentrant/out-of-contract"
+    },
+    {
+      "source": "child_yielded",
+      "target": "outer_yielded",
+      "condition": "No cancel; child resume has returned; zero-value outer yield"
+    },
+    {
+      "source": "child_yielded",
+      "target": "cooperative_cancel",
+      "condition": "Owned flag became true at child yield boundary"
+    },
+    {
+      "source": "child_yielded",
+      "target": "external_removed",
+      "condition": "Owner/run invalidated; no safe cleanup authority inferred"
+    },
+    {
+      "source": "outer_yielded",
+      "target": "await_pump",
+      "condition": "Original yield succeeds at outer depth baseline"
+    },
+    {
+      "source": "outer_yielded",
+      "target": "outer_failed",
+      "condition": "Outer yield remains under a forbidden same-thread C boundary"
+    },
+    {
+      "source": "await_pump",
+      "target": "resume_child",
+      "condition": "A later allowed MoCo visit resumes outer; cancellation not set"
+    },
+    {
+      "source": "await_pump",
+      "target": "cooperative_cancel",
+      "condition": "Later allowed outer resume observes owned flag before child resume"
+    },
+    {
+      "source": "await_pump",
+      "target": "external_removed",
+      "condition": "Scheduler membership removed; no new outer instructions execute"
+    },
+    {
+      "source": "await_pump",
+      "target": "vm_destroyed",
+      "condition": "VM/scene owner closes before another visit"
+    },
+    {
+      "source": "entry_returned",
+      "target": "cleanup_selected",
+      "condition": "RESULT_POLICY classifies payload; return itself is not business success"
+    },
+    {
+      "source": "entry_error",
+      "target": "cleanup_selected",
+      "condition": "Outer still valid; drop sole inner reference and preserve arbitrary error object"
+    },
+    {
+      "source": "cooperative_cancel",
+      "target": "cleanup_selected",
+      "condition": "Outer still scheduled/owned; child will never be resumed again"
+    },
+    {
+      "source": "load_failed",
+      "target": "cleanup_selected",
+      "condition": "Only actually owned partial effects/export are considered"
+    },
+    {
+      "source": "unexpected_state",
+      "target": "cleanup_selected",
+      "condition": "Abort outcome; cleanup allowed only if ownership remains independently valid"
+    },
+    {
+      "source": "cleanup_selected",
+      "target": "cleanup_running",
+      "condition": "A concrete effect-aware policy exists; no guessed release/reset"
+    },
+    {
+      "source": "cleanup_selected",
+      "target": "cleanup_failed",
+      "condition": "Ownership/acquisition/postcondition needed by policy is unknown"
+    },
+    {
+      "source": "cleanup_selected",
+      "target": "external_removed",
+      "condition": "External owner invalidates run before cleanup executes"
+    },
+    {
+      "source": "cleanup_running",
+      "target": "cleanup_yielded",
+      "condition": "Selected step explicitly requires a legal yield and continued native pump"
+    },
+    {
+      "source": "cleanup_yielded",
+      "target": "cleanup_running",
+      "condition": "Later allowed MoCo visit; same cleanup state/owner survives"
+    },
+    {
+      "source": "cleanup_yielded",
+      "target": "external_removed",
+      "condition": "Cancel/remove while suspended prevents remaining cleanup instructions"
+    },
+    {
+      "source": "cleanup_yielded",
+      "target": "vm_destroyed",
+      "condition": "Owner teardown prevents cleanup resumption"
+    },
+    {
+      "source": "cleanup_running",
+      "target": "cleanup_done",
+      "condition": "Every selected step and required postcondition completed"
+    },
+    {
+      "source": "cleanup_running",
+      "target": "cleanup_failed",
+      "condition": "Step returns failure, raises, or postcondition not established"
+    },
+    {
+      "source": "cleanup_failed",
+      "target": "outer_failed",
+      "condition": "Uncaught cleanup error escapes the outer coroutine"
+    },
+    {
+      "source": "cleanup_failed",
+      "target": "await_server_resolution",
+      "condition": "Explicit failure recorded without claiming restoration; external policy resolves"
+    },
+    {
+      "source": "cleanup_done",
+      "target": "end_called",
+      "condition": "Only final owner issues explicit End under selected completion policy"
+    },
+    {
+      "source": "end_called",
+      "target": "outer_returned",
+      "condition": "Immediate return; no post-End work or yield"
+    },
+    {
+      "source": "end_called",
+      "target": "outer_failed",
+      "condition": "Native/outer failure before normal End return remains exceptional"
+    },
+    {
+      "source": "outer_returned",
+      "target": "await_server_resolution",
+      "condition": "003F/00EB and actual outcome remain separate protocol facts"
+    },
+    {
+      "source": "outer_failed",
+      "target": "await_server_resolution",
+      "condition": "MoCo may remove failed outer; Server timeout/owner recovery required"
+    },
+    {
+      "source": "external_removed",
+      "target": "await_server_resolution",
+      "condition": "External native cleanup/Server policy owns disposition"
+    },
+    {
+      "source": "vm_destroyed",
+      "target": "await_server_resolution",
+      "condition": "Session/scene disposition resolved by Server policy"
+    },
+    {
+      "source": "native_fault",
+      "target": "await_server_resolution",
+      "condition": "Only if independent Server timeout/disconnection detection remains available"
+    }
+  ],
+  "validation": {
+    "lua_executed": false,
+    "lua_compiled": false,
+    "client_executed": false,
+    "server_implemented": false,
+    "game_resources_deployed": false,
+    "gameplay_accepted": false,
+    "T01_FULL_PASS": false,
+    "RR_ACCEPTED": false
+  }
+}

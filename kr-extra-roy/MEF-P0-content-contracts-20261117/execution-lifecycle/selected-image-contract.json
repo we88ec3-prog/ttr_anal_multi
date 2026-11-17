@@ -1,0 +1,92 @@
+{
+  "schema": "ttr-mef-p0-selected-image-lifecycle-v1",
+  "classification": "ORIGINAL_SOURCE_AND_NATIVE_BRANCH_ANALYSIS",
+  "quest": 2440,
+  "scene": 5,
+  "chosen_execution_profile": "EXISTING_SINGLE_RUN_ORIGINAL_FLOW",
+  "member_sha256": "22131443cd236fd9498847353da3e7b8f8862f05cfab3258932e8158c9be3258",
+  "line": 59,
+  "bounded_statement": "FlyingObject(\"Image/Prologue/Aisen00_1.dds\", 50, 30, 100, 100, 0, 0)",
+  "arguments": {
+    "path": "Image/Prologue/Aisen00_1.dds",
+    "x_percent": 50,
+    "y_percent": 30,
+    "fade_in": 100,
+    "hold": 100,
+    "fade_out": 0,
+    "hold_forever_integer": 0
+  },
+  "constructor_contract": {
+    "native_call": "0x5649a1 -> 0x553e90",
+    "initial_fields": {
+      "+0x1c_total_in": 100,
+      "+0x28_remaining_in": 100,
+      "+0x20_total_out": 0,
+      "+0x2c_remaining_out": 0,
+      "+0x30_hold": 100,
+      "+0x24_delay": 0,
+      "+0x3c_group_policy": 0,
+      "+0x14_alive": 1
+    },
+    "initializer": "CFlyingImage v+4=560030 sets phase+34=1 after normal texture-load/logging path returns; actual texture presence is a separate draw condition",
+    "hold_minus_one_override": false
+  },
+  "phase_contract": [
+    {
+      "phase": 1,
+      "behavior": "Positive delay decrements and returns; nonpositive delay sets phase2 and falls through to fade-in branch",
+      "condition": "Shared-manager group scheduling must eventually permit progress; no fixed wall-clock bound"
+    },
+    {
+      "phase": 2,
+      "behavior": "Positive remaining_in decrements and divides by total_in=100; nonpositive branch sets alpha255 and phase3",
+      "zero_denominator_reachable_for_selected_values": false
+    },
+    {
+      "phase": 3,
+      "behavior": "Positive hold decrements; hold0 advances to phase4; this call selected hold100, not negative hold"
+    },
+    {
+      "phase": 4,
+      "remaining_out": 0,
+      "read_va": "0x553c05",
+      "signed_nonpositive_branch_va": "0x553c0a",
+      "taken_target": "0x553c41",
+      "skipped_division_va": "0x553c22",
+      "behavior": "JLE is taken before decrement/division: alpha0 at553C41, phase0 at553C45, return; alive is not cleared by this branch",
+      "division_by_zero_reachable_for_selected_values": false
+    },
+    {
+      "phase": 0,
+      "behavior": "Next qualified image tick writes alive0 at553B79; same manager iteration then observes zero and calls release/deleting destructor/tree erase"
+    }
+  ],
+  "cleanup_consumer": {
+    "manager_tick": "0x5537f0",
+    "tick_call": "0x55387c",
+    "alive_read_call": "0x553885",
+    "release_call": "0x553892",
+    "deleting_destructor_call": "0x55389c",
+    "tree_erase_call": "0x5538a7",
+    "texture_release_target": "0x553de0",
+    "deleting_destructor_target": "0x553e40"
+  },
+  "evidence": [
+    "reuse_native:q_flying_create",
+    "world_native:flying_fade_constructor",
+    "world_native:flying_image_load",
+    "world_native:flying_fade_tick",
+    "world_native:flying_alive_reader",
+    "world_native:flying_release_tick",
+    "world_native:flying_deleting_destructor",
+    "runner_native:F11",
+    "native-evidence.json:data:image_phase_jump_table"
+  ],
+  "selected_zero_fadeout_native_branch_closed": true,
+  "finite_lifetime_condition": "Normal allocation/initialization return, continued qualified manager ticks, eventual phase1 group eligibility and no competing mutation/replacement. Cancellation or replacement is a separate earlier termination path.",
+  "image_visible_proved": false,
+  "fixed_elapsed_time_proved": false,
+  "lua_completion_token_proved": false,
+  "client_executed": false,
+  "lua_executed": false
+}

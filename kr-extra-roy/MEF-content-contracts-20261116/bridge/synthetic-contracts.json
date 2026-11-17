@@ -1,0 +1,14 @@
+{
+  "classification": "SYN / NOT_NATIVE_MEF; bounded integer operations only; not Lua or Client execution",
+  "proof": "Native branch and truncation anchors are in contracts.json. Prior prepass no-op namespace is pinned in source-manifest.json.",
+  "cases": [
+    {"id":"SYN-first-model-wins-alias","operations":[["create",1,100,0],["create",65537,200,6]],"expected":{"slots":[{"slot":1,"model":100,"actions":[1,6]}],"music":""}},
+    {"id":"SYN-existing-zero-not-normalized","operations":[["create",7,100,2],["create",7,200,0]],"expected":{"slots":[{"slot":7,"model":100,"actions":[0,2]}],"music":""}},
+    {"id":"SYN-zero-check-before-WORD-truncation","operations":[["create",3,100,65536]],"expected":{"slots":[{"slot":3,"model":100,"actions":[0]}],"music":""}},
+    {"id":"SYN-action-before-create-is-lost","operations":[["ani",4,9],["walk",4,1,8],["create",4,100,1]],"expected":{"slots":[{"slot":4,"model":100,"actions":[1]}],"music":""}},
+    {"id":"SYN-gates-defaults-and-dedup","operations":[["create",4,100,1],["walk",4,0,9],["walk",4,1,-1],["warp",4,1,-1],["ani",4,65540]],"expected":{"slots":[{"slot":4,"model":100,"actions":[1,4]}],"music":""}},
+    {"id":"SYN-model-width-is-not-catalog-validity","operations":[["create",2,70000,1]],"expected":{"slots":[{"slot":2,"model":4464,"actions":[1]}],"music":""}},
+    {"id":"SYN-script-clear-does-not-reset-prepass","operations":[["create",2,100,1],["clear_script_stub",0],["create",2,200,7]],"expected":{"slots":[{"slot":2,"model":100,"actions":[1,7]}],"music":""}},
+    {"id":"SYN-top-level-reload-clears-data","operations":[["create",2,100,1],["music","SYN-A"],["reset"],["create",2,200,7],["music","SYN-B"],["music","SYN-C"]],"expected":{"slots":[{"slot":2,"model":200,"actions":[7]}],"music":"SYN-C"}}
+  ]
+}

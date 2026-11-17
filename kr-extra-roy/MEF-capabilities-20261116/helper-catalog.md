@@ -1,0 +1,83 @@
+# qbase：75個頂層函式完整導覽
+
+本表由原Event/qbase.lua root的CLOSURE→SETGLOBAL完整派生，原件為76 prototypes／906指令字。各列的「讀globals」僅是直接GETGLOBAL操作數，不能當已窮盡的呼叫圖；同名回呼也不能單因定義存在就宣稱有native producer。
+
+固定形參數、prototype及code SHA可在 [helper-index.json](control/helper-index.json) 逐項核對。沒有在這份交付放入完整Lua member／全部bytecode。能力與時序解釋見 [能力總表](capability-catalog.md) 及四組分題。
+
+| 函式 | Proto | 固定形參數 | 直接讀取globals | 結構提示 |
+|---|---:|---:|---|---|
+| `f_registerCoroutine` | 1 | 1 | `qco` | 依相應能力章及原helper條件使用 |
+| `f_doCoTask` | 2 | 0 | `qco`、`Q` | 依相應能力章及原helper條件使用 |
+| `f_removeAllCoroutines` | 3 | 0 | `qco` | 依相應能力章及原helper條件使用 |
+| `yield` | 4 | 0 | `wait` | 依相應能力章及原helper條件使用 |
+| `OnYesTriggered` | 5 | 0 | `TRUE` | 依相應能力章及原helper條件使用 |
+| `OnNoTriggered` | 6 | 0 | `TRUE` | 依相應能力章及原helper條件使用 |
+| `OnNextTalk` | 7 | 1 | — | 只有RETURN；空helper |
+| `PrologCloseCallback` | 8 | 0 | `print`、`Prolog` | 依相應能力章及原helper條件使用 |
+| `OnEndTalk` | 9 | 0 | `FALSE` | 依相應能力章及原helper條件使用 |
+| `WaitForScene` | 10 | 0 | `yield`、`g_scenePlaying`、`wait` | 依相應能力章及原helper條件使用 |
+| `WaitForCamera` | 11 | 0 | `yield`、`CameraWorks`、`wait` | 依相應能力章及原helper條件使用 |
+| `WaitForProlog` | 12 | 0 | `yield`、`Q`、`wait` | 依相應能力章及原helper條件使用 |
+| `WaitForBook` | 13 | 0 | `yield`、`Q`、`wait` | 依相應能力章及原helper條件使用 |
+| `PlayCameraNoWait` | 14 | 5 | `Q`、`CameraWorks` | 依相應能力章及原helper條件使用 |
+| `PlayCamera` | 15 | 5 | `PlayCameraNoWait`、`WaitForCamera` | 依相應能力章及原helper條件使用 |
+| `SkipCamera` | 16 | 1 | `Q`、`yield` | 依相應能力章及原helper條件使用 |
+| `OpenTalkScene` | 17 | 2 | `TRUE`、`ScenarioTalkTable`、`WaitForScene` | 依相應能力章及原helper條件使用 |
+| `OpenAutoTalkScene` | 18 | 2 | `TRUE`、`ScenarioTalkTable`、`WaitForScene` | 依相應能力章及原helper條件使用 |
+| `CheckConfirmMessage` | 19 | 0 | `g_noTriggered`、`FALSE`、`g_yesTriggered` | 依相應能力章及原helper條件使用 |
+| `WaitAndCheckConfirmMessage` | 20 | 0 | `yield`、`FALSE`、`g_noTriggered`、`g_yesTriggered`、`CheckConfirmMessage` | 依相應能力章及原helper條件使用 |
+| `PlayMusic` | 21 | 1 | `Q`、`TRUE`、`yield` | 依相應能力章及原helper條件使用 |
+| `StopMusic` | 22 | 0 | `Q`、`yield` | 依相應能力章及原helper條件使用 |
+| `StopMusicWithFadeOut` | 23 | 1 | `Q`、`yield` | 依相應能力章及原helper條件使用 |
+| `WaitForObjectsStop` | 24 | 0 | `yield`、`Q` | 依相應能力章及原helper條件使用 |
+| `ConvSpeedStepToMultiplier` | 25 | 1 | `print` | 依相應能力章及原helper條件使用 |
+| `WalkObject` | 26 | 7 | `ConvSpeedStepToMultiplier`、`Q`、`yield` | 依相應能力章及原helper條件使用 |
+| `WarpObject` | 27 | 7 | `Q`、`yield` | 依相應能力章及原helper條件使用 |
+| `RotateObject` | 28 | 3 | `Q`、`yield` | 依相應能力章及原helper條件使用 |
+| `AniObject` | 29 | 3 | `Q`、`yield` | 依相應能力章及原helper條件使用 |
+| `AniSkip` | 30 | 2 | `Q`、`yield` | 依相應能力章及原helper條件使用 |
+| `SpeedObject` | 31 | 2 | `ConvSpeedStepToMultiplier`、`Q`、`yield` | 依相應能力章及原helper條件使用 |
+| `ShowObject` | 32 | 2 | `Q` | 依相應能力章及原helper條件使用 |
+| `FaceObject` | 33 | 3 | `Q`、`yield` | 依相應能力章及原helper條件使用 |
+| `FlashObject` | 34 | 3 | `Q`、`yield` | 依相應能力章及原helper條件使用 |
+| `StopObject` | 35 | 1 | `Q`、`yield` | 依相應能力章及原helper條件使用 |
+| `ClearObjects` | 36 | 0 | `Q` | 依相應能力章及原helper條件使用 |
+| `Transition` | 37 | 0 | `Q`、`yield` | 依相應能力章及原helper條件使用 |
+| `FlyingObject` | 38 | 7 | `Q`、`yield` | 依相應能力章及原helper條件使用 |
+| `DelFlyingObject` | 39 | 0 | `Q` | 依相應能力章及原helper條件使用 |
+| `StartLoading` | 40 | 0 | `yield` | 只呼yield；非載入器 |
+| `EndLoading` | 41 | 0 | `yield` | 只呼yield；非載入器 |
+| `AttachCamera` | 42 | 1 | `Q` | 依相應能力章及原helper條件使用 |
+| `DetachCamera` | 43 | 0 | `Q` | 依相應能力章及原helper條件使用 |
+| `MoveCamera` | 44 | 3 | `Q` | 依相應能力章及原helper條件使用 |
+| `RotCamera` | 45 | 3 | `Q` | 依相應能力章及原helper條件使用 |
+| `DoProlog` | 46 | 1 | `Q`、`WaitForProlog` | 依相應能力章及原helper條件使用 |
+| `PlaySound` | 47 | 1 | `Q`、`yield` | 依相應能力章及原helper條件使用 |
+| `PlayTalkSound` | 48 | 1 | `Q`、`yield` | 依相應能力章及原helper條件使用 |
+| `FadeOut` | 49 | 1 | `Q`、`yield` | 依相應能力章及原helper條件使用 |
+| `FadeIn` | 50 | 1 | `Q`、`yield` | 依相應能力章及原helper條件使用 |
+| `FadeColor` | 51 | 1 | `Q`、`yield` | 依相應能力章及原helper條件使用 |
+| `CameraEffect` | 52 | 4 | `Q`、`TRUE`、`wait`、`yield` | 依相應能力章及原helper條件使用 |
+| `Book` | 53 | 1 | `Q`、`WaitForBook` | 依相應能力章及原helper條件使用 |
+| `Dialogue` | 54 | 1 | `Q`、`yield` | 依相應能力章及原helper條件使用 |
+| `BalloonTalk` | 55 | 2 | `Q`、`yield` | 依相應能力章及原helper條件使用 |
+| `BurstStruck` | 56 | 3 | `Q`、`yield` | 依相應能力章及原helper條件使用 |
+| `NumberPanel` | 57 | 3 | `Q`、`yield` | 依相應能力章及原helper條件使用 |
+| `Sepia` | 58 | 2 | `Q` | 依相應能力章及原helper條件使用 |
+| `SlowMotion` | 59 | 1 | `Q` | 依相應能力章及原helper條件使用 |
+| `LoadMap` | 60 | 1 | `Q` | 依相應能力章及原helper條件使用 |
+| `RestoreMap` | 61 | 0 | `Q` | 依相應能力章及原helper條件使用 |
+| `CreateObject` | 62 | 9 | `Q`、`isVisible` | 依相應能力章及原helper條件使用 |
+| `SetTransitionType` | 63 | 1 | — | 依相應能力章及原helper條件使用 |
+| `SetFinalMusic` | 64 | 1 | `Q` | 依相應能力章及原helper條件使用 |
+| `HideOriginalObjs` | 65 | 1 | — | 依相應能力章及原helper條件使用 |
+| `AllowPoisonForestRaidHack` | 66 | 0 | `TRUE` | 依相應能力章及原helper條件使用 |
+| `Phase1` | 67 | 0 | `TRUE`、`FALSE`、`Q`、`g_hideOrigObjs`、`ScenarioTalkTable`、`yield`、`g_transitionIdx`、`Fade`、`wait` | 依相應能力章及原helper條件使用 |
+| `Phase2` | 68 | 0 | — | 只有RETURN；空helper |
+| `Phase3` | 69 | 0 | — | 只有RETURN；空helper |
+| `Phase4` | 70 | 0 | — | 只有RETURN；空helper |
+| `RevPhase4` | 71 | 0 | — | 只有RETURN；空helper |
+| `RevPhase3` | 72 | 0 | `CameraWorks` | 依相應能力章及原helper條件使用 |
+| `RevPhase2` | 73 | 0 | — | 只有RETURN；空helper |
+| `RevPhase1` | 74 | 0 | `Q`、`g_transitionIdx`、`Fade`、`wait`、`ScenarioTalkTable`、`g_hideOrigObjs`、`yield` | 依相應能力章及原helper條件使用 |
+| `Register` | 75 | 1 | `f_registerCoroutine`、`coroutine` | 依相應能力章及原helper條件使用 |

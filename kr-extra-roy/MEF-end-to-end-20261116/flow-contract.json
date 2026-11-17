@@ -1,0 +1,442 @@
+{
+  "schema": "mef-end-to-end-contract-v1",
+  "classification_note": "Analysis/design index only; not official REQ/RR ledger or native MEF schema",
+  "original_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+  "work_parent": "15819c892c0a9a23924704daa5883615a09626bf",
+  "stages": [
+    {
+      "id": "deliver",
+      "title": "啟動前交付",
+      "classification": "CLIENT_CONFIRMED_BOUNDED",
+      "owner": "Launcher",
+      "native_or_design_chain": "manifest FILE → HTTP/gzip → ordinary writer",
+      "output": "檔案與版本可供後續索引讀取",
+      "preconditions": [
+        "原更新流程實際啟用",
+        "合法更新端點",
+        "普通檔案分支"
+      ],
+      "limits": [
+        "Game TCP沒有已證任意MEF bytes receiver"
+      ],
+      "evidence": "kr-extra-roy/20261114-183651-chatgpt-web-roy1-MEF-delivery-windows.md"
+    },
+    {
+      "id": "resolve",
+      "title": "資源可見性",
+      "classification": "CLIENT_CONFIRMED_BOUNDED",
+      "owner": "resource provider",
+      "native_or_design_chain": "714770／714030／713Dxx",
+      "output": "可被已知loader取得的buffer",
+      "preconditions": [
+        "package/fallback/checksum/cache條件"
+      ],
+      "limits": [
+        "檔案存在不等於被選取"
+      ],
+      "evidence": "kr-extra-roy/MEF-complete-flow-20261115/resource-gates/report.md"
+    },
+    {
+      "id": "select",
+      "title": "SceneList選取",
+      "classification": "CLIENT_CONFIRMED_BOUNDED",
+      "owner": "Q manager M",
+      "native_or_design_chain": "0047 → 503040 → 561760",
+      "output": "Event/Sequences/<funcName>.seq",
+      "preconditions": [
+        "two signed WORD keys",
+        "索引已載入",
+        "合法context",
+        "busy等gate通過"
+      ],
+      "limits": [
+        "不是任意filename/blob",
+        "不排隊",
+        "非零quest不保證End回報"
+      ],
+      "evidence": "kr-extra-roy/MEF-entry-lifecycle-events-20261114/entry.md"
+    },
+    {
+      "id": "prepass",
+      "title": "有限預掃描",
+      "classification": "CLIENT_CONFIRMED_BOUNDED",
+      "owner": "獨立prepass VM",
+      "native_or_design_chain": "55D6A0 → 55D560 Register",
+      "output": "slot/model/actions/music collector",
+      "preconditions": [
+        "有限return",
+        "callback ABI正確",
+        "Create先於action"
+      ],
+      "limits": [
+        "同步執行",
+        "globals可持續",
+        "collector不提供gameplay ACK"
+      ],
+      "evidence": "kr-extra-roy/MEF-content-contracts-20261116/bridge/report.md"
+    },
+    {
+      "id": "model_work",
+      "title": "模型與動作依賴",
+      "classification": "CLIENT_CONFIRMED_BOUNDED",
+      "owner": "Q M+70與resource jobs",
+      "native_or_design_chain": "collector → model job → formal Create → CMotion",
+      "output": "資源請求與receiver",
+      "preconditions": [
+        "真實model/action catalog",
+        "collector位寬匹配"
+      ],
+      "limits": [
+        "wait/event不是所有依賴成功證據"
+      ],
+      "evidence": "kr-extra-roy/MEF-content-contracts-20261116/bridge/report.md"
+    },
+    {
+      "id": "formal_register",
+      "title": "正式內容登記",
+      "classification": "CLIENT_CONFIRMED_BOUNDED",
+      "owner": "正式Lua/qco",
+      "native_or_design_chain": "561C7D → 6F4A50 → qbase Register",
+      "output": "thread被加入coroutineList",
+      "preconditions": [
+        "正常binding",
+        "合法Lua function"
+      ],
+      "limits": [
+        "不等於立即resume",
+        "Register無成功ACK"
+      ],
+      "evidence": "kr-extra-roy/MEF-end-to-end-20261116/entry/report.md"
+    },
+    {
+      "id": "new_module",
+      "title": "首次新模組caller",
+      "classification": "DESIGN_CONDITIONAL",
+      "owner": "新seq callback",
+      "native_or_design_chain": "受控lexical phase → global DoFile(ModulePath)",
+      "output": "當次export，外層coroutine直接進entry",
+      "preconditions": [
+        "ModulePath實際可見",
+        "status==0",
+        "export版本相符",
+        "頂層有限",
+        "保持原Register時序"
+      ],
+      "limits": [
+        "不是官方MEF格式",
+        "本輪未部署",
+        "不是已證MapList自然caller"
+      ],
+      "evidence": "kr-extra-roy/MEF-end-to-end-20261116/entry/report.md"
+    },
+    {
+      "id": "parse",
+      "title": "Lua解析與執行",
+      "classification": "CLIENT_CONFIRMED_BOUNDED",
+      "owner": "Lua state",
+      "native_or_design_chain": "6FE990 → 6FE860 → 70D680/70E420 → VM",
+      "output": "Proto/closure與numeric status",
+      "preconditions": [
+        "Lua source或相容5.1 bytecode",
+        "12-byte header及code檢查"
+      ],
+      "limits": [
+        "副檔名不選parser",
+        "DoFile0/1都truthy",
+        "DoFile不回module table"
+      ],
+      "evidence": "kr-extra-roy/MEF-parser-executor-storage-20261114/parser.md"
+    },
+    {
+      "id": "pump",
+      "title": "合法Q排程",
+      "classification": "CLIENT_CONFIRMED_BOUNDED",
+      "owner": "Q M與qco",
+      "native_or_design_chain": "561520 → f_doCoTask → MoCo → resume",
+      "output": "工作yield/return/error",
+      "preconditions": [
+        "M+28 active",
+        "M+2C及outer gates可達"
+      ],
+      "limits": [
+        "active Q寫controller+58",
+        "ordinary背景runner仍未證",
+        "debug hook不提供獨立tick"
+      ],
+      "evidence": "kr-extra-roy/MEF-end-to-end-20261116/runner/report.md"
+    },
+    {
+      "id": "q_actions",
+      "title": "有限Q物件操作",
+      "classification": "CLIENT_CONFIRMED_BOUNDED",
+      "owner": "Q actor tree",
+      "native_or_design_chain": "Create/Walk/native tick/IsAllObjectsStopped",
+      "output": "Q-local presentation與numeric stop observer",
+      "preconditions": [
+        "唯一slots",
+        "型別/參數數量正確",
+        "資源有效"
+      ],
+      "limits": [
+        "不是world EntityId",
+        "停止不等於死亡/清組",
+        "DeleteObject空實作"
+      ],
+      "evidence": "kr-extra-roy/MEF-content-contracts-20261116/actors/report.md"
+    },
+    {
+      "id": "end",
+      "title": "明確結束與清理",
+      "classification": "CLIENT_CONFIRMED_BOUNDED",
+      "owner": "Q/Lua/native/UI各自owner",
+      "native_or_design_chain": "顯式cleanup → 561DB0 End／實際Stop",
+      "output": "active/coroutines/actors/input的限定變更",
+      "preconditions": [
+        "選定End分支",
+        "清理各自有owner"
+      ],
+      "limits": [
+        "return不自動End",
+        "removeAll不打斷目前Lua frame",
+        "轉場不普遍取消"
+      ],
+      "evidence": "kr-extra-roy/MEF-runtime-contracts-20261115/input-lifecycle/report.md"
+    },
+    {
+      "id": "finish_message",
+      "title": "既有收尾訊息",
+      "classification": "CLIENT_CONFIRMED_BOUNDED",
+      "owner": "Client network",
+      "native_or_design_chain": "4A39A0 → C2S003F",
+      "output": "8-byte app雙鍵low16＋末WORD1",
+      "preconditions": [
+        "send guard",
+        "normal active branch或seen-skip",
+        "非零quest需CheckConfirmMessage==1"
+      ],
+      "limits": [
+        "不含instance/generation",
+        "seen-skip也送",
+        "不是成功/發獎憑據"
+      ],
+      "evidence": "kr-extra-roy/MEF-world-integration-20261115/wire/report.md"
+    },
+    {
+      "id": "unlock",
+      "title": "等待解除",
+      "classification": "CLIENT_CONFIRMED_BOUNDED",
+      "owner": "ordinary field/UI/input owner",
+      "native_or_design_chain": "00EB EB00 → 4B6190 → 562250",
+      "output": "dialog移除／mask bit2清除",
+      "preconditions": [
+        "有效lane2/business context",
+        "已證ordinary路由",
+        "適當End之後的時序"
+      ],
+      "limits": [
+        "不StopQ",
+        "不清qco",
+        "不清controller+58"
+      ],
+      "evidence": "kr-extra-roy/MEF-world-integration-20261115/wire/report.md"
+    },
+    {
+      "id": "reconcile",
+      "title": "Server對帳與下一輪",
+      "classification": "SERVER_DEVELOPMENT",
+      "owner": "Server自有狀態",
+      "native_or_design_chain": "內容key/version/run-stage關聯、取消、持久化",
+      "output": "相容回覆與可追溯狀態",
+      "preconditions": [
+        "沿既有REQ/SPEC",
+        "原wire不添加未證欄位"
+      ],
+      "limits": [
+        "官方Server內部政策不需猜測",
+        "實作/靜態/人測分別驗收"
+      ],
+      "evidence": "kr-extra-roy/MEF-end-to-end-20261116/server-handoff.md"
+    }
+  ],
+  "edges": [
+    {
+      "source": "deliver",
+      "target": "resolve",
+      "condition": "內容發布後可見"
+    },
+    {
+      "source": "resolve",
+      "target": "select",
+      "condition": "表與內容版本就緒"
+    },
+    {
+      "source": "select",
+      "target": "prepass",
+      "condition": "合法鍵被接納"
+    },
+    {
+      "source": "prepass",
+      "target": "model_work",
+      "condition": "有限callback返回；既有protected error被吃掉時也可能帶空／部分collector繼續，不等於預掃描成功"
+    },
+    {
+      "source": "model_work",
+      "target": "formal_register",
+      "condition": "正常載入流程繼續"
+    },
+    {
+      "source": "formal_register",
+      "target": "pump",
+      "condition": "正式callback待合法tick"
+    },
+    {
+      "source": "pump",
+      "target": "new_module",
+      "condition": "新內容callback選正式分支"
+    },
+    {
+      "source": "new_module",
+      "target": "parse",
+      "condition": "由新caller交ModulePath"
+    },
+    {
+      "source": "parse",
+      "target": "q_actions",
+      "condition": "status/export均通過且entry被呼叫"
+    },
+    {
+      "source": "q_actions",
+      "target": "end",
+      "condition": "選定流程明確完成或取消"
+    },
+    {
+      "source": "end",
+      "target": "finish_message",
+      "condition": "僅適用分支與send gate"
+    },
+    {
+      "source": "end",
+      "target": "unlock",
+      "condition": "Server選定合法解除策略"
+    },
+    {
+      "source": "finish_message",
+      "target": "reconcile",
+      "condition": "只作受限信號"
+    },
+    {
+      "source": "unlock",
+      "target": "reconcile",
+      "condition": "解除不等於業務完成"
+    },
+    {
+      "source": "reconcile",
+      "target": "select",
+      "condition": "下一輪有合法context"
+    },
+    {
+      "source": "q_actions",
+      "target": "pump",
+      "condition": "工作yield且後續tick仍可達"
+    },
+    {
+      "source": "select",
+      "target": "finish_message",
+      "condition": "已看略過分支，未執行本次正常seq載入"
+    },
+    {
+      "source": "select",
+      "target": "end",
+      "condition": "正常Q查無SceneList row"
+    },
+    {
+      "source": "new_module",
+      "target": "end",
+      "condition": "新caller明確處理DoFile/export失敗；不是所有Lua error的自動清理"
+    }
+  ],
+  "original_mef_entry": {
+    "classification": "CLIENT_UNRESOLVED",
+    "missing_edge": "MapList.TRIGGER name → actual resource read → parser/executor",
+    "known_chain": "0012 → 4B24F0 → 4DF510 → 4F7DF0 only establishes bounded name access",
+    "limits": "New Lua module caller is a separate conditional design, not evidence of this edge"
+  },
+  "ordinary_gameplay": {
+    "classification": "CLIENT_UNRESOLVED",
+    "required_joins": [
+      "legal persistent Lua runner preserving normal input",
+      "stable typed world identity exposed to content and server",
+      "typed ordinary world death/group/result observer"
+    ],
+    "already_excluded": [
+      "Q EnableInput/00EB alone",
+      "checkpoint or UI native tick",
+      "counter prediction plus 0007 adopt",
+      "Q stop or Tutorial visibility/keymap state as death"
+    ],
+    "evidence": [
+      "kr-extra-roy/MEF-end-to-end-20261116/runner/report.md",
+      "kr-extra-roy/MEF-end-to-end-20261116/world/report.md"
+    ]
+  },
+  "positive_tutorial_scope": {
+    "classification": "CLIENT_CONFIRMED_BOUNDED",
+    "chain": "fixed Tutorial actor create → geometric visibility observer → real world erase; UI keymap confirmation → controller+134 → original tutorial wait",
+    "scope": "exact original context/keys/receivers only, no arbitrary monster or group API",
+    "evidence": "kr-extra-roy/MEF-end-to-end-20261116/world/report.md",
+    "fixed_entity": {
+      "type": "CActor",
+      "allocation_bytes": 1056,
+      "model_id": 4,
+      "world_key": "0xf000",
+      "delete_argument": 240,
+      "delete_conversion": "(integer & 0xff) << 8",
+      "observer": "key lookup plus geometry, no RTTI/model/HP/death check"
+    },
+    "ui_state": {
+      "receiver": "FUI::CTutoMsgDummy",
+      "event_handler": "0x6bfe90",
+      "writer": "0x6c00e4",
+      "controller_pointer": "[0xfba7a4]",
+      "field": "controller+0x134",
+      "written_value": 1,
+      "consumer": "Original TutorialMain prototype5 after TUTORIAL_CHANGEKEYTYPE enum9"
+    }
+  },
+  "validation": {
+    "client_executed": false,
+    "lua_executed": false,
+    "packets_sent": false,
+    "game_resources_modified": false,
+    "new_mef_deployed": false,
+    "t01_full_pass_granted": false,
+    "formal_rr_status_changed": false
+  },
+  "failure_boundaries": [
+    {
+      "stage": "prepass",
+      "fact": "55D6A0不將loader status用作停止gate；collector可能為空/部分",
+      "consequence": "發布前必須靜態驗證有限依賴，不把空collector視為成功"
+    },
+    {
+      "stage": "model_work",
+      "fact": "caller未檢查WaitForSingleObject返回值；缺catalog可跳過",
+      "consequence": "event不是資源完整性ACK"
+    },
+    {
+      "stage": "formal_register",
+      "fact": "normal/review正式loader返回後不依status立即取消",
+      "consequence": "缺檔/語法錯誤不可期待native自動End"
+    },
+    {
+      "stage": "pump",
+      "fact": "MoCo錯誤移除只改list，不必達native cleanup",
+      "consequence": "正常return、可捕獲error與外層error分別記錄"
+    },
+    {
+      "stage": "finish_message",
+      "fact": "003F還可能來自seen-skip，且無run generation",
+      "consequence": "Server不可只憑003F判定新模組執行/任務完成"
+    }
+  ]
+}
