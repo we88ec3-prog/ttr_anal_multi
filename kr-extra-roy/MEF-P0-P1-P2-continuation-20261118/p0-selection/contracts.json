@@ -1,0 +1,436 @@
+{
+  "schema": "MEF_P0_SELECTION_CONTRACTS_V1",
+  "baseline": "15d9501c203c6f656461b64f578a50c96e38a5ff",
+  "language": "zh-Hant",
+  "scope": "P0 資源選取 cache/index 的現有原件可證鏈；不重新結算整體 MEF 或 P0 完成率。",
+  "status": {
+    "static_policy_questions_closed": true,
+    "actual_cha_abf_winner_observed": false,
+    "actual_map_fld_winner_observed": false,
+    "native_selected_paths": null,
+    "resource_payload_ready": false,
+    "full_p0_ready": false,
+    "playable_verified": false,
+    "t01_full_pass": false
+  },
+  "cache_reader": {
+    "function": "0x716440",
+    "caller": "0x799170",
+    "filename": "fcs.flu",
+    "mode": "rb",
+    "manager": "0xfe1dfc",
+    "open_failure_return": 0,
+    "normal_opened_path_return": 1,
+    "return_one_qualifier": "Only when this opened-input path completes normally; not a promise for allocation failure, corrupt strings, absent groups, CRT failure or exceptions.",
+    "read_calls": [
+      {
+        "va": "0x7164b3",
+        "unit_size": 8,
+        "count": 1,
+        "destination": "two u32 header locals",
+        "return_checked": false
+      },
+      {
+        "va": "0x716562",
+        "unit_size": 344,
+        "count": "header[0]",
+        "destination": "group array",
+        "return_checked": false
+      },
+      {
+        "va": "0x716577",
+        "unit_size": 536,
+        "count": "header[1]",
+        "destination": "entry array",
+        "return_checked": false
+      }
+    ],
+    "header": [
+      {
+        "offset": 0,
+        "type": "u32_le",
+        "role": "group record count"
+      },
+      {
+        "offset": 4,
+        "type": "u32_le",
+        "role": "entry record count"
+      }
+    ],
+    "group_record": {
+      "stride": 344,
+      "fields": [
+        {
+          "offset": 0,
+          "physical_slot_bytes": 16,
+          "type": "nul-terminated bytes",
+          "role": "exact group name"
+        },
+        {
+          "offset": 16,
+          "physical_slot_bytes": 64,
+          "type": "nul-terminated bytes",
+          "role": "scan pattern"
+        },
+        {
+          "offset": 80,
+          "physical_slot_bytes": 260,
+          "type": "nul-terminated bytes",
+          "role": "scan directory"
+        },
+        {
+          "offset": 340,
+          "physical_slot_bytes": 4,
+          "type": "u32_le",
+          "role": "recursive flag; zero vs nonzero"
+        }
+      ]
+    },
+    "entry_record": {
+      "stride": 536,
+      "fields": [
+        {
+          "offset": 0,
+          "physical_slot_bytes": 16,
+          "type": "nul-terminated bytes",
+          "role": "exact group name"
+        },
+        {
+          "offset": 16,
+          "physical_slot_bytes": 260,
+          "type": "nul-terminated bytes",
+          "role": "selected directory"
+        },
+        {
+          "offset": 276,
+          "physical_slot_bytes": 260,
+          "type": "nul-terminated bytes",
+          "role": "selected filename"
+        }
+      ]
+    },
+    "ordered_phases": [
+      "header",
+      "group-array read",
+      "entry-array read",
+      "all group registrations in input order",
+      "all entry insertions in input order",
+      "close and return 1"
+    ],
+    "native_guards_not_present_in_complete_reader": [
+      "magic/version comparison",
+      "exact whole-file length comparison",
+      "read return count check",
+      "in-slot NUL check",
+      "required CHA_ABF/MAP_FLD presence check",
+      "graceful missing-entry-group guard immediately before node+0x28 dereference"
+    ],
+    "existing_guards_and_limits": [
+      "allocation multiplication overflow is folded into allocation size; this is not full malformed-input validation",
+      "group/entry iteration count comparisons use signed conditions",
+      "allocation-failure and invalid-parameter paths are not emulated"
+    ],
+    "physical_slot_qualifier": "Slot widths follow the next field offset/stride. Native strlen loops are unbounded; the analyzer enforces per-slot NUL as its own policy.",
+    "evidence": [
+      "cache_file_reader",
+      "group_definition_first_wins",
+      "group_lower_bound",
+      "group_compare",
+      "byte_compare"
+    ]
+  },
+  "init_decision": {
+    "zero_return": {
+      "fb79a8": 0,
+      "action": "register default groups then scan each group"
+    },
+    "nonzero_return": {
+      "fb79a8": 1,
+      "action": "skip all default registrations and global scan"
+    },
+    "zero_count_cache_counterexample": {
+      "input_description": "8-byte header with two zero u32 counts, manager initially empty, normal allocations/CRT completion",
+      "cache_reader_return": 1,
+      "global_default_scan": false,
+      "target_groups_present": false,
+      "proof_type": "static control-flow consequence; synthetic analyzer case is not Client execution"
+    },
+    "evidence": [
+      "cache_state_normal_init",
+      "cache_file_reader"
+    ]
+  },
+  "group_policy": {
+    "lookup_key": "original group bytes, exact length and byte comparison",
+    "group_casefold": false,
+    "duplicate_definition": "first existing definition retained; later definition has no directory/pattern/recursive rewrite",
+    "object_offsets": {
+      "pattern": "0x0",
+      "directory": "0x1c",
+      "recursive": "0x38",
+      "file_index": "0x3c"
+    },
+    "cache_inspector_precondition": "initially empty manager",
+    "evidence": [
+      "group_definition_first_wins",
+      "group_lower_bound",
+      "group_compare",
+      "byte_compare"
+    ]
+  },
+  "entry_policy": {
+    "key": "filename passed through native 0x7198b0 / CRT uppercase helper, independent of directory",
+    "duplicate_entry": "first accepted key within same group retained",
+    "cache_group_directory_not_prepended_to_entry_directory": true,
+    "stored_path_rule": "entry.directory + entry.filename, literal concatenation",
+    "entry_offsets": {
+      "directory": "0x0",
+      "filename": "0x1c"
+    },
+    "normalization_tool_scope": "default ASCII branch only; runtime locale is unobserved",
+    "query_copy_buffer_bytes": 64,
+    "cache_insert_key_copy_buffer_bytes": 64,
+    "scan_insert_key_copy_buffer_bytes": 260,
+    "evidence": [
+      "cached_basename_first_entry",
+      "filesystem_scan_complete",
+      "cache_entry_strings",
+      "basename_lookup_complete",
+      "basename_uppercase_loop",
+      "crt_uppercase_ascii_branch"
+    ]
+  },
+  "fallback_default_groups": [
+    {
+      "call_va": "0x7991c1",
+      "group": "CHA_ABF",
+      "group_va": "0xc0f570",
+      "pattern": "*.abf",
+      "pattern_va": "0xc4f270",
+      "directory": "Character/",
+      "directory_va": "0xc4f264",
+      "recursive": 1,
+      "manager_va": "0xfe1dfc"
+    },
+    {
+      "call_va": "0x799204",
+      "group": "MAP_OBJ",
+      "group_va": "0xc4f28c",
+      "pattern": "*.gb3",
+      "pattern_va": "0xc4f284",
+      "directory": "Map/Object/",
+      "directory_va": "0xc4f278",
+      "recursive": 1,
+      "manager_va": "0xfe1dfc"
+    },
+    {
+      "call_va": "0x799247",
+      "group": "MAP_PTC",
+      "group_va": "0xc4f29c",
+      "pattern": "*.ptc",
+      "pattern_va": "0xc4f294",
+      "directory": "Map/",
+      "directory_va": "0xc0cec8",
+      "recursive": 1,
+      "manager_va": "0xfe1dfc"
+    },
+    {
+      "call_va": "0x79928a",
+      "group": "MAP_MO3",
+      "group_va": "0xc4f2ac",
+      "pattern": "*.mo3",
+      "pattern_va": "0xc4f2a4",
+      "directory": "Map/Object/",
+      "directory_va": "0xc4f278",
+      "recursive": 1,
+      "manager_va": "0xfe1dfc"
+    },
+    {
+      "call_va": "0x7992cd",
+      "group": "MAP_DDS",
+      "group_va": "0xc4f2bc",
+      "pattern": "*.dds",
+      "pattern_va": "0xc4f2b4",
+      "directory": "Map/Object/",
+      "directory_va": "0xc4f278",
+      "recursive": 1,
+      "manager_va": "0xfe1dfc"
+    },
+    {
+      "call_va": "0x799310",
+      "group": "MAP_MRE",
+      "group_va": "0xc4f2d8",
+      "pattern": "*.mre",
+      "pattern_va": "0xc4f2d0",
+      "directory": "Map/Map/",
+      "directory_va": "0xc4f2c4",
+      "recursive": 1,
+      "manager_va": "0xfe1dfc"
+    },
+    {
+      "call_va": "0x799353",
+      "group": "MAP_FLD",
+      "group_va": "0xc4f2e8",
+      "pattern": "*.fld",
+      "pattern_va": "0xc4f2e0",
+      "directory": "Map/Map/",
+      "directory_va": "0xc4f2c4",
+      "recursive": 1,
+      "manager_va": "0xfe1dfc"
+    },
+    {
+      "call_va": "0x799396",
+      "group": "EFF_EFF",
+      "group_va": "0xc4f2f8",
+      "pattern": "*.eff",
+      "pattern_va": "0xc4f2f0",
+      "directory": "Effect/",
+      "directory_va": "0xc0f548",
+      "recursive": 1,
+      "manager_va": "0xfe1dfc"
+    },
+    {
+      "call_va": "0x7993d9",
+      "group": "EFF_DDS",
+      "group_va": "0xc4f310",
+      "pattern": "*.dds",
+      "pattern_va": "0xc4f2b4",
+      "directory": "Effect/Texture/",
+      "directory_va": "0xc4f300",
+      "recursive": 1,
+      "manager_va": "0xfe1dfc"
+    },
+    {
+      "call_va": "0x79941c",
+      "group": "COMMON_DDS",
+      "group_va": "0xc4f320",
+      "pattern": "*.dds",
+      "pattern_va": "0xc4f2b4",
+      "directory": "Panel/",
+      "directory_va": "0xc4f318",
+      "recursive": 1,
+      "manager_va": "0xfe1dfc"
+    }
+  ],
+  "filesystem_scan": {
+    "function": "0x718fb0",
+    "provider_namespace": "Win32 filesystem FindFirstFileA / FindNextFileA",
+    "package_member_enumeration": false,
+    "path_interpretation": "relative directories are supplied literally; actual process cwd is not observed",
+    "clear_before_global_scan": true,
+    "order": [
+      "if recursive: collect immediate child directory names with directory+*.* in returned enumeration order",
+      "enumerate current-directory files matching directory+pattern and insert retained basename entries",
+      "recurse each collected child directory in stored order, depth first"
+    ],
+    "child_filter": {
+      "require_attribute_mask": 16,
+      "reject_attribute_mask": 2,
+      "reject_exact_names": [
+        ".",
+        ".."
+      ]
+    },
+    "file_filter": {
+      "reject_attribute_mask": 18
+    },
+    "explicit_sort_in_complete_scan_body": false,
+    "cross_sibling_winner": "depends on supplied filesystem enumeration unless candidate uniqueness is separately proved",
+    "return": "current index entry count, not a payload readability/success bit",
+    "evidence": [
+      "group_scan_rebuild",
+      "index_clear",
+      "filesystem_scan_complete"
+    ]
+  },
+  "lookup_and_exception": {
+    "generic_lookup": "0x716740 / 0x7197e0 return zero for a missing group/key and contain no automatic scan",
+    "ptc_local_exception": {
+      "function": "0x7f6b80",
+      "global_query_group": "MAP_PTC",
+      "fallback_call": "0x7f6c3d",
+      "directory": "Map/",
+      "pattern": "*.ptc",
+      "recursive": 1,
+      "index_owner": "stack local, not FE1DFC group index",
+      "destructor_call": "0x7f6d43",
+      "generalize_to_cha_abf_or_map_fld": false
+    },
+    "evidence": [
+      "group_lookup_complete",
+      "basename_lookup_complete",
+      "ptc_local_fallback",
+      "index_constructor",
+      "index_destructor"
+    ]
+  },
+  "boundary": {
+    "no_mef_group_in_this_ten_default_list": true,
+    "not_a_global_mef_absence_proof": true,
+    "actual_fcs_may_register_other_group_names": true,
+    "literal_call_census_is_not_all_program_callgraph": true
+  },
+  "minimum_missing_evidence": [
+    {
+      "id": "P0-SRC-CACHE",
+      "priority": "P0",
+      "type": "RESOURCE_SELECTION_INPUT",
+      "need": "同版本實際 fcs.flu（或具原始 record order 與完整同鍵覆蓋證明的目標子集），並確認這次安裝採 cache 分支。",
+      "why": "單一同名 entry 或 STP basename 不證明 first-wins winner。",
+      "status": "MISSING"
+    },
+    {
+      "id": "P0-SRC-SCAN",
+      "priority": "P0",
+      "type": "ALTERNATIVE_SELECTION_INPUT",
+      "need": "若無 cache：實際 cwd、Character/ 與 Map/Map/ 的 loose-file 名單和屬性；同鍵重複時另需實際列舉次序；若證明全範圍只有一個候選，則不必靠次序決勝。",
+      "why": "Master 虛擬目錄／STP member 不能替代 FindFirstFileA 的實體目錄。",
+      "status": "MISSING"
+    },
+    {
+      "id": "P0-SRC-BYTES",
+      "priority": "P0",
+      "type": "RESOURCE_PAYLOAD",
+      "need": "被選到 entry 的完整字面 path，對應同版本 Master provider/具體 carrier 與實際 payload；依 provider 父節點優先規則驗證，無須預先要求所有 897 carriers。",
+      "why": "索引 winner 與最後可讀 member 是兩個驗證門檻。",
+      "status": "MISSING"
+    }
+  ],
+  "server_development_handoff": [
+    {
+      "type": "SERVER_DEVELOPMENT",
+      "player_situation": "新手教學與進場要用到正確怪物和地圖",
+      "requirement": "由 S00 去重並接收已確認 resource dependency / selector contract，Server 的出生、狀態、完成條件與保存規則獨立開發；不得用虛構封包補齊 Client 缺檔。",
+      "new_wire_opcode_inferred": false
+    },
+    {
+      "type": "CROSS_FEATURE_INTEGRATION",
+      "player_situation": "避免同名素材選錯造成外觀或場景不一致",
+      "requirement": "內容檢查流程保存 cache/loose 路線、key、首筆 record、候選 path、最終 provider、payload hash，各層狀態分開；本工具只提供前段候選。"
+    }
+  ],
+  "open_items": [
+    {
+      "id": "P0-WINNER-CHA_ABF",
+      "state": "BLOCKED_MISSING_SELECTION_INPUT",
+      "native_selected_path": null,
+      "resume": "取得 cache 或能證唯一性的 loose-file inventory 後執行只讀 query，接續既有 ActorList FILE→CHA_ABF reader 鏈。"
+    },
+    {
+      "id": "P0-WINNER-MAP_FLD",
+      "state": "BLOCKED_MISSING_SELECTION_INPUT",
+      "native_selected_path": null,
+      "resume": "取得同版 MAP_FLD entry / Map/Map/ loose sources，接續既有 7C1E47→7ED1C0→XML consumer。"
+    },
+    {
+      "id": "P0-PAYLOAD-OPEN",
+      "state": "BLOCKED_MISSING_RESOURCE_PAYLOAD",
+      "resume": "依所選 literal path 檢查 Master 父 provider 先行，補精確 carrier/member bytes。"
+    },
+    {
+      "id": "P0-PLAYABLE",
+      "state": "NOT_TESTED",
+      "resume": "Server 正流程實作、內容整合後另做使用者遊玩驗收。"
+    }
+  ]
+}

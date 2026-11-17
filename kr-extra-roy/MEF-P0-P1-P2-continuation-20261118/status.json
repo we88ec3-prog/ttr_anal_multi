@@ -1,0 +1,272 @@
+{
+  "schema": "MEF_P0_P1_P2_CONTINUATION_STATUS_V1",
+  "date_taipei": "2026-11-18",
+  "base_commit": "15d9501c203c6f656461b64f578a50c96e38a5ff",
+  "branch": "extra/roy1",
+  "planned_work_packages": {
+    "P0": 3,
+    "P1": 4,
+    "P2": 1
+  },
+  "work_packages_addressed": 8,
+  "work_packages": [
+    {
+      "id": "P0-ABI",
+      "priority": "P0",
+      "work_package": "採用勘誤與 ABI",
+      "player_goal": "演出指令不誤用",
+      "evidence_mode": "REUSED_PINNED_CONTRACT",
+      "analysis_disposition": "BOUNDED_CONTRACT_PROVEN",
+      "native_contract": "121 bindings / 33 marshallers / 15 adopted errata",
+      "remaining": [
+        "Server/content-tool adoption and integration",
+        "Normal-flow use of each selected content profile"
+      ],
+      "evidence": [
+        "../MEF-comprehensive-contracts-20261117/abi/report.md",
+        "../MEF-P0-P1-master-continuation-20261117/baseline-replay/abi.json"
+      ]
+    },
+    {
+      "id": "P0-RESOURCES",
+      "priority": "P0",
+      "work_package": "內容真實依賴",
+      "player_goal": "角色、地圖、圖片與聲音讀到正確素材",
+      "evidence_mode": "NEW_READER_SELECTION_CONTRACT_PLUS_REUSE",
+      "analysis_disposition": "SOURCE_BLOCKED_AFTER_BOUNDED_NATIVE_CLOSURE",
+      "remaining": [
+        "Same-version fcs.flu and actual branch context, or loose inventory/uniqueness/enumeration for reader open-failure return 0",
+        "Actual selected descriptor/avatar/FLD/image/audio payloads",
+        "Selected payload accept/result evidence"
+      ],
+      "evidence": [
+        "p0-selection/",
+        "../MEF-P0-P1-master-continuation-20261117/master-resource-closure/p0-frontier-delta.json"
+      ],
+      "ready": false
+    },
+    {
+      "id": "P0-LIFECYCLE",
+      "priority": "P0",
+      "work_package": "執行與收尾契約",
+      "player_goal": "劇情結束後恢復鏡頭、畫面及操控",
+      "evidence_mode": "REUSED_PINNED_CONTRACT",
+      "analysis_disposition": "BOUNDED_CONTRACT_PROVEN",
+      "native_contract": "22 owners / 20 cleanup edges / 3 run profiles",
+      "remaining": [
+        "Server/content scheduling and cleanup adoption",
+        "Normal-flow cancellation/reentry/return validation"
+      ],
+      "evidence": [
+        "../MEF-P0-content-contracts-20261117/execution-lifecycle/report.md",
+        "../MEF-P0-P1-master-continuation-20261117/baseline-replay/lifecycle.json"
+      ],
+      "runtime_owner_completion_verified": false
+    },
+    {
+      "id": "P1-JOURNEY",
+      "priority": "P1",
+      "work_package": "第一個完整正常旅程",
+      "player_goal": "接任務、打怪開門、結算回城、接續下一個任務",
+      "evidence_mode": "REUSED_PINNED_REAL_DATA_JOURNEY",
+      "analysis_disposition": "ANALYZED_WITH_EXACT_RESOURCE_AND_SERVER_REQUIREMENTS",
+      "remaining": [
+        "Server integration/adoption evidence",
+        "Selected content payloads",
+        "End-to-end normal gameplay and persistence verification"
+      ],
+      "evidence": [
+        "../MEF-P0-P1-master-continuation-20261117/journey-families/REPORT.md",
+        "SERVER-REQUIREMENTS.md"
+      ],
+      "ready": false
+    },
+    {
+      "id": "P1-FAMILIES",
+      "priority": "P1",
+      "work_package": "擴充所有功能族",
+      "player_goal": "七類演出與互動各有實際使用例",
+      "evidence_mode": "REUSED_PINNED_SEVEN_REAL_EXAMPLES",
+      "analysis_disposition": "ANALYZED_7_OF_7_PLANNED_FAMILIES",
+      "remaining": [
+        "Actual selected payloads",
+        "Shared-owner combinations",
+        "Normal gameplay acceptance"
+      ],
+      "evidence": [
+        "../MEF-P0-P1-master-continuation-20261117/journey-families/contracts.json"
+      ],
+      "every_content_or_arbitrary_combination_proven": false
+    },
+    {
+      "id": "P1-ENTRY-B",
+      "priority": "P1",
+      "work_package": "不中斷普通場景首次入口 B",
+      "player_goal": "一般可走動場景中啟動並持續背景事件",
+      "evidence_mode": "NEW_UI_RESOURCE_OWNER_FACTORY_AND_LIFECYCLE_CHAIN",
+      "analysis_disposition": "SOURCE_AND_ENDPOINT_BLOCKED",
+      "remaining": [
+        "Selected TalkBox_Scenario_Panel.FTC and actual child/callback content",
+        "Positive ordinary event-to-first-content-execution edge",
+        "Same-VM continuing pump and script owner cancellation/reentry contract"
+      ],
+      "evidence": [
+        "p1-entry/"
+      ],
+      "capability": "NOT_CLOSED",
+      "ready": false
+    },
+    {
+      "id": "P1-WORLD-LUA",
+      "priority": "P1",
+      "work_package": "world 結果到 Lua 的出口",
+      "player_goal": "打死怪物／清完敵群後原背景腳本能正確繼續",
+      "evidence_mode": "REUSED_PINNED_PRODUCERS_AND_REJECTED_SINK_CANDIDATES",
+      "analysis_disposition": "ENDPOINT_NOT_PROVEN",
+      "remaining": [
+        "Actual registered callback/getter writer and storage",
+        "Same-run actor-generation event identity and lifetime",
+        "Positive same-VM consumer chain"
+      ],
+      "evidence": [
+        "../MEF-P0-P1-master-continuation-20261117/world-lua/contracts.json",
+        "../MEF-complete-flow-20261115/parser-executor/report.md",
+        "REUSED-EVIDENCE.md"
+      ],
+      "capability": "NOT_CLOSED_NO_PROVEN_ENDPOINT",
+      "ready": false
+    },
+    {
+      "id": "P2-FORMAT",
+      "priority": "P2",
+      "work_package": "官方 MEF 原始格式",
+      "player_goal": "讀懂並相容原版 MEF 關卡事件",
+      "evidence_mode": "REUSED_FIELD_ROUTING_WITH_NEW_ALIAS_ERRATUM_AND_CROSS_PACKAGE_REVIEW",
+      "analysis_disposition": "SOURCE_AND_CONSUMER_BLOCKED",
+      "remaining": [
+        "Authentic .mef sample and version/source identity",
+        "Actual bytes-loader/format-dispatch/parser edge",
+        "Command executor/state owner and genuine positive/negative format vectors"
+      ],
+      "evidence": [
+        "p2-format/"
+      ],
+      "official_mef_grammar_proven": false,
+      "official_mef_executor_proven": false
+    }
+  ],
+  "all_native_goals_closed": false,
+  "all_p0_readiness_gates_closed": false,
+  "resource_ready": false,
+  "ordinary_entry_B": "NOT_CLOSED",
+  "ordinary_world_to_same_run_generation_lua": "NOT_CLOSED_NO_PROVEN_ENDPOINT",
+  "official_mef_grammar_proven": false,
+  "official_mef_executor_proven": false,
+  "deployment_ready": false,
+  "gameplay_verified": false,
+  "server_changes_implemented": false,
+  "master_source_gate": "CLOSED_DECLARED_MOUNT_TREE",
+  "master_available": true,
+  "prior_selected_scenes": {
+    "scene_keys": [
+      [
+        119,
+        3
+      ],
+      [
+        2440,
+        5
+      ]
+    ],
+    "dependency_nodes": 132,
+    "remaining_original_frontier_entries": 108,
+    "missing_descriptor_payloads": 13,
+    "new_payloads_obtained": 0
+  },
+  "q119_scope": {
+    "scene_keys": [
+      [
+        119,
+        1
+      ],
+      [
+        119,
+        2
+      ],
+      [
+        119,
+        3
+      ],
+      [
+        119,
+        4
+      ],
+      [
+        119,
+        5
+      ]
+    ],
+    "body_calls_by_scene": [
+      16,
+      33,
+      46,
+      48,
+      33
+    ],
+    "body_calls_total": 176,
+    "distinct_models": 11,
+    "available_descriptor_models": [
+      1001,
+      1009,
+      1022,
+      1086
+    ],
+    "missing_descriptor_models": [
+      1478,
+      1479,
+      1480,
+      1481,
+      10002,
+      10003,
+      10047
+    ],
+    "functional_families": 7,
+    "journey_steps": 10,
+    "server_nodes": 4,
+    "portal_pre_register_closed": [
+      false,
+      false,
+      false,
+      true
+    ],
+    "node_policy_authority": "SERVER_RECONSTRUCTION_NOT_NATIVE_MEF"
+  },
+  "server_development": {
+    "can_proceed_without_unknown_B_or_world_lua_bridge": true,
+    "can_proceed_without_official_mef_grammar": true,
+    "requirements_document": "SERVER-REQUIREMENTS.md",
+    "existing_related_ids": [
+      "REQ-0010",
+      "REQ-0016",
+      "REQ-0017",
+      "REQ-0018",
+      "REQ-0019",
+      "REQ-0021"
+    ],
+    "formal_registry_changed": false,
+    "existing_implementation_reaudited": false
+  },
+  "effects": {
+    "client_executed": false,
+    "client_modified": false,
+    "lua_executed": false,
+    "server_executed": false,
+    "server_modified": false,
+    "target_dll_executed": false,
+    "originals_modified": false,
+    "full_originals_exported": false,
+    "formal_status_changed": false,
+    "new_branch_created": false
+  },
+  "interpretation": "Eight planned work packages are individually addressed. Bounded proven contracts, source-blocked goals, Server development and gameplay remain distinct; no overall completion percentage is inferred."
+}

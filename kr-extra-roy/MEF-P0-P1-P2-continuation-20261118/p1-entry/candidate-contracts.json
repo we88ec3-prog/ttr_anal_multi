@@ -1,0 +1,125 @@
+{
+  "schema": "mef.p1-ui-resource-entry.contracts.v1",
+  "baseline_commit": "15d9501c203c6f656461b64f578a50c96e38a5ff",
+  "branch": "extra/roy1",
+  "status": {
+    "new_typed_UI_resource_lifecycle": "BOUNDED_STATIC_CLOSED",
+    "resource_selected_child_graph": "BLOCKED_ON_IDENTIFIED_SOURCE",
+    "ordinary_B": "NOT_CLOSED",
+    "ordinary_B_enabled": false,
+    "native_MEF_grammar_complete": false,
+    "script_owner_cancel_and_reentry_proven": false,
+    "runtime_resource_load_observed": false,
+    "target_execution": false,
+    "server_implemented_by_this_package": false,
+    "T01_FULL_PASS_claimed": false
+  },
+  "definition": "B 必須保留 ordinary Mission/Scenario field/page 與一般輸入，由真正 producer 首次交付本次內容至有效 VM，持續 pump，並以同一 run owner 取消及重入。UI layout 首載、namespace 登記、UI 快取重入均不能替代這條契約。",
+  "new_candidates": [
+    {
+      "id": "UI-01",
+      "question": "5A9F40/5A3840 的真正 receiver 與 resource 212 的來源為何？",
+      "result": "CLOSED_AS_TYPED_UI_LAYOUT_LOADER",
+      "evidence": ["U01", "U02", "U03", "U04", "U05", "U06", "U07", "U08", "D01", "D02", "D12", "RTTI_BINDER_TD", "RTTI_CACHE_TD"],
+      "finding": "596010 棧上 CFXUIBinder 的 v+14 回 FAAFD8；v+1C 以 ID*0x1c 索引 E560B8。212 的 E577E8 由 AD2991 初始化為 UI/Component/TalkBox_Scenario_Panel.FTC。不是普通 page 的 v+14，也不是 UI/LUA 檔。",
+      "ordinary_B_positive": false
+    },
+    {
+      "id": "UI-02",
+      "question": "前稿未定型的 talk+18 / v+110 child hook 是否能提供另一個首次入口？",
+      "result": "CLOSED_NO_OP_ON_IDENTIFIED_ROOT_LOAD",
+      "evidence": ["U09", "U10", "U11", "U12", "U13", "U14", "D04", "D05", "D13", "D14", "reused:B09"],
+      "finding": "7645D1 在呼 typed reader 前設定 root+18=root；normal CScenarioTalkBox 的 +110 是只有 RET 0xc 的 49AE10。749019 的 out-child 先清 0，hook 不改它，故此路徑必然落到 native factory。這修正前稿將 +18 視為必定不同 receiver 的過強敘述。",
+      "ordinary_B_positive": false
+    },
+    {
+      "id": "UI-03",
+      "question": "首次 layout load 與 cache 命中是否使用同一 window？",
+      "result": "CLOSED_WITH_CACHE_PRECONDITIONS",
+      "evidence": ["U09", "U12", "U19", "U20", "U32", "U33", "U34", "reused:B02", "reused:B03"],
+      "finding": "descriptor registry 以 window+4 為 key；active resource map 以 resource ID 為 key。registry 命中且 descriptor+8 非零時直接回 descriptor+C，重新註冊並附加，沒有重新讀 FTC。cache flag 在 typed deserializer 返回後設 1，不能獨立充作 layout 完整成功 ACK。",
+      "ordinary_B_positive": false
+    },
+    {
+      "id": "UI-04",
+      "question": "正常 Mission/Scenario 如何卸下 resource 212，重入是否建立 script 新世代？",
+      "result": "UI_DETACH_AND_RETENTION_CLOSED_SCRIPT_CANCEL_NOT_PROVEN",
+      "evidence": ["U21", "U22", "U23", "U24", "U25", "U26", "U27", "U28", "U29", "U30", "U31", "U35", "D05", "D06", "D08", "D09", "D10"],
+      "finding": "普通 page 的 v+10c 經已選 cleanup chain 到 5960B0→4095E0(212)。先從 page v+74 detach，再由 44E3F0 移除 active map；descriptor registry 命中時跳過 window destructor。talk 的 +108/+10c 是 RET。這是 UI 生命期，沒有證明新 Lua run 的停止、generation 或重新啟動。",
+      "ordinary_B_positive": false
+    },
+    {
+      "id": "UI-05",
+      "question": "必要 child 與 dock 候選還能在現有 BIN 靜態前進多少？",
+      "result": "SELECTED_FACTORY_ROUTES_CLOSED_LAYOUT_SELECTION_BLOCKED",
+      "evidence": ["F01", "F02", "F03", "F04", "F05", "F06", "U15", "U16", "U17", "U36", "U37", "U38", "U39", "U40", "U44", "D15", "D16", "D17", "D18", "D19", "D20", "D21", "D22", "M01", "M02", "reused:B20", "reused:B31", "reused:B32"],
+      "finding": "固定 lookup 要求 ID1100/1200 是 type200 FXUIStatic，ID2000/2100 是 type1400 FXUIPicture；兩條 factory table branch 與 vptr 已核。dock 只有0x103c4/5/6三型，reader 為 numeric/rectangle。FTC 原件缺失，尚不能確定實際 child 列表、額外型別、文字/圖像資源及後續動態 callback。",
+      "ordinary_B_positive": false
+    }
+  ],
+  "typed_objects": {
+    "binder": {"rtti": ".?AVCFXUIBinder@FUI@@", "vptr": "0xc1920c", "location": "596010 stack [ebp-0x20]", "vector_begin": "+0x4", "vector_end": "+0x8", "vector_capacity": "+0xc"},
+    "descriptor": {"vptr": "0xc1b514", "global": "0xfe2c5c", "resource_id_offset": "+0x4", "resource_id": 212, "layout_cache_flag_offset": "+0x8", "window_offset": "+0xc"},
+    "cache_manager": {"rtti": ".?AVFXUICachingMgrCmdTarget@FUI@@", "vptr": "0xbfc9d8", "address": "0xfaafd8", "active_map_offset": "+0x4", "active_key": "resource ID", "descriptor_registry_offset": "+0x14", "descriptor_key": "window+0x4 instance identifier"},
+    "talk": {"vptr": "0xc3eb44", "class_id": 53000, "root_resource_owner_offset": "+0x18", "root_resource_owner_value": "self on 764520 successful-root path before v+14", "resource_id_offset": "+0x20", "UI_context_offset": "+0x24", "attached_page_offset": "+0x60", "selected_record_offset": "+0x9c", "formal_Lua_receiver_global": "0xfe3180", "formal_Lua_wrapper": "0xfdf3c8"}
+  },
+  "selected_resource": {
+    "id": 212,
+    "array_base": "0xe560b8",
+    "array_stride": 28,
+    "string_object": "0xe577e8",
+    "initializer": "0xad2991",
+    "literal": "0xbef0c8",
+    "path": "UI/Component/TalkBox_Scenario_Panel.FTC",
+    "reader": ["0x44e120", "0x764cf0", "0x72f110", "0x714770", "0x72f260", "0x764520", "0x776c60", "0x748c40"],
+    "reader_order_note": "714770 opens a file and returns; 72f260 parses into TiXmlDocument and returns; only successful load then reaches 764520. This is not one unconditional flat call chain.",
+    "root_tag": "CMDTARGET",
+    "class_attribute": "ClassID",
+    "required_root_class_id": 53000,
+    "declared_provider": "UI/Component.stp",
+    "master_binding_member": "Master0z/UI/Component/AttachedPackage",
+    "supplied_payload": false,
+    "loaded_payload_hash": null,
+    "actual_children": null,
+    "provider_precedence": "Reuse native package routing; declaration does not prove installed source or successful selected bytes."
+  },
+  "cache_branches": [
+    {"id": "cache_not_registered", "condition": "descriptor registry miss", "path": "44E284→72F110; success→764520", "normal_talk_precondition": "Normal non-null 597BC0 allocation registers descriptor first, so this is the generic fallback arm, not the expected normal first talk load."},
+    {"id": "first_cached_layout_load", "condition": "descriptor registry hit and descriptor+8==0", "path": "44E1B7→764CF0→72F110; successful file parse→764520→descriptor v+c(1)", "caveat": "The setter is after the typed deserializer call, without checking its returned pointer; flag alone is not full success evidence."},
+    {"id": "cached_reentry", "condition": "descriptor registry hit and descriptor+8!=0", "path": "44E245→descriptor v+10→44E6C0→window+20=resourceID→binder vector append", "read_file": false},
+    {"id": "normal_unbind", "condition": "active resource hit; descriptor registry hit by same window+4", "path": "4095E0→parent v+74;44E3F0→optional745680→skip window destructor→active map erase", "retains_descriptor_window": true},
+    {"id": "uncached_unbind", "condition": "active resource hit but descriptor registry miss", "path": "44E446→746B80/746C10→window v+1c(1)→active map erase", "same_as_normal_cached_talk": false}
+  ],
+  "required_child_contracts": [
+    {"lookup_id": 1100, "talk_offset": "+0x84", "required_class_id": 200, "factory": "0x7470f3", "allocation_bytes": 344, "vptr": "0xc49c6c", "class": "FoxUI::FXUIStatic", "actual_FTC_row_available": false},
+    {"lookup_id": 1200, "talk_offset": "+0x80", "required_class_id": 200, "factory": "0x7470f3", "allocation_bytes": 344, "vptr": "0xc49c6c", "class": "FoxUI::FXUIStatic", "actual_FTC_row_available": false},
+    {"lookup_id": 2000, "talk_offset": "+0x88", "required_class_id": 1400, "factory": "0x7476ca", "allocation_bytes": 168, "vptr": "0xc4697c", "class": "FoxUI::FXUIPicture", "actual_FTC_row_available": false},
+    {"lookup_id": 2100, "talk_offset": "+0x8c", "required_class_id": 1400, "factory": "0x7476ca", "allocation_bytes": 168, "vptr": "0xc4697c", "class": "FoxUI::FXUIPicture", "actual_FTC_row_available": false}
+  ],
+  "ordinary_B_required_edges": [
+    {"edge": "typed ordinary UI receiver installation", "status": "PROVEN_REUSED", "reason": "page+B4 and formal namespace receiver already closed in previous package"},
+    {"edge": "ordinary resource212 filename→native UI reader", "status": "PROVEN_THIS_PACKAGE", "reason": "explicit FTC path to CMDTARGET/ClassID deserializer"},
+    {"edge": "resource-selected child data and later callback provenance", "status": "BLOCKED_IDENTIFIED_SOURCE", "reason": "Missing actual TalkBox_Scenario_Panel.FTC bytes; numeric ClassID/child graph/string properties are carried by this file, not the BIN lookup expectations", "unlock": "same-version UI/Component.stp or original selected FTC with provenance; inspect actual nodes and follow their concrete vtables/events"},
+    {"edge": "first ordinary script bytes→same formal VM execution", "status": "NOT_PROVEN", "reason": "The newly identified content is UI XML/layout. No new positive filename/buffer/closure producer into Lua has been established."},
+    {"edge": "continuous same-VM pump while Q inactive", "status": "NOT_PROVEN", "reason": "UI resource cache/initialization/uninitialization is not a coroutine scheduler; known Q/T conditions remain unchanged."},
+    {"edge": "script run owner cancel/reentry", "status": "NOT_PROVEN", "reason": "A retained UI window and cleared page attachment are not a script generation token or a cancel completion ACK."},
+    {"edge": "ordinary world/input/camera preserved over full run", "status": "NOT_PROVEN", "reason": "No complete background execution path exists to evaluate all its gates; the UI load path itself cannot fill this requirement."}
+  ],
+  "unexpanded_boundaries": [
+    {"source": "0x74902b / 0x74907e", "boundary": "resource-selected child class and recursive child v+14", "why_not_resolved": "BIN factory exists, but the actual FTC ClassID/node selection and property values are not supplied. Selected known required classes alone do not describe all nodes.", "not_claimed": "All generic factory children/transitive consumers have no scripting."},
+    {"source": "0x744450→0x744710; 0x754c20→0x754350/0x75a620/0x776210", "boundary": "native control/text/image property subgraph", "why_not_resolved": "Two required class routes are typed; exact selected image/text/font references and any content-selected descendant require the FTC. No need to invent those rows from expected IDs.", "not_claimed": "Every native UI control/parser callback is globally exhausted."},
+    {"source": "0x745590/0x745600/0x745680", "boundary": "recursive selected child lifecycle hooks", "why_not_resolved": "talk and required Static/Picture selected hooks are concrete/no-op as specified, but unprovided extra children have unknown actual selection.", "not_claimed": "UI cleanup cancels any arbitrary dynamically registered Lua job."}
+  ],
+  "development_split": {
+    "Client_reverse_engineering": ["取得上述 FTC 後追實際額外 child 及 callback", "建立真正 ordinary 首次 script producer、同 VM pump 和 script owner"],
+    "Server_development_requirements": ["內容能力表保留 ordinary_B=false；已證合法 Q/T 入口按原 gate 使用", "以 Server run/instance/generation 管理事件、取消、冪等和進度，不以 UI cache flag 或 FE3180 pointer 充作確認", "部署資源清單分開記錄 Master 宣告、選中來源、member hash、實際驗證結果；不發明新的 UI/MEF wire opcode"],
+    "cross_feature_integration": ["套用 ERRATA 的 root+18=self 條件", "使用 FTC 名稱與精確 provider 追補件；勿與 UI/LUA 或 Field grammar 合併", "把 UI retained-window 與劇情 run 生命期分開"],
+    "play_validation": ["在正向 background入口成立後，驗收走動、攻擊、相機、離圖取消及重入；本包沒有執行 Client"]
+  },
+  "reuse_limits": [
+    "既有 121 bindings/33 marshallers/223 sink callers/91 talk vtable slots 不算本輪新研究。",
+    "既有 Lua execute/precall 的 20+4 直接 caller 分類，只覆蓋明列 E8/E9/literal 範圍；不能否定 computed indirect call 或動態 global/metatable/registry 改寫。",
+    "Master/UI 分類與 TiXml EX reader 不構成官方 MEF grammar。",
+    "source hash、窗口重驗、候選一致性 PASS 不等於 T01 FULL-PASS、RR ACCEPTED、Server 完成或可玩。"
+  ]
+}
