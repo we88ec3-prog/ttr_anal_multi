@@ -17,6 +17,8 @@ NPC 商店、裝備、倉庫與銷毀已有各自規格及離線收據。點數�
 
 最新接續 [商城道具使用](CASH-SHOP-CONSUMABLES.md)：5238 全資源回復、27461／27462 的 CP 入帳與商品冷卻已接；多格快捷總量、銷毀後保留計數及正常 TCP 使用入帳有專項覆蓋。時裝容量與套裝加成仍待開發。
 
+再接續 [時裝資源容量](CASH-EQUIPMENT-RESOURCE-CAPACITY.md)：目錄 864 個 Item 的 SP／MP OPTION 已逐件核對，候選 Server 已接穿脫、同格替換、重讀、角色面板、戰鬥與回復。套裝與指定 v2 狀態保持待驗／待開發。
+
 [NPC 買賣](PHINDOS-GROCER-TRADE.md) · [裝備穿戴](EQUIPMENT-WEAR-WIRE.md) · [倉庫](PHINDOS-BANK-VAULT.md) · [銷毀](BAG-ITEM-DESTRUCTION.md) · [批次驗收](../testing/S00-CONTENT-BATCH-TESTS.md)
 
 ## 點數商城來源導航
