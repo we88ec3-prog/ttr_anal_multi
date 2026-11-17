@@ -287,6 +287,10 @@ Q2852 的 Content 2948 指定「在狩獵場按 V 使用氣充電」。Server �
 
 修正後，兩條原版 BND 離線旅程驗證城鎮、RAID 1、Stage 465 三處短 V。前兩處保留已接取狀態，Stage 465 進入氣充電後可交付，重登仍可領取 2,890 EXP 且完成旗標保存。兩組依序加 `--check-early-raids` 載入 Case 88～90，分別沿用下方的 `--check-charge-training-fixture` 和含 `--check-native-equipment-windows` 的正常裝備教學。隔離組僅預置 Q2850 完成，正常組由 Q2849／Q2850 自然完成。收據 SHA-256 分別為 `c73eeb0ce0202ec25eb4261a9958b95a89dbff5eee362b1202b23bd426fd1f65`、`27f44b411300ff9505a32d078fbadc3eadc42be3c8edcf351489b054344fa18c`。指定 v2 實機併入 SK-P11。
 
+2026-11-17 補驗同登入銜接。原版 BND 離線從新帳號完成 Q144，存點為 Town 3、圖 199。自然完成 Q2849／Q2850 並接 Q2852 後，保留原一人隊從爾勒梅斯回廣場，選 RAID 1。首圖短 V 扣 50 MP，任務維持已接取。用已學的 C 消耗氣充電後正常打完五圖，確認結果回廣場時挑戰隊伍解散、Product 2274 入包一件、CP 維持 3,000。使用同一遊戲連線新建一人隊進爾勒梅斯，Q2852 仍為已接取。在 Stage 465 短 V 後達成目標，再重登核對可交付、領取 2,890 EXP 與完成旗標保存。後續仍通過 RAID 2／3 與三本經驗書使用。
+
+自然路線收據 SHA-256 為 `7c3a0cdd0e8e50db9f2db45bc512d79613e912ef2464fac46d21e3e0bdd42a9a`，`equipmentTutorialChain.raidClearToHuntSameLogin` 是同登入銜接的驗證結果。隔離路線複驗收據為 `9bf70b2db8f619a0d3eaf2aac805b54d05cf79216d946f764f5577ae38092cf2`。Host 與檢查器 Release 建置、563 項 HappyPath 合成通過。指定 v2 的按鍵、畫面與狩獵場正常回村交付仍待驗。 [SK-P11 批次](../testing/S00-CONTENT-BATCH-TESTS.md)
+
 正常新帳號可先走馮德斯 Q2849／Q2850。Server 以成功分解、強化保存對應的任務目標。原表描述的開窗判定安排獨立取證。 [前置任務與正常路線](../scenario-content/EARLY-EQUIPMENT-DISMANTLE.md#可玩的-server-候選)
 
 一般、輪替兩條原版 BND 路線先由新帳號完成 Q144，均存於圖 199、Lv.19／333,742 EXP。另加 `--check-charge-training-fixture`（接在 `--check-remaining-base-skills` 後），先證明缺少 Q2850 時無法接取，再只在該次隔離資料庫預置 Q2850 已完成。之後以正常請求接 Q2852、進 Stage 465 短按 V，確認城鎮短按不算、狩獵場短按觸發 Ready。重登後回 NPC 10014 交付一次 2,890 EXP，再次重登確認完成，主線仍保持 Q144。這兩筆證據驗 Q2852 及其前置檢查，前置開窗與指定 v2 畫面另待 SK-P11。
