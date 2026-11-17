@@ -52,6 +52,8 @@ C2S `00AD` 的雙鍵只查當前帳號。領取在同一寫入交易中合併可
 
 ## 配置及接續
 
+同日接續的 [TCP 正流程與 Host 配置驗證](CASH-SHOP-TCP-ACCEPTANCE.md) 已把新帳號旅程後的商城正常重登、付款、領取、時裝替換及銀行／銷毀接到實際 loopback socket；另完成 `-IncludeCashShop` 的隔離 Host preflight。前節「尚未取得 TCP」為本頁初版階段範圍，最新證據以接續頁為準。指定 v2 與其餘商品功能仍未完成。
+
 Host 增加 `TARTAROS_LOCAL_CASH_SHOP_CATALOG_PATH`（絕對 `.cash-shop.json` 路徑）與 `TARTAROS_LOCAL_CASH_SHOP_CATALOG_SHA256`；必須配現有 `LOCAL_PHINDOS_GROCER_CANDIDATE` 交易模式。未提供目錄不開放新付款／領取。Server 私有 `content/` 保存同 SHA 投影；完整原資源及快照留本機，不上傳。
 
 本輪沒有換版或操作 Client。批次實機項目集中到 CS-01；下一步補完整入口／TCP 對照、特殊商品與期限、時裝數值及未知模型鍵，再依排程驗收。
