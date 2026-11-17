@@ -1,0 +1,113 @@
+{
+  "schema": "ttr-mef-reuse-contracts-v1",
+  "kind": "NOT_NATIVE_MEF_ANALYSIS_CONTRACTS",
+  "status": "NOT_DEPLOYED_NOT_GAMEPLAY_TESTED",
+  "official_mef_loader_proved": false,
+  "immutable_baseline": {
+    "A1_policy_changed": false,
+    "new_scene_key_assumed": false,
+    "new_actor_slot_assumed": false,
+    "native_owner_token_assumed": false,
+    "new_wire_ack_assumed": false
+  },
+  "finite_effect": {
+    "status": "CONTENT_BINDINGS_UNBOUND",
+    "required": [
+      "real asset path/hash/content version",
+      "verified ABI and finite counters",
+      "legal entry and seen policy",
+      "explicit previous-image replace or natural-finish policy",
+      "same-context native ticks remain reachable",
+      "gameplay observation separate from server business completion"
+    ],
+    "next_image_semantics": "cancel previous tracked Q image before allocation/publication",
+    "must_not_assume": [
+      "one yield means finished",
+      "Del synchronously destroys",
+      "normal End resets every owner",
+      "all shared images belong to Q"
+    ]
+  },
+  "two_segments": {
+    "preferred_when_independent": "clean A while A callback is legal, normal End A, then permitted Start B",
+    "key_values": null,
+    "slot_model_action_values": null,
+    "preconditions": [
+      "A owns entire Q tree if using DeleteAllObject",
+      "camera work/snapshot ownership and baseline already established",
+      "original globals/bindings or exact rebind proven",
+      "B content and actual key/skip policy bound",
+      "Server serialization and duplicate policy implemented"
+    ],
+    "forbidden_shortcuts": [
+      "Start B then DeleteAllObject as pure A-only cleanup",
+      "inactive Stop as universal reset",
+      "choose unseen new key/slot without validation",
+      "treat 003F or 00EB as cleanup/asset ACK",
+      "wait for Lua cleanup after normal End removes qco"
+    ],
+    "single_start_two_phases_requires": [
+      "prepass full dependency table across both phases",
+      "same-slot first-model collection handled",
+      "mid-phase DeleteAll level3 removal understood; valid CDoll same-resource reload is proved in reuse-followup, with actual catalog/asset/render gates and whole-tree ownership still required"
+    ]
+  },
+  "cleanup_partial_order": [
+    {
+      "before": "stop_owned_camera_work",
+      "after": "detach_owned_current",
+      "reason": "Detach removes current entry used by Stop"
+    },
+    {
+      "before": "detach_owned_current",
+      "after": "paired_owned_snapshot_restore",
+      "reason": "avoid surviving work overwriting restored camera; ownership required"
+    },
+    {
+      "before": "stop_detach_actor_attached_camera",
+      "after": "delete_all_owned_q_actors",
+      "reason": "finish camera dependency before removing actor tree"
+    },
+    {
+      "before": "delete_all_owned_q_actors",
+      "after": "normal_end_A",
+      "reason": "DeleteAll also submits/waits empty level3 replacement; callback must still be legal. This level event is not an all-Doll-request/apply/release drain barrier."
+    },
+    {
+      "before": "normal_end_A",
+      "after": "accepted_start_B",
+      "reason": "separate original qco phase and native active gate"
+    },
+    {
+      "before": "B_prepass_collector_reset_and_collect",
+      "after": "B_level3_replace_job",
+      "reason": "native Start source order"
+    },
+    {
+      "before": "B_level3_replace_job",
+      "after": "B_formal_script_load",
+      "reason": "native Start waits job before formal loader; wait is not aggregate success ACK"
+    }
+  ],
+  "server_requirements": [
+    "run serialization and replay/idempotency policy",
+    "content/asset manifest and verified keys",
+    "handoff states with unknown/timeout distinguished from success",
+    "interrupt/disconnect authoritative recovery",
+    "server-controlled battle/progression/assets/persistence"
+  ],
+  "completed_followup_edges": [
+    "actual Q CreateObject direct initialization uses actor,1 immediate path through 4D0FE0",
+    "CDoll request/release separately increment/decrement the same resource+5C",
+    "valid CDoll request reaches same-resource 7C5BE0 resident reload after +58/+60 cleared",
+    "request/result retain original Doll and apply it; level event is not total callback drain",
+    "draw instance/readiness gates and failed state3 tick retry exclusion"
+  ],
+  "remaining_native_edges": [
+    "legal retry/reset of an existing state3 Doll only if required by content",
+    "observable total Doll request/apply/release drain only if required for handoff",
+    "F4358/current-controller interaction during next Start",
+    "reachable interrupt cleanup entry after qco removed",
+    "same-key replay seen policy for a concrete content tuple"
+  ]
+}

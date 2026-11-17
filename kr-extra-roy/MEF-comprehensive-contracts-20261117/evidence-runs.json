@@ -1,0 +1,152 @@
+{
+  "schema": "mef-offline-evidence-runs-v1",
+  "execution_policy": "Only these read-only research scripts; no target, original Lua, or Server execution. JSON verifier stdout is compared with saved receipts; the pinned text fixture runner must exit zero and leave its recomputed fixture receipt equal to the saved version.",
+  "runs": [
+    {
+      "name": "abi",
+      "cwd": "abi",
+      "argv": [
+        "{python}",
+        "-B",
+        "verify_evidence.py",
+        "--bin",
+        "{sources}/02-Tartaros.bin"
+      ],
+      "receipt": "abi/verification-result.json",
+      "required_fields": {
+        "status": "PASS",
+        "bindings": 121,
+        "new_numeric_value_producers": 17,
+        "observation_queries": 16,
+        "no_new_binding_value": 104
+      },
+      "stdout_format": "json"
+    },
+    {
+      "name": "abi_fixtures",
+      "cwd": "abi",
+      "argv": [
+        "{python}",
+        "-B",
+        "check_validation.py"
+      ],
+      "receipt": "abi/validation-results.json",
+      "required_fields": {
+        "status": "PASS",
+        "checks": 14
+      },
+      "stdout_format": "text"
+    },
+    {
+      "name": "events",
+      "cwd": "events",
+      "argv": [
+        "{python}",
+        "-B",
+        "verify_evidence.py",
+        "--bin",
+        "{sources}/02-Tartaros.bin",
+        "--repo",
+        "{repo}"
+      ],
+      "receipt": "events/verification-result.json",
+      "required_fields": {
+        "status": "PASS",
+        "exact_query_sources": 16,
+        "ordinary_world_lua_result_bridge": false,
+        "client_executed": false
+      },
+      "stdout_format": "json"
+    },
+    {
+      "name": "reuse",
+      "cwd": "reuse",
+      "argv": [
+        "{python}",
+        "-B",
+        "verify_evidence.py",
+        "--bin",
+        "{sources}/02-Tartaros.bin",
+        "--event",
+        "{sources}/06-Event.stp",
+        "--repo",
+        "{repo}"
+      ],
+      "receipt": "reuse/verification-result.json",
+      "required_fields": {
+        "all_matched": true,
+        "historical_aggregate_verifier_rerun": false,
+        "client_executed": false
+      },
+      "stdout_format": "json"
+    },
+    {
+      "name": "reuse-followup",
+      "cwd": "reuse-followup",
+      "argv": [
+        "{python}",
+        "-B",
+        "verify_evidence.py",
+        "--bin",
+        "{sources}/02-Tartaros.bin",
+        "--event",
+        "{sources}/06-Event.stp",
+        "--repo",
+        "{repo}"
+      ],
+      "receipt": "reuse-followup/verification-result.json",
+      "required_fields": {
+        "all_matched": true,
+        "all_assets_ready_proved": false,
+        "client_executed": false
+      },
+      "stdout_format": "json"
+    },
+    {
+      "name": "resources",
+      "cwd": "resources",
+      "argv": [
+        "{python}",
+        "-B",
+        "verify_evidence.py",
+        "--sources",
+        "{sources}",
+        "--repo",
+        "{repo}",
+        "--supplemental",
+        "{supplemental}"
+      ],
+      "receipt": "resources/verification-result.json",
+      "required_fields": {
+        "result": "PASS_REPRODUCIBLE_RESEARCH",
+        "ready": false,
+        "require_ready_exit_status": 2
+      },
+      "stdout_format": "json"
+    },
+    {
+      "name": "resource-selection",
+      "cwd": "resource-selection",
+      "argv": [
+        "{python}",
+        "-B",
+        "verify_evidence.py",
+        "--sources",
+        "{sources}",
+        "--supplemental",
+        "{supplemental}",
+        "--repo",
+        "{repo}"
+      ],
+      "receipt": "resource-selection/verification-result.json",
+      "required_fields": {
+        "status": "PASS_REPRODUCIBLE_RESEARCH",
+        "selected_PRE_status": "NOT_A_MODEL_CATALOG_KEY_FIELD",
+        "ready": false,
+        "native_selected_descriptor_path": null,
+        "target_execution": false
+      },
+      "stdout_format": "json"
+    }
+  ]
+}
