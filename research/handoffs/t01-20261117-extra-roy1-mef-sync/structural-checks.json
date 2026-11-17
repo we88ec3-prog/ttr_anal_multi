@@ -1,0 +1,60 @@
+{
+  "schema": "t01-mef-structural-checks-v1",
+  "scope": "Post-integration read-only registry/source gates; not Client semantic or gameplay tests",
+  "checks": [
+    {
+      "name": "registry",
+      "command": "python -B governance/validate_s00.py",
+      "started_utc": "2026-11-17T14:46:16.852Z",
+      "ended_utc": "2026-11-17T14:46:18.032Z",
+      "exit_code": 0,
+      "output_capture": "complete",
+      "output_summary": "S00 registry integrity OK. This is not an original-client semantic verdict or Server compatibility test."
+    },
+    {
+      "name": "dispatch",
+      "command": "python -B research/dispatch/dispatch.py check",
+      "started_utc": "2026-11-17T14:46:16.852Z",
+      "ended_utc": "2026-11-17T14:46:17.510Z",
+      "exit_code": 0,
+      "output_capture": "complete",
+      "output_summary": "S00 dispatch checks OK (not an Agent wakeup or native verification)"
+    },
+    {
+      "name": "intake-worklist",
+      "command": "python -B governance/phase_b_worklist.py --check",
+      "started_utc": "2026-11-17T14:46:16.852Z",
+      "ended_utc": "2026-11-17T14:46:17.510Z",
+      "exit_code": 0,
+      "output_capture": "tool output truncated; exit code retained",
+      "output_summary": "14 RR; 6 in review; 4 queued; check exit 0."
+    },
+    {
+      "name": "research-preflight",
+      "command": "python -B governance/phase_b_review_preflight.py --check",
+      "started_utc": "2026-11-17T14:46:16.852Z",
+      "ended_utc": "2026-11-17T14:46:17.515Z",
+      "exit_code": 0,
+      "output_capture": "tool output truncated; exit code retained",
+      "output_summary": "14 RR; 6 artifact-present; invalid 0; check exit 0."
+    },
+    {
+      "name": "server-requirements",
+      "command": "python -B governance/check_server_requirements.py --check",
+      "started_utc": "2026-11-17T14:46:16.852Z",
+      "ended_utc": "2026-11-17T14:46:17.537Z",
+      "exit_code": 0,
+      "output_capture": "complete",
+      "output_summary": "S00 Server requirements: {'requirements': 23, 'discovery_counts': {'CODE_ANALYSIS': 5, 'GAME_RUNTIME_OBSERVATION': 71, 'PLAYER_ADMIN_REQUEST': 31}, 'approved': 0}"
+    },
+    {
+      "name": "source-audit",
+      "command": "python -B research/handoffs/t01-20261117-extra-roy1-mef-sync/audit_sources.py --repo /workspace/scratch/d850068ce350/ttr_anal_multi --sources /workspace/scratch/d850068ce350/project_sources > research/handoffs/t01-20261117-extra-roy1-mef-sync/r0-audit.json",
+      "started_utc": "2026-11-17T14:46:16.852Z",
+      "ended_utc": "2026-11-17T14:46:18.448Z",
+      "exit_code": 0,
+      "output_capture": "complete",
+      "output_summary": ""
+    }
+  ]
+}
