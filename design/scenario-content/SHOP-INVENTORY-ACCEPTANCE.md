@@ -30,6 +30,8 @@ NPC 商店、裝備、倉庫與銷毀已有各自規格及離線收據。整體�
 
 2026-11-18 追加 [購物車與保管箱收發核對](../../governance/client-variants/20261118-cash-shop/README.md)。原件與指定 v2 的 13 個視窗位元組相同，購物車 `00AC`、專用 S2C `00DF`、一般保管箱領取 C2S `00AD` 及相關結果 consumer 已定位。來源檢查同時核對原表 1,311 筆商品。付款幣別、保管箱身分、初始化及領取入包仍待接續，Server checkout 尚未實作。
 
+同日追加 [餘額與保管箱欄位](../../governance/client-variants/20261118-cash-shop/BALANCE-AND-STORAGE.md)。`00DD` 已接入 Server 正常資產初始化與銀行擴充扣款後的餘額發布，本機沿用現有 Garnet。原件另定位 `00E2/00E3` 的 19-byte 保管箱列。購買與領取交易仍待實作，指定 v2 的餘額顯示加入既有 TS-06。
+
 來源索引為 `kr-bulk-roy/<BIN SHA>/index.jsonl`，每個地址的 raw 路徑與 SHA 可由 `lookup.py <address> --metadata-only` 讀取。使用前沿用 [大量反編譯的審核邊界](../../shared/integrations/T01-BULK-20261026-02/README.md)。
 
 ## 點數商城接線前需閉合的流程

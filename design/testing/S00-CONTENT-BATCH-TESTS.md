@@ -118,7 +118,7 @@ TS-04 待實機批次。備三張一般復活卷軸，可用專用帳號購買�
 
 TS-05 待實機批次。用首次設定 100,001,200 LeeLoo、7 Battle Point 的專用帳號，正常建隊進村後開銀行商店。買一張「一億 LeeLoo 支票」，確認背包名稱正確且餘額降為 1,200。重登再次進村後售回支票，確認格位清空、LeeLoo 回到 100,001,200，Battle Point 保持 7。 [銀行支票規格](../scenario-content/PHINDOS-BANK-VAULT.md)
 
-TS-06 待實機批次。以專用帳號準備 120 Garnet，測試 Host 設定擴充費為 50。正常進村開倉庫，點擴充並確認一次，記錄原生確認窗顯示的費用。確認可用格由 80 增至 100，重登回村後容量和原有道具仍在。後端帳本應剩 70 Garnet。Garnet 畫面同步另待分析，原版費率尚未確認。 [銀行倉庫規格](../scenario-content/PHINDOS-BANK-VAULT.md)
+TS-06 待實機批次。以專用帳號準備 120 Garnet，測試 Host 設定擴充費為 50。正常進村開倉庫，點擴充並確認一次，記錄原生確認窗顯示的費用。確認可用格由 80 增至 100，後端帳本剩 70 Garnet。若介面顯示 Garnet，記錄顯示位置及扣款前後數字。Server 已接 `00DD`，初始化應發 120、擴充提交後發 70。重登回村後核對容量、原有道具與剩餘 70 的發布及畫面。原版費率仍待確認。 [銀行倉庫規格](../scenario-content/PHINDOS-BANK-VAULT.md)
 
 TS-07 待實機批次，先核對重置券新疊 metadata 並啟用商品設定。用首次設定 55,000 LeeLoo、7 Battle Point 的專用帳號正常進馮德斯，買一張復活卷軸及一張重置券，兩件分別出現在背包，LeeLoo 剩 3,000。重登回村後，從各自格位賣回復活卷軸與重置券，LeeLoo 依次為 3,200、8,200，兩格依次清空。Battle Point 保持 7。 [商品設定與價格依據](../scenario-content/PHINDOS-GROCER-TRADE.md)
 

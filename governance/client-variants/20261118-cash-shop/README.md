@@ -2,6 +2,8 @@
 
 2026-11-18 S00 限定來源核對。工作基準為本庫 `02758e1a027fcd1a69dcb94ef3073990eaded7eb`、Server `94b4ddc61e08101afd2334d0916ed0d0bca2df43`。本批將商城來源導航推進到購物車請求、結果 consumer 與保管箱領取請求。Server 付款及入包接線仍待後述條件閉合。
 
+同日接續 [商城餘額與保管箱欄位](BALANCE-AND-STORAGE.md)，追加固定餘額 consumer、19-byte 保管箱列及 Server 餘額發布規劃。前批 13 個來源視窗與收據保留，新增部分有自己的來源索引與檢查收據。
+
 使用固定 SHA 的原 KR BIN、指定 v2 及 Table.stp。原件保持唯讀，沒有遊戲、Lua 或 Server 執行。來源擷取使用 Ghidra 12.1.4 的 PE32 loader、`-readOnly -noanalysis` 與局部反組譯，配合先前保存的 Ghidra 偽碼閱讀。REA 的前次字串查詢逾時後，進一步核對發現沙箱內 `java -version` 無法完成；本批改用沙箱外的唯讀 Ghidra 工作，原本的本任務分析助手已核對後結束。
 
 本批覆蓋以下特定資料流與原件位元組，並未進行整個函式的 T01 全文審核。正式 SPEC／REQ／RR 狀態仍依原台帳。 [來源索引](source-index.json) · [局部指令](instructions.txt) · [檢查收據](verification-result.json)
