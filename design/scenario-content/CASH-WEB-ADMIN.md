@@ -2,6 +2,8 @@
 
 2026-11-19 接續新增 [商品查詢、停賣／恢復與稽核](CASH-SALE-ADMINISTRATION.md)。管理變更控制新購買，不會自動替換遊戲內的 STP 列表或標價。整體剩餘工作見 [管理接續範圍](CASH-MANAGEMENT-COMPLETION.md)。
 
+新增 [購買與領取持久帳本](CASH-TRANSACTION-HISTORY.md) 與 `/admin/cash/history`：依帳號／Product／狀態分頁查詢，領取後仍保存成交及格位事實。舊版已領取資料不回推；既有待領資料的未知成本保持未知。
+
 本機後台新增 `/admin/cash`，接目前遊戲使用的 SQLite 測試資料庫。可搜尋登入帳號，查看 Garnet、保管箱筆數與前 100 筆尚未領取商品，並以正數加值、負數扣除。帳號須先完成冒險團命名。
 
 每筆加扣必填原因，保存操作識別碼、帳號、增減、前後餘額及 UTC 時間。SQLite 同一寫入交易完成餘額與管理紀錄，識別碼避免表單重複提交造成再次加扣。商城購買亦讀同一錢包，管理操作後重新登入可確認 Client 餘額。管理記錄使用獨立 `local_cash_admin_audit` 表。

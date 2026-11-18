@@ -1,0 +1,118 @@
+{
+  "date": "2026-11-19",
+  "classification": "SERVER_DESIGN_CHOICE / OFFLINE_SYNTHETIC",
+  "schema": "LOCAL_CASH_HISTORY_V1",
+  "builds": {
+    "host": "Release PASS 0 warnings/errors",
+    "earlierWebFailure": "Five syntax errors in new HTML option quote; fixed before HTTP validation",
+    "web": "Release isolated then standard output PASS 0 warnings/errors",
+    "inspector": "Release PASS 0 warnings/errors"
+  },
+  "tests": [
+    {
+      "passed": 0,
+      "total": 0,
+      "outcome": "Failed",
+      "note": "Aborted before test execution: sandbox vstest/testhost connection timeout; terminal handle confirmed before retry",
+      "file": "cash-history-focused-v1.trx",
+      "sha256": "b11ff8bb574577d3aaa003e53784add8952e8ba556dff1653d2811aceb95b3d1",
+      "failed": 0
+    },
+    {
+      "passed": 2,
+      "total": 2,
+      "outcome": "Completed",
+      "note": "Authorized HappyPath",
+      "file": "cash-history-focused-v2.trx",
+      "sha256": "2d74b96157928a9fb74c37ccdc335ff4b5aade08323a141767d3bdcf5dcaa83b",
+      "failed": 0
+    },
+    {
+      "passed": 594,
+      "total": 594,
+      "outcome": "Completed",
+      "note": "Authorized HappyPath",
+      "file": "cash-history-full-v1.trx",
+      "sha256": "cc1898e709f21b59aca5e86b40176c38d3541b6f08629e6f2b25021441d1c108",
+      "failed": 0
+    }
+  ],
+  "receipts": [
+    {
+      "file": "history-http-fixture.json",
+      "sha256": "f9ebe4f0f24cff651666d28b6b1de49f951b25fd438dae866c57914151e3a5d2"
+    },
+    {
+      "file": "history-http-proof.json",
+      "sha256": "707fc02eb03f3648ff0f18ba0e69112eeb11d26f7d89103a56bd500b2408e07c"
+    },
+    {
+      "file": "history-host-preflight.json",
+      "sha256": "8d13eac66aefd677fdad2ef0e5814b855437679da1e9a9e82a2b681c64a0682c"
+    },
+    {
+      "file": "history-live-host-receipt.json",
+      "sha256": "21d837e1920d5ed182a00c12673f7e004c3ce124cfd2314a44b804332ac5e975"
+    },
+    {
+      "file": "history-live-verification.json",
+      "sha256": "e1b43e4c936ff359d3a970a3b4188820842ce093d6883895380602e193dbef48"
+    },
+    {
+      "file": "history-live-components.json",
+      "sha256": "ad1ea0050923b4e2a72bc8392090f2a43595e3add3d826e7b21404444d9712e0"
+    }
+  ],
+  "http": {
+    "classification": "ISOLATED_HTTP_FUNCTIONAL",
+    "clientExecuted": false,
+    "productionDatabaseChanged": false,
+    "total": 55,
+    "pageOneRows": 50,
+    "pageTwoRows": 5,
+    "claimed2625": 2,
+    "pending2625": 52,
+    "legacy5342": 1,
+    "searchValuePreserved": true,
+    "claimEquipmentIdentityShown": true,
+    "visualAcceptance": "NOT_EXECUTED"
+  },
+  "deployment": {
+    "pages": [
+      {
+        "path": "/admin/cash",
+        "status": 200
+      },
+      {
+        "path": "/admin/cash/catalog",
+        "status": 200
+      },
+      {
+        "path": "/admin/cash/history",
+        "status": 200
+      }
+    ],
+    "gamePid": 15524,
+    "previousAdminPid": 30276,
+    "adminPid": 30796,
+    "note": "Replaced verified loopback services once after full batch passed; retained pre-update DB backup. Initial verification compared slash separators incorrectly; corrected verifier passed on same processes.",
+    "previousGamePid": 34532,
+    "firstVillageParty": "PRIVATE_SOLO_AFTER_COMMITTED_Q15",
+    "hostAssemblySha256": "4b9642531916dd7695dfac624e1b9d08d7a3570417b25dc01f3cf72a8e1b49e1",
+    "adminAssemblySha256": "e5c15b0420e4b4457e3594ae933b9553544c4bc8127a6a7af89de757d7189aa2"
+  },
+  "clientExecuted": false,
+  "clientModified": false,
+  "limitations": [
+    "Current labels are not historical names; identity retained by Product/Item/storage key/catalog SHA",
+    "Legacy pending storage has unknown cost, catalog and purchase time",
+    "Previously claimed legacy goods have no reconstructible ledger",
+    "Ledger filtering is not complete reconciliation or refund handling",
+    "No designated-v2 manual acceptance claimed; first-village test remains postponed",
+    "No native MEF claim"
+  ],
+  "deferred": [
+    "Replay, rejection, fault, concurrency, security and load tests",
+    "Manual new history page and new sale controls acceptance"
+  ]
+}
