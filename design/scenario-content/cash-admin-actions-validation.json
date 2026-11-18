@@ -1,0 +1,149 @@
+{
+  "date": "2026-11-19",
+  "classification": "SERVER_DESIGN_CHOICE / OFFLINE_SYNTHETIC",
+  "historyDefinition": "LOCAL_CASH_HISTORY_V2",
+  "actionsDefinition": "LOCAL_CASH_ADMIN_ACTIONS_V1",
+  "builds": {
+    "web": "Release PASS 0 warnings/errors",
+    "inspector": "Release PASS 0 warnings/errors",
+    "host": "Release PASS 0 warnings/errors"
+  },
+  "tests": [
+    {
+      "total": 2,
+      "failed": 0,
+      "sha256": "4f2be807b5894982b2938fd2a81584711f1e75b0a3e7b2b462c49713b99e389a",
+      "file": "cash-actions-focused-v1.trx",
+      "passed": 2
+    },
+    {
+      "total": 598,
+      "failed": 0,
+      "sha256": "80177bfb8c3cf28f3be158f55dc7977418b591840ecd197d7eb01004508dde9a",
+      "file": "cash-actions-full-v1.trx",
+      "passed": 598
+    }
+  ],
+  "receipts": [
+    {
+      "file": "actions-migration-proof.json",
+      "sha256": "4858a6372c7f1f6c7bfa1751ea4b1fd00bb3a0d0f732cd0670bd7bd26b8f1651"
+    },
+    {
+      "file": "actions-http-proof.json",
+      "sha256": "7eedade5075080bdc4fc26c3743c23e62de82e06b518c31179fb174e7eee6b24"
+    },
+    {
+      "file": "actions-host-preflight.json",
+      "sha256": "ef03bb4079cd23e532b561c11409a590eab575a3487b1304a512c14e28d17805"
+    },
+    {
+      "file": "actions-live-host-receipt.json",
+      "sha256": "6da85bfd4134973e876901f00e2f5efc033a8a6665c3c327ceb5fef789cc2550"
+    },
+    {
+      "file": "actions-live-verification.json",
+      "sha256": "5e5f24b5dae778db09c0f3c2c5089de82e7cf8ab713c70be8e9df893d7f77048"
+    },
+    {
+      "file": "actions-live-components.json",
+      "sha256": "15890b0d9d5195668712d68633f8c5acf28bd0b1b08294a15cf6c96234dd8324"
+    }
+  ],
+  "migration": {
+    "classification": "NORMAL_V1_TO_V2_MIGRATION",
+    "historicalFactsPreserved": true,
+    "foreignKeysValid": true,
+    "definition": "LOCAL_CASH_HISTORY_V2",
+    "tables": {
+      "local_cash_checkouts": {
+        "rows": 6,
+        "sha256": "3a35cc91e6951f85682b083a3b0667258cb20a9bd2370d189ccf2b4c82148d7d"
+      },
+      "local_cash_deliveries": {
+        "rows": 55,
+        "sha256": "9b03018c2dbcd58690abdec996149b6dde50917a12527d5b346bfafbdf157fb4"
+      },
+      "local_cash_claims": {
+        "rows": 2,
+        "sha256": "6bf22b11218f2f0992390e0e17f08056e53a2b12315315ae2fcf800b4647d6fd"
+      },
+      "local_cash_claim_slots": {
+        "rows": 2,
+        "sha256": "8447ab7d59638c87a2a54b0728630c77b148b87abe0cda8c32fcaf380b1e095e"
+      }
+    },
+    "clientExecuted": false
+  },
+  "http": {
+    "classification": "ISOLATED_HTTP_VALID_FORM",
+    "clientExecuted": false,
+    "productionDatabaseChanged": false,
+    "initialPending": 53,
+    "grant": 1,
+    "grantRevoked": 1,
+    "purchaseRefunded": 1,
+    "legacyRevoked": 1,
+    "refundAmount": 250,
+    "finalBalance": 6750,
+    "finalPending": 51,
+    "terminalHistoryVerified": true,
+    "reconciliationIssues": 0,
+    "paginationVerified": true,
+    "catalogGrantLinkVerified": true,
+    "visualAcceptance": "NOT_EXECUTED"
+  },
+  "deployment": {
+    "firstVillageParty": "PRIVATE_SOLO_AFTER_COMMITTED_Q15",
+    "adminPid": 37040,
+    "pages": [
+      {
+        "status": 200,
+        "path": "/admin/cash"
+      },
+      {
+        "status": 200,
+        "path": "/admin/cash/catalog"
+      },
+      {
+        "status": 200,
+        "path": "/admin/cash/history"
+      },
+      {
+        "status": 200,
+        "path": "/admin/cash/reconciliation"
+      },
+      {
+        "status": 200,
+        "path": "/admin/cash/actions"
+      }
+    ],
+    "gamePid": 12332,
+    "liveAssetOperationsExecutedByAgent": false,
+    "assemblySha256": {
+      "E:\\Tartaros\\workspace\\server-runtime-dev/src/Tartaros.Server.Host/bin/Release/net10.0/Tartaros.Persistence.dll": "fb93f309e206c5b126719fea790e3262564c6170d73b540b36ab06217f599661",
+      "E:\\Tartaros\\workspace\\server-runtime-dev/src/Tartaros.Admin.Web/bin/Release/net10.0/Tartaros.Admin.Web.dll": "532d013627cfcdb3e558dd028001a6a890b768088dd2fdbb9391158d1da62ff2",
+      "E:\\Tartaros\\workspace\\server-runtime-dev/src/Tartaros.Admin.Web/bin/Release/net10.0/Tartaros.Persistence.dll": "fb93f309e206c5b126719fea790e3262564c6170d73b540b36ab06217f599661",
+      "E:\\Tartaros\\workspace\\server-runtime-dev/src/Tartaros.Server.Host/bin/Release/net10.0/Tartaros.Server.Host.dll": "3ccff673f81835d811d5045fd17331079f092538308ab4545e2677e3c6161577"
+    },
+    "previousAdminPid": 30796,
+    "previousGamePid": 15524,
+    "note": "One coherent replacement after HappyPath and isolated Web/Host checks; includes the preceding reconciliation batch; retained pre-update DB backup"
+  },
+  "clientExecuted": false,
+  "clientModified": false,
+  "deferred": [
+    "Designated v2 manual grant/claim and pending-refund acceptance",
+    "Replay, rejection, concurrency, fault, security and load tests",
+    "Injected integrity differences",
+    "Claimed-item return and use/equipment identity verification"
+  ],
+  "limitations": [
+    "Grant/revocation storage visibility requires game relogin; no new dynamic storage push claimed",
+    "Refund uses recorded per-item cost for unclaimed purchases only",
+    "Legacy revocation has unknown prior payment and no credit",
+    "Claimed assets are not returned or deleted by this page",
+    "Price/list publication and special products remain open",
+    "No native MEF completion claim"
+  ]
+}
