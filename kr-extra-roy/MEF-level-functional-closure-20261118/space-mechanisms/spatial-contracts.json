@@ -1,0 +1,113 @@
+{
+  "schema": "MEF_LEVEL_SPATIAL_CONTRACTS_V1",
+  "classification": "SERVER_MEF_RULES_WITH_NATIVE_CLIENT_PRESENTATION_AND_INPUT",
+  "analysis_complete": true,
+  "new_runtime_implementation_claimed": false,
+  "official_mef_format_is_goal_or_gate": false,
+  "consumer_separation": [
+    {"id": "point_enabled", "consumer": "544730 reads point+0x105", "producer": "0048 or existing Lua setter through 544940 -> 543B30", "effect": "Existing point becomes eligible for native input subject to mode, distance and input gates.", "does_not_imply": ["create missing point", "move point", "change map", "open solid geometry"]},
+    {"id": "portal_effect", "consumer": "543B30 category-0 status branch", "producer": "status==1 selects the open portal effect", "effect": "Portal-style presentation for that point.", "does_not_imply": ["three-dimensional gate mesh", "physical passability", "Server exit authorization"]},
+    {"id": "gate_mesh", "consumer": "No gate-mesh state adapter is established by the selected point consumer.", "producer": "Requires explicit selected asset/controller integration if a solid gate is authored.", "effect": "Server MEF development/integration requirement for that chosen experience.", "does_not_imply": ["all local presentation is unavailable", "official MEF recovery is required"]},
+    {"id": "server_collision", "consumer": "Existing Server static BND plus flag-barrier overlay", "producer": "Committed instance flags, not Client portal appearance", "effect": "Server movement/path/projectile/interaction collision policy as documented in FLAG-BARRIERS.md.", "does_not_imply": ["native Client collision changed", "full three-dimensional geometry", "dynamic actor collision proven"]}
+  ],
+  "contracts": [
+    {
+      "id": "SP01-map-identity",
+      "player_result": "Enter the selected map at a valid authored spawn.",
+      "current_mef": "Node map/spawn and exit destination are authored data. MapID joins the selected _MapList row and BOUND member.",
+      "client_reuse": "Existing map/world setup and point input consumers.",
+      "predicate": "0<=x<worldWidth, 0<=y<worldHeight; floor(x*gridWidth/worldWidth), floor(y*gridHeight/worldHeight); nonzero layer 0 OR layer 1 is blocked under the current Server policy.",
+      "remaining": "MapID assignment alone is not map-ready. Owner, point snapshot, current node, content revision and scene completion must belong to the same installed generation.",
+      "evidence": ["spatial-evidence.json:map_joins", "SCENE-INTERACTION.md", "STORY-PLACEMENT-CANDIDATE.md"]
+    },
+    {
+      "id": "SP02-points-and-exits",
+      "player_result": "See an exit unlock and press Z at the intended destination.",
+      "current_mef": "One main exit plus up to seven alternatives; exact category/key and authored action/target node.",
+      "client_reuse": "0027 creates the complete point set; 0048 or the existing Lua setter changes an installed point; 001C returns category/key.",
+      "predicate": "Category 0 native distance is strictly less than 0.8*wireRadius. The Server authored radius is inclusive and does not automatically receive that scaling.",
+      "remaining": "A full 0027 replaces the set and local status. Restore all surviving exits/markers/manual points after a scene; do not append one point at a time or treat 003F as proof of setter success.",
+      "evidence": ["native-evidence.json:N-point-snapshot,N-point-lookup,N-point-set,N-point-gate", "S00-20261111-SCENARIO-BRANCH-CONTRACT.md"]
+    },
+    {
+      "id": "SP03-exit-selection",
+      "player_result": "Choose one branch without accidentally taking the other.",
+      "current_mef": "The Server resolves the exact provided key, or its documented fallback chooses nearest in-range then smallest key on a tie. Only OpenExitKeys authorize a transfer.",
+      "client_reuse": "Native nearest eligible point and mode/input gates; the Server fallback tie rule is not asserted as a native tie rule.",
+      "predicate": "Clear aggregate group AND exit-specific requiredFlags AND optional current activationRegion; once qualified, the exit latches open.",
+      "remaining": "A branch chart being acyclic does not prove physical access or safe visible placement. Preserve the selected exit key/position through the transition transaction.",
+      "evidence": ["spatial-evidence.json:potential_exit_circle_overlaps", "S00-20261111-CONDITIONAL-EXIT-CONTRACT.md", "S00-20261111-SCENARIO-BRANCH-CONTRACT.md"]
+    },
+    {
+      "id": "SP04-manual-mechanism",
+      "player_result": "Press Z once at a mechanism to satisfy the configured condition.",
+      "current_mef": "CheckpointInteracted, category 1/key, region, optional prior flags and group-clear requirement. A successful interaction sets a fixed instance flag and disables that point.",
+      "client_reuse": "Existing category-1 input emits 001C in the established ordinary-mode path; no new gameplay opcode.",
+      "predicate": "Native distance <wireRadius; Server region distance<=radius plus current instance/node, owned living actor and enabled state. An optional distinct category-0 marker remains disabled.",
+      "remaining": "Category 1 has no proven category-0-like visual. A lever/chest/breakable model and animation require a chosen presentation adapter; the point is not itself a save policy.",
+      "evidence": ["S00-20261111-MANUAL-INTERACTION-CONTRACT.md", "S00-20261111-CHECKPOINT1-NATIVE-BOUNDARY.md", "spatial-evidence.json:feature_geometry"]
+    },
+    {
+      "id": "SP05-region-presence",
+      "player_result": "Entering the authored circle can raise a flag or permit a wave/exit.",
+      "current_mef": "Circle center/radius; signal flags and current-position gates have different latching behavior.",
+      "client_reuse": "Visual cues may use supported native presentation, but no generic local region-fact-to-authoritative-event bridge is established by the point evidence.",
+      "predicate": "Inclusive circle. A wave activationRegion requires the current observed position at evaluation; entering earlier then leaving is not enough. RegionEntered raises its once-only instance flag when observed inside.",
+      "remaining": "No swept-segment/crossing trigger is promised. Polygon, height, moving regions and any/all-party occupancy need explicit MEF schema and predicate semantics if requested.",
+      "evidence": ["REGION-WAVE-AUTHORING.md", "S00-20261111-CONDITIONAL-EXIT-CONTRACT.md"]
+    },
+    {
+      "id": "SP06-region-held",
+      "player_result": "Stay inside a circle continuously for the authored time to open the exit.",
+      "current_mef": "RegionHeld with hold duration 0.25..3600 seconds. The Q119 node-4 candidate uses radius 2 and 2.5 seconds.",
+      "client_reuse": "Optional local countdown/indicator presentation after a properly bound instruction; completion remains the configured Server MEF fact.",
+      "predicate": "First inside observation starts; observed movement or skill displacement outside resets; downed and mainline-clear commit reset incomplete hold; mainline scene time is excluded; completed flag remains for the instance.",
+      "remaining": "No current generic region/countdown visualization binding is established by this audit. Match visible countdown to this exact clock and reset semantics, not a generic NodeDelay timer.",
+      "evidence": ["REGION-HOLD-SIGNALS.md", "spatial-evidence.json:feature_geometry"]
+    },
+    {
+      "id": "SP07-hazard",
+      "player_result": "Remaining in a trap circle causes periodic damage; leaving or disabling it stops the countdown.",
+      "current_mef": "Up to 16 circular hazards/node, damage 1..500, interval 0.25..3600 seconds, optional disabledByFlag; Q119 candidate has radius 3, 25 damage per second, disabled by a 14-second node flag.",
+      "client_reuse": "Existing health/hurt/death presentation; local warning effects can be added through a selected supported presentation route.",
+      "predicate": "Start at first observed inside; full interval before first damage; observed outside resets; one tick maximum per late update; overlapping hazards have independent timers; stop on disable, aggregate clear or map change; pending waves keep the battle active.",
+      "remaining": "The selected content has no established matching visible trap area/countdown adapter. Fixed damage has no attacker and is not automatically the ordinary enemy hit/dodge/block policy.",
+      "evidence": ["AREA-HAZARDS.md", "spatial-evidence.json:feature_geometry"]
+    },
+    {
+      "id": "SP08-flag-barrier",
+      "player_result": "A configured local obstruction disappears when its flag is committed.",
+      "current_mef": "Up to 16 axis-aligned rectangles/node; opensWithFlag; optional portal-style marker.",
+      "client_reuse": "Marker point appearance can reuse category 0; it is separate from Server blockage.",
+      "predicate": "Cell-center test with minX/minY inclusive and maxX/maxY exclusive. A cell covered by several closed barriers remains blocked until every covering barrier opens. Base BND walls remain; opening invalidates obsolete detour paths.",
+      "remaining": "All three present Q119 barrier candidates allow a static route around the rectangle. They are local obstacles plus a conditional exit. A physically sealed gate requires a choke-point cut and independent Client mesh/collision integration.",
+      "evidence": ["FLAG-BARRIERS.md", "spatial-evidence.json:feature_geometry", "content-remediation.json:barrier_policy_choices"]
+    },
+    {
+      "id": "SP09-patrol-terrain",
+      "player_result": "A guard patrols, pursues within its home range, and returns without walking through static walls.",
+      "current_mef": "One to sixteen waypoints; every segment, including the return, has length >0 and <=256; profile aggroRange and spawn-centered leashRadius; every segment is checked.",
+      "client_reuse": "Existing native movement/animation handling. This audit does not claim a new collision bypass or new savings for presentation already performed locally.",
+      "predicate": "Aggro is measured from current monster position; leash from spawn. Leaving leash cancels pending hit and returns home preserving HP/cooldown. Bounded four-neighbor search: <=4096 cells and <=1 monster search/battle update; chase replan after >=0.5 seconds and target movement >=2.",
+      "remaining": "Selected BND policy covers static terrain; moving obstacles, party blocking, moving-platform connectivity and actor-width clearance require explicit extensions. Actual Client/Server position alignment remains a play gate.",
+      "evidence": ["MONSTER-PATROLS.md", "MONSTER-COLLISION-MOVEMENT-CANDIDATE.md", "spatial-evidence.json:feature_geometry"]
+    },
+    {
+      "id": "SP10-generation-lifetime",
+      "player_result": "A previous room's delayed switch cannot operate the new room's similarly numbered point.",
+      "current_mef": "Bind authored point declarations and rule outputs to the current instance, node and selected content revision. Rebuild the full point snapshot after the chosen scene lifecycle.",
+      "client_reuse": "The real wire contains category/key, not a map/run token. Same-map reinstallation and point replacement are lifetime changes even if MapID stays equal.",
+      "predicate": "Generation change invalidates queued deltas and obsolete region/hazard/patrol work before installing the new point set. 0027 is replacement, not additive; setter success is not separately acknowledged.",
+      "remaining": "The release adapter must enforce its own current-generation dispatch binding; do not invent a wire field or assume changing field automatically cancels an older Lua coroutine.",
+      "evidence": ["SCENE-INTERACTION.md", "MEF-server-provided-capabilities-20261118/npc-progression/report.md"]
+    }
+  ],
+  "optimization_proposals": [
+    {"id": "OPT01", "proposal": "Cache immutable geometry by BND decoded hash plus policy version while retaining MapID and per-instance overlay identity.", "measurable_target": "This corpus resolves 118 MapIDs to 74 BND members. A cold per-MapID decoder can avoid 44 duplicate decodes; this is a decode-count comparison, not a measured CPU percentage.", "preserve": "Separate per-instance barrier states and generation; no mutation of the shared base grid."},
+    {"id": "OPT02", "proposal": "Compile flag-to-dependent-exits/barriers/interactions and region-to-dependent-rules indices at load time.", "measurable_target": "Count rules evaluated per accepted position/flag event and number of actual changed outputs; unchanged flags must not cause duplicate 0048 or collision rebuild.", "preserve": "Observe movement/displacement exits promptly so hold/hazard reset semantics stay exact; no invented swept-crossing trigger."},
+    {"id": "OPT03", "proposal": "Use one complete point snapshot for installation/rebuild and only changed point deltas between replacements.", "measurable_target": "Count 0027 replacements, rows, 0048 changes, bytes and point-count retention after the scene. A missing point or a scene rebuild still requires the full selected set.", "preserve": "Local setter changes do not survive a later replacement unless represented by the new authoritative snapshot; generation binds every queued operation."},
+    {"id": "OPT04", "proposal": "Keep hazard and hold deadlines in indexed schedules with state-change cancellation; use Client effects for presentation where the selected profile permits.", "measurable_target": "Count active timer entries, due callbacks and region predicates per update for identical content; compare normal completion and reset points.", "preserve": "No catch-up hazard burst, no first-tick acceleration, no mainline-scene hold time, and no replacement of clear/hold facts by an arbitrary wait."},
+    {"id": "OPT05", "proposal": "Prevalidate patrol loops and reuse bounded paths until target movement or affected obstacle generation invalidates them.", "measurable_target": "Count BFS starts, expanded cells, cache reuse, blocked-stop messages and successful resumes. Retain <=4096-cell and <=1-search-per-update bounds unless explicitly redesigned.", "preserve": "Leash origin, current-position aggro, hit line-of-sight, HP/cooldown preservation, and old-route invalidation on barrier change."},
+    {"id": "OPT06", "proposal": "Choose local finite MEF presentation only for a real multi-step sequence and its compatible control/lifecycle profile.", "measurable_target": "Compare removed Server presentation timers and step dispatches against the actual selector/completion traffic. A single 0048 may be cheaper than starting a finite scene.", "preserve": "Already-native movement/point selection is not a new saving; authoritative spatial facts, exit conditions and saves remain in the shared MEF/adapter system."}
+  ]
+}

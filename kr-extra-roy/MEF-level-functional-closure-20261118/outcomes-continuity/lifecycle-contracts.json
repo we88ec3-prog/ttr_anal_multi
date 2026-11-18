@@ -1,0 +1,787 @@
+{
+  "schema": "MEF_LEVEL_OUTCOMES_ANALYSIS_V1",
+  "baseline_commit": "09799b117f01e577be56dee3e909e1cde25b855f",
+  "analysis_only": true,
+  "runtime_observed_this_round": false,
+  "mef_is_server_development": true,
+  "native_official_mef_is_gate": false,
+  "transitions": [
+    {
+      "id": "L01",
+      "profiles": [
+        "scenario",
+        "mission",
+        "raid"
+      ],
+      "event": "Normal NPC/formation/lobby entry accepted",
+      "required_state": "Account lease, ownership, prerequisite, selected content/version accepted",
+      "next_state": "Admitted run",
+      "action": "Allocate run identity and retain typed Quest/Stage/Case/map/node separately",
+      "commit_boundary": "Existing session/admission; not final reward",
+      "sources": [
+        "S03",
+        "S05",
+        "S08",
+        "S15"
+      ],
+      "after": []
+    },
+    {
+      "id": "L02",
+      "profiles": [
+        "scenario",
+        "mission",
+        "raid"
+      ],
+      "event": "Entry or genuine map change",
+      "required_state": "Old Q/run lifetime handled; old entities/loot retirement policy resolved",
+      "next_state": "Field and world constructing",
+      "action": "Use compatible field subtype, map, actors, binding, point snapshot and owner resources in dependent order",
+      "commit_boundary": "Install/runtime state; no achievement inferred from map display",
+      "sources": [
+        "S10",
+        "S05",
+        "S08"
+      ],
+      "after": [
+        "L01"
+      ]
+    },
+    {
+      "id": "L03",
+      "profiles": [
+        "scenario"
+      ],
+      "event": "Configured intro/entry Q completed",
+      "required_state": "Match current accepted quest/scene step; nonzero quest End requires its existing profile policy",
+      "next_state": "Narrative step committed; battle reconstruction pending",
+      "action": "Commit narrative checkpoint before publish; rebuild owner/battle if this step requires it",
+      "commit_boundary": "Narrative Commit; distinct from final Quest reward",
+      "sources": [
+        "S04",
+        "S17",
+        "S18"
+      ],
+      "after": [
+        "L02"
+      ]
+    },
+    {
+      "id": "L04",
+      "profiles": [
+        "scenario",
+        "mission",
+        "raid"
+      ],
+      "event": "All selected entry prerequisites satisfied",
+      "required_state": "Required world actor and controller relation installed; point set current; Q no longer suppressing control; proper masks/loading handled",
+      "next_state": "Battle operable",
+      "action": "0014 controller-ready, loading0024 and Q-wait00EB have distinct consumers; no single ACK proves all",
+      "commit_boundary": "No new DB checkpoint for each visual ready tick",
+      "sources": [
+        "S10",
+        "S11"
+      ],
+      "after": [
+        "L02"
+      ]
+    },
+    {
+      "id": "L05",
+      "profiles": [
+        "scenario",
+        "mission",
+        "raid"
+      ],
+      "event": "Authoritative monster alive to HP0",
+      "required_state": "Distinct current run/spawn; ordinary configured defeat reward eligible",
+      "next_state": "Fallen monster, removal pending",
+      "action": "Create matching ground drops; submit new defeat XP batch/receipt and then005C/0034; preserve corpse removal phase",
+      "commit_boundary": "Drop existence transient; defeat XP durable on successful transaction",
+      "sources": [
+        "S04",
+        "S05",
+        "S06"
+      ],
+      "after": [
+        "L04"
+      ]
+    },
+    {
+      "id": "L06",
+      "profiles": [
+        "scenario",
+        "mission",
+        "raid"
+      ],
+      "event": "Fallen removal due",
+      "required_state": "All fallen actors required for clear have their remove messages queued this update or earlier",
+      "next_state": "Removal-queued clear candidate",
+      "action": "Order removal messages before clear-scene/open-exit publication; this is not a native Client animation ACK",
+      "commit_boundary": "Runtime/message ordering, separate from XP and final reward",
+      "sources": [
+        "S04",
+        "S05"
+      ],
+      "after": [
+        "L05"
+      ]
+    },
+    {
+      "id": "L07",
+      "profiles": [
+        "scenario",
+        "mission",
+        "raid"
+      ],
+      "event": "Group and required waves/boss satisfy clear",
+      "required_state": "No remaining required actor/wave; L06 satisfied; valid current run",
+      "next_state": "Committed clear state / pending clear scene",
+      "action": "Plan on isolated instance snapshot and publish after narrative Commit; internal portal may unlock but World waits for clear scene",
+      "commit_boundary": "Commit A: clear/narrative state, not Quest reward",
+      "sources": [
+        "S04",
+        "S17",
+        "S05"
+      ],
+      "after": [
+        "L06"
+      ]
+    },
+    {
+      "id": "L08",
+      "profiles": [
+        "scenario"
+      ],
+      "event": "Clear-scene dispatch",
+      "required_state": "Current narrative selector; Q119 final map635 clear scene4; World portal still gated",
+      "next_state": "Clear Q running",
+      "action": "Run installed finite narrative; account for input suppression; Q End/003F alone is not open-point or victory ACK",
+      "commit_boundary": "No reward solely for Q End",
+      "sources": [
+        "S04",
+        "S11",
+        "S18"
+      ],
+      "after": [
+        "L07"
+      ]
+    },
+    {
+      "id": "L09",
+      "profiles": [
+        "scenario"
+      ],
+      "event": "Matching clear-scene completion accepted",
+      "required_state": "Active accepted step and profile matched; do not treat generic seen-skip003F as setter success",
+      "next_state": "Clear-scene narrative committed",
+      "action": "Commit completion of the narrative step before rebuilding battle",
+      "commit_boundary": "Commit B: scene-completion checkpoint, distinct from Commit A and final reward",
+      "sources": [
+        "S04",
+        "S17",
+        "S18"
+      ],
+      "after": [
+        "L08"
+      ]
+    },
+    {
+      "id": "L10",
+      "profiles": [
+        "scenario"
+      ],
+      "event": "Post-clear narrative Commit succeeded",
+      "required_state": "L09 successful; retain authoritative flags and used interactions",
+      "next_state": "Rebuilt field generation",
+      "action": "Rebuild same logical map and bind required actors/controller; publish one complete0027 using current flags",
+      "commit_boundary": "Runtime publication derived from committed state; 0012/0027 clear/replace point set",
+      "sources": [
+        "S04",
+        "S10"
+      ],
+      "after": [
+        "L09"
+      ]
+    },
+    {
+      "id": "L11",
+      "profiles": [
+        "scenario"
+      ],
+      "event": "Rebuild/point/ready handoff complete",
+      "required_state": "Current-generation point exists; clear-scene finished; source actor alive and interaction eligible",
+      "next_state": "Exit usable",
+      "action": "Existing flow can already publish enabled point; new finite-after-rebuild feature must suppress premature opening and bind generation explicitly",
+      "commit_boundary": "No point setter changes DB progression; no added token in native wire",
+      "sources": [
+        "S04",
+        "S10",
+        "S19"
+      ],
+      "after": [
+        "L10"
+      ]
+    },
+    {
+      "id": "L12",
+      "profiles": [
+        "scenario",
+        "mission",
+        "raid"
+      ],
+      "event": "Player Z on enabled normal exit",
+      "required_state": "Current run/map/key, distance, alive and authored prerequisites validated",
+      "next_state": "Next node",
+      "action": "Retire old unpicked drops; instantiate next node; preserve supported owner state only under applicable profile",
+      "commit_boundary": "No final reward; accumulated clear XP remains transient until success",
+      "sources": [
+        "S04",
+        "S05",
+        "S06"
+      ],
+      "after": [
+        "L04"
+      ]
+    },
+    {
+      "id": "L13",
+      "profiles": [
+        "scenario",
+        "mission",
+        "raid"
+      ],
+      "event": "Space pickup intent C2S0007 high bit",
+      "required_state": "Nearby eligible reachable drop; capacity and product rules; no targetID in request",
+      "next_state": "Claim committed or unchanged ground drop",
+      "action": "Choose configured eligible target; atomic bag/claim transaction before002C/001A; leave object on failed/full bag",
+      "commit_boundary": "Persistent claim identity; one picked item is not deferred until final clear",
+      "sources": [
+        "S06"
+      ],
+      "after": [
+        "L05"
+      ]
+    },
+    {
+      "id": "L14",
+      "profiles": [
+        "scenario"
+      ],
+      "event": "Z on final Result exit",
+      "required_state": "All authored final conditions plus World interaction admission satisfied",
+      "next_state": "Scenario result presentation",
+      "action": "Send0022/type0 using current outcome candidate; remove remaining ground objects before retiring their state",
+      "commit_boundary": "Result preview is not final Quest transaction; prior defeat XP remains durable",
+      "sources": [
+        "S04",
+        "S09",
+        "S13"
+      ],
+      "after": [
+        "L11"
+      ]
+    },
+    {
+      "id": "L15",
+      "profiles": [
+        "scenario"
+      ],
+      "event": "C2S0033 result return intent",
+      "required_state": "Current Scenario result phase; no Quest/Map field in the2byte request",
+      "next_state": "Return flow accepted",
+      "action": "Resolve destination and return scenes from active MEF context; optional new-character popup has its own identified button branch",
+      "commit_boundary": "Do not infer reward/role grant from button or popup close",
+      "sources": [
+        "S09",
+        "S13"
+      ],
+      "after": [
+        "L14"
+      ]
+    },
+    {
+      "id": "L16",
+      "profiles": [
+        "scenario"
+      ],
+      "event": "Configured return scene completed",
+      "required_state": "Accepted return phase; Q119 return scene5 / Town1",
+      "next_state": "Final completion candidate",
+      "action": "Validate current narrative/lease/revision and beneficiary; read needed return asset snapshots before final Commit",
+      "commit_boundary": "Completion precondition; no extra reward for unrelated scene report",
+      "sources": [
+        "S04",
+        "S13",
+        "S15"
+      ],
+      "after": [
+        "L15"
+      ]
+    },
+    {
+      "id": "L17",
+      "profiles": [
+        "scenario"
+      ],
+      "event": "Final normal completion transaction succeeds",
+      "required_state": "Valid Quest outcome, account, beneficiary, compatible graph/reward policy, return completion",
+      "next_state": "Quest completed and reward receipt saved",
+      "action": "Atomic narrative progress + ScenarioCompletion + XP ledger + effective wallet/skill practice; publish actual receipt",
+      "commit_boundary": "Q119 new defeat68 already committed; final10+20+5850=5880; first full total5948",
+      "sources": [
+        "S04",
+        "S12",
+        "S13",
+        "S20"
+      ],
+      "after": [
+        "L16"
+      ]
+    },
+    {
+      "id": "L18",
+      "profiles": [
+        "scenario"
+      ],
+      "event": "Return town initialization",
+      "required_state": "Saved assets read; if final transaction changed currency use committed balance",
+      "next_state": "Town operable and next eligible Quest visible",
+      "action": "Map then saved bag/equipment/hotkeys/cooldown/Quest and actual currency snapshot before0024; one correct currency snapshot",
+      "commit_boundary": "Read-before-Commit asset preparation is not stale balance publication",
+      "sources": [
+        "S15",
+        "S13"
+      ],
+      "after": [
+        "L17"
+      ]
+    },
+    {
+      "id": "L19",
+      "profiles": [
+        "mission"
+      ],
+      "event": "Z on final Result exit",
+      "required_state": "Required final boss and all required actors/waves cleared/removed; authored final exit admitted",
+      "next_state": "Mission reward committed and type2 result shown",
+      "action": "Commit clear+completion once per run; use existing defeat receipts; result+8stage,+12defeat,+20actual total",
+      "commit_boundary": "Do not re-award defeat XP in final transaction; repeated fresh runs can earn",
+      "sources": [
+        "S05",
+        "S22"
+      ],
+      "after": [
+        "L04"
+      ]
+    },
+    {
+      "id": "L20",
+      "profiles": [
+        "mission"
+      ],
+      "event": "C2S0019 direct result confirm branch",
+      "required_state": "Resulttype2 with chosen+24=2 branch; current instance accepted",
+      "next_state": "Original party lobby or town",
+      "action": "Preserve party as configured; for single town send0069 then wait0043/type10 before0012/bag0029; lobby publishes map+bag in one return batch",
+      "commit_boundary": "Rotate Case only after normal successful committed clear; no mainline advancement",
+      "sources": [
+        "S05",
+        "S22"
+      ],
+      "after": [
+        "L19"
+      ]
+    },
+    {
+      "id": "L21",
+      "profiles": [
+        "scenario",
+        "mission",
+        "raid"
+      ],
+      "event": "Owner HP reaches0",
+      "required_state": "Current authoritative owner",
+      "next_state": "Downed; movement and ordinary mechanisms/exits gated",
+      "action": "Clear current/saved intent; ignore downed movement; keep death action and same encounter",
+      "commit_boundary": "Death is not GroupCleared or Quest success",
+      "sources": [
+        "S07",
+        "S15"
+      ],
+      "after": [
+        "L04"
+      ]
+    },
+    {
+      "id": "L22",
+      "profiles": [
+        "scenario",
+        "mission",
+        "raid"
+      ],
+      "event": "Valid revival use accepted",
+      "required_state": "Owner down, owned eligible product, inventory and unexpired UTC cooldown policy",
+      "next_state": "Same-position alive owner; encounter retained",
+      "action": "Atomic consume+group deadline; full HP/SP/MP for183/248 policy; clear old input; new movement required; hazard timer restarts next world update",
+      "commit_boundary": "Product183 group2/300sec;248 group3/4sec; persistence spans relog/map/restart",
+      "sources": [
+        "S07",
+        "S05"
+      ],
+      "after": [
+        "L21"
+      ],
+      "client_input_scope": "Revival service acceptance is distinct from UI reachability. Bag-direct class26 selected native branch accepts modes4/9; it does not establish Scenario mode2 direct-bag use. Mainline quickslot/visible control remains selected-v2 observation."
+    },
+    {
+      "id": "L23",
+      "profiles": [
+        "mission"
+      ],
+      "event": "Existing005D/00 leave admitted",
+      "required_state": "Normal ordinary dungeon leave adapter; actual in-dungeon UI emission still pending v2",
+      "next_state": "Town; abandoned run retired",
+      "action": "Keep picked bag items and committed defeat XP; remove unpicked ground objects; discard uncommitted clear/completion; unfinished rotation Case retained",
+      "commit_boundary": "Current run does not receive final settlement; new run restarts entry",
+      "sources": [
+        "S05",
+        "S06"
+      ],
+      "after": [
+        "L04"
+      ]
+    },
+    {
+      "id": "L24",
+      "profiles": [
+        "scenario"
+      ],
+      "event": "Logout/relogin then normal reentry",
+      "required_state": "Saved account/mainline/ownership/lease prerequisites; no battle checkpoint feature enabled",
+      "next_state": "Square then village NPC restarts unfinished Quest",
+      "action": "Restore durable assets/completed mainline, not enemy set, HP snapshot or Lua VM; new instance/version validated",
+      "commit_boundary": "Committed defeat XP/loot/cooldown retained; completed prefix preserved",
+      "sources": [
+        "S15",
+        "S04",
+        "S13"
+      ],
+      "after": [
+        "L01"
+      ]
+    },
+    {
+      "id": "L25",
+      "profiles": [
+        "raid"
+      ],
+      "event": "Normal final Raid success",
+      "required_state": "Configured Stage50..52 final conditions satisfied; success not already settled",
+      "next_state": "Durable pending book reward then type3 success",
+      "action": "Persist account+run claim before result;0019returnSquare claims into bag, fullbag retains claim; retries/relogin deduplicate",
+      "commit_boundary": "Books2274/2275/2276 each per-run pending claim; success/failure exclusive",
+      "sources": [
+        "S08"
+      ],
+      "after": [
+        "L04"
+      ]
+    },
+    {
+      "id": "L26",
+      "profiles": [
+        "raid"
+      ],
+      "event": "Single Raid ownerdown then0031/0 or timeout",
+      "required_state": "Downed prompt10sec; successful revive may cancel before failure commit",
+      "next_state": "Committed Raid failure and resulttype3+8=0",
+      "action": "Failure transaction once perrun, floor0 CP deduction140 after dailyrefresh policy;003A closes prompt;0019returnsSquare",
+      "commit_boundary": "No success reward; activequit/disconnect policy remains distinct and unclosed",
+      "sources": [
+        "S08"
+      ],
+      "after": [
+        "L21"
+      ]
+    }
+  ],
+  "result_profiles": [
+    {
+      "id": "scenario_result",
+      "result_type": 0,
+      "result_direction": "S2C",
+      "result_opcode": "0022",
+      "return_opcode": "0033",
+      "return_direction": "C2S",
+      "return_bytes": 2,
+      "client_result_is_reward_commit": false,
+      "publication_policy": "May preview final Quest/SkillExp before return scene transaction; prior defeat receipts are already committed",
+      "minimum_observed_result_bytes": 22,
+      "extra": "Nonzero application+9 selects CEmployNewCharacter popup; its recognized click returns0033 when context+5F4C!=1; mode1 uses local Tutorial query"
+    },
+    {
+      "id": "mission_result",
+      "result_type": 2,
+      "result_direction": "S2C",
+      "result_opcode": "0022",
+      "return_opcode": "0019",
+      "return_direction": "C2S",
+      "return_bytes": 2,
+      "client_result_is_reward_commit": false,
+      "publication_policy": "After actual final run receipt; +8stage,+12defeat,+16party,+20total,+26rank; +24=2 selects direct confirm profile",
+      "minimum_observed_result_bytes": 30,
+      "extra": "Total is separately read; Client does not sum the displayed columns in this branch"
+    },
+    {
+      "id": "raid_result",
+      "result_type": 3,
+      "result_direction": "S2C",
+      "result_opcode": "0022",
+      "return_opcode": "0019",
+      "return_direction": "C2S",
+      "return_bytes": 2,
+      "client_result_is_reward_commit": false,
+      "publication_policy": "Success pending claim or failure CP receipt committed before publication",
+      "minimum_observed_result_bytes": 14,
+      "extra": "Success+8=1,+10cardCount,+14five-byte reward rows; one-row candidate19bytes. Failure+8=0 no reward rows."
+    }
+  ],
+  "q119_clear_handoff": {
+    "ordered_transition_ids": [
+      "L05",
+      "L06",
+      "L07",
+      "L08",
+      "L09",
+      "L10",
+      "L11"
+    ],
+    "pre_rebuild_setter_survives": false,
+    "default_after_rebuild_points_use_committed_flags": true,
+    "new_finite_after_rebuild_adapter_is_existing_implementation": false,
+    "commit_A": "clear/narrative checkpoint before selected clear scene",
+    "commit_B": "accepted clear-scene completion before rebuild",
+    "final_reward_is_neither_A_nor_B": true,
+    "finite_extension": "Root finite-handoff proposal must bind new generation, avoid pre-enabled target and handle persistent seen branch; no generic event bridge required"
+  },
+  "item_use_direction_distinction": {
+    "S2C_0021": "ground_drop_snapshot_rows",
+    "C2S_0021": "bag_direct_use",
+    "S2C_0022": "result_mode",
+    "C2S_0022": "quickslot_use"
+  },
+  "persistence_policy": {
+    "mid_battle_reconnect": "restart_unfinished_instance",
+    "lua_vm_is_persistent_checkpoint": false,
+    "durable": [
+      "completed mainline prefix/revision",
+      "defeat experience receipts",
+      "claimed loot/inventory",
+      "account item cooldown UTC deadline",
+      "final quest rewards and skill practice",
+      "ordinary quest objective journal",
+      "Raid pending reward and success/failure receipt"
+    ],
+    "instance_only": [
+      "unpicked ground objects",
+      "uncommitted clear/completion XP",
+      "current monster set/node runtime cursor",
+      "optional same-run owner continuity"
+    ],
+    "optimization": "Batch new defeat events within existing update receipt; keep atomic grant/claim boundaries. No silent end-only durability or per-frame DB writes."
+  },
+  "normal_journeys": {
+    "q119": [
+      "NPC10047: intro scene1",
+      "Field26/Case107: maps632,633,634,635 / local nodes1..4",
+      "Entry scenes2 atmap632 and3 atmap635",
+      "Map635 clear scene4: L05..L11",
+      "Z final Result: type0 then0033",
+      "Return scene5, Town1",
+      "Final transaction5880XP after already committed68; optional900LeeLoo and40SkillExp per enabled policy",
+      "Return asset/Quest snapshots, nextQuest120 eligibility"
+    ],
+    "ordinary_case693": [
+      "Normal single leader lobby:0064Stage462;009Aselection;0008start",
+      "005F/type4;0038Stage462/Case693;0012map;0049node;actors/binding/points;ready/loading phases",
+      "Node10→1→3→5or6→4→2, maps3430→3431→3432→3433or3435→3437→3438",
+      "Per-kill56XP durable across route; three possible guaranteed scroll units on fullnormalroute",
+      "Final admitted portal commits20XP; type2 columns20/56/76",
+      "0019 result return restores sameparty lobby orsingle town andinventory",
+      "Rotation advances only after committed success; leave preserves picked/defeat and restarts unfinishedCase"
+    ]
+  },
+  "player_progress": [
+    {
+      "id": "F01",
+      "player_function": "進關、載圖與恢復操作",
+      "priority": "P0",
+      "analysis": "Complete for the declared level-lifecycle scope; precise unresolved interfaces remain listed",
+      "existing": "原生分層介面與既有正常入場流程存在",
+      "missing": "選定v2整條入場與Q收尾畫面／操作驗收；新內容需綁相容profile",
+      "optimization": "重用相同field/controller時保留必要重綁；一次完整點快照",
+      "sources": [
+        "S10",
+        "S11",
+        "S15"
+      ],
+      "new_runtime_pass_claim": false
+    },
+    {
+      "id": "F02",
+      "player_function": "清完怪後播劇情、再開門",
+      "priority": "P0",
+      "analysis": "Complete for the declared level-lifecycle scope; precise unresolved interfaces remain listed",
+      "existing": "現有清場等移除排送、敘事提交、重建與0027契約",
+      "missing": "新增after-rebuild finite adapter需抑制早開點與綁generation；重複seen處理由根報告分析",
+      "optimization": "同generation才用單點delta；重建後僅一份完整點集合",
+      "sources": [
+        "S04",
+        "S17",
+        "S10"
+      ],
+      "new_runtime_pass_claim": false
+    },
+    {
+      "id": "F03",
+      "player_function": "主線通關、回村與領獎",
+      "priority": "P0",
+      "analysis": "Complete for the declared level-lifecycle scope; precise unresolved interfaces remain listed",
+      "existing": "Q119終點、返回劇情、固定/擊倒/清場/通關經驗與原子交易已接",
+      "missing": "新增內容綁既有結算服務；指定v2結果文字/回村控制驗收",
+      "optimization": "收據驅動UI；不把擊倒經驗再加一次",
+      "sources": [
+        "S04",
+        "S13",
+        "S15"
+      ],
+      "new_runtime_pass_claim": false
+    },
+    {
+      "id": "F04",
+      "player_function": "掉落與拾取保存",
+      "priority": "P0",
+      "analysis": "Complete for the declared level-lifecycle scope; precise unresolved interfaces remain listed",
+      "existing": "HP0掉落、Space意圖、單件claim、背包提交及離圖清理已接",
+      "missing": "外觀162缺對應特效與實際拾取觀感；新裝備掉落需正式內容",
+      "optimization": "同tick批次0021；每次有效拾取維持先提交再消失",
+      "sources": [
+        "S06"
+      ],
+      "new_runtime_pass_claim": false
+    },
+    {
+      "id": "F05",
+      "player_function": "換圖血魔與技能冷卻",
+      "priority": "P1",
+      "analysis": "Complete for the declared level-lifecycle scope; precise unresolved interfaces remain listed",
+      "existing": "普通副本承接；主線preserveOwnerAcrossNodes候選；絕對CD期限",
+      "missing": "Q119SC-01人測；連段/蓄氣/暫時增益/投射物跨圖未開放",
+      "optimization": "保留deadline與regen起點；重建首批資源比例一致",
+      "sources": [
+        "S04",
+        "S05"
+      ],
+      "new_runtime_pass_claim": false
+    },
+    {
+      "id": "F06",
+      "player_function": "一般副本練等與連刷",
+      "priority": "P1",
+      "analysis": "Complete for the declared level-lifecycle scope; precise unresolved interfaces remain listed",
+      "existing": "Case693–696八路正常離線結果56+20=76與持久入帳",
+      "missing": "指定v2選關、分支、出口、結算、回原隊伍驗收",
+      "optimization": "沿收據推進輪替；選關ID與map分離",
+      "sources": [
+        "S05",
+        "S03"
+      ],
+      "new_runtime_pass_claim": false
+    },
+    {
+      "id": "F07",
+      "player_function": "倒地與原地復活",
+      "priority": "P1",
+      "analysis": "Complete for the declared level-lifecycle scope; precise unresolved interfaces remain listed",
+      "existing": "普通/主線復活卷軸、帳號CD與原地繼續存在；Raid可續戰",
+      "missing": "指定v2動畫/可操作性；背包class26已核分支為mode4/9，不能宣稱主線mode2雙擊入口已閉；完全復活死亡懲罰效果未閉",
+      "optimization": "消耗+UTCdeadline同交易；新輸入恢復、完整危險區間隔",
+      "sources": [
+        "S07",
+        "S05",
+        "S08"
+      ],
+      "new_runtime_pass_claim": false
+    },
+    {
+      "id": "F08",
+      "player_function": "放棄、重登與繼續進度",
+      "priority": "P1",
+      "analysis": "Complete for the declared level-lifecycle scope; precise unresolved interfaces remain listed",
+      "existing": "普通005D/00可回村保存已領資產/XP；主線重登回廣場再重開未完任務",
+      "missing": "主線倒地退出按鈕/請求未證；副本內005D/00UI待實機；戰鬥中途續接未提供",
+      "optimization": "只保存已承諾業務checkpoint；若另開中途續接再設狀態版本",
+      "sources": [
+        "S05",
+        "S15"
+      ],
+      "new_runtime_pass_claim": false
+    },
+    {
+      "id": "F09",
+      "player_function": "挑戰成功獎勵與失敗結算",
+      "priority": "P2",
+      "analysis": "Complete for the declared level-lifecycle scope; precise unresolved interfaces remain listed",
+      "existing": "三本待領書與runId去重；單人倒地10秒、失敗CP140候選",
+      "missing": "實際提示/返回UI；主動退出/斷線CP政策；多人挑戰非此次單人契約",
+      "optimization": "先存待領權利再顯示；滿包保留，不丟獎勵",
+      "sources": [
+        "S08"
+      ],
+      "new_runtime_pass_claim": false
+    },
+    {
+      "id": "F10",
+      "player_function": "結果頁的招募角色視窗",
+      "priority": "P2",
+      "analysis": "Complete for the declared level-lifecycle scope; precise unresolved interfaces remain listed",
+      "existing": "本輪新閉合CEmployNewCharacter RTTI、按鈕、非mode1的0033",
+      "missing": "非該按鈕的關閉/取消未證；不由此宣告角色授予實作或人測完成",
+      "optimization": "選定合法角色；結果返回與角色持久授予各有契約",
+      "sources": [
+        "S09"
+      ],
+      "new_runtime_pass_claim": false
+    },
+    {
+      "id": "F11",
+      "player_function": "普通任務的目標與已完成進度",
+      "priority": "P2",
+      "analysis": "Complete for the declared level-lifecycle scope; precise unresolved interfaces remain listed",
+      "existing": "Accepted/Ready/目標計數與入場回填已有紀錄",
+      "missing": "每種新關卡目標要接真實事件；沒有泛用Lua任意目標上報",
+      "optimization": "共用事件索引及journal；不重造任務存檔",
+      "sources": [
+        "S14",
+        "S13"
+      ],
+      "new_runtime_pass_claim": false
+    },
+    {
+      "id": "F12",
+      "player_function": "MEF減少逐關程式及表現命令",
+      "priority": "P2",
+      "analysis": "Complete for the declared level-lifecycle scope; precise unresolved interfaces remain listed",
+      "existing": "Server事件引擎與Client有限Q/native表現能力可組合",
+      "missing": "新內容compiler/adapter與相同正常內容量測；本輪無CPU/封包節省實測",
+      "optimization": "載入時編譯索引、單次選finite內容、收據批次發布",
+      "sources": [
+        "S17",
+        "S18",
+        "S19"
+      ],
+      "new_runtime_pass_claim": false
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "schema": "MEF_LEVEL_SPATIAL_REMEDIATION_V1",
+  "classification": "ANALYZED_NOT_APPLIED_SERVER_MEF_AUTHORING_CANDIDATE",
+  "source": "design/scenario-content/branch-example.scenario.json",
+  "preserve": ["definition identity", "node/map identity", "exit category/key", "branch actions/targetNode", "monster models", "all non-coordinate properties"],
+  "purpose": "Replace ten blocked authored centers and one remote but walkable spawn with a coherent four-node geometry example. This does not select an active release or alter the fixed two-map mainline adapter.",
+  "nodes": [
+    {"node": 1, "map": 191, "spawn": {"x": 418, "y": 385}, "portal": {"x": 430, "y": 385}, "alternative_portals": [{"x": 418, "y": 373}], "encounters": [{"x": 426, "y": 385}]},
+    {"node": 2, "map": 192, "spawn": {"x": 379, "y": 369}, "portal": {"x": 391, "y": 369}, "alternative_portals": [], "encounters": [{"x": 385, "y": 369}]},
+    {"node": 3, "map": 193, "spawn": {"x": 377.5, "y": 315.5}, "portal": {"x": 377.5, "y": 307.5}, "alternative_portals": [], "encounters": [{"x": 377.5, "y": 291.5}]},
+    {"node": 4, "map": 194, "spawn": {"x": 383.5, "y": 279.5}, "portal": {"x": 383.5, "y": 271.5}, "alternative_portals": [], "encounters": [{"x": 383.5, "y": 255.5}]}
+  ],
+  "acceptance": [
+    "Every proposed center is in map bounds, has zero layer-0/1 union blockage, and belongs to its spawn's four-neighbor component.",
+    "Every spawn-to-monster and spawn-to-exit segment has zero blocked samples at maximum spacing 0.25.",
+    "Every exit radius-3 disk has zero blocked sampled points at spacing 0.25; this is an authored placement check, not continuous or actor-radius proof.",
+    "The two node-1 exit disks do not overlap at Server radius and preserve distinct keys and branch destinations.",
+    "Deployment, if later selected, uses the general branch-capable adapter. The fixed two-node Phindos adapter is not broadened by this candidate.",
+    "Client camera visibility, actual Z selection and ordinary play remain a release acceptance item, separate from this static analysis."
+  ],
+  "barrier_policy_choices": [
+    {
+      "choice": "keep_as_local_obstacle",
+      "recommended_for_current_q119_candidate": true,
+      "description": "Keep the existing twelve-cell obstacle and describe it accurately. The exit remains locked by its instance flag even if the player walks around the rectangle.",
+      "acceptance": ["The overlay blocks the stated cells until the flag is committed.", "The exit is absent from OpenExitKeys until its authoritative conditions pass.", "Moving around the rectangle is allowed and does not commit a transfer or reward.", "The marker is a portal-style indicator, not a promised three-dimensional gate."]
+    },
+    {
+      "choice": "author_a_sealing_gate",
+      "recommended_for_current_q119_candidate": false,
+      "description": "If the intended player experience is a physically sealed corridor, author a gate at an actual choke point and establish a separate mesh/collision integration contract.",
+      "acceptance": ["With the gate closed, spawn and the protected destination are in different components under the full selected overlay.", "The opening producer and every mandatory pre-clear monster/region remain on the reachable side.", "With the flag open, a valid route reaches the exit; overlapping barriers require every covering flag.", "Any manual/automatic exit activation region cannot be used from the wrong side under the selected interaction/LOS policy.", "Client-visible mesh state and Client movement collision are explicitly matched to Server collision before describing it as a solid door."]
+    }
+  ]
+}

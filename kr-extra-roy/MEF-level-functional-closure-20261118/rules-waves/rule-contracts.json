@@ -1,0 +1,472 @@
+{
+  "schema": "MEF_LEVEL_RULE_SEMANTIC_CONTRACTS_V1",
+  "baseline": "09799b117f01e577be56dee3e909e1cde25b855f",
+  "interpretation": "MEF includes Server-executed authored rules. NOT_NATIVE_MEF is provenance, not exclusion from MEF development. This file closes analysis of documented present behavior; it does not assert new runtime implementation.",
+  "rule_events": [
+    "Entry",
+    "GroupCleared",
+    "InteractZ"
+  ],
+  "rule_actions": [
+    "SpawnGroup",
+    "UnlockPortal",
+    "NextNode",
+    "Result"
+  ],
+  "signal_events": [
+    "GroupCleared",
+    "RegionEntered",
+    "CheckpointInteracted",
+    "ClearDelayElapsed",
+    "WaveCleared",
+    "WaveHealthReached",
+    "NodeDelayElapsed",
+    "RegionHeld",
+    "BossDefeated"
+  ],
+  "features": [
+    {
+      "id": "RULE-01",
+      "player_feature": "進場生成第一批敵人",
+      "schema_pointers": [
+        "/$defs/rule",
+        "/$defs/node/properties/encounters"
+      ],
+      "configured_coverage": {
+        "nodes": 399,
+        "initial_actor_occurrences": 868
+      },
+      "existing_engine_evidence": "DOCUMENTED_IMPLEMENTATION_NOT_RERUN",
+      "execution_location": "SERVER_EXECUTED_MEF_RULES",
+      "contracts": [
+        "Entry → SpawnGroup 是每節點唯一入場規則。",
+        "encounter aiProfile 未填或 null 繼承 node；生成ID與模型ID／波次ID分開。",
+        "換波沿用同一combat玩家；入場初始空場另外需非空後續波。"
+      ],
+      "sources": [
+        "design/scenario-content/local-scenario-definition.schema.json",
+        "governance/s00-iterations/S00-20261110-SEQUENTIAL-ENCOUNTER-WAVES.md"
+      ]
+    },
+    {
+      "id": "RULE-02",
+      "player_feature": "清怪後依序增援",
+      "schema_pointers": [
+        "/$defs/node/properties/reinforcements",
+        "/$defs/wave"
+      ],
+      "configured_coverage": {
+        "waves": 18
+      },
+      "existing_engine_evidence": "DOCUMENTED_IMPLEMENTATION_NOT_RERUN",
+      "execution_location": "SERVER_EXECUTED_MEF_RULES",
+      "contracts": [
+        "按陣列順序；當前聚合活怪清空後起算 delay。",
+        "delay=0 可在同次 Poll 末尾生成，但已結算命中不追溯傷害新怪。",
+        "定時波新增活怪會讓順序波重新等待聚合清空。"
+      ],
+      "sources": [
+        "governance/s00-iterations/S00-20261110-SEQUENTIAL-ENCOUNTER-WAVES.md",
+        "governance/s00-iterations/S00-20261111-TIMED-REINFORCEMENTS.md"
+      ]
+    },
+    {
+      "id": "RULE-03",
+      "player_feature": "戰鬥仍在進行時定時增援",
+      "schema_pointers": [
+        "/$defs/node/properties/timedReinforcements",
+        "/$defs/wave"
+      ],
+      "configured_coverage": {
+        "waves": 9
+      },
+      "existing_engine_evidence": "DOCUMENTED_IMPLEMENTATION_NOT_RERUN",
+      "execution_location": "SERVER_EXECUTED_MEF_RULES",
+      "contracts": [
+        "各波從遭遇建立起算，不等上一波清空。",
+        "同次 Poll 先處理到期定時波，依陣列順序，再檢查順序波。",
+        "某定時波等區域不會阻擋其他已符合條件的定時波。",
+        "到期僅在下一個 eligible Poll 消費，沒有畫面逐幀準時保證。"
+      ],
+      "sources": [
+        "governance/s00-iterations/S00-20261111-TIMED-REINFORCEMENTS.md"
+      ]
+    },
+    {
+      "id": "RULE-04",
+      "player_feature": "開機關或走到位置後才增援",
+      "schema_pointers": [
+        "/$defs/wave/properties/requiredFlags",
+        "/$defs/wave/properties/activationRegion"
+      ],
+      "configured_coverage": {
+        "flag_gated_waves": 5,
+        "region_gated_waves": 7
+      },
+      "existing_engine_evidence": "DOCUMENTED_IMPLEMENTATION_NOT_RERUN",
+      "execution_location": "SERVER_EXECUTED_MEF_RULES",
+      "contracts": [
+        "所有旗標、原計時門檻與當下區域判定是 AND。",
+        "延遲先到、旗標後到不重起算 delay。",
+        "待生成必要波阻止 GroupCleared；依賴自己／未可達波／整場清場的波次不成立。",
+        "區域是目前 Server 位姿的含邊界圓，非穿越線段或記住曾經進入。"
+      ],
+      "sources": [
+        "design/scenario-content/REINFORCEMENT-FLAGS.md",
+        "design/scenario-content/REGION-WAVE-AUTHORING.md",
+        "design/scenario-content/WAVE-CLEAR-SIGNALS.md"
+      ]
+    },
+    {
+      "id": "RULE-05",
+      "player_feature": "入場先等待，稍後才出第一波",
+      "schema_pointers": [
+        "/$defs/node/anyOf",
+        "/$defs/node/properties/encounters"
+      ],
+      "configured_coverage": {
+        "empty_initial_nodes": 0,
+        "named_wave_required_boss_nodes": 0
+      },
+      "existing_engine_evidence": "DOCUMENTED_IMPLEMENTATION_NOT_RERUN",
+      "execution_location": "SERVER_EXECUTED_MEF_RULES",
+      "contracts": [
+        "encounters 可為空，至少一個非空後續波。",
+        "空初始群不算 WaveCleared 或 WaveHealthReached 的生成波。",
+        "初始空場的第一順序波 delay 從首次戰鬥更新起算。",
+        "公開JSON無此配置；既有文檔記錄私有延後Boss離線案例，不等於未實作。"
+      ],
+      "sources": [
+        "design/scenario-content/REINFORCEMENT-FLAGS.md"
+      ]
+    },
+    {
+      "id": "RULE-06",
+      "player_feature": "只清掉特定一波就觸發機關",
+      "schema_pointers": [
+        "/$defs/signal"
+      ],
+      "configured_coverage": {
+        "signal_event": "WaveCleared",
+        "occurrences": 2
+      },
+      "existing_engine_evidence": "DOCUMENTED_IMPLEMENTATION_NOT_RERUN",
+      "execution_location": "SERVER_EXECUTED_MEF_RULES",
+      "contracts": [
+        "省略或 null waveId 指初始波；具名只引用本節點波次，大小寫精確。",
+        "已生成波的所有 Server HP=0 時鎖存；其他波活怪不影響此旗標。",
+        "傷害結算後、後續增援前記錄；不等同整場清場。"
+      ],
+      "sources": [
+        "design/scenario-content/WAVE-CLEAR-SIGNALS.md"
+      ]
+    },
+    {
+      "id": "RULE-07",
+      "player_feature": "怪群血量下降後進下一階段",
+      "schema_pointers": [
+        "/$defs/signal"
+      ],
+      "configured_coverage": {
+        "signal_event": "WaveHealthReached",
+        "occurrences": 1
+      },
+      "existing_engine_evidence": "DOCUMENTED_IMPLEMENTATION_NOT_RERUN",
+      "execution_location": "SERVER_EXECUTED_MEF_RULES",
+      "contracts": [
+        "healthPercent 為1..99；觀察指定已生成波。",
+        "sum(currentHP)/sum(maximumHP) 到或低於門檻觸發一次；已死亡成員仍在最大血量分母。",
+        "傷害後、增援前；需與尚存原怪並行出怪時選定時波，順序波仍等聚合活怪清空。"
+      ],
+      "sources": [
+        "design/scenario-content/WAVE-HEALTH-SIGNALS.md"
+      ]
+    },
+    {
+      "id": "RULE-08",
+      "player_feature": "擊倒指定頭目後變化",
+      "schema_pointers": [
+        "/$defs/node/properties/requiredBoss",
+        "/$defs/signal"
+      ],
+      "configured_coverage": {
+        "signal_event": "BossDefeated",
+        "occurrences": 0,
+        "required_boss_nodes": 56
+      },
+      "existing_engine_evidence": "DOCUMENTED_IMPLEMENTATION_NOT_RERUN",
+      "execution_location": "SERVER_EXECUTED_MEF_RULES",
+      "contracts": [
+        "requiredBoss HP 歸零時設定；具名 wave 依該波識別。",
+        "未生成頭目的死亡不得作自身生成前提。",
+        "公開JSON沒有 BossDefeated signal；既有Q119合成及延後Boss離線紀錄不能冒充此輪實機。"
+      ],
+      "sources": [
+        "design/scenario-content/REINFORCEMENT-FLAGS.md"
+      ]
+    },
+    {
+      "id": "RULE-09",
+      "player_feature": "全部敵群完成後開放出口評估",
+      "schema_pointers": [
+        "/$defs/rule",
+        "/$defs/signal"
+      ],
+      "configured_coverage": {
+        "default_unlock_rules": 399,
+        "signal_event": "GroupCleared",
+        "occurrences": 3
+      },
+      "existing_engine_evidence": "DOCUMENTED_IMPLEMENTATION_NOT_RERUN",
+      "execution_location": "SERVER_EXECUTED_MEF_RULES",
+      "contracts": [
+        "所有必要波已生成且倒下，保留剩餘投射物及既有勝利等待。",
+        "目前主線／一般副本還等倒地怪物移除訊息列入更新，再提交清場。",
+        "UnlockPortal 是評估每出口條件的階段；不代表所有點同時開啟，也不自動換圖。"
+      ],
+      "sources": [
+        "design/scenario-content/WAVE-CLEAR-SIGNALS.md",
+        "design/scenario-content/STORY-SCENARIO-OVERRIDES.md",
+        "governance/s00-iterations/S00-20261111-CONDITIONAL-EXIT-CONTRACT.md"
+      ]
+    },
+    {
+      "id": "RULE-10",
+      "player_feature": "走進區域後記住一次",
+      "schema_pointers": [
+        "/$defs/signal"
+      ],
+      "configured_coverage": {
+        "signal_event": "RegionEntered",
+        "occurrences": 0
+      },
+      "existing_engine_evidence": "DOCUMENTED_IMPLEMENTATION_NOT_RERUN",
+      "execution_location": "SERVER_EXECUTED_MEF_RULES",
+      "contracts": [
+        "節點已進入且當前 Server 位姿在指定區域即可鎖存，可早於清怪。",
+        "與 wave/exit 的即時 activationRegion 不同；flag設立後離開仍保留。",
+        "公開JSON無此signal；不把0配置誤寫成引擎缺功能。"
+      ],
+      "sources": [
+        "governance/s00-iterations/S00-20261111-CONDITIONAL-EXIT-CONTRACT.md"
+      ]
+    },
+    {
+      "id": "RULE-11",
+      "player_feature": "入場戰鬥開放後倒數",
+      "schema_pointers": [
+        "/$defs/signal"
+      ],
+      "configured_coverage": {
+        "signal_event": "NodeDelayElapsed",
+        "occurrences": 2
+      },
+      "existing_engine_evidence": "DOCUMENTED_IMPLEMENTATION_NOT_RERUN",
+      "execution_location": "SERVER_EXECUTED_MEF_RULES",
+      "contracts": [
+        "主線從入場劇情完成提交、允許戰鬥開始；無劇情進場即開始；lab建立節點開始。",
+        "首次達門檻的戰鬥更新設flag，可同次更新觸發已符合的波。",
+        "清場劇情期間不派送，經過時間仍算；每節點重新起算，已鎖存flag跨圖保留。"
+      ],
+      "sources": [
+        "design/scenario-content/NODE-DELAY-SIGNALS.md"
+      ]
+    },
+    {
+      "id": "RULE-12",
+      "player_feature": "清場完成後再等待開門",
+      "schema_pointers": [
+        "/$defs/signal"
+      ],
+      "configured_coverage": {
+        "signal_event": "ClearDelayElapsed",
+        "occurrences": 3
+      },
+      "existing_engine_evidence": "DOCUMENTED_IMPLEMENTATION_NOT_RERUN",
+      "execution_location": "SERVER_EXECUTED_MEF_RULES",
+      "contracts": [
+        "先清場，再以該節點清場後第一次有效 Server 玩家位置初始化原點。",
+        "主線原點在清場劇情與 Portal 提交後；等待存檔及清場演出時間不算。",
+        "到期後首次正常更新鎖存；clone保留原點，未提交副本不改原實例。"
+      ],
+      "sources": [
+        "design/scenario-content/CLEAR-DELAY-SIGNALS.md"
+      ]
+    },
+    {
+      "id": "RULE-13",
+      "player_feature": "持續站住一段時間才完成機關",
+      "schema_pointers": [
+        "/$defs/signal"
+      ],
+      "configured_coverage": {
+        "signal_event": "RegionHeld",
+        "occurrences": 1
+      },
+      "existing_engine_evidence": "DOCUMENTED_IMPLEMENTATION_NOT_RERUN",
+      "execution_location": "SERVER_EXECUTED_MEF_RULES",
+      "contracts": [
+        "首次觀察在區內起算，0.25..3600秒。",
+        "任一觀察到的出區，包括兩個tick之間移動報告／技能位移，重設未完成計時。",
+        "死亡或主線提交清場重設未完成計時；主線演出不計。",
+        "完成後flag鎖存，離開不撤銷。"
+      ],
+      "sources": [
+        "design/scenario-content/REGION-HOLD-SIGNALS.md"
+      ]
+    },
+    {
+      "id": "RULE-14",
+      "player_feature": "靠近機關並按Z",
+      "schema_pointers": [
+        "/$defs/signal",
+        "/$defs/interaction"
+      ],
+      "configured_coverage": {
+        "signal_event": "CheckpointInteracted",
+        "occurrences": 4,
+        "require_group_clear": 2,
+        "no_group_clear_requirement": 2,
+        "with_flag_prerequisites": 3
+      },
+      "existing_engine_evidence": "DOCUMENTED_IMPLEMENTATION_NOT_RERUN",
+      "execution_location": "SERVER_EXECUTED_MEF_RULES",
+      "contracts": [
+        "category1/key；Server檢查實例、節點、擁有actor、alive、enabled與當前位置。",
+        "requireGroupCleared 與 ALL requiredFlags 控制可用；成功設固定flag一次後停用。",
+        "不直接換圖／結算／永久存檔；3D槓桿或寶箱外觀需另接呈現。",
+        "使用互動flag通過出口，會連其必要前置flag納入下游保證。"
+      ],
+      "sources": [
+        "governance/s00-iterations/S00-20261111-MANUAL-INTERACTION-CONTRACT.md"
+      ]
+    },
+    {
+      "id": "RULE-15",
+      "player_feature": "逐個出口滿足條件才打開",
+      "schema_pointers": [
+        "/$defs/portal",
+        "/$defs/exitCondition"
+      ],
+      "configured_coverage": {
+        "default_exit_conditions": 12,
+        "alternative_exit_conditions": 2
+      },
+      "existing_engine_evidence": "DOCUMENTED_IMPLEMENTATION_NOT_RERUN",
+      "execution_location": "SERVER_EXECUTED_MEF_RULES",
+      "contracts": [
+        "清場 AND全部旗標 AND當下activationRegion。",
+        "按key鎖存打開，離開不關；授權用OpenExitKeys，PortalUnlocked僅至少一出口開。",
+        "玩家仍須在該出口半徑內明確互動；空間繞過屏障不替代出口flag。"
+      ],
+      "sources": [
+        "governance/s00-iterations/S00-20261111-CONDITIONAL-EXIT-CONTRACT.md"
+      ]
+    },
+    {
+      "id": "RULE-16",
+      "player_feature": "選擇岔路並在正確路線結算",
+      "schema_pointers": [
+        "/$defs/exit",
+        "/$defs/definition"
+      ],
+      "configured_coverage": {
+        "branch_nodes": 45,
+        "alternative_exits": 45,
+        "next_node_edges": 356,
+        "result_exits": 88
+      },
+      "existing_engine_evidence": "DOCUMENTED_IMPLEMENTATION_NOT_RERUN",
+      "execution_location": "SERVER_EXECUTED_MEF_RULES",
+      "contracts": [
+        "最多256節點、8出口／節點；所有預設及替代邊都要存在、無環、全由entry可達。",
+        "有key只選對應點且位置合格；無key選範圍內最近，等距取較小key。",
+        "story targetNode 為scenario陣列1-based位置，不是mapID／SourceNode。",
+        "合流旗標取每條入口保證交集；不可拿另一分支或未來producer補目前需求。"
+      ],
+      "sources": [
+        "governance/s00-iterations/S00-20261111-SCENARIO-BRANCH-CONTRACT.md",
+        "governance/s00-iterations/S00-20261111-CONDITIONAL-EXIT-CONTRACT.md",
+        "design/scenario-content/WAVE-CLEAR-SIGNALS.md"
+      ]
+    },
+    {
+      "id": "RULE-17",
+      "player_feature": "同一場保留機關狀態，重開一場重置",
+      "schema_pointers": [
+        "/$defs/signal",
+        "/$defs/definition"
+      ],
+      "configured_coverage": {
+        "signal_occurrences": 16,
+        "nodes_with_incoming_guaranteed_flags": 5
+      },
+      "existing_engine_evidence": "DOCUMENTED_IMPLEMENTATION_NOT_RERUN",
+      "execution_location": "SERVER_EXECUTED_MEF_RULES",
+      "contracts": [
+        "旗標同instance跨節點保留；放棄／新instance重置，未完成登出重開。",
+        "Fork複製flag、游標、計時；catalog／requiredFlags凍結，不共享可變實例狀態。",
+        "先在fork規劃，提交成功後發布游標與點位，未提交不推進原狀態。"
+      ],
+      "sources": [
+        "governance/s00-iterations/S00-20261111-CONDITIONAL-EXIT-CONTRACT.md",
+        "governance/s00-iterations/S00-20261111-SCENARIO-BRANCH-CONTRACT.md",
+        "design/scenario-content/CLEAR-DELAY-SIGNALS.md"
+      ]
+    },
+    {
+      "id": "RULE-18",
+      "player_feature": "劇情結束後仍看得到正確出口與機關",
+      "schema_pointers": [
+        "/$defs/portal",
+        "/$defs/interaction"
+      ],
+      "configured_coverage": {
+        "pre_registered_default_exits": 37
+      },
+      "existing_engine_evidence": "DOCUMENTED_IMPLEMENTATION_NOT_RERUN",
+      "execution_location": "SERVER_EXECUTED_MEF_RULES",
+      "contracts": [
+        "0027替換整份點集合；所有出口、互動、marker一次發布，不逐點追加。",
+        "只更新已登記點可用0048；清場劇情後重建，以當下旗標及已使用狀態重建。",
+        "舊分支契約曾禁止ClearScenes預登記；較新STORY-SCENARIO-OVERRIDES已記錄重建實作，不能沿用舊缺口。"
+      ],
+      "sources": [
+        "governance/s00-iterations/S00-20261111-SCENARIO-BRANCH-CONTRACT.md",
+        "governance/s00-iterations/S00-20261111-MANUAL-INTERACTION-CONTRACT.md",
+        "design/scenario-content/STORY-SCENARIO-OVERRIDES.md"
+      ]
+    }
+  ],
+  "limits": {
+    "nodes_per_definition": 256,
+    "extra_waves_combined_per_node": 31,
+    "actors_total_per_node": 255,
+    "exits_per_node": 8,
+    "manual_interactions_per_node": 8,
+    "unique_flags_per_definition": 64,
+    "flags_per_requirement": 16,
+    "wave_delay_seconds_inclusive": [
+      0,
+      3600
+    ],
+    "signal_delay_seconds_exclusive_min_inclusive_max": [
+      0,
+      3600
+    ],
+    "region_hold_seconds_inclusive": [
+      0.25,
+      3600
+    ]
+  },
+  "not_expressed_by_this_schema": [
+    "arbitrary_script_or_callback",
+    "cyclic_or_random_weighted_route",
+    "repeatable_mutable_counter",
+    "inventory_or_quest_item_predicate",
+    "cross_instance_party_synchronization",
+    "mid_encounter_persistent_checkpoint"
+  ],
+  "runtime_test_performed": false,
+  "human_play_verified": false
+}

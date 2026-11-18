@@ -2,7 +2,7 @@
 
 **2026-11-18 使用者最新指示；適用 `extra/roy1` 的後續 MEF 分析與規劃。**
 
-本頁是目前研究入口。完整重新分析在 [MEF-server-provided-capabilities-20261118](MEF-server-provided-capabilities-20261118/README.md)。歷史包保留原始證據與當時結論；遇到「是否必須還原官方 MEF」「Server 責任是否排除 MEF」「哪些項目阻塞所有自製內容」的方向衝突，依本頁與本輪報告解讀。
+本頁是目前研究入口。最新關卡功能分析在 [MEF-level-functional-closure-20261118](MEF-level-functional-closure-20261118/README.md)；能力與執行位置基礎見 [MEF-server-provided-capabilities-20261118](MEF-server-provided-capabilities-20261118/README.md)。歷史包保留原始證據與當時結論；遇到「是否必須還原官方 MEF」「Server 責任是否排除 MEF」「哪些項目阻塞所有自製內容」的方向衝突，依本頁與本輪報告解讀。
 
 ## 已確定的目標
 
@@ -21,3 +21,10 @@
 - 既有 Server 功能與驗證收據要復用。新 MEF 還沒接入，不等於整個背包、任務或存檔功能從未實作。
 
 本頁不變更正式 Task owner、RR、T01 驗證、S00 規格狀態或遊玩驗收；原件唯讀及分析與執行分離仍依共用指示。使用者已指定工作分支 `extra/roy1`，不另開分支。
+
+## 最新關卡分析補充
+
+- 已完成20類關卡功能的有界分析；實際67份配置的圖／旗標和BND分層稽核，進度、缺項、優化分列[玩家進度](MEF-level-functional-closure-20261118/PLAYER-PROGRESS.md)。這些包含歷史與候選，不等於67個已部署可玩副本。
+- 原生 `CSL.scn` 有保存／讀回seen紀錄的路徑。舊「一次／Client epoch」只足作Server派送預算，不保證重啟後未看或callback必跑；003F也可來自seen-skip。[原件補證](MEF-level-functional-closure-20261118/finite-handoff/report.md)
+- Q119清場演出後的地圖／完整點集重建會換代；較早的本地setter不保證保留。沿用已提交Server MEF旗標投影到新快照；只有需要多步演出才新增有限插播hook。
+- 現有scenario JSON／typed規則可以直接作MEF開發，不強制新建格式。公開範例缺口、實作缺口、特定Client可見操作與新玩法擴充分開，不能互相代換。
