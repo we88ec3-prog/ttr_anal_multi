@@ -1,5 +1,7 @@
 # 點數商城購物車與保管箱的收發接線
 
+Wing 接續：[普通狩獵／RAID 傳送候選](../../../design/scenario-content/CASH-WING-TELEPORT.md)、[來源核對](verify_wing.py)、[有界收據](wing-source-verification.json)。原使用與位置 consumer 已核；以主出口作目的地及 4 秒時間皆為 Server 政策，官方選點／秒數仍 UNKNOWN，不是原版相容驗收。
+
 強化保護材料接續：[付款與鐵匠串接](../../../design/scenario-content/CASH-ENHANCEMENT-PROTECTION.md)、[來源驗證器](verify_protection.py)及[收據](protection-source-verification.json)。已分開六種材料的 Grade／SafetyID 與價格；5523／27484 有付費使用合成證據，高品級裝備路線及指定 v2 仍待完成。
 
 完全復活卷軸接續：[付費取得與戰鬥串接](../../../design/scenario-content/CASH-COMPLETE-REVIVAL.md)、[原表核對](verify_revival.py)與[來源收據](revival-source-verification.json)。付款／領取／復活資源與保存有離線證據，原視聽、死亡懲罰／評級恢復及指定 v2 仍未完成。
