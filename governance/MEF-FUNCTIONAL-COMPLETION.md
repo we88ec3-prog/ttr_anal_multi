@@ -6,6 +6,11 @@
 
 ## 2026-11-14 extra/roy1 整合
 
+2026-11-19：[RAID 配套單場正流程](../design/testing/RAID-NORMAL-ROUTE-INSPECTION.md)
+補上三個基準與三個實際匯出稿的廣場建隊至成功返回／發書證據，使用準備角色、
+一般裝備及正常 HP 卷軸輸入，合計 30 次原 BND 地圖載入。此為離線應用層，
+未提高新帳號、TCP、Client 或原生 MEF 完成狀態。
+
 2026-11-19：[RAID 1–3 工作台](../design/scenario-content/RAID-SCENARIO-WORKBENCH.md)
 補上三組固定 RAID 範本、AI 配對及 Host 覆蓋稿載入。15 張原 BND 的編輯／匯出／
 載入預檢已通過；既有入場等級、圖序、必要頭目與 CP／經驗書領域規則保留。
