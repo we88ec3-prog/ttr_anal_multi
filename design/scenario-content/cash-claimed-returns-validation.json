@@ -1,0 +1,158 @@
+{
+  "date": "2026-11-19",
+  "classification": "SERVER_DESIGN_CHOICE / OFFLINE_SYNTHETIC",
+  "component": "LOCAL_CASH_CLAIMED_RETURNS_V1",
+  "builds": {
+    "host": "Release PASS 0 warnings/errors",
+    "web": "Release PASS 0 warnings/errors",
+    "inspector": "Release PASS 0 warnings/errors"
+  },
+  "tests": [
+    {
+      "file": "cash-returns-focused-v1.trx",
+      "passed": 3,
+      "sha256": "8d7c2742b6368ed5f710b5968de6c5a34e47f89e3c5702b4453aee11f9c136d9",
+      "total": 3,
+      "failed": 0
+    },
+    {
+      "file": "cash-returns-full-v1.trx",
+      "passed": 601,
+      "sha256": "7d66e64763c2664445f9ea4ba40ced613a513e018197b1d0e064a006944e9a0b",
+      "total": 601,
+      "failed": 0
+    }
+  ],
+  "receipts": [
+    {
+      "file": "returns-facts-proof.json",
+      "sha256": "24dec041ac92a51cf9772e8eb58f4097b76fd0337b0fabfa245422045430b719"
+    },
+    {
+      "file": "returns-http-proof.json",
+      "sha256": "2ca9ee6cceb4d1f15449e614398202774d8f1996007578aaab4807f73fa35a83"
+    },
+    {
+      "file": "returns-host-preflight.json",
+      "sha256": "98488d7be00e32eedb4c00e565f4cb332870806d2af3b94caf3af4edfc5cf2d8"
+    },
+    {
+      "file": "returns-live-host-receipt.json",
+      "sha256": "329c99ccd557061f8a0f5add3da2d6b5ec19f073aa3247b0bd5af0fac35515aa"
+    },
+    {
+      "file": "returns-live-verification.json",
+      "sha256": "5d8886337c9377c91a69d5fe13a1ff8e808c725bc40ca1a5461471a09c42c807"
+    },
+    {
+      "file": "returns-live-components.json",
+      "sha256": "95b4ea1769cf12767b453379ba5bd276f0e891f0159edecd21e95b5be5c4b03d"
+    }
+  ],
+  "http": {
+    "classification": "ISOLATED_HTTP_VALID_PLAN_AND_FORM",
+    "clientExecuted": false,
+    "liveAssetsChanged": false,
+    "fixtureAlreadyOffline": true,
+    "initialClaimed": 2,
+    "remainingClaimed": 1,
+    "originalEquipmentReturned": 1,
+    "refundAmount": 250,
+    "balanceBefore": 6750,
+    "balanceAfter": 7000,
+    "planDigestVerified": true,
+    "validCsrfPost": true,
+    "historyVerified": true,
+    "reconciliationIssues": 0,
+    "originalFactsPreserved": true,
+    "visualAcceptance": "NOT_EXECUTED"
+  },
+  "originalFacts": {
+    "classification": "NORMAL_ADDITIVE_MIGRATION_AND_RETURN",
+    "oldFactsPreserved": true,
+    "foreignKeysValid": true,
+    "fixtureAlreadyOffline": true,
+    "tables": {
+      "local_cash_checkouts": {
+        "rows": 6,
+        "sha256": "3a35cc91e6951f85682b083a3b0667258cb20a9bd2370d189ccf2b4c82148d7d"
+      },
+      "local_cash_deliveries": {
+        "rows": 56,
+        "sha256": "b6ebf3dbc57aca8314f7111a4065c4ee730a1eedad0fd5fbe0ff1eeee6d0075b"
+      },
+      "local_cash_claims": {
+        "rows": 2,
+        "sha256": "6bf22b11218f2f0992390e0e17f08056e53a2b12315315ae2fcf800b4647d6fd"
+      },
+      "local_cash_claim_slots": {
+        "rows": 2,
+        "sha256": "8447ab7d59638c87a2a54b0728630c77b148b87abe0cda8c32fcaf380b1e095e"
+      }
+    },
+    "clientExecuted": false
+  },
+  "policy": {
+    "payment": "Original per-item cost for recorded purchases; grant/legacy recover with no guessed credit",
+    "equipment": "Original claimed equipment IDs, matching product and identity fields, exactly one current owned position each",
+    "sourceFacts": "Preserve original checkout/delivery/claim/slot records; append return/debit/binding facts",
+    "execution": "Account without unexpired Session; recompute plan in immediate transaction and match snapshot digest",
+    "plainStacks": "Equivalent current same-product same-metadata stock; does not prove original lot unused"
+  },
+  "deployment": {
+    "assemblySha256": {
+      "E:\\Tartaros\\workspace\\server-runtime-dev/src/Tartaros.Server.Host/bin/Release/net10.0/Tartaros.Server.Host.dll": "babaae57d15c2f47ea4758b70c5d187679a42f97147dfc0eba5d12c1437d92e8",
+      "E:\\Tartaros\\workspace\\server-runtime-dev/src/Tartaros.Admin.Web/bin/Release/net10.0/Tartaros.Admin.Web.dll": "8abafcf3ed72065479c55fa7b50b12c5bf7794f4866c00e8fd695065c151c4c5",
+      "E:\\Tartaros\\workspace\\server-runtime-dev/src/Tartaros.Admin.Web/bin/Release/net10.0/Tartaros.Persistence.dll": "0736ccdbf010423b21e680267ce780e9f1e42b72d672adcb7bffb4b170c726b6",
+      "E:\\Tartaros\\workspace\\server-runtime-dev/src/Tartaros.Server.Host/bin/Release/net10.0/Tartaros.Persistence.dll": "0736ccdbf010423b21e680267ce780e9f1e42b72d672adcb7bffb4b170c726b6"
+    },
+    "liveAssetOperationsExecutedByAgent": false,
+    "previousAdminPid": 37040,
+    "note": "One complete local service replacement after successful checks; preserved pre-update DB copy",
+    "previousGamePid": 12332,
+    "pages": [
+      {
+        "status": 200,
+        "path": "/admin/cash"
+      },
+      {
+        "status": 200,
+        "path": "/admin/cash/catalog"
+      },
+      {
+        "status": 200,
+        "path": "/admin/cash/history"
+      },
+      {
+        "status": 200,
+        "path": "/admin/cash/reconciliation"
+      },
+      {
+        "status": 200,
+        "path": "/admin/cash/actions"
+      },
+      {
+        "status": 200,
+        "path": "/admin/cash/returns"
+      }
+    ],
+    "firstVillageParty": "PRIVATE_SOLO_AFTER_COMMITTED_Q15",
+    "adminPid": 248,
+    "gamePid": 32188
+  },
+  "clientExecuted": false,
+  "clientModified": false,
+  "deferred": [
+    "Manual post-return login UI, equipped resource capacities and normal play",
+    "Active-session rejection and stale-plan cases",
+    "Replay, rejection, concurrency, fault, security and load tests",
+    "Injected integrity differences"
+  ],
+  "limitations": [
+    "No unit-level consumption lineage for merged stacks; equivalent-stock policy is explicit",
+    "No refund of consumed effects, enhancement materials or fees",
+    "Unknown pre-ledger claimed purchases cannot be reconstructed",
+    "Price/list publication and special-product effects remain open",
+    "No original-Client or native-MEF completion claim"
+  ]
+}
