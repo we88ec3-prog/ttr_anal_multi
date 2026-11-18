@@ -1,0 +1,502 @@
+{
+  "schema": "mef-world-offload-capability-contracts-v1",
+  "baseline_commit": "60c1c1a5dc7a73902d9dbb50361d5148e8b30058",
+  "goal": "Server provides MEF; rules and executable behavior are MEF development; prefer available Client/native offload. No official-MEF restoration prerequisite.",
+  "labels": {
+    "BOUNDED_ANALYSIS_COMPLETE": "capability, existing implementation, input/output gaps and acceptance specified; not runtime completion"
+  },
+  "capabilities": [
+    {
+      "id": "W01",
+      "player_feature": "依內容生出普通怪",
+      "priority": "P0",
+      "mef_policy": "模型、位置、方向、波次、時機、出生profile及重入規則均屬MEF",
+      "current_server_baseline": "現有Scenario/SpawnGroup/逐出生profile與既有生成adapter可復用",
+      "client_native_execution": "lb.CreateObjectEx(model,x,y,scale,direction,attach)配置真正CMonster並加入world；model10..10000只是factory分類，不是資源有效性保證",
+      "client_observation": "無新ID或成功ACK推入Lua",
+      "adapter_gap": "已載入且有context的有限生成可先驗；共享戰鬥另需出生結果/邏輯key與worldID映射",
+      "load_reduction": "生成指令及逐個spawn dispatch僅在停發後Client仍成功時算省量",
+      "evidence": [
+        "source:governance/MEF-FUNCTIONAL-COMPLETION.md",
+        "source:kr-extra-roy/MEF-capabilities-20261116/world-npc/report.md",
+        "source:kr-extra-roy/MEF-world-integration-20261115/identity/report.md",
+        "native:world_step_iterator"
+      ],
+      "acceptance": "停發指定怪0007後建立成功；資源失敗、重入、ID碰撞與後續操作分項驗收",
+      "analysis_status": "BOUNDED_ANALYSIS_COMPLETE",
+      "new_runtime_implementation": false,
+      "new_runtime_acceptance": false
+    },
+    {
+      "id": "W02",
+      "player_feature": "後續操作仍指向同一隻怪",
+      "priority": "P0",
+      "mef_policy": "run/wave/actor key/出生世代/清理原因由MEF內容與runtime契約定義",
+      "current_server_baseline": "現有Server分配worldID與生怪接線可先維持",
+      "client_native_execution": "本地counter lowWORD寫actor+4；world tree與0007共用；Q slot獨立",
+      "client_observation": "CreateObjectEx未回傳新worldID；0007 duplicate hit跳過，沒有採用既有本地actor契約",
+      "adapter_gap": "Client本地共享戰鬥需可用handle與SpawnApplied結果；純擺設不先強制跨端配對",
+      "load_reduction": "沒有可靠配對前不承諾停止共享戰鬥生成記錄",
+      "evidence": [
+        "source:kr-extra-roy/MEF-world-integration-20261115/identity/report.md",
+        "source:kr-extra-roy/MEF-world-identity-scene-interaction-20261117/WORLD-IDENTITY-EVENTS.md"
+      ],
+      "acceptance": "每一出生、失敗、重生、重送、換場都唯一對帳；不得猜counter或pointer",
+      "analysis_status": "BOUNDED_ANALYSIS_COMPLETE",
+      "new_runtime_implementation": false,
+      "new_runtime_acceptance": false
+    },
+    {
+      "id": "W03",
+      "player_feature": "怪物沿一段路自己走",
+      "priority": "P1",
+      "mef_policy": "路點、等待、速度策略、追擊/回位條件放MEF",
+      "current_server_baseline": "LocalClientRouteComparison/v92已有單次目標人測；戰鬥AI尚未整合該路段",
+      "client_native_execution": "world frame→4E0060→4E13F0→CMonster v+20→4C8580→4CA890→位置gate→A0/A4",
+      "client_observation": "所選native路線沒有Lua抵達ACK",
+      "adapter_gap": "把既有固定路段接現有AI；補中止、碰撞、轉向與校正/抵達觀察",
+      "load_reduction": "可減路段內座標下發和相關Server更新；既有Client步進/動畫不是新省量",
+      "evidence": [
+        "source:governance/MEF-FUNCTIONAL-COMPLETION.md",
+        "source:governance/s00-iterations/S00-20261113-MONSTER-LOCAL-CONTROLLER-BOUNDARY.md",
+        "native:world_getter",
+        "native:frame_world_step",
+        "native:world_step",
+        "native:world_step_iterator",
+        "native:monster_step_thunk",
+        "native:movement_step",
+        "native:position_delta_gate",
+        "native:position_writer"
+      ],
+      "acceptance": "比較路段命令/位置更新/校正次數及Server更新時間；停止中途座標後仍完成且可對帳",
+      "analysis_status": "BOUNDED_ANALYSIS_COMPLETE",
+      "new_runtime_implementation": false,
+      "new_runtime_acceptance": false
+    },
+    {
+      "id": "W04",
+      "player_feature": "怪物巡邏、索敵、追人與回家",
+      "priority": "P1",
+      "mef_policy": "profile、目標規則、追擊界線、巡邏路線、階段與冷卻放MEF",
+      "current_server_baseline": "已有MonsterBehavior、v93追擊/回位人測、巡邏/繞路規格；PT項目待實機",
+      "client_native_execution": "Single/Tutorial attach填三個控制槽；Formation已選SubAI action拒model>9，1036不通過",
+      "client_observation": "普通敵方決策的Lua輸入/輸出未在這些入口證成",
+      "adapter_gap": "現有Server MEF執行器可先做；若移Client需typed位置/目標/狀態reader與指定actor動作adapter",
+      "load_reduction": "移出逐怪決策才有CPU卸載；內容化本身先減少逐關硬編碼",
+      "evidence": [
+        "source:governance/MEF-FUNCTIONAL-COMPLETION.md",
+        "source:governance/s00-iterations/S00-20261113-MONSTER-LOCAL-CONTROLLER-BOUNDARY.md",
+        "native:controller_attach",
+        "native:subai_model_gate",
+        "source:design/scenario-content/MONSTER-PATROLS.md"
+      ],
+      "acceptance": "以接近、退離、重入、牆面、死亡後停止及多目標測試；不以attach非零判定AI成功",
+      "analysis_status": "BOUNDED_ANALYSIS_COMPLETE",
+      "new_runtime_implementation": false,
+      "new_runtime_acceptance": false
+    },
+    {
+      "id": "W05",
+      "player_feature": "怪物選招後播出正確招式",
+      "priority": "P0",
+      "mef_policy": "選招、時點、段數、取消、資源與冷卻由MEF規則",
+      "current_server_baseline": "現有選招/動作adapter及部分測試基礎可復用",
+      "client_native_execution": "000D→4C8A90→state13→motion/rate；CSkillState enter只寫+418=300；tick為ret4",
+      "client_observation": "動作完成/命中/死亡不由該state的tick回Lua",
+      "adapter_gap": "普通Lua無已證可直接指名任意world怪動作接口；可先用Server MEF→既有動作adapter",
+      "load_reduction": "動畫本已Client執行；新增決策下放或批次指令才可計省量",
+      "evidence": [
+        "source:governance/MEF-FUNCTIONAL-COMPLETION.md",
+        "native:skill_receive",
+        "native:skill_action_apply",
+        "native:skill_state_install",
+        "native:skill_state_enter",
+        "native:skill_state_update_stub",
+        "source:kr-extra-roy/MEF-capabilities-20261116/world-npc/report.md"
+      ],
+      "acceptance": "明確分驗招式呈現、資源消耗、命中、HP、死亡；不把視覺通過當整招通過",
+      "analysis_status": "BOUNDED_ANALYSIS_COMPLETE",
+      "new_runtime_implementation": false,
+      "new_runtime_acceptance": false
+    },
+    {
+      "id": "W06",
+      "player_feature": "攻擊有命中與合理扣血",
+      "priority": "P0",
+      "mef_policy": "範圍、視線/牆面、傷害/資源公式、時點、狀態與目標篩選可由MEF定義",
+      "current_server_baseline": "共用Server戰鬥已有基礎；巡邏規格已有靜態牆面命中檢查；不重寫為全未實作",
+      "client_native_execution": "所選native移動gate不是命中判定；技能state不是傷害公式；000E是結果consumer",
+      "client_observation": "未證任意普通world actor的Lua傷害/生命事件接口",
+      "adapter_gap": "可先在Server MEF事件執行器計算自訂規則並復用battle adapter；Client執行需要完整輸入/輸出接橋",
+      "load_reduction": "Server執行MEF不自動少CPU；Client確實執行命中/公式後才計移出工作",
+      "evidence": [
+        "source:governance/MEF-FUNCTIONAL-COMPLETION.md",
+        "source:kr-extra-roy/MEF-P0-P1-master-continuation-20261117/world-lua/report.md",
+        "native:position_validity",
+        "native:skill_state_enter",
+        "native:skill_state_update_stub",
+        "source:design/scenario-content/MONSTER-PATROLS.md"
+      ],
+      "acceptance": "區分命中/未命中、遮擋、無敵、重送、同時傷害與資源不足；本輪不捏官方公式或參數",
+      "analysis_status": "BOUNDED_ANALYSIS_COMPLETE",
+      "new_runtime_implementation": false,
+      "new_runtime_acceptance": false
+    },
+    {
+      "id": "W07",
+      "player_feature": "血量階段可叫援軍",
+      "priority": "P0",
+      "mef_policy": "HP/資源初值、消耗回復、門檻與旗標由MEF定義",
+      "current_server_baseline": "WaveHealthReached已實作波總HP比例與一次鎖存；實機階段測試待驗",
+      "client_native_execution": "0034 CMonster mode2寫maxHP+3BC/currentHP+3C8；角色HP/SP/MP另有guards；HUD/native AI讀取",
+      "client_observation": "沒有由HUD/native reader推得普通Lua任意HP getter",
+      "adapter_gap": "Server MEF可直接復用既有健康狀態；Client需要typed observer",
+      "load_reduction": "只有搬移門檻判斷或減少輪詢/同步才是新省量",
+      "evidence": [
+        "source:kr-extra-roy/MEF-P0-P1-master-continuation-20261117/world-lua/report.md",
+        "source:design/scenario-content/WAVE-HEALTH-SIGNALS.md"
+      ],
+      "acceptance": "跨門檻、恰等門檻、重複通知、未生成波、已死成員最大HP仍計入，沿現有規則驗收",
+      "analysis_status": "BOUNDED_ANALYSIS_COMPLETE",
+      "new_runtime_implementation": false,
+      "new_runtime_acceptance": false
+    },
+    {
+      "id": "W08",
+      "player_feature": "怪物死亡並播放死亡效果",
+      "priority": "P0",
+      "mef_policy": "判死條件、終止原因、死亡效果與後續政策放MEF",
+      "current_server_baseline": "現有Server HP/死亡及場景流程可復用",
+      "client_native_execution": "000C→4B0130→FSM state3→CDeadState enter/update；同state重入未去重",
+      "client_observation": "死相/淡出不等於Lua收到唯一死亡事件",
+      "adapter_gap": "需要ActorOutcome/既有事件接橋時必帶同一生命身分；不能每次enter算一殺",
+      "load_reduction": "native死相已是Client成本；省量取決判死規則/事件觀察是否下放",
+      "evidence": [
+        "source:kr-extra-roy/MEF-P0-P1-master-continuation-20261117/world-lua/report.md",
+        "source:kr-extra-roy/MEF-world-identity-scene-interaction-20261117/WORLD-IDENTITY-EVENTS.md"
+      ],
+      "acceptance": "同事件重送不重算、HP0與死亡state分驗、復活與重生世代分開",
+      "analysis_status": "BOUNDED_ANALYSIS_COMPLETE",
+      "new_runtime_implementation": false,
+      "new_runtime_acceptance": false
+    },
+    {
+      "id": "W09",
+      "player_feature": "指定波全倒下才接下一段",
+      "priority": "P0",
+      "mef_policy": "波成員、名單封閉、哪些原因算完成、後續增援/出口條件由MEF定義",
+      "current_server_baseline": "WaveCleared已依生成波的Server HP全零鎖存；另等全部波/投射物/既有清場流程",
+      "client_native_execution": "沒有由所列正常Lua候選取得普通wave生命事件完整鏈",
+      "client_observation": "GetObjectCount、Tutorial flags、004C/004E、Q停止、CAIControl pointer皆不足",
+      "adapter_gap": "Server MEF先復用既有事件；Client自主清波需生成/生命/世代observer",
+      "load_reduction": "事件驅動可替代輪詢；完整Client閉環後才可移除相應Server群狀態更新",
+      "evidence": [
+        "source:governance/MEF-FUNCTIONAL-COMPLETION.md",
+        "source:kr-extra-roy/MEF-P0-P1-master-continuation-20261117/world-lua/report.md",
+        "source:kr-extra-roy/MEF-transition-actor-event-20261117/WORLD-EVENTS.md",
+        "source:design/scenario-content/WAVE-CLEAR-SIGNALS.md"
+      ],
+      "acceptance": "未生成不清波、出生失敗不算死亡、舊世代不計、重送不重算、cancel不默算擊殺",
+      "analysis_status": "BOUNDED_ANALYSIS_COMPLETE",
+      "new_runtime_implementation": false,
+      "new_runtime_acceptance": false
+    },
+    {
+      "id": "W10",
+      "player_feature": "離圖或取消時清掉正確怪物",
+      "priority": "P0",
+      "mef_policy": "正常結束/取消/離圖/重生與範圍清理由MEF規則決定",
+      "current_server_baseline": "現有Server移除/重建adapter可復用",
+      "client_native_execution": "001A世界erase；Tutorial.DeleteObject只合成低byte0ID；Q有批次清理",
+      "client_observation": "erase不帶完整Lua死亡/理由事件；Tutorial刪除沒有新成功ACK",
+      "adapter_gap": "要下放ordinary清理須typed handle及controller安全清理契約；不得套用固定TutorialID",
+      "load_reduction": "可停發對應清理指令須先驗唯一物件與無殘留；不能把移除當擊殺",
+      "evidence": [
+        "source:kr-extra-roy/MEF-world-integration-20261115/identity/report.md",
+        "source:kr-extra-roy/MEF-world-identity-scene-interaction-20261117/WORLD-IDENTITY-EVENTS.md"
+      ],
+      "acceptance": "受控槽、死亡淡出、換圖、重入、取消與同ID新生不互相誤清",
+      "analysis_status": "BOUNDED_ANALYSIS_COMPLETE",
+      "new_runtime_implementation": false,
+      "new_runtime_acceptance": false
+    },
+    {
+      "id": "W11",
+      "player_feature": "用怪物/角色模型做演出",
+      "priority": "P1",
+      "mef_policy": "演出slot、位置、動作、表情、等待、收尾由MEF提供",
+      "current_server_baseline": "已有Q內容觸發與收尾基礎",
+      "client_native_execution": "Q.CreateObject配置CEventActor；Q slot與worldID分域；原Q操作可走位/動作/面部/閃色",
+      "client_observation": "Q停止/演出完成只觀察演出域",
+      "adapter_gap": "採同輪delivery profile已證入口/壽命；Q.DeleteObject stub不能當單物件刪除",
+      "load_reduction": "直接下放演出排程與呈現，不把演出結束冒充普通敵群清空",
+      "evidence": [
+        "source:governance/MEF-FUNCTIONAL-COMPLETION.md",
+        "source:kr-extra-roy/MEF-capabilities-20261116/world-npc/report.md"
+      ],
+      "acceptance": "多slot、resource缺失、skip、取消、重入與清理均符合該演出profile",
+      "analysis_status": "BOUNDED_ANALYSIS_COMPLETE",
+      "new_runtime_implementation": false,
+      "new_runtime_acceptance": false
+    },
+    {
+      "id": "W12",
+      "player_feature": "教學依走位/按鍵推進",
+      "priority": "P1",
+      "mef_policy": "提示、位置、輸入、分段進度放MEF",
+      "current_server_baseline": "既有Tutorial序列與互動點可復用",
+      "client_native_execution": "checkpoint/映射輸入→controller progress→Lua getter；鍵位確認另寫+134",
+      "client_observation": "旗標語意限實際producer，004C完成亦限適用Tutorial",
+      "adapter_gap": "普通副本須另接context與事件，不可用越界flag或換page冒充",
+      "load_reduction": "教學提示/分段等待能在已證profile本地執行",
+      "evidence": [
+        "source:kr-extra-roy/20261116-191747-chatgpt-web-roy1-MEF-tutorial-observation.md",
+        "source:kr-extra-roy/MEF-end-to-end-20261116/world/report.md",
+        "source:kr-extra-roy/MEF-world-integration-20261115/events/report.md"
+      ],
+      "acceptance": "重入重設、skip、正常完成及context不符分驗，不宣稱旗標是死亡",
+      "analysis_status": "BOUNDED_ANALYSIS_COMPLETE",
+      "new_runtime_implementation": false,
+      "new_runtime_acceptance": false
+    },
+    {
+      "id": "W13",
+      "player_feature": "同隊看到一致結果並可續行",
+      "priority": "P2",
+      "mef_policy": "內容版本、run、wave/actor世代、結果與重入政策屬MEF契約",
+      "current_server_baseline": "現有副本/保存邊界與Server世界ID可復用",
+      "client_native_execution": "已知worldID為u16；缺新跨端可配對本地spawn回報",
+      "client_observation": "既有選定事件缺run/generation/seq/reason",
+      "adapter_gap": "需要最小同步/結果提交adapter；持久化交同輪整合規格，不把規則排除於MEF",
+      "load_reduction": "只同步必要結果/校正有潛力少高頻流量；沒有量測不得報比例",
+      "evidence": [
+        "source:governance/MEF-FUNCTIONAL-COMPLETION.md",
+        "source:kr-extra-roy/MEF-world-integration-20261115/identity/report.md",
+        "source:kr-extra-roy/MEF-world-identity-scene-interaction-20261117/WORLD-IDENTITY-EVENTS.md",
+        "source:kr-extra-roy/MEF-transition-actor-event-20261117/WORLD-EVENTS.md"
+      ],
+      "acceptance": "版本一致、斷線/重送/重入/同ID新生與多人結果一致，跨端提交可去重",
+      "analysis_status": "BOUNDED_ANALYSIS_COMPLETE",
+      "new_runtime_implementation": false,
+      "new_runtime_acceptance": false
+    }
+  ],
+  "proposed_observer_contract": {
+    "status": "PROPOSED_ADAPTER_DATA_NOT_EXISTING_LUA_API_OR_OPCODE",
+    "policy": "Default defeat-only closure; existing Server WaveCleared implementation remains unchanged.",
+    "fields": [
+      "content_version",
+      "run_id",
+      "wave_id",
+      "logical_actor_key",
+      "generation",
+      "event_id",
+      "terminal_reason"
+    ],
+    "rules": [
+      "membership must be sealed",
+      "at least one intended member",
+      "pending or failed spawn never counts as defeated",
+      "match run and generation",
+      "ignore repeated event_id for same member lifetime",
+      "cancel/despawn not defeat unless content explicitly chooses it",
+      "clear once when every current member is terminal for a counted reason"
+    ]
+  },
+  "proposed_observer_examples": [
+    {
+      "id": "pending_spawn",
+      "sealed": true,
+      "members": {
+        "a": {
+          "generation": 1,
+          "state": "pending"
+        }
+      },
+      "events": [],
+      "expected_clear": false
+    },
+    {
+      "id": "one_alive",
+      "sealed": true,
+      "members": {
+        "a": {
+          "generation": 1,
+          "state": "alive"
+        },
+        "b": {
+          "generation": 1,
+          "state": "alive"
+        }
+      },
+      "events": [
+        {
+          "actor": "a",
+          "generation": 1,
+          "event_id": 1,
+          "reason": "defeat"
+        }
+      ],
+      "expected_clear": false
+    },
+    {
+      "id": "all_defeated",
+      "sealed": true,
+      "members": {
+        "a": {
+          "generation": 1,
+          "state": "alive"
+        }
+      },
+      "events": [
+        {
+          "actor": "a",
+          "generation": 1,
+          "event_id": 1,
+          "reason": "defeat"
+        }
+      ],
+      "expected_clear": true
+    },
+    {
+      "id": "duplicate_event",
+      "sealed": true,
+      "members": {
+        "a": {
+          "generation": 1,
+          "state": "alive"
+        },
+        "b": {
+          "generation": 1,
+          "state": "alive"
+        }
+      },
+      "events": [
+        {
+          "actor": "a",
+          "generation": 1,
+          "event_id": 1,
+          "reason": "defeat"
+        },
+        {
+          "actor": "a",
+          "generation": 1,
+          "event_id": 1,
+          "reason": "defeat"
+        }
+      ],
+      "expected_clear": false
+    },
+    {
+      "id": "old_generation",
+      "sealed": true,
+      "members": {
+        "a": {
+          "generation": 2,
+          "state": "alive"
+        }
+      },
+      "events": [
+        {
+          "actor": "a",
+          "generation": 1,
+          "event_id": 1,
+          "reason": "defeat"
+        }
+      ],
+      "expected_clear": false
+    },
+    {
+      "id": "cancel_not_defeat",
+      "sealed": true,
+      "members": {
+        "a": {
+          "generation": 1,
+          "state": "alive"
+        }
+      },
+      "events": [
+        {
+          "actor": "a",
+          "generation": 1,
+          "event_id": 1,
+          "reason": "cancel"
+        }
+      ],
+      "expected_clear": false
+    },
+    {
+      "id": "unsealed",
+      "sealed": false,
+      "members": {
+        "a": {
+          "generation": 1,
+          "state": "alive"
+        }
+      },
+      "events": [
+        {
+          "actor": "a",
+          "generation": 1,
+          "event_id": 1,
+          "reason": "defeat"
+        }
+      ],
+      "expected_clear": false
+    },
+    {
+      "id": "empty_wave",
+      "sealed": true,
+      "members": {},
+      "events": [],
+      "expected_clear": false
+    },
+    {
+      "id": "wrong_run",
+      "sealed": true,
+      "members": {
+        "a": {
+          "generation": 1,
+          "state": "alive"
+        }
+      },
+      "events": [
+        {
+          "actor": "a",
+          "generation": 1,
+          "event_id": 1,
+          "reason": "defeat",
+          "run": "previous"
+        }
+      ],
+      "expected_clear": false
+    },
+    {
+      "id": "failed_spawn",
+      "sealed": true,
+      "members": {
+        "a": {
+          "generation": 1,
+          "state": "failed"
+        }
+      },
+      "events": [
+        {
+          "actor": "a",
+          "generation": 1,
+          "event_id": 1,
+          "reason": "defeat"
+        }
+      ],
+      "expected_clear": false
+    }
+  ],
+  "performance_claims": {
+    "measured_cpu_reduction_percent": null,
+    "measured_network_reduction_percent": null,
+    "existing_native_animation_and_step_counted_as_new_savings": false,
+    "server_interpreted_mef_automatically_reduces_cpu": false,
+    "new_native_api_or_opcode_claimed": false,
+    "target_executed": false
+  }
+}

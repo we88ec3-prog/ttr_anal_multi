@@ -1,0 +1,283 @@
+{
+  "schema": "MEF_P0_RULE_EXECUTION_CONTRACT_V1",
+  "status": "ANALYZED_PINNED_SERVER_SOURCE_AND_AUTHORED_STATIC_INPUTS",
+  "official_format_recovery_required": false,
+  "scope": "P0-5, P0-6, P0-7, P0-8; typed Server MEF rules; no new game execution",
+  "ids": {
+    "definitionId": "immutable content choice/version",
+    "instanceId": "one runtime encounter session; never content-shared mutable state",
+    "nodeId": "authored node identity, not MapID or original SourceNode",
+    "waveId": "Ordinal/case-sensitive within current node; WaveCleared/WaveHealthReached null means nonempty initial group; requiredBoss null has different semantics.",
+    "actorId": "Combat allocator appends unique actor slot IDs for this encounter; never waveId, Model or PRE; old dead slots retained through removal.",
+    "requiredBoss": "model+PRE with optional waveId; omitted waveId searches every initial/sequential/timed actor in the node, named id only that wave; exactly one matching configured actor required by typed loader.",
+    "flagId": "unique producer within definition, monotonic per instance",
+    "exitKey": "per-node identity; openness must be tested for this exact key"
+  },
+  "clear_gate": {
+    "ReadyToReturn": {
+      "all_required_waves_spawned": true,
+      "aggregate_actor_hp_zero": true,
+      "player_alive": true,
+      "no_enemy_projectile_flights": true,
+      "victory_wait_due": true,
+      "required_boss_if_configured": "matching actor HP zero AND RemoveAt null"
+    },
+    "ReadyToClearMissionNode": {
+      "includes": "ReadyToReturn",
+      "all_actors_RemoveAt_null": true
+    },
+    "consumers": {
+      "functional_lab": "ReadyToReturn",
+      "story": "ReadyToClearMissionNode before fork/commit",
+      "ordinary_stage_one": "ReadyToClearMissionNode AND PendingStageOneDefeatExperience null"
+    },
+    "victory_wait_seconds": {
+      "expanded": 1.25,
+      "nonexpanded": 0.75
+    },
+    "death_removal": "deadline due AND no enemy projectile sourced from that actor; packet appended then RemoveAt cleared",
+    "wave_observation_can_precede_death_removal": true,
+    "all_projectile_types_are_gate": false,
+    "client_empty_screen_is_evidence": false,
+    "boss_dead_alone_is_whole_clear": false,
+    "client_model_removal_ack_required": false,
+    "evidence": [
+      "S12",
+      "S17",
+      "S18",
+      "S22",
+      "S29"
+    ]
+  },
+  "documented_partial_order": [
+    {
+      "before": "accepted_lethal_hit",
+      "after": "BossDefeated flag",
+      "evidence": [
+        "S19",
+        "S07"
+      ]
+    },
+    {
+      "before": "NodeDelay observation",
+      "after": "combat Poll",
+      "evidence": [
+        "S22"
+      ]
+    },
+    {
+      "before": "combat damage and enemy AI/projectiles/hazards",
+      "after": "wave HP observation",
+      "evidence": [
+        "S13",
+        "S14"
+      ]
+    },
+    {
+      "before": "wave HP observation",
+      "after": "timed reinforcement pass",
+      "evidence": [
+        "S13"
+      ]
+    },
+    {
+      "before": "timed reinforcement pass in array order",
+      "after": "single sequential reinforcement attempt",
+      "evidence": [
+        "S13",
+        "S15"
+      ]
+    },
+    {
+      "before": "combat Poll",
+      "after": "routine position/RegionEntered/RegionHeld observation",
+      "evidence": [
+        "S22"
+      ]
+    },
+    {
+      "before": "adapter-specific full clear gate",
+      "after": "GroupCleared and exit reevaluation",
+      "evidence": [
+        "S10",
+        "S22",
+        "S29"
+      ]
+    },
+    {
+      "before": "selected unlocked key and accepted position",
+      "after": "story branch plan on fork",
+      "evidence": [
+        "S10",
+        "S26"
+      ]
+    },
+    {
+      "before": "story transition commit",
+      "after": "publish selected node or current Portal points",
+      "evidence": [
+        "S23",
+        "S24",
+        "S25",
+        "S26"
+      ]
+    }
+  ],
+  "partial_order_limit": "These are pinned consumer phases. RegionEntered produced after combat Poll need not unlock a wave in that same update; NodeDelay observed before Poll may. No arbitrary event callback replaces an eligible update or story commit.",
+  "wave_health": {
+    "predicate": "(long)health * 100 <= (long)maximum * authoredPercent",
+    "requires_spawned": true,
+    "nonempty_initial_group_only": true,
+    "observation_requires_player_alive": true,
+    "dead_members_maximum_hp_stays_in_denominator": true,
+    "flags_latch_once": true,
+    "existing_optimization": "callback only when HP total changed; cleared wave removed from observation list",
+    "evidence": [
+      "S07",
+      "S11",
+      "S14"
+    ]
+  },
+  "timers": [
+    {
+      "id": "C1",
+      "kind": "TimedWave",
+      "origin": "current combat object construction _entryAt",
+      "comparison": "now >= Add(entryAt,delaySeconds)",
+      "eligibility": "expanded ordinary encounter, alive player, due time, ALL requiredFlags and current activationRegion",
+      "phase": "timed array order; waiting entry does not block later eligible entries; before sequential attempt",
+      "reset": "entry origin survives other waves; a newly constructed combat has new origin",
+      "story_detail": "committed Combat transition recreates combat after entry scene; do not count earlier pre-scene allocation as this combat origin",
+      "evidence": [
+        "S11",
+        "S15",
+        "S16",
+        "S23",
+        "S24"
+      ]
+    },
+    {
+      "id": "C2",
+      "kind": "SequentialWave",
+      "origin": "first eligible sequential attempt observing aggregate HP zero while a next sequential wave exists",
+      "comparison": "now >= Add(waveClearedAt,delaySeconds)",
+      "eligibility": "same normal combat guards, next array element, aggregate empty, time, ALL flags and current region",
+      "phase": "one sequential wave per eligible Poll, after timed pass",
+      "reset": "any spawned reinforcement clears empty interval and victory wait; living timed wave prevents sequential progress",
+      "evidence": [
+        "S15",
+        "S16"
+      ]
+    },
+    {
+      "id": "C3",
+      "kind": "FirstSequentialAfterEmptyInitial",
+      "origin": "first eligible sequential pass in combat Poll observing the empty initial encounter",
+      "comparison": "same Add comparison as C2; zero delay may spawn in that update",
+      "eligibility": "no fabricated null WaveCleared/WaveHealth signal; necessary timed and sequential waves remain counted",
+      "phase": "after timed pass; a due timed wave may occupy the field before sequential clock starts",
+      "reset": "same aggregate-empty rules as C2",
+      "evidence": [
+        "S11",
+        "S15",
+        "S16"
+      ]
+    },
+    {
+      "id": "C4",
+      "kind": "NodeDelayElapsed",
+      "origin": "scenario ActivateNodeTimer; story only in Encounter phase, lab/ordinary node activation",
+      "comparison": "TimeProvider.GetElapsedTime(activated).TotalSeconds >= double delaySeconds",
+      "eligibility": "entered, not completed, activated; existing eligible adapter update",
+      "phase": "normal world observer before combat Poll; can unlock same Poll wave",
+      "reset": "new node Enter resets origin; story fork copies it",
+      "story_detail": "entry scene precedes activation; clear scene elapsed time continues but locked dispatch waits until eligible update/committed Portal observation",
+      "evidence": [
+        "S08",
+        "S10",
+        "S22",
+        "S24",
+        "S25",
+        "S28"
+      ]
+    },
+    {
+      "id": "C5",
+      "kind": "ClearDelayElapsed",
+      "origin": "first valid ObservePosition after GroupIsCleared; story first eligible observation in committed Portal phase",
+      "comparison": "TimeProvider.GetElapsedTime(clearObservedAt,now).TotalSeconds >= double delaySeconds",
+      "eligibility": "entered, not completed, finite accepted position and cleared group",
+      "phase": "position observer then exit reevaluation; not a global combat deadline",
+      "reset": "new node Enter; save/clear-cinematic time before first observation does not prepay delay",
+      "evidence": [
+        "S08",
+        "S10",
+        "S25"
+      ]
+    },
+    {
+      "id": "C6",
+      "kind": "RegionHeld",
+      "origin": "first eligible accepted observation in current region",
+      "comparison": "TimeProvider.GetElapsedTime(holdStart,now).TotalSeconds >= double delaySeconds",
+      "eligibility": "canHold and inside region; flags once latched remain set",
+      "phase": "position observer; first in-region observation records start without immediate completion",
+      "reset": "observed leave, canHold false/death or story clear planning resets unfinished hold; flags already completed survive",
+      "evidence": [
+        "S08",
+        "S22",
+        "S26"
+      ]
+    }
+  ],
+  "duration_conversion": {
+    "status": "RESOLVED_FROM_PINNED_IMPLEMENTATION",
+    "clock": "one injected TimeProvider shared by world/scenario/combat; world defaults TimeProvider.System; no assumed fixed TimestampFrequency",
+    "combat_deadline": "checked(at + (long)(seconds * clock.TimestampFrequency))",
+    "combat_numeric_semantics": "multiply using deployed double semantics, convert product to long toward zero, then checked timestamp addition; finite nonnegative wave delay is bounded 0..3600; do not replace with decimal math, round or ceil",
+    "scenario_elapsed": "preserve exact GetElapsedTime(...).TotalSeconds API and comparison with authored double; no explicit Add conversion in these observers",
+    "framework_scope": "Use the same injected provider and deployed .NET GetElapsedTime/TimeSpan behavior. This analysis does not independently reimplement the framework or assume its runtime timestamp frequency.",
+    "timer_queue_requirement": "Queue may select candidates, but final due predicate and original eligible phase must remain identical, especially for elapsed-time observers.",
+    "evidence": [
+      "S03",
+      "S08",
+      "S20",
+      "S21",
+      "S22",
+      "S24",
+      "S28"
+    ]
+  },
+  "branch": {
+    "graph": "finite acyclic, all nodes reachable, every path ends in Result",
+    "merge_flags": "intersection of those post-exit guarantee sets across every incoming route",
+    "postclear_flags_cannot_unlock_pending_required_waves": true,
+    "selector": "explicit key selects only that key; without key nearest then lower key",
+    "commit": "fork plan then publish after existing story commit",
+    "new_instance": "reset flags/wave cursors/timers; reuse existing permanent asset/quest journal services",
+    "post_exit_guarantees": "incoming guaranteed flags UNION GroupCleared/BossDefeated/all wave-observation signal flags UNION all necessary wave requiredFlags UNION selected exit requiredFlags; then transitive interaction prerequisites",
+    "evidence": [
+      "S05",
+      "S06",
+      "S09",
+      "S10",
+      "S26"
+    ]
+  },
+  "projection": "Flags trigger consumer reevaluation; do not directly impersonate actor HP, inventory mutation, completion receipt or Client callback.",
+  "scope_completion": {
+    "P0-5": "existing wave execution and four missing authored coverage analyzed; schema/dependency/BND verified",
+    "P0-6": "adapter-specific full clear gates, exact Boss matching and cross-node guarantees analyzed",
+    "P0-7": "finite repeat helper, once-per-entry weighted selector and typed service extension contracts analyzed; runtime adapters not deployed",
+    "P0-8": "six origins, phases and exact deployed code conversion families analyzed; scheduler equivalence requirements explicit"
+  },
+  "server_evidence": "server-code-evidence.json",
+  "registration": {
+    "functional_lab": "hardcoded mode-to-definition catalog; new IDs require explicit registration",
+    "story_override": "must bind pinned narrative and preserve node count, numbered maps and initial model order; generic finite-repeat input is not automatically compatible",
+    "evidence": [
+      "S27",
+      "S30"
+    ]
+  }
+}

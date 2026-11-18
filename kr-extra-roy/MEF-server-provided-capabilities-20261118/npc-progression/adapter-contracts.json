@@ -1,0 +1,237 @@
+{
+  "schema": "MEF_MINIMUM_ADAPTER_MAP_V1",
+  "adapters": [
+    {
+      "id": "AD01",
+      "name": "既有副本事件/敘事引擎",
+      "existing_status": "DOCUMENTED_EXISTING_IMPLEMENTATION",
+      "inputs": [
+        "Entry",
+        "GroupCleared",
+        "InteractZ",
+        "既有敘事步驟回報"
+      ],
+      "mef_owns": "節點、出口條件、演出selector、返回/終點政策",
+      "adapter_outputs": [
+        "既有SpawnGroup/UnlockPortal/NextNode/Result",
+        "敘事adapter選合法Q scene",
+        "Safe-time S2C0047 selects prebound new finite Client sequence after GroupCleared; no event payload injection"
+      ],
+      "source_ids": [
+        "S12",
+        "S13",
+        "S36"
+      ],
+      "new_mef_delta": "共用自有MEF規則編譯到LocalScenarioDefinition；GroupCleared可選有限Q內容，無需一般結果注入；只有常駐動態Lua用途另需generic bridge。",
+      "this_round_runtime_verified": false
+    },
+    {
+      "id": "AD02",
+      "name": "點集合/點更新",
+      "existing_status": "PROVEN_NATIVE_PLUS_DOCUMENTED_SERVER_PLACEMENT",
+      "inputs": [
+        "MEF點配置",
+        "本地已知條件或Server規則的開放決策"
+      ],
+      "mef_owns": "category/key/位置/初值/解鎖條件",
+      "adapter_outputs": [
+        "S2C 0x0027全量集合",
+        "Client Lua SetCheckPointStatus",
+        "S2C 0x0048單次更新"
+      ],
+      "source_ids": [
+        "S02",
+        "S06",
+        "S07"
+      ],
+      "new_mef_delta": "預放政策顯式改版；保全共存點。可直接0048，或由AD01一次0047選有限內容後本地wait/演出/setter；兩者都不新增缺失點。",
+      "this_round_runtime_verified": false
+    },
+    {
+      "id": "AD03",
+      "name": "NPC/店舖互動",
+      "existing_status": "PROVEN_BOUNDED_LEGACY_INTENT",
+      "inputs": [
+        "C2S 0x001C: category/key",
+        "原生本地對話/選單"
+      ],
+      "mef_owns": "任務優先、店舖資格、目的服務",
+      "adapter_outputs": [
+        "目前Town/NPC/Shop服務context",
+        "已存在主線或服務adapter"
+      ],
+      "source_ids": [
+        "S01",
+        "S05",
+        "S26"
+      ],
+      "new_mef_delta": "不是每個互動都送001C；某NPC支路本地先開scene1再送；不得重複啟動",
+      "this_round_runtime_verified": false
+    },
+    {
+      "id": "AD04",
+      "name": "共用交易/強化",
+      "existing_status": "DOCUMENTED_EXISTING_IMPLEMENTATION",
+      "inputs": [
+        "C2S 0x0027 buy",
+        "C2S 0x0020 sell",
+        "C2S 0x00A1 enhance"
+      ],
+      "mef_owns": "品項、價格、費用、材料、機率、允許範圍",
+      "adapter_outputs": [
+        "既有SQLite資產交易",
+        "S2C 0x002C",
+        "適用0x007B/0x00D9/0x0030"
+      ],
+      "source_ids": [
+        "S33",
+        "S34",
+        "S35"
+      ],
+      "new_mef_delta": "MEF規則接既有服務；每服務既有支援範圍與normal UI待驗保留",
+      "this_round_runtime_verified": false
+    },
+    {
+      "id": "AD05",
+      "name": "普通任務與目標",
+      "existing_status": "DOCUMENTED_EXISTING_IMPLEMENTATION",
+      "inputs": [
+        "C2S 0x0036接取",
+        "已接納擊倒/拾取/互動事件",
+        "現有NPC交付候選"
+      ],
+      "mef_owns": "前置/目標/受益角色/Accepted→Ready→Completed",
+      "adapter_outputs": [
+        "S2C 0x0040/0x0042",
+        "S2C 0x0041/0x0045/0x0046",
+        "既有目標持久計數"
+      ],
+      "source_ids": [
+        "S09",
+        "S10",
+        "S11"
+      ],
+      "new_mef_delta": "每種新目標找真實事件；資料化後沿既有共用任務服務",
+      "this_round_runtime_verified": false
+    },
+    {
+      "id": "AD06",
+      "name": "普通結果與返回",
+      "existing_status": "PROVEN_NATIVE_PLUS_DOCUMENTED_SERVER_FLOW",
+      "inputs": [
+        "MEF Result決策",
+        "C2S 0x0033限定直接返回分支"
+      ],
+      "mef_owns": "結果呈現數值、返回Town、返回演出、下一步",
+      "adapter_outputs": [
+        "S2C 0x0022/type0",
+        "既有場景/地圖/actor/點/控制器重建"
+      ],
+      "source_ids": [
+        "S03",
+        "S07",
+        "S15",
+        "S17"
+      ],
+      "new_mef_delta": "SkillExp +0x12已閉合；未解全payload欄位不猜；0033自身無目的地",
+      "this_round_runtime_verified": false
+    },
+    {
+      "id": "AD07",
+      "name": "主線結算提交",
+      "existing_status": "DOCUMENTED_EXISTING_IMPLEMENTATION",
+      "inputs": [
+        "ScenarioCompletion",
+        "被既有profile接受的返回最後一步",
+        "版本相符獎勵規則"
+      ],
+      "mef_owns": "何時合格、受益角色、EXP/LeeLoo/SkillExp條目與下一Quest",
+      "adapter_outputs": [
+        "同筆主線/完成事件/經驗帳本/角色成長/錢包/熟練度保存",
+        "account+Quest既有授予身分"
+      ],
+      "source_ids": [
+        "S03",
+        "S08",
+        "S17",
+        "S30"
+      ],
+      "new_mef_delta": "內部OutcomeCandidate是提案名；不是新增wire或原生LuaAPI；不另建帳本",
+      "this_round_runtime_verified": false
+    },
+    {
+      "id": "AD08",
+      "name": "提交後發布/登入恢復",
+      "existing_status": "DOCUMENTED_EXISTING_IMPLEMENTATION",
+      "inputs": [
+        "已提交快照",
+        "有效登入/世界載入"
+      ],
+      "mef_owns": "哪些checkpoint與Quest/獎勵狀態持久、哪個MEF步驟重新開始",
+      "adapter_outputs": [
+        "006F完整完成集合",
+        "0042 Accepted/Ready與目標回填",
+        "005C/0034角色成長",
+        "002C資產與適用002A熟練度"
+      ],
+      "source_ids": [
+        "S03",
+        "S08",
+        "S09",
+        "S10",
+        "S17"
+      ],
+      "new_mef_delta": "MEF存檔欄/版本對接；未完成副本沿現有重開策略；不序列化任意Lua堆疊",
+      "this_round_runtime_verified": false
+    }
+  ],
+  "generic_server_result_to_lua": {
+    "status": "UNPROVEN_PUBLIC_BRIDGE",
+    "exact_missing": [
+      "公開接收/注入入口",
+      "資料型別與同run關聯",
+      "有效owner/page/profile",
+      "普通world結果如何喚醒所選coroutine"
+    ],
+    "usable_now": "Existing Server MEF GroupCleared can choose installed finite Q with0047; Client completes wait/presentation/setter without a generic bridge. A single0048 is another option for direct point update. The missing bridge concerns arbitrary dynamic input into ordinary resident Lua.",
+    "not_invented": [
+      "OnGroupCleared Lua API",
+      "SendEvent Lua API",
+      "DB write Lua API",
+      "new legacy opcode fields"
+    ]
+  },
+  "wire_directions_distinct": true,
+  "server_internal_proposal_names_are_not_wire": true,
+  "finite_dispatch_route": {
+    "status": "DESIGN_COMPOSITION_OF_PROVEN_INTERFACES_NOT_DEPLOYED",
+    "event_source": "Existing Server MEF GroupCleared event, retained as the world eligibility fact",
+    "route": [
+      "AD01 accepts GroupCleared for current instance/node",
+      "At an allowed Q interruption point, enqueue one S2C0047 selecting previously published finite content",
+      "Client registered formal coroutine runs bounded wait/presentation, then SetCheckPointStatus for an existing point, explicit End and return",
+      "Apply selected profile completion/00EB policy; quest0 report is003F, not a new success ACK"
+    ],
+    "requires_generic_event_injection_into_resident_lua": false,
+    "requires_ordinary_background_B": false,
+    "trigger_transports_arbitrary_event_payload": false,
+    "bindings_are": "selector, point key/category, delays and presentation are bound in the release/build manifest, not extra0047 fields",
+    "preconditions": [
+      "Current GroupCleared fact accepted by existing Server engine",
+      "Known content version and actual selected member",
+      "Preinstalled unique point in current snapshot",
+      "Q ownership/safe interruption/context and seen/reentry policy"
+    ],
+    "result_semantics": "003F is only the selected existing Q completion report; no proof of point setter, generic mission success or reward commit",
+    "packet_tradeoff": "Total0047/report/release traffic can exceed one0048; intended saving is multi-step Server presentation scheduling/dispatch, not automatically packet count",
+    "source_ids": [
+      "S06",
+      "S07",
+      "S12",
+      "S14",
+      "S36"
+    ],
+    "cross_package_contract": "../delivery-profiles/authoring-contract.md",
+    "runtime_executed_this_round": false
+  }
+}

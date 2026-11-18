@@ -1,0 +1,126 @@
+{
+  "schema": "ttr-mef-p0-lifecycle-verification-v1",
+  "all_matched": true,
+  "scope": "Pinned original bytes/PE mappings/decoded boundaries, bounded calls/data, original STPD and Lua-as-data, source identities, authoring DAG and SYN projections. Not whole-function semantic acceptance, native runtime or Server implementation.",
+  "source_commit": "ac7e668ef19b91f86f05074d660aba10612c9a5f",
+  "bin_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+  "event_sha256": "2e68e0202565530e574e0810ad7f758a2fc8d6826a0de0975ccaff12c2d4718b",
+  "new_native_windows": 7,
+  "new_native_window_bytes": 2471,
+  "new_native_instructions": 804,
+  "reused_native_windows": 28,
+  "reused_native_window_bytes": 12050,
+  "reused_native_instructions": 3706,
+  "anchors": 51,
+  "direct_calls": 15,
+  "data_records": 13,
+  "source_pins": 47,
+  "qbase_total_prototypes": 76,
+  "qbase_total_instruction_words": 906,
+  "qbase_selected_prototypes": 22,
+  "qbase_selected_instruction_words": 225,
+  "boot_prefix_instruction_words": 4,
+  "selected_original_image_zero_fadeout_branch_closed": true,
+  "selected_original_scenes": [
+    {
+      "quest": 119,
+      "scene": 3,
+      "member_sha256": "05abe5f9773c3b0b40d5a849f7d984b4f06f57d2e5a5fe8c931e83ec2d7b857a",
+      "direct_create_calls": 3,
+      "bounded_lifecycle_statements": 11
+    },
+    {
+      "quest": 2440,
+      "scene": 5,
+      "member_sha256": "22131443cd236fd9498847353da3e7b8f8862f05cfab3258932e8158c9be3258",
+      "direct_create_calls": 14,
+      "bounded_lifecycle_statements": 11
+    }
+  ],
+  "owners": 22,
+  "cleanup_edges": 20,
+  "run_profiles": 3,
+  "artifact_integrity_files": 15,
+  "synthetic_examples": [
+    {
+      "name": "applied_cleanup_then_destructor_does_not_duplicate_same_release",
+      "pass": true,
+      "kind": "SYN",
+      "boundary": "Normal state1 cleanup queues once then resets state; destructor state1 gate is skipped. Worker must still process the queued release."
+    },
+    {
+      "name": "normal_Q_immediate_creation_returns_after_apply",
+      "pass": true,
+      "kind": "SYN",
+      "boundary": "Models normal worker apply-before-signal only. This does not prove draw/assets ready or that wait errors are handled."
+    },
+    {
+      "name": "item_dirty_does_not_change_immediate_mode",
+      "pass": true,
+      "kind": "SYN",
+      "boundary": "Selected item setter changes dirty/map, not D+20. Later request uses then-current immediate flag. Not a proof every engine writer preserves it."
+    },
+    {
+      "name": "conditional_deferred_cleanup_does_not_reset_pending_state",
+      "pass": true,
+      "kind": "SYN",
+      "boundary": "Conditional non-immediate branch only; not claimed to occur after normal initial Q.CreateObject returns in the selected scenes."
+    },
+    {
+      "name": "conditional_late_apply_targets_old_D_not_reused_slot",
+      "pass": true,
+      "kind": "SYN",
+      "boundary": "Request/result retains original D. A same-number slot is not used as callback lookup in the selected chain."
+    },
+    {
+      "name": "selected_SEQ_clear_before_restore_is_allowed",
+      "pass": true,
+      "kind": "SYN",
+      "boundary": "Observed content order; not a runtime success test."
+    },
+    {
+      "name": "native_Stop_restore_before_clear_is_allowed",
+      "pass": true,
+      "kind": "SYN",
+      "boundary": "Avoids inventing a universal ordering between map restore and actor clear."
+    },
+    {
+      "name": "reject_End_before_owned_cleanup",
+      "pass": true,
+      "kind": "SYN",
+      "boundary": "Authoring policy: current callback can still execute synchronously, but removed qco provides no future cleanup scheduling guarantee."
+    },
+    {
+      "name": "reject_Detach_then_Stop_for_same_current_work",
+      "pass": true,
+      "kind": "SYN",
+      "boundary": "Detach discards current access. Does not assert the old camera object is destroyed."
+    },
+    {
+      "name": "reject_map_restore_overwriting_final_snapshot",
+      "pass": true,
+      "kind": "SYN",
+      "boundary": "Conditional policy when final baseline is the acquired snapshot; both write camera state."
+    },
+    {
+      "name": "empty_setter_retains_but_Start_assign_clears",
+      "pass": true,
+      "kind": "SYN",
+      "boundary": "Different native string helpers. No locale or audio output is emulated."
+    },
+    {
+      "name": "nonempty_SetFinalMusic_appends",
+      "pass": true,
+      "kind": "SYN",
+      "boundary": "Bounded nonspace branch; shows why a second policy write is not a replacement API."
+    }
+  ],
+  "client_executed": false,
+  "lua_executed": false,
+  "server_executed": false,
+  "deployment_ready": false,
+  "gameplay_tested": false,
+  "formal_status_changed": false,
+  "official_mef_grammar_proved": false,
+  "global_queue_drain_proved": false
+}

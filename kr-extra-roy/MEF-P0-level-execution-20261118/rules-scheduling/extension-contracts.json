@@ -1,0 +1,216 @@
+{
+  "schema": "MEF_P0_AUTHORING_EXTENSIONS_V1",
+  "new_server_runtime_implemented": false,
+  "items": [
+    {
+      "id": "E1",
+      "name": "entry weighted definition selection",
+      "level": "NEW_SMALL_ENTRY_ADAPTER; ordinary selected runtime unchanged",
+      "player": "每次開場選定一種關卡配置，這場內不再改變",
+      "input": [
+        "policyVersion",
+        "eligible definitionId+positive integer weight",
+        "trusted uniform draw in [0,totalWeight)"
+      ],
+      "lowering": "ordered cumulative interval chooses one immutable existing definition before Enter",
+      "state": [
+        "selected definitionId",
+        "definition content hash",
+        "selection policy version",
+        "run identity"
+      ],
+      "fixed_for": "same run including same-map rebuild and presentation replay",
+      "normal_contract": [
+        "filter by currently committed admission prerequisites first",
+        "require nonempty positive-weight eligible set",
+        "draw once then construct selected existing instance",
+        "node transitions use selected fixed graph",
+        "selecting content grants nothing",
+        "validate unique registered IDs, content hash and total integer weight <= 2147483647; retain order for cumulative intervals",
+        "persist selection in the current run state; durable resume is separate from existing restart policy"
+      ],
+      "scope_limit": "In-node rerolls or conditions changing after start need separate rules and commit semantics; this is not those features.",
+      "evidence": [
+        "S10",
+        "S27",
+        "S30"
+      ],
+      "registration": "Register the selected catalog with the intended normal admission adapter; functional-lab mode whitelist and mainline source preservation are explicit integration boundaries."
+    },
+    {
+      "id": "E2",
+      "name": "fixed repeat compiled to DAG",
+      "level": "NEW_AUTHORING_COMPILER; generic finite graph runtime unchanged",
+      "player": "預先編排打三輪同樣房間，每輪機關重新開始，最後一輪才結算",
+      "input": [
+        "single finite node template",
+        "fixed visits",
+        "explicit visit-local or run-wide flag scope",
+        "reward and owner policy"
+      ],
+      "implemented_analysis_helper": "build_authoring.py compile_repeat supports only one-node visit-local subset; not deployed",
+      "lowering": [
+        "visit i becomes unique authored node i",
+        "fresh encounterGroup per visit",
+        "rename every signal producer and all requiredFlags/opensWithFlag/disabledByFlag references with visit namespace",
+        "keep waveId local to each new node; world actor ID remains allocator-owned",
+        "every nonfinal InteractZ becomes NextNode(i+1), final remains Result"
+      ],
+      "constraints": [
+        "expanded nodes <=256 and flags <=64, names <=64 chars",
+        "no hidden carried producers; reject undeclared cross-visit dependencies",
+        "no alternative exits or drops in this bounded helper",
+        "existing fixed two-map/mainline-source-preserving adapter is not automatically compatible"
+      ],
+      "reward_policy": "Examples explicitly set defeatExperience=0 and clearExperience=0, contain no drops or completionExperience. End reward remains existing selected adapter policy; only one Result endpoint exists. A per-kill or per-room reward design must count expanded occurrences explicitly.",
+      "owner_policy": "Repeated nodes can rebuild same map and actor; not same-encounter waves. Cross-node HP/cooldown preservation is separately opt-in on supported story adapter. Use existing reinforcement arrays instead when the intended experience is uninterrupted same-room combat.",
+      "evidence": [
+        "S03",
+        "S04",
+        "S05",
+        "S10",
+        "S24",
+        "S27",
+        "S30"
+      ]
+    },
+    {
+      "id": "E3",
+      "name": "read-only inventory or quest eligibility",
+      "level": "NEW_TYPED_CONDITION_ADAPTER; reuse existing saved services",
+      "player": "持有指定物品或已完成任務，才能選這條路或開機關",
+      "typed_ids": [
+        "SessionLease including AccountId and authorized session/revision",
+        "admitted local role byte or selected-character identity according to the chosen existing adapter (do not interchange them)",
+        "Product uint (not Item.xml row or slot number)",
+        "known Quest ushort and explicit step predicate",
+        "positive quantity and independent-item inclusion policy",
+        "predicate mode: entry snapshot or live gate"
+      ],
+      "normal_contract": [
+        "read committed authoritative inventory or quest state",
+        "keep item possession distinct from accumulated objective counter",
+        "entry-snapshot eligibility can choose one existing definition without changing node schema",
+        "in-instance live eligibility requires explicit predicate/event adapter and refresh on relevant committed changes",
+        "define whether opening latches or is rechecked on use; do not silently turn transient inventory possession into permanent instance flag"
+      ],
+      "sources": [
+        "design/scenario-content/PHINDOS-GROCER-TRADE.md",
+        "design/scenario-content/ORDINARY-QUEST-OBJECTIVE-JOURNAL.md",
+        "governance/s00-iterations/S00-20261111-CONDITIONAL-EXIT-PLAN.md"
+      ],
+      "existing_service_mapping": [
+        {
+          "predicate": "HasProduct",
+          "existing_api": "ILocalTownTradeStore.ReadAuthorizedAsync(SessionLease)",
+          "implementation": "SqliteTownTradeStore.ReadAuthorizedAsync / ReadAssetsAsync",
+          "identity": "lease.AccountId; Product uint stored in LocalTownBagStack.Item (legacy field name); quantity; independent equipment identity only when policy explicitly includes it",
+          "authority": "current committed bag snapshot under authorized deferred transaction",
+          "evidence": [
+            "S31",
+            "S32",
+            "S33",
+            "S35"
+          ]
+        },
+        {
+          "predicate": "QuestStep",
+          "existing_api": "SqliteStoryProgressStore.ReadHuntingQuestAsync(lease, role, ct, questId)",
+          "identity": "known ushort QuestId plus admitted role byte 1..9; current local expedition path has selected_character_id NULL and a valid lease",
+          "authority": "persisted ordinary quest step/defeat counters and current collection bag count; journal packets only project it",
+          "limit": "reuse only admitted known ordinary quests under current journey/prerequisite rules; broader quest namespace requires its own existing owner adapter",
+          "evidence": [
+            "S36",
+            "S38"
+          ]
+        }
+      ],
+      "minimal_new_input": {
+        "kind": "HasProduct|QuestStep",
+        "combine": "ALL inside existing condition; alternatives use explicit finite exits/definition choice",
+        "scope": "EntrySnapshot|LiveAtUse",
+        "live_policy": "read only on accepted event or relevant committed asset/quest change, recheck at use when policy is live",
+        "latching": "explicit OpenOnce vs RecheckAtUse; existing exit latch alone cannot encode revocable possession"
+      }
+    },
+    {
+      "id": "E4",
+      "name": "consume item to open or select route",
+      "level": "NEW_TRANSACTIONAL_GAMEPLAY_ADAPTER; reuse existing inventory storage and publication",
+      "player": "真的扣掉鑰匙後才開門，背包和關卡狀態一致",
+      "typed_ids": [
+        "AccountId",
+        "ProductId",
+        "quantity",
+        "instanceId/nodeId/exitKey",
+        "content/policy version",
+        "one committed interaction identity"
+      ],
+      "normal_contract": [
+        "use existing legitimate checkpoint interaction and current position/liveness checks",
+        "read and consume authoritative committed inventory in existing transaction boundary",
+        "record successful business receipt for the chosen gate operation",
+        "publish bag/shortcut deltas using existing asset sync",
+        "project successful receipt into current instance gate state",
+        "do not consume on mere UI preview, cinematic completion or polling"
+      ],
+      "scope_limit": "Current schema has no item predicate or consume action. Inventing free-form Client flag or new wire is unnecessary. Exact cross-store coupling must be implemented in existing service transaction API, not asserted as already present.",
+      "sources": [
+        "design/scenario-content/PHINDOS-GROCER-TRADE.md",
+        "design/scenario-content/ORDINARY-QUEST-OBJECTIVE-JOURNAL.md",
+        "governance/s00-iterations/S00-20261111-MANUAL-INTERACTION-CONTRACT.md"
+      ],
+      "existing_service_mapping": {
+        "pattern": "SqliteTownTradeStore transaction and postcommit assets receipt; quest-completion consumption already shares a transaction with progress",
+        "evidence": [
+          "S31",
+          "S32",
+          "S34",
+          "S35",
+          "S37"
+        ],
+        "not_existing": "no generic consume-to-open operation on current trade interface; scroll/shop APIs cannot be repurposed as gate success"
+      },
+      "proposed_operation": {
+        "name": "ConsumeScenarioGateAuthorized (proposal only)",
+        "identity": [
+          "valid SessionLease",
+          "run identity",
+          "definition/catalog hash",
+          "nodeId",
+          "interactionKey or exitKey",
+          "positive Product quantity",
+          "admitted one-shot interaction identity"
+        ],
+        "transaction": "within existing SQLite owner: validate lease and accepted operation, read count, subtract exact quantity, store gate-operation receipt in same transaction, return committed slot deltas and receipt",
+        "publication": "only committed receipt can set corresponding instance flag/open state; repeat refresh reads prior receipt and returns current state without another debit",
+        "failure": "no receipt and no gate state change when count/admission fails; do not reopen by Client callback",
+        "save_scope": "per-run receipt can survive presentation rebuild; cross-login continuation requires explicit run resume policy before promising persistence"
+      }
+    },
+    {
+      "id": "E5",
+      "name": "dynamic loops and in-instance weighted choices",
+      "level": "OPTIONAL_NEW_RUNTIME_FEATURE",
+      "player": "關內反覆進房、依當下條件抽下一條路",
+      "required_design": [
+        "new declared count/counter scope",
+        "reset or preservation of wave/flag/open/used state per visit",
+        "actual termination condition and Result eligibility",
+        "reward multiplicity and chosen route commit",
+        "versioned replay/resume policy if durable checkpoints are requested"
+      ],
+      "not_required_for": [
+        "existing finite branches",
+        "fixed finite repeat expansion",
+        "once-per-entry weighted selection"
+      ],
+      "reason": "Current runtime flags are monotonic and graph is acyclic; reusing original node identity cannot safely stand in for a new visit.",
+      "evidence": [
+        "S05",
+        "S10"
+      ]
+    }
+  ],
+  "server_evidence": "server-code-evidence.json"
+}

@@ -1,0 +1,92 @@
+{
+  "schema": "MEF_P0_GATES_TRANSITIONS_ANALYSIS_CONTRACT_V1",
+  "classification": "SERVER_PROVIDED_MEF_DESIGN_AND_SOURCE_BACKED_NATIVE_SUBCHAINS",
+  "deployed": false,
+  "formal_admission_changed": false,
+  "typed_domains": {
+    "RuntimeScope": "Server-local content hash + run identity + node + publication generation; not extra wire fields",
+    "MapID": "u32 resource selector; different from node and field/case",
+    "PointKey": "u16 within point category and current point collection; not actor world ID",
+    "WorldActorID": "u16 keyed world actor identity; actor type is low byte for the selected spawn factory",
+    "ModelID": "u16 table model; independently resolved from runtime actor ID",
+    "SceneSelector": "quest u16 + scene u16 with established provider and confirmation policy",
+    "GateFlag": "existing instance-owned named flag; may drive overlay, marker and exit independently"
+  },
+  "gate_rule": {
+    "executor": "existing Server MEF LocalScenarioInstance and LocalTutorialBounds",
+    "closed": "opening flag absent; each rectangle blocks the cells whose centers lie in its half-open rectangle",
+    "opened": "opening flag present; rectangle stops contributing blocked cells; original static cells remain unchanged",
+    "cache_invalidation": "ClosedBarrierMask identifies current flag-dependent overlay state for consumers that cache routes",
+    "markers": "category0 visual points, intercepted by IsBarrierMarkerInteraction; never treated as exits",
+    "client_dynamic_collision_command_proven": false,
+    "candidate_sources": ["candidate-clear-delay.scenario.json", "candidate-region-hold.scenario.json"],
+    "candidate_selection": "Two alternative files for the same story-quest-119 override; select exactly one and pin its hash",
+    "clear_delay": "existing 5-second producer after eligible post-clear Portal observation; requires clear before opening",
+    "region_held": "existing 2.5-second hold producer may open barrier before clear; exit still independently requires GroupIsCleared and flag",
+    "publish_order": "Commit existing authoritative flag state; derive current overlay and visible point snapshot/delta from that state"
+  },
+  "event_object_visual_state": {
+    "status": "SOURCE_BACKED_PARTIAL; new content adapter and concrete model-resource validation required",
+    "spawn_consumer": "S2C0007, factory type7 -> 4D1060 CEventObject; not lb.CreateMonster with a large model number",
+    "world_lookup_required": true,
+    "parameter_consumer": "S2C0000 -> 4AFAF0 -> actor v+2C -> 4D1250",
+    "selector": {"wire_bits": "u16", "accepted_low_word": 28},
+    "state": {"wire_bits": "u16", "consumer": "sign-extended int16 at4D12DB", "allowed": "Only states explicitly declared for the selected model; six joined examples have0,1,2"},
+    "state_mapping": "EventObjects(model,state) -> AVATAR and MOTION; v+68 selects MOTION, actor+388 stores AVATAR",
+    "known_models": [20055, 20056, 20109, 20148, 20159, 20162],
+    "not_yet_named": ["which motion means closed", "which motion means opening", "which motion means open"],
+    "separate_from": ["checkpoint status", "portal effect", "Server collision overlay", "native dynamic collision"]
+  },
+  "exit_intent": {
+    "client": {
+      "eligibility": "point enabled + strict distance less than local radius squared + mode/input gate + one-shot latch",
+      "category0_radius": "0.8 times transmitted radius",
+      "category1_radius": "transmitted radius",
+      "winner": "closest newly eligible point; equal distance preserves earlier vector row",
+      "overlap_caution": "eligibility updates latches for all rows before selecting the winner",
+      "manual_rearm": "release input or leave radius; disabled branch does not clear the previous latch",
+      "packet": "existing6-byte001C: opcode u16, category u16, key u16",
+      "guards": "winner action also checks page state; mode23/24 group branch may ask native confirmation before send"
+    },
+    "server": {
+      "selected_route": "normal Story adapter",
+      "requirements": ["current committed scenario and Portal phase", "no pending narrative commit", "current role alive", "category0 key matches an exit in this node", "that exact exit unlocked", "reconciled Server pose within transmitted radius", "clear interaction segment when barriers are configured"],
+      "transaction": "LocalStoryRoute.EnterPortal forks scenario, passes exact selected key and pose to InteractZ, plans NextNode or Result, publishes only on Commit",
+      "wire_no_instance_token": true,
+      "replay_policy": "Bind pending work to Server-local scope and current collection. The existing001C cannot independently prove the originating Client generation.",
+      "do_not_infer": "PortalUnlocked means at least one exit is open, not every branch"
+    }
+  },
+  "point_lifecycle": {
+    "0012": "clears points and resets controllers before map loader, even for the same MapID",
+    "0027": "replaces the complete collection, not append",
+    "0048": "updates first matching existing category/key; missing key is not created",
+    "lua_setter": "Tutorial.SetCheckPointStatus shares the same existing-point setter; affects current point generation only",
+    "status_only_condition": "Story ClearScenes.Length ==0 AND every exit PreRegisterClosed",
+    "otherwise": "Map + Rebuild + full collection of all exits and interaction/marker points from committed flags; refresh loot snapshot as existing code requires",
+    "generation_key": "Do not carry raw pointers or an old local setter result into the new point collection",
+    "same_map": "native map loader may skip graphics/Bound/minimap reload; earlier0012 point/controller clear still occurs",
+    "cross_map": "resolve MapID resources including BND; rebuild actors, pose, points and appropriate input ownership",
+    "lb_change_map": "direct loader call lacks0012 pre-clear and is not a substitute for Server node transition",
+    "q_load_restore": "visual map backup/restore is not complete Server/node/point/collision restoration"
+  },
+  "readiness": {
+    "0023_0024": "front-end loading state",
+    "0014": "field/controller ready; clears input mask1 only when Q inactive",
+    "00EB": "Q waiting and mask2 handoff, not actor construction or full field readiness",
+    "003F": "presentation milestone may also be emitted by persistent-seen skip; never proof a new setter or gate animation ran",
+    "after_rebuild_hook": "Add only if a new multi-action presentation needs it; existing simple gate/exit state can use snapshot or0048"
+  },
+  "existing_adapter_differences": [
+    {"route": "normal Story", "source": "LocalTutorialWorldConnection.Story.cs + LocalStoryRoute.cs", "scope": "key-specific authorization, health, radius, barrier-aware path and transactional cursor"},
+    {"route": "fixed Phindos", "source": "LocalTutorialWorldConnection.cs", "scope": "single configured key, role/loaded/health and InteractZ; no explicit HasClearInteractionPath in this selected exit branch"},
+    {"route": "ContentBranches lab", "source": "LocalTutorialWorldConnection.ContentBranches.cs", "scope": "selected key plus path and InteractZ; method has no explicit PlayerHealth guard; do not promote the lab method as the normal Story authorization contract"}
+  ],
+  "remaining_work": [
+    {"id": "G1", "class": "SERVER_CONTENT_INTEGRATION", "item": "Select one new geometry candidate, validate chosen normal Story content version, then integrate with existing override/flag/transition services"},
+    {"id": "G2", "class": "SERVER_MEF_VISUAL_ADAPTER", "item": "Map authored gate visual states to a properly initialized CEventObject and only declared model states; no new native opcode or Lua binding claimed"},
+    {"id": "G3", "class": "CLIENT_MATERIAL_AND_NATIVE_COLLISION_UNKNOWN", "item": "Obtain the selected model and motion data, establish visible semantics, and separately identify a real writable collision surface whose changed value reaches the movement consumer"},
+    {"id": "G4", "class": "SERVER_SCOPE_INTEGRATION", "item": "Use current instance/node/publication scope for scheduled changes and full snapshots; preserve existing commit and ready/Q handoffs"},
+    {"id": "G5", "class": "NORMAL_GAMEPLAY_VALIDATION", "item": "Observe chosen content, gate appearance, movement feedback and scene/exit handoff on the original Client; not run by this static package"}
+  ]
+}

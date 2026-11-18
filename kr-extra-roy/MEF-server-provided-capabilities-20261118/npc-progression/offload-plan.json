@@ -1,0 +1,122 @@
+{
+  "schema": "MEF_OFFLOAD_MEASUREMENT_PLAN_V1",
+  "situations": [
+    {
+      "id": "OP01",
+      "player_situation": "跟NPC看完一段劇情再開門",
+      "potentially_removed_server_work": [
+        "台詞/相機/動畫的逐步派送",
+        "純演出等待計時",
+        "已知本地條件後的點開關"
+      ],
+      "server_work_retained": [
+        "入場點集合",
+        "合法出口/服務處理"
+      ],
+      "measure": [
+        "server_presentation_timer_callbacks",
+        "presentation_messages",
+        "presentation_bytes",
+        "same_visible_sequence"
+      ],
+      "execution_site": "CLIENT_EXECUTION_WHERE_PROFILE_REACHABLE",
+      "measurements_available": false,
+      "claimed_saving_percent": null
+    },
+    {
+      "id": "OP02",
+      "player_situation": "敵群清空後播放短劇並開出口",
+      "potentially_removed_server_work": [
+        "每關專用開門分支",
+        "一次0047觸發有限內容後，Client承擔清場後多步等待/演出/setter，不需逐步Server計時與派送"
+      ],
+      "server_work_retained": [
+        "既有GroupCleared事件與出口資格",
+        "依需求選擇一次0048直接開點，或0047/適用003F/00EB有限內容流程",
+        "內容/selector/點版本與Q安全時點",
+        "必要結算與保存"
+      ],
+      "measure": [
+        "rule_evaluations",
+        "scene_commands",
+        "point_snapshot_count",
+        "point_delta_count",
+        "server_timer_callbacks"
+      ],
+      "execution_site": "EXISTING_SERVER_MEF_EVENT_SELECTS_CLIENT_FINITE_SEQUENCE_OR_DIRECT_POINT_ADAPTER",
+      "measurements_available": false,
+      "claimed_saving_percent": null,
+      "tradeoff": "有限內容可增加相對單0048的總封包；評估整段多步程序的計時和派送成本，不預設節省百分比。"
+    },
+    {
+      "id": "OP03",
+      "player_situation": "完成任務後鐵匠開店",
+      "potentially_removed_server_work": [
+        "每家店硬寫條件",
+        "本地UI選單步驟的Server編排"
+      ],
+      "server_work_retained": [
+        "同一MEF服務資格規則",
+        "一次交易",
+        "資產發布"
+      ],
+      "measure": [
+        "hardcoded_content_branches",
+        "rule_lookup_count",
+        "trade_transaction_count",
+        "trade_transaction_ms"
+      ],
+      "execution_site": "DATA_DRIVEN_SERVER_MEF_WITH_CLIENT_UI",
+      "measurements_available": false,
+      "claimed_saving_percent": null
+    },
+    {
+      "id": "OP04",
+      "player_situation": "通關領經驗/錢/熟練度並接下一任務",
+      "potentially_removed_server_work": [
+        "散落每任務條件/常數",
+        "若已本地演出的等待則不另加Server計時"
+      ],
+      "server_work_retained": [
+        "一次既有主線結算交易",
+        "角色/錢包/SkillExp保存",
+        "提交後快照"
+      ],
+      "measure": [
+        "settlement_transaction_count",
+        "settlement_transaction_ms",
+        "rule_evaluation_count",
+        "publication_bytes"
+      ],
+      "execution_site": "SERVER_MEF_RULES_REUSE_EXISTING_SETTLEMENT",
+      "measurements_available": false,
+      "claimed_saving_percent": null
+    },
+    {
+      "id": "OP05",
+      "player_situation": "重新登入看到原任務進度",
+      "potentially_removed_server_work": [
+        "任務各自特殊重建程式",
+        "不必要的逐幀MEF表現保存"
+      ],
+      "server_work_retained": [
+        "既有讀取/保存",
+        "0042/006F/資產重建",
+        "未完副本重開政策"
+      ],
+      "measure": [
+        "durable_checkpoint_count",
+        "profile_read_ms",
+        "snapshot_bytes",
+        "same_visible_progress"
+      ],
+      "execution_site": "DECLARED_CHECKPOINTS_OVER_EXISTING_PERSISTENCE",
+      "measurements_available": false,
+      "claimed_saving_percent": null
+    }
+  ],
+  "server_side_interpretation_saves_cpu_claim": false,
+  "event_indexing": "proposed load-time event→rules index over existing engine; benchmark before claiming savings",
+  "already_native_local_work_not_double_counted": true,
+  "test_scope": "normal gameplay only, no new runtime tests this round"
+}

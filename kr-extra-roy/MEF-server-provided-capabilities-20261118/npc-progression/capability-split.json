@@ -1,0 +1,239 @@
+{
+  "schema": "MEF_CAPABILITY_RESPONSIBILITY_SPLIT_V1",
+  "server_executed_mef_is_mef": true,
+  "official_mef_recovery_required": false,
+  "all_are_server_development_or_integration": true,
+  "capabilities": [
+    {
+      "id": "C01",
+      "name": "NPC外觀與演出",
+      "player_outcome": "人物出現、走位與動作",
+      "client_executed_mef": "PROVEN: lb.CreateObject[Ex] world actor; Q.CreateObject explicit presentation slot",
+      "server_executed_mef": "模型/位置/場景與角色規則",
+      "existing_adapter": "已知原生world/Q容器；已有NPC發布",
+      "source_ids": [
+        "S01",
+        "S14",
+        "S18"
+      ],
+      "new_mef_integration_delta": "可達執行profile、模型資源；lb動作無新entity回值",
+      "server_work_reduction": "Client執行時可移走純演出逐步派送；既有同步NPC身分仍需保留",
+      "analysis_status": "BOUNDED_CAPABILITY_AND_INTEGRATION_SPLIT_COMPLETED",
+      "new_mef_runtime_integrated_this_round": false,
+      "server_mef_only_cpu_offload_claim": false,
+      "client_lua_db_write_claim": false
+    },
+    {
+      "id": "C02",
+      "name": "對話編排",
+      "player_outcome": "NPC多段對話可按鍵或自動推進",
+      "client_executed_mef": "PROVEN: ScenarioTalkTable.open/next/hide; qbase本地等待",
+      "server_executed_mef": "選哪組台詞與場景",
+      "existing_adapter": "原表/TalkBox/native OnEndTalk路線",
+      "source_ids": [
+        "S20",
+        "S32"
+      ],
+      "new_mef_integration_delta": "文字/頭像依賴與UI owner；OnEndTalk只為演出完成",
+      "server_work_reduction": "逐句演出、聲音/相機協調與等待可本地；不能重算原本已本地完成的收益",
+      "analysis_status": "BOUNDED_CAPABILITY_AND_INTEGRATION_SPLIT_COMPLETED",
+      "new_mef_runtime_integrated_this_round": false,
+      "server_mef_only_cpu_offload_claim": false,
+      "client_lua_db_write_claim": false
+    },
+    {
+      "id": "C03",
+      "name": "NPC互動開關",
+      "player_outcome": "劇情後才能和NPC互動",
+      "client_executed_mef": "PROVEN: SetCheckPointStatus(key,3,0/1)",
+      "server_executed_mef": "解鎖條件與已完成任務",
+      "existing_adapter": "一次S2C0027點集合；001C部分NPC意圖",
+      "source_ids": [
+        "S06",
+        "S07",
+        "S26"
+      ],
+      "new_mef_integration_delta": "先有點；任務/NPC/Town上下文與同run事實",
+      "server_work_reduction": "本地條件可省開點delta；服務資格仍由同份MEF Server規則處理",
+      "analysis_status": "BOUNDED_CAPABILITY_AND_INTEGRATION_SPLIT_COMPLETED",
+      "new_mef_runtime_integrated_this_round": false,
+      "server_mef_only_cpu_offload_claim": false,
+      "client_lua_db_write_claim": false
+    },
+    {
+      "id": "C04",
+      "name": "商店與解鎖",
+      "player_outcome": "通關後鐵匠開店",
+      "client_executed_mef": "PROVEN: SetCheckPointStatus(ShopNo,2,0/1) and native menu",
+      "server_executed_mef": "requiresCompletedQuest、位置、貨單、價格",
+      "existing_adapter": "town-placement v3/town-trade 已存在",
+      "source_ids": [
+        "S02",
+        "S28",
+        "S29"
+      ],
+      "new_mef_integration_delta": "將MEF規則編譯/映射現有配置，貨架和服務政策一致",
+      "server_work_reduction": "免每店硬寫解鎖分支；Client執行本地演出後開店可省逐步派送",
+      "analysis_status": "BOUNDED_CAPABILITY_AND_INTEGRATION_SPLIT_COMPLETED",
+      "new_mef_runtime_integrated_this_round": false,
+      "server_mef_only_cpu_offload_claim": false,
+      "client_lua_db_write_claim": false
+    },
+    {
+      "id": "C05",
+      "name": "買賣",
+      "player_outcome": "扣款取得物品、賣出拿錢",
+      "client_executed_mef": "PROVEN: 既有本地選單/視窗，不是任意Lua交易API",
+      "server_executed_mef": "品項、價格、數量與可售政策",
+      "existing_adapter": "C2S0027/0020；既有SQLite交易與002C",
+      "source_ids": [
+        "S05",
+        "S33",
+        "S35"
+      ],
+      "new_mef_integration_delta": "MEF規則資料接交易adapter；不另建錢包",
+      "server_work_reduction": "減硬編碼與每項專用邏輯；交易計算與DB仍在Server",
+      "analysis_status": "BOUNDED_CAPABILITY_AND_INTEGRATION_SPLIT_COMPLETED",
+      "new_mef_runtime_integrated_this_round": false,
+      "server_mef_only_cpu_offload_claim": false,
+      "client_lua_db_write_claim": false
+    },
+    {
+      "id": "C06",
+      "name": "強化",
+      "player_outcome": "扣材料與費用提升同件裝備",
+      "client_executed_mef": "PROVEN: NPC TYPE12/00A1/00D9 UI route",
+      "server_executed_mef": "升級條件、費用、材料、機率與呈現",
+      "existing_adapter": "現有強化服務/CustomItem/007B/002C/00D9",
+      "source_ids": [
+        "S01",
+        "S34"
+      ],
+      "new_mef_integration_delta": "MEF規則接已支援的強化範圍；不要重新列整套未實作",
+      "server_work_reduction": "資料化減內容程式；裝備更新與存檔不算移走CPU",
+      "analysis_status": "BOUNDED_CAPABILITY_AND_INTEGRATION_SPLIT_COMPLETED",
+      "new_mef_runtime_integrated_this_round": false,
+      "server_mef_only_cpu_offload_claim": false,
+      "client_lua_db_write_claim": false
+    },
+    {
+      "id": "C07",
+      "name": "教學互動點",
+      "player_outcome": "提示點、引導與教學轉段",
+      "client_executed_mef": "PROVEN: InsertTutorialCheckPoint(rowKey) category4; SetCheckPointStatus",
+      "server_executed_mef": "提示點/步驟與任務/教學政策",
+      "existing_adapter": "原TutCheckPoint表與教學既有UI",
+      "source_ids": [
+        "S04",
+        "S14"
+      ],
+      "new_mef_integration_delta": "固定category4不冒充通用出口/NPC點新增",
+      "server_work_reduction": "教學提示和本地等待可移走Server計時；業務milestone仍需adapter",
+      "analysis_status": "BOUNDED_CAPABILITY_AND_INTEGRATION_SPLIT_COMPLETED",
+      "new_mef_runtime_integrated_this_round": false,
+      "server_mef_only_cpu_offload_claim": false,
+      "client_lua_db_write_claim": false
+    },
+    {
+      "id": "C08",
+      "name": "開出口",
+      "player_outcome": "清完敵群或看完演出可離開",
+      "client_executed_mef": "PROVEN: 已存在點的SetCheckPointStatus；可由Server已確認GroupCleared後以0047選有限Q內容，再本地wait/演出/setter。這不需要一般group-result-to-resident-Lua橋。",
+      "server_executed_mef": "Entry/GroupCleared/InteractZ既有規則與出口目的地",
+      "existing_adapter": "LocalScenarioDefinition；0027、0048、001C",
+      "source_ids": [
+        "S06",
+        "S12",
+        "S13",
+        "S36"
+      ],
+      "new_mef_integration_delta": "本地條件用setter；Server清組可一次0047觸發綁定finite內容或直接0048。需發布內容、預放唯一點、Q安全時點與seen政策；只有普通常駐事件注入另需generic bridge。",
+      "server_work_reduction": "finite清場序列可移走Server多步計時/演出/開點派送；0047/003F/00EB總量可能多於單0048，不能一概宣稱封包更少。Server端MEF保留清組判斷。",
+      "analysis_status": "BOUNDED_CAPABILITY_AND_INTEGRATION_SPLIT_COMPLETED",
+      "new_mef_runtime_integrated_this_round": false,
+      "server_mef_only_cpu_offload_claim": false,
+      "client_lua_db_write_claim": false
+    },
+    {
+      "id": "C09",
+      "name": "任務條件與計數",
+      "player_outcome": "NPC標記、目標數與可交任務",
+      "client_executed_mef": "PROVEN: Client本地Quest/目標consumer；無通用Lua持久目標setter",
+      "server_executed_mef": "前置、等級、Town/NPC、目標、Accepted/Ready規則",
+      "existing_adapter": "現有普通任務87項記錄；0040/0042/0041/0045",
+      "source_ids": [
+        "S08",
+        "S09",
+        "S10",
+        "S11"
+      ],
+      "new_mef_integration_delta": "MEF目標資料接已存在事件與任務服務；新事件逐項補橋",
+      "server_work_reduction": "資料化免每任務硬寫；Client已有UI條件消費，持久計數仍Server",
+      "analysis_status": "BOUNDED_CAPABILITY_AND_INTEGRATION_SPLIT_COMPLETED",
+      "new_mef_runtime_integrated_this_round": false,
+      "server_mef_only_cpu_offload_claim": false,
+      "client_lua_db_write_claim": false
+    },
+    {
+      "id": "C10",
+      "name": "結算與獎勵",
+      "player_outcome": "通關後取得經驗、錢與熟練度",
+      "client_executed_mef": "PROVEN: 演出/結果呈現；不直接寫資產",
+      "server_executed_mef": "終點、返回條件、受益角色、5850/40/900方案與版本",
+      "existing_adapter": "ScenarioCompletion、同筆故事/EXP/錢包/SkillExp帳本",
+      "source_ids": [
+        "S03",
+        "S08",
+        "S17",
+        "S30"
+      ],
+      "new_mef_integration_delta": "自有MEF規則映射既有提交入口；保留返回後入帳政策",
+      "server_work_reduction": "免每關結算條件/常數硬碼；交易與I/O不外移",
+      "analysis_status": "BOUNDED_CAPABILITY_AND_INTEGRATION_SPLIT_COMPLETED",
+      "new_mef_runtime_integrated_this_round": false,
+      "server_mef_only_cpu_offload_claim": false,
+      "client_lua_db_write_claim": false
+    },
+    {
+      "id": "C11",
+      "name": "進度保存",
+      "player_outcome": "重新登入仍可續玩、已領獎不再領",
+      "client_executed_mef": "ClientMEF只保存當次local流程；持久狀態由Server恢復",
+      "server_executed_mef": "宣告持久checkpoint/Quest狀態/版本與重建策略",
+      "existing_adapter": "既有帳號角色保存、006F、0042回填、002C與成長快照",
+      "source_ids": [
+        "S08",
+        "S09",
+        "S10",
+        "S17"
+      ],
+      "new_mef_integration_delta": "內容狀態到既有存檔映射；不存任意coroutine，不把未完副本自動續接",
+      "server_work_reduction": "減零散進度程式與不必要逐幀保存；DB是共用adapter",
+      "analysis_status": "BOUNDED_CAPABILITY_AND_INTEGRATION_SPLIT_COMPLETED",
+      "new_mef_runtime_integrated_this_round": false,
+      "server_mef_only_cpu_offload_claim": false,
+      "client_lua_db_write_claim": false
+    },
+    {
+      "id": "C12",
+      "name": "結果與返回",
+      "player_outcome": "按結果頁返回、恢復村莊並接下一任務",
+      "client_executed_mef": "PROVEN: Q演出、普通Scenario結果UI；RestoreMap只視覺",
+      "server_executed_mef": "目的Town/節點/返回劇情/下一Quest與門檻",
+      "existing_adapter": "S2C0022/type0、C2S0033限定分支、既有回村重建",
+      "source_ids": [
+        "S07",
+        "S08",
+        "S15",
+        "S17"
+      ],
+      "new_mef_integration_delta": "將MEF返回計畫接現有場景安裝；不能以Q.End統一所有ACK",
+      "server_work_reduction": "本地演出順序可省逐步派送；世界快照/提交仍需既有adapter",
+      "analysis_status": "BOUNDED_CAPABILITY_AND_INTEGRATION_SPLIT_COMPLETED",
+      "new_mef_runtime_integrated_this_round": false,
+      "server_mef_only_cpu_offload_claim": false,
+      "client_lua_db_write_claim": false
+    }
+  ],
+  "runtime_executed_this_round": false
+}

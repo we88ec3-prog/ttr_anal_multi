@@ -1,0 +1,183 @@
+{
+  "schema": "MEF_SEVEN_GAMEPLAY_CAPABILITY_PLAN_V1",
+  "base_commit": "60c1c1a5dc7a73902d9dbb50361d5148e8b30058",
+  "server_development_includes_mef": true,
+  "prefer_mef_execution_where_supported": true,
+  "original_format_recovery_is_goal": false,
+  "records": [
+    {
+      "id": "spawn",
+      "player_feature": "生怪",
+      "client_mef": "以已證 world 建立入口安排本地生成；由 native world update 推進物件。",
+      "server_mef": "內容定義模型、出生位置、波次、條件與逐出生行為設定。",
+      "existing_foundation": "Scenario／MonsterBehavior、逐出生 profile、順序／定時／區域波次。",
+      "minimum_adapter": "需要跨端共享時才接共同身分與世界發布；可獨立的本地用途不因無 ID 回值而排除。",
+      "remaining": [
+        "所選模型與場景幾何",
+        "新內容入口／lifetime 整合",
+        "敵對自主控制與跨端 ID 對齊依具體用途補證"
+      ],
+      "evidence": [
+        "world-offload/report.md",
+        "SERVER-REUSE.md"
+      ],
+      "scope": "MEF_AND_SERVER_DEVELOPMENT",
+      "analysis_status": "CAPABILITY_AND_CONCRETE_INTEGRATION_DELTA_DOCUMENTED",
+      "new_client_mef_integration_status": "NOT_DEPLOYED_OR_PLAY_VERIFIED_IN_THIS_BATCH",
+      "official_mef_required": false,
+      "existing_server_status": "REUSE_PUBLISHED_IMPLEMENTATION_RECORDS_WITH_THEIR_ORIGINAL_LIMITS"
+    },
+    {
+      "id": "combat",
+      "player_feature": "戰鬥判定",
+      "client_mef": "使用已存在的移動、狀態／動畫執行；Client MEF 的敵方決策或命中仍需相符輸入／事件。",
+      "server_mef": "把選招、節奏、HP／傷害與效果規則放入共用 MEF 規則，沿現有戰鬥 adapter。",
+      "existing_foundation": "既有 AI profile、追擊／回位／巡邏、選招／冷卻及戰鬥服務。",
+      "minimum_adapter": "尚在 Server 求值的決策使用已有 action／HP／result 發布；不可把動作動畫或面板當扣血。",
+      "remaining": [
+        "所選 Client 決策的合法輸入與回報接口",
+        "具體技能／命中／效果規則接線",
+        "同等正常流程的增量負擔量測"
+      ],
+      "evidence": [
+        "world-offload/report.md",
+        "LOAD-REDUCTION.md",
+        "SERVER-REUSE.md"
+      ],
+      "scope": "MEF_AND_SERVER_DEVELOPMENT",
+      "analysis_status": "CAPABILITY_AND_CONCRETE_INTEGRATION_DELTA_DOCUMENTED",
+      "new_client_mef_integration_status": "NOT_DEPLOYED_OR_PLAY_VERIFIED_IN_THIS_BATCH",
+      "official_mef_required": false,
+      "existing_server_status": "REUSE_PUBLISHED_IMPLEMENTATION_RECORDS_WITH_THEIR_ORIGINAL_LIMITS"
+    },
+    {
+      "id": "group_clear",
+      "player_feature": "敵群清空",
+      "client_mef": "若取得同群的真正死亡／清空事實，可由 MEF 接續；正常 getter 尚無通用普通群清結果。",
+      "server_mef": "定義群組、波次、完成條件及後續節點；以既有 GroupCleared／波清旗標求值。",
+      "existing_foundation": "每實例事件引擎、聚合 GroupCleared、指定波清／血量旗標。",
+      "minimum_adapter": "目前用既有 world 事件進規則引擎；若要 Client 自主判定，補同 run 普通事件至 Lua 的實際橋。",
+      "remaining": [
+        "普通死亡／移除理由／群組觀察至 Client Lua 的接口",
+        "適用 run／群組／物件代次對照",
+        "新波次內容整合"
+      ],
+      "evidence": [
+        "world-offload/report.md",
+        "binding-offload-map.json",
+        "SERVER-REUSE.md"
+      ],
+      "scope": "MEF_AND_SERVER_DEVELOPMENT",
+      "analysis_status": "CAPABILITY_AND_CONCRETE_INTEGRATION_DELTA_DOCUMENTED",
+      "new_client_mef_integration_status": "NOT_DEPLOYED_OR_PLAY_VERIFIED_IN_THIS_BATCH",
+      "official_mef_required": false,
+      "existing_server_status": "REUSE_PUBLISHED_IMPLEMENTATION_RECORDS_WITH_THEIR_ORIGINAL_LIMITS"
+    },
+    {
+      "id": "exit",
+      "player_feature": "開出口",
+      "client_mef": "在已有的 category/key 上執行 Tutorial.SetCheckPointStatus，可排演出與等待後開點。",
+      "server_mef": "定義出口條件、延遲、互動政策及目的節點。",
+      "existing_foundation": "0027 點快照、0048 同 setter、條件出口／旗標及 InteractZ。",
+      "minimum_adapter": "入場一次配置點；Server MEF 收 GroupCleared 後可用一次 0047 選已綁定 finite 內容，Client 自行 wait／演出／setter，不需通用事件注入 Lua。純單開點沿 0048；轉場沿既有互動服務。",
+      "remaining": [
+        "目標點必須先存在且唯一",
+        "finite 方案需內容／selector／literal／同場景版本綁定；若要求向持續 Lua 注入動態結果才另需橋",
+        "實際出口幾何與正常流程驗收"
+      ],
+      "evidence": [
+        "npc-progression/report.md",
+        "delivery-profiles/authoring-contract.md"
+      ],
+      "scope": "MEF_AND_SERVER_DEVELOPMENT",
+      "analysis_status": "CAPABILITY_AND_CONCRETE_INTEGRATION_DELTA_DOCUMENTED",
+      "new_client_mef_integration_status": "NOT_DEPLOYED_OR_PLAY_VERIFIED_IN_THIS_BATCH",
+      "official_mef_required": false,
+      "existing_server_status": "REUSE_PUBLISHED_IMPLEMENTATION_RECORDS_WITH_THEIR_ORIGINAL_LIMITS"
+    },
+    {
+      "id": "settlement",
+      "player_feature": "任務結算",
+      "client_mef": "可安排結束演出、文字與結果後流程；回報僅按原介面的精確語意使用。",
+      "server_mef": "定義終點／返回條件、完成資格、受益者與下一任務。",
+      "existing_foundation": "ScenarioCompletion、普通任務 Accepted／Ready／Completed、結果及返回路線。",
+      "minimum_adapter": "MEF 產生有版本的結果候選，接同 run 的既有 settlement；不將任意 003F 當通關。",
+      "remaining": [
+        "新 MEF 模型到現有結算入口的映射",
+        "新目標事件所需 adapter",
+        "所選任務的完整正常結果／返回驗收"
+      ],
+      "evidence": [
+        "npc-progression/report.md",
+        "npc-progression/adapter-contracts.json"
+      ],
+      "scope": "MEF_AND_SERVER_DEVELOPMENT",
+      "analysis_status": "CAPABILITY_AND_CONCRETE_INTEGRATION_DELTA_DOCUMENTED",
+      "new_client_mef_integration_status": "NOT_DEPLOYED_OR_PLAY_VERIFIED_IN_THIS_BATCH",
+      "official_mef_required": false,
+      "existing_server_status": "REUSE_PUBLISHED_IMPLEMENTATION_RECORDS_WITH_THEIR_ORIGINAL_LIMITS"
+    },
+    {
+      "id": "rewards",
+      "player_feature": "獎勵",
+      "client_mef": "安排獎勵說明與顯示；已知 native 結果欄由原 UI 消費。",
+      "server_mef": "定義經驗、金錢、熟練度、道具與資格／時點等規則。",
+      "existing_foundation": "主線經驗、錢包、熟練度、普通任務獎勵與既有資產服務／帳本。",
+      "minimum_adapter": "把規則決定的結果交給既有資產交易與發布；Client 無已證直接帳戶／DB 寫入 binding。",
+      "remaining": [
+        "新內容的獎勵政策與規則版本",
+        "需要新增品項時的合法資料／交易接線",
+        "獎勵顯示與實際保存的正常流程對照"
+      ],
+      "evidence": [
+        "npc-progression/report.md",
+        "SERVER-REUSE.md"
+      ],
+      "scope": "MEF_AND_SERVER_DEVELOPMENT",
+      "analysis_status": "CAPABILITY_AND_CONCRETE_INTEGRATION_DELTA_DOCUMENTED",
+      "new_client_mef_integration_status": "NOT_DEPLOYED_OR_PLAY_VERIFIED_IN_THIS_BATCH",
+      "official_mef_required": false,
+      "existing_server_status": "REUSE_PUBLISHED_IMPLEMENTATION_RECORDS_WITH_THEIR_ORIGINAL_LIMITS"
+    },
+    {
+      "id": "persistence",
+      "player_feature": "進度保存",
+      "client_mef": "持有場內暫態，按已發布快照恢復本地點／演出狀態。",
+      "server_mef": "宣告需保存的業務里程碑、已完成／已領獎與登入續接政策。",
+      "existing_foundation": "帳號／角色成長與資產、主線游標、普通任務進度、結算帳本及登入回填。",
+      "minimum_adapter": "使用既有持久化交易與版本關聯；不新造第二套存檔，不預設保存任意 Lua 堆疊。",
+      "remaining": [
+        "新 MEF 業務狀態到現行保存欄位／版本的映射",
+        "若要求未完成副本中途續玩，另設明確 checkpoint",
+        "指定正常重新登入流程的驗收"
+      ],
+      "evidence": [
+        "npc-progression/report.md",
+        "SERVER-REUSE.md"
+      ],
+      "scope": "MEF_AND_SERVER_DEVELOPMENT",
+      "analysis_status": "CAPABILITY_AND_CONCRETE_INTEGRATION_DELTA_DOCUMENTED",
+      "new_client_mef_integration_status": "NOT_DEPLOYED_OR_PLAY_VERIFIED_IN_THIS_BATCH",
+      "official_mef_required": false,
+      "existing_server_status": "REUSE_PUBLISHED_IMPLEMENTATION_RECORDS_WITH_THEIR_ORIGINAL_LIMITS"
+    }
+  ],
+  "performance_claim": "No measured CPU/network saving; client execution and server rule datafication are distinct.",
+  "status_meaning": "分工與可用接口已分析；尚未閉合的精確 Client 接口、新內容整合與實機結果各自保留。",
+  "finite_result_dispatch": {
+    "classification": "SELF_AUTHORED_COMPOSITION_OF_PROVEN_INTERFACES",
+    "source_event": "Existing Server MEF GroupCleared for current run",
+    "dispatch": "One 0047 selector for installed finite content at a compatible Q time",
+    "local_steps": [
+      "wait",
+      "presentation as configured",
+      "existing point setter",
+      "explicit End"
+    ],
+    "completion_policy": "Selected quest0 normal End uses 003F/00EB; not success ACK",
+    "generic_event_to_resident_lua_bridge_required": false,
+    "new_wire_payload": false,
+    "deployed": false,
+    "single_point_update_is_not_guaranteed_to_save_packets": true
+  }
+}

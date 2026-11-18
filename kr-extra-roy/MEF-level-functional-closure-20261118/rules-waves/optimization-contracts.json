@@ -1,0 +1,189 @@
+{
+  "schema": "MEF_LEVEL_RULE_OPTIMIZATION_CONTRACTS_V1",
+  "baseline": "09799b117f01e577be56dee3e909e1cde25b855f",
+  "scope": "Server-executed MEF rule evaluation. These are semantics-preserving design contracts, not deployed optimization or measured CPU offload. Client finite/native execution eligibility is handled by the parent integration report.",
+  "proposals": [
+    {
+      "id": "OPT-01",
+      "proposal": "載入時編譯事件與反向旗標索引",
+      "inputs": [
+        "immutable definition graph",
+        "signals[event]",
+        "requiredFlags",
+        "waveId",
+        "interaction.key",
+        "exit.key"
+      ],
+      "index": [
+        "flag -> exits, waves, manual interactions, barriers, hazards",
+        "(node, waveId) -> WaveCleared/WaveHealthReached/BossDefeated observers",
+        "(node, category, key) -> fixed point action"
+      ],
+      "trigger": "只有 false→true 的旗標變更，才把相依consumer加入原評估phase的去重候選集合；按原陣列順序派送。",
+      "invariants": [
+        "不以全副本任何分支可能取得旗標的聯集，取代編譯期每入口路線保證交集。",
+        "flag全definition唯一且最多64；跨圖沿用instance bitset，new instance重置。",
+        "already spawned wave、used interaction、latched-open exit均保留one-shot狀態。",
+        "必須保留原normal/battle update派送點；不是在任意網路callback立即執行玩法。"
+      ],
+      "cost_claim": "可減少不相依consumer重算；本輪只建立真實內容反向索引，未量測Server CPU。",
+      "implementation_status": "ANALYZED_NOT_IMPLEMENTED"
+    },
+    {
+      "id": "OPT-02",
+      "proposal": "用實體變更更新波次活怪與血量彙總",
+      "inputs": [
+        "actor accepted HP transition",
+        "actor->spawned wave binding",
+        "wave maximum HP total",
+        "required boss identity",
+        "projectile count",
+        "dead-actor removal queued state"
+      ],
+      "trigger": "HP與生成／移除事件更新 counters，只喚醒該波觀察者及聚合清場候選。",
+      "invariants": [
+        "WaveCleared只在該波已生成、其所有HP=0時設flag。",
+        "WaveHealth分母保留死亡成員maximumHP，不跟屍體刪除縮小。",
+        "整場清場仍要 pending sequential=0、pending timed=0、全部活怪0、投射物及既有勝利／移除提交門檻。",
+        "一般HP變動、生成、未來若支援復活／治療等都必須更新彙總；不能只在死亡事件減一次卻漏狀態變更。",
+        "使用足夠寬的整數／現行數值模型；255×1000000×100已超過32-bit有號整數，不能引進門檻乘法溢位。",
+        "新怪不承受本次已結算舊命中；不得透過重新掃射傷害擴大同一攻擊的作用對象。"
+      ],
+      "cost_claim": "由重掃所有成員改為處理已變動實體；需要實測HP事件成本，未宣稱既有engine目前一定重掃。",
+      "implementation_status": "ANALYZED_NOT_IMPLEMENTED"
+    },
+    {
+      "id": "OPT-03",
+      "proposal": "各計時原點分開的deadline queue與到期等待集合",
+      "inputs": [
+        "existing monotonic clock",
+        "existing seconds->timer threshold conversion",
+        "node and encounter generation",
+        "eligible update phase",
+        "deadline kind",
+        "stable content array order"
+      ],
+      "trigger": "到期時只喚醒該計時物件；若旗標／區域未滿，轉到對應依賴等待集合，保留原到期狀態。",
+      "invariants": [
+        "timed reinforcement origin=encounter creation。",
+        "sequential origin=aggregate alive became zero；定時波生成使alive回正時，保留現行重新等聚合清場的語意，舊deadline不可越過新活怪。",
+        "empty-initial first sequential origin=first battle update。",
+        "NodeDelay origin=entry cinematic committed/battle enabled；clear cinematic suppresses dispatch but elapsed time still counts。",
+        "ClearDelay origin=first valid Server position after clear cinematic/Portal commit；DB等待與清場劇情不預支延遲。",
+        "RegionHeld origin=first observed inside；observed exit/actor death/story clear reset incomplete interval；story cinematic time excluded。",
+        "維持目前整數毫秒門檻／秒數轉換精度、>=判斷及首次eligible update；公開文檔未給所有小數轉換細節，新adapter必須由既有實作pin，不自行假定floor/ceil。",
+        "同一Poll定時先、陣列順序，再順序波；舊node generation的到期項目不得流入新節點。",
+        "fork複製需要保存原點／到期狀態；提交失敗不修改原實例。"
+      ],
+      "not_equivalent": "以Q.wait替代所有delay並不保證loading、pause、clear cinematic與首次可派送更新語意一致。",
+      "cost_claim": "可避免每tick掃所有未到期計時器；本輪沒有跑Server或測計時精度。",
+      "implementation_status": "ANALYZED_NOT_IMPLEMENTED"
+    },
+    {
+      "id": "OPT-04",
+      "proposal": "區域觀察只追蹤目前節點尚未完成的條件",
+      "inputs": [
+        "authoritative estimated position changes",
+        "skill displacement",
+        "active region predicates",
+        "current lifecycle phase"
+      ],
+      "trigger": "新位姿與現行必要週期更新產生候選；RegionHeld另由deadline喚醒。",
+      "invariants": [
+        "RegionEntered完成可退訂；wave activationRegion與尚未開的出口需要當前位置，不可快取曾經進入當滿足。",
+        "RegionHeld兩次tick間的出區也必須重設，不能以降低位置事件頻率換取錯誤占點成功。",
+        "任何空間索引僅作粗篩，最後仍用原精確圓／矩形邊界。",
+        "BND可達另由space-mechanisms核；圖上有路徑不保證玩家走得到。"
+      ],
+      "cost_claim": "減少已完成一次性區域觀察；當前公開內容僅少量區域，是否值得格網索引須量測。",
+      "implementation_status": "ANALYZED_NOT_IMPLEMENTED"
+    },
+    {
+      "id": "OPT-05",
+      "proposal": "同一更新合併狀態變更後發布點位",
+      "inputs": [
+        "OpenExitKeys",
+        "interaction used/enabled",
+        "flag state",
+        "scene rebuild state",
+        "pending transaction"
+      ],
+      "trigger": "保留既有commit邊界；正常更新只發布changed keys，需重建時一次完整0027。",
+      "invariants": [
+        "0027不是append；不得每個出口各送一包導致先前點消失。",
+        "使用過的category1點不因clear cinematic重建復活；latched-open出口保留。",
+        "不把某出口打開代表所有出口獲授權；伺服端仍核對實際key和位置。",
+        "提早顯示本地效果不得提早接受換圖／結算。"
+      ],
+      "cost_claim": "這是沿用已有發布契約；可以量測state changes對wire packets比值，不能再宣稱所有收益都是新實作。",
+      "implementation_status": "EXISTING_CONTRACT_REUSE_FOR_NEW_MEF_ADAPTER"
+    },
+    {
+      "id": "OPT-06",
+      "proposal": "載入時完成不可變計畫，實例只存小量可變狀態",
+      "inputs": [
+        "frozen source hash",
+        "compiled graph hash",
+        "validated graph",
+        "stable IDs",
+        "per-instance flags, wave cursors, deadlines, open/used sets"
+      ],
+      "trigger": "實例建立讀取已驗證catalog；fork採獨立mutable state，再於commit替換。",
+      "invariants": [
+        "源檔SHA、合併後scenarioGraphSHA分開，舊內容進度不可默默套新圖。",
+        "不能跨instance共用live counters／flags／timers。",
+        "重開副本不是從舊wave index或舊timer繼續；已實作永久收益仍依既有保存adapter。",
+        "原內容規則凍結與此輪靜態稽核不構成中途存檔功能。"
+      ],
+      "cost_claim": "可降低重複解析、依賴推導與複製不可變資料；實際配置載入頻率須量測。",
+      "implementation_status": "EXISTING_CONTRACT_REUSE_FOR_NEW_MEF_ADAPTER"
+    },
+    {
+      "id": "OPT-07",
+      "proposal": "把等待原因做成可解釋的進度快照",
+      "inputs": [
+        "pending wave identity",
+        "timer remaining or reached",
+        "missing required flags",
+        "current region result",
+        "pending removal/projectiles",
+        "closed exit reasons"
+      ],
+      "trigger": "診斷或狀態改變才生成文字快照，避免每tick重組完整JSON。",
+      "invariants": [
+        "每種blocked reason附對應node/wave/exit與source hash；不得將Server已生成當Client可見ACK。",
+        "同時顯示多個AND前提，不把未清怪誤顯示為計時尚未到。",
+        "待生成波、剩餘投射物、死亡移除、清場劇情、出口旗標等待分開。"
+      ],
+      "cost_claim": "能使關卡卡住定位到精確規則；既有timedReinforcementWaits可直接重用。",
+      "implementation_status": "ANALYZED_WITH_EXISTING_DIAGNOSTIC_REUSE"
+    }
+  ],
+  "measurement_plan": {
+    "before_after_same_source_hash": true,
+    "normal_user_journeys_only": [
+      "same configured sequential/timed-wave progression",
+      "same manual and branch selection",
+      "same clear-cinematic and delayed-exit progression"
+    ],
+    "metrics": [
+      "rules considered vs consumers actually affected",
+      "HP observer visits per accepted HP transition",
+      "deadline pop and deferred-ready counts",
+      "region exact checks per accepted position change",
+      "changed point keys and published0027/0048 count",
+      "time from eligible condition to actual Server dispatch",
+      "final node/flags/open exits/spawn order equality"
+    ],
+    "must_not_claim": [
+      "no benchmark was executed",
+      "no new Client opcode or generic event bridge proved",
+      "no lower total Server load percentage predicted",
+      "no Client play acceptance created"
+    ]
+  },
+  "target_executed": false,
+  "server_executed": false,
+  "lua_executed": false,
+  "runtime_test_performed": false
+}

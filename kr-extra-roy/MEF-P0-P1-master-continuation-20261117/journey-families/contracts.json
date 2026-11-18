@@ -1,0 +1,684 @@
+{
+  "schema": "MEF_P1_JOURNEY_FAMILIES_CONTRACT_V1",
+  "baseline": "5ed4833b805949fabe260aea77e3fe0fd8e86bfa",
+  "native_mef_grammar_recovered": false,
+  "status": {
+    "normal_journey_static_analysis": "ANALYZED_WITH_EXACT_RESOURCE_FRONTIERS",
+    "function_family_analysis": "ANALYZED_7_OF_7",
+    "client_server_run_performed": false,
+    "deployable_ready": false,
+    "formal_T01_R3_or_REQ_state_changed": false
+  },
+  "scope": "P1原4題中的正常旅程與所有功能族；普通背景首次入口B及world→Lua出口由同輪其他分題處理",
+  "families": [
+    {
+      "id": "camera",
+      "title": "相機",
+      "example": "Q119/2 / Phin_YuriandRazed_Stage_01.cam",
+      "data_pointer": "/family_examples/camera",
+      "acquire": [
+        "合法 Q119/2 caller 選中原 SEQ；PlayCameraNoWait(name,0,0,0,0) → Event/CameraWorks/<name> → 共用 KeyFrame owner",
+        "Load/LoadRel → Play；正式 Lua numeric flag 採 ABI/P0 規則"
+      ],
+      "complete": [
+        "原例 NoWait 不等待相機結束",
+        "WaitForCamera 可輪詢數字 IsEnded；current=null 也回1，需結合本 run 曾接納的狀態"
+      ],
+      "exit": [
+        "CameraWorks.Stop 停目前工作；不等於 snapshot restore",
+        "原 Q phases/RestoreMap 依單份備份恢復相機；其他 snapshot 由自己的 push/pop 配對"
+      ],
+      "resources": [
+        "Event camera XML 已存在並解析2幀",
+        "相機/world/UI context 與腳本資源版本仍為前置"
+      ],
+      "server": [
+        "只排相容 scene key；不得把鏡頭停下當通關或再發下一 run 的全清理 ACK"
+      ],
+      "native": [
+        "audiovisual:C03",
+        "audiovisual:C04",
+        "audiovisual:C05",
+        "audiovisual:C06",
+        "audiovisual:C07",
+        "audiovisual:C12"
+      ],
+      "status": "ANALYZED_REAL_DATA_CONTRACT"
+    },
+    {
+      "id": "sound",
+      "title": "聲音",
+      "example": "Q119/4 Sound/Scene/bodyfall.wav；Q119/5 BGM003",
+      "data_pointer": "/family_examples/sound",
+      "acquire": [
+        "原 Q119/4兩個PlaySound literal 對到 _Sound.xml Name/File=Scene/bodyfall.wav，Setting=Character",
+        "Q119/5 PlayMusic/SetFinalMusic BGM003 對到 _SoundList MUSIC_PHINDOUS；Q/Tutorial共享primary BGM"
+      ],
+      "complete": [
+        "PlaySound/PlayMusic helper 的 yield 與native回傳個數不是音訊播放完成",
+        "一般音效沒有本例可公開等待的專屬 completion handle"
+      ],
+      "exit": [
+        "StopMusic停止及釋放共用pool；fade-to-zero不等於Stop",
+        "SetFinalMusic是供RestoreMap後續消費的字串；空字串append不會自行清舊值，接納Start會清空"
+      ],
+      "resources": [
+        "聲音表資料已解析，實際bodyfall.wav與BGM003.ogg不在供應索引",
+        "Master只有Scenario聲音掛載宣告；不能編造Sound/BGM.stp"
+      ],
+      "server": [
+        "排程只決定何時演出、如何回復背景音樂；不以音效成功當戰鬥/傷害/獎勵提交"
+      ],
+      "native": [
+        "audiovisual:M01",
+        "audiovisual:M02",
+        "audiovisual:S01"
+      ],
+      "status": "ANALYZED_PAYLOAD_FRONTIER"
+    },
+    {
+      "id": "images",
+      "title": "圖片／序章",
+      "example": "Q2440/5 Image/Prologue/Aisen00_1.dds + Prolog19",
+      "data_pointer": "/family_examples/images",
+      "acquire": [
+        "原 FlyingObject(path,50,30,100,100,0,0) 先取消Q追蹤舊圖再配置新圖",
+        "DoProlog19使用Table/Prolog.xml十個Dialog及各PicturePath"
+      ],
+      "complete": [
+        "原fadeout=0沿已核phase4跳除法，phase0後下一合格tick清alive再由manager回收",
+        "DoProlog getter停止active不等於任務成功；圖片可見仍需texture成功"
+      ],
+      "exit": [
+        "Q.DelFlyingObject是Q追蹤圖取消，不是所有Tutorial/共享owner清掃",
+        "Prolog/UI/voice依各自owner退出；不得用003F替代這些工作"
+      ],
+      "resources": [
+        "8個不同DDS參照：直接Aisen00_1加Prolog19七圖；Master宣告Image/Prologue.stp",
+        "payload未提供；UI/font/frame/voice及mount/cache需另滿足",
+        "同輪Master分題已證737D40原path probe miss才改.etf；不是任意decode失敗fallback。本例DDS與條件式ETF均無供應payload。"
+      ],
+      "server": [
+        "內容審查固定所選圖片/Prolog版本；排程與獎勵分離；不把無圖但phase推進當正確呈現"
+      ],
+      "native": [
+        "world:q_flying_create",
+        "world:q_flying_delete",
+        "world:flying_fade_tick",
+        "world:flying_release_tick",
+        "T01:selected-zero-fadeout",
+        "same-round master-resource-closure:texture_common_read/image_texture_load"
+      ],
+      "status": "ANALYZED_PAYLOAD_FRONTIER"
+    },
+    {
+      "id": "book_tutorial",
+      "title": "書本／教學",
+      "example": "Table/Book.txt + Synopsis/book01..04.gb3",
+      "data_pointer": "/family_examples/book_tutorial",
+      "acquire": [
+        "Q.Book(integer) 實際忽略該integer；固定owner FC1BF8讀Book.txt兩個三分量設定並啟動四個typed state",
+        "這不是以integer選任意書；Tutorial runner/page/context須由適用入口安裝"
+      ],
+      "complete": [
+        "Q.IsBookFlying真正推number；原WaitForBook先yield，再while==1等待",
+        "State2需text done且shared voice handle為0；最後phase清B+74；初始0不是已播完證據"
+      ],
+      "exit": [
+        "正常四state走完後離開helper等待；取消須按Q/Tutorial與shared-owner規則，不以刪coroutine代替native清理"
+      ],
+      "resources": [
+        "Book六個數值已原件解析；constructor四個Synopsis/book*.gb3字串已BIN核對",
+        "Master宣告Synopsis.stp；四模型payload未提供，未知後代不得虛構"
+      ],
+      "server": [
+        "教學完成、按既有0040/004C推進scenario及角色持久化由Server判定；書本flag不提交進度"
+      ],
+      "native": [
+        "world:q_book_start",
+        "world:book_config_start",
+        "world:book_constructor",
+        "world:book_update",
+        "world:book_state2_done",
+        "world:q_book_read",
+        "new:fixed_book_paths"
+      ],
+      "status": "ANALYZED_PAYLOAD_FRONTIER"
+    },
+    {
+      "id": "world_npc_services",
+      "title": "世界NPC／服務",
+      "example": "Town1 Shop2 → NPC10030/type12 → Product2614/item2607",
+      "data_pointer": "/family_examples/world_npc_services",
+      "acquire": [
+        "category2/key2互動點先查ShopNo2，再以NPC10030查談話；後段以currentTown1+NPC查商品",
+        "NPCtype12選強化operation29與既有F42F6；買賣operation4走F42EA",
+        "可見NPC外觀/world entity/Q slot/shop number/product/item均分域；10030沒有ActorList模型列，不能靠CreateObject顯示鐵匠"
+      ],
+      "complete": [
+        "打開UI或S2C0030/00D9結果提示不等於資產已提交",
+        "C2S001C服務context、0027購買、0020販售、00A1強化各沿原serializer；002C資產更新需一致"
+      ],
+      "exit": [
+        "服務context關閉／離開town／角色切換後撤銷Server服務資格；UI與world/NPC/point清理由各owner處理"
+      ],
+      "resources": [
+        "Shop2有27產品宣告及NPC5個TALKSET；Product2614實際ITEM2607、LEELOO3700、SELL_LEELOO370",
+        "Q119/5可見Yuri候選model10047 FILE01_Yuri01；Npc/Base descriptor與payload仍缺",
+        "現有服務UI資源與current-page/context為前置"
+      ],
+      "server": [
+        "地點/距離/商店資格、數量/貨幣/背包檢查、交易原子性與持久化",
+        "強化消耗/成敗/損壞與裝備更新由Server規格實作；沿REQ0021後續服務需求由S00去重，不假稱正式需求已受理"
+      ],
+      "native": [
+        "world-npc:checkpoint_market_interaction",
+        "world-npc:shop_lookup_town_npc",
+        "world-npc:menu_blacksmith",
+        "world-npc:trade_open_request",
+        "world-npc:buy_request",
+        "world-npc:sell_request",
+        "world-npc:enhance_request",
+        "world-npc:asset_update_slots"
+      ],
+      "status": "ANALYZED_SERVER_DEVELOPMENT_AND_RESOURCE_FRONTIER"
+    },
+    {
+      "id": "interaction_points",
+      "title": "互動點",
+      "example": "TutCheckPoint1 → category4/key1 → TUTPOINT → effect98",
+      "data_pointer": "/family_examples/interaction_points",
+      "acquire": [
+        "原TutCheckPoint row1 x311,y149,range30,active1,effectTUTPOINT；Tutorial.InsertTutorialCheckPoint(1)查表並建立category4",
+        "EffectCategoryMapper的TUTPOINT/subcategory0/Sequential/idx0→effectId98；EffectList98指Area\\Zone\\ + A_Zone_TutorialZone01.eff",
+        "普通category0出口、category2商店、category3NPC由既有S2C0027 snapshot建立；教學insert不可當任意category建點"
+      ],
+      "complete": [
+        "已存在點可用SetCheckPointStatus(1,4,0/1)或S2C0048改狀態；miss不upsert",
+        "disable不清point+104 latch；再次enable不保證新的one-shot邊緣"
+      ],
+      "exit": [
+        "狀態關閉不等於刪除；0012前置或0027替換會清共用集合",
+        "本例座標屬Tutorial資料，不移植成Q119地圖或Town1商店站位"
+      ],
+      "resources": [
+        "表列/型別/效果selector已串接；EFF/texture/payload仍缺；Master Effect根掛載只是宣告"
+      ],
+      "server": [
+        "發布完整共存point snapshot、驗證出口意圖與距離、隔離過期delta與地圖世代；不新增Client不讀的wire token"
+      ],
+      "native": [
+        "new:tutorial_insert_point_public",
+        "new:tutorial_point_table_create",
+        "new:effect_category_lookup",
+        "scene:point_lookup_setter",
+        "scene:point_set_status",
+        "scene:checkpoint_delta_packet"
+      ],
+      "status": "ANALYZED_PAYLOAD_FRONTIER"
+    },
+    {
+      "id": "scene_minimap",
+      "title": "場景／小地圖",
+      "example": "Map632 → mushroom01D / mushroom01 / scenario_chicken01.mef",
+      "data_pointer": "/family_examples/scene_minimap",
+      "acquire": [
+        "S2C0012(map632)先清point/resetcontroller再進worldloader；lb.ChangeMap不含相同前置",
+        "MAP採graphics basename，BOUND採BoundMap及Map/Minimap/mushroom01.mmt；minimap還要mode marker及symbols",
+        "Q.LoadMap/RestoreMap只有視覺圖及單份備份，不更動完整world context；TRIGGER字串不等於MEF首次loader證據"
+      ],
+      "complete": [
+        "current mapKey先寫，不保證資源成功；0014、loadingend、music或handler回值不是全owner ready",
+        "同mapID 0012仍先清points/controller，worldloader可跳過graphics/bounds/minimap重載"
+      ],
+      "exit": [
+        "普通轉場重建actor/controller/points/world/minimap；Q演出自行RestoreMap不能替代普通返回",
+        "小地圖沒有新Lua成功值；缺MMT不得猜texture或worldsize"
+      ],
+      "resources": [
+        "四個MapList與BND原件已解析；21個候選點在Server static0/1政策下可站、4條spawn→portal連通",
+        "Master宣告Map/MiniMap.stp；四MMT及其TextureFile、symbols、marker payload未提供",
+        "FLD實際MAP_FLD/cache選取與後代保持來源缺口；Field.stp不可代替圖形FLD"
+      ],
+      "server": [
+        "將field/map/controller/UI/world/points/loading按相容順序整合；明定重送與同ID更新政策；驗收可見畫面、行走和返回"
+      ],
+      "native": [
+        "scene:s2c0012_map",
+        "scene:world_map_load",
+        "scene:q_loadmap",
+        "scene:q_restoremap",
+        "control:minimap_dispatch",
+        "control:minimap_descriptor_start"
+      ],
+      "status": "ANALYZED_PAYLOAD_FRONTIER"
+    }
+  ],
+  "journey": [
+    {
+      "id": "J01",
+      "title": "NPC任務接取與前置",
+      "scenes": [
+        1
+      ],
+      "server_node": null,
+      "selectors": [
+        "QuestInfo.Quest[id=119]: giver=finisher10047,town1,field26,level5,Demand118",
+        "Town1 roster includes10047; candidate introScenes=[1]"
+      ],
+      "wire": [
+        "C2S001C category3/NPC key is an intent under the bounded NPC modal path",
+        "local561760(questLookup,1) can precede001C; S2C0047 is the lawful indexed scene adapter"
+      ],
+      "entry": "Server認證、角色所有權、Town/NPC/距離、Q118完成與Q119資格；Client該NPC lookup確實回119及適用UI path",
+      "completion": "只接受本session預期的有條件scene進度；本地已啟動時不要再次0047重入",
+      "server_requirement": "任務可用性與NPC意圖去重；本輪未重建全部modalwrapper或宣稱所有NPC都走同分支"
+    },
+    {
+      "id": "J02",
+      "title": "119/1前導與普通副本安裝",
+      "scenes": [
+        1
+      ],
+      "server_node": null,
+      "selectors": [
+        "SceneList119/1→Phindous_YuriandRazed_Blank.seq",
+        "Case107.STAGE26,MAPFLOW/CLUSTER scenario_chicken"
+      ],
+      "wire": [
+        "S2C0047(119,1), only when Server owns initiation and no local already-started run",
+        "S2C005F/0012/0027/0014 and existing loading bracket"
+      ],
+      "entry": "前導接納與來源一致，上一owner停止或合法交接",
+      "completion": "Blank仍16個calls，LoadMap空字串不等於無副作用；非零quest End需confirm條件才送003F",
+      "server_requirement": "分離requested/accepted/finished/cleanup/commit，設計相容timeout與取消；不以計時冒充全清理"
+    },
+    {
+      "id": "J03",
+      "title": "節點1入場與首組",
+      "scenes": [
+        2
+      ],
+      "server_node": 1,
+      "selectors": [
+        "sourceChartNode4→Map632→mushroom01D/BOUNDmushroom01",
+        "Cluster1:1001×2; candidate entry119/2"
+      ],
+      "wire": [
+        "S2C0012(map632)+world/point snapshots+ready",
+        "S2C0047(119,2)"
+      ],
+      "entry": "map/actor/controller/point context已按既有adapter建立，Q未busy",
+      "completion": "原Stage33calls/7Qslots/1cam/Talk12-10；正常收尾後仍由Server權威戰鬥",
+      "server_requirement": "SpawnGroup與普通戰鬥權威狀態；Qslot不可充當worldEntityId"
+    },
+    {
+      "id": "J04",
+      "title": "節點1清組與出口",
+      "scenes": [],
+      "server_node": 1,
+      "selectors": [
+        "candidate GroupCleared→UnlockPortal；InteractZ→node2",
+        "portal key1; preRegisterClosed=false"
+      ],
+      "wire": [
+        "S2C0027 establishes replacement point snapshot; 0048 only changes an existing matching point",
+        "C2S001C exit intent under existing checkpoint category"
+      ],
+      "entry": "權威組1所有應判定敵人已完成；點已存在或先snapshot建立",
+      "completion": "近距離有效Z後Server核准下一節點；不是畫面特效或003F判定",
+      "server_requirement": "節點1候選preRegisterClosed=false，採清組後建門；點尚未存在時先以0027 snapshot建立，0048只更新既存點。若改成預登記，需明確改版並保留共存點。"
+    },
+    {
+      "id": "J05",
+      "title": "節點2",
+      "scenes": [],
+      "server_node": 2,
+      "selectors": [
+        "sourceChartNode3→Map633/mushroom04D/BOUNDmushroom04",
+        "Cluster2:1001×3; no entry/clear scene",
+        "portal key2; preRegisterClosed=false；清組後建立出口"
+      ],
+      "wire": [
+        "S2C0012 map633 + applicable actor/point/control/ready",
+        "existing world combat and C2S001C exit intent"
+      ],
+      "entry": "前一節點出口有效、清理與轉場序列成立",
+      "completion": "Entry→SpawnGroup；GroupCleared→UnlockPortal；InteractZ→node3",
+      "server_requirement": "保持目前typed JSON三事件／四動作；不偽加PlayScene或Lua action"
+    },
+    {
+      "id": "J06",
+      "title": "節點3",
+      "scenes": [],
+      "server_node": 3,
+      "selectors": [
+        "sourceChartNode2→Map634/mushroom07D/BOUNDmushroom07",
+        "Cluster3:1001×3+1004×1; no entry/clear scene",
+        "portal key3; preRegisterClosed=false；清組後建立出口"
+      ],
+      "wire": [
+        "S2C0012 map634 + applicable world snapshots/ready",
+        "existing world combat and C2S001C exit intent"
+      ],
+      "entry": "合法前節點及現instance/角色",
+      "completion": "Entry→SpawnGroup；GroupCleared→UnlockPortal；InteractZ→node4",
+      "server_requirement": "權威group與重入/斷線恢復由Server持有；不以本地查詢值提交"
+    },
+    {
+      "id": "J07",
+      "title": "節點4入場與王前演出",
+      "scenes": [
+        3
+      ],
+      "server_node": 4,
+      "selectors": [
+        "sourceChartNode1→Map635/mushroom12D/BOUNDmushroom12",
+        "Server Cluster4=[1001,1001,1001,1022]；原119/3 Q三slot均model1086",
+        "portal key4; preRegisterClosed=true；候選入場預登記關閉出口"
+      ],
+      "wire": [
+        "S2C0012 map635 + existing snapshots/ready",
+        "S2C0047(119,3)"
+      ],
+      "entry": "normalQ未busy、world map635 context有效",
+      "completion": "119/3是enter scene，不是clear/return；Q模型1086不替代Server王1022或原Cluster19",
+      "server_requirement": "演出模型/群組模板/world實體分域；原Cluster選擇依候選政策而非官方MEF推論"
+    },
+    {
+      "id": "J08",
+      "title": "節點4清組與王後演出",
+      "scenes": [
+        4
+      ],
+      "server_node": 4,
+      "selectors": [
+        "candidate node4.clearScenes=[4]；SceneList119/4→BossClear",
+        "原48calls/8Qslots/3cam/Talk12 scenes12..16/bodyfall"
+      ],
+      "wire": [
+        "S2C0047(119,4)",
+        "conditional C2S003F(119,4,1); appropriate 00EB only for its bounded wait layer",
+        "第四節點依preRegisterClosed=true候選預先建立關閉point；確認matching category/key已存在後，清組使用0048更新狀態"
+      ],
+      "entry": "Server權威清組後，上一Q已終止並完成所需owner交接",
+      "completion": "原RevPhase4→3→2→DeleteAllObject→RestoreMap→RevPhase1；003F不是這一偏序的總ACK",
+      "server_requirement": "串接既有scene adapter；節點4已為預登記關閉門候選，應核實snapshot建立再於清組更新既存點。外部scenario JSON沒有PlayScene欄位，內容版本/adapter責任須明確。"
+    },
+    {
+      "id": "J09",
+      "title": "結果與返回",
+      "scenes": [],
+      "server_node": 4,
+      "selectors": [
+        "candidate node4 InteractZ→Result；returnTown1",
+        "原Quest119 RewardsEtc typed rows保留原數字"
+      ],
+      "wire": [
+        "existing result/ordinary field/map/actor/controller/point adapters; no newly invented opcode",
+        "C2S001C intended exit"
+      ],
+      "entry": "合法出口意圖與權威終點，結算冪等",
+      "completion": "Server完成result/返回狀態與持久化；實際獎勵提交點獨立於Q呈現",
+      "server_requirement": "同session/instance的戰鬥、任務、貨幣道具及返回狀態一致；沿REQ0016/0019，不宣稱已新增實作"
+    },
+    {
+      "id": "J10",
+      "title": "119/5返回劇情與下一主線資格",
+      "scenes": [
+        5
+      ],
+      "server_node": null,
+      "selectors": [
+        "candidate returnScenes=[5],Town1,NPC10047",
+        "After.seq town001D,33calls/6Qslots/2cam/Talk12-17/18；finalMusicBGM003",
+        "Quest120的實際Demand119與level8另作資格"
+      ],
+      "wire": [
+        "S2C0047(119,5) in valid returned context",
+        "conditional C2S003F; 00EB only where applicable"
+      ],
+      "entry": "返回Town1/world/point/leader/controller已重建、原演出依賴滿足",
+      "completion": "完成自身owner收尾與ServerQ119持久化；Q120資格不足應可解釋且可繼續正常養成",
+      "server_requirement": "保存穩定QuestID前綴與實際等級；既有REQ0019曾記Q120 level8卡點，不能說Q119完成即整村主線完成"
+    }
+  ],
+  "wire_contracts": [
+    {
+      "name": "scene_start",
+      "direction": "S2C",
+      "opcode": "0047",
+      "application_read_min_bytes": 6,
+      "fields": [
+        {
+          "offset": 2,
+          "type": "s16le",
+          "meaning": "questIdx"
+        },
+        {
+          "offset": 4,
+          "type": "s16le",
+          "meaning": "sceneIdx"
+        }
+      ],
+      "limits": [
+        "local indexed SceneList only; no filename or arbitrary Lua buffer",
+        "busy is not queue; caller can change review flag before busy return"
+      ]
+    },
+    {
+      "name": "scene_report",
+      "direction": "C2S",
+      "opcode": "003F",
+      "application_bytes": 8,
+      "fields": [
+        {
+          "offset": 2,
+          "type": "u16le",
+          "meaning": "questLowWord"
+        },
+        {
+          "offset": 4,
+          "type": "u16le",
+          "meaning": "sceneLowWord"
+        },
+        {
+          "offset": 6,
+          "type": "u16le",
+          "meaning": "constant1"
+        }
+      ],
+      "limits": [
+        "nonzero quest End sends only if CheckConfirmMessage converted result equals1",
+        "no content-success, world-clear, cleanup or reward meaning"
+      ]
+    },
+    {
+      "name": "map_change",
+      "direction": "S2C",
+      "opcode": "0012",
+      "application_read_min_bytes": 6,
+      "fields": [
+        {
+          "offset": 2,
+          "type": "u32le",
+          "meaning": "mapKey"
+        }
+      ],
+      "limits": [
+        "point clear/controller reset precede same-ID shortcut"
+      ]
+    },
+    {
+      "name": "point_delta",
+      "direction": "S2C",
+      "opcode": "0048",
+      "application_read_min_bytes": 6,
+      "fields": [
+        {
+          "offset": 2,
+          "type": "u16le",
+          "meaning": "key"
+        },
+        {
+          "offset": 4,
+          "type": "u8",
+          "meaning": "category"
+        },
+        {
+          "offset": 5,
+          "type": "u8",
+          "meaning": "status"
+        }
+      ],
+      "limits": [
+        "existing first matching point only; not upsert or position change"
+      ]
+    },
+    {
+      "name": "npc_intent",
+      "direction": "C2S",
+      "opcode": "001C",
+      "application_bytes": 6,
+      "fields": [
+        {
+          "offset": 2,
+          "type": "u16le",
+          "meaning": "nested category lowWord"
+        },
+        {
+          "offset": 4,
+          "type": "u16le",
+          "meaning": "nested NPC key lowWord"
+        }
+      ],
+      "limits": [
+        "bounded modal consumer, not universal001C business meaning",
+        "local scene can begin before network send; NPC context must be checked"
+      ]
+    },
+    {
+      "name": "wait_release",
+      "direction": "S2C",
+      "opcode": "00EB",
+      "application_read_min_bytes": 2,
+      "fields": [],
+      "limits": [
+        "bounded dialog/mask2 release; not Q/coroutine/native-owner drain ACK",
+        "no run/generation token; stale suppression is Server queue responsibility"
+      ]
+    }
+  ],
+  "server_development_requirements": [
+    {
+      "existing_id": "REQ-0019",
+      "scope": "Q119正常旅程與後續Q120資格、穩定任務進度保存",
+      "development": [
+        "將5段SceneList鍵與4節點候選串接既有adapter",
+        "非零quest End條件、busy/timeout、取消與退出策略",
+        "明定result/reward/persistence提交點與Q120資格顯示"
+      ],
+      "acceptance": [
+        "同一角色正常NPC→四節點→result→Town1→return scene",
+        "相同內容版本及原件依賴；能走動、可互動、聲畫正確、控制恢復",
+        "重連讀到一致Q119進度，重送不重複發獎"
+      ],
+      "status": "PROPOSED_INPUT_TO_EXISTING_CANDIDATE_NOT_NEW_OFFICIAL_STATE"
+    },
+    {
+      "existing_id": "REQ-0017",
+      "scope": "演出與轉場排程",
+      "development": [
+        "每owner的normal/cancel/reentry偏序；Q/scene/等待解鎖分開",
+        "禁止0047預送與以003F做全清理證明"
+      ],
+      "acceptance": [
+        "前run收尾後才開始下一run；晚到00EB不解鎖下一run"
+      ],
+      "status": "PROPOSED_INPUT_TO_EXISTING_CANDIDATE_NOT_NEW_OFFICIAL_STATE"
+    },
+    {
+      "existing_id": "REQ-0016",
+      "scope": "普通戰鬥權威進度",
+      "development": [
+        "worldEntityId/group/HP/death/clear與Qslot/model分域",
+        "完整snapshot/增量與合法出口意圖",
+        "依四節點候選分流：1/2/3 preRegisterClosed=false採清組後建門；4 preRegisterClosed=true先登記關閉門，清組更新。0048皆不建立缺點。"
+      ],
+      "acceptance": [
+        "本例四組的權威clear與portal/result恰對應，不依賴Lua新出口"
+      ],
+      "status": "PROPOSED_INPUT_TO_EXISTING_CANDIDATE_NOT_NEW_OFFICIAL_STATE"
+    },
+    {
+      "existing_id": "REQ-0018",
+      "scope": "NPC互動與控制恢復",
+      "development": [
+        "角色外觀與category/key/context分離",
+        "本地已啟動scene與Server補發去重"
+      ],
+      "acceptance": [
+        "Town1 NPC10047正確接任務與返回；離開/重入控制正常"
+      ],
+      "status": "PROPOSED_INPUT_TO_EXISTING_CANDIDATE_NOT_NEW_OFFICIAL_STATE"
+    },
+    {
+      "existing_id": "REQ-0010",
+      "scope": "教學與場景context",
+      "development": [
+        "TutPoint1/Book在合法Tutorial/page/controller下建立與清理",
+        "field/map/minimap/world/context初始化分層"
+      ],
+      "acceptance": [
+        "指定教學點原資料生效，不把其座標重用成Q119點"
+      ],
+      "status": "PROPOSED_INPUT_TO_EXISTING_CANDIDATE_NOT_NEW_OFFICIAL_STATE"
+    },
+    {
+      "existing_id": "REQ-0021",
+      "scope": "主線完成後的服務功能候選",
+      "development": [
+        "沿既有排序接買賣/裝備/強化等服務；S00去重細化",
+        "product2614/item2607及Shop2/NPC10030的typed表與原wire適配",
+        "交易/強化與資產更新、保存的一致性"
+      ],
+      "acceptance": [
+        "Shop2原選單可達；資金/物品/裝備結果與重登入一致",
+        "表存在與UI成功分別驗證，無模型來源不假稱NPC可見"
+      ],
+      "status": "PROPOSED_INPUT_TO_EXISTING_CANDIDATE_NOT_NEW_OFFICIAL_STATE"
+    }
+  ],
+  "cross_cutting_limits": [
+    "所有121正常binding採P0 ABI/15項勘誤；新資料例不是重新發現全ABI",
+    "Master mount宣告可讀不代表payload、fcs cache勝者或native選中已成立",
+    "本包不新增正式需求台帳、不執行原件、不把Server開發事項列成Client逆向阻塞",
+    "所有資源陰性僅限列舉的供應archive與補充ZIP，未聲稱完整安裝缺件"
+  ],
+  "portal_policy_by_node": [
+    {
+      "node": 1,
+      "map": 632,
+      "key": 1,
+      "preRegisterClosed": false
+    },
+    {
+      "node": 2,
+      "map": 633,
+      "key": 2,
+      "preRegisterClosed": false
+    },
+    {
+      "node": 3,
+      "map": 634,
+      "key": 3,
+      "preRegisterClosed": false
+    },
+    {
+      "node": 4,
+      "map": 635,
+      "key": 4,
+      "preRegisterClosed": true
+    }
+  ]
+}

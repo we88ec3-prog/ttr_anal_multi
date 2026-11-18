@@ -1,0 +1,764 @@
+{
+  "schema": "MEF-P1-WORLD-LUA-CONTRACTS-1",
+  "baseline_commit": "5ed4833b805949fabe260aea77e3fe0fd8e86bfa",
+  "binary_sha256": "9741d1975327b9309d82b52f631165bc410757694d7c183a5eed970a53ebef91",
+  "classification": {
+    "bounded_native_continuation": "ANALYZED_WITH_PINNED_EVIDENCE",
+    "ordinary_world_to_same_run_generation_lua": "NOT_CLOSED_NO_PROVEN_ENDPOINT",
+    "server_authoritative_business_logic": "SERVER_DEVELOPMENT_REQUIREMENT",
+    "official_native_complete": false,
+    "target_executed": false,
+    "runtime_verified": false,
+    "all_program_alias_or_lua_absence_proved": false,
+    "meaning": "通過原件核對不等於普通 world 結果已能被同一 Lua run 精確觀察；未變更正式研究完成狀態。"
+  },
+  "identity_domains": [
+    {
+      "id": "world_actor",
+      "owner": "0xFAB130",
+      "tree": "0xFAB138",
+      "sentinel": "0xFAB13C",
+      "key": "zero-extended u16 actor EntityId",
+      "node_actor_pointer_offset": "0x10",
+      "actor_identity_field": "u16 actor+0x4",
+      "generation_field_proven": false,
+      "run_field_proven": false,
+      "reuse": "WORLD-IDENTITY-EVENTS.md / actor_map_insert / common_primary"
+    },
+    {
+      "id": "q_actor",
+      "owner": "0xFB73C0",
+      "tree_offset": "0x1C",
+      "equivalent_to_world_actor": false,
+      "reason": "既有 Q actor 容器和建立/消費路徑不同；相同整數不構成同實體證據。"
+    },
+    {
+      "id": "hero_ai_feedback",
+      "owner": "0xFB7A28",
+      "slot_count": 3,
+      "slot_start": "0xA8",
+      "slot_stride": "0x10",
+      "target_offset_in_owner": "0xB0 + 0x10*i",
+      "secondary_offset_in_owner": "0xB4 + 0x10*i",
+      "semantics": "覆寫三個英雄槽的攻擊/被攻擊來源 ID；不是有序事件佇列或怪物 AI 容器。",
+      "generation_field_proven": false,
+      "lua_endpoint_proven": false
+    },
+    {
+      "id": "visual_pair",
+      "owner": "0xFD9278",
+      "container": "three pointers begin/end/capacity; 28-byte records",
+      "key_semantics": "每 tick/draw 以兩個 u16 ID 重查當時的 world actor",
+      "generation_field_proven": false,
+      "lua_endpoint_proven": false
+    }
+  ],
+  "wire_contracts": [
+    {
+      "id": "S2C_0000",
+      "opcode": "0x0000",
+      "new_or_reused": "new typed producer/consumer continuation",
+      "receiver": "0x4AFAF0",
+      "range": [
+        "0x4AFAF0",
+        "0x4AFB7A"
+      ],
+      "header_bytes": 2,
+      "row_bytes": 6,
+      "count": "length < 2 ? 0 : floor((length-2)/6)",
+      "fields": [
+        {
+          "offset": 0,
+          "name": "worldEntityId",
+          "type": "u16le",
+          "meaning": "world tree lookup"
+        },
+        {
+          "offset": 2,
+          "name": "selector",
+          "type": "u16le on wire; i16 at CMonster/CCharacter consumer",
+          "meaning": "v+0x2C first argument"
+        },
+        {
+          "offset": 4,
+          "name": "value",
+          "type": "u16le on wire; i16 at concrete consumer",
+          "meaning": "v+0x2C second argument"
+        }
+      ],
+      "guards": [
+        "world lookup hit and non-null actor"
+      ],
+      "typed_dispatch": [
+        {
+          "class": "CMonster",
+          "vtable": "0xC0C9DC",
+          "slot": "0x2C",
+          "callee": "0x4D1E10"
+        },
+        {
+          "class": "CCharacter",
+          "vtable": "0xC07B44",
+          "slot": "0x2C",
+          "callee": "0x4CE7F0"
+        }
+      ],
+      "hp_ratio": {
+        "selector": 1,
+        "actor_field": "i32 actor+0x3B0",
+        "conversion": "sign_extend_i16(value)",
+        "display_record": "bar owner actor+0x368; key u8(0); record+0x0C",
+        "display_type": "f32",
+        "display_value": "float(sign_extend_i16(value)) * ROM double 9.999999747378752e-05 (approximately value/10000)",
+        "monster_null_bar_guard": false,
+        "character_null_bar_guard": true,
+        "absolute_hp_current_written": false,
+        "death_fsm_called_in_case1": false,
+        "rom_scale": {
+          "va": "0xC556D8",
+          "little_endian_hex": "000000e0e2361a3f",
+          "type": "f64",
+          "value": 9.999999747378752e-05
+        }
+      },
+      "excluded_equivalence": [
+        "ratio is not authoritative HP current/max",
+        "normal integer return 0 is not Lua value or network ACK"
+      ],
+      "native_evidence": [
+        "parameter_0000",
+        "monster_parameter",
+        "character_parameter",
+        "bar_record_access",
+        "monster_percent_reader",
+        "character_percent_reader",
+        "raw_ratio_reader",
+        "bar_submit"
+      ]
+    },
+    {
+      "id": "S2C_0034",
+      "opcode": "0x0034",
+      "new_or_reused": "new typed absolute resource producer/consumer continuation",
+      "receiver": "0x4B3090",
+      "range": [
+        "0x4B3090",
+        "0x4B32D1"
+      ],
+      "registration": "common dispatch field +0x1A4; (0x1A4-4)/8 = 0x34",
+      "header_bytes": 2,
+      "row_bytes": 18,
+      "count": "length < 2 ? 0 : floor((length-2)/18)",
+      "fields": [
+        {
+          "offset": 0,
+          "name": "mode",
+          "type": "u32le",
+          "meaning": "mode 2/3/4 resource snapshots; mode1 separate attributes"
+        },
+        {
+          "offset": 4,
+          "name": "worldEntityId",
+          "type": "u16le",
+          "meaning": "world tree lookup"
+        },
+        {
+          "offset": 6,
+          "name": "valueA",
+          "type": "32-bit wire bits; i32 resource consumers",
+          "meaning": "max for mode2/3/4"
+        },
+        {
+          "offset": 10,
+          "name": "valueB",
+          "type": "32-bit wire bits",
+          "meaning": "unused in modes2/3/4; separate mode1"
+        },
+        {
+          "offset": 14,
+          "name": "valueC",
+          "type": "32-bit wire bits; i32 resource consumers",
+          "meaning": "current for modes2/3/4"
+        }
+      ],
+      "monster_path": {
+        "guards": [
+          "actor+0x39C == 1",
+          "mode == 2",
+          "dynamic_cast CActor -> CMonster succeeds"
+        ],
+        "writes": {
+          "actor+0x3BC": "valueA / maxHP",
+          "actor+0x3C8": "valueC / currentHP",
+          "actor+0x430": 1
+        },
+        "source_anchors": [
+          "0x4B313C",
+          "0x4B3142",
+          "0x4B3148"
+        ]
+      },
+      "character_path": {
+        "guards": [
+          "actor+0x39C != 1",
+          "mode in {2,3,4}",
+          "dynamic_cast CActor -> CCharacter succeeds",
+          "u16(actor+0x88) <= 9",
+          "computed roster record address nonzero"
+        ],
+        "local_mirror_condition": "actor+0x9C == GameInfo+0x5F50",
+        "remote_actor_still_needs_roster_guard": true,
+        "modes": [
+          {
+            "mode": 2,
+            "resource": "HP",
+            "actor_max": "0x3BC",
+            "actor_current": "0x3C8",
+            "roster_max": "0x40",
+            "roster_current": "0x34",
+            "anchors": [
+              "0x4B3243",
+              "0x4B3249"
+            ]
+          },
+          {
+            "mode": 3,
+            "resource": "SP",
+            "actor_max": "0x3C0",
+            "actor_current": "0x3CC",
+            "roster_max": "0x44",
+            "roster_current": "0x38",
+            "anchors": [
+              "0x4B321C",
+              "0x4B3222"
+            ]
+          },
+          {
+            "mode": 4,
+            "resource": "MP",
+            "actor_max": "0x3C4",
+            "actor_current": "0x3D0",
+            "roster_max": "0x48",
+            "roster_current": "0x3C",
+            "anchors": [
+              "0x4B31F5",
+              "0x4B31FB"
+            ]
+          }
+        ]
+      },
+      "mode1": {
+        "classification": "separate three-DWORD attributes; not assigned HP/EXP business names",
+        "mapping": [
+          {
+            "field": "valueB",
+            "virtual_slot": "0x7C"
+          },
+          {
+            "field": "valueA",
+            "virtual_slot": "0x80"
+          },
+          {
+            "field": "valueC",
+            "virtual_slot": "0x78"
+          }
+        ],
+        "bounds": "vtable slots/argument sources pinned; downstream attribute names/fields not claimed by this continuation"
+      },
+      "on_zero_current": "this receiver does not call state transition or append death event",
+      "missing_actor": "row skipped; no pending event queue in body",
+      "lua_endpoint_proven": false,
+      "native_evidence": [
+        "resource_0034",
+        "monster_caption",
+        "hud_resource_update",
+        "field_hud_caller",
+        "native_skill_check",
+        "native_skill_condition",
+        "skill_cost_parser",
+        "hp_cost_reader",
+        "sp_cost_reader",
+        "mp_cost_reader"
+      ]
+    },
+    {
+      "id": "S2C_000E",
+      "opcode": "0x000E",
+      "new_or_reused": "reuse prior T12 row/effect ABI and FrameControl correction; new complete body byte recheck and case8 container consumer continuation",
+      "receiver": "0x4B0640",
+      "range": [
+        "0x4B0640",
+        "0x4B1914"
+      ],
+      "jump_table": [
+        "0x4B1914",
+        "0x4B1938"
+      ],
+      "header_bytes": 2,
+      "row_bytes": 13,
+      "count": "length < 2 ? 0 : floor((length-2)/13)",
+      "fields": [
+        {
+          "offset": 0,
+          "name": "sourceWorldEntityId",
+          "type": "u16le",
+          "meaning": "current world tree lookup"
+        },
+        {
+          "offset": 2,
+          "name": "targetWorldEntityId",
+          "type": "u16le",
+          "meaning": "current world tree lookup"
+        },
+        {
+          "offset": 4,
+          "name": "kind",
+          "type": "i8",
+          "meaning": "valid switch range0..8"
+        },
+        {
+          "offset": 5,
+          "name": "effectIndex",
+          "type": "i8",
+          "meaning": "signed forwarded resource index; formal enum unknown"
+        },
+        {
+          "offset": 6,
+          "name": "resultValue",
+          "type": "i32 visual interpretation",
+          "meaning": "case1 may negate in place; decimal glyph/aggregate consumer"
+        },
+        {
+          "offset": 10,
+          "name": "unassignedA",
+          "type": "u8",
+          "meaning": "not directly read by root packet footprint"
+        },
+        {
+          "offset": 11,
+          "name": "unassignedB",
+          "type": "u8",
+          "meaning": "not directly read by root packet footprint"
+        },
+        {
+          "offset": 12,
+          "name": "effectArg",
+          "type": "i8",
+          "meaning": "read and forwarded as 5521D0 sixth stack argument; low byte reaches 4F6F70"
+        }
+      ],
+      "guards": [
+        "local relation F93930 exists in FAB148, else log and return0x80004005",
+        "source/target world actor lookup hit; missing row skipped"
+      ],
+      "case_targets": [
+        "0x4B0B69",
+        "0x4B118B",
+        "0x4B0EEC",
+        "0x4B0E5A",
+        "0x4B0D14",
+        "0x4B15B7",
+        "0x4B1313",
+        "0x4B18D9",
+        "0x4B1673"
+      ],
+      "case7": "row advance only",
+      "case8_pair_store": "0x4B1860 -> 0x48A400; 0x4B186C -> 0x6D89C0; visual_pair28",
+      "result_value_not_hp_snapshot": true,
+      "case1_inplace_negation": true,
+      "selected_target_aggregate": "F942C4 accumulates displayed result in target-membership branch; native UI 458850 reads; no EntityId/event-sequence retained in scalar",
+      "frame_control_reused_correction": {
+        "0_or_8": "source motion group/NORMAL0; target group4/NORMAL0",
+        "4": "target motion group/BLOCKED1; source group4/BLOCKED1",
+        "2": "target motion group/CRITICAL2; source group4/CRITICAL2",
+        "shared_tail": "4B18D4 is not constant result0; branches can enter4B18C9 after setting EDX1/2"
+      },
+      "native_evidence": [
+        "result_000E",
+        "aggregate_display",
+        "pair_store_accessor",
+        "pair_store_constructor",
+        "pair_store_append",
+        "pair_store_tick",
+        "pair_store_draw",
+        "update_prefix",
+        "draw_prefix",
+        "actor_effect_position",
+        "pair_graphics_sink"
+      ],
+      "bounds": "all root instruction bytes rechecked; not every graphics/motion virtual callee or external interface fully expanded; no all-program absence proof"
+    },
+    {
+      "id": "S2C_0007",
+      "opcode": "0x0007",
+      "new_or_reused": "reuse",
+      "receiver": "0x4AE4D0",
+      "header_bytes": 2,
+      "row_bytes": 26,
+      "semantics": "key hit skips existing actor row rather than refreshing generation; creation uses current world u16 key",
+      "evidence": "WORLD-IDENTITY-EVENTS.md / common_primary",
+      "same_generation_proven": false
+    },
+    {
+      "id": "S2C_000C",
+      "opcode": "0x000C",
+      "new_or_reused": "reuse",
+      "receiver": "0x4B0130",
+      "header_bytes": 2,
+      "row_bytes": 3,
+      "fields": [
+        {
+          "offset": 0,
+          "name": "worldEntityId",
+          "type": "u16le",
+          "meaning": "world lookup"
+        },
+        {
+          "offset": 2,
+          "name": "state",
+          "type": "i8",
+          "meaning": "actor+F0 secondary virtual+8 -> 4CA060"
+        }
+      ],
+      "state3": "CDeadState presentation transition; repeated state3 can reenter/reset visual lifetime",
+      "world_erase_equivalence": false,
+      "hp_current_zero_equivalence": false,
+      "lua_endpoint_proven": false,
+      "evidence": [
+        "state_packet",
+        "fsm_transition",
+        "state_dead_enter",
+        "state_dead_update"
+      ]
+    },
+    {
+      "id": "S2C_001A",
+      "opcode": "0x001A",
+      "new_or_reused": "reuse",
+      "receiver": "0x4B28D0",
+      "header_bytes": 4,
+      "row_bytes": 2,
+      "fields": [
+        {
+          "offset": 0,
+          "name": "worldEntityId",
+          "type": "u16le",
+          "meaning": "row ID, begins packet+4"
+        }
+      ],
+      "header_offset2": "u16 opaque/unread by receiver body; no removal reason assigned",
+      "erase": "4DFBC0: actor virtual+14 cleanup, virtual+0(1) deleting destructor, tree erase",
+      "monster_vtable_slots": {
+        "0x14": "0x4D1F80",
+        "0x00": "0x4D18D0"
+      },
+      "death_equivalence": false,
+      "lua_endpoint_proven": false,
+      "evidence": [
+        "delete001a",
+        "world_erase",
+        "monster_cleanup",
+        "monster_delete"
+      ]
+    }
+  ],
+  "native_records": [
+    {
+      "id": "visual_pair28",
+      "owner": "0xFD9278",
+      "bytes": 28,
+      "constructor": "0x6D89C0",
+      "abi": "7 stack slots (manager/source/target/R/G/B/A), RET0x1C; XMM0 duration; IDs low WORD",
+      "fields": [
+        {
+          "offset": 0,
+          "name": "sourceWorldEntityId",
+          "type": "u16",
+          "meaning": "actor+4"
+        },
+        {
+          "offset": 2,
+          "name": "targetWorldEntityId",
+          "type": "u16",
+          "meaning": "actor+4"
+        },
+        {
+          "offset": 4,
+          "name": "red",
+          "type": "f32",
+          "meaning": "case8=2.0"
+        },
+        {
+          "offset": 8,
+          "name": "green",
+          "type": "f32",
+          "meaning": "case8=0.2"
+        },
+        {
+          "offset": 12,
+          "name": "blue",
+          "type": "f32",
+          "meaning": "case8=0.2"
+        },
+        {
+          "offset": 16,
+          "name": "alpha",
+          "type": "f32",
+          "meaning": "case8=1.2"
+        },
+        {
+          "offset": 20,
+          "name": "totalTime",
+          "type": "f32",
+          "meaning": "case8 approximately0.4 in the main update delta unit; seconds not independently established in this continuation"
+        },
+        {
+          "offset": 24,
+          "name": "remainingTime",
+          "type": "f32",
+          "meaning": "initially total; tick subtracts delta"
+        }
+      ],
+      "tick": {
+        "callee": "0x6D8480",
+        "actual_caller": "0x4928A8",
+        "owner": "update root0x492040 prefix",
+        "lookups": "u16 IDs against current FAB138 tree",
+        "erase_conditions": [
+          "source actor absent",
+          "target actor absent",
+          "remaining <= 0 after subtracting delta"
+        ],
+        "erase_width": 28,
+        "completion_callback_in_body": false
+      },
+      "draw": {
+        "callee": "0x6D8660",
+        "actual_caller": "0x492EBD",
+        "owner": "draw root0x492900 prefix",
+        "lookups": "same current world IDs",
+        "color": "clamp byte channels from RGBA * remaining / total",
+        "position_virtual_slot": "0x50",
+        "typed_position_callee": "0x4C8FA0",
+        "graphics_sink": "0x7CCC00",
+        "lua_stack_output": false
+      },
+      "absent_fields": [
+        "runId",
+        "sceneGeneration",
+        "actorGeneration",
+        "eventSequence",
+        "removalReason",
+        "HP",
+        "deathFlag"
+      ],
+      "conditional_identity_risk": "If an old ID is removed and reused before next tick/draw while remaining>0, this record resolves the new current actor. Static consequence of record+lookup; not a runtime occurrence claim.",
+      "not_equivalent_to": [
+        "death queue",
+        "lifecycle ACK",
+        "Lua coroutine wakeup",
+        "server enemy-group completion"
+      ]
+    },
+    {
+      "id": "skill_level_cost16",
+      "owner": "SkillActiveTable record vector at +0x60",
+      "bytes": 16,
+      "new_semantic_scope": "first three signed WORD demand costs only",
+      "fields": [
+        {
+          "offset": 0,
+          "name": "hpDemand",
+          "type": "i16",
+          "meaning": "parser hp branch, 530530 reader"
+        },
+        {
+          "offset": 2,
+          "name": "spDemand",
+          "type": "i16",
+          "meaning": "parser sp branch, 5305C0 reader"
+        },
+        {
+          "offset": 4,
+          "name": "mpDemand",
+          "type": "i16",
+          "meaning": "parser mp branch, 530650 reader"
+        }
+      ],
+      "parser": "0x530890..0x5316C3; names hp/sp/mp at0xC0F09C/0xC0F0A0/0xC0F0A4; locals -24/-22/-20 copied into 16-byte row",
+      "readers": [
+        "0x53059E",
+        "0x53062E",
+        "0x5306BE"
+      ],
+      "consumer": "549980 reads actor+3C8/+3CC/+3D0, adds signed demand and rejects negative result",
+      "actual_caller": "54AE83 in SubAI::CSkillCheckCondition virtual+4",
+      "lua_endpoint_proven": false,
+      "damage_formula_proven": false
+    },
+    {
+      "id": "ordinary_field_hud",
+      "class": "FUI::CBottomMenuFrameField",
+      "vtable": "0xC21B64",
+      "slot": "0x198",
+      "caller": "0x5D4780",
+      "callsite": "0x5D478F",
+      "consumer": "0x5D1BF0",
+      "normal_state": "reads max/current HP/SP/MP; ratio0 for max<1, else current/max; native widget and text update",
+      "state_gate": "actor+158 absent OR state+34 nonzero -> UI zeros",
+      "actor_hp_zero_write_in_zero_ui_branch": false,
+      "lua_endpoint_proven": false
+    }
+  ],
+  "candidate_dispositions": [
+    {
+      "candidate": "54AA60 / hero feedback",
+      "status": "REUSED_EXCLUDED_AS_LUA_ENDPOINT",
+      "reason": "known actual consumers549660/549C60 produce native direction/input; no new Lua bridge",
+      "evidence": [
+        "native_AI_pair_writer",
+        "native_AI_pair_reader",
+        "ai_direction_consumer",
+        "ai_action_consumer"
+      ]
+    },
+    {
+      "candidate": "54AE70 / skill condition",
+      "status": "NEW_NATIVE_CONDITION_ENDPOINT",
+      "reason": "typed SubAI::CSkillCheckCondition and bool; HP/SP/MP availability, no Lua result",
+      "evidence": [
+        "native_skill_condition",
+        "native_skill_check"
+      ]
+    },
+    {
+      "candidate": "FD9278 paired IDs",
+      "status": "NEW_VISUAL_CONTAINER_ENDPOINT",
+      "reason": "28-byte TTL/RGBA/IDs, native tick/draw/graphics; no lifecycle metadata or Lua completion",
+      "evidence": [
+        "pair_store_constructor",
+        "pair_store_tick",
+        "pair_store_draw"
+      ]
+    },
+    {
+      "candidate": "F942C4 result aggregate",
+      "status": "NEW_NATIVE_DISPLAY_ENDPOINT",
+      "reason": "scalar cumulative display, no per-actor identity or sequence",
+      "evidence": [
+        "result_000E",
+        "aggregate_display"
+      ]
+    },
+    {
+      "candidate": "ordinary HUD / monster caption",
+      "status": "NEW_NATIVE_UI_ENDPOINT",
+      "reason": "typed concrete native display consumers; state-derived zero UI is not HP write",
+      "evidence": [
+        "hud_resource_update",
+        "field_hud_caller",
+        "monster_caption"
+      ]
+    },
+    {
+      "candidate": "000F action/skill response",
+      "status": "NEW_EXCLUDED_AS_HP_PRODUCER",
+      "reason": "4B19D0 current controller v+3C -> typed controller545C50 error/resource UI; not resource snapshot, death ACK or Lua completion",
+      "evidence": [
+        "skill_response_000F",
+        "skill_response_ui"
+      ]
+    },
+    {
+      "candidate": "Q actor queries /16 normal observations",
+      "status": "REUSED_BOUNDED_NEGATIVE",
+      "reason": "distinct Q tree and existing finite binding catalog; no ordinary arbitrary-world-ID generation/death getter",
+      "evidence": "MEF-comprehensive-contracts-20261117/events/observation-catalog.json"
+    }
+  ],
+  "unclosed_endpoints": [
+    {
+      "id": "WL-01",
+      "requirement": "same-run/generation ordinary world result producer -> Lua observable consumer",
+      "status": "NOT_CLOSED",
+      "exact_missing": [
+        "a producer/storage correlation carrying or validating actor lifetime identity",
+        "a registered native Lua C closure/callback or proven legitimate script bridge",
+        "same VM/coroutine and typed payload consumer preserving eventSequence/removalReason/death identity"
+      ],
+      "exhausted_bounded_candidates": [
+        "0007 identity",
+        "0000 ratio",
+        "0034 absolute HP/SP/MP",
+        "000E display/FrameControl/aggregate",
+        "case8 FD9278 tick/draw",
+        "000C FSM",
+        "001A erase",
+        "Scenario three-slot AI feedback",
+        "SubAI skill availability",
+        "ordinary field HUD",
+        "16 prior normal observations"
+      ],
+      "not_claimed": [
+        "absence of every hidden alias/custom closure/external graphics callback in entire program",
+        "all possible publisher paths or runtime protocol behavior",
+        "formal native_complete"
+      ],
+      "discharge_evidence": "rooted, byte-pinned writer -> storage/bridge -> typed Lua callback/getter arguments -> registered same-VM consumer with lifetime correlation; or an explicit Server-to-script event contract implementing equivalent identity. More runtime alone, a named getter, or native bool does not discharge."
+    }
+  ],
+  "server_development_requirements": [
+    {
+      "id": "SR-WL-01",
+      "priority": "P0 implementation",
+      "requirement": "authoritative actor lifecycle and event log",
+      "design_not_original_wire": true,
+      "identity": [
+        "runId",
+        "sceneGeneration",
+        "worldEntityId:u16",
+        "actorGeneration",
+        "eventSequence"
+      ],
+      "events": [
+        "HPSnapshot",
+        "Died",
+        "Removed(reason)"
+      ],
+      "details": "Server owns damage/death transition/group clear/quest/drop/persistence and exactly-once business dedup. Client visual, UI zeros or integer0 are not ACKs."
+    },
+    {
+      "id": "SR-WL-02",
+      "priority": "P0 implementation",
+      "requirement": "projection to established packet formats",
+      "design_not_original_wire": true,
+      "details": "Keep 0007/0000/0034/000E/000C/001A observed field sizes. Store generation/sequence/reason server-side; do not append new words to legacy wire. Publish actor existence before dependent messages; apply consistent state and result ordering under Server policy, not an invented universal native ordering."
+    },
+    {
+      "id": "SR-WL-03",
+      "priority": "P1 implementation",
+      "requirement": "synchronize ratio and absolute-resource projections",
+      "design_not_original_wire": true,
+      "details": "0000 value*approximately0.0001 and0034 max/current have distinct writers/readers. Project both when target UI requires it; enforce signed range and max/current consistency. Do not infer HP from000E visual value."
+    },
+    {
+      "id": "SR-WL-04",
+      "priority": "P1 implementation",
+      "requirement": "world ID reuse and stale-result isolation",
+      "design_not_original_wire": true,
+      "details": "Use internal actor generations/outbox sequencing and explicit reuse policy; visual_pair28 relooks up only u16 IDs. Avoid old outbox effects crossing actor lifetimes; no runtime occurrence asserted."
+    },
+    {
+      "id": "SR-WL-05",
+      "priority": "P1 implementation",
+      "requirement": "content/MEF orchestration from authoritative events",
+      "design_not_original_wire": true,
+      "details": "Group kill/quest completion should consume Server events and emit only existing verified content triggers under the separate journey contract. If Client Lua must see arbitrary world result, develop and prove an explicit typed bridge with same-VM/lifetime contract; current analysis does not claim it exists."
+    }
+  ],
+  "verification_limits": [
+    "Verifier proves file identity, byte ranges, disassembly boundaries, selected exact anchors, RTTI/slot bindings and finite candidate census.",
+    "Negative semantic conclusions apply only to listed roots, typed consumers and prior finite catalog.",
+    "No target execution, live transport trace, whole-program alias proof or official status promotion."
+  ]
+}

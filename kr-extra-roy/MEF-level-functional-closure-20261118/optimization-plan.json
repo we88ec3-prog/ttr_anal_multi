@@ -1,0 +1,111 @@
+{
+  "schema": "MEF_LEVEL_OPTIMIZATION_PLAN_V1",
+  "performance_measurements_new": false,
+  "items": [
+    {
+      "id": "O01",
+      "priority": "P0",
+      "title": "內容先過分層稽核",
+      "action": "選定唯一配置版本；圖/旗標與BND分開驗證；修舊範例座標；屏障意圖寫明。",
+      "benefit": "避免玩家出生卡牆、出口走不到或門可繞行與設計不符。",
+      "evidence": [
+        "rules-waves/report.md",
+        "space-mechanisms/content-remediation.json"
+      ],
+      "implemented_this_turn": false
+    },
+    {
+      "id": "O02",
+      "priority": "P0",
+      "title": "保留時計與清場重建順序",
+      "action": "新MEF adapter保留6種計時原點、清場提交、重建後完整點集；不依賴可能被跳過的演出callback開門。",
+      "benefit": "重打、清場演出和換圖後不會誤提前出怪或丟掉開門狀態。",
+      "evidence": [
+        "finite-handoff/report.md",
+        "rules-waves/optimization-contracts.json",
+        "outcomes-continuity/report.md"
+      ],
+      "implemented_this_turn": false
+    },
+    {
+      "id": "O03",
+      "priority": "P1",
+      "title": "事件與旗標反向索引",
+      "action": "載入選定definition時建立flag→consumer索引，變更只喚醒相依規則且保留原phase；本輪67檔合計26筆引用是覆蓋統計，非單場索引規模。",
+      "benefit": "少做與本次事件無關的檢查。",
+      "evidence": [
+        "rules-waves/optimization-contracts.json",
+        "rules-waves/content-audit.json"
+      ],
+      "implemented_this_turn": false
+    },
+    {
+      "id": "O04",
+      "priority": "P1",
+      "title": "波次彙總和分時鐘deadline",
+      "action": "以有效HP／生成變更維護每波alive/current/max彙總；沿用既有單調時計，按各計時種類的原點、排除和派送規則維護期限，到期仍待原合格更新。",
+      "benefit": "減少每次掃全部怪物與全部計時器；維持原先增援順序。",
+      "evidence": [
+        "rules-waves/optimization-contracts.json"
+      ],
+      "implemented_this_turn": false
+    },
+    {
+      "id": "O05",
+      "priority": "P1",
+      "title": "活躍區域與有變化的點同步",
+      "action": "完成的一次性區域退訂，粗篩後精確幾何；同點集只發真正改變的0048，重建仍完整0027。",
+      "benefit": "減少位置輪詢和重複同步，不讓機關或出口漏判。",
+      "evidence": [
+        "space-mechanisms/spatial-contracts.json",
+        "rules-waves/optimization-contracts.json"
+      ],
+      "implemented_this_turn": false
+    },
+    {
+      "id": "O06",
+      "priority": "P1",
+      "title": "把適合的多步演出交Client MEF",
+      "action": "選有多個本地等待/效果的有限內容；綁provider/selector/seen/cleanup，再由Server派一次。",
+      "benefit": "可減少Server逐拍排程；單一開關直接native delta更省，不能預設所有插播都降流量。",
+      "evidence": [
+        "finite-handoff/handoff-contract.json"
+      ],
+      "implemented_this_turn": false
+    },
+    {
+      "id": "O07",
+      "priority": "P1",
+      "title": "補齊公開內容範例",
+      "action": "整理RegionEntered、BossDefeated、空場首波與具名Boss波的可追溯候選；沿用既有實作。",
+      "benefit": "新關卡作者可以直接選用已說明的玩法組件。",
+      "evidence": [
+        "rules-waves/report.md"
+      ],
+      "implemented_this_turn": false
+    },
+    {
+      "id": "O08",
+      "priority": "P2",
+      "title": "共用不可變編譯計畫",
+      "action": "以內容hash共用catalog/圖/索引，只複製每instance的旗標、游標、timer、open/used集合。",
+      "benefit": "多人各自進場時少重建同一份關卡計畫，狀態仍互相獨立。",
+      "evidence": [
+        "rules-waves/optimization-contracts.json"
+      ],
+      "implemented_this_turn": false
+    },
+    {
+      "id": "O09",
+      "priority": "P2",
+      "title": "按玩法需求擴充typed MEF",
+      "action": "需要時增加可重複計數、道具條件、隨機路線、循環、跨實例隊伍事件或戰鬥中途checkpoint；每項接既有Server服務。",
+      "benefit": "擴大可做玩法；不把尚未要求的複雜玩法列為目前關卡阻塞。",
+      "evidence": [
+        "rules-waves/report.md",
+        "outcomes-continuity/report.md"
+      ],
+      "implemented_this_turn": false
+    }
+  ]
+}

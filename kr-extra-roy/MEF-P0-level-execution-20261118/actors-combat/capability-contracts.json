@@ -1,0 +1,598 @@
+{
+  "schema": "MEF_P0_ACTORS_CAPABILITY_CONTRACTS_V1",
+  "analysis_baseline": "19005c9f8a8180e6f0deb00faf008a11ef98023f",
+  "server_commit": "e88ac0ad5fd6e911b28b1e61b6eedab3bfdfb4b4",
+  "classification": "Capabilities and proposed adapters for Server-provided MEF; not a new native file format and not implementation/deployment.",
+  "capabilities": [
+    {
+      "id": "AC01",
+      "player": "生出可放進世界、可播放動作的怪物",
+      "status": "NATIVE_STATIC_CLOSED",
+      "native": "lb.CreateObjectEx 4A0F70 model10..10000→CMonster;0007 4AE4D0→CMonster;same FAB130 tree",
+      "evidence": [
+        "B01",
+        "B02",
+        "B03",
+        "B04",
+        "B05",
+        "D05",
+        "B35",
+        "D15"
+      ],
+      "limits": [
+        "Q presentation slots are a separate owner/identity domain",
+        "local factory does not accept explicit worldID/group/variant/run token",
+        "a body in the tree does not prove autonomous hostile target/skill decisions"
+      ]
+    },
+    {
+      "id": "AC02",
+      "player": "設定怪物的陣營與移動速度",
+      "status": "NATIVE_STATIC_CLOSED",
+      "native": "0000→v+2C;CMonster selector29→+90;5→+D0;6→+CC; speed=(D0*.01)*CC",
+      "evidence": [
+        "B26",
+        "B27",
+        "D01",
+        "B19"
+      ],
+      "limits": [
+        "value is signed16 at the native consumer",
+        "group write does not itself rerun bar-style v+64 or select a target",
+        "existing authoring nativeMovementSpeed range needs tightening to 1..32767"
+      ]
+    },
+    {
+      "id": "AC03",
+      "player": "怪物巡邏、追人、返家與挑選招式",
+      "status": "SERVER_SOURCE_PRESENT",
+      "server": [
+        "LocalEncounterSpawn",
+        "ResolveBehavior",
+        "PollEnemies",
+        "UpdateEnemyEngagement",
+        "ChooseEnemyAttack",
+        "FindMonsterRoute"
+      ],
+      "evidence": [
+        "B04",
+        "B26",
+        "B27",
+        "R_world_step",
+        "R_world_step_iterator"
+      ],
+      "limits": [
+        "this is Server-executed MEF-rule capability, not recovered official AI",
+        "current Server collision pose and target choice remain Server computation",
+        "ordinary CMonster local hostile decision producer is not established"
+      ]
+    },
+    {
+      "id": "AC04",
+      "player": "前搖、命中判定、防禦、扣血、死亡及延後移除",
+      "status": "SERVER_SOURCE_PRESENT",
+      "server": [
+        "LaunchEnemyAttack",
+        "ApplyIncomingDamage",
+        "ApplyEnemyHit",
+        "ReportWaveHealth",
+        "ReadyToClearMissionNode"
+      ],
+      "evidence": [
+        "B02",
+        "B20",
+        "B26",
+        "B27"
+      ],
+      "limits": [
+        "000D animation,000E feedback,0000 ratio,0034 absolute resources,001A removal are different operations",
+        "current enemy HP source is Server EnemyAgent.Health; default native absolute100 is not gameplay truth",
+        "generic world death→same-run Lua observation remains unproved"
+      ]
+    },
+    {
+      "id": "AC05",
+      "player": "投射物由Client連續播放飛行",
+      "status": "NATIVE_STATIC_CLOSED",
+      "native": "0094→CBullet C079FC→world v+20 4CC150 and v+24 4CC540; modes direction, world-target, fixed coordinate",
+      "evidence": [
+        "B09",
+        "B10",
+        "B11",
+        "B12",
+        "B13",
+        "B14",
+        "B15",
+        "B18",
+        "B19",
+        "B21",
+        "B22",
+        "B23",
+        "B24",
+        "B25",
+        "D02",
+        "D03",
+        "D04",
+        "D08",
+        "D09",
+        "D11"
+      ],
+      "limits": [
+        "direction mode needs explicit speed properties5/6; constructor speed base0",
+        "targeted elapsed/duration can follow target position but does not calculate authoritative damage",
+        "elapsed saturation is not automatic deletion",
+        "frame animation delta can be locally scaled, so it is not Server combat clock"
+      ]
+    },
+    {
+      "id": "AC06",
+      "player": "選用已有的投射物外觀、地面瞄準與收尾效果",
+      "status": "NATIVE_STATIC_CLOSED",
+      "native": "Table/Blt2.blt→82BB00→Type-key FBAAE8;4F5320→class2 model+38 effect name→551FF0",
+      "evidence": [
+        "B11",
+        "B14",
+        "B17",
+        "B28",
+        "B29",
+        "B30",
+        "B31",
+        "B32",
+        "B33",
+        "D12",
+        "D13",
+        "D14"
+      ],
+      "limits": [
+        "228 declared Type rows,156 nonempty main effects,8 ground effects,119 impact effects,170 Curve rows",
+        "two0094Type fields independently select trajectory/optional effects and main visual model",
+        "runtime effect payload lookup/render acceptance remains an integration requirement",
+        "Speed/Lifetime/Radius in data do not automatically become native hit rules in the examined CBullet bodies"
+      ]
+    },
+    {
+      "id": "AC07",
+      "player": "投射物撞中、耗盡距離或超時後正確結束",
+      "status": "ADAPTER_REQUIRED",
+      "server": [
+        "LocalMonsterProjectiles.Launch",
+        "LocalMonsterProjectiles.Poll",
+        "LocalTutorialCombat.Projectiles"
+      ],
+      "native": "001A→optional terminal effect at elapsed/duration>~0.6→world erasure/cleanup",
+      "evidence": [
+        "B12",
+        "B13",
+        "B16",
+        "B17",
+        "B18",
+        "B20",
+        "D10",
+        "B36"
+      ],
+      "limits": [
+        "Server straight swept collision already exists; native visual packet mapper/entityID lifecycle does not exist in reviewed Server source",
+        "terminal visual may appear for non-hit removals after threshold; gameplay feedback must stay separate",
+        "do not use target-tracking mode to silently change non-homing damage semantics"
+      ]
+    },
+    {
+      "id": "AC08",
+      "player": "由Client背景腳本全權操控普通敵方AI並回報戰鬥事件",
+      "status": "CLIENT_JOIN_UNPROVEN",
+      "native": "reviewed local/packet construction,Single/Formation/SubAI model<=9,000A supplied-relation follow,0000/000D/000E/0034/001A consumers",
+      "evidence": [
+        "B03",
+        "B04",
+        "B08",
+        "B26",
+        "B27",
+        "R_world_step",
+        "R_world_step_iterator"
+      ],
+      "limits": [
+        "requires an actual CMonster1036 decision-agent binding and direction/skill producer, or a deliberately implemented new adapter",
+        "requires stable run/generation entity identity and typed lifecycle results",
+        "RR-0013/T13 not modified or declared accepted",
+        "this optional execution profile does not block Server rule MEF development"
+      ]
+    }
+  ],
+  "wire_consumers": [
+    {
+      "id": "spawn_0007",
+      "opcode": "0x0007",
+      "consumer": "0x4ae4d0",
+      "header_bytes": 2,
+      "row_bytes": 26,
+      "fields": [
+        {
+          "row_offset": 0,
+          "bytes": 2,
+          "wire_type": "u16",
+          "meaning": "worldEntityId;low byte1 for CMonster"
+        },
+        {
+          "row_offset": 2,
+          "bytes": 1,
+          "wire_type": "u8",
+          "meaning": "pre;native subtracts1 into compound model key"
+        },
+        {
+          "row_offset": 3,
+          "bytes": 1,
+          "wire_type": "unassigned",
+          "meaning": "not named in this bounded contract"
+        },
+        {
+          "row_offset": 4,
+          "bytes": 2,
+          "wire_type": "u16",
+          "meaning": "model"
+        },
+        {
+          "row_offset": 6,
+          "bytes": 4,
+          "wire_type": "f32",
+          "meaning": "x"
+        },
+        {
+          "row_offset": 10,
+          "bytes": 4,
+          "wire_type": "f32",
+          "meaning": "y"
+        },
+        {
+          "row_offset": 14,
+          "bytes": 4,
+          "wire_type": "f32",
+          "meaning": "scale"
+        },
+        {
+          "row_offset": 18,
+          "bytes": 4,
+          "wire_type": "u32",
+          "meaning": "relationKey→actor+9C"
+        },
+        {
+          "row_offset": 22,
+          "bytes": 1,
+          "wire_type": "u8",
+          "meaning": "direction"
+        },
+        {
+          "row_offset": 23,
+          "bytes": 1,
+          "wire_type": "u8",
+          "meaning": "variant→CMonster+424"
+        },
+        {
+          "row_offset": 24,
+          "bytes": 1,
+          "wire_type": "u8",
+          "meaning": "group→actor+90"
+        },
+        {
+          "row_offset": 25,
+          "bytes": 1,
+          "wire_type": "u8",
+          "meaning": "FSM state"
+        }
+      ],
+      "constraints": [
+        "exact Server payload size2+26*n",
+        "reserve ID with lowbyte1 for monster",
+        "pre>=1",
+        "finite bounded coordinates and scale",
+        "existing ID skips whole row, so not a local-actor adoption/update operation"
+      ]
+    },
+    {
+      "id": "properties_0000",
+      "opcode": "0x0000",
+      "consumer": "0x4afaf0",
+      "header_bytes": 2,
+      "row_bytes": 6,
+      "fields": [
+        {
+          "row_offset": 0,
+          "bytes": 2,
+          "wire_type": "u16",
+          "meaning": "worldEntityId"
+        },
+        {
+          "row_offset": 2,
+          "bytes": 2,
+          "wire_type": "u16 bits→typed signed16",
+          "meaning": "selector"
+        },
+        {
+          "row_offset": 4,
+          "bytes": 2,
+          "wire_type": "u16 bits→typed signed16",
+          "meaning": "value"
+        }
+      ],
+      "monster_selectors": {
+        "1": "+3B0 ratio/basispoints",
+        "5": "+D0 speed factor",
+        "6": "+CC base speed and first-speed baseline",
+        "23": "+3D4 level/name display",
+        "29": "+90 group"
+      },
+      "bullet_selectors": {
+        "5": "+D0 speed factor",
+        "6": "+CC base speed"
+      },
+      "constraints": [
+        "typed receiver required",
+        "positive speeds1..32767",
+        "ratio basispoints0..10000",
+        "do not send actor-specific selectors to a different class"
+      ]
+    },
+    {
+      "id": "visual_bullet_0094",
+      "opcode": "0x0094",
+      "consumer": "0x4af1f0",
+      "header_bytes": 2,
+      "row_bytes": 24,
+      "fields": [
+        {
+          "row_offset": 0,
+          "bytes": 2,
+          "wire_type": "u16",
+          "meaning": "sourceWorldId;must already resolve"
+        },
+        {
+          "row_offset": 2,
+          "bytes": 2,
+          "wire_type": "u16",
+          "meaning": "bulletWorldId;must be unused"
+        },
+        {
+          "row_offset": 4,
+          "bytes": 2,
+          "wire_type": "u16",
+          "meaning": "metadataBulletType→+10C→Blt2 Type"
+        },
+        {
+          "row_offset": 6,
+          "bytes": 2,
+          "wire_type": "u16",
+          "meaning": "visualBulletType→model(0x02000000|value)"
+        },
+        {
+          "row_offset": 8,
+          "bytes": 2,
+          "wire_type": "i16",
+          "meaning": "startX"
+        },
+        {
+          "row_offset": 10,
+          "bytes": 2,
+          "wire_type": "i16",
+          "meaning": "startY"
+        },
+        {
+          "row_offset": 12,
+          "bytes": 4,
+          "wire_type": "f32",
+          "meaning": "scale"
+        },
+        {
+          "row_offset": 16,
+          "bytes": 1,
+          "wire_type": "u8",
+          "meaning": "direction"
+        },
+        {
+          "row_offset": 17,
+          "bytes": 2,
+          "wire_type": "u16",
+          "meaning": "durationMilliseconds→+130 /1000"
+        },
+        {
+          "row_offset": 19,
+          "bytes": 1,
+          "wire_type": "u8",
+          "meaning": "mode0 direction;1 world-target;2 coordinate-target"
+        },
+        {
+          "row_offset": 20,
+          "bytes": 2,
+          "wire_type": "u16",
+          "meaning": "mode1 targetWorldId;mode2 targetX"
+        },
+        {
+          "row_offset": 22,
+          "bytes": 2,
+          "wire_type": "u16",
+          "meaning": "mode2 targetY;unused in mode1 and0"
+        }
+      ],
+      "constraints": [
+        "exact Server payload size2+24*n",
+        "source spawn precedes0094",
+        "reserved entityID lowbyte2 is the conservative lifecycle profile",
+        "metadata and visualType resolved against pinned Blt2; empty main visual deliberately allowed only for ground/impact-only designs",
+        "duration1..65535ms",
+        "direction-mode speed5/6 emitted after construction",
+        "signed start coords versus unsigned target coords handled without wrap",
+        "duplicate ID does not reconfigure existing bullet"
+      ]
+    },
+    {
+      "id": "remove_001a",
+      "opcode": "0x001a",
+      "consumer": "0x4b28d0",
+      "header_bytes": 4,
+      "row_bytes": 2,
+      "fields": [
+        {
+          "row_offset": 0,
+          "bytes": 2,
+          "wire_type": "u16",
+          "meaning": "worldEntityId"
+        }
+      ],
+      "constraints": [
+        "remove only known live generation",
+        "direction mode requires explicit termination even after visual duration",
+        "typed lowbyte2/8/9 uses CBullet offsets",
+        "target-mode ratio>~0.6 may trigger impact visual regardless of removal reason"
+      ]
+    }
+  ],
+  "adapters": [
+    {
+      "id": "spawn_existing_server_rules",
+      "state": "REUSE_PRESENT_SERVER_CAPABILITY",
+      "inputs": [
+        "instance/run identity",
+        "spawn definition Model/X/Y/Pre/AiProfile/Patrol/MaximumHealth",
+        "wave identity",
+        "validated bounds"
+      ],
+      "steps": [
+        "resolve behavior once and freeze definition",
+        "assign unique ushort monsterID lowbyte1",
+        "emit0007",
+        "emit0000 ratio1=10000 and expanded speed5/6",
+        "keep authoritative EnemyAgent HP/state on Server",
+        "consume existing hit/death/wave-health hooks"
+      ],
+      "new_work": [
+        "connect new MEF authoring shape to existing definitions; do not rewrite combat engine",
+        "tighten nativeMovementSpeed signed boundary",
+        "tie catalog hash/version to instance policy"
+      ]
+    },
+    {
+      "id": "local_world_actor_optional",
+      "state": "NEW_ADAPTER_IF_SELECTED",
+      "inputs": [
+        "explicit desired runtime class",
+        "model/presentation",
+        "allocated network ID or creation acknowledgement",
+        "runId and generation",
+        "group/relation/variant/resource initialization",
+        "control mode"
+      ],
+      "known_reusable": [
+        "native local world creation and frame stepping",
+        "0000 selector29 group and5/6 speed once identity known",
+        "0007 path already provides full deterministic packet metadata"
+      ],
+      "new_work": [
+        "same-run ID mapping and no-collision allocation",
+        "explicit local variant initialization instead of assuming constructor sets+424",
+        "attach/control assignment for selected profile",
+        "terminal events with cause and sequence",
+        "do not adopt by duplicate0007; it skips"
+      ]
+    },
+    {
+      "id": "native_projectile_visual",
+      "state": "NEW_SERVER_PACKET_AND_LIFECYCLE_ADAPTER",
+      "inputs": [
+        "Server flightId",
+        "instanceId/runId/generation",
+        "source network entity",
+        "separate allocated bullet network entity",
+        "metadataType/visualType and asset version",
+        "direction or target mode",
+        "duration and positive native speed",
+        "terminal cause"
+      ],
+      "server_authority": [
+        "LocalMonsterProjectiles keeps non-homing swept path, bounds occlusion,hitRadius,range,lifetime and damage",
+        "do not replace Server flightId with ushort entityID",
+        "one hit and one terminal per flight",
+        "source removal waits existing source flights"
+      ],
+      "native_steps": [
+        "0094 once",
+        "0000 speed5/6 for direction mode",
+        "Client v+20/v+24 updates visuals",
+        "001A once on actual hit/block/range/lifetime/cancel/scene disposal"
+      ],
+      "required_lifecycle": [
+        "retain mapping through source death and launched-flight tail",
+        "do not make vanished source suppress already-authorized result",
+        "cleanup late/duplicate events by generation",
+        "decouple optional impact visual from damage event",
+        "clear mappings on scene abort/reconnect; no ID reuse until native removal safe"
+      ],
+      "remaining": [
+        "asset path/mount/render verification for selected effects",
+        "packet implementation and order integration",
+        "acceptance cases for moving targets, early wall stop,source death and terminal ratio threshold"
+      ],
+      "performance": "Potentially avoids adding per-frame visual position packets. Existing Server projectile source currently emits no native flight visual, so no measured reduction in its present network load or collision CPU is claimed."
+    },
+    {
+      "id": "typed_combat_events",
+      "state": "REUSE_SERVER_EVENTS_AND_ADD_CONTRACT",
+      "inputs": [
+        "runId",
+        "generation",
+        "entityId",
+        "waveId",
+        "eventSequence",
+        "eventKind",
+        "previousHP",
+        "currentHP",
+        "maxHP",
+        "terminalCause",
+        "pendingFlightCount"
+      ],
+      "allowed_events": [
+        "Spawned",
+        "HealthChanged",
+        "Defeated",
+        "RemovalQueued",
+        "RemovedOrSceneDiscarded",
+        "FlightFinished",
+        "WaveHealthChanged"
+      ],
+      "rules": [
+        "Defeated only on positive→zero authoritative HP transition",
+        "removal is not automatically defeat",
+        "cleanup/cancel does not satisfy required kills",
+        "no Q movement/stopped/count predicate as group-clear evidence",
+        "projectile active tail separate from enemy HP zero",
+        "bridge to ordinary Lua only if the chosen execution profile implements and validates it"
+      ]
+    }
+  ],
+  "mef_type_recommendations": [
+    {
+      "type": "生怪與增援",
+      "responsibility": "怪種、出生點、數量、波次、個體身分、配置繼承",
+      "native_or_server": "Server MEF rules plus native world factory/consumer"
+    },
+    {
+      "type": "怪物行為與戰鬥",
+      "responsibility": "巡邏、仇恨、追逐、返家、選招、血量階段、傷害與死亡條件",
+      "native_or_server": "existing Server behavior/attack services; client animation consumers"
+    },
+    {
+      "type": "投射物呈現（可併入戰鬥類）",
+      "responsibility": "方向飛行、跟隨目標的畫面插值、定點飛行、地面瞄準、收尾與清理",
+      "native_or_server": "native CBullet positive capability; new Server visual adapter needed"
+    },
+    {
+      "type": "角色演出",
+      "responsibility": "指定人物走位、轉向、動作及入場演出",
+      "native_or_server": "Q slots or explicitly managed world actors; not implicit combat authority"
+    }
+  ],
+  "completion": {
+    "p0_3": "功能/欄位/可用Server執行鏈及選用local bridge差額已分析；新內容整合和Client自主AI另列需求",
+    "p0_4": "現有Server戰鬥與native呈現/資源/終止鏈已分析；0094視覺adapter與選用ordinaryLua觀察仍需開發",
+    "formal_full_pass": false,
+    "formal_rr_0013_closed": false,
+    "client_runtime_accepted": false
+  }
+}

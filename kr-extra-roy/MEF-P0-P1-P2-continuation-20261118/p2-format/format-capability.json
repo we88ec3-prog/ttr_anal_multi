@@ -1,0 +1,169 @@
+{
+  "schema": "MEF_P2_FORMAT_CAPABILITY_V1",
+  "date_asia_taipei": "2026-11-18",
+  "branch": "extra/roy1",
+  "baseline": "15d9501c203c6f656461b64f578a50c96e38a5ff",
+  "p2_overall": "BLOCKED",
+  "p2_player_status": "已確定原生 MEF 的候選資源包與已知載入機制，尚缺真正 MEF 檔案及把它交給解譯器的連線，不能宣稱已能播放或編寫原生 MEF。",
+  "available_evidence_review": "COMPLETED_FOR_LISTED_CANDIDATES",
+  "full_program_absence_proved": false,
+  "official_mef": {
+    "verified_payload_count": 0,
+    "sample_carrier_candidate": "Field.stp",
+    "sample_carrier_supplied": false,
+    "header": null,
+    "version": null,
+    "record_grammar": null,
+    "parser_address": null,
+    "executor_address": null,
+    "first_normal_entry": null,
+    "server_delivery_opcode": null,
+    "native_format_complete": false,
+    "playable_verified": false
+  },
+  "identified_other_formats": [
+    {
+      "id": "STP_CONTAINER",
+      "evidence": "Master source plus native STP_OPEN/MOUNT_WALK",
+      "identity": "STPD/STP container and mounted member namespace",
+      "official_mef_grammar": false
+    },
+    {
+      "id": "MASTER_PACKING_RULES",
+      "evidence": "master-rule-evidence.json M04/M05; prior full 897-record analysis",
+      "identity": "Observed packing metadata record layout; Field row has xml/mef extension slots",
+      "flag_byte_semantics": "UNASSIGNED",
+      "official_mef_grammar": false
+    },
+    {
+      "id": "MAPLIST_TRIGGER_NAME",
+      "evidence": "TRIGGER_STORAGE plus pinned storage.md",
+      "identity": "Owned narrow filename/reference string keyed by map ID",
+      "payload_buffer": false,
+      "official_mef_grammar": false
+    },
+    {
+      "id": "LUA_TEXT_AND_BINARY",
+      "evidence": "LUA_DISPATCH/LUA_HEADER plus pinned parser.md/executor.md",
+      "binary_header_hex": "1b4c75615100010404040800",
+      "format": "Lua 5.1 text or binary chunk; header alone does not identify patch version",
+      "selector": "6FE860 first byte; 1B to 70D680, otherwise 70E420",
+      "execution": "Existing protected execution and coroutine/callback consumers; source-specific entry still required",
+      "renaming_lua_to_mef_proves_official_mef": false,
+      "official_mef_grammar": false
+    },
+    {
+      "id": "SERVER_DEFINED_CONTENT",
+      "identity": "Separate Server design may use its own versioned schema",
+      "required_classification": "NOT_NATIVE_MEF",
+      "official_mef_grammar": false
+    }
+  ],
+  "chain_review": [
+    {
+      "id": "P2-C01",
+      "chain": "Master Field AttachedPackage to Field.stp request and provider installation",
+      "status": "BOUNDED_STATIC_CLOSED",
+      "reuse": true,
+      "end": "7136C9 calls 715620; success returns zero before 7136D2 installs provider at directory+100",
+      "not_proved": "Field carrier exists, opens successfully, or contains any specified MEF member"
+    },
+    {
+      "id": "P2-C02",
+      "chain": "Field xml/mef extension slots to format dispatch",
+      "status": "NO_DISPATCH_EDGE_IN_EXAMINED_MOUNT_PATH",
+      "reuse": true,
+      "end": "7135B0 handles directory kind 1 and AttachedPackage; 715620 handles container opening/indexing",
+      "not_proved": "Any runtime consumer of PackingRules elsewhere, or an official MEF parser"
+    },
+    {
+      "id": "P2-C03",
+      "chain": "MapList trigger attribute to retained filename",
+      "status": "BOUNDED_STATIC_CLOSED",
+      "reuse": true,
+      "end": "4F5640 -> 4F7DF0 -> 403040 owned node+10 string; collection root+50",
+      "not_proved": "Filename to opened MEF bytes"
+    },
+    {
+      "id": "P2-C04",
+      "chain": "Known MapList lookup and root aliases to first MEF reader",
+      "status": "LISTED_CANDIDATES_CLASSIFIED_WITHOUT_POSITIVE_MEF_READER",
+      "reuse": true,
+      "end": "4DF58D return not used as filename; later native-aliases report closes the specific world/font/sender/audio virtual targets",
+      "not_proved": "Full-program absence, arbitrary computed aliases, exceptional callbacks, external modules"
+    },
+    {
+      "id": "P2-C05",
+      "chain": "4BAD73 saved EDI to 4BADC2 partial overwrite",
+      "status": "CORRECTED_BY_NATIVE_BYTES",
+      "reuse": false,
+      "end": "4BADC2 mov di,[FB90EA] replaces low 16 bits; 4BAE70 movsx edx,di is numeric use",
+      "not_proved": "A full 32-bit overwrite, or mathematical inequality for every possible loaded low word"
+    },
+    {
+      "id": "P2-C06",
+      "chain": "Verified Lua bytes to parser, closure and executor",
+      "status": "BOUNDED_STATIC_CLOSED_FOR_IDENTIFIED_LUA_PATHS",
+      "reuse": true,
+      "end": "6FE860/6FE990 and existing protected execution; native caller and finite sink sets classified in prior reports",
+      "not_proved": "Official MEF shares this format or that Server raw bytes reach the reader"
+    },
+    {
+      "id": "P2-C07",
+      "chain": "Normal group fallback or ordinary talk UI to Field format consumer",
+      "status": "SIBLING_CONCRETE_CONSUMERS_ARE_DIFFERENT_RESOURCE_FAMILIES",
+      "reuse": false,
+      "same_batch_dependencies": ["../p0-selection", "../p1-entry"],
+      "not_proved": "A global absence of additional groups or consumers"
+    },
+    {
+      "id": "P2-C08",
+      "chain": "Authentic MEF payload to actual reader, grammar and execution owner",
+      "status": "BLOCKED_SOURCE_AND_NATIVE_EDGE",
+      "reuse": false,
+      "end": "No verified Field carrier/member or native byte consumer is supplied in this evidence set",
+      "not_proved": "All native functions have been exhausted; no such capability can exist"
+    }
+  ],
+  "blockers": [
+    {
+      "id": "P2-B01",
+      "category": "CLIENT_EVIDENCE_SOURCE",
+      "question": "Which real Field member is a native MEF file for this BIN?",
+      "needed": "Field.stp with whole-file hash and intact index, or an authentic .mef plus original carrier/member path, length, hash and version provenance",
+      "why_current_sources_stop": "Master supplies mount and extension metadata, not those member bytes; a reference string cannot reveal header, record boundaries or grammar",
+      "resolves_without_official_server_source": true
+    },
+    {
+      "id": "P2-B02",
+      "category": "CLIENT_REVERSE_ENGINEERING",
+      "question": "Which producer passes that exact filename or byte buffer to which parser, and who first executes it?",
+      "needed": "Retain sibling Field XML/config references and map/trigger identity; follow an exact member/reference to native reader arguments, parser selection, owner and lifecycle. For another Client version, also require its corresponding BIN/EXE mapping",
+      "why_current_sources_stop": "Examined MapList storage, root-alias branches and existing Lua reader/sink collections do not provide a positive MEF bytes producer. Further arbitrary callback possibilities are not evidence of this edge",
+      "resolves_without_official_server_source": true
+    },
+    {
+      "id": "P2-B03",
+      "category": "CLIENT_REVERSE_ENGINEERING",
+      "question": "What structures, rejection rules, state transitions and dispatch semantics belong to genuine MEF?",
+      "needed": "A real sample bound to the actual parser/executor; derive only consumed fields and branches, then validate positive and rejected cases statically before any separately authorized gameplay test",
+      "why_current_sources_stop": "STP framing, PackingRules and Lua header each already have a different proven consumer; none can be promoted into MEF grammar",
+      "resolves_without_official_server_source": true
+    }
+  ],
+  "server_development_requirements": [
+    "Select existing compatible content and trigger it through verified Client interfaces; maintain the content/version manifest.",
+    "Own map/quest/player eligibility, run identity, cancellation, result reconciliation and persistence as Server rules.",
+    "Treat any separately designed scenario schema as NOT_NATIVE_MEF and keep it distinct from native file support.",
+    "Do not invent an MEF transfer opcode, Client acknowledgement, or successful parse signal without its native receiving interface."
+  ],
+  "integration_remaining": [
+    "Join a real member to P0 source selection and readiness; a declared provider is not a selected payload.",
+    "Join a real first entry to the correct P1 VM and scheduler; callback availability does not supply source bytes."
+  ],
+  "gameplay_validation": "NOT_RUN",
+  "target_execution": false,
+  "client_modified": false,
+  "server_modified": false,
+  "formal_status_promoted": false
+}

@@ -1,0 +1,82 @@
+{
+  "schema": "MEF_REQUESTED_P0_PROGRESS_V1",
+  "base_commit": "19005c9f8a8180e6f0deb00faf008a11ef98023f",
+  "status_meaning": "Completed bounded static capability and implementation-input analysis; unresolved optional native interfaces, new development and gameplay verification remain explicit.",
+  "items": [
+    {
+      "id": "P0-3", "prior_feature": "L03", "title": "生怪",
+      "analysis_status": "COMPLETED_BOUNDED_SPAWN_AND_ADAPTER_ANALYSIS",
+      "newly_closed": ["三種 actor 的身分與 owner 分開", "local 與 packet CMonster 初始化差額", "selector29 關係 writer", "真實 Server 出生與行為 profile 接線", "signed movement speed 的作者資料限制"],
+      "player_effect": "決定哪種怪、在哪裡、以什麼身分出現，並使用現有戰鬥行為。",
+      "remaining": ["新 MEF 配置接選定 spawn adapter", "新正速度資料限制至 native 可表達範圍", "完整 Client 自主敵方 AI 的控制／回報接口仍另列"],
+      "evidence": ["actors-combat/report.md"],
+      "new_implementation_or_deployment_claimed": false
+    },
+    {
+      "id": "P0-4", "prior_feature": "L04", "title": "戰鬥與扣血",
+      "analysis_status": "COMPLETED_BOUNDED_COMBAT_AND_PROJECTILE_ANALYSIS",
+      "newly_closed": ["輸入／動作、HP／死亡／移除 consumer 的界線", "Server 巡邏、追敵、返家、選招與傷害能力直接原碼核對", "0094 CBullet 呈現與001A清除鏈", "方向模式速度與目標／座標模式持續時間的區別"],
+      "player_effect": "怪物能追擊、施招，投射物規則可沿用；飛行畫面的原生接口與資源來源已找到。",
+      "remaining": ["依所選內容接既有戰鬥／投射物服務", "新增0094/0000/001A native flight視覺adapter及network entity生命期", "所選effect實際畫面驗收", "一般結果進常駐 Lua 與完整 Client 命中判定下放仍需精確接口", "新內容正常遊玩驗證"],
+      "evidence": ["actors-combat/report.md"],
+      "new_implementation_or_deployment_claimed": false
+    },
+    {
+      "id": "P0-5", "prior_feature": "L05", "title": "分批增援",
+      "analysis_status": "COMPLETED_RULE_ORDER_AND_AUTHORED_COVERAGE",
+      "newly_closed": ["定時／順序處理次序與各自前置旗標", "空初始場景與具名延後頭目作者候選", "逐波生成、血量彙總與必要波清場依賴"],
+      "player_effect": "進場先空一段時間、走到位置才伏擊，或打完一批再出下一批。",
+      "remaining": ["作者definition ID需登錄正式catalog/selector", "選定相容adapter與內容版本，主線override保留節點/地圖/初始怪順序限制", "優化實作須保留原次序與時基", "正常流程出怪時點驗證"],
+      "evidence": ["rules-scheduling/report.md", "rules-scheduling/examples/missing-coverage.scenario.json"],
+      "new_implementation_or_deployment_claimed": false
+    },
+    {
+      "id": "P0-6", "prior_feature": "L06", "title": "敵群清空與頭目",
+      "analysis_status": "COMPLETED_CLEAR_GATES_AND_BOSS_MATCHING",
+      "newly_closed": ["主線/一般副本與功能測試場清場 gate 的精確差別", "敵方投射物與移除排送條件", "一般副本等待PendingStageOneDefeatExperience完成", "省略waveId的Model/PRE唯一匹配", "BossDefeated與named-wave公開作者候選"],
+      "player_effect": "必要怪群與頭目真正結束後才開放通關，不會因暫時空場提早結算。",
+      "remaining": ["新 MEF 沿正確場景 adapter 使用清場條件", "所選頭目模型／變體與玩法內容接線", "Client 已看見死亡／消失仍須正常流程確認"],
+      "evidence": ["rules-scheduling/report.md", "rules-scheduling/examples/missing-coverage.scenario.json"],
+      "new_implementation_or_deployment_claimed": false
+    },
+    {
+      "id": "P0-7", "prior_feature": "L07", "title": "分支路線與旗標",
+      "analysis_status": "COMPLETED_FINITE_MAPPING_AND_EXTENSION_CONTRACTS",
+      "newly_closed": ["三次重複展開成既有節點及逐次旗標", "必要波與Boss/Wave訊號的跨節點保證", "入場選definition與關內動態隨機分開", "道具／任務條件接既有服務的最小擴充"],
+      "player_effect": "左右分路、固定多輪挑戰與進場選路可以依內容編排。",
+      "remaining": ["有限展開為逐節點重建；同房不中斷連戰採既有增援，owner延續依選定adapter", "作者ID須登錄相容catalog/selector，不能任意放入受限主線override", "入口加權選擇adapter尚為提案", "關內動態隨機／真正循環需新增規則", "消耗道具開門需提交扣除與開門狀態的服務接線"],
+      "evidence": ["rules-scheduling/report.md", "rules-scheduling/repeat-mapping.json", "rules-scheduling/extension-contracts.json"],
+      "new_implementation_or_deployment_claimed": false
+    },
+    {
+      "id": "P0-8", "prior_feature": "L08", "title": "倒數與延遲事件",
+      "analysis_status": "COMPLETED_EXACT_TIMER_IMPLEMENTATION_ANALYSIS",
+      "newly_closed": ["戰鬥／波次的整數timestamp截斷轉換", "NodeDelay/ClearDelay/RegionHeld的double elapsed比較", "六類原點及合格派送階段", "期限排程與原時計等價條件"],
+      "player_effect": "增援、占點與清場後等待保留各自正確時機，劇情時間不會被錯算。",
+      "remaining": ["如採新排程器，按原語意實作與量測", "純畫面等待和權威玩法倒數分別編排", "新內容正常時間流程確認"],
+      "evidence": ["rules-scheduling/report.md", "rules-scheduling/execution-contract.json", "rules-scheduling/optimization-contracts.json"],
+      "new_implementation_or_deployment_claimed": false
+    },
+    {
+      "id": "P0-9", "prior_feature": "L10", "title": "門、屏障與通路",
+      "analysis_status": "COMPLETED_STATIC_GATE_CANDIDATE_AND_NATIVE_BOUNDARIES",
+      "newly_closed": ["Map635單一8格真封口候選", "完整互動圓保守格覆蓋及必要條件可達", "type7 CEventObject與selector0x1C狀態consumer", "六個門模型與EventObjects映射", "所查動態region結果未影響碰撞返回的反證"],
+      "player_effect": "已有在Server二維BND及overlay政策下關閉不通、開啟後走到新出口的內容方案。",
+      "remaining": ["候選會移動出口並縮小半徑，採用時明確版本化", "六種門的實際motion開關語意仍需模型素材", "真正Client動態碰撞接口仍未由現有鏈證成", "三維畫面與角色尺寸正常驗證"],
+      "evidence": ["gates-transitions/report.md"],
+      "new_implementation_or_deployment_claimed": false
+    },
+    {
+      "id": "P0-10", "prior_feature": "L13", "title": "開出口與換圖",
+      "analysis_status": "COMPLETED_POINT_INTENT_AND_TRANSITION_ADAPTER_ANALYSIS",
+      "newly_closed": ["Client點／輸入到既有互動意圖", "一般、Story與功能測試場的實際adapter", "ClearScenes或未預註冊出口的完整重建分支", "全部預註冊且無該演出時的點狀態更新分支"],
+      "player_effect": "出口條件、點資料與下一張圖接續一致，清場演出後保留正確出口狀態。",
+      "remaining": ["新 MEF 配置綁定當前instance/node和合法出口", "需要多步重建後演出時才新增hook", "seen-skip與003F仍不能證明setter成功", "loading／ready／Q各owner的正常交接確認"],
+      "evidence": ["gates-transitions/report.md"],
+      "new_implementation_or_deployment_claimed": false
+    }
+  ],
+  "formal_rr_status_changed": false,
+  "new_server_implementation_claimed": false,
+  "new_gameplay_or_deployment_claimed": false
+}

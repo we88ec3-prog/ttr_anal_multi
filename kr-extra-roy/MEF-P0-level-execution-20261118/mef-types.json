@@ -1,0 +1,1567 @@
+{
+  "schema": "MEF_COMPOSABLE_PLAYER_CATALOG_V1",
+  "base_commit": "19005c9f8a8180e6f0deb00faf008a11ef98023f",
+  "classification_origin": "Project-authored functional taxonomy, not recovered native file kinds or new wire types",
+  "types_can_be_composed": true,
+  "not_a_native_file_format_count": true,
+  "server_development_includes_mef": true,
+  "official_format_recovery_required": false,
+  "counts": {
+    "player_types": 12,
+    "execution_routes": 4,
+    "source_native_domains": 15,
+    "normal_binding_names": 121,
+    "binding_classifications": {
+      "BOUNDED_NATIVE_CAPABILITY_REUSABLE": 116,
+      "NO_COUNT_RESULT": 1,
+      "UNUSABLE_STUB": 4
+    }
+  },
+  "sources": [
+    {
+      "commit": "19005c9f8a8180e6f0deb00faf008a11ef98023f",
+      "path": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json",
+      "git_blob": "f0c9aa79d68c7f1e1f0d8dd1aad7248b45ef82f3",
+      "bytes": 156445,
+      "sha256": "23720b6a3d5872fd3df3d201dceaf2bde24d1bb9a9daa6e7e80058b7fa1deab2"
+    },
+    {
+      "commit": "19005c9f8a8180e6f0deb00faf008a11ef98023f",
+      "path": "kr-extra-roy/MEF-server-provided-capabilities-20261118/delivery-profiles/contracts.json",
+      "git_blob": "cc9ae1fe709a71c24ecbb5198d7291c3df2c0ac2",
+      "bytes": 5702,
+      "sha256": "87247a317e291f6c69da16ae30ed43d5bf569b6e6d1be42da3058cb2c1c1a8ff"
+    }
+  ],
+  "execution_routes": [
+    {
+      "id": "SERVER_RULES",
+      "title": "Server 執行的規則 MEF",
+      "purpose": "生怪、戰鬥條件、波次、分支、機關、出口、獎勵與保存政策。",
+      "status": "EXISTING_TYPED_RUNTIME_AND_SERVICES_REUSED; NEW_RULE_EXTENSIONS_EXPLICIT",
+      "condition": "沿用現有 scenario／MonsterBehavior 與服務；新語法另列編譯／adapter 工作。",
+      "load_reduction": "少寫每關專用程式；事件索引等優化可減少求值；規則本身仍在 Server。"
+    },
+    {
+      "id": "Q_FINITE",
+      "title": "Client 有限演出 MEF",
+      "purpose": "一段有起點與終點的對話、鏡頭、動作、等待與既有點操作。",
+      "status": "STATIC_ADAPTER_CLOSED_CONTENT_AND_RELEASE_UNBOUND",
+      "condition": "選已發布內容，接受 Q 對輸入／UI 的影響；新版 seen 持久化及點換代約束照前輪補證。",
+      "load_reduction": "可移走多步演出的中間計時與派送；單一點開關不保證更省。"
+    },
+    {
+      "id": "TUTORIAL_INTERACTIVE",
+      "title": "Client 教學互動 MEF",
+      "purpose": "教學提示、已映射操作與進區觀察、頁面與角色條件、串接有限演出。",
+      "status": "STATIC_NATIVE_AND_ORIGINAL_CONTENT_CHAIN_CLOSED_CUSTOM_RELEASE_UNBOUND",
+      "condition": "使用真正 Tutorial field／controller／page；普通關卡不能直接套用同一觀察通路。",
+      "load_reduction": "可移走已支持教學的提示監看、UI 順序及本地等待。"
+    },
+    {
+      "id": "NATIVE_CONTINUATION",
+      "title": "由 MEF 啟動的原生持續效果",
+      "purpose": "已建立角色的更新，或音訊、鏡頭、圖片、淡幕等各自原生工作。",
+      "status": "OPERATION_SPECIFIC_STATIC_CONTRACTS_REUSED",
+      "condition": "每項各有 owner／gate／完成與回收條件；不是 End 後仍能任意排新 Lua 工作。",
+      "load_reduction": "使用 Client 本來已有的逐幀更新，不重複在 Server 模擬；既有工作不全算本輪新增節省。"
+    }
+  ],
+  "optional_ordinary_background_profile": {
+    "id": "ORDINARY_BACKGROUND_B",
+    "status": "OPTIONAL_ADAPTER_NOT_CLOSED",
+    "static_end_to_end_closed": false,
+    "purpose": "ordinary Mission/Scenario retains normal field/controller/input while arbitrary new Lua content keeps running",
+    "ordinary_background_B_required": true,
+    "missing_edges": [
+      "actual content producer -> same VM first execution",
+      "sustained pump while Q inactive",
+      "input ownership",
+      "cancel and reentry of same content owner"
+    ],
+    "latest_UI_chain": "resource 212 -> UI/Component/TalkBox_Scenario_Panel.FTC -> native XML UI reader, not a proved Lua content producer",
+    "blocker_for_other_profiles": false,
+    "deployed": false,
+    "counted_as_available_route": false,
+    "latest_scope": "本輪普通 actor／技能／HP 證據不能自動補出持續 Lua producer/pump 或通用事件橋。"
+  },
+  "types": [
+    {
+      "id": "M01",
+      "title": "關卡流程與分支 MEF",
+      "player_example": "打完第一區後開左右兩條路；選一條路繼續，最後才結算。",
+      "responsibility": "節點、前置旗標、清場後事件、每個出口的目的地及通關條件。",
+      "routes": [
+        "SERVER_RULES"
+      ],
+      "current_capability": "現有 scenario definition、有限節點圖、ALL 旗標及逐出口資格可沿用。",
+      "limits": "關卡規則可資料化；規則仍在 Server 求值的部分不計為 Client 計算外移。",
+      "remaining": "固定輪數可逐節點展開，同房連戰用增援；作者ID需登錄相容入口且保留主線override限制。入口選路及關內動態分支分開接線。",
+      "evidence": [
+        "../MEF-level-functional-closure-20261118/rules-waves/report.md",
+        "rules-scheduling/report.md"
+      ],
+      "primary_binding_count": 0,
+      "binding_classifications": {}
+    },
+    {
+      "id": "M02",
+      "title": "生怪與增援 MEF",
+      "player_example": "進房先出一群小怪，打完再增援，達成條件後頭目登場。",
+      "responsibility": "怪物模型、出生位置、波次、生成時點、必要敵群與世界身分的接線。",
+      "routes": [
+        "SERVER_RULES",
+        "Q_FINITE",
+        "TUTORIAL_INTERACTIVE",
+        "NATIVE_CONTINUATION"
+      ],
+      "current_capability": "Server 波次引擎可沿用；lb.CreateObject[Ex] 有本地 world actor 建立路徑。",
+      "limits": "本地建立與封包建立的 CMonster 初始化不同；沒有新 Lua EntityId 回值，不可用 GetObjectCount 當存活數。",
+      "remaining": "依 actor profile 接齊身分、關係／控制、屬性與終端事件；新正速度值限制至native signed16可表達範圍；生成外觀不自行代表完整敵對 AI。",
+      "evidence": [
+        "actors-combat/report.md",
+        "rules-scheduling/report.md",
+        "../MEF-server-provided-capabilities-20261118/world-offload/report.md"
+      ],
+      "primary_binding_count": 3,
+      "binding_classifications": {
+        "BOUNDED_NATIVE_CAPABILITY_REUSABLE": 2,
+        "NO_COUNT_RESULT": 1
+      }
+    },
+    {
+      "id": "M03",
+      "title": "怪物行為、戰鬥與頭目階段 MEF",
+      "player_example": "頭目血量下降到指定程度後出增援；所有必要敵人確實倒下才算清場。",
+      "responsibility": "巡邏、追敵、返家、選招、戰鬥參數與階段條件、有效 HP／死亡事件、波清與對應畫面回饋。",
+      "routes": [
+        "SERVER_RULES",
+        "NATIVE_CONTINUATION",
+        "Q_FINITE",
+        "TUTORIAL_INTERACTIVE"
+      ],
+      "current_capability": "實際 Server 已有行為 profile、依血量／距離／冷卻選招、傷害與投射物規則；Client 有動作、結果及投射物呈現 consumer，新的投射物視覺 adapter 仍待接入。",
+      "limits": "NumberPanel、BattlePanel、BurstStruck 是回饋，不寫權威 HP；完整普通敵方 AI／命中判定下放不是已閉合通路。",
+      "remaining": "MEF 規則接既有戰鬥事件；0094/0000/001A投射物視覺adapter及network entity生命期仍需新增。完整Client自主戰鬥另需控制與結果觀察／回報接口。",
+      "evidence": [
+        "actors-combat/report.md",
+        "rules-scheduling/report.md"
+      ],
+      "primary_binding_count": 3,
+      "binding_classifications": {
+        "BOUNDED_NATIVE_CAPABILITY_REUSABLE": 3
+      }
+    },
+    {
+      "id": "M04",
+      "title": "機關、占點與障礙 MEF",
+      "player_example": "站在圈內一段時間、按下拉桿或打倒守衛後，關閉陷阱並開放通路。",
+      "responsibility": "進區／占點／互動條件、一次性旗標、傷害區、障礙及既有點狀態。",
+      "routes": [
+        "SERVER_RULES",
+        "Q_FINITE",
+        "TUTORIAL_INTERACTIVE"
+      ],
+      "current_capability": "現有區域與按鍵規則可用；Lua checkpoint setter 共用點更新consumer；另找到6個門模型的CEventObject外觀狀態鏈。",
+      "limits": "出口啟用、光效、門模型和碰撞各有 consumer；改點狀態不自動成為物理門。",
+      "remaining": "Server二維封口候選已給；採用時保留必要怪與機關可達。門模型motion的開關語意及真正Client動態碰撞仍另需材料／接口。",
+      "evidence": [
+        "gates-transitions/report.md",
+        "../MEF-level-functional-closure-20261118/space-mechanisms/report.md"
+      ],
+      "primary_binding_count": 2,
+      "binding_classifications": {
+        "BOUNDED_NATIVE_CAPABILITY_REUSABLE": 2
+      }
+    },
+    {
+      "id": "M05",
+      "title": "出口、地圖與轉場 MEF",
+      "player_example": "清場後出口亮起，按鍵進下一區，出生位置與目前進度一起接續。",
+      "responsibility": "出口目的地、換圖、同圖重建、完整點集、演出地圖備份與小地圖。",
+      "routes": [
+        "SERVER_RULES",
+        "Q_FINITE",
+        "TUTORIAL_INTERACTIVE"
+      ],
+      "current_capability": "現有互動意圖與 Server transition 可復用；Client 有地圖載入、小地圖與 Q 地圖備份／還原。",
+      "limits": "lb.ChangeMap 不自動取得 Q 的 map backup；只換本機地圖不等於兩端實例及進度已切換。",
+      "remaining": "按選定入口保持實例、角色、點集與 loading／ready／Q 的交接，重建後使用當代點資料。",
+      "evidence": [
+        "gates-transitions/report.md",
+        "../MEF-level-functional-closure-20261118/finite-handoff/report.md"
+      ],
+      "primary_binding_count": 4,
+      "binding_classifications": {
+        "BOUNDED_NATIVE_CAPABILITY_REUSABLE": 4
+      }
+    },
+    {
+      "id": "M06",
+      "title": "角色演出與外觀 MEF",
+      "player_example": "NPC 走到玩家面前、轉身說話；頭目登場時做指定動作。",
+      "responsibility": "演出角色建立、移動、走路、轉向、動畫、顯隱與 world actor 外觀部件。",
+      "routes": [
+        "Q_FINITE",
+        "TUTORIAL_INTERACTIVE",
+        "NATIVE_CONTINUATION"
+      ],
+      "current_capability": "Q 演出 slot 與 native 動作有既有入口；world 外觀與附件也有有界 consumer。",
+      "limits": "Q 角色與可戰鬥 world entity 分開；Q.DeleteObject 是 stub，Q.IsAllObjectsStopped 不能當敵群清空。",
+      "remaining": "選有效資源及角色身分，按該 owner 清理；不得把外觀附件當背包道具。",
+      "evidence": [
+        "actors-combat/report.md",
+        "../MEF-server-provided-capabilities-20261118/BINDING-OFFLOAD-MAP.md"
+      ],
+      "primary_binding_count": 21,
+      "binding_classifications": {
+        "BOUNDED_NATIVE_CAPABILITY_REUSABLE": 20,
+        "UNUSABLE_STUB": 1
+      }
+    },
+    {
+      "id": "M07",
+      "title": "劇情、對話與教學 MEF",
+      "player_example": "播放對話與字幕，提示玩家移動、攻擊或切換角色，完成後繼續下一步。",
+      "responsibility": "多列對話、字幕、書本、序章、教學頁面、已映射操作與教學進度。",
+      "routes": [
+        "Q_FINITE",
+        "TUTORIAL_INTERACTIVE"
+      ],
+      "current_capability": "有限 Q 與真正 Tutorial context 的互動鏈可用；教學 pump 不要求 Q 正在播放。",
+      "limits": "Tutorial 條件不能直接當普通戰鬥事件；Q.BalloonTalk、Tutorial.InsertObject 是 stub；seen 回覆不證正式 callback 執行。",
+      "remaining": "綁定內容版本、入口、播放／跳過政策和結束交接；對話結束與任務完成分別提交。",
+      "evidence": [
+        "../MEF-server-provided-capabilities-20261118/delivery-profiles/report.md",
+        "../MEF-level-functional-closure-20261118/finite-handoff/report.md"
+      ],
+      "primary_binding_count": 30,
+      "binding_classifications": {
+        "BOUNDED_NATIVE_CAPABILITY_REUSABLE": 28,
+        "UNUSABLE_STUB": 2
+      }
+    },
+    {
+      "id": "M08",
+      "title": "鏡頭與畫面效果 MEF",
+      "player_example": "頭目特寫、鏡頭跟隨、淡入淡出、黑邊與慢動作。",
+      "responsibility": "鏡頭路徑／跟隨／快照、畫面轉場、色調、黑邊與動畫速度效果。",
+      "routes": [
+        "Q_FINITE",
+        "TUTORIAL_INTERACTIVE",
+        "NATIVE_CONTINUATION"
+      ],
+      "current_capability": "既有 native consumer 執行鏡頭與畫面效果的後續更新。",
+      "limits": "每種效果的時基、owner、結束與回收條件不同；慢動作不等於 Server 戰鬥時計一併變慢。",
+      "remaining": "內容按自己的資源與生命期配對開始／結束及快照還原；衡量多步演出的實際下放收益。",
+      "evidence": [
+        "../MEF-server-provided-capabilities-20261118/BINDING-OFFLOAD-MAP.md",
+        "../MEF-server-provided-capabilities-20261118/delivery-profiles/report.md"
+      ],
+      "primary_binding_count": 31,
+      "binding_classifications": {
+        "BOUNDED_NATIVE_CAPABILITY_REUSABLE": 31
+      }
+    },
+    {
+      "id": "M09",
+      "title": "音樂、語音與圖片 MEF",
+      "player_example": "進頭目房換音樂、對話播放語音、顯示圖片或飛入畫面。",
+      "responsibility": "音樂與淡出、音效、語音、圖片替換／縮放／飛行與取消。",
+      "routes": [
+        "Q_FINITE",
+        "TUTORIAL_INTERACTIVE",
+        "NATIVE_CONTINUATION"
+      ],
+      "current_capability": "已知 binding 可啟動 native 播放器與圖片效果；本地維持各自後續更新。",
+      "limits": "新圖片可替換先前 owner；效果消失不能當任務、獎勵或保存完成。",
+      "remaining": "發行正確音訊／貼圖，保留已更正的 FlyingObject 參數與回收契約。",
+      "evidence": [
+        "../MEF-server-provided-capabilities-20261118/BINDING-OFFLOAD-MAP.md",
+        "../MEF-comprehensive-contracts-20261117/abi/abi-contracts.json"
+      ],
+      "primary_binding_count": 12,
+      "binding_classifications": {
+        "BOUNDED_NATIVE_CAPABILITY_REUSABLE": 12
+      }
+    },
+    {
+      "id": "M10",
+      "title": "NPC 與商店服務 MEF",
+      "player_example": "完成任務後鐵匠開放，NPC 說不同台詞，玩家買賣或強化裝備。",
+      "responsibility": "NPC／商店位置與資格、對話順序、貨單／價格／消耗政策，以及既有交易服務接線。",
+      "routes": [
+        "SERVER_RULES",
+        "Q_FINITE",
+        "TUTORIAL_INTERACTIVE"
+      ],
+      "current_capability": "既有 town placement、任務解鎖、商店 UI 與交易服務可以復用。",
+      "limits": "可見模型、NPC key、ShopNo 與互動點不同；Server 改價格不代表本地貨架顯示會自動一致。",
+      "remaining": "新 MEF 規則接既有資格與交易，選定本地表可支援的內容；不新增第二套背包／錢包。",
+      "evidence": [
+        "../MEF-server-provided-capabilities-20261118/npc-progression/report.md",
+        "../MEF-server-provided-capabilities-20261118/SERVER-REUSE.md"
+      ],
+      "primary_binding_count": 0,
+      "binding_classifications": {}
+    },
+    {
+      "id": "M11",
+      "title": "結算、獎勵與進度保存 MEF",
+      "player_example": "過關獲得經驗與道具，再登入仍有已完成任務與已拿到的獎勵。",
+      "responsibility": "完成條件、受益範圍、獎勵政策、提交時點、返回與可保存的里程碑。",
+      "routes": [
+        "SERVER_RULES"
+      ],
+      "current_capability": "既有任務、經驗、背包、錢包、冷卻與持久化服務可直接接 MEF 決策。",
+      "limits": "畫面數字、演出結束與落地掉落各不代表已入帳；目前副本暫存旗標不等於永久戰鬥檢查點。",
+      "remaining": "新增規則綁版本及原有提交點；若要求中途永久續玩，再定義可保存的 checkpoint。",
+      "evidence": [
+        "../MEF-level-functional-closure-20261118/outcomes-continuity/report.md",
+        "../MEF-level-functional-closure-20261118/LATEST-MAIN-UPDATE.md"
+      ],
+      "primary_binding_count": 0,
+      "binding_classifications": {}
+    },
+    {
+      "id": "M12",
+      "title": "輸入、排程與生命週期 MEF",
+      "player_example": "演出時暫時鎖住操控，結束後還給玩家；等待正確條件後再接下一步。",
+      "responsibility": "合法入口、協程、等待、輸入 mask、鍵位切換、收尾與所有權；診斷／顯示設定列為附屬能力。",
+      "routes": [
+        "SERVER_RULES",
+        "Q_FINITE",
+        "TUTORIAL_INTERACTIVE",
+        "NATIVE_CONTINUATION"
+      ],
+      "current_capability": "既有 Q／Tutorial caller、原生輸入控制和本機時計可復用。",
+      "limits": "回傳 callback 不等於 End；End 不會自動完成全部 owner 清理；本機時計不是 Server 時計；PrintCurrSceneID 是 stub。",
+      "remaining": "選定 profile 的首次執行、持續 pump、輸入交接及取消生命期；普通場景常駐 Lua 仍是獨立選用接口。",
+      "evidence": [
+        "rules-scheduling/report.md",
+        "../MEF-server-provided-capabilities-20261118/delivery-profiles/contracts.json",
+        "../MEF-level-functional-closure-20261118/finite-handoff/report.md"
+      ],
+      "primary_binding_count": 15,
+      "binding_classifications": {
+        "BOUNDED_NATIVE_CAPABILITY_REUSABLE": 14,
+        "UNUSABLE_STUB": 1
+      }
+    }
+  ],
+  "bindings": [
+    {
+      "name": "lb.SetDebugLevel",
+      "primary_player_type": "M12",
+      "source_domain": "diagnostics",
+      "native": "0x4a0aa0",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "設定 Client 診斷等級",
+      "limits": "本體只寫診斷欄位並把上端限制為9；不是玩法狀態。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#lb.SetDebugLevel"
+    },
+    {
+      "name": "lb.GetObjectCount",
+      "primary_player_type": "M02",
+      "source_domain": "world",
+      "native": "0x4a0a30",
+      "classification": "NO_COUNT_RESULT",
+      "effect": "有登記入口，但本體是一次性 manager 初始化路徑",
+      "limits": "不提供可信的物件數／存活數查詢。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#lb.GetObjectCount"
+    },
+    {
+      "name": "lb.ChangeMap",
+      "primary_player_type": "M05",
+      "source_domain": "maps",
+      "native": "0x4a0ac0",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "要求本機地圖載入器換圖",
+      "limits": "需合法 map key；兩端地圖、實體、互動點與進度另外同步。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#lb.ChangeMap"
+    },
+    {
+      "name": "lb.CreateObject",
+      "primary_player_type": "M02",
+      "source_domain": "world",
+      "native": "0x4a0b40",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "以簡化參數本地建立世界 actor",
+      "limits": "固定 scale=12、direction=0；model/x/y/attach，不回傳新 EntityId。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#lb.CreateObject"
+    },
+    {
+      "name": "lb.CreateObjectEx",
+      "primary_player_type": "M02",
+      "source_domain": "world",
+      "native": "0x4a0f70",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "指定模型、位置、縮放、面向建立世界 actor",
+      "limits": "model,x,y,scale,direction,attach；模型分支與資源須有效，本機配號。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#lb.CreateObjectEx"
+    },
+    {
+      "name": "lb.SetActorAvatar",
+      "primary_player_type": "M06",
+      "source_domain": "world",
+      "native": "0x4a0b80",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "更改指定世界 actor 的外觀部件／變體",
+      "limits": "world key、part、variant；消費者是 CDoll 外觀樹，需既有 render owner。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#lb.SetActorAvatar"
+    },
+    {
+      "name": "lb.AttachActorItem",
+      "primary_player_type": "M06",
+      "source_domain": "world",
+      "native": "0x4a0c50",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "把指定附件加入世界 actor 的外觀",
+      "limits": "以資源 item/actor key 查附件部件；不能當新增背包道具。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#lb.AttachActorItem"
+    },
+    {
+      "name": "lb.DetachActorItem",
+      "primary_player_type": "M06",
+      "source_domain": "world",
+      "native": "0x4a0d10",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "移除世界 actor 指定外觀部件及配對部件",
+      "limits": "刪 part 與 part+0x10；不是把 Attach 的 item key 直接反向傳回。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#lb.DetachActorItem"
+    },
+    {
+      "name": "lb.GetTime",
+      "primary_player_type": "M12",
+      "source_domain": "diagnostics",
+      "native": "0x4a0b70",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "取得本地計時值",
+      "limits": "WINMM.timeGetTime 的32-bit原值以signed FILD轉Lua number；不是Server時鐘。 本輪觀察補充：不是時間事件、frame callback或Server時鐘；signed number轉換另見ABI審計",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#lb.GetTime"
+    },
+    {
+      "name": "lb.DoFile",
+      "primary_player_type": "M12",
+      "source_domain": "entry",
+      "native": "0x4a1230",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "依路徑讀資源並交正式 Lua wrapper 執行",
+      "limits": "已存在合法 caller 與資源可見性；opening failure 和成功執行都可回 0，須查當次 exports/version，與大寫 global loader 契約不同。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#lb.DoFile"
+    },
+    {
+      "name": "lb.PrintCurrSceneID",
+      "primary_player_type": "M12",
+      "source_domain": "diagnostics",
+      "native": "0x5f5d10",
+      "classification": "UNUSABLE_STUB",
+      "effect": "此 build 正常 target 為空操作",
+      "limits": "RET，不提供 scene ID。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#lb.PrintCurrSceneID"
+    },
+    {
+      "name": "lb.ChangeResolution",
+      "primary_player_type": "M12",
+      "source_domain": "display",
+      "native": "0x4a1330",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "呼現有顯示參數與 rendering 重設路徑",
+      "limits": "三個數值參數；本次不虛構合法尺寸與模式enum。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#lb.ChangeResolution"
+    },
+    {
+      "name": "lb.LoadMinimap",
+      "primary_player_type": "M05",
+      "source_domain": "maps",
+      "native": "0x4a1400",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "按 map key 重載小地圖描述與圖示資源",
+      "limits": "既有 minimap owner、BOUND→.mmt、texture與symbols須有效。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#lb.LoadMinimap"
+    },
+    {
+      "name": "lb.ChangeKeymapType",
+      "primary_player_type": "M12",
+      "source_domain": "input",
+      "native": "0x4a1440",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "切換原生支援的鍵位配置",
+      "limits": "已證0/1兩分支；不等於解除所有輸入 owner。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#lb.ChangeKeymapType"
+    },
+    {
+      "name": "Tutorial.IsSynopsisSkipped",
+      "primary_player_type": "M07",
+      "source_domain": "tutorial",
+      "native": "0x4a9320",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "讀取特定簡介流程的跳過紀錄",
+      "limits": "number，讀FBA7A0；不是所有內容的通用取消旗標。 本輪觀察補充：只在兩個entry清0；Stop在active檢查之前即可按選定keys設1，不是最近任意演出結果",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Tutorial.IsSynopsisSkipped"
+    },
+    {
+      "name": "Tutorial.PlayMusic",
+      "primary_player_type": "M09",
+      "source_domain": "audio",
+      "native": "0x4a9330",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "在既有音樂播放器中請求音軌",
+      "limits": "與Q共享音樂owner，需合法資源；非同步且同名可略過重播。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Tutorial.PlayMusic"
+    },
+    {
+      "name": "Tutorial.InsertTutorialCheckPoint",
+      "primary_player_type": "M04",
+      "source_domain": "points",
+      "native": "0x4a9430",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "按教學資料列建立提示點",
+      "limits": "固定category4；位置與半徑取自原表。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Tutorial.InsertTutorialCheckPoint"
+    },
+    {
+      "name": "Tutorial.SetCheckPointStatus",
+      "primary_player_type": "M04",
+      "source_domain": "points",
+      "native": "0x4a9460",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "切換既有互動點enabled；出口等類型另有視覺分支",
+      "limits": "key/category/status，與S2C0048同setter；category2/3不保證招牌外觀改變。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Tutorial.SetCheckPointStatus"
+    },
+    {
+      "name": "Tutorial.SetKeymapEnabled",
+      "primary_player_type": "M12",
+      "source_domain": "input",
+      "native": "0x4a94c0",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "設定教學輸入mask",
+      "limits": "數字0/1；非零清mask0x2，Lua true不等於整數1。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Tutorial.SetKeymapEnabled"
+    },
+    {
+      "name": "Tutorial.StopCameraWorks",
+      "primary_player_type": "M08",
+      "source_domain": "camera",
+      "native": "0x4a9570",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "停止目前 CameraWorks",
+      "limits": "共享current pointer；不等於pop相機快照。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Tutorial.StopCameraWorks"
+    },
+    {
+      "name": "Tutorial.PushCamera",
+      "primary_player_type": "M08",
+      "source_domain": "camera",
+      "native": "0x4a95f0",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "以標籤保存相機快照",
+      "limits": "label對應同一相機owner，取得／釋放需成對。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Tutorial.PushCamera"
+    },
+    {
+      "name": "Tutorial.PopCamera",
+      "primary_player_type": "M08",
+      "source_domain": "camera",
+      "native": "0x4a96a0",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "按標籤還原並移除相機快照",
+      "limits": "先還原與移除再比標籤；不匹配可能繼續消耗stack。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Tutorial.PopCamera"
+    },
+    {
+      "name": "Tutorial.ApplyDefaultCamera",
+      "primary_player_type": "M08",
+      "source_domain": "camera",
+      "native": "0x4a9720",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "將既有預設相機值套用到相機",
+      "limits": "是預設值路徑，不是PopCamera的同義操作。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Tutorial.ApplyDefaultCamera"
+    },
+    {
+      "name": "Tutorial.StartCutScene",
+      "primary_player_type": "M12",
+      "source_domain": "entry",
+      "native": "0x4a9730",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "從教學編排發起既有Q演出",
+      "limits": "使用合法scene雙鍵及對應context，受Q busy／資源前置限制。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Tutorial.StartCutScene"
+    },
+    {
+      "name": "Tutorial.IsCutSceneRunning",
+      "primary_player_type": "M12",
+      "source_domain": "entry",
+      "native": "0x4a97b0",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "查目前Q演出running狀態",
+      "limits": "numeric狀態；不代表教學scenario／任務已結算。 本輪觀察補充：active0不保證曾啟動、成功完成或所有呈現已回收",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Tutorial.IsCutSceneRunning"
+    },
+    {
+      "name": "Tutorial.StopCutScene",
+      "primary_player_type": "M12",
+      "source_domain": "entry",
+      "native": "0x4a9820",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "由教學入口呼Q停止與對應清理",
+      "limits": "依native Stop guard與參數分支，與正常End不同。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Tutorial.StopCutScene"
+    },
+    {
+      "name": "Tutorial.PostUIMessage_EmployChar",
+      "primary_player_type": "M07",
+      "source_domain": "tutorial",
+      "native": "0x4a98d0",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "送固定雇用詢問UI事件",
+      "limits": "F431F加一個整數，由適用頁面的consumer處理。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Tutorial.PostUIMessage_EmployChar"
+    },
+    {
+      "name": "Tutorial.PostUIMessage_TutoMsg",
+      "primary_player_type": "M07",
+      "source_domain": "tutorial",
+      "native": "0x4a9950",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "送固定教學提示UI事件",
+      "limits": "F43FD加兩個整數，不能任意指定event或callback。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Tutorial.PostUIMessage_TutoMsg"
+    },
+    {
+      "name": "Tutorial.HideUI",
+      "primary_player_type": "M07",
+      "source_domain": "tutorial",
+      "native": "0x4a99d0",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "隱藏適用當前頁面原先可見的子視窗",
+      "limits": "空豁免集合，先記錄key再virtual visibility(0)，需typed page。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Tutorial.HideUI"
+    },
+    {
+      "name": "Tutorial.SetUIPage",
+      "primary_player_type": "M07",
+      "source_domain": "tutorial",
+      "native": "0x4a9ae0",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "選擇固定教學頁面；同頁時送F4355刷新事件",
+      "limits": "固定page15，沒有任意page參數，不表示同步完成整頁重建。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Tutorial.SetUIPage"
+    },
+    {
+      "name": "Tutorial.RegisterSkipMessage",
+      "primary_player_type": "M09",
+      "source_domain": "image",
+      "native": "0x4a9b70",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "建立持續顯示的跳過提示圖片",
+      "limits": "接texture path；不是登記Lua callable。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Tutorial.RegisterSkipMessage"
+    },
+    {
+      "name": "Tutorial.RegisterScalingObject",
+      "primary_player_type": "M09",
+      "source_domain": "image",
+      "native": "0x4a9c80",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "建立指定尺寸的縮放圖片",
+      "limits": "path/width/height；由圖片owner更新／繪製。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Tutorial.RegisterScalingObject"
+    },
+    {
+      "name": "Tutorial.DestroyFlyingObjects",
+      "primary_player_type": "M09",
+      "source_domain": "image",
+      "native": "0x4a9db0",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "取消Tutorial所追蹤的圖片",
+      "limits": "標記與清tracking，實體回收可能在後續合格tick。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Tutorial.DestroyFlyingObjects"
+    },
+    {
+      "name": "Tutorial.IsCharacterAvailable",
+      "primary_player_type": "M07",
+      "source_domain": "tutorial",
+      "native": "0x4a9f00",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "查固定角色roster條目的可用欄位",
+      "limits": "固定 roster index 2（零起算，第 3 筆）可用性；native 不讀形式引數，不能指定任意 EntityId。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Tutorial.IsCharacterAvailable"
+    },
+    {
+      "name": "Tutorial.SetControlStatus",
+      "primary_player_type": "M07",
+      "source_domain": "tutorial",
+      "native": "0x4a9f90",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "寫入教學controller的控制旗標",
+      "limits": "已知0..31 layout及正確controller，native無bounds check。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Tutorial.SetControlStatus"
+    },
+    {
+      "name": "Tutorial.GetControlStatus",
+      "primary_player_type": "M07",
+      "source_domain": "tutorial",
+      "native": "0x4a9fb0",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "讀回教學controller控制旗標",
+      "limits": "與Set同owner/index，number；不是一般世界事件查詢。 本輪觀察補充：沒有bounds/type guard；旗標可被script寫入並殘留，非可消耗事件queue",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Tutorial.GetControlStatus"
+    },
+    {
+      "name": "Tutorial.GetTutorialState",
+      "primary_player_type": "M07",
+      "source_domain": "tutorial",
+      "native": "0x4a9fd0",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "查教學UI推進的狀態欄位",
+      "limits": "CTutoMsgDummy等特定writer，不是任意關卡完成狀態。 本輪觀察補充：無receiver/type guard；不是worldFSM、任務或群清state",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Tutorial.GetTutorialState"
+    },
+    {
+      "name": "Tutorial.InsertObject",
+      "primary_player_type": "M07",
+      "source_domain": "tutorial",
+      "native": "0x476430",
+      "classification": "UNUSABLE_STUB",
+      "effect": "此 build 正常 target 為空操作",
+      "limits": "RET 4；固定教學角色可走已證InsertIsilia，不把本名稱當建立器。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Tutorial.InsertObject"
+    },
+    {
+      "name": "Tutorial.DeleteObject",
+      "primary_player_type": "M07",
+      "source_domain": "tutorial",
+      "native": "0x4a9fe0",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "按教學角色鍵移除對應物件",
+      "limits": "用低BYTE轉教學world key；不同於Q.DeleteObject stub。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Tutorial.DeleteObject"
+    },
+    {
+      "name": "Tutorial.InsertIsilia",
+      "primary_player_type": "M07",
+      "source_domain": "tutorial",
+      "native": "0x4aa070",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "建立原版教學固定Isilia物件",
+      "limits": "固定world key F000、model4；不可改說任意NPC建立器。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Tutorial.InsertIsilia"
+    },
+    {
+      "name": "Tutorial.IsIsiliaFound",
+      "primary_player_type": "M07",
+      "source_domain": "tutorial",
+      "native": "0x4aa240",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "判斷原版固定Isilia的教學條件",
+      "limits": "固定對象／視認鏈，不是任意actor存亡。 本輪觀察補充：0混合找不到、null actor、視錐／距離／螢幕邊界失敗；不檢查一般死亡原因",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Tutorial.IsIsiliaFound"
+    },
+    {
+      "name": "Tutorial.CheckLeader",
+      "primary_player_type": "M07",
+      "source_domain": "tutorial",
+      "native": "0x4aa4a0",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "檢查當前領隊的模型條件",
+      "limits": "取得領隊並比model低WORD是否3；不是EntityId==3。 本輪觀察補充：null回0；不回EntityId，不能指定任意model或監聽領隊lifetime",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Tutorial.CheckLeader"
+    },
+    {
+      "name": "Tutorial.IsLeaderDialogOpened",
+      "primary_player_type": "M07",
+      "source_domain": "tutorial",
+      "native": "0x54e740",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "查教學領隊對話UI的記錄分支",
+      "limits": "讀owner+38；show可能被gate擋住，1非嚴格可見性保證。 本輪觀察補充：既有writer可在show helper被gate擋下時仍設1；非當幀可見性保證",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Tutorial.IsLeaderDialogOpened"
+    },
+    {
+      "name": "Tutorial.RequestStartScenario",
+      "primary_player_type": "M07",
+      "source_domain": "tutorial",
+      "native": "0x4aa4d0",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "送出教學scenario開始意圖",
+      "limits": "C2S0040加low-WORD key，需連線／合法情境；Server接續流程。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Tutorial.RequestStartScenario"
+    },
+    {
+      "name": "Tutorial.IsScenarioEnded",
+      "primary_player_type": "M07",
+      "source_domain": "tutorial",
+      "native": "0x4aa510",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "等待對應教學scenario的結束旗標",
+      "limits": "同Tutorial owner map，S2C004C寫入；正確context下可接續腳本。 本輪觀察補充：missing key可插入0；值1可殘留；ordinary Mission/Scenario不接受004C writer",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Tutorial.IsScenarioEnded"
+    },
+    {
+      "name": "CameraWorks.Load",
+      "primary_player_type": "M08",
+      "source_domain": "camera",
+      "native": "0x54e970",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "從路徑載入相機keyframe工作",
+      "limits": "正確XML／frame資料，沿既有相機owner。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#CameraWorks.Load"
+    },
+    {
+      "name": "CameraWorks.LoadRel",
+      "primary_player_type": "M08",
+      "source_domain": "camera",
+      "native": "0x54e990",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "載入並對keyframe位置加相對偏移",
+      "limits": "path與XYZ offset，與Q.PlayCameraWorks的relative flag不同ABI。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#CameraWorks.LoadRel"
+    },
+    {
+      "name": "CameraWorks.Play",
+      "primary_player_type": "M08",
+      "source_domain": "camera",
+      "native": "0x54e9e0",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "開始目前相機工作",
+      "limits": "有真實KeyFrame tick→插值→camera apply，需合格Client更新。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#CameraWorks.Play"
+    },
+    {
+      "name": "CameraWorks.Stop",
+      "primary_player_type": "M08",
+      "source_domain": "camera",
+      "native": "0x54e9f0",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "停止目前相機工作",
+      "limits": "不替代相機快照還原或其他效果清理。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#CameraWorks.Stop"
+    },
+    {
+      "name": "CameraWorks.IsEnded",
+      "primary_player_type": "M08",
+      "source_domain": "camera",
+      "native": "0x54ea00",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "查目前相機工作的完成predicate",
+      "limits": "null回1，實際型別走v+20；需區分未建立與自然播完。 本輪觀察補充：current null直接回1；Stop與自然到尾可同值；不是載入成功或snapshot已還原",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#CameraWorks.IsEnded"
+    },
+    {
+      "name": "Fade.Start",
+      "primary_player_type": "M08",
+      "source_domain": "screen",
+      "native": "0x55e740",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "啟動原版全畫面淡幕",
+      "limits": "與Q.FadeIn／Out／Color共用FE2744；接方向與更新計數，不是毫秒。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Fade.Start"
+    },
+    {
+      "name": "Fade.End",
+      "primary_player_type": "M08",
+      "source_domain": "screen",
+      "native": "0x55e770",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "停止淡幕更新並可清alpha",
+      "limits": "End(0)保留當前alpha，非零才清覆蓋；draw不以active作唯一gate。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Fade.End"
+    },
+    {
+      "name": "Prolog.OnClose",
+      "primary_player_type": "M07",
+      "source_domain": "talk",
+      "native": "0x55f950",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "明確關閉Prolog流程並發相應UI事件",
+      "limits": "是native已註冊入口；helper同名callback是否自動觸發需另看caller。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Prolog.OnClose"
+    },
+    {
+      "name": "Q.StartCutScene",
+      "primary_player_type": "M12",
+      "source_domain": "entry",
+      "native": "0x561760",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "啟動雙鍵對應的有限演出",
+      "limits": "SceneList→seq；busy與prepass/formal前置仍須成立。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.StartCutScene"
+    },
+    {
+      "name": "Q.EndCutScene",
+      "primary_player_type": "M12",
+      "source_domain": "entry",
+      "native": "0x561db0",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "結束Q的正常控制流程及條件式回報",
+      "limits": "不是全部資源清理；應在選定清理完成後最後呼叫。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.EndCutScene"
+    },
+    {
+      "name": "Q.IsCutSceneRunning",
+      "primary_player_type": "M12",
+      "source_domain": "entry",
+      "native": "0x489cf0",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "讀Q running狀態",
+      "limits": "number；正常回0也可能由取消／停止造成。 本輪觀察補充：不含成功／取消／skip／回收原因；本target本身不lazy-init",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.IsCutSceneRunning"
+    },
+    {
+      "name": "Q.InsertText",
+      "primary_player_type": "M07",
+      "source_domain": "talk",
+      "native": "0x5628c0",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "加入演出文字字幕queue",
+      "limits": "採設定codepage轉寬字；最多255 UTF-16 units加NUL，native無長度guard；不是多列頭像對白。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.InsertText"
+    },
+    {
+      "name": "Q.EnableInput",
+      "primary_player_type": "M12",
+      "source_domain": "input",
+      "native": "0x562980",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "清除Q指定輸入mask",
+      "limits": "不單獨釋放controller忙碌owner。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.EnableInput"
+    },
+    {
+      "name": "Q.DisableInput",
+      "primary_player_type": "M12",
+      "source_domain": "input",
+      "native": "0x5629f0",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "設定Q指定輸入mask",
+      "limits": "需在結束時配對恢復。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.DisableInput"
+    },
+    {
+      "name": "Q.PlayCameraWorks",
+      "primary_player_type": "M08",
+      "source_domain": "camera",
+      "native": "0x562b80",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "載入並開始指定camera work",
+      "limits": "字串與整數relative flag；合法XML、非空路徑與current owner前置。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.PlayCameraWorks"
+    },
+    {
+      "name": "Q.SkipCamera",
+      "primary_player_type": "M08",
+      "source_domain": "camera",
+      "native": "0x562cf0",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "在目前鏡頭工作進度加上trunc(float(k)/R)",
+      "limits": "相對增量；KeyFrame只夾尾端上界，不是絕對frame、毫秒或任意腳本skip。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.SkipCamera"
+    },
+    {
+      "name": "Q.CameraEffect",
+      "primary_player_type": "M08",
+      "source_domain": "camera",
+      "native": "0x5650c0",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "向相機加入指定震動／位移效果",
+      "limits": "三int native ABI；helper有額外wait flag且等待是估算。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.CameraEffect"
+    },
+    {
+      "name": "Q.SetCameraPoint",
+      "primary_player_type": "M08",
+      "source_domain": "camera",
+      "native": "0x562e10",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "立即設定相機XYZ位置",
+      "limits": "三float，與Q.MoveCamera同target，沒有插值時間。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.SetCameraPoint"
+    },
+    {
+      "name": "Q.CreateObject",
+      "primary_player_type": "M06",
+      "source_domain": "actors",
+      "native": "0x562ec0",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "用內容指定slot建立CEventActor演出物件",
+      "limits": "九參數，Q私有索引與prepass依賴；slot不可重複當upsert。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.CreateObject"
+    },
+    {
+      "name": "Q.MoveObject",
+      "primary_player_type": "M06",
+      "source_domain": "actors",
+      "native": "0x5632d0",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "立即改既有Q物件位置與方向",
+      "limits": "slot/x/y/direction，查Q tree；不同於普通world EntityId。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.MoveObject"
+    },
+    {
+      "name": "Q.DeleteObject",
+      "primary_player_type": "M06",
+      "source_domain": "actors",
+      "native": "0x476430",
+      "classification": "UNUSABLE_STUB",
+      "effect": "此 build 正常 target 為空操作",
+      "limits": "RET 4，不能作單一物件刪除；批次清理另有DeleteAllObject。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.DeleteObject"
+    },
+    {
+      "name": "Q.BeginCameraOverride",
+      "primary_player_type": "M08",
+      "source_domain": "camera",
+      "native": "0x562a60",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "保存Q演出開始前的相機快照",
+      "limits": "固定QSceneCam label；需平衡取得／釋放。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.BeginCameraOverride"
+    },
+    {
+      "name": "Q.EndCameraOverride",
+      "primary_player_type": "M08",
+      "source_domain": "camera",
+      "native": "0x562b00",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "還原Q標籤相機快照",
+      "limits": "pop先移除再比名，非可盲目重試的reset。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.EndCameraOverride"
+    },
+    {
+      "name": "Q.GetLeaderPosN",
+      "primary_player_type": "M06",
+      "source_domain": "actors",
+      "native": "0x564610",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "取得領隊位置指定分量",
+      "limits": "分量0/1/2，不提供actor ID或存活判定。 本輪觀察補充：無leader或selector不屬0/1/2都返回0；與合法座標0不能區分；不是actor handle／worldID",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.GetLeaderPosN"
+    },
+    {
+      "name": "Q.Transition",
+      "primary_player_type": "M08",
+      "source_domain": "screen",
+      "native": "0x5646a0",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "擷取畫面並作多層放大淡出轉場",
+      "limits": "兩整數layers/rate；helper固定(2,120)，native預設(8,120)，須enabled；未有界夾任意layers。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.Transition"
+    },
+    {
+      "name": "Q.PlayMusic",
+      "primary_player_type": "M09",
+      "source_domain": "audio",
+      "native": "0x5643c0",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "請求播放指定背景音樂",
+      "limits": "與Tutorial共享CMusicPlayer，非同步，同名可不重啟。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.PlayMusic"
+    },
+    {
+      "name": "Q.StopMusic",
+      "primary_player_type": "M09",
+      "source_domain": "audio",
+      "native": "0x564500",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "停止並釋放共用音樂pool的stream",
+      "limits": "操作整個16-slot pool並清pending／fade資料，不只單一當前音軌。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.StopMusic"
+    },
+    {
+      "name": "Q.StopMusicWithFadeOut",
+      "primary_player_type": "M09",
+      "source_domain": "audio",
+      "native": "0x564580",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "逐次降低音樂音量因子",
+      "limits": "fade完成至0不等於停止／釋放stream。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.StopMusicWithFadeOut"
+    },
+    {
+      "name": "Q.AttachCamera",
+      "primary_player_type": "M08",
+      "source_domain": "camera",
+      "native": "0x563830",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "使相機工作跟隨指定Q物件節點",
+      "limits": "Q slot與CAMERA_DUMMY01；不是任意world EntityId。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.AttachCamera"
+    },
+    {
+      "name": "Q.DetachCamera",
+      "primary_player_type": "M08",
+      "source_domain": "camera",
+      "native": "0x563900",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "解除目前附著相機工作",
+      "limits": "清current pointer，不pop override，不等於銷毀所有工作。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.DetachCamera"
+    },
+    {
+      "name": "Q.MoveCamera",
+      "primary_player_type": "M08",
+      "source_domain": "camera",
+      "native": "0x562e10",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "立即設定相機XYZ位置",
+      "limits": "與SetCameraPoint同target，名稱不代表路徑移動。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.MoveCamera"
+    },
+    {
+      "name": "Q.RotCamera",
+      "primary_player_type": "M08",
+      "source_domain": "camera",
+      "native": "0x563970",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "設定兩個相機角與局部鏡頭距離",
+      "limits": "三float中第三個為distance，不是第三旋轉軸。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.RotCamera"
+    },
+    {
+      "name": "Q.WalkObject",
+      "primary_player_type": "M06",
+      "source_domain": "actors",
+      "native": "0x563330",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "讓Q物件朝目標執行走位",
+      "limits": "使用Q slot、合法動作與速度；完成可另查全Q停止狀態。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.WalkObject"
+    },
+    {
+      "name": "Q.WarpObject",
+      "primary_player_type": "M06",
+      "source_domain": "actors",
+      "native": "0x5633b0",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "將Q物件依指定位置／動作條件快速換位",
+      "limits": "與Walk的移動狀態不同；不是Server換圖。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.WarpObject"
+    },
+    {
+      "name": "Q.AniObject",
+      "primary_player_type": "M06",
+      "source_domain": "actors",
+      "native": "0x5634e0",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "選Q物件的模型動畫並設定播放倍率",
+      "limits": "需要模型對應action；動畫不寫 HP／不等於命中計算。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.AniObject"
+    },
+    {
+      "name": "Q.AniSkip",
+      "primary_player_type": "M06",
+      "source_domain": "actors",
+      "native": "0x563530",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "調整Q物件動畫播放位置",
+      "limits": "signed整數step除render設定後加位置並clamp，無step非負gate；不是毫秒等待或跳整幕。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.AniSkip"
+    },
+    {
+      "name": "Q.RotateObject",
+      "primary_player_type": "M06",
+      "source_domain": "actors",
+      "native": "0x563660",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "設定Q物件面向／旋轉",
+      "limits": "direction取low BYTE；第三整數0走立即yaw但仍受gate，非零沿common更新。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.RotateObject"
+    },
+    {
+      "name": "Q.SpeedObject",
+      "primary_player_type": "M06",
+      "source_domain": "actors",
+      "native": "0x5636f0",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "調整Q物件的走位倍率",
+      "limits": "direct(slot,float)寫CEventActor+434；global helper另把speed-step轉倍率。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.SpeedObject"
+    },
+    {
+      "name": "Q.FaceObject",
+      "primary_player_type": "M06",
+      "source_domain": "actors",
+      "native": "0x563730",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "操作Q物件的臉部表情／Face.SKIN路徑",
+      "limits": "不是朝向目標；需有效臉部資源與render owner。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.FaceObject"
+    },
+    {
+      "name": "Q.StopObject",
+      "primary_player_type": "M06",
+      "source_domain": "actors",
+      "native": "0x5637e0",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "停止指定Q物件的移動狀態",
+      "limits": "停止不等於死亡或自然到達目的地。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.StopObject"
+    },
+    {
+      "name": "Q.ShowObject",
+      "primary_player_type": "M06",
+      "source_domain": "actors",
+      "native": "0x564900",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "切換Q物件render gate",
+      "limits": "不刪索引、不釋放actor，也不停止其update。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.ShowObject"
+    },
+    {
+      "name": "Q.FlashObject",
+      "primary_player_type": "M06",
+      "source_domain": "actors",
+      "native": "0x563790",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "設定Q物件的顏色／透明度閃爍",
+      "limits": "direct(slot,mode,ticks)由common update遞減；ticks不是固定毫秒。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.FlashObject"
+    },
+    {
+      "name": "Q.DeleteAllObject",
+      "primary_player_type": "M06",
+      "source_domain": "actors",
+      "native": "0x563a70",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "清除整個Q物件索引與持有actor",
+      "limits": "批次所有Q物件，與world actors／Lua排程owner分開。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.DeleteAllObject"
+    },
+    {
+      "name": "Q.LoadMap",
+      "primary_player_type": "M05",
+      "source_domain": "maps",
+      "native": "0x563c40",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "為演出載入地圖並備份既有map/camera",
+      "limits": "只有一份backup，不是巢狀map stack。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.LoadMap"
+    },
+    {
+      "name": "Q.RestoreMap",
+      "primary_player_type": "M05",
+      "source_domain": "maps",
+      "native": "0x563fa0",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "還原演出保存的地圖／相機並消費相關音樂設定",
+      "limits": "重寫backup欄位；資源與當前context須有效。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.RestoreMap"
+    },
+    {
+      "name": "Q.DisableObjRender",
+      "primary_player_type": "M06",
+      "source_domain": "world",
+      "native": "0x5647a0",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "暫停指定世界物件render路徑",
+      "limits": "只影響render gate，不停止全部世界simulation。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.DisableObjRender"
+    },
+    {
+      "name": "Q.EnableObjRender",
+      "primary_player_type": "M06",
+      "source_domain": "world",
+      "native": "0x564810",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "恢復指定世界物件render路徑",
+      "limits": "與Q物件自己的ShowObject不同owner。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.EnableObjRender"
+    },
+    {
+      "name": "Q.IsAllObjectsStopped",
+      "primary_player_type": "M06",
+      "source_domain": "actors",
+      "native": "0x564880",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "查整棵Q tree的移動pending bit",
+      "limits": "全Q集合，停止不必然是自然完成，亦無分組參數。 本輪觀察補充：空tree也回1；停止不等於動作結束、刪除、死亡或群組完成",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.IsAllObjectsStopped"
+    },
+    {
+      "name": "Q.FlyingObject",
+      "primary_player_type": "M09",
+      "source_domain": "image",
+      "native": "0x564940",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "顯示具有淡入／保持／淡出狀態的圖片",
+      "limits": "path 加六個整數；配置新圖之前會先取消 M+40 追蹤的前圖，再建新圖。hold=-1 也會被後次新建取消；取消不等於同步釋放，無 Lua 完成 token。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.FlyingObject"
+    },
+    {
+      "name": "Q.DelFlyingObject",
+      "primary_player_type": "M09",
+      "source_domain": "image",
+      "native": "0x564a60",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "取消Q保存handle對應圖片",
+      "limits": "取消 M+40 單一追蹤圖並清 handle；新建入口本身也會先做此取消。實體回收延後，不是掃描共享其他 owner 圖或同步 destructor。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.DelFlyingObject"
+    },
+    {
+      "name": "Q.ShowLetterbox",
+      "primary_player_type": "M08",
+      "source_domain": "screen",
+      "native": "0x564b00",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "顯示演出上下黑邊",
+      "limits": "固定native draw owner，與Fade alpha不同。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.ShowLetterbox"
+    },
+    {
+      "name": "Q.HideLetterbox",
+      "primary_player_type": "M08",
+      "source_domain": "screen",
+      "native": "0x564b50",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "隱藏演出上下黑邊",
+      "limits": "清對應flag，需既有renderer context。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.HideLetterbox"
+    },
+    {
+      "name": "Q.Prolog",
+      "primary_player_type": "M07",
+      "source_domain": "talk",
+      "native": "0x564ba0",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "啟動既有Prolog文字／書頁呈現",
+      "limits": "按原表key和對應資源，狀態可由IsPrologRunning觀察。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.Prolog"
+    },
+    {
+      "name": "Q.IsPrologRunning",
+      "primary_player_type": "M07",
+      "source_domain": "talk",
+      "native": "0x564c50",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "查Prolog文字流程是否running",
+      "limits": "0也可能是關閉／失敗／取消，需結合流程原因。 本輪觀察補充：0不證成功播放；與ScenarioTalk、Q.Dialogue及world事件分開",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.IsPrologRunning"
+    },
+    {
+      "name": "Q.PlaySound",
+      "primary_player_type": "M09",
+      "source_domain": "audio",
+      "native": "0x564cc0",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "請求播放指定一般音效",
+      "limits": "合法音效資源與音訊context；helper不等待播完。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.PlaySound"
+    },
+    {
+      "name": "Q.PlayTalkSound",
+      "primary_player_type": "M09",
+      "source_domain": "audio",
+      "native": "0x564d90",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "沿音效播放鏈請求聲音並指定Voice資源group",
+      "limits": "修改快取SoundFile的group；helper只yield，沒有本次完成handle，不是Book／Prolog共用voice handle的寫入器。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.PlayTalkSound"
+    },
+    {
+      "name": "Q.FadeOut",
+      "primary_player_type": "M08",
+      "source_domain": "screen",
+      "native": "0x564f30",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "啟動畫面淡出至不透明覆蓋",
+      "limits": "count為合格native更新次數的分母，不是毫秒；到255仍active，helper只yield一次。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.FadeOut"
+    },
+    {
+      "name": "Q.FadeIn",
+      "primary_player_type": "M08",
+      "source_domain": "screen",
+      "native": "0x564fb0",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "啟動畫面淡入至透明",
+      "limits": "與Q.FadeOut／Fade.Start共用遮罩；count不是毫秒，alpha到0才清active。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.FadeIn"
+    },
+    {
+      "name": "Q.FadeColor",
+      "primary_player_type": "M08",
+      "source_domain": "screen",
+      "native": "0x565040",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "設定畫面淡幕色彩",
+      "limits": "數值色彩由native consumer處理，非文字或材質資源替換。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.FadeColor"
+    },
+    {
+      "name": "Q.Book",
+      "primary_player_type": "M07",
+      "source_domain": "talk",
+      "native": "0x565140",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "啟動原版固定書本序列",
+      "limits": "一整數ABI但native忽略參數；Table/Book.txt固定向量與voice gate，WaitForBook讀狀態。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.Book"
+    },
+    {
+      "name": "Q.Dialogue",
+      "primary_player_type": "M07",
+      "source_domain": "talk",
+      "native": "0x5651f0",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "播放Prolog表指定的文字／語音演出",
+      "limits": "不是world actor聊天框；原helper只yield，本輪無專用完成query。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.Dialogue"
+    },
+    {
+      "name": "Q.IsBookFlying",
+      "primary_player_type": "M07",
+      "source_domain": "talk",
+      "native": "0x565270",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "查書本演出active狀態",
+      "limits": "0可由正常最後階段或Stop清除，不能單憑值區分原因。 本輪觀察補充：0不證曾啟動／成功；與圖片manager一般handle不同",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.IsBookFlying"
+    },
+    {
+      "name": "Q.BalloonTalk",
+      "primary_player_type": "M07",
+      "source_domain": "talk",
+      "native": "0x550450",
+      "classification": "UNUSABLE_STUB",
+      "effect": "此 build 正常 target 為空操作",
+      "limits": "RET 8，兩個數值被忽略；沒有氣泡文字consumer。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.BalloonTalk"
+    },
+    {
+      "name": "Q.NumberPanel",
+      "primary_player_type": "M03",
+      "source_domain": "feedback",
+      "native": "0x5652e0",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "在Q物件位置顯示數字型面板",
+      "limits": "direct style限0..5、value0無面板；排除INT32_MIN，helper另分流；不改HP。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.NumberPanel"
+    },
+    {
+      "name": "Q.BattlePanel",
+      "primary_player_type": "M03",
+      "source_domain": "feedback",
+      "native": "0x5653c0",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "在Q物件位置顯示Miss／Block提示面板",
+      "limits": "direct style限0..3且須先驗範圍；不執行命中、傷害或資產更新。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.BattlePanel"
+    },
+    {
+      "name": "Q.BurstStruck",
+      "primary_player_type": "M03",
+      "source_domain": "feedback",
+      "native": "0x565490",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "顯示擊殺數與爆擊字樣的螢幕效果",
+      "limits": "arg1非零啟動Kills及arg3數字，arg2啟動Critical；不選Q物件，不扣HP。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.BurstStruck"
+    },
+    {
+      "name": "Q.SetFinalMusic",
+      "primary_player_type": "M09",
+      "source_domain": "audio",
+      "native": "0x565560",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "修改演出保存的後續音樂字串",
+      "limits": "null不變、首字元空白清除、其他追加；RestoreMap消費，不是立即播放。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.SetFinalMusic"
+    },
+    {
+      "name": "Q.StartSepia",
+      "primary_player_type": "M08",
+      "source_domain": "screen",
+      "native": "0x5655c0",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "啟動褐色／色調演出狀態",
+      "limits": "需要後續native更新及renderer context。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.StartSepia"
+    },
+    {
+      "name": "Q.EndSepia",
+      "primary_player_type": "M08",
+      "source_domain": "screen",
+      "native": "0x565600",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "要求結束褐色色調效果",
+      "limits": "先置phase4，後續合格更新4→5→6→0，非立即全復原。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.EndSepia"
+    },
+    {
+      "name": "Q.StartSlowMotion",
+      "primary_player_type": "M08",
+      "source_domain": "screen",
+      "native": "0x565640",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "啟用指定actor動畫delta縮放",
+      "limits": "選定路徑約0.2倍，不改Server時鐘或所有子系統。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.StartSlowMotion"
+    },
+    {
+      "name": "Q.EndSlowMotion",
+      "primary_player_type": "M08",
+      "source_domain": "screen",
+      "native": "0x5656b0",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "清Q slow-motion旗標",
+      "limits": "其他countdown可能仍使該動畫路徑慢速。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#Q.EndSlowMotion"
+    },
+    {
+      "name": "ScenarioTalkTable.open",
+      "primary_player_type": "M07",
+      "source_domain": "talk",
+      "native": "0x6bd620",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "按id/scene選原表多列對白並發起",
+      "limits": "兩int＋Lua truthiness boolean手動模式；actor是頭像資料key，talk是文字key。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#ScenarioTalkTable.open"
+    },
+    {
+      "name": "ScenarioTalkTable.start",
+      "primary_player_type": "M07",
+      "source_domain": "talk",
+      "native": "0x6bd6b0",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "開始已選定的對白資料",
+      "limits": "依原生選定資料／視窗context，不是任意新對話資料生成器。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#ScenarioTalkTable.start"
+    },
+    {
+      "name": "ScenarioTalkTable.hideOtherUI",
+      "primary_player_type": "M07",
+      "source_domain": "talk",
+      "native": "0x6bd7f0",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "隱藏對話以外的適用UI",
+      "limits": "保留固定豁免key集合，記錄原顯示子視窗。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#ScenarioTalkTable.hideOtherUI"
+    },
+    {
+      "name": "ScenarioTalkTable.showOtherUI",
+      "primary_player_type": "M07",
+      "source_domain": "talk",
+      "native": "0x6bd9b0",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "恢復同一頁面記錄的其他UI",
+      "limits": "與hideOtherUI配對，同owner生命週期。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#ScenarioTalkTable.showOtherUI"
+    },
+    {
+      "name": "ScenarioTalkTable.hide",
+      "primary_player_type": "M07",
+      "source_domain": "talk",
+      "native": "0x6bd720",
+      "classification": "BOUNDED_NATIVE_CAPABILITY_REUSABLE",
+      "effect": "停止對話語音並結束／隱藏對白",
+      "limits": "呼OnEndTalk、隱藏視窗、清已選定資料；不是任務結算。",
+      "source_record": "kr-extra-roy/MEF-server-provided-capabilities-20261118/binding-offload-map.json#ScenarioTalkTable.hide"
+    }
+  ],
+  "target_executed": false,
+  "new_server_implementation_claimed": false,
+  "new_deployment_claimed": false
+}

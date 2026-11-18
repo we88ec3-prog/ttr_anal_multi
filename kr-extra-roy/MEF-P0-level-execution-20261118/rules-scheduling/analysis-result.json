@@ -1,0 +1,1295 @@
+{
+  "schema": "MEF_P0_RULE_EXAMPLE_ANALYSIS_V1",
+  "result": "PASS_STATIC_AUTHORING_DEPENDENCIES_AND_BND",
+  "source_verification": {
+    "git_sources": 28,
+    "originals": 2,
+    "server_sources": 14,
+    "server_spans": 39
+  },
+  "scenario_files": [
+    "bounded-repeat.scenario.json",
+    "cross-node-guarantees.scenario.json",
+    "missing-coverage.scenario.json"
+  ],
+  "definition_count": 6,
+  "node_count": 9,
+  "coverage": {
+    "RegionEntered": 5,
+    "NodeDelayElapsed": 5,
+    "ClearDelayElapsed": 5,
+    "empty_initial_nodes": 3,
+    "named_required_boss_nodes": 2,
+    "BossDefeated": 3,
+    "WaveCleared": 3
+  },
+  "projections": [
+    {
+      "definition": "p0-fixed-three-visits-candidate",
+      "node_count": 3,
+      "topological_order": [
+        1,
+        2,
+        3
+      ],
+      "flag_count": 9,
+      "nodes": [
+        {
+          "node": 1,
+          "guaranteed_flags_on_entry": [],
+          "preclear_possible_flags": [
+            "visit1.entered-area",
+            "visit1.node-ready"
+          ],
+          "postclear_possible_flags": [
+            "visit1.entered-area",
+            "visit1.exit-ready",
+            "visit1.node-ready"
+          ],
+          "boss_wave": null,
+          "spawnable_wave_ids": [
+            "region-ambush"
+          ],
+          "exits": [
+            {
+              "key": 801,
+              "action": "NextNode",
+              "target": 2,
+              "guaranteed_after_exit": [
+                "visit1.entered-area",
+                "visit1.exit-ready",
+                "visit1.node-ready"
+              ]
+            }
+          ]
+        },
+        {
+          "node": 2,
+          "guaranteed_flags_on_entry": [
+            "visit1.entered-area",
+            "visit1.exit-ready",
+            "visit1.node-ready"
+          ],
+          "preclear_possible_flags": [
+            "visit1.entered-area",
+            "visit1.exit-ready",
+            "visit1.node-ready",
+            "visit2.entered-area",
+            "visit2.node-ready"
+          ],
+          "postclear_possible_flags": [
+            "visit1.entered-area",
+            "visit1.exit-ready",
+            "visit1.node-ready",
+            "visit2.entered-area",
+            "visit2.exit-ready",
+            "visit2.node-ready"
+          ],
+          "boss_wave": null,
+          "spawnable_wave_ids": [
+            "region-ambush"
+          ],
+          "exits": [
+            {
+              "key": 801,
+              "action": "NextNode",
+              "target": 3,
+              "guaranteed_after_exit": [
+                "visit1.entered-area",
+                "visit1.exit-ready",
+                "visit1.node-ready",
+                "visit2.entered-area",
+                "visit2.exit-ready",
+                "visit2.node-ready"
+              ]
+            }
+          ]
+        },
+        {
+          "node": 3,
+          "guaranteed_flags_on_entry": [
+            "visit1.entered-area",
+            "visit1.exit-ready",
+            "visit1.node-ready",
+            "visit2.entered-area",
+            "visit2.exit-ready",
+            "visit2.node-ready"
+          ],
+          "preclear_possible_flags": [
+            "visit1.entered-area",
+            "visit1.exit-ready",
+            "visit1.node-ready",
+            "visit2.entered-area",
+            "visit2.exit-ready",
+            "visit2.node-ready",
+            "visit3.entered-area",
+            "visit3.node-ready"
+          ],
+          "postclear_possible_flags": [
+            "visit1.entered-area",
+            "visit1.exit-ready",
+            "visit1.node-ready",
+            "visit2.entered-area",
+            "visit2.exit-ready",
+            "visit2.node-ready",
+            "visit3.entered-area",
+            "visit3.exit-ready",
+            "visit3.node-ready"
+          ],
+          "boss_wave": null,
+          "spawnable_wave_ids": [
+            "region-ambush"
+          ],
+          "exits": [
+            {
+              "key": 801,
+              "action": "Result",
+              "target": null,
+              "guaranteed_after_exit": [
+                "visit1.entered-area",
+                "visit1.exit-ready",
+                "visit1.node-ready",
+                "visit2.entered-area",
+                "visit2.exit-ready",
+                "visit2.node-ready",
+                "visit3.entered-area",
+                "visit3.exit-ready",
+                "visit3.node-ready"
+              ]
+            }
+          ]
+        }
+      ],
+      "result_endpoints": 1,
+      "assumptions": [
+        "accepted combat can defeat each actor",
+        "required regions/interactions can be reached",
+        "eligible clock observations progress"
+      ],
+      "scope": "static dependency possibility; not actual Server loader or execution"
+    },
+    {
+      "definition": "p0-cross-node-wave-guarantees-candidate",
+      "node_count": 2,
+      "topological_order": [
+        1,
+        2
+      ],
+      "flag_count": 5,
+      "nodes": [
+        {
+          "node": 1,
+          "guaranteed_flags_on_entry": [],
+          "preclear_possible_flags": [
+            "boss-defeated",
+            "boss-wave-cleared"
+          ],
+          "postclear_possible_flags": [
+            "boss-defeated",
+            "boss-wave-cleared"
+          ],
+          "boss_wave": "boss-entry",
+          "spawnable_wave_ids": [
+            "boss-entry"
+          ],
+          "exits": [
+            {
+              "key": 801,
+              "action": "NextNode",
+              "target": 2,
+              "guaranteed_after_exit": [
+                "boss-defeated",
+                "boss-wave-cleared"
+              ]
+            }
+          ]
+        },
+        {
+          "node": 2,
+          "guaranteed_flags_on_entry": [
+            "boss-defeated",
+            "boss-wave-cleared"
+          ],
+          "preclear_possible_flags": [
+            "boss-defeated",
+            "boss-wave-cleared",
+            "entered-area",
+            "node-ready"
+          ],
+          "postclear_possible_flags": [
+            "boss-defeated",
+            "boss-wave-cleared",
+            "entered-area",
+            "exit-ready",
+            "node-ready"
+          ],
+          "boss_wave": null,
+          "spawnable_wave_ids": [
+            "region-ambush"
+          ],
+          "exits": [
+            {
+              "key": 801,
+              "action": "Result",
+              "target": null,
+              "guaranteed_after_exit": [
+                "boss-defeated",
+                "boss-wave-cleared",
+                "entered-area",
+                "exit-ready",
+                "node-ready"
+              ]
+            }
+          ]
+        }
+      ],
+      "result_endpoints": 1,
+      "assumptions": [
+        "accepted combat can defeat each actor",
+        "required regions/interactions can be reached",
+        "eligible clock observations progress"
+      ],
+      "scope": "static dependency possibility; not actual Server loader or execution"
+    },
+    {
+      "definition": "p0-region-entered-candidate",
+      "node_count": 1,
+      "topological_order": [
+        1
+      ],
+      "flag_count": 3,
+      "nodes": [
+        {
+          "node": 1,
+          "guaranteed_flags_on_entry": [],
+          "preclear_possible_flags": [
+            "entered-area",
+            "node-ready"
+          ],
+          "postclear_possible_flags": [
+            "entered-area",
+            "exit-ready",
+            "node-ready"
+          ],
+          "boss_wave": null,
+          "spawnable_wave_ids": [
+            "region-ambush"
+          ],
+          "exits": [
+            {
+              "key": 801,
+              "action": "Result",
+              "target": null,
+              "guaranteed_after_exit": [
+                "entered-area",
+                "exit-ready",
+                "node-ready"
+              ]
+            }
+          ]
+        }
+      ],
+      "result_endpoints": 1,
+      "assumptions": [
+        "accepted combat can defeat each actor",
+        "required regions/interactions can be reached",
+        "eligible clock observations progress"
+      ],
+      "scope": "static dependency possibility; not actual Server loader or execution"
+    },
+    {
+      "definition": "p0-boss-defeated-candidate",
+      "node_count": 1,
+      "topological_order": [
+        1
+      ],
+      "flag_count": 1,
+      "nodes": [
+        {
+          "node": 1,
+          "guaranteed_flags_on_entry": [],
+          "preclear_possible_flags": [
+            "boss-defeated"
+          ],
+          "postclear_possible_flags": [
+            "boss-defeated"
+          ],
+          "boss_wave": null,
+          "spawnable_wave_ids": [
+            "after-boss"
+          ],
+          "exits": [
+            {
+              "key": 801,
+              "action": "Result",
+              "target": null,
+              "guaranteed_after_exit": [
+                "boss-defeated"
+              ]
+            }
+          ]
+        }
+      ],
+      "result_endpoints": 1,
+      "assumptions": [
+        "accepted combat can defeat each actor",
+        "required regions/interactions can be reached",
+        "eligible clock observations progress"
+      ],
+      "scope": "static dependency possibility; not actual Server loader or execution"
+    },
+    {
+      "definition": "p0-empty-initial-candidate",
+      "node_count": 1,
+      "topological_order": [
+        1
+      ],
+      "flag_count": 1,
+      "nodes": [
+        {
+          "node": 1,
+          "guaranteed_flags_on_entry": [],
+          "preclear_possible_flags": [
+            "first-defeated"
+          ],
+          "postclear_possible_flags": [
+            "first-defeated"
+          ],
+          "boss_wave": null,
+          "spawnable_wave_ids": [
+            "first-visible-wave",
+            "second-visible-wave"
+          ],
+          "exits": [
+            {
+              "key": 801,
+              "action": "Result",
+              "target": null,
+              "guaranteed_after_exit": [
+                "first-defeated"
+              ]
+            }
+          ]
+        }
+      ],
+      "result_endpoints": 1,
+      "assumptions": [
+        "accepted combat can defeat each actor",
+        "required regions/interactions can be reached",
+        "eligible clock observations progress"
+      ],
+      "scope": "static dependency possibility; not actual Server loader or execution"
+    },
+    {
+      "definition": "p0-named-wave-boss-candidate",
+      "node_count": 1,
+      "topological_order": [
+        1
+      ],
+      "flag_count": 2,
+      "nodes": [
+        {
+          "node": 1,
+          "guaranteed_flags_on_entry": [],
+          "preclear_possible_flags": [
+            "boss-defeated",
+            "boss-wave-cleared"
+          ],
+          "postclear_possible_flags": [
+            "boss-defeated",
+            "boss-wave-cleared"
+          ],
+          "boss_wave": "boss-entry",
+          "spawnable_wave_ids": [
+            "boss-entry"
+          ],
+          "exits": [
+            {
+              "key": 801,
+              "action": "Result",
+              "target": null,
+              "guaranteed_after_exit": [
+                "boss-defeated",
+                "boss-wave-cleared"
+              ]
+            }
+          ]
+        }
+      ],
+      "result_endpoints": 1,
+      "assumptions": [
+        "accepted combat can defeat each actor",
+        "required regions/interactions can be reached",
+        "eligible clock observations progress"
+      ],
+      "scope": "static dependency possibility; not actual Server loader or execution"
+    }
+  ],
+  "map_join": {
+    "map": 193,
+    "bound_member": "BoundMap/keep04.bnd",
+    "map_list_member": {
+      "carrier": "07-Table.stp",
+      "carrier_sha256": "09e2cc48be98ad491afe394f966feb5812983fbf35da9037a8fa477d9848a442",
+      "path": "Table/_MapList.xml",
+      "block_id": 1014,
+      "stored_offset": 5019664,
+      "stored_length": 41467,
+      "first_block": 4902,
+      "last_block": 4942,
+      "stored_sha256": "5fafdc398c97ba949672008a336c954051e6cf2a8c52111cfa93e983dee76d2b",
+      "decoded_length": 363452,
+      "decoded_sha256": "cd47d8ca42f4297f6584a2c0c8807ae76352e3b353855b3989f660e64fd27f8c",
+      "prefix": "efbbbf3c3f786d6c20766572"
+    },
+    "bnd": {
+      "carrier": "10-BoundMap.stp",
+      "carrier_sha256": "07d8f3a20aa4a396312c60927431a53a89dce6370ef8bb8192bd8d8eca1dd6b8",
+      "path": "BoundMap/keep04.bnd",
+      "block_id": 523,
+      "stored_offset": 7410704,
+      "stored_length": 10762,
+      "first_block": 7237,
+      "last_block": 7247,
+      "stored_sha256": "189834d33de3743e7b62b220fe36f8f7be06127a5b4e516ac1e25e11af53cefd",
+      "decoded_length": 10762,
+      "decoded_sha256": "189834d33de3743e7b62b220fe36f8f7be06127a5b4e516ac1e25e11af53cefd",
+      "version": 2,
+      "grid": [
+        768,
+        768
+      ],
+      "world_extent": [
+        768.0,
+        768.0
+      ],
+      "layers": [
+        {
+          "layer": 0,
+          "offset": 564,
+          "stored_length": 4224,
+          "expanded_length": 2359296,
+          "sha256": "9ded8dbd8b201168bd3250066f0b1697910c8f493d0dda5a2677a04230099b31",
+          "nonzero_cells": 16846
+        },
+        {
+          "layer": 1,
+          "offset": 4788,
+          "stored_length": 5974,
+          "expanded_length": 2359296,
+          "sha256": "fa2288a1e29fb84d2425f75a9b3bb9515648c4220ed28e43780189d0d62d30e7",
+          "nonzero_cells": 555310
+        }
+      ],
+      "union_blocked_cells": 565917
+    }
+  },
+  "geometry": [
+    {
+      "definition": "p0-fixed-three-visits-candidate",
+      "node": 1,
+      "location": "spawn",
+      "kind": "spawn",
+      "point": {
+        "x": 377.5,
+        "y": 315.5
+      },
+      "reachable": true,
+      "spawn_segment": {
+        "distance": 0.0,
+        "sample_step_max": 0.25,
+        "samples": 2,
+        "blocked_samples": 0,
+        "first_blocked": []
+      }
+    },
+    {
+      "definition": "p0-fixed-three-visits-candidate",
+      "node": 1,
+      "location": "portal",
+      "kind": "exit",
+      "point": {
+        "x": 377.5,
+        "y": 307.5
+      },
+      "reachable": true,
+      "spawn_segment": {
+        "distance": 8.0,
+        "sample_step_max": 0.25,
+        "samples": 33,
+        "blocked_samples": 0,
+        "first_blocked": []
+      },
+      "disk_samples": {
+        "sample_spacing": 0.25,
+        "samples": 797,
+        "blocked_samples": 0,
+        "scope": "sampled points only; not continuous geometry or actor-radius proof"
+      }
+    },
+    {
+      "definition": "p0-fixed-three-visits-candidate",
+      "node": 1,
+      "location": "encounters/0",
+      "kind": "monster",
+      "point": {
+        "x": 377.5,
+        "y": 291.5
+      },
+      "reachable": true,
+      "spawn_segment": {
+        "distance": 24.0,
+        "sample_step_max": 0.25,
+        "samples": 97,
+        "blocked_samples": 0,
+        "first_blocked": []
+      }
+    },
+    {
+      "definition": "p0-fixed-three-visits-candidate",
+      "node": 1,
+      "location": "timedReinforcements/0/encounters/0",
+      "kind": "monster",
+      "point": {
+        "x": 377.5,
+        "y": 295.5
+      },
+      "reachable": true,
+      "spawn_segment": {
+        "distance": 20.0,
+        "sample_step_max": 0.25,
+        "samples": 81,
+        "blocked_samples": 0,
+        "first_blocked": []
+      }
+    },
+    {
+      "definition": "p0-fixed-three-visits-candidate",
+      "node": 1,
+      "location": "signals/0/region",
+      "kind": "signal_region",
+      "point": {
+        "x": 377.5,
+        "y": 295.5
+      },
+      "reachable": true,
+      "spawn_segment": {
+        "distance": 20.0,
+        "sample_step_max": 0.25,
+        "samples": 81,
+        "blocked_samples": 0,
+        "first_blocked": []
+      },
+      "disk_samples": {
+        "sample_spacing": 0.25,
+        "samples": 197,
+        "blocked_samples": 0,
+        "scope": "sampled points only; not continuous geometry or actor-radius proof"
+      }
+    },
+    {
+      "definition": "p0-fixed-three-visits-candidate",
+      "node": 2,
+      "location": "spawn",
+      "kind": "spawn",
+      "point": {
+        "x": 377.5,
+        "y": 315.5
+      },
+      "reachable": true,
+      "spawn_segment": {
+        "distance": 0.0,
+        "sample_step_max": 0.25,
+        "samples": 2,
+        "blocked_samples": 0,
+        "first_blocked": []
+      }
+    },
+    {
+      "definition": "p0-fixed-three-visits-candidate",
+      "node": 2,
+      "location": "portal",
+      "kind": "exit",
+      "point": {
+        "x": 377.5,
+        "y": 307.5
+      },
+      "reachable": true,
+      "spawn_segment": {
+        "distance": 8.0,
+        "sample_step_max": 0.25,
+        "samples": 33,
+        "blocked_samples": 0,
+        "first_blocked": []
+      },
+      "disk_samples": {
+        "sample_spacing": 0.25,
+        "samples": 797,
+        "blocked_samples": 0,
+        "scope": "sampled points only; not continuous geometry or actor-radius proof"
+      }
+    },
+    {
+      "definition": "p0-fixed-three-visits-candidate",
+      "node": 2,
+      "location": "encounters/0",
+      "kind": "monster",
+      "point": {
+        "x": 377.5,
+        "y": 291.5
+      },
+      "reachable": true,
+      "spawn_segment": {
+        "distance": 24.0,
+        "sample_step_max": 0.25,
+        "samples": 97,
+        "blocked_samples": 0,
+        "first_blocked": []
+      }
+    },
+    {
+      "definition": "p0-fixed-three-visits-candidate",
+      "node": 2,
+      "location": "timedReinforcements/0/encounters/0",
+      "kind": "monster",
+      "point": {
+        "x": 377.5,
+        "y": 295.5
+      },
+      "reachable": true,
+      "spawn_segment": {
+        "distance": 20.0,
+        "sample_step_max": 0.25,
+        "samples": 81,
+        "blocked_samples": 0,
+        "first_blocked": []
+      }
+    },
+    {
+      "definition": "p0-fixed-three-visits-candidate",
+      "node": 2,
+      "location": "signals/0/region",
+      "kind": "signal_region",
+      "point": {
+        "x": 377.5,
+        "y": 295.5
+      },
+      "reachable": true,
+      "spawn_segment": {
+        "distance": 20.0,
+        "sample_step_max": 0.25,
+        "samples": 81,
+        "blocked_samples": 0,
+        "first_blocked": []
+      },
+      "disk_samples": {
+        "sample_spacing": 0.25,
+        "samples": 197,
+        "blocked_samples": 0,
+        "scope": "sampled points only; not continuous geometry or actor-radius proof"
+      }
+    },
+    {
+      "definition": "p0-fixed-three-visits-candidate",
+      "node": 3,
+      "location": "spawn",
+      "kind": "spawn",
+      "point": {
+        "x": 377.5,
+        "y": 315.5
+      },
+      "reachable": true,
+      "spawn_segment": {
+        "distance": 0.0,
+        "sample_step_max": 0.25,
+        "samples": 2,
+        "blocked_samples": 0,
+        "first_blocked": []
+      }
+    },
+    {
+      "definition": "p0-fixed-three-visits-candidate",
+      "node": 3,
+      "location": "portal",
+      "kind": "exit",
+      "point": {
+        "x": 377.5,
+        "y": 307.5
+      },
+      "reachable": true,
+      "spawn_segment": {
+        "distance": 8.0,
+        "sample_step_max": 0.25,
+        "samples": 33,
+        "blocked_samples": 0,
+        "first_blocked": []
+      },
+      "disk_samples": {
+        "sample_spacing": 0.25,
+        "samples": 797,
+        "blocked_samples": 0,
+        "scope": "sampled points only; not continuous geometry or actor-radius proof"
+      }
+    },
+    {
+      "definition": "p0-fixed-three-visits-candidate",
+      "node": 3,
+      "location": "encounters/0",
+      "kind": "monster",
+      "point": {
+        "x": 377.5,
+        "y": 291.5
+      },
+      "reachable": true,
+      "spawn_segment": {
+        "distance": 24.0,
+        "sample_step_max": 0.25,
+        "samples": 97,
+        "blocked_samples": 0,
+        "first_blocked": []
+      }
+    },
+    {
+      "definition": "p0-fixed-three-visits-candidate",
+      "node": 3,
+      "location": "timedReinforcements/0/encounters/0",
+      "kind": "monster",
+      "point": {
+        "x": 377.5,
+        "y": 295.5
+      },
+      "reachable": true,
+      "spawn_segment": {
+        "distance": 20.0,
+        "sample_step_max": 0.25,
+        "samples": 81,
+        "blocked_samples": 0,
+        "first_blocked": []
+      }
+    },
+    {
+      "definition": "p0-fixed-three-visits-candidate",
+      "node": 3,
+      "location": "signals/0/region",
+      "kind": "signal_region",
+      "point": {
+        "x": 377.5,
+        "y": 295.5
+      },
+      "reachable": true,
+      "spawn_segment": {
+        "distance": 20.0,
+        "sample_step_max": 0.25,
+        "samples": 81,
+        "blocked_samples": 0,
+        "first_blocked": []
+      },
+      "disk_samples": {
+        "sample_spacing": 0.25,
+        "samples": 197,
+        "blocked_samples": 0,
+        "scope": "sampled points only; not continuous geometry or actor-radius proof"
+      }
+    },
+    {
+      "definition": "p0-cross-node-wave-guarantees-candidate",
+      "node": 1,
+      "location": "spawn",
+      "kind": "spawn",
+      "point": {
+        "x": 377.5,
+        "y": 315.5
+      },
+      "reachable": true,
+      "spawn_segment": {
+        "distance": 0.0,
+        "sample_step_max": 0.25,
+        "samples": 2,
+        "blocked_samples": 0,
+        "first_blocked": []
+      }
+    },
+    {
+      "definition": "p0-cross-node-wave-guarantees-candidate",
+      "node": 1,
+      "location": "portal",
+      "kind": "exit",
+      "point": {
+        "x": 377.5,
+        "y": 307.5
+      },
+      "reachable": true,
+      "spawn_segment": {
+        "distance": 8.0,
+        "sample_step_max": 0.25,
+        "samples": 33,
+        "blocked_samples": 0,
+        "first_blocked": []
+      },
+      "disk_samples": {
+        "sample_spacing": 0.25,
+        "samples": 797,
+        "blocked_samples": 0,
+        "scope": "sampled points only; not continuous geometry or actor-radius proof"
+      }
+    },
+    {
+      "definition": "p0-cross-node-wave-guarantees-candidate",
+      "node": 1,
+      "location": "timedReinforcements/0/encounters/0",
+      "kind": "monster",
+      "point": {
+        "x": 377.5,
+        "y": 291.5
+      },
+      "reachable": true,
+      "spawn_segment": {
+        "distance": 24.0,
+        "sample_step_max": 0.25,
+        "samples": 97,
+        "blocked_samples": 0,
+        "first_blocked": []
+      }
+    },
+    {
+      "definition": "p0-cross-node-wave-guarantees-candidate",
+      "node": 2,
+      "location": "spawn",
+      "kind": "spawn",
+      "point": {
+        "x": 377.5,
+        "y": 315.5
+      },
+      "reachable": true,
+      "spawn_segment": {
+        "distance": 0.0,
+        "sample_step_max": 0.25,
+        "samples": 2,
+        "blocked_samples": 0,
+        "first_blocked": []
+      }
+    },
+    {
+      "definition": "p0-cross-node-wave-guarantees-candidate",
+      "node": 2,
+      "location": "portal",
+      "kind": "exit",
+      "point": {
+        "x": 377.5,
+        "y": 307.5
+      },
+      "reachable": true,
+      "spawn_segment": {
+        "distance": 8.0,
+        "sample_step_max": 0.25,
+        "samples": 33,
+        "blocked_samples": 0,
+        "first_blocked": []
+      },
+      "disk_samples": {
+        "sample_spacing": 0.25,
+        "samples": 797,
+        "blocked_samples": 0,
+        "scope": "sampled points only; not continuous geometry or actor-radius proof"
+      }
+    },
+    {
+      "definition": "p0-cross-node-wave-guarantees-candidate",
+      "node": 2,
+      "location": "encounters/0",
+      "kind": "monster",
+      "point": {
+        "x": 377.5,
+        "y": 291.5
+      },
+      "reachable": true,
+      "spawn_segment": {
+        "distance": 24.0,
+        "sample_step_max": 0.25,
+        "samples": 97,
+        "blocked_samples": 0,
+        "first_blocked": []
+      }
+    },
+    {
+      "definition": "p0-cross-node-wave-guarantees-candidate",
+      "node": 2,
+      "location": "timedReinforcements/0/encounters/0",
+      "kind": "monster",
+      "point": {
+        "x": 377.5,
+        "y": 295.5
+      },
+      "reachable": true,
+      "spawn_segment": {
+        "distance": 20.0,
+        "sample_step_max": 0.25,
+        "samples": 81,
+        "blocked_samples": 0,
+        "first_blocked": []
+      }
+    },
+    {
+      "definition": "p0-cross-node-wave-guarantees-candidate",
+      "node": 2,
+      "location": "signals/0/region",
+      "kind": "signal_region",
+      "point": {
+        "x": 377.5,
+        "y": 295.5
+      },
+      "reachable": true,
+      "spawn_segment": {
+        "distance": 20.0,
+        "sample_step_max": 0.25,
+        "samples": 81,
+        "blocked_samples": 0,
+        "first_blocked": []
+      },
+      "disk_samples": {
+        "sample_spacing": 0.25,
+        "samples": 197,
+        "blocked_samples": 0,
+        "scope": "sampled points only; not continuous geometry or actor-radius proof"
+      }
+    },
+    {
+      "definition": "p0-region-entered-candidate",
+      "node": 1,
+      "location": "spawn",
+      "kind": "spawn",
+      "point": {
+        "x": 377.5,
+        "y": 315.5
+      },
+      "reachable": true,
+      "spawn_segment": {
+        "distance": 0.0,
+        "sample_step_max": 0.25,
+        "samples": 2,
+        "blocked_samples": 0,
+        "first_blocked": []
+      }
+    },
+    {
+      "definition": "p0-region-entered-candidate",
+      "node": 1,
+      "location": "portal",
+      "kind": "exit",
+      "point": {
+        "x": 377.5,
+        "y": 307.5
+      },
+      "reachable": true,
+      "spawn_segment": {
+        "distance": 8.0,
+        "sample_step_max": 0.25,
+        "samples": 33,
+        "blocked_samples": 0,
+        "first_blocked": []
+      },
+      "disk_samples": {
+        "sample_spacing": 0.25,
+        "samples": 797,
+        "blocked_samples": 0,
+        "scope": "sampled points only; not continuous geometry or actor-radius proof"
+      }
+    },
+    {
+      "definition": "p0-region-entered-candidate",
+      "node": 1,
+      "location": "encounters/0",
+      "kind": "monster",
+      "point": {
+        "x": 377.5,
+        "y": 291.5
+      },
+      "reachable": true,
+      "spawn_segment": {
+        "distance": 24.0,
+        "sample_step_max": 0.25,
+        "samples": 97,
+        "blocked_samples": 0,
+        "first_blocked": []
+      }
+    },
+    {
+      "definition": "p0-region-entered-candidate",
+      "node": 1,
+      "location": "timedReinforcements/0/encounters/0",
+      "kind": "monster",
+      "point": {
+        "x": 377.5,
+        "y": 295.5
+      },
+      "reachable": true,
+      "spawn_segment": {
+        "distance": 20.0,
+        "sample_step_max": 0.25,
+        "samples": 81,
+        "blocked_samples": 0,
+        "first_blocked": []
+      }
+    },
+    {
+      "definition": "p0-region-entered-candidate",
+      "node": 1,
+      "location": "signals/0/region",
+      "kind": "signal_region",
+      "point": {
+        "x": 377.5,
+        "y": 295.5
+      },
+      "reachable": true,
+      "spawn_segment": {
+        "distance": 20.0,
+        "sample_step_max": 0.25,
+        "samples": 81,
+        "blocked_samples": 0,
+        "first_blocked": []
+      },
+      "disk_samples": {
+        "sample_spacing": 0.25,
+        "samples": 197,
+        "blocked_samples": 0,
+        "scope": "sampled points only; not continuous geometry or actor-radius proof"
+      }
+    },
+    {
+      "definition": "p0-boss-defeated-candidate",
+      "node": 1,
+      "location": "spawn",
+      "kind": "spawn",
+      "point": {
+        "x": 377.5,
+        "y": 315.5
+      },
+      "reachable": true,
+      "spawn_segment": {
+        "distance": 0.0,
+        "sample_step_max": 0.25,
+        "samples": 2,
+        "blocked_samples": 0,
+        "first_blocked": []
+      }
+    },
+    {
+      "definition": "p0-boss-defeated-candidate",
+      "node": 1,
+      "location": "portal",
+      "kind": "exit",
+      "point": {
+        "x": 377.5,
+        "y": 307.5
+      },
+      "reachable": true,
+      "spawn_segment": {
+        "distance": 8.0,
+        "sample_step_max": 0.25,
+        "samples": 33,
+        "blocked_samples": 0,
+        "first_blocked": []
+      },
+      "disk_samples": {
+        "sample_spacing": 0.25,
+        "samples": 797,
+        "blocked_samples": 0,
+        "scope": "sampled points only; not continuous geometry or actor-radius proof"
+      }
+    },
+    {
+      "definition": "p0-boss-defeated-candidate",
+      "node": 1,
+      "location": "encounters/0",
+      "kind": "monster",
+      "point": {
+        "x": 377.5,
+        "y": 291.5
+      },
+      "reachable": true,
+      "spawn_segment": {
+        "distance": 24.0,
+        "sample_step_max": 0.25,
+        "samples": 97,
+        "blocked_samples": 0,
+        "first_blocked": []
+      }
+    },
+    {
+      "definition": "p0-boss-defeated-candidate",
+      "node": 1,
+      "location": "timedReinforcements/0/encounters/0",
+      "kind": "monster",
+      "point": {
+        "x": 377.5,
+        "y": 295.5
+      },
+      "reachable": true,
+      "spawn_segment": {
+        "distance": 20.0,
+        "sample_step_max": 0.25,
+        "samples": 81,
+        "blocked_samples": 0,
+        "first_blocked": []
+      }
+    },
+    {
+      "definition": "p0-empty-initial-candidate",
+      "node": 1,
+      "location": "spawn",
+      "kind": "spawn",
+      "point": {
+        "x": 377.5,
+        "y": 315.5
+      },
+      "reachable": true,
+      "spawn_segment": {
+        "distance": 0.0,
+        "sample_step_max": 0.25,
+        "samples": 2,
+        "blocked_samples": 0,
+        "first_blocked": []
+      }
+    },
+    {
+      "definition": "p0-empty-initial-candidate",
+      "node": 1,
+      "location": "portal",
+      "kind": "exit",
+      "point": {
+        "x": 377.5,
+        "y": 307.5
+      },
+      "reachable": true,
+      "spawn_segment": {
+        "distance": 8.0,
+        "sample_step_max": 0.25,
+        "samples": 33,
+        "blocked_samples": 0,
+        "first_blocked": []
+      },
+      "disk_samples": {
+        "sample_spacing": 0.25,
+        "samples": 797,
+        "blocked_samples": 0,
+        "scope": "sampled points only; not continuous geometry or actor-radius proof"
+      }
+    },
+    {
+      "definition": "p0-empty-initial-candidate",
+      "node": 1,
+      "location": "reinforcements/0/encounters/0",
+      "kind": "monster",
+      "point": {
+        "x": 377.5,
+        "y": 291.5
+      },
+      "reachable": true,
+      "spawn_segment": {
+        "distance": 24.0,
+        "sample_step_max": 0.25,
+        "samples": 97,
+        "blocked_samples": 0,
+        "first_blocked": []
+      }
+    },
+    {
+      "definition": "p0-empty-initial-candidate",
+      "node": 1,
+      "location": "reinforcements/1/encounters/0",
+      "kind": "monster",
+      "point": {
+        "x": 377.5,
+        "y": 295.5
+      },
+      "reachable": true,
+      "spawn_segment": {
+        "distance": 20.0,
+        "sample_step_max": 0.25,
+        "samples": 81,
+        "blocked_samples": 0,
+        "first_blocked": []
+      }
+    },
+    {
+      "definition": "p0-named-wave-boss-candidate",
+      "node": 1,
+      "location": "spawn",
+      "kind": "spawn",
+      "point": {
+        "x": 377.5,
+        "y": 315.5
+      },
+      "reachable": true,
+      "spawn_segment": {
+        "distance": 0.0,
+        "sample_step_max": 0.25,
+        "samples": 2,
+        "blocked_samples": 0,
+        "first_blocked": []
+      }
+    },
+    {
+      "definition": "p0-named-wave-boss-candidate",
+      "node": 1,
+      "location": "portal",
+      "kind": "exit",
+      "point": {
+        "x": 377.5,
+        "y": 307.5
+      },
+      "reachable": true,
+      "spawn_segment": {
+        "distance": 8.0,
+        "sample_step_max": 0.25,
+        "samples": 33,
+        "blocked_samples": 0,
+        "first_blocked": []
+      },
+      "disk_samples": {
+        "sample_spacing": 0.25,
+        "samples": 797,
+        "blocked_samples": 0,
+        "scope": "sampled points only; not continuous geometry or actor-radius proof"
+      }
+    },
+    {
+      "definition": "p0-named-wave-boss-candidate",
+      "node": 1,
+      "location": "timedReinforcements/0/encounters/0",
+      "kind": "monster",
+      "point": {
+        "x": 377.5,
+        "y": 291.5
+      },
+      "reachable": true,
+      "spawn_segment": {
+        "distance": 24.0,
+        "sample_step_max": 0.25,
+        "samples": 97,
+        "blocked_samples": 0,
+        "first_blocked": []
+      }
+    }
+  ],
+  "weighted_entry_intervals": [
+    {
+      "definition": "p0-region-entered-candidate",
+      "inclusive_lower": 0,
+      "exclusive_upper": 2
+    },
+    {
+      "definition": "p0-named-wave-boss-candidate",
+      "inclusive_lower": 2,
+      "exclusive_upper": 3
+    }
+  ],
+  "total_weight": 3,
+  "server_or_client_or_lua_executed": false,
+  "deployed": false,
+  "limitations": [
+    "no actual Server loader, tick simulation or gameplay",
+    "BND checks 2D point connectivity and samples, not actor width or Client 3D collision",
+    "new author definitions require explicit content/selector registration before use"
+  ]
+}

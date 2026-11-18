@@ -1,0 +1,413 @@
+{
+  "schema": "MEF-P1-WORLD-LUA-READ-SET-1",
+  "baseline": "5ed4833b805949fabe260aea77e3fe0fd8e86bfa",
+  "new_native_windows": [
+    {
+      "id": "result_000E",
+      "start": "0x4b0640",
+      "end": "0x4b1914",
+      "scope": "完整函式指令；結果欄位/副作用/九個分支，callee 依下述有界證據與 T12 既有報告分流"
+    },
+    {
+      "id": "parameter_0000",
+      "start": "0x4afaf0",
+      "end": "0x4afb7a",
+      "scope": "完整；6-byte row、world lookup、v+2C"
+    },
+    {
+      "id": "monster_parameter",
+      "start": "0x4d1e10",
+      "end": "0x4d1f32",
+      "scope": "完整程式，不含後方資料表；case1 比例、其餘 case 排除為生命期事件"
+    },
+    {
+      "id": "character_parameter",
+      "start": "0x4ce7f0",
+      "end": "0x4ceb5c",
+      "scope": "完整程式，不含後方資料表；case1/2/3 對應比例通道"
+    },
+    {
+      "id": "resource_0034",
+      "start": "0x4b3090",
+      "end": "0x4b32d1",
+      "scope": "完整；typed actor/roster guards、三組 max/current writer、mode1另域"
+    },
+    {
+      "id": "monster_caption",
+      "start": "0x4d1b90",
+      "end": "0x4d1e01",
+      "scope": "完整；+430 gate 與兩數字顯示；不展開所有字型/圖形 callee"
+    },
+    {
+      "id": "hud_resource_update",
+      "start": "0x5d1bf0",
+      "end": "0x5d2120",
+      "scope": "完整；current/max 與 state+34 分流；UI下層非完整圖形還原"
+    },
+    {
+      "id": "field_hud_caller",
+      "start": "0x5d4780",
+      "end": "0x5d4797",
+      "scope": "完整；普通場景 concrete UI caller"
+    },
+    {
+      "id": "native_skill_check",
+      "start": "0x549980",
+      "end": "0x549c51",
+      "scope": "完整；HP/SP/MP成本比較；不是傷害公式/死亡判決"
+    },
+    {
+      "id": "native_skill_condition",
+      "start": "0x54ae70",
+      "end": "0x54ae92",
+      "scope": "完整；SubAI::CSkillCheckCondition v+4 bool"
+    },
+    {
+      "id": "skill_cost_parser",
+      "start": "0x530890",
+      "end": "0x5316c3",
+      "scope": "完整機械解碼；語意僅 hp/sp/mp 欄位到16-byte level record與容器+60；不宣稱完整技能格式"
+    },
+    {
+      "id": "hp_cost_reader",
+      "start": "0x530530",
+      "end": "0x5305b3",
+      "scope": "完整；有號WORD offset0"
+    },
+    {
+      "id": "sp_cost_reader",
+      "start": "0x5305c0",
+      "end": "0x530644",
+      "scope": "完整；有號WORD offset2"
+    },
+    {
+      "id": "mp_cost_reader",
+      "start": "0x530650",
+      "end": "0x5306d4",
+      "scope": "完整；有號WORD offset4"
+    },
+    {
+      "id": "pair_store_accessor",
+      "start": "0x48a400",
+      "end": "0x48a437",
+      "scope": "完整；唯一 singleton FD9278，三指標容器"
+    },
+    {
+      "id": "pair_store_constructor",
+      "start": "0x6d89c0",
+      "end": "0x6d8a0a",
+      "scope": "完整；兩WORD、四float、total/remaining；stack 7args + XMM0"
+    },
+    {
+      "id": "pair_store_append",
+      "start": "0x6d8a10",
+      "end": "0x6d8a7e",
+      "scope": "完整；28-byte複製/append；增容callee不作事件語意"
+    },
+    {
+      "id": "pair_store_tick",
+      "start": "0x6d8480",
+      "end": "0x6d865b",
+      "scope": "完整；live world ID查找、缺actor/到期erase"
+    },
+    {
+      "id": "pair_store_draw",
+      "start": "0x6d8660",
+      "end": "0x6d89bc",
+      "scope": "完整；同live ID重查、ARGB衰減、位置→7CCC00"
+    },
+    {
+      "id": "update_prefix",
+      "start": "0x492040",
+      "end": "0x4928ad",
+      "scope": "rooted prefix至pair tick call返回；只判定既定主更新caller，不宣稱整個ClientLoop"
+    },
+    {
+      "id": "draw_prefix",
+      "start": "0x492900",
+      "end": "0x492ec2",
+      "scope": "rooted prefix至pair draw call返回；只判定既定繪圖caller"
+    },
+    {
+      "id": "actor_effect_position",
+      "start": "0x4c8fa0",
+      "end": "0x4c900d",
+      "scope": "完整；模型slot0位置或actor A0/A4/A8 fallback"
+    },
+    {
+      "id": "pair_graphics_sink",
+      "start": "0x7ccc00",
+      "end": "0x7cce36",
+      "scope": "完整本機body；外部圖形介面虛呼叫保留接點，不展開DLL"
+    },
+    {
+      "id": "bar_record_access",
+      "start": "0x7b4ed0",
+      "end": "0x7b4f76",
+      "scope": "完整；bar key0取record+0C"
+    },
+    {
+      "id": "monster_percent_reader",
+      "start": "0x4c7040",
+      "end": "0x4c7051",
+      "scope": "完整tail thunk；+3B0乘0.01後轉整數"
+    },
+    {
+      "id": "character_percent_reader",
+      "start": "0x4cd010",
+      "end": "0x4cd027",
+      "scope": "完整tail thunk；current/max乘100後轉整數"
+    },
+    {
+      "id": "raw_ratio_reader",
+      "start": "0x4c7060",
+      "end": "0x4c7067",
+      "scope": "完整；返回+3B0，並非Lua binding"
+    },
+    {
+      "id": "bar_submit",
+      "start": "0x4c88f0",
+      "end": "0x4c89a0",
+      "scope": "完整；模型/ratio/可見條件→native bar提交"
+    },
+    {
+      "id": "skill_response_000F",
+      "start": "0x4b19d0",
+      "end": "0x4b19f2",
+      "scope": "完整；current controller v+3C delegate"
+    },
+    {
+      "id": "skill_response_ui",
+      "start": "0x545c50",
+      "end": "0x545e19",
+      "scope": "完整；op0F錯誤/資源不足UI，不是HP snapshot producer"
+    },
+    {
+      "id": "aggregate_display",
+      "start": "0x458850",
+      "end": "0x458bd5",
+      "scope": "完整；F942C4→native十進位UI，不保留EntityId事件"
+    }
+  ],
+  "reused_windows": [
+    {
+      "path": "kr-extra-roy/MEF-world-identity-scene-interaction-20261117/native-evidence.json",
+      "commit": "5ed4833b805949fabe260aea77e3fe0fd8e86bfa",
+      "id": "common_primary",
+      "start": "0x4add50",
+      "end": "0x4ae380",
+      "bytes": 1584,
+      "sha256": "f9cee5546de393ee1584d8c621e067d56f218559a800556f9b1bdcacc1a6d0f7"
+    },
+    {
+      "path": "kr-extra-roy/MEF-world-identity-scene-interaction-20261117/native-evidence.json",
+      "commit": "5ed4833b805949fabe260aea77e3fe0fd8e86bfa",
+      "id": "world_erase",
+      "start": "0x4dfbc0",
+      "end": "0x4dfc2c",
+      "bytes": 108,
+      "sha256": "21ae8dd896a0efbf2fc1719b9b2af83daf1fc550fdb8d3c10097a2a4c642baf8"
+    },
+    {
+      "path": "kr-extra-roy/MEF-world-identity-scene-interaction-20261117/native-evidence.json",
+      "commit": "5ed4833b805949fabe260aea77e3fe0fd8e86bfa",
+      "id": "delete001a",
+      "start": "0x4b28d0",
+      "end": "0x4b2af0",
+      "bytes": 544,
+      "sha256": "77862701c7d9722afe96ff9681e24fa67fef370c922e6813f19e4a441fe13ff4"
+    },
+    {
+      "path": "kr-extra-roy/MEF-world-identity-scene-interaction-20261117/native-evidence.json",
+      "commit": "5ed4833b805949fabe260aea77e3fe0fd8e86bfa",
+      "id": "state_packet",
+      "start": "0x4b0130",
+      "end": "0x4b01bf",
+      "bytes": 143,
+      "sha256": "8c455f0159324b40abd9ea1ca240572e9ef169f270961ce32d4e0e5c21d6147b"
+    },
+    {
+      "path": "kr-extra-roy/MEF-world-identity-scene-interaction-20261117/native-evidence.json",
+      "commit": "5ed4833b805949fabe260aea77e3fe0fd8e86bfa",
+      "id": "fsm_transition",
+      "start": "0x4ca060",
+      "end": "0x4ca0ab",
+      "bytes": 75,
+      "sha256": "2bef145cdcd604a8197d7838922ae2e06e3fe2822a9e8d2b4c682aeabe729231"
+    },
+    {
+      "path": "kr-extra-roy/MEF-world-identity-scene-interaction-20261117/native-evidence.json",
+      "commit": "5ed4833b805949fabe260aea77e3fe0fd8e86bfa",
+      "id": "state_dead_enter",
+      "start": "0x4cb590",
+      "end": "0x4cb710",
+      "bytes": 384,
+      "sha256": "9917db82c62b8039619de6749d575bad7cf2565c83f9c73d060d616f95827610"
+    },
+    {
+      "path": "kr-extra-roy/MEF-world-identity-scene-interaction-20261117/native-evidence.json",
+      "commit": "5ed4833b805949fabe260aea77e3fe0fd8e86bfa",
+      "id": "state_dead_update",
+      "start": "0x4cb710",
+      "end": "0x4cb7d0",
+      "bytes": 192,
+      "sha256": "e93a33eba2c76f4a4e26266a34a1ba14f98f850f6b8cd550b9fdee86f74ae8e9"
+    },
+    {
+      "path": "kr-extra-roy/MEF-world-identity-scene-interaction-20261117/native-evidence.json",
+      "commit": "5ed4833b805949fabe260aea77e3fe0fd8e86bfa",
+      "id": "actor_map_insert",
+      "start": "0x4dff30",
+      "end": "0x4dffaa",
+      "bytes": 122,
+      "sha256": "3f117a1e4bbff0df9e40958c1e7d3af22bdfe8c05860d441437b37af52d18295"
+    },
+    {
+      "path": "kr-extra-roy/MEF-world-identity-scene-interaction-20261117/native-evidence.json",
+      "commit": "5ed4833b805949fabe260aea77e3fe0fd8e86bfa",
+      "id": "monster_ctor",
+      "start": "0x4d1710",
+      "end": "0x4d18d0",
+      "bytes": 448,
+      "sha256": "41cc95ca5aa7aac20573d3aea111d56f8c53b7c97bb1025dad2185dad5c51577"
+    },
+    {
+      "path": "kr-extra-roy/MEF-world-identity-scene-interaction-20261117/native-evidence.json",
+      "commit": "5ed4833b805949fabe260aea77e3fe0fd8e86bfa",
+      "id": "monster_delete",
+      "start": "0x4d18d0",
+      "end": "0x4d1901",
+      "bytes": 49,
+      "sha256": "2cf47102808191c44ba4d7c2f615c10bb0b0defa8c1a7fed2156648514092e0b"
+    },
+    {
+      "path": "kr-extra-roy/MEF-world-identity-scene-interaction-20261117/native-evidence.json",
+      "commit": "5ed4833b805949fabe260aea77e3fe0fd8e86bfa",
+      "id": "monster_cleanup",
+      "start": "0x4d1f80",
+      "end": "0x4d1f88",
+      "bytes": 8,
+      "sha256": "ffa540291c94665ee3eaf406cc0f5c54388c0bc0ad71a865bf179a53719187fb"
+    },
+    {
+      "path": "kr-extra-roy/MEF-transition-actor-event-20261117/native-evidence.json",
+      "commit": "5ed4833b805949fabe260aea77e3fe0fd8e86bfa",
+      "id": "field_result_virtual",
+      "start": "0x436c40",
+      "end": "0x436c45",
+      "bytes": 5,
+      "sha256": "330d07aeacf2d9103182d1a4304782bf56d1816731f174dffc87be14e92d0485"
+    },
+    {
+      "path": "kr-extra-roy/MEF-transition-actor-event-20261117/native-evidence.json",
+      "commit": "5ed4833b805949fabe260aea77e3fe0fd8e86bfa",
+      "id": "scenario_result_wrapper",
+      "start": "0x4c4920",
+      "end": "0x4c4aba",
+      "bytes": 410,
+      "sha256": "fd8d68293859815423916e14b3a9c4c2c7444f6bf93c906453262ffcceda38d4"
+    },
+    {
+      "path": "kr-extra-roy/MEF-transition-actor-event-20261117/native-evidence.json",
+      "commit": "5ed4833b805949fabe260aea77e3fe0fd8e86bfa",
+      "id": "native_AI_pair_writer",
+      "start": "0x54a8f0",
+      "end": "0x54aa58",
+      "bytes": 360,
+      "sha256": "1b776b5d17dce58bfeaff15e56696beac973427df9d356bed6346508b6c86258"
+    },
+    {
+      "path": "kr-extra-roy/MEF-transition-actor-event-20261117/native-evidence.json",
+      "commit": "5ed4833b805949fabe260aea77e3fe0fd8e86bfa",
+      "id": "native_AI_pair_reader",
+      "start": "0x54aa60",
+      "end": "0x54ab5a",
+      "bytes": 250,
+      "sha256": "836f34e5896e7aa557f4cc6159eb1fb9878a90b109423158afffe596e38b921a"
+    },
+    {
+      "path": "kr-extra-roy/MEF-comprehensive-contracts-20261117/events/native-evidence.json",
+      "commit": "5ed4833b805949fabe260aea77e3fe0fd8e86bfa",
+      "id": "ai_direction_consumer",
+      "start": "0x549660",
+      "end": "0x5498b9",
+      "bytes": 601,
+      "sha256": "badb0ff2eea8e3e64763f5d6d2e58a0a615610fee37c696eec1637b96118ac6a"
+    },
+    {
+      "path": "kr-extra-roy/MEF-comprehensive-contracts-20261117/events/native-evidence.json",
+      "commit": "5ed4833b805949fabe260aea77e3fe0fd8e86bfa",
+      "id": "ai_action_consumer",
+      "start": "0x549c60",
+      "end": "0x549e07",
+      "bytes": 423,
+      "sha256": "23c2ed631ad447a842eaa401a2e98f24813f6ec193a43c1c9059cf88e37a5300"
+    }
+  ],
+  "navigation_functions": [
+    "4b0640",
+    "4afaf0",
+    "4d1e10",
+    "4ce7f0",
+    "4b3090",
+    "4d1b90",
+    "5d1bf0",
+    "5d4780",
+    "549980",
+    "54ae70",
+    "530890",
+    "530530",
+    "5305c0",
+    "530650",
+    "48a400",
+    "6d89c0",
+    "6d8a10",
+    "6d8480",
+    "6d8660",
+    "492040",
+    "492900",
+    "4c8fa0",
+    "7ccc00",
+    "7b4ed0",
+    "4c7040",
+    "4cd010",
+    "4c7060",
+    "4c88f0",
+    "4b19d0",
+    "545c50",
+    "458850",
+    "4d1710",
+    "5521d0",
+    "551f20",
+    "7abcd0",
+    "7ac030",
+    "4b28d0",
+    "4ca060",
+    "4b0130",
+    "4dfbc0",
+    "4c4920",
+    "4ae4d0",
+    "4add50",
+    "79a5f0",
+    "5d2610",
+    "6b67e0",
+    "6b71a0",
+    "5d4480",
+    "5d4d00",
+    "545040",
+    "545210",
+    "547750"
+  ],
+  "search_only_scope": [
+    "4ADD50 common handler direct target list: 86 navigation sources loaded for targeted field/diagnostic search; not 86 semantic completions",
+    "literal +3BC/+3C8 and decompiler indexed variants: navigation candidates including unrelated UI/runtime structs; selected typed consumers expanded only",
+    "FD9278/FD927C/FD9280 named references and original-bin literal/E8/E9 candidates; no all-program alias proof"
+  ],
+  "not_done": [
+    "No repeat full Lua binding census",
+    "No new Client/Lua/Server execution",
+    "No global HP writer/read alias proof",
+    "No official gameplay or Server damage formula",
+    "No publication/claim-state changes by this sub-analysis"
+  ]
+}
