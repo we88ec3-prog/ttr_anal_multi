@@ -1,0 +1,193 @@
+{
+  "schema": "LOCAL_SCENARIO_DEFINITION_V1_NOT_NATIVE_MEF",
+  "nativeMef": false,
+  "authority": "SERVER_RECONSTRUCTION_NOT_NATIVE_MEF",
+  "definitions": [
+    {
+      "id": "p0-cross-node-wave-guarantees-candidate",
+      "entryNode": 1,
+      "authority": "SERVER_RECONSTRUCTION_NOT_NATIVE_MEF",
+      "sources": [
+        {
+          "kind": "AUTHORED_ANALYSIS_CANDIDATE_REUSING_EXISTING_CONTRACT",
+          "reference": "design/scenario-content/functional-lab.scenario.json",
+          "sha256": "58180393ba9364875318d7c3daf99039fd3ea9cfe3658327508643fbca29f9ac",
+          "authority": "SERVER_RECONSTRUCTION_NOT_NATIVE_MEF"
+        },
+        {
+          "kind": "AUTHORED_ANALYSIS_CANDIDATE_REUSING_EXISTING_CONTRACT",
+          "reference": "design/scenario-content/REINFORCEMENT-FLAGS.md",
+          "sha256": "cb51f3c09f267b86cb7c9474cc1c20447a8075db6dc36ee319a28627aeb6a4e3",
+          "authority": "SERVER_RECONSTRUCTION_NOT_NATIVE_MEF"
+        },
+        {
+          "kind": "AUTHORED_ANALYSIS_CANDIDATE_REUSING_EXISTING_CONTRACT",
+          "reference": "design/scenario-content/NODE-DELAY-SIGNALS.md",
+          "sha256": "3131a2cbee7f712d1a0a066cb4a47a8a842e50a933d2fcb6d1fff61155412179",
+          "authority": "SERVER_RECONSTRUCTION_NOT_NATIVE_MEF"
+        },
+        {
+          "kind": "AUTHORED_ANALYSIS_CANDIDATE_REUSING_EXISTING_CONTRACT",
+          "reference": "design/scenario-content/CLEAR-DELAY-SIGNALS.md",
+          "sha256": "0f0002c503b2093ab57a0978d36170d11831c5899be10d1aca1c0daa6335d25d",
+          "authority": "SERVER_RECONSTRUCTION_NOT_NATIVE_MEF"
+        }
+      ],
+      "nodes": [
+        {
+          "node": 1,
+          "map": 193,
+          "spawn": {
+            "x": 377.5,
+            "y": 315.5
+          },
+          "portal": {
+            "x": 377.5,
+            "y": 307.5,
+            "radius": 4,
+            "key": 801,
+            "preRegisterClosed": true
+          },
+          "encounters": [],
+          "aiProfile": "lab-stationary",
+          "rules": [
+            {
+              "event": "Entry",
+              "action": "SpawnGroup"
+            },
+            {
+              "event": "GroupCleared",
+              "action": "UnlockPortal"
+            },
+            {
+              "event": "InteractZ",
+              "action": "NextNode",
+              "targetNode": 2
+            }
+          ],
+          "encounterGroup": "p0-named-wave-boss",
+          "clearExperience": 0,
+          "timedReinforcements": [
+            {
+              "id": "boss-entry",
+              "delaySeconds": 5,
+              "encounters": [
+                {
+                  "model": 1001,
+                  "pre": 1,
+                  "x": 377.5,
+                  "y": 291.5,
+                  "defeatExperience": 0
+                }
+              ]
+            }
+          ],
+          "requiredBoss": {
+            "model": 1001,
+            "pre": 1,
+            "waveId": "boss-entry"
+          },
+          "signals": [
+            {
+              "flag": "boss-defeated",
+              "event": "BossDefeated"
+            },
+            {
+              "flag": "boss-wave-cleared",
+              "event": "WaveCleared",
+              "waveId": "boss-entry"
+            }
+          ]
+        },
+        {
+          "node": 2,
+          "map": 193,
+          "spawn": {
+            "x": 377.5,
+            "y": 315.5
+          },
+          "portal": {
+            "x": 377.5,
+            "y": 307.5,
+            "radius": 4,
+            "key": 801,
+            "preRegisterClosed": true,
+            "condition": {
+              "requiredFlags": [
+                "entered-area",
+                "exit-ready"
+              ]
+            }
+          },
+          "encounters": [
+            {
+              "model": 1001,
+              "x": 377.5,
+              "y": 291.5,
+              "defeatExperience": 0
+            }
+          ],
+          "aiProfile": "lab-stationary",
+          "rules": [
+            {
+              "event": "Entry",
+              "action": "SpawnGroup"
+            },
+            {
+              "event": "GroupCleared",
+              "action": "UnlockPortal"
+            },
+            {
+              "event": "InteractZ",
+              "action": "Result"
+            }
+          ],
+          "encounterGroup": "p0-guaranteed-downstream",
+          "clearExperience": 0,
+          "signals": [
+            {
+              "flag": "entered-area",
+              "event": "RegionEntered",
+              "region": {
+                "x": 377.5,
+                "y": 295.5,
+                "radius": 2
+              }
+            },
+            {
+              "flag": "node-ready",
+              "event": "NodeDelayElapsed",
+              "delaySeconds": 2
+            },
+            {
+              "flag": "exit-ready",
+              "event": "ClearDelayElapsed",
+              "delaySeconds": 2
+            }
+          ],
+          "timedReinforcements": [
+            {
+              "id": "region-ambush",
+              "delaySeconds": 1,
+              "requiredFlags": [
+                "entered-area",
+                "node-ready",
+                "boss-defeated",
+                "boss-wave-cleared"
+              ],
+              "encounters": [
+                {
+                  "model": 1001,
+                  "pre": 1,
+                  "x": 377.5,
+                  "y": 295.5,
+                  "defeatExperience": 0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -2,7 +2,7 @@
 
 **2026-11-18 使用者最新指示；適用 `extra/roy1` 的後續 MEF 分析與規劃。**
 
-本頁是目前研究入口。最新關卡功能分析在 [MEF-level-functional-closure-20261118](MEF-level-functional-closure-20261118/README.md)；能力與執行位置基礎見 [MEF-server-provided-capabilities-20261118](MEF-server-provided-capabilities-20261118/README.md)。歷史包保留原始證據與當時結論；遇到「是否必須還原官方 MEF」「Server 責任是否排除 MEF」「哪些項目阻塞所有自製內容」的方向衝突，依本頁與本輪報告解讀。
+本頁是目前研究入口。最新 P0-3～10 深入分析與種類整理在 [MEF-P0-level-execution-20261118](MEF-P0-level-execution-20261118/README.md)；前輪20類關卡全表在 [MEF-level-functional-closure-20261118](MEF-level-functional-closure-20261118/README.md)；能力與執行位置基礎見 [MEF-server-provided-capabilities-20261118](MEF-server-provided-capabilities-20261118/README.md)。歷史包保留原始證據與當時結論；遇到「是否必須還原官方 MEF」「Server 責任是否排除 MEF」「哪些項目阻塞所有自製內容」的方向衝突，依本頁與本輪報告解讀。
 
 ## 已確定的目標
 
@@ -28,3 +28,13 @@
 - 原生 `CSL.scn` 有保存／讀回seen紀錄的路徑。舊「一次／Client epoch」只足作Server派送預算，不保證重啟後未看或callback必跑；003F也可來自seen-skip。[原件補證](MEF-level-functional-closure-20261118/finite-handoff/report.md)
 - Q119清場演出後的地圖／完整點集重建會換代；較早的本地setter不保證保留。沿用已提交Server MEF旗標投影到新快照；只有需要多步演出才新增有限插播hook。
 - 現有scenario JSON／typed規則可以直接作MEF開發，不強制新建格式。公開範例缺口、實作缺口、特定Client可見操作與新玩法擴充分開，不能互相代換。
+
+## P0-3～10 深入分析後的採用補充
+
+- 已直接讀固定 Server `e88ac0a` 原碼核對出生、行為／戰鬥、時計、清場與轉場；既有巡邏、追敵、返家、選招、傷害及投射物能力可接 Server MEF。原碼實作、Client 原件、自有設計與實機結果分層記錄。
+- 本地 Lua 與封包建立的 CMonster 初始化不同；普通 group writer、signed 速度界線與 Client 原生投射物鏈已補證。group 與 relation key 不同；完整普通 Client 自主 AI／命中下放仍另需接口。[生怪與戰鬥](MEF-P0-level-execution-20261118/actors-combat/report.md)
+- 波次 timestamp 換算與 NodeDelay／ClearDelay／RegionHeld 的 elapsed 比較不能一律合成同一公式。主線／一般副本的清場、功能測試場返回及一般副本擊倒經驗處理有各自 gate；較精確原碼結論優先於舊概括。[規則與時計](MEF-P0-level-execution-20261118/rules-scheduling/report.md)
+- 補齊公開作者範例；固定輪數可用逐節點展開，同房連戰仍用增援。作者 ID 必須接相容 catalog／selector，不能忽略既有主線 override 的限制。
+- Map635 有8格真封口的新候選，會移動出口、縮小半徑；只證所列Server二維地形／overlay。另找到6個門模型的CEventObject狀態consumer，實際motion開關語意與Client動態碰撞仍分開。[門與轉場](MEF-P0-level-execution-20261118/gates-transitions/report.md)
+- 最新Portal adapter在有ClearScenes或未預註冊出口時走完整重建；全預註冊且無該演出才走點狀態更新。不能把單次setter路線的限制外推成所有內容禁止ClearScenes。
+- [12類MEF](MEF-P0-level-execution-20261118/MEF-TYPES.md)是可組合的玩家用途分類，不是12種原生檔案格式；Server規則、有限Q、Tutorial與原生持續效果依各自條件選用。

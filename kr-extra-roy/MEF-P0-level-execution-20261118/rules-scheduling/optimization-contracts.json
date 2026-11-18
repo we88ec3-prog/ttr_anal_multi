@@ -1,0 +1,93 @@
+{
+  "schema": "MEF_P0_RULE_OPTIMIZATION_CONTRACTS_V1",
+  "measured_performance": false,
+  "items": [
+    {
+      "id": "R1",
+      "action": "event and flag consumer index",
+      "equivalence": [
+        "same event owner and instance",
+        "same ALL predicates",
+        "evaluate at existing phase; do not execute arbitrary rule directly in network receive callback",
+        "cross-node flags retain semantics, index recomputes only active node consumers",
+        "preserve position-after-combat and NodeTime-before-combat observations; do not move RegionEntered wave activation earlier",
+        "per-key open latch and monotonic flags remain distinct from pending live inventory predicates"
+      ],
+      "measure": "rules evaluated per accepted event and per eligible update",
+      "evidence": [
+        "S07",
+        "S08",
+        "S09",
+        "S22"
+      ]
+    },
+    {
+      "id": "R2",
+      "action": "per-wave alive/HP totals",
+      "equivalence": [
+        "record only accepted HP/actor changes",
+        "death decrements alive once without dropping its max HP denominator",
+        "unspawned waves never count as cleared",
+        "pending required waves remain whole-clear blockers",
+        "leave world ID/death animation/removal ownership to existing combat adapter",
+        "use exact long cross-multiplication for thresholds",
+        "preserve accepted HP decreases and increases, spawn, reset/return-home updates and player-alive observation guard"
+      ],
+      "measure": "full actor scans avoided; identical flag and clear sequence",
+      "already_present": "Changed-HP callback suppression, one-shot cleared-wave removal, spawned timed wave set and monotonic flag latches already exist; do not count them as new savings.",
+      "evidence": [
+        "S07",
+        "S11",
+        "S14",
+        "S16"
+      ]
+    },
+    {
+      "id": "R3",
+      "action": "deadline queue grouped by semantic clock origin",
+      "equivalence": [
+        "preserve the same TimeProvider: combat Add double product plus toward-zero long conversion and checked addition; scenario GetElapsedTime(...).TotalSeconds predicates remain as written",
+        "keep timed before sequential and array order at equal eligible update",
+        "reset sequential empty interval when living timed wave arrives",
+        "ClearDelay excludes save/cinematic wait",
+        "NodeDelay includes clear-cinematic elapsed time but dispatch waits",
+        "RegionHeld resets on observed leave/death/clear commit",
+        "due queue only narrows candidates; recheck original predicates at eligible phases",
+        "never sort timed candidates solely by deadline if that changes original array order within an update",
+        "first empty-initial sequential delay starts after the timed pass; max one sequential wave per Poll",
+        "new story combat after entry scene has its own entry origin"
+      ],
+      "measure": "timer predicates evaluated and generated event order for same normal route",
+      "evidence": [
+        "S08",
+        "S13",
+        "S15",
+        "S16",
+        "S20",
+        "S22",
+        "S23",
+        "S24",
+        "S25"
+      ]
+    },
+    {
+      "id": "R4",
+      "action": "finite plan sharing and entry selection",
+      "equivalence": [
+        "immutable definition/version shared only",
+        "flags/timers/open/used sets remain instance-specific",
+        "compiled visit namespace stays unique",
+        "selection fixed once for run; no reroll on rebuild",
+        "reward occurrence policy explicit",
+        "new authored IDs require registered catalog/selector; generic graph support does not override narrative binding restrictions"
+      ],
+      "measure": "catalog builds and allocations; no claim that definition selection reduces combat CPU",
+      "evidence": [
+        "S10",
+        "S27",
+        "S30"
+      ]
+    }
+  ],
+  "server_evidence": "server-code-evidence.json"
+}

@@ -1,0 +1,139 @@
+{
+  "schema": "MEF_PLAYER_FUNCTIONAL_TYPES_V1",
+  "classification_origin": "Project-authored functional taxonomy, not recovered native file kinds or new wire types",
+  "composable": true,
+  "server_mef_is_in_scope": true,
+  "official_format_recovery_required": false,
+  "binding_domain_primary_type": {
+    "entry": "M12", "actors": "M06", "world": "M02", "camera": "M08",
+    "audio": "M09", "image": "M09", "talk": "M07", "tutorial": "M07",
+    "points": "M04", "maps": "M05", "input": "M12", "screen": "M08",
+    "feedback": "M03", "diagnostics": "M12", "display": "M12"
+  },
+  "binding_name_primary_type_overrides": {
+    "lb.SetActorAvatar": "M06", "lb.AttachActorItem": "M06",
+    "lb.DetachActorItem": "M06", "Q.DisableObjRender": "M06", "Q.EnableObjRender": "M06"
+  },
+  "types": [
+    {
+      "id": "M01", "title": "關卡流程與分支 MEF",
+      "player_example": "打完第一區後開左右兩條路；選一條路繼續，最後才結算。",
+      "responsibility": "節點、前置旗標、清場後事件、每個出口的目的地及通關條件。",
+      "routes": ["SERVER_RULES"],
+      "current_capability": "現有 scenario definition、有限節點圖、ALL 旗標及逐出口資格可沿用。",
+      "limits": "關卡規則可資料化；規則仍在 Server 求值的部分不計為 Client 計算外移。",
+      "remaining": "固定輪數可逐節點展開，同房連戰用增援；作者ID需登錄相容入口且保留主線override限制。入口選路及關內動態分支分開接線。",
+      "evidence": ["../MEF-level-functional-closure-20261118/rules-waves/report.md", "rules-scheduling/report.md"]
+    },
+    {
+      "id": "M02", "title": "生怪與增援 MEF",
+      "player_example": "進房先出一群小怪，打完再增援，達成條件後頭目登場。",
+      "responsibility": "怪物模型、出生位置、波次、生成時點、必要敵群與世界身分的接線。",
+      "routes": ["SERVER_RULES", "Q_FINITE", "TUTORIAL_INTERACTIVE", "NATIVE_CONTINUATION"],
+      "current_capability": "Server 波次引擎可沿用；lb.CreateObject[Ex] 有本地 world actor 建立路徑。",
+      "limits": "本地建立與封包建立的 CMonster 初始化不同；沒有新 Lua EntityId 回值，不可用 GetObjectCount 當存活數。",
+      "remaining": "依 actor profile 接齊身分、關係／控制、屬性與終端事件；新正速度值限制至native signed16可表達範圍；生成外觀不自行代表完整敵對 AI。",
+      "evidence": ["actors-combat/report.md", "rules-scheduling/report.md", "../MEF-server-provided-capabilities-20261118/world-offload/report.md"]
+    },
+    {
+      "id": "M03", "title": "怪物行為、戰鬥與頭目階段 MEF",
+      "player_example": "頭目血量下降到指定程度後出增援；所有必要敵人確實倒下才算清場。",
+      "responsibility": "巡邏、追敵、返家、選招、戰鬥參數與階段條件、有效 HP／死亡事件、波清與對應畫面回饋。",
+      "routes": ["SERVER_RULES", "NATIVE_CONTINUATION", "Q_FINITE", "TUTORIAL_INTERACTIVE"],
+      "current_capability": "實際 Server 已有行為 profile、依血量／距離／冷卻選招、傷害與投射物規則；Client 有動作、結果及投射物呈現 consumer，新的投射物視覺 adapter 仍待接入。",
+      "limits": "NumberPanel、BattlePanel、BurstStruck 是回饋，不寫權威 HP；完整普通敵方 AI／命中判定下放不是已閉合通路。",
+      "remaining": "MEF 規則接既有戰鬥事件；0094/0000/001A投射物視覺adapter及network entity生命期仍需新增。完整Client自主戰鬥另需控制與結果觀察／回報接口。",
+      "evidence": ["actors-combat/report.md", "rules-scheduling/report.md"]
+    },
+    {
+      "id": "M04", "title": "機關、占點與障礙 MEF",
+      "player_example": "站在圈內一段時間、按下拉桿或打倒守衛後，關閉陷阱並開放通路。",
+      "responsibility": "進區／占點／互動條件、一次性旗標、傷害區、障礙及既有點狀態。",
+      "routes": ["SERVER_RULES", "Q_FINITE", "TUTORIAL_INTERACTIVE"],
+      "current_capability": "現有區域與按鍵規則可用；Lua checkpoint setter 共用點更新consumer；另找到6個門模型的CEventObject外觀狀態鏈。",
+      "limits": "出口啟用、光效、門模型和碰撞各有 consumer；改點狀態不自動成為物理門。",
+      "remaining": "Server二維封口候選已給；採用時保留必要怪與機關可達。門模型motion的開關語意及真正Client動態碰撞仍另需材料／接口。",
+      "evidence": ["gates-transitions/report.md", "../MEF-level-functional-closure-20261118/space-mechanisms/report.md"]
+    },
+    {
+      "id": "M05", "title": "出口、地圖與轉場 MEF",
+      "player_example": "清場後出口亮起，按鍵進下一區，出生位置與目前進度一起接續。",
+      "responsibility": "出口目的地、換圖、同圖重建、完整點集、演出地圖備份與小地圖。",
+      "routes": ["SERVER_RULES", "Q_FINITE", "TUTORIAL_INTERACTIVE"],
+      "current_capability": "現有互動意圖與 Server transition 可復用；Client 有地圖載入、小地圖與 Q 地圖備份／還原。",
+      "limits": "lb.ChangeMap 不自動取得 Q 的 map backup；只換本機地圖不等於兩端實例及進度已切換。",
+      "remaining": "按選定入口保持實例、角色、點集與 loading／ready／Q 的交接，重建後使用當代點資料。",
+      "evidence": ["gates-transitions/report.md", "../MEF-level-functional-closure-20261118/finite-handoff/report.md"]
+    },
+    {
+      "id": "M06", "title": "角色演出與外觀 MEF",
+      "player_example": "NPC 走到玩家面前、轉身說話；頭目登場時做指定動作。",
+      "responsibility": "演出角色建立、移動、走路、轉向、動畫、顯隱與 world actor 外觀部件。",
+      "routes": ["Q_FINITE", "TUTORIAL_INTERACTIVE", "NATIVE_CONTINUATION"],
+      "current_capability": "Q 演出 slot 與 native 動作有既有入口；world 外觀與附件也有有界 consumer。",
+      "limits": "Q 角色與可戰鬥 world entity 分開；Q.DeleteObject 是 stub，Q.IsAllObjectsStopped 不能當敵群清空。",
+      "remaining": "選有效資源及角色身分，按該 owner 清理；不得把外觀附件當背包道具。",
+      "evidence": ["actors-combat/report.md", "../MEF-server-provided-capabilities-20261118/BINDING-OFFLOAD-MAP.md"]
+    },
+    {
+      "id": "M07", "title": "劇情、對話與教學 MEF",
+      "player_example": "播放對話與字幕，提示玩家移動、攻擊或切換角色，完成後繼續下一步。",
+      "responsibility": "多列對話、字幕、書本、序章、教學頁面、已映射操作與教學進度。",
+      "routes": ["Q_FINITE", "TUTORIAL_INTERACTIVE"],
+      "current_capability": "有限 Q 與真正 Tutorial context 的互動鏈可用；教學 pump 不要求 Q 正在播放。",
+      "limits": "Tutorial 條件不能直接當普通戰鬥事件；Q.BalloonTalk、Tutorial.InsertObject 是 stub；seen 回覆不證正式 callback 執行。",
+      "remaining": "綁定內容版本、入口、播放／跳過政策和結束交接；對話結束與任務完成分別提交。",
+      "evidence": ["../MEF-server-provided-capabilities-20261118/delivery-profiles/report.md", "../MEF-level-functional-closure-20261118/finite-handoff/report.md"]
+    },
+    {
+      "id": "M08", "title": "鏡頭與畫面效果 MEF",
+      "player_example": "頭目特寫、鏡頭跟隨、淡入淡出、黑邊與慢動作。",
+      "responsibility": "鏡頭路徑／跟隨／快照、畫面轉場、色調、黑邊與動畫速度效果。",
+      "routes": ["Q_FINITE", "TUTORIAL_INTERACTIVE", "NATIVE_CONTINUATION"],
+      "current_capability": "既有 native consumer 執行鏡頭與畫面效果的後續更新。",
+      "limits": "每種效果的時基、owner、結束與回收條件不同；慢動作不等於 Server 戰鬥時計一併變慢。",
+      "remaining": "內容按自己的資源與生命期配對開始／結束及快照還原；衡量多步演出的實際下放收益。",
+      "evidence": ["../MEF-server-provided-capabilities-20261118/BINDING-OFFLOAD-MAP.md", "../MEF-server-provided-capabilities-20261118/delivery-profiles/report.md"]
+    },
+    {
+      "id": "M09", "title": "音樂、語音與圖片 MEF",
+      "player_example": "進頭目房換音樂、對話播放語音、顯示圖片或飛入畫面。",
+      "responsibility": "音樂與淡出、音效、語音、圖片替換／縮放／飛行與取消。",
+      "routes": ["Q_FINITE", "TUTORIAL_INTERACTIVE", "NATIVE_CONTINUATION"],
+      "current_capability": "已知 binding 可啟動 native 播放器與圖片效果；本地維持各自後續更新。",
+      "limits": "新圖片可替換先前 owner；效果消失不能當任務、獎勵或保存完成。",
+      "remaining": "發行正確音訊／貼圖，保留已更正的 FlyingObject 參數與回收契約。",
+      "evidence": ["../MEF-server-provided-capabilities-20261118/BINDING-OFFLOAD-MAP.md", "../MEF-comprehensive-contracts-20261117/abi/abi-contracts.json"]
+    },
+    {
+      "id": "M10", "title": "NPC 與商店服務 MEF",
+      "player_example": "完成任務後鐵匠開放，NPC 說不同台詞，玩家買賣或強化裝備。",
+      "responsibility": "NPC／商店位置與資格、對話順序、貨單／價格／消耗政策，以及既有交易服務接線。",
+      "routes": ["SERVER_RULES", "Q_FINITE", "TUTORIAL_INTERACTIVE"],
+      "current_capability": "既有 town placement、任務解鎖、商店 UI 與交易服務可以復用。",
+      "limits": "可見模型、NPC key、ShopNo 與互動點不同；Server 改價格不代表本地貨架顯示會自動一致。",
+      "remaining": "新 MEF 規則接既有資格與交易，選定本地表可支援的內容；不新增第二套背包／錢包。",
+      "evidence": ["../MEF-server-provided-capabilities-20261118/npc-progression/report.md", "../MEF-server-provided-capabilities-20261118/SERVER-REUSE.md"]
+    },
+    {
+      "id": "M11", "title": "結算、獎勵與進度保存 MEF",
+      "player_example": "過關獲得經驗與道具，再登入仍有已完成任務與已拿到的獎勵。",
+      "responsibility": "完成條件、受益範圍、獎勵政策、提交時點、返回與可保存的里程碑。",
+      "routes": ["SERVER_RULES"],
+      "current_capability": "既有任務、經驗、背包、錢包、冷卻與持久化服務可直接接 MEF 決策。",
+      "limits": "畫面數字、演出結束與落地掉落各不代表已入帳；目前副本暫存旗標不等於永久戰鬥檢查點。",
+      "remaining": "新增規則綁版本及原有提交點；若要求中途永久續玩，再定義可保存的 checkpoint。",
+      "evidence": ["../MEF-level-functional-closure-20261118/outcomes-continuity/report.md", "../MEF-level-functional-closure-20261118/LATEST-MAIN-UPDATE.md"]
+    },
+    {
+      "id": "M12", "title": "輸入、排程與生命週期 MEF",
+      "player_example": "演出時暫時鎖住操控，結束後還給玩家；等待正確條件後再接下一步。",
+      "responsibility": "合法入口、協程、等待、輸入 mask、鍵位切換、收尾與所有權；診斷／顯示設定列為附屬能力。",
+      "routes": ["SERVER_RULES", "Q_FINITE", "TUTORIAL_INTERACTIVE", "NATIVE_CONTINUATION"],
+      "current_capability": "既有 Q／Tutorial caller、原生輸入控制和本機時計可復用。",
+      "limits": "回傳 callback 不等於 End；End 不會自動完成全部 owner 清理；本機時計不是 Server 時計；PrintCurrSceneID 是 stub。",
+      "remaining": "選定 profile 的首次執行、持續 pump、輸入交接及取消生命期；普通場景常駐 Lua 仍是獨立選用接口。",
+      "evidence": ["rules-scheduling/report.md", "../MEF-server-provided-capabilities-20261118/delivery-profiles/contracts.json", "../MEF-level-functional-closure-20261118/finite-handoff/report.md"]
+    }
+  ]
+}
