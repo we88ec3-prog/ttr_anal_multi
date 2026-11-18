@@ -1,0 +1,183 @@
+{
+  "schema": "SELF_AUTHORED_MEF_INTEGRATION_PLAN_V1",
+  "classification": "DESIGN_PROPOSAL_OVER_EXISTING_SERVER_COMPONENTS",
+  "native_format_claim": false,
+  "accepted_by_existing_loader": false,
+  "executable_lua": false,
+  "new_event_engine_required": false,
+  "meaning": "MEF為Server提供的內容/規則；此模型待編譯或映射既有schema，不需官方MEF檔",
+  "q119": {
+    "quest": 119,
+    "prerequisites": {
+      "completed_quest": 118,
+      "minimum_level": 5,
+      "town": 1,
+      "giver_npc": 10047,
+      "finisher_npc": 10047
+    },
+    "event_engine_target": "existing LocalScenarioDefinition Entry/GroupCleared/InteractZ",
+    "current_node_portals": [
+      {
+        "node": 1,
+        "map": 632,
+        "portal_key": 1,
+        "preRegisterClosed": false
+      },
+      {
+        "node": 2,
+        "map": 633,
+        "portal_key": 2,
+        "preRegisterClosed": false
+      },
+      {
+        "node": 3,
+        "map": 634,
+        "portal_key": 3,
+        "preRegisterClosed": false
+      },
+      {
+        "node": 4,
+        "map": 635,
+        "portal_key": 4,
+        "preRegisterClosed": true
+      }
+    ],
+    "proposed_all_points_pre_registered": true,
+    "proposed_change_note": "前三節點由清組後建立改為入場先關閉，第四節點保持既有true；本輪不改現行內容",
+    "point_native_action": "Tutorial.SetCheckPointStatus(key,category,0_or_1)",
+    "point_creation_adapter": "AD02:S2C0027 full set",
+    "clear_fact_delivery": {
+      "current_usable": "AD01 existing Server event → AD02 single S2C0048",
+      "conditional_local": "local observable presentation condition → native Lua setter",
+      "generic_dynamic_lua_bridge": "UNPROVEN_PUBLIC_BRIDGE only for arbitrary dynamic input into ordinary resident Lua; not a prerequisite of finite0047 dispatch",
+      "finite_client_sequence": {
+        "eligibility_owner": "Existing Server MEF GroupCleared",
+        "trigger": "One S2C0047 at a Q-safe point selects a new published finite sequence",
+        "client_work": [
+          "bounded local wait/presentation",
+          "SetCheckPointStatus on preinstalled matching point",
+          "explicit Q.EndCutScene then return"
+        ],
+        "generic_resident_lua_bridge_required": false,
+        "end_semantics": "Selected profile only; 003F/00EB for appropriate quest0 policy. No point-success/settlement proof.",
+        "deployment": "PROPOSED_UNBOUND_NOT_DEPLOYED"
+      }
+    },
+    "scenes": {
+      "entry": [
+        [
+          119,
+          2
+        ],
+        [
+          119,
+          3
+        ]
+      ],
+      "clear": [
+        [
+          119,
+          4
+        ]
+      ],
+      "return": [
+        [
+          119,
+          5
+        ]
+      ],
+      "binding": "existing scene adapter, not extra fields silently added to v1 scenario schema"
+    },
+    "settlement": {
+      "adapter": "AD07",
+      "entitlement": "matching ScenarioCompletion plus accepted final return step",
+      "existing_commit_point": "after normal final exit, return Town1 and return scene completion accepted by existing story service",
+      "single_transaction_fields": [
+        "story checkpoint",
+        "ScenarioCompletion",
+        "experience ledger",
+        "role growth",
+        "wallet reward ledger and balance",
+        "SkillExp award"
+      ],
+      "idempotency_reuses": "existing account+Quest reward/settlement identity",
+      "reward_rules": [
+        {
+          "kind": "experience",
+          "amount": 5850,
+          "source_reward_type": 2,
+          "recipient": "existing policy: participating role from completion event",
+          "level_curve": "reuse pinned active story-experience policy; do not infer official curve"
+        },
+        {
+          "kind": "skill_exp",
+          "amount": 40,
+          "source_reward_type": 3,
+          "recipient": "existing account-wide SkillExp ledger",
+          "source": "S03 later consumer/persistence"
+        },
+        {
+          "kind": "lee_loo",
+          "amount": 900,
+          "source_reward_type": 4,
+          "recipient": "existing shared trade wallet",
+          "existing_rule": {
+            "schema": "LOCAL_STORY_WALLET_V1_NOT_NATIVE_MEF",
+            "experiencePolicySha256": "60ca18e680aecec6218f96b5d6d09baf781ff6e81ef7812f9372f4a2d90940ee",
+            "rewards": [
+              {
+                "quest": 119,
+                "leeLoo": 900
+              }
+            ]
+          }
+        }
+      ],
+      "publication_adapter": "AD08"
+    },
+    "next": {
+      "quest": 120,
+      "requires_completed_quest": 119,
+      "minimum_level": 8,
+      "town": 1,
+      "npc": 10008
+    },
+    "normal_acceptance": "same account completes Q119, gets one recorded grant, returns playable, can meet Q120 level/NPC condition, then normal relog preserves it"
+  },
+  "shop_unlock": {
+    "existing_target": "town-placement v3/town-trade",
+    "town": 1,
+    "shop": 2,
+    "npc": 10030,
+    "requires_completed_quest": 117,
+    "point_category": 2,
+    "visible_npc_model_claim": false,
+    "product": 2614,
+    "item": 2607,
+    "buy_lee_loo": 3700,
+    "sell_lee_loo": 370,
+    "source_ids": [
+      "S02",
+      "S29"
+    ],
+    "client_shop_catalog_must_agree": true
+  },
+  "ordinary_dialogue_quest": {
+    "quest": 2842,
+    "npc": 10002,
+    "content": 2938,
+    "ui_objective_key": 3938,
+    "rule_target": "existing ordinary quest service",
+    "steps": [
+      "0036 accepted transaction",
+      "accepted dialogue intent gives Ready",
+      "Ready delivery transaction gives completed and700EXP"
+    ],
+    "known_unimplemented_reward_in_source": "guild area fame1 remains outside existing awarded scope",
+    "source_ids": [
+      "S10",
+      "S11"
+    ]
+  },
+  "no_actual_commit_performed": true
+}
