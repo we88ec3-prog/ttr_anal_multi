@@ -7,6 +7,9 @@
 2026-11-19 後續擴充：同頁新增[一般狩獵場工作台](HUNTING-SCENARIO-WORKBENCH.md)，
 支援固定 Case 315／693–706；下方原有主線契約與歷史驗證仍保留。
 
+同日新增[關卡與怪物 AI 配套](SCENARIO-AI-BUNDLES.md)：可在同一版本編輯行為檔，
+聯合驗證並下載配對 ZIP。來源 profile SHA 仍表示原基準；自訂 AI 的 SHA 獨立保存。
+
 ## 作業流程
 
 在 loopback 管理端 `/admin/scenarios` 選既有主線任務建立範本，或貼上既有
@@ -33,8 +36,9 @@ SHA 組成。設定不一致時保留唯讀；不得把舊基準直接視為新�
 Admin 需設定三項：`TARTAROS_ADMIN_SCENARIO_STORY_PATH`、
 `TARTAROS_ADMIN_SCENARIO_STORY_SHA256`、`TARTAROS_ADMIN_SCENARIO_BOUNDS_DIRECTORY`。
 使用既有固定來源主線與 BND，啟動時核對；未設定時不開放工作台。
-目前使用 Host 內建 AI 目錄，預覽顯示其 SHA；自訂 AI 配套、圖形化編排與
-任意新 Case 的部署仍另行開發。範本與保存資料不包含帳號或遊戲資產。
+目前由 Host 內建 AI 目錄建立範本，行為檔可隨草稿編輯並保留基準 ID，
+預覽顯示實際配套 SHA。圖形化編排與任意新 Case 部署仍另行開發。
+範本與保存資料不包含帳號或遊戲資產。
 
 現行 `alsmeer-mainline-route-v2.json` 提供 Q119 至 Q144 的十份主線副本範本，
 SHA `14773c3184b201e6a369b753fbf1094972d792c1e2f8e10a4f67587714def50c`。

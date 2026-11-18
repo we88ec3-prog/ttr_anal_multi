@@ -38,6 +38,9 @@ Admin 設定 `TARTAROS_ADMIN_HUNTING_PROFILES_PATH`、
 
 原生 MEF 載入、Lua 編排、Client 本地生怪與 AI 移交仍依既有缺口追查。
 
+後續加入[關卡與怪物 AI 配套](SCENARIO-AI-BUNDLES.md)，一般狩獵場同樣可在
+每版保存自訂 AI、重驗引用與巡邏地形，再匯出配對 ZIP；不改 Case／圖序的界線。
+
 ## 2026-11-19 驗證
 
 範本清單 SHA 為 `2173bc50eebbc16b037cfbdcbb24396299087a1ce6a48b5f59ae8dca5e901a1d`。
