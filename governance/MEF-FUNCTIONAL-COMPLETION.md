@@ -6,6 +6,11 @@
 
 ## 2026-11-14 extra/roy1 整合
 
+2026-11-19：[RAID 1–3 工作台](../design/scenario-content/RAID-SCENARIO-WORKBENCH.md)
+補上三組固定 RAID 範本、AI 配對及 Host 覆蓋稿載入。15 張原 BND 的編輯／匯出／
+載入預檢已通過；既有入場等級、圖序、必要頭目與 CP／經驗書領域規則保留。
+管理端已更新，但遊戲 Host 未換；新稿正常通關、Client 與原生 MEF 仍各自待驗。
+
 2026-11-19：[一般狩獵場單趟正常入口](../design/testing/HUNTING-NORMAL-ROUTE-INSPECTION.md)
 新增 41 條工程收據：15 個 Case 全部 37 條基準路線，加自訂 AI 與 81 EXP 匯出
 版本各兩條。準備角色 4／Lv.15，第二村以前綴準備資格；廣場建隊至結果同室
