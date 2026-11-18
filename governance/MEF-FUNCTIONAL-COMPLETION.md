@@ -6,6 +6,11 @@
 
 ## 2026-11-14 extra/roy1 整合
 
+2026-11-19：[一般狩獵場單趟正常入口](../design/testing/HUNTING-NORMAL-ROUTE-INSPECTION.md)
+新增 41 條工程收據：15 個 Case 全部 37 條基準路線，加自訂 AI 與 81 EXP 匯出
+版本各兩條。準備角色 4／Lv.15，第二村以前綴準備資格；廣場建隊至結果同室
+回村均經應用層驗證。這不提升原生 MEF、Client 自主生怪或實機驗收狀態。
+
 2026-11-19：追加 [已存檔背包數量旗標](../design/scenario-content/BAG-QUANTITY-SIGNALS.md)
 的 Server-owned 契約與實作驗證。它只表示在目前副本曾持有指定數量，
 不消耗道具、不涵蓋持續持有或任務交付。原生 MEF 載入鏈缺口維持，

@@ -54,3 +54,7 @@ Client 動作或命中驗收。主線與狩獵場配對、AI-only 新版、舊�
 指紋保持，遊戲 Host 未換版；Client 操作／資源變更與遊戲實機均未執行。
 預檢器同時回報 `monsterBehaviorSha256` 與 `monsterBehaviorProfiles`，此例核對
 為上述行為 SHA 及 5 個 profile；不是僅從輸入參數推定載入版本。
+
+2026-11-19 補充：[單場正常入口工程驗證](../testing/HUNTING-NORMAL-ROUTE-INSPECTION.md)
+已完成基準 37 條、自訂 AI 兩條及 81 EXP 匯出版本兩條，共 41 條。
+準備帳號通過廣場建隊至同室回村；並非新帳號主線、TCP 或指定 v2 實機。

@@ -57,3 +57,7 @@ Admin 設定 `TARTAROS_ADMIN_HUNTING_PROFILES_PATH`、
 
 管理端已更新至 16 組設定，四頁 HTTP 200、組件 SHA 與 loopback 核對通過；
 遊戲 Host 保留，既有草稿指紋一致，無測試範例移入使用者資料庫。
+
+2026-11-19 補充：[單場正常入口工程驗證](../testing/HUNTING-NORMAL-ROUTE-INSPECTION.md)
+已完成基準 37 條、自訂 AI 兩條及 81 EXP 匯出版本兩條，共 41 條。
+準備帳號通過廣場建隊至同室回村；並非新帳號主線、TCP 或指定 v2 實機。
