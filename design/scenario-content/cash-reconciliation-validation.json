@@ -1,0 +1,103 @@
+{
+  "date": "2026-11-19",
+  "classification": "SERVER_DESIGN_CHOICE / OFFLINE_SYNTHETIC",
+  "component": "LOCAL_CASH_RECONCILIATION_V1",
+  "builds": {
+    "host": "Release PASS 0 warnings/errors",
+    "inspector": "Release PASS 0 warnings/errors",
+    "web": "Release PASS 0 warnings/errors"
+  },
+  "tests": [
+    {
+      "total": 2,
+      "failed": 0,
+      "sha256": "b9794bd712cdec8a22c019a9f098392b6cac93cc7e7dbdb474a4636695da9f5c",
+      "file": "cash-reconciliation-focused-v1.trx",
+      "passed": 2
+    },
+    {
+      "total": 596,
+      "failed": 0,
+      "sha256": "24c00ce6c997539686c99c75bb555eb7d0037456d0c3efd443c1ad78e35bc09b",
+      "file": "cash-reconciliation-full-v1.trx",
+      "passed": 596
+    }
+  ],
+  "receipts": [
+    {
+      "file": "reconciliation-http-fixture.json",
+      "sha256": "c661ab3f8e76369d52ad0227f38aaaf69f81da4bcf4293dce249ff5938cb97e7"
+    },
+    {
+      "file": "reconciliation-http-proof.json",
+      "sha256": "720e5b2527c4be8587c6d22907cb64afaa33d9b12e0f354b5870904bd7ca8e11"
+    },
+    {
+      "file": "reconciliation-host-preflight.json",
+      "sha256": "26a1e662245267b48daab20f57e3d2ab363721fc17800d2a00c217e743e2689b"
+    }
+  ],
+  "http": {
+    "classification": "ISOLATED_HTTP_FUNCTIONAL",
+    "clientExecuted": false,
+    "productionDatabaseChanged": false,
+    "accounts": 27,
+    "pageOneRows": 25,
+    "pageTwoRows": 2,
+    "fundedAccountBalance": 6525,
+    "fundedAccountMovements": 9,
+    "normalIssues": 0,
+    "types": [
+      "ADMIN_ADJUST",
+      "CHECKOUT",
+      "VAULT_EXPANSION"
+    ],
+    "searchValuePreserved": true,
+    "navigationLinkPresent": true,
+    "visualAcceptance": "NOT_EXECUTED"
+  },
+  "initialHttpHelperFailure": "PowerShell reserved HOME variable collision during navigation check; helper stopped in finally, variable renamed, normal verification rerun passed",
+  "sourceReview": {
+    "garnetWriters": [
+      "Admin adjustment",
+      "Cash checkout",
+      "Vault expansion"
+    ],
+    "transactionBoundary": "Opening, movement and relevant source/wallet update share the existing SQLite write transaction",
+    "checksImplemented": [
+      "Opening coverage",
+      "Expected versus actual wallet",
+      "Per-event balance chain",
+      "Movement/source account, delta, before/after and timestamp",
+      "New sources without movement versus historical sources",
+      "Checkout item cost sum",
+      "Delivery source account",
+      "Storage without origin",
+      "Storage fields",
+      "Pending/claimed exclusivity",
+      "Claim slot product and added quantity sum"
+    ],
+    "openingBoundary": "Immutable observed balance plus source rowid watermarks, not reconstructed historical zero"
+  },
+  "deployment": {
+    "newReconciliation": "READY_NOT_DEPLOYED; group with following complete administration-action batch",
+    "liveServiceReplacement": false,
+    "liveDatabaseChanged": false,
+    "retainedAdminPid": 30796,
+    "retainedGamePid": 15524,
+    "preflight": "Dedicated consistent DB copy and isolated ports; helper stopped"
+  },
+  "clientExecuted": false,
+  "clientModified": false,
+  "deferred": [
+    "Injected differences and corruption detection branches",
+    "Rejections, replay, concurrency, fault, security and load tests",
+    "Manual reconciliation page acceptance",
+    "Refund, grant, revoke and claimed-item return implementation"
+  ],
+  "limitations": [
+    "Reconciliation starts at recorded activation balance; prior unknown money flow stays unknown",
+    "HTTP proof is functional, not visual acceptance",
+    "No automatic repair, Client list/price change or native MEF claim"
+  ]
+}
