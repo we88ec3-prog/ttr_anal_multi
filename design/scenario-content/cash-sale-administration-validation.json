@@ -1,0 +1,67 @@
+{
+  "date": "2026-11-19",
+  "classification": "SERVER_DESIGN_CHOICE / OFFLINE_SYNTHETIC",
+  "builds": {
+    "priorWebBuild": "Direct output failed because existing Admin DLLs were locked; preserved, no service stopped",
+    "inspector": "Release PASS, 0 warnings/errors",
+    "host": "Release PASS, 0 warnings/errors",
+    "web": "Release isolated output PASS, 0 warnings/errors"
+  },
+  "tests": [
+    {
+      "file": "cash-sale-admin-focused.trx",
+      "sha256": "aa0fe50c575a39ec42316780daeb7f992db75aa19288eef566a7c1fc91175aeb",
+      "total": 1,
+      "passed": 1,
+      "failed": 0
+    },
+    {
+      "file": "cash-sale-admin-full.trx",
+      "sha256": "aed48a675b5183215ac7e1739eb8e8577178dcc4669a25b23c1ef9f2beb88f9b",
+      "total": 592,
+      "passed": 592,
+      "failed": 0
+    }
+  ],
+  "http": {
+    "result": {
+      "CatalogGet": true,
+      "ValidCsrfPause": true,
+      "ValidCsrfResume": true,
+      "Product": 2625,
+      "ProofDatabase": "sale-admin-http-proof.db",
+      "ProductionSaleRulesChanged": false,
+      "ClientExecuted": false
+    },
+    "receipt": "sale-admin-http-proof.json",
+    "scope": "Independent SQLite copy and loopback port 15091; helper stopped",
+    "sha256": "a61ac3ee855493005cd1972393da925a6f9e4383c9c3326743fd0b8500c391d0",
+    "visualAcceptance": "NOT_EXECUTED"
+  },
+  "sources": {
+    "labelsSha256": "a1bcc931d1715a43d946ff208044e320e7abc3373829dec172c6fc454aded8eb",
+    "commonMessagesMemberSha256": "830cc748fc4739bd11d02ca741a5380895e5f170fdf88b6dc166ee7b9d2e60cc",
+    "labelsProjection": "build_admin_labels.py --check PASS",
+    "consumerWindowSha256": "464ae446fc77b2a1589aae3313fea1df5cb9314c121b25bdfbee74b57c9d3bf3",
+    "catalogSha256": "f13f57ed492ec99833b744ef99467f7d59e100d34a2990f05b516b20467b1cd4",
+    "messageVerifier": "verify_sale_messages.py PASS on original BIN and designated v2"
+  },
+  "deployment": {
+    "existingServices": "not restarted by publication",
+    "productionSaleRulesChanged": false,
+    "newSalesManagement": "NOT_DEPLOYED; source publication only in this batch"
+  },
+  "clientExecuted": false,
+  "clientModified": false,
+  "deferred": [
+    "New management page manual acceptance",
+    "Paused-sale purchase rejection and insufficient-balance cases",
+    "Replay, fault, security, concurrency and load tests",
+    "Fresh Q15 private-party NPC and same-login square return; user postponed"
+  ],
+  "limitations": [
+    "Sale controls do not change Client display list or prices",
+    "Persistent purchase/claim ledger remains unfinished",
+    "No native MEF completion claim"
+  ]
+}
