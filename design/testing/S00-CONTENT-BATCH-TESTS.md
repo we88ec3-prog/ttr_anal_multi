@@ -1,5 +1,15 @@
 # S00 關卡功能批次測試表
 
+## MALL-EXT-01 獨立商城檔（指定新工作副本待人工）
+
+本批新檔 `Tartaros.ip-zh-tw-only-v2-mall-v1.exe`，讀 `TC_Mall/CashTable.xml`。
+原 v2／STP 保留，初始 XML 與現用表相同。人工方便時完整退出再啟動新檔，
+確認原商城分類／列表與正常購買領取；再選定管理草稿，核對配套 manifest，
+整組更新 XML／Server 目錄／標籤並重啟，驗改價標示與扣款一致、移出商品消失、
+加入既有模板可見，以及舊待領商品可領取。沒有熱重載／自動下載。
+狀態 `DESIGNATED_CLIENT_PENDING`；工程／HTTP／SQLite／Host 啟動證據不得改寫為
+人工通過。沒有請使用者現在測試。參見 [配套與範圍](../scenario-content/CASH-EXTERNAL-CATALOG-RELEASE.md)。
+
 WB-14 成本表單正流程已驗：表單啟用183／1、保存、取消成本另存；兩版除
 成本外相等，歷史JSON／AI／ZIP精確匯出與CSP／SRI通過。實際匯出各走兩路，
 均76EXP回原房間；成本版各一筆扣物收據，取消版不扣物。635 HappyPath通過。
