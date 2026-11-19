@@ -1,6 +1,8 @@
 # 消耗道具機關：世界接線與正常旅程
 
 狀態：WORLD／JSON_AUTHORING_READY；圖形成本欄位與Client實機仍待完成。
+此處是世界接線交付當時的狀態；後續[成本表單](SCENARIO-CONSUMPTION-FORM.md)
+已補上專用欄位，Client及更完整商品政策仍待完成。
 接續[交易層](SCENARIO-CONSUME-GATE-TRANSACTION.md)，將消耗接到既有
 CheckpointInteracted，不新增原生MEF、封包或任意Client旗標。
 
