@@ -53,7 +53,7 @@ S00 將 `be56ab2e6`、`2d9896d62`、`0a2503db0` 的研究稿與證據包保留�
 |持續占點|可按區域停留時間設立旗標，接增援、屏障與出口。離區會重算未完成時間|RH-01 待實機。Q119 提供占點開門候選。 [占點規格](../design/scenario-content/REGION-HOLD-SIGNALS.md)|
 |NPC／市場內容|市場配置獨立載入，三村商店已接共用交易與資產更新，銀行共用存提款。三村可穿戴商品已接裝備欄、基礎能力值及鐵匠商品外觀更新|待實機驗商戶點位、視窗、交易、裝備面板／外觀及傷害。強化與進階能力公式待接。 [三村市場](../design/scenario-content/TOWN-MARKETS.md) · [裝備規格](../design/scenario-content/EQUIPMENT-WEAR-WIRE.md)|
 |通用內容執行器交付|有限typed事件與既有packet adapter|功能範圍足夠支援需求關卡，不能只搬常數便算完成|
-|管理／編輯工作台|Admin.Web 提供[主線副本](../design/scenario-content/SCENARIO-WORKBENCH.md)、[一般狩獵場 15 個 Case](../design/scenario-content/HUNTING-SCENARIO-WORKBENCH.md)及[自訂 AI 配套](../design/scenario-content/SCENARIO-AI-BUNDLES.md)：固定範本、關卡與 AI 同版保存、來源／條件／AI／BND 驗證與配對 ZIP。新舊草稿及原 BND 正流程已驗，編輯的 Case 693 結算與預覽一致，新 AI 已進入 Server 戰鬥執行器|圖形化編排、任意新 Case 部署及原生 MEF 尚未完成。未自動發布或宣告遊戲實機通過；使用者已取消另建簡易帳號頁|
+|管理／編輯工作台|Admin.Web 提供[主線副本](../design/scenario-content/SCENARIO-WORKBENCH.md)、[一般狩獵場 15 個 Case](../design/scenario-content/HUNTING-SCENARIO-WORKBENCH.md)及[自訂 AI 配套](../design/scenario-content/SCENARIO-AI-BUNDLES.md)及[二維點位編排](../design/scenario-content/SCENARIO-MAP-EDITOR.md)：固定範本、關卡與 AI 同版保存、來源／條件／AI／BND 驗證與配對 ZIP。新舊草稿及原 BND 正流程已驗，編輯的 Case 693 結算與預覽一致，新 AI 已進入 Server 戰鬥執行器|完整規則／波次與三維編排、任意新 Case 部署及原生 MEF 尚未完成。未自動發布或宣告遊戲實機通過；使用者已取消另建簡易帳號頁|
 |完整場景驗證|已有部分正常旅程人測及獨立工程收據|每個新增功能的來源／Server測試／Client人測分開驗收|
 |馮德斯一般副本練等|Stage 462／463 的四個 Case、八條路線均用原版 BND 走完正常建隊、選關、生怪、戰鬥、頭目清除、掉落、拾取、結算與回村。每條路在出口前已入帳 56 EXP，結算後單場合計 76 EXP。Case 693 兩路各撿三張復活卷軸，其餘各一張。離線檢查器逐圖比對測試頁顯示、存檔與預期經驗。|指定 v2 Client 的正常入口、戰鬥、Space 拾取、升級顯示及回村循環待實機。見 [TS-37 批次驗收](../design/testing/S00-CONTENT-BATCH-TESTS.md)。|
 

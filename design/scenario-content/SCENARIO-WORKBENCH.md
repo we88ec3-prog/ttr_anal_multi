@@ -37,7 +37,8 @@ Admin 需設定三項：`TARTAROS_ADMIN_SCENARIO_STORY_PATH`、
 `TARTAROS_ADMIN_SCENARIO_STORY_SHA256`、`TARTAROS_ADMIN_SCENARIO_BOUNDS_DIRECTORY`。
 使用既有固定來源主線與 BND，啟動時核對；未設定時不開放工作台。
 目前由 Host 內建 AI 目錄建立範本，行為檔可隨草稿編輯並保留基準 ID，
-預覽顯示實際配套 SHA。圖形化編排與任意新 Case 部署仍另行開發。
+預覽顯示實際配套 SHA。[二維點位編排](SCENARIO-MAP-EDITOR.md)已提供；
+完整規則／波次與三維編排、任意新 Case 部署仍另行開發。
 範本與保存資料不包含帳號或遊戲資產。
 
 現行 `alsmeer-mainline-route-v2.json` 提供 Q119 至 Q144 的十份主線副本範本，
