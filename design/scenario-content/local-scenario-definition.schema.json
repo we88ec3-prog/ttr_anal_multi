@@ -225,10 +225,28 @@
           "items": { "$ref": "#/$defs/point" },
           "description": "Absolute XY waypoints. The route starts and ends at the encounter spawn."
         },
+        "maximumHealth": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000000,
+          "description": "Optional Server-authored maximum HP for this spawn. Takes precedence over the scenario growth calculation and AI profile."
+        },
+        "defeatExperience": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2147483647,
+          "description": "Optional Server-authored reward per defeated spawn, including reinforcements. Applied only by normal Stage 1 settlement. Defaults to zero. NOT_NATIVE_MEF."
+        },
         "model": {
           "type": "integer",
           "minimum": 1,
           "maximum": 65535
+        },
+        "pre": {
+          "type": ["integer", "null"],
+          "minimum": 1,
+          "maximum": 255,
+          "description": "Actor resource variant. Omitted or null uses PRE1."
         },
         "x": {
           "type": "number"
@@ -289,6 +307,11 @@
         "encounterGroup": {
           "type": "string",
           "minLength": 1
+        },
+        "clearExperience": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2147483647
         },
         "encounters": {
           "type": "array",
@@ -412,16 +435,17 @@
           "default": false,
           "description": "In the story adapter, keep player HP, SP, MP, recovery timing and skill cooldowns within the same scenario."
         },
+        "completionExperience": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647,
+          "description": "Server-defined completion experience for the Stage 1 adapter. An explicit Host override takes precedence."
+        },
         "recommendedCombatLevel": {
           "type": "integer",
           "minimum": 1,
-          "maximum": 21,
-          "description": "Fixed enemy HP reference level for the scenario."
-        },
-        "completionExperience": {
-          "type": ["integer", "null"],
-          "minimum": 1,
-          "maximum": 2147483647
+          "maximum": 34,
+          "description": "Sets the fixed enemy HP reference level for the scenario and enables Server-authored role growth in normal village and combat flows on the Host."
         },
         "authority": {
           "const": "SERVER_RECONSTRUCTION_NOT_NATIVE_MEF"
