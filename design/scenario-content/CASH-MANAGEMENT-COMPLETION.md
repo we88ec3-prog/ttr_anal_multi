@@ -1,5 +1,9 @@
 # 商城管理接續範圍
 
+2026-11-20 使用者限定追加角色／部位／種類篩選、價格編輯入口及韓文簡譯，
+詳 [商品管理篩選與簡譯](CASH-BROWSE-FILTERS-AND-TRANSLATION.md) 與
+[驗證收據](cash-browse-validation.json)。只更新管理端，其他開發維持暫停。
+
 ## 最新：獨立檔修改與配套匯出（2026-11-19）
 
 使用者已明確授權並要求完成：確認實際讀取路徑、新命名 EXE 改讀獨立商城檔、保留原件與舊版。已完成 [獨立商城配套](CASH-EXTERNAL-CATALOG-RELEASE.md) 工程：`TC_Mall/CashTable.xml`、固定版本 ZIP、匹配 Server 定價／管理標籤、獨立 runtime 與草稿基準、啟動器配對核對。首次獨立 XML 與現用表逐 byte 相同；測試價格／列表僅在隔離範例，未發布到玩家環境。
