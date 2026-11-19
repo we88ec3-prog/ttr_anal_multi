@@ -20,6 +20,9 @@ Schema 為 `LOCAL_SCENARIO_STATIC_TERRAIN_V1_NOT_NATIVE_MEF`，欄位包含 `col
 
 ## 操作與保存
 
+[波次管理](SCENARIO-WAVE-EDITOR.md)另提供順序／定時增援建立、改名、次序、
+延遲、旗標及觸發區域，沿用本頁的同一份 JSON、版本及驗證流程。
+
 腳本隨 Web 程式內嵌，頁面以相同 SHA 設定 CSP 與外部腳本 SRI。
 只有關卡頁允許該精確腳本與同站地形讀取；其他頁面原政策保持，沒有開放全站
 任意腳本、inline script 或 eval。
