@@ -1,6 +1,8 @@
 # 消耗道具機關：交易層契約
 
 狀態：**STORE_READY，WORLD／AUTHORING_WIRING_OPEN**。
+這是交易層交付當時的範圍；後續[世界與JSON編排接線](SCENARIO-CONSUME-GATE-WORLD.md)
+已有正常旅程證據，專用表單與Client驗收仍未完成。
 本批只實作既有 SQLite 資產服務內的原子扣物與機關操作收據，尚未把此能力
 接成可遊玩的機關。既有 BagQuantityReached 仍是唯讀持有量 latch，不能
 用它假裝已扣除道具；既有手動互動也保持原規則。
