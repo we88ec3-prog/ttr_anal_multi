@@ -1,12 +1,15 @@
 # 獨立商城檔與管理端配套匯出
 
+最新路徑已依使用者要求改為 `Mall/CashProducts.xml`，使用 mall-v2 工作副本，
+與 TC／繁中無關。舊 mall-v1／TC_Mall 保留為舊版，詳 [更名記錄](MALL-FOLDER-RENAME.md)。
+
 2026-11-19 使用者明確要求先確認實際讀取路徑，完成主程式讀取獨立商城檔的修改，保留原件與舊版；商城管理完成後推上 Git 並暫停開發。此授權涵蓋本方案的商城資源工作副本及新命名 EXE，不授權代理啟動／附加／操作遊戲。退款與真實金流不在開發範圍。
 
 ## Client 讀取與更新方式
 
 指定 v2 原有商城解析器 `511E40` 在 `511E90` 將 `C0E098` 指向的完整路徑放入 ECX，再於 `511EA3` 呼叫 `72F110`。ECX 是檔名，不能因舊偽碼省略暫存器參數而把它當作無檔名呼叫。後續使用原有 XML／檔案讀取程式；來源與有限指令證據見 [載入鏈核對](../../governance/client-variants/20261119-cash-external-files/README.md)。
 
-新工作副本只把完整 NUL 結尾字串 `Table/CashProduct.xml` 改為等長 `TC_Mall/CashTable.xml`，不改全域封裝掛載或其他表的路徑，不增加 Server 傳檔 opcode。商城資料仍用原有 CASH_PRODUCT_LIST／CASH_PRODUCT／PRICE_LIST 格式，非新增原生格式。新增 EXE 為 `Tartaros.ip-zh-tw-only-v2-mall-v1.exe`，舊 v2 與所有既有 STP 保留。最初獨立 XML 是現用 CashProduct 的逐 byte 副本，沒有自行更改商品或價格。
+新工作副本只把完整 NUL 結尾字串 `Table/CashProduct.xml` 改為等長 `Mall/CashProducts.xml`，不改全域封裝掛載或其他表的路徑，不增加 Server 傳檔 opcode。商城資料仍用原有 CASH_PRODUCT_LIST／CASH_PRODUCT／PRICE_LIST 格式，非新增原生格式。新增 EXE 為 `Tartaros.ip-zh-tw-only-v2-mall-v2.exe`，舊 v2 與所有既有 STP 保留。最初獨立 XML 是現用 CashProduct 的逐 byte 副本，沒有自行更改商品或價格。
 
 商城表由 singleton 建構載入；本批使用完整退出後再從遊戲目錄啟動新 EXE 的更新流程。沒有實作或宣稱熱重載、自動下載；寶石重整仍僅更新 Garnet。這次只需準備一次新 EXE，之後改商城列表／價格只更新獨立 XML 及匹配 Server 資料，不重產 Table.stp。新增主程式與解析路徑的靜態核對不等於指定 Client 實機通過。
 
@@ -20,7 +23,7 @@
 
 管理者先核對草稿 ID、版本、價格與列表差異，再由管理頁下載此固定版本 ZIP；CSRF 檢查及明確審閱欄位沿用管理表單流程。相同來源／版本的包內容可重現，下載提供 SHA。ZIP 內容包含：
 
-- `TC_Mall/CashTable.xml`：完整目標商城列表與標價。
+- `Mall/CashProducts.xml`：完整目標商城列表與標價。
 - Server V3 `.cash-shop.json`：所有既有 offer 及新價格，保存來源／草稿／Client XML SHA 與管理定價身份。
 - 匹配的管理端 labels：名稱、Client 是否列出、目錄 SHA。
 - manifest 與操作說明：每個產物雜湊、固定草稿身份、相依版本及手動套用方式。

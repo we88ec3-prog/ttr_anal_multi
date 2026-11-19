@@ -2,7 +2,7 @@
 
 ## MALL-EXT-01 獨立商城檔（指定新工作副本待人工）
 
-本批新檔 `Tartaros.ip-zh-tw-only-v2-mall-v1.exe`，讀 `TC_Mall/CashTable.xml`。
+本批新檔 `Tartaros.ip-zh-tw-only-v2-mall-v2.exe`，讀 `Mall/CashProducts.xml`。
 原 v2／STP 保留，初始 XML 與現用表相同。人工方便時完整退出再啟動新檔，
 確認原商城分類／列表與正常購買領取；再選定管理草稿，核對配套 manifest，
 整組更新 XML／Server 目錄／標籤並重啟，驗改價標示與扣款一致、移出商品消失、

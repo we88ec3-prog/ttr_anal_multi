@@ -76,6 +76,8 @@ def write_new_or_identical(path, raw):
 
 
 def prepare(args):
+    new_literal = NEW if args.variant == 'mall-v1' else b'Mall/CashProducts.xml\0'
+    variant_name = 'Tartaros.ip-zh-tw-only-v2-' + args.variant + '.exe'
     exe = pinned(args.exe, 'exe')
     original_bin = pinned(args.bin, 'bin')
     originals = {str(Path(args.exe).resolve()): sha(exe), str(Path(args.bin).resolve()): sha(original_bin)}
@@ -92,7 +94,7 @@ def prepare(args):
         if sha(member) != PINS[name+'_xml'] or ET.fromstring(member).tag != 'CASH_PRODUCT_LIST':
             raise ValueError('Source member identity/root differs')
         members[name] = member
-    if len(OLD) != len(NEW) or exe.count(OLD) != 1 or exe[FILE_OFFSET:FILE_OFFSET+len(OLD)] != OLD:
+    if len(OLD) != len(new_literal) or exe.count(OLD) != 1 or exe[FILE_OFFSET:FILE_OFFSET+len(OLD)] != OLD:
         raise ValueError('Expected unique exact filename literal')
     if file_offset(exe, 0xc0e098, len(OLD)) != FILE_OFFSET:
         raise ValueError('Filename VA mapping differs')
@@ -110,13 +112,13 @@ def prepare(args):
         if raw != original_bin[second:second+length]:
             raise ValueError('Original/v2 loader windows differ')
         windows.append(dict(address=hex(address), bytes=length, fileOffset=hex(first), sha256=sha(raw)))
-    modified = exe[:FILE_OFFSET]+NEW+exe[FILE_OFFSET+len(OLD):]
+    modified = exe[:FILE_OFFSET]+new_literal+exe[FILE_OFFSET+len(OLD):]
     changes = [index for index, (a, b) in enumerate(zip(exe, modified)) if a != b]
     if len(modified) != len(exe) or not all(FILE_OFFSET <= x < FILE_OFFSET+len(OLD)-1 for x in changes):
         raise ValueError('Unexpected binary changes')
     output = Path(args.client_root).resolve()
-    target = output/'Tartaros.ip-zh-tw-only-v2-mall-v1.exe'
-    xml_target = output/'TC_Mall/CashTable.xml'
+    target = output/variant_name
+    xml_target = output/new_literal[:-1].decode()
     evidence = Path(args.evidence).resolve()
     # Check every destination before any write; reruns must not replace a published XML.
     artifacts = [(target, modified), (xml_target, members['working'])]
@@ -130,7 +132,7 @@ def prepare(args):
         raise ValueError('An original changed')
     receipt = dict(schema='LOCAL_CASH_EXTERNAL_CLIENT_VARIANT_V1_NOT_NATIVE_MEF',
         authorization='2026-11-19 explicit user request; retain originals/old versions',
-        sourceFiles=originals, oldFilename=OLD[:-1].decode(), newFilename=NEW[:-1].decode(),
+        sourceFiles=originals, oldFilename=OLD[:-1].decode(), newFilename=new_literal[:-1].decode(),
         filenameVA='0xc0e098', filenameFileOffset=hex(FILE_OFFSET),
         outputExe=str(target), outputExeSha256=sha(modified), executableBytes=len(modified),
         changedBytes=len(changes), changedOffsets=[hex(x) for x in changes], codeWindows=windows,
@@ -148,4 +150,5 @@ if __name__ == '__main__':
     parser=argparse.ArgumentParser(description=__doc__)
     for name in ('exe', 'bin', 'original', 'working', 'client-root', 'evidence'):
         parser.add_argument('--'+name, required=True, type=Path)
+    parser.add_argument('--variant', choices=['mall-v1', 'mall-v2'], default='mall-v1')
     prepare(parser.parse_args())
