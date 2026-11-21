@@ -1,5 +1,7 @@
 # MEF 目前開發方向：Server 提供內容，優先由 MEF 處理
 
+2026-11-22：[旗標後延遲](../design/scenario-content/FLAG-DELAY-SIGNALS.md) 已接正常poll時計、延遲鏈與節點／fork界線。Case693開關達標後1.5秒才開門、頭目階段後0.75秒門檻於下一poll才增援；兩條TCP路線各清理14枚子彈、保存88EXP回原隊伍。665 HappyPath通過；Client／新管理欄位／自然新帳號仍待驗。
+
 2026-11-22：[多機關旗標條件](../design/scenario-content/FLAG-COUNT-CONDITIONS.md) 已接有限固定點、路徑可達性與管理端編排。Case693三開關任選兩個，三組各兩條TCP路線均在第二個後才送0048開兩出口，未按第三個保持未成立；各保存88EXP回原村同隊。662 HappyPath通過；Client、自然新帳號及新管理欄位瀏覽器仍待驗。
 
 2026-11-22：[招式旗標條件](../design/scenario-content/MONSTER-ATTACK-FLAGS.md) 已接怪物選招與接近距離，並使用既有圖路徑分析驗證AI旗標來源。新Case693兩條TCP路線的同一活頭目由真實75%HP旗標切換兩階段招式；每路13枚子彈清理、保存88EXP回原村同隊。658 HappyPath通過；指定v2與CPU移轉仍未宣稱通過。

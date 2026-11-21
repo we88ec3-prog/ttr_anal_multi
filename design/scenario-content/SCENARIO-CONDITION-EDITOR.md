@@ -1,5 +1,7 @@
 # 訊號與出口條件編排
 
+2026-11-22：新增 [FlagDelayElapsed](FLAG-DELAY-SIGNALS.md)，可選afterFlag及延遲秒數；正常poll觀察來源成立後起算，與入圖／清場延遲分開。來源旗標重新命名與刪除引用沿用管理，保存／匯出不自動發布；新欄位瀏覽器操作待驗。
+
 2026-11-22：新增 [FlagsCountReached](FLAG-COUNT-CONDITIONS.md)、觀察旗標與至少數量；重新命名同步watchedFlags引用、刪除受引用旗標受阻。既有版本保存／匯出不自動發布；新欄位瀏覽器操作仍待驗。
 
 這是既有 Server 關卡 schema 的管理介面，標記 `NOT_NATIVE_MEF`。
