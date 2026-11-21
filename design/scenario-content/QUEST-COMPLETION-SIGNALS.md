@@ -43,3 +43,5 @@ Release Host／Inspector／Admin.Web皆零警告錯誤；HappyPath655/655。
 三個新增單元案例涵蓋Accepted→Ready→Completed正常進度、跨角色帳號完成、
 一次觀察釋放多消費者、規劃fork與換圖保存界線。
 詳見 [機器收據](quest-completion-signals-validation.json)。
+
+2026-11-22後續：[正常NPC／TCP接取交付補驗](../testing/QUEST-GATE-NPC-TCP-ROUTE.md)已完成兩路。先走Q117主線交接，再真實0036／001C接取交付Q2842，之後門檻副本88EXP與任務700EXP分別核對。這補上本文件原批次的prepared-record限制，Client、自然新帳號及獨立Host遊戲通關仍待驗。
