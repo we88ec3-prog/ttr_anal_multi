@@ -31,8 +31,8 @@ AI attack條件都按同一scope轉換。wave／hazard／checkpoint識別屬單�
 
 計畫schema見 [local-finite-entry-repeat-plan.schema.json](local-finite-entry-repeat-plan.schema.json)。
 固定3次計畫SHA為4ae70bc3ead178155129a019117fb0bc66d5d728e4fc626a52bc4b64bf311267；
-來源是flag-delay版c0b22c…與原AI d4768b…。輸出scenario為90eb2ea6c32e3be3a83b1d77f06b1661aa55242ac846149ec65d16a7d3ad71ae，
-AI為e9bace1214fde94612a8a20e5941028244e4fc643b52d6d11741d3c387349d4d；
+來源是flag-delay版c0b22c…與原AI d4768b…。輸出scenario為7e6939f41df7ef7a18ad450f3b228463ade2c9794b9a79908838c637345c02b4，
+AI為063ae7deaca4669d30cfb54518f0cec7853425d8ec3a16843c6a07e3f78c2327；
 [編譯清單](phindos-stage462-case693-repeat3.repeat-compilation.json)列全部來源、訪問與經驗。
 logical11→12→10皆map3430／chart10，每場路線由88增為96EXP（多兩次各4），原完成20只發一次。
 
@@ -72,3 +72,5 @@ chart10、opt-in mode、兩來源SHA與96EXP；已關閉自己的預檢Host，�
 node、原生chart及map三者；沒有略過遊戲handler或手動設旗標。詳見
 [機器收據](finite-entry-repeat-validation.json)。原BIN與v2完整SHA在驗證後保持。
 本輪不以新Ghidra查詢逾時、同程序元件TCP或工具數量宣稱原Client實機通過。
+
+Compiler v2 fixes output to LF before hashing. Initial Windows CRLF working-copy hashes in8336965 were normalized by Git; the v2 pair/receipt supersedes those values. Original outputs/history remain; source plan is unchanged. Verify indexed Git blob bytes against raw artifact hashes before publication.
