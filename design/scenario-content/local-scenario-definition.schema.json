@@ -529,6 +529,9 @@
           "minimum": 1,
           "maximum": 65535,
           "description": "Explicit finite-entry-repeat normal adapter only; existing Client CHART key, distinct from logical node."
+        },
+        "weightedExits": {
+          "$ref": "#/$defs/weightedExits"
         }
       },
       "anyOf": [
@@ -1416,6 +1419,45 @@
         "region"
       ],
       "description": "Server-authored single-use category1 manual checkpoint, not official save/puzzle policy. Optional category0 closed visual marker."
+    },
+    "weightedExits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "afterFlag",
+        "choices"
+      ],
+      "properties": {
+        "afterFlag": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,63}$"
+        },
+        "choices": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 8,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "key",
+              "weight"
+            ],
+            "properties": {
+              "key": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 65535
+              },
+              "weight": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 2147483647
+              }
+            }
+          }
+        }
+      }
     }
   }
 }
