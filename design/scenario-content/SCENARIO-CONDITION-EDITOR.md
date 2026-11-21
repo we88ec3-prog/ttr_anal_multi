@@ -1,5 +1,7 @@
 # 訊號與出口條件編排
 
+2026-11-22：新增 [FlagsCountReached](FLAG-COUNT-CONDITIONS.md)、觀察旗標與至少數量；重新命名同步watchedFlags引用、刪除受引用旗標受阻。既有版本保存／匯出不自動發布；新欄位瀏覽器操作仍待驗。
+
 這是既有 Server 關卡 schema 的管理介面，標記 `NOT_NATIVE_MEF`。
 不新增原生 MEF 格式、載入鏈或傳檔 opcode，不修改 Client。
 主線、一般狩獵場與 RAID 沿用各自來源設定、同版 AI、歷史與匯出驗證。

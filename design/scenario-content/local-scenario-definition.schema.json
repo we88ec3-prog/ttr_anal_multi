@@ -780,7 +780,8 @@
             "RegionHeld",
             "BossDefeated",
             "BagQuantityReached",
-            "QuestCompleted"
+            "QuestCompleted",
+            "FlagsCountReached"
           ]
         },
         "region": {
@@ -850,6 +851,36 @@
           ],
           "minimum": 1,
           "maximum": 255
+        },
+        "watchedFlags": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 16,
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 64,
+                "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,63}$",
+                "not": {
+                  "pattern": "[^A-Za-z0-9_.-]"
+                }
+              }
+            }
+          ]
+        },
+        "minimumFlags": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1,
+          "maximum": 16
         }
       },
       "required": [
@@ -1057,6 +1088,39 @@
                 "type": "null"
               },
               "quantity": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "event": {
+                "const": "FlagsCountReached"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "watchedFlags",
+              "minimumFlags"
+            ],
+            "properties": {
+              "watchedFlags": {
+                "type": "array"
+              },
+              "minimumFlags": {
+                "type": "integer"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "watchedFlags": {
+                "type": "null"
+              },
+              "minimumFlags": {
                 "type": "null"
               }
             }
