@@ -1,5 +1,7 @@
 # 關卡／MEF功能完成追蹤
 
+2026-11-22：[有限兩房前綴重訪](../design/scenario-content/FINITE-PREFIX-REPEAT.md) 已有獨立計畫／mode與Case693 adapter。三輪logical11／12／13／14／10／1投影map3430／3431、chart10／1，重啟波次與三筆機關成本後接回分支頭目；兩路TCP各一次128EXP存檔回原隊伍，24枚投射物清理。674 HappyPath、新舊編譯bytes與Host預檢通過；Client回跳畫面與兩房管理端仍待驗／待開發。
+
 2026-11-22：[有限重訪管理端](../design/scenario-content/FINITE-REPEAT-WORKBENCH.md) 已可由保存版本預覽次數及獎勵，下載含來源、計畫、配對與Host設定的可重現ZIP。r2保存後r1的2／3次匯出仍為92／96EXP，實際下載配套兩條TCP路線均一次96EXP存檔回原隊伍；671 HappyPath通過。瀏覽器與Client實機仍待驗，未換既有服務。
 
 2026-11-22：[有限同圖入口重複](../design/scenario-content/FINITE-ENTRY-REPEAT.md) 已有固定SHA計畫、可重現編譯器與Case693正常入口opt-in。logical11／12／10投影既有map3430／chart10，各自拾取並消耗開門道具，接回原分支頭目後單次96EXP；兩條TCP路線通過、各24枚子彈退休，669 HappyPath通過。原件17窗重核／37來源保存；Client鏡頭／小地圖／latch仍待驗，新Ghidra逾時未列通過。
