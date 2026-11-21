@@ -1,5 +1,7 @@
 # MEF 目前開發方向：Server 提供內容，優先由 MEF 處理
 
+2026-11-21 開發整合：[Case693 完整副本](../design/scenario-content/MEF-INTEGRATED-DUNGEON.md) 已將計時／依序波次、頭目血量階段、消耗機關、兩條分支與結算串為同一內容；兩條正常廣場建隊至回村的原 BND 離線路線通過，640 HappyPath 通過。自訂 schema／NOT_NATIVE_MEF，指定 v2 實機、TCP 端到端仍待驗，不提高原生容器完成狀態。
+
 **2026-11-18 使用者最新指示；適用 `extra/roy1` 的後續 MEF 分析與規劃。**
 
 本頁是目前研究入口。最新 P0-3～10 深入分析與種類整理在 [MEF-P0-level-execution-20261118](MEF-P0-level-execution-20261118/README.md)；前輪20類關卡全表在 [MEF-level-functional-closure-20261118](MEF-level-functional-closure-20261118/README.md)；能力與執行位置基礎見 [MEF-server-provided-capabilities-20261118](MEF-server-provided-capabilities-20261118/README.md)。歷史包保留原始證據與當時結論；遇到「是否必須還原官方 MEF」「Server 責任是否排除 MEF」「哪些項目阻塞所有自製內容」的方向衝突，依本頁與本輪報告解讀。

@@ -4,6 +4,10 @@
 自訂定義沿用自己的schema與副檔名，明示NOT_NATIVE_MEF；原生格式與傳檔相容性
 是獨立研究事項。此表不是已完成宣告，也不以合成測試數量換算完成百分比。
 
+## 2026-11-21 完整副本整合
+
+[Case693 整合副本](../design/scenario-content/MEF-INTEGRATED-DUNGEON.md) 已在同一內容組合波次、頭目血量階段、消耗機關、分支與結算；兩條正常廣場建隊至回村、原版 BND 應用層正流程各取得88 EXP且保存。640 HappyPath通過。此為準備帳號 OFFLINE_SYNTHETIC／NOT_NATIVE_MEF，不代表官方格式、全新帳號升級、TCP或Client實機完成；沿用既有能力，不以測試數換算整體百分比。
+
 ## 2026-11-14 extra/roy1 整合
 
 2026-11-19：[RAID 配套單場正流程](../design/testing/RAID-NORMAL-ROUTE-INSPECTION.md)
