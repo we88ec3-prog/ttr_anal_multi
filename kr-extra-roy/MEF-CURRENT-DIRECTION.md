@@ -1,5 +1,7 @@
 # MEF 目前開發方向：Server 提供內容，優先由 MEF 處理
 
+2026-11-22 網路整合：[完整副本TCP正流程](../design/testing/MEF-INTEGRATED-TCP-ROUTES.md) 兩條Case693分支已經正式登入／primary gateway的真正loopback socket通關回村，含機關、存活頭目階段、每路5枚子彈清理與88EXP保存。此為準備角色及受控制時計、同程序正式Server元件，Client／另行部署Host實機與全新帳號升級仍分開待驗。
+
 2026-11-22 開發整合：[怪物投射物視覺adapter](../design/scenario-content/MONSTER-PROJECTILE-VISUALS.md) 已把既有Server直線飛行接到0094／速度selector／001A生命期；獨立Case693配套兩路正常入口各5枚子彈建立／清除，88EXP通關回村，648 HappyPath通過。效果可見性與速度仍待指定v2人測，未修改Client，碰撞／傷害仍由Server判定。
 
 2026-11-21 開發整合：[Case693 完整副本](../design/scenario-content/MEF-INTEGRATED-DUNGEON.md) 已將計時／依序波次、頭目血量階段、消耗機關、兩條分支與結算串為同一內容；兩條正常廣場建隊至回村的原 BND 離線路線通過，640 HappyPath 通過。自訂 schema／NOT_NATIVE_MEF，指定 v2 實機、TCP 端到端仍待驗，不提高原生容器完成狀態。

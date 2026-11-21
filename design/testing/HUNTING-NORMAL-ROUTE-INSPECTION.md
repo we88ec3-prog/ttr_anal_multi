@@ -1,5 +1,7 @@
 # 一般狩獵場單趟正流程檢查
 
+2026-11-22：[Case693完整TCP路線](MEF-INTEGRATED-TCP-ROUTES.md) 新增正常登入／primary與gateway tick的真正socket模式（`--tcp`）；兩路仍以原BND保存88EXP並回村。以下歷史37／41路線仍屬原來應用層收據，不因新模式而變成全部TCP已驗。
+
 2026-11-21：[Case693 完整副本整合](../scenario-content/MEF-INTEGRATED-DUNGEON.md) 新增固定整合稿兩條正流程：計時／依序波次、頭目75%血量增援、消耗與分支機關、88 EXP結算及同村隊伍返回。逐波收據證明增援時頭目仍存活、出口未開；這仍是準備帳號應用層，不是TCP或Client實機。
 
 此模式以一次性 SQLite 帳號，透過 Server 應用層現有封包處理，走廣場建單人隊、
