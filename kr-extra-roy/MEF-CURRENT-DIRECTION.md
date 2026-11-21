@@ -1,5 +1,7 @@
 # MEF 目前開發方向：Server 提供內容，優先由 MEF 處理
 
+2026-11-22：[兩房重訪工作台](../design/scenario-content/FINITE-PREFIX-REPEAT-WORKBENCH.md) 已可選單房／前兩房、依保存版本預覽及下載配套。HTTP兩房2／3輪為108／128EXP，舊缺省單房ZIP與原golden bytes一致；實際下載三輪配套兩路TCP各一次128EXP保存回原隊伍。瀏覽器控制項108／96／128已驗、676 HappyPath通過；截圖擷取失敗未列版面驗收，Client與獨立Host遊戲通關仍待驗。
+
 2026-11-22：[任務門檻正常NPC／TCP](../design/testing/QUEST-GATE-NPC-TCP-ROUTE.md) 已補Q117正常交接、Q2842接取／目標對話／交付，未預設完成紀錄。兩路門檻副本各保存700＋88EXP＝788增量並回原村同隊，任務仍Completed、主線索引1；674 HappyPath與建置通過。生產規則未改；Client、自然升級及獨立Host遊戲通關維持待驗。
 
 2026-11-22：[有限兩房前綴重訪](../design/scenario-content/FINITE-PREFIX-REPEAT.md) 已有獨立計畫／mode與Case693 adapter。三輪logical11／12／13／14／10／1投影map3430／3431、chart10／1，重啟波次與三筆機關成本後接回分支頭目；兩路TCP各一次128EXP存檔回原隊伍，24枚投射物清理。674 HappyPath、新舊編譯bytes與Host預檢通過；Client回跳畫面與兩房管理端仍待驗／待開發。

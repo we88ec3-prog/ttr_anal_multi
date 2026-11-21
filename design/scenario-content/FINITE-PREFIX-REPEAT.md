@@ -56,4 +56,4 @@ map3430／3431、chart10／1各三輪，EXP累積4／20／24／40／44／60。�
 
 機器收據見 [finite-prefix-repeat-validation.json](finite-prefix-repeat-validation.json)。
 
-最終Release Host／Inspector／Admin.Web零警告錯誤；674／674 HappyPath通過，含新增三個2／3輪正流程案例。新計畫、Scenario與AI Schema核對通過。兩房計畫目前使用CLI與獨立Host模式，尚無新增管理端編輯按鈕；原單房工作台保持。
+最終Release Host／Inspector／Admin.Web零警告錯誤；674／674 HappyPath通過，含新增三個2／3輪正流程案例。新計畫、Scenario與AI Schema核對通過。此編譯器批次最初使用CLI與獨立Host模式；後續[兩房工作台](FINITE-PREFIX-REPEAT-WORKBENCH.md)已提供保存版本的範圍選擇、預覽與配套下載。
