@@ -778,7 +778,9 @@
             "WaveHealthReached",
             "NodeDelayElapsed",
             "RegionHeld",
-            "BossDefeated"
+            "BossDefeated",
+            "BagQuantityReached",
+            "QuestCompleted"
           ]
         },
         "region": {
@@ -824,6 +826,30 @@
               "$ref": "#/$defs/interaction"
             }
           ]
+        },
+        "quest": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1,
+          "maximum": 65535
+        },
+        "product": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1,
+          "maximum": 4294967295
+        },
+        "quantity": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1,
+          "maximum": 255
         }
       },
       "required": [
@@ -972,6 +998,65 @@
           "else": {
             "properties": {
               "healthPercent": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "event": {
+                "const": "QuestCompleted"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "quest"
+            ],
+            "properties": {
+              "quest": {
+                "type": "integer"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "quest": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "event": {
+                "const": "BagQuantityReached"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "product",
+              "quantity"
+            ],
+            "properties": {
+              "product": {
+                "type": "integer"
+              },
+              "quantity": {
+                "type": "integer"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "product": {
+                "type": "null"
+              },
+              "quantity": {
                 "type": "null"
               }
             }

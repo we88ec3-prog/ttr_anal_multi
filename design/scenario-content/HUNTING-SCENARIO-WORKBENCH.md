@@ -1,5 +1,7 @@
 # 一般狩獵場工作台
 
+2026-11-22：訊號編排新增 [普通任務已交付](QUEST-COMPLETION-SIGNALS.md) 與Quest ID欄位；由既有任務服務只讀Completed，不代交或發獎勵。新版欄位瀏覽器操作仍待驗，JSON／載入／正常TCP路線已有收據。
+
 2026-11-22：一般狩獵場編排新增可選入場權重，取消會移除欄位；同Stage正常Case每場選一次。保存新版本及ZIP不自動部署，詳見 [入場權重契約](HUNTING-ENTRY-WEIGHTS.md)。
 此擴充沿用[主線工作台](SCENARIO-WORKBENCH.md)的 JSON 編輯、不可覆寫版本與
 匯出流程，新增一般狩獵場的驗證設定。仍為 `NOT_NATIVE_MEF`；不改 Client，

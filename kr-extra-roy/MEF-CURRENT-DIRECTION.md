@@ -1,5 +1,7 @@
 # MEF 目前開發方向：Server 提供內容，優先由 MEF 處理
 
+2026-11-22：[已交付任務條件](../design/scenario-content/QUEST-COMPLETION-SIGNALS.md) 已接正式授權存檔讀取與副本旗標。Case693新候選首圖要求Q2842已交付及消耗機關；兩條TCP正常路線各保存88EXP回原村同隊，655 HappyPath通過。Q2842為入場前準備紀錄；自然交任務、指定v2與新管理欄位瀏覽器操作仍各自待驗。
+
 2026-11-22：[一般狩獵場入場權重](../design/scenario-content/HUNTING-ENTRY-WEIGHTS.md) 已接正常入場與管理端版本／ZIP。Stage462 Case693:694=6:4，每場只選一次並綁來源與run；4條固定選擇TCP路線及管理端實際匯出2條路線通關回村，652 HappyPath通過。這是自有MEF功能，NOT_NATIVE_MEF；分布、指定v2畫面與完整新帳號實機分開待驗。
 2026-11-22 網路整合：[完整副本TCP正流程](../design/testing/MEF-INTEGRATED-TCP-ROUTES.md) 兩條Case693分支已經正式登入／primary gateway的真正loopback socket通關回村，含機關、存活頭目階段、每路5枚子彈清理與88EXP保存。此為準備角色及受控制時計、同程序正式Server元件，Client／另行部署Host實機與全新帳號升級仍分開待驗。
 
