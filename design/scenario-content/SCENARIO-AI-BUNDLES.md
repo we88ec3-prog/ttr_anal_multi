@@ -1,5 +1,7 @@
 # 關卡與怪物 AI 配套草稿
 
+2026-11-22：AI攻擊新增可選 requiredFlags／disabledByFlag，沿用JSON編輯與同版配對匯出；實際節點引用須通過旗標來源與跨路徑檢查。詳見 [招式旗標條件](MONSTER-ATTACK-FLAGS.md)。
+
 2026-11-22：[怪物投射物呈現](MONSTER-PROJECTILE-VISUALS.md) 新增可選
 attack.projectile.visual（Type1/43、scale），沿用同版保存與匯出；沒有欄位的舊稿
 維持原樣。移速consumer的正signed16限制同步至現行schema；原生畫面仍待驗。
