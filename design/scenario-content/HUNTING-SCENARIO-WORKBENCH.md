@@ -1,5 +1,6 @@
 # 一般狩獵場工作台
 
+2026-11-22：一般狩獵場編排新增可選入場權重，取消會移除欄位；同Stage正常Case每場選一次。保存新版本及ZIP不自動部署，詳見 [入場權重契約](HUNTING-ENTRY-WEIGHTS.md)。
 此擴充沿用[主線工作台](SCENARIO-WORKBENCH.md)的 JSON 編輯、不可覆寫版本與
 匯出流程，新增一般狩獵場的驗證設定。仍為 `NOT_NATIVE_MEF`；不改 Client，
 不建立新的原生 Stage／Case，不把編輯成功當成遊戲驗收。

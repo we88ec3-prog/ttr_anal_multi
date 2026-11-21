@@ -219,10 +219,15 @@
           "description": "Optional explicit Server profile override; null inherits node aiProfile. Not native MEF."
         },
         "patrol": {
-          "type": ["array", "null"],
+          "type": [
+            "array",
+            "null"
+          ],
           "minItems": 1,
           "maxItems": 16,
-          "items": { "$ref": "#/$defs/point" },
+          "items": {
+            "$ref": "#/$defs/point"
+          },
           "description": "Absolute XY waypoints. The route starts and ends at the encounter spawn."
         },
         "maximumHealth": {
@@ -243,7 +248,10 @@
           "maximum": 65535
         },
         "pre": {
-          "type": ["integer", "null"],
+          "type": [
+            "integer",
+            "null"
+          ],
           "minimum": 1,
           "maximum": 255,
           "description": "Actor resource variant. Omitted or null uses PRE1."
@@ -265,28 +273,98 @@
       "type": "object",
       "additionalProperties": false,
       "not": {
-        "required": ["initialOnly", "waveId"],
-        "properties": { "initialOnly": { "const": true }, "waveId": { "type": "string" } }
+        "required": [
+          "initialOnly",
+          "waveId"
+        ],
+        "properties": {
+          "initialOnly": {
+            "const": true
+          },
+          "waveId": {
+            "type": "string"
+          }
+        }
       },
       "properties": {
-        "monster": { "type": "integer", "minimum": 1, "maximum": 65535 },
-        "pre": { "type": "integer", "minimum": 1, "maximum": 255, "default": 1 },
-        "waveId": { "type": ["string", "null"], "minLength": 1, "description": "Optional exact ID of a sequential or timed reinforcement on this node." },
-        "initialOnly": { "type": "boolean", "default": false, "description": "Match only actors spawned on entry." },
-        "visual": { "type": "integer", "minimum": 1, "maximum": 65535 },
-        "product": { "type": "integer", "minimum": 1, "maximum": 4294967295 },
-        "quantity": { "type": "integer", "minimum": 1, "maximum": 255 },
-        "pickupRadius": { "type": "number", "exclusiveMinimum": 0, "maximum": 100 },
-        "chanceBasisPoints": { "type": ["integer", "null"], "minimum": 1, "maximum": 10000, "description": "Independent drop chance per eligible defeat. Omitted, null or 10000 guarantees the drop." }
+        "monster": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65535
+        },
+        "pre": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 255,
+          "default": 1
+        },
+        "waveId": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "description": "Optional exact ID of a sequential or timed reinforcement on this node."
+        },
+        "initialOnly": {
+          "type": "boolean",
+          "default": false,
+          "description": "Match only actors spawned on entry."
+        },
+        "visual": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65535
+        },
+        "product": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4294967295
+        },
+        "quantity": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 255
+        },
+        "pickupRadius": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 100
+        },
+        "chanceBasisPoints": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1,
+          "maximum": 10000,
+          "description": "Independent drop chance per eligible defeat. Omitted, null or 10000 guarantees the drop."
+        }
       },
-      "required": ["monster", "visual", "product", "quantity", "pickupRadius"]
+      "required": [
+        "monster",
+        "visual",
+        "product",
+        "quantity",
+        "pickupRadius"
+      ]
     },
     "node": {
       "type": "object",
       "additionalProperties": false,
       "not": {
-        "required": ["groundDrop", "groundDrops"],
-        "properties": { "groundDrop": { "type": "object" }, "groundDrops": { "type": "array" } }
+        "required": [
+          "groundDrop",
+          "groundDrops"
+        ],
+        "properties": {
+          "groundDrop": {
+            "type": "object"
+          },
+          "groundDrops": {
+            "type": "array"
+          }
+        }
       },
       "properties": {
         "node": {
@@ -361,35 +439,77 @@
           "description": "Additional explicit exits beside the default portal/rule. Server-owned NOT_NATIVE_MEF."
         },
         "barriers": {
-          "type": ["array", "null"],
+          "type": [
+            "array",
+            "null"
+          ],
           "minItems": 1,
           "maxItems": 16,
-          "items": { "$ref": "#/$defs/barrier" }
+          "items": {
+            "$ref": "#/$defs/barrier"
+          }
         },
         "hazards": {
-          "type": ["array", "null"],
+          "type": [
+            "array",
+            "null"
+          ],
           "minItems": 1,
           "maxItems": 16,
-          "items": { "$ref": "#/$defs/hazard" }
+          "items": {
+            "$ref": "#/$defs/hazard"
+          }
         },
         "groundDrop": {
-          "anyOf": [{ "$ref": "#/$defs/groundDrop" }, { "type": "null" }]
+          "anyOf": [
+            {
+              "$ref": "#/$defs/groundDrop"
+            },
+            {
+              "type": "null"
+            }
+          ]
         },
         "requiredBoss": {
-          "type": ["object", "null"],
+          "type": [
+            "object",
+            "null"
+          ],
           "additionalProperties": false,
           "properties": {
-            "model": { "type": "integer", "minimum": 1, "maximum": 65535 },
-            "pre": { "type": "integer", "minimum": 1, "maximum": 255 },
-            "waveId": { "type": ["string", "null"], "minLength": 1 }
+            "model": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 65535
+            },
+            "pre": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 255
+            },
+            "waveId": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "minLength": 1
+            }
           },
-          "required": ["model", "pre"]
+          "required": [
+            "model",
+            "pre"
+          ]
         },
         "groundDrops": {
-          "type": ["array", "null"],
+          "type": [
+            "array",
+            "null"
+          ],
           "minItems": 1,
           "maxItems": 16,
-          "items": { "$ref": "#/$defs/groundDrop" },
+          "items": {
+            "$ref": "#/$defs/groundDrop"
+          },
           "description": "Alternative to groundDrop. Catalog checks distinct monster/PRE/Product entries and the per-node drop entity limit."
         },
         "signals": {
@@ -403,9 +523,36 @@
         }
       },
       "anyOf": [
-        { "required": ["encounters"], "properties": { "encounters": { "minItems": 1 } } },
-        { "required": ["reinforcements"], "properties": { "reinforcements": { "minItems": 1 } } },
-        { "required": ["timedReinforcements"], "properties": { "timedReinforcements": { "minItems": 1 } } }
+        {
+          "required": [
+            "encounters"
+          ],
+          "properties": {
+            "encounters": {
+              "minItems": 1
+            }
+          }
+        },
+        {
+          "required": [
+            "reinforcements"
+          ],
+          "properties": {
+            "reinforcements": {
+              "minItems": 1
+            }
+          }
+        },
+        {
+          "required": [
+            "timedReinforcements"
+          ],
+          "properties": {
+            "timedReinforcements": {
+              "minItems": 1
+            }
+          }
+        }
       ],
       "required": [
         "node",
@@ -464,6 +611,12 @@
             "$ref": "#/$defs/node"
           },
           "maxItems": 256
+        },
+        "entryWeight": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10000,
+          "description": "Optional normal-hunting entry selection weight; omitted keeps legacy rotation when every loaded Stage case omits it."
         }
       },
       "required": [
@@ -504,7 +657,9 @@
             "minLength": 1,
             "maxLength": 64,
             "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,63}$",
-            "not": { "pattern": "[^A-Za-z0-9_.-]" }
+            "not": {
+              "pattern": "[^A-Za-z0-9_.-]"
+            }
           },
           "default": []
         },
@@ -637,17 +792,26 @@
           ]
         },
         "healthPercent": {
-          "type": ["integer", "null"],
+          "type": [
+            "integer",
+            "null"
+          ],
           "minimum": 1,
           "maximum": 99
         },
         "waveId": {
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "minLength": 1,
           "pattern": "\\S"
         },
         "delaySeconds": {
-          "type": ["number", "null"],
+          "type": [
+            "number",
+            "null"
+          ],
           "exclusiveMinimum": 0,
           "maximum": 3600
         },
@@ -671,7 +835,10 @@
           "if": {
             "properties": {
               "event": {
-                "enum": ["RegionEntered", "RegionHeld"]
+                "enum": [
+                  "RegionEntered",
+                  "RegionHeld"
+                ]
               }
             }
           },
@@ -721,42 +888,93 @@
         },
         {
           "if": {
-            "properties": { "event": { "enum": ["ClearDelayElapsed", "NodeDelayElapsed", "RegionHeld"] } }
+            "properties": {
+              "event": {
+                "enum": [
+                  "ClearDelayElapsed",
+                  "NodeDelayElapsed",
+                  "RegionHeld"
+                ]
+              }
+            }
           },
           "then": {
-            "required": ["delaySeconds"],
-            "properties": { "delaySeconds": { "type": "number" } }
+            "required": [
+              "delaySeconds"
+            ],
+            "properties": {
+              "delaySeconds": {
+                "type": "number"
+              }
+            }
           },
           "else": {
-            "properties": { "delaySeconds": { "type": "null" } }
+            "properties": {
+              "delaySeconds": {
+                "type": "null"
+              }
+            }
           }
         },
         {
           "if": {
-            "properties": { "event": { "const": "RegionHeld" } }
+            "properties": {
+              "event": {
+                "const": "RegionHeld"
+              }
+            }
           },
           "then": {
-            "properties": { "delaySeconds": { "minimum": 0.25 } }
+            "properties": {
+              "delaySeconds": {
+                "minimum": 0.25
+              }
+            }
           }
         },
         {
           "if": {
-            "properties": { "event": { "enum": ["WaveCleared", "WaveHealthReached"] } }
+            "properties": {
+              "event": {
+                "enum": [
+                  "WaveCleared",
+                  "WaveHealthReached"
+                ]
+              }
+            }
           },
           "else": {
-            "properties": { "waveId": { "type": "null" } }
+            "properties": {
+              "waveId": {
+                "type": "null"
+              }
+            }
           }
         },
         {
           "if": {
-            "properties": { "event": { "const": "WaveHealthReached" } }
+            "properties": {
+              "event": {
+                "const": "WaveHealthReached"
+              }
+            }
           },
           "then": {
-            "required": ["healthPercent"],
-            "properties": { "healthPercent": { "type": "integer" } }
+            "required": [
+              "healthPercent"
+            ],
+            "properties": {
+              "healthPercent": {
+                "type": "integer"
+              }
+            }
           },
           "else": {
-            "properties": { "healthPercent": { "type": "null" } }
+            "properties": {
+              "healthPercent": {
+                "type": "null"
+              }
+            }
           }
         }
       ]
@@ -765,36 +983,100 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "minX": { "type": "number", "minimum": 0 },
-        "minY": { "type": "number", "minimum": 0 },
-        "maxX": { "type": "number", "exclusiveMinimum": 0 },
-        "maxY": { "type": "number", "exclusiveMinimum": 0 },
-        "opensWithFlag": { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,63}$" },
+        "minX": {
+          "type": "number",
+          "minimum": 0
+        },
+        "minY": {
+          "type": "number",
+          "minimum": 0
+        },
+        "maxX": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "maxY": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "opensWithFlag": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,63}$"
+        },
         "marker": {
-          "type": ["object", "null"],
+          "type": [
+            "object",
+            "null"
+          ],
           "additionalProperties": false,
           "properties": {
-            "key": { "type": "integer", "minimum": 1, "maximum": 65535 },
-            "x": { "type": "number" },
-            "y": { "type": "number" },
-            "radius": { "type": "number", "exclusiveMinimum": 0 }
+            "key": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 65535
+            },
+            "x": {
+              "type": "number"
+            },
+            "y": {
+              "type": "number"
+            },
+            "radius": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            }
           },
-          "required": ["key", "x", "y", "radius"]
+          "required": [
+            "key",
+            "x",
+            "y",
+            "radius"
+          ]
         }
       },
-      "required": ["minX", "minY", "maxX", "maxY", "opensWithFlag"]
+      "required": [
+        "minX",
+        "minY",
+        "maxX",
+        "maxY",
+        "opensWithFlag"
+      ]
     },
     "hazard": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "id": { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,63}$" },
-        "region": { "$ref": "#/$defs/activationRegion" },
-        "damage": { "type": "integer", "minimum": 1, "maximum": 500 },
-        "intervalSeconds": { "type": "number", "minimum": 0.25, "maximum": 3600 },
-        "disabledByFlag": { "type": ["string", "null"], "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,63}$" }
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,63}$"
+        },
+        "region": {
+          "$ref": "#/$defs/activationRegion"
+        },
+        "damage": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 500
+        },
+        "intervalSeconds": {
+          "type": "number",
+          "minimum": 0.25,
+          "maximum": 3600
+        },
+        "disabledByFlag": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,63}$"
+        }
       },
-      "required": ["id", "region", "damage", "intervalSeconds"]
+      "required": [
+        "id",
+        "region",
+        "damage",
+        "intervalSeconds"
+      ]
     },
     "exitCondition": {
       "type": "object",
