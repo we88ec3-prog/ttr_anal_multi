@@ -74,3 +74,5 @@ node、原生chart及map三者；沒有略過遊戲handler或手動設旗標。�
 本輪不以新Ghidra查詢逾時、同程序元件TCP或工具數量宣稱原Client實機通過。
 
 Compiler v2 fixes output to LF before hashing. Initial Windows CRLF working-copy hashes in8336965 were normalized by Git; the v2 pair/receipt supersedes those values. Original outputs/history remain; source plan is unchanged. Verify indexed Git blob bytes against raw artifact hashes before publication.
+
+後續管理端整合見 [有限入口重訪工作台](FINITE-REPEAT-WORKBENCH.md)：從已保存版本預覽與匯出2～16次配套，CLI仍可使用。
