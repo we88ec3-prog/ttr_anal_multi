@@ -1,5 +1,7 @@
 # 關卡／MEF功能完成追蹤
 
+2026-11-22：[有限同圖入口重複](../design/scenario-content/FINITE-ENTRY-REPEAT.md) 已有固定SHA計畫、可重現編譯器與Case693正常入口opt-in。logical11／12／10投影既有map3430／chart10，各自拾取並消耗開門道具，接回原分支頭目後單次96EXP；兩條TCP路線通過、各24枚子彈退休，669 HappyPath通過。原件17窗重核／37來源保存；Client鏡頭／小地圖／latch仍待驗，新Ghidra逾時未列通過。
+
 2026-11-22：[旗標後延遲](../design/scenario-content/FLAG-DELAY-SIGNALS.md) 已接正常poll時計、延遲鏈與節點／fork界線。Case693開關達標後1.5秒才開門、頭目階段後0.75秒門檻於下一poll才增援；兩條TCP路線各清理14枚子彈、保存88EXP回原隊伍。665 HappyPath通過；Client／新管理欄位／自然新帳號仍待驗。
 
 2026-11-22：[多機關旗標條件](../design/scenario-content/FLAG-COUNT-CONDITIONS.md) 已接有限固定點、路徑可達性與管理端編排。Case693三開關任選兩個，三組各兩條TCP路線均在第二個後才送0048開兩出口，未按第三個保持未成立；各保存88EXP回原村同隊。662 HappyPath通過；Client、自然新帳號及新管理欄位瀏覽器仍待驗。

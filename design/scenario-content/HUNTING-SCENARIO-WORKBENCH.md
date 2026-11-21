@@ -1,5 +1,7 @@
 # 一般狩獵場工作台
 
+2026-11-22：[有限入口重複](FINITE-ENTRY-REPEAT.md) 由CLI編譯，再以明確normal opt-in載入。普通15個工作台範本仍保留原圖序／來源，不自動接受展開稿；另設compiled baseline可用同一既有編排器，chart映射保持固定。本版沒有新增repeat GUI按鈕。
+
 2026-11-22：訊號編排新增 [普通任務已交付](QUEST-COMPLETION-SIGNALS.md) 與Quest ID欄位；由既有任務服務只讀Completed，不代交或發獎勵。新版欄位瀏覽器操作仍待驗，JSON／載入／正常TCP路線已有收據。
 
 2026-11-22：一般狩獵場編排新增可選入場權重，取消會移除欄位；同Stage正常Case每場選一次。保存新版本及ZIP不自動部署，詳見 [入場權重契約](HUNTING-ENTRY-WEIGHTS.md)。
