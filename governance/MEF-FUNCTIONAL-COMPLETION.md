@@ -6,6 +6,8 @@
 
 ## 2026-11-21 完整副本整合
 
+2026-11-22 追加[投射物呈現配套](../design/scenario-content/MONSTER-PROJECTILE-VISUALS.md)：首次將既有怪物直線飛行接上已證0094／0000速度／001A；兩路正常入口各5枚建立與清除，保留88EXP及同村返回。這閉合Server視覺adapter實作，仍不等於Client效果、速度或原生MEF執行通過。
+
 [Case693 整合副本](../design/scenario-content/MEF-INTEGRATED-DUNGEON.md) 已在同一內容組合波次、頭目血量階段、消耗機關、分支與結算；兩條正常廣場建隊至回村、原版 BND 應用層正流程各取得88 EXP且保存。640 HappyPath通過。此為準備帳號 OFFLINE_SYNTHETIC／NOT_NATIVE_MEF，不代表官方格式、全新帳號升級、TCP或Client實機完成；沿用既有能力，不以測試數換算整體百分比。
 
 ## 2026-11-14 extra/roy1 整合

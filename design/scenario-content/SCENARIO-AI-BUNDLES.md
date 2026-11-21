@@ -1,5 +1,9 @@
 # 關卡與怪物 AI 配套草稿
 
+2026-11-22：[怪物投射物呈現](MONSTER-PROJECTILE-VISUALS.md) 新增可選
+attack.projectile.visual（Type1/43、scale），沿用同版保存與匯出；沒有欄位的舊稿
+維持原樣。移速consumer的正signed16限制同步至現行schema；原生畫面仍待驗。
+
 工作台新增 `LOCAL_MONSTER_BEHAVIOR_V1_NOT_NATIVE_MEF` 行為檔編輯。
 這是 Server-owned 行為資料，不是 Lua、原生 MEF、Client AI 或外掛執行介面。
 沿用既有移速、追擊、血量、招式範圍／冷卻、血量階段與投射物的型別及界線。
