@@ -1,5 +1,7 @@
 # MEF 目前開發方向：Server 提供內容，優先由 MEF 處理
 
+2026-11-22：[巡邏屏障繞路](../design/scenario-content/PATROL-BARRIER-ROUTES.md)已從既有追擊／回位延伸至平時巡邏，保留路點順序、共用搜尋上限與追擊圈。原BND320位置、兩路正常TCP繞路及88EXP通關、獨立真實時計Host同隊回村、756 HappyPath通過；仍是Server二維路線，未提高Client自主AI／3D門或人測狀態。
+
 2026-11-22：[延遲門檻與父旗標索引](../design/scenario-content/DELAY-THRESHOLD-INDEX.md)保留三種起算／原phase與source順序，完成四個新正流程、完整兩分支舊新版TCP、同版真實時計獨立Host88EXP同隊回村及752 HappyPath。每路頭目房候選槽下界870／851對52／46門檻比較是工作量，不是CPU節省或Client卸載；其他combat時計／全域血量與具體接口分開接續。
 
 2026-11-22：[波次血量事件索引](../design/scenario-content/WAVE-HEALTH-EVENT-INDEX.md)已把原每poll重掃改為生成／已接受扣血更新，保留死亡分母與原回報phase。獨立參考、完整兩分支TCP回包（只正規化隨機wireAlias）、同版獨立Host88EXP與748 HappyPath通過；每路頭目波原295成員訪問，改為登記4／HP更新15，非CPU／Client卸載量。官方格式搜尋維持退出目前功能目標，仍按下方已確定方向開發具體接口。

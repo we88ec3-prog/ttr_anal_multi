@@ -1,5 +1,10 @@
 # 關卡／MEF功能完成追蹤
 
+2026-11-22最新：[巡邏旗標屏障繞路](../design/scenario-content/PATROL-BARRIER-ROUTES.md)
+補平時巡邏遇障礙停住的缺口；共享原追擊／回位搜尋預算與追擊圈，開門／接敵／牽引丟棄舊路。
+原版BND320位置、接近前每路30筆真實0016繞路回包、兩路TCP88EXP及獨立真實時計Host
+88EXP同村同隊返回通過。三Release、756 HappyPath；收據56ddf907。Server二維，Client3D門仍分開。
+
 2026-11-22最新：[延遲門檻與父旗標索引](../design/scenario-content/DELAY-THRESHOLD-INDEX.md)
 保留節點啟用／清場位置／父旗標三種起算及原派送順序，新增四個正流程。
 舊／新版完整兩分支TCP與同版真實時計獨立Host88EXP同隊回村通過；752 HappyPath、
