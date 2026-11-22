@@ -1,5 +1,11 @@
 # 關卡／MEF功能完成追蹤
 
+2026-11-23追加：[初始空場圖形編排](../design/scenario-content/INITIAL-EMPTY-GROUP-WORKBENCH.md)
+補最後初始怪必留一隻的GUI限制；先備增援，再移除普通初始怪，可保存空場。保留必要Boss及
+波內至少一隻限制，另防空場刪除最後一波；摘要顯示初始／增援狀態。實際瀏覽器r2原入口→表單r3空場、
+歷史讀回／三ZIP不變，四TCP及r3真實時計Host各88EXP一次同隊回村通過。三Release／796HappyPath
+通過；原AI只受表單CRLF影響raw SHA，語意保持。其他adapter／人測／整體MEF仍另列。
+
 2026-11-23追加：[初始空場／接近才生怪](../design/scenario-content/INITIAL-EMPTY-REGION-APPROACH.md)
 補D07內容採用缺口：Case693入口0怪仍pending必要波，正常進區才生原1004，掉183付款後接
 原分支／具名頭目／75%護衛與結算。來源／保存各兩路加舊控制兩路，六TCP各88EXP同隊回村；
