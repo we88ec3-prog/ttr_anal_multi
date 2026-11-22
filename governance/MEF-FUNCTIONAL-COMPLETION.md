@@ -1,5 +1,10 @@
 # 關卡／MEF功能完成追蹤
 
+2026-11-23追加：[怪物 HP 圖形工作台](../design/scenario-content/MONSTER-HP-WORKBENCH.md)
+補出生定義既有 HP 欄位；瀏覽器設定120/72/84及清空恢復80/60/60，三版歷史保存。
+四條 TCP 與兩個最終獨立 Host 各88EXP同隊回村、三Release及782HappyPath通過。
+AI只因表單換行改變bytes，語意保持；原件／現用服務不變，Client人測與其餘功能仍追蹤。
+
 2026-11-23追加：[全域敵群血量彙總](../design/scenario-content/TOTAL-COMBAT-HEALTH.md)
 Health首次讀取後維護總量，保留原扣血／增援／清場／投射物及必要頭目gate。三新正流程、
 舊新版兩條完整TCP回包、Story循環控制及同版獨立Host88EXP同隊回村通過；三Release、

@@ -1,5 +1,9 @@
 # MEF 目前開發方向：Server 提供內容，優先由 MEF 處理
 
+2026-11-23：[出生定義 HP 圖形編輯](../design/scenario-content/MONSTER-HP-WORKBENCH.md)
+可設定／留空恢復成長或AI，三類怪物實際保存與歷史配套通過；四TCP／兩個最終Host各88EXP
+正常建隊通關同隊回村、三Release與782HappyPath通過。這是Server自有格式，非原生MEF或ClientAI移交。
+
 2026-11-23：[全域Health彙總](../design/scenario-content/TOTAL-COMBAT-HEALTH.md)
 已接首次建立、實際扣血與增援更新，不改既有返回條件。兩完整分支回包、Story控制、同版
 獨立Host88EXP同隊回村、三Release與782 HappyPath通過，最終短鎖版收據cc04445a。原全域Health查詢

@@ -1,5 +1,9 @@
 # 關卡二維地形編排
 
+2026-11-23：[怪物最大 HP](MONSTER-HP-WORKBENCH.md)可對選取出生定義設定或留空恢復繼承。
+實際瀏覽器初始／依序／定時三類保存與清空、四 TCP／兩個最終獨立 Host 88 EXP 同隊回村，
+三 Release 與 782 HappyPath 通過；人測及其他 adapter 不外推。
+
 2026-11-22：[巡邏路線工作台](PATROL-ROUTE-WORKBENCH.md)加入路點／綠線、排序、
 座標與移除、選取怪物的AI副本。實際瀏覽器三版及HTTP配套六路TCP各76EXP同隊回村通過，
 歷史ZIP／原AI保持，756 HappyPath。指定v2與這三版獨立Host仍分開。
