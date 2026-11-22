@@ -1,5 +1,7 @@
 # 執行中結構化循環
 
+2026-11-22：[分支區段循環](STRUCTURED-BRANCH-LOOPS.md)已加入正常Case693的3／5／6／4body，同一場逐輪可選不同岔路，重啟開關／延遲後保存104／120EXP回村；700 HappyPath通過。原兩房管理端及配套profile仍限前綴，分支工作台待接續；下列早期admission範圍依本補充擴大，不代表其他Case或巢狀流程開放。
+
 2026-11-22：[循環管理工作台](STRUCTURED-LOOP-WORKBENCH.md)已補獨立profile、規則表單、Server預覽、保存／歷史版本與配套下載。實際匯出及瀏覽器保存的五條TCP通過108／128／148EXP，696 HappyPath通過；下方管理端待完成敘述保留為前一批狀態，新匯出版本Host啟動預檢與Client仍分開待驗。
 
 2026-11-22。SERVER_DESIGN_CHOICE / NOT_NATIVE_MEF。基準Server `b68e939`，沿用已發布的訪次、機關帳本V2、旗標重置群組與正式戰鬥／經驗提交。本功能在出口依本場權威旗標決定回到同一logical node；既有固定alias展開仍是獨立功能，兩者不能混稱。
