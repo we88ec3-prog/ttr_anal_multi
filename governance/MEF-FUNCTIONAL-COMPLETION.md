@@ -1,5 +1,11 @@
 # 關卡／MEF功能完成追蹤
 
+2026-11-23追加：[一次性區域退訂](../design/scenario-content/REGION-OBSERVATION-RETIREMENT.md)
+補D06的RegionEntered／RegionHeld完成退訂，保留未完成離區／暫停重算、fork隔離及循環重入。
+三新正流程、四Q119 TCP及同版真實時計Host5984EXP一次Q119同隊回村通過；舊／新DLL相同
+Inspector的1676回包在精確fixture識別欄正規化後完全相等。三Release與796HappyPath通過。
+工作量列與判定在開門後保持不增，不宣稱CPU／Client卸載；其他D06與人測仍各自追蹤。
+
 2026-11-23追加：[Q119封路候選正常採用](../design/testing/STORY-SEALED-GATE-NORMAL-ROUTES.md)
 把原靜態RegionHeld的8格封口接進逐輪擊倒／FirstVisit版本；正常移動受阻、占點2.5秒開門、
 完整0027／各一次0048與穿越均有五TCP／兩獨立真實時計Host證據。全圖重算關閉出生27830／
