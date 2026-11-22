@@ -1,3 +1,5 @@
+2026-11-23：[Q119真正封路採用](../../design/testing/STORY-SEALED-GATE-NORMAL-ROUTES.md)已以另存版接入占點開門；五TCP／兩保存配套真實時計Host通關、5936／5984EXP一次Q119同隊回村，793HappyPath。原靜態幾何在本版地形全圖重算一致；Client動態物理門／指定v2仍待驗，未更動現用服務。
+
 2026-11-13：[馮德斯雜貨 183 買賣](../../design/scenario-content/PHINDOS-GROCER-TRADE.md)已有離線資產原子提交與提交後結果。386 項 Server 正流程合成通過。普通開店可對照 Server 診斷，遊戲交易尚待 Client 背包／LeeLoo 發布及 context 配對。本機版本未替換。
 
 2026-11-13：[馮德斯村商店入口](../../design/scenario-content/TOWN-MARKETS.md)可獨立配置。五處市場點與九位常駐 NPC 同送完整點位清單，385 項 Server 正流程合成通過，Map 182 資料預檢成功。[TS-01](../../design/testing/S00-CONTENT-BATCH-TESTS.md) 待實機驗證對話及貨單入口，交易仍待開發。

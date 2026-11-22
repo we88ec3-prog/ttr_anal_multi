@@ -1,5 +1,11 @@
 # 關卡／MEF功能完成追蹤
 
+2026-11-23追加：[Q119封路候選正常採用](../design/testing/STORY-SEALED-GATE-NORMAL-ROUTES.md)
+把原靜態RegionHeld的8格封口接進逐輪擊倒／FirstVisit版本；正常移動受阻、占點2.5秒開門、
+完整0027／各一次0048與穿越均有五TCP／兩獨立真實時計Host證據。全圖重算關閉出生27830／
+出口53／門8，保守八鄰不能繞路，Server全圖遮罩一致；保存5936／5984EXP、一次Q119與同隊回村，
+三Release及793HappyPath通過。Client物理門／外觀、另個clear-delay候選及指定v2仍各自待辦。
+
 2026-11-23追加：[空間作者預覽](../design/scenario-content/SPATIAL-AUTHORING-PREVIEW.md)
 完成D06作者圖面部分：設定／Client圈線、數值、跟隨縮放與旗標屏障格；預覽不寫入關卡。
 四旗標狀態新增20／8／16／0格與Server CanStand相同，四TCP／保存版獨立Host各88EXP
