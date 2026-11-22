@@ -1,5 +1,7 @@
 # 動態循環：接續實作計畫
 
+2026-11-22追加：[進段旗標重置群組](FLAG-RESET-SCOPES.md)已完成明確入口清除、整場旗標保留、歷史逆推失效追蹤、重訪編譯器群組映射。兩路新扣款／88EXP及四條舊控制TCP、689 HappyPath通過；仍是DAG分段，真正循環控制流／SCC／最大獎勵與同節點重訪驗收尚待完成。
+
 2026-11-22追加：[節點訪次與機關帳本V2](SCENARIO-VISIT-IDENTITY.md)已完成進入／fork／選擇身分、舊帳本保留與同節點兩訪扣款領域正流程；四路既有TCP／685 HappyPath通過。以下為此前來源快照及全循環計畫；旗標／loop作用域、循環控制與完整動態路線仍待完成，沒有放行cycle。
 
 2026-11-22，SERVER_DESIGN_CHOICE／DRAFT／NOT_NATIVE_MEF。尚未實作完成，
