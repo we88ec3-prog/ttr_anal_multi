@@ -1,5 +1,7 @@
 # 關卡／MEF功能完成追蹤
 
+2026-11-22：[節點訪次及機關V2](../design/scenario-content/SCENARIO-VISIT-IDENTITY.md) 已接Enter／fork／選擇／結果，機關提交綁目前訪次。V1表保留、歷史複製到空訪次，正流程驗相同run/node/key兩訪分扣；四條既有TCP（88／128EXP）逐圖對齊訪次及ledger，存檔回原隊，685 HappyPath與三個Release通過。這是動態loop基礎；同節點兩訪只在領域測試，TCP固定alias展開不算循環。旗標作用域、循環控制與Client仍開放。
+
 2026-11-22：[旗標條件出口](../design/scenario-content/CONDITIONAL-EXIT-SELECTION.md) 已能依本場旗標真／假選定一個出口，保留至結算；同一Case693以31/33與31/35正常機關操作走兩路，各88EXP存檔回原村同隊。683 HappyPath、三個Release、原權重控制組及六個舊編譯配套bytes通過。這只是動態loop必要的分支原語；[循環DRAFT計畫](../design/scenario-content/DYNAMIC-LOOP-EXECUTION-PLAN.md)已核對訪次／旗標／機關ledger與現有EXP流程，動態loop仍未完成。NOT_NATIVE_MEF，Client與獨立Host遊戲驗收分開待驗。
 
 2026-11-22：[關內出口權重工作台](../design/scenario-content/WEIGHTED-EXIT-WORKBENCH.md) 已提供來源旗標、逐出口權重、條件式比例及切回手動。瀏覽器改成出口6:3=2:8、改名同步、保存r1／手動r2及歷史r1再載入均通過；實際HTTP下載兩版四路TCP各保存88EXP回原隊。679 HappyPath、三個Release建置及窄視窗畫面存證通過，瀏覽器下載等待未確認完成、未列通過。NOT_NATIVE_MEF；動態loop／一般子圖、Client與獨立Host遊戲驗收仍開放。
