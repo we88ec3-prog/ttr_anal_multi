@@ -1,5 +1,14 @@
 # S00 關卡功能批次測試表
 
+## SL-S01 主線循環（指定 v2 待人工）
+
+Q119 使用 `story-q119-structured-loop.scenario.json` ca070796；正常 NPC／編成後，
+node2 原出生點停止 51／marker52，或不操作直到第三輪，再走原 node3／4、結算及返回劇情。
+核對每訪原劇情重播／鏡頭、標記可見與操作、原隊伍保留、NPC 及 Q120；
+停止／上限工程收據分別 4／8 訪、完整增加 5932／5972 EXP，最終 Q119 交易各一次 5880。
+正常 TCP 與獨立真實時間 Host 均已通過，[收據及限制](../scenario-content/STORY-STRUCTURED-LOOP-TCP-ROUTES.md)；
+仍未換現用服務，未新增指定 Client 人測，不回填為人工通過。主線循環工作台成對交付待完成。
+
 ## NL-01 巢狀循環（指定v2待人工）
 
 正常廣場建隊進村／Stage462／Case693，核准配套新增內層node1停止51、外層node4停止61。
