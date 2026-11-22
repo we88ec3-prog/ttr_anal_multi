@@ -1,5 +1,10 @@
 # 關卡／MEF功能完成追蹤
 
+2026-11-22最新：[巡邏圖形工作台](../design/scenario-content/PATROL-ROUTE-WORKBENCH.md)
+補路點／綠線、增刪改排序、獨立AI副本與同版交付。瀏覽器三版／歷史讀回、HTTP精確ZIP／AI、
+實際下載六路TCP76EXP同隊回村及756 HappyPath通過；收據61799a2c。這批採原76EXP範本，
+不混稱前批88EXP整合內容；新三版獨立Host／Client待驗，原件／現用服務不變。
+
 2026-11-22最新：[巡邏旗標屏障繞路](../design/scenario-content/PATROL-BARRIER-ROUTES.md)
 補平時巡邏遇障礙停住的缺口；共享原追擊／回位搜尋預算與追擊圈，開門／接敵／牽引丟棄舊路。
 原版BND320位置、接近前每路30筆真實0016繞路回包、兩路TCP88EXP及獨立真實時計Host

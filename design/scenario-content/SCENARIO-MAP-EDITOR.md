@@ -1,5 +1,9 @@
 # 關卡二維地形編排
 
+2026-11-22：[巡邏路線工作台](PATROL-ROUTE-WORKBENCH.md)加入路點／綠線、排序、
+座標與移除、選取怪物的AI副本。實際瀏覽器三版及HTTP配套六路TCP各76EXP同隊回村通過，
+歷史ZIP／原AI保持，756 HappyPath。指定v2與這三版獨立Host仍分開。
+
 管理端 `/admin/scenarios` 在相容的主線、一般狩獵場及 RAID 草稿提供二維編排。
 底圖來自各設定已載入、已核對 SHA 的 BND 靜態通行格；不是遊戲三維場景，
 也不表示 Client 本地碰撞、動態門或原生 MEF 已恢復。
