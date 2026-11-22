@@ -1,5 +1,10 @@
 # MEF 目前開發方向：Server 提供內容，優先由 MEF 處理
 
+2026-11-22：[RAID1～3起手事件](../design/testing/RAID-ATTACK-START-NORMAL-ROUTES.md)
+已由實際頭目起手接延遲護衛，三份保存配套、六條TCP與三個同版獨立Host正常通關；
+一本書／CP3000及正常回廣場保持，776 HappyPath與三Release通過，收據8f2939a5。
+這補上RAID新事件工程路線，不提高Story新事件、指定v2、自然新帳號或Client自主AI狀態。
+
 2026-11-22：[普通狩獵場配套部署](../design/scenario-content/NORMAL-HUNTING-BUNDLE-DEPLOYMENT.md)已接固定普通catalog，實際瀏覽器三版用同版獨立真實時計Host完成76EXP入庫／同隊回村，兩巡邏版另驗移動前0016位置。15個普通Case的配套／slot領域測試及771 HappyPath通過；其他Case遊戲／指定v2／自然新帳號仍各自待驗。
 
 2026-11-22：[巡邏路線圖形編輯](../design/scenario-content/PATROL-ROUTE-WORKBENCH.md)可從選取怪物建立AI副本、編排／排序／移除路點及匯出同版配套。瀏覽器三版、歷史保持、六路下載檔正常TCP各76EXP回原村同隊及756 HappyPath通過；新三版的獨立Host與指定v2各自待驗。

@@ -1,5 +1,11 @@
 # 關卡／MEF功能完成追蹤
 
+2026-11-22追加：[RAID起手事件正常通關](../design/testing/RAID-ATTACK-START-NORMAL-ROUTES.md)
+補齊RAID1～3先前僅接線的缺口：各以實際指定頭目起手觸發0.5秒增援、清完護衛結算。
+三份標準工作台保存／配套、六條原版及新版TCP、三個同版獨立真實時計Host均通過；
+各一本書、CP3000、角色／裝備／主線保持並回廣場。三Release與776 HappyPath通過，
+收據8f2939a5。早期不同DLL的Host1/2保留但不採入最終收據，Story新事件與指定v2仍待驗。
+
 2026-11-22追加：[怪物招式起手訊號](../design/scenario-content/MONSTER-ATTACK-START-SIGNALS.md)
 將實際出招接入波次／旗標延遲與圖形工作台。Case693整合副本兩分支、四條TCP及保存第三版
 即時Host均88EXP保存／原村同隊返回；提前擊倒走明示替代來源，無虛構起手。
