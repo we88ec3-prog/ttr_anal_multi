@@ -1,5 +1,9 @@
 # MEF 目前開發方向：Server 提供內容，優先由 MEF 處理
 
+2026-11-23：[RAID普通守衛／具名護衛擊倒](../design/testing/RAID-MONSTER-DEFEAT-NORMAL-ROUTES.md)
+已有三保存配套、六TCP／三真實時計Host正常五圖通關，各發書一次、CP3000保持並回廣場。
+普通守衛事件成立時頭目仍活，三Release與786HappyPath通過；不提升Story新事件、人測或原生格式。
+
 2026-11-23：[普通怪物擊倒訊號](../design/scenario-content/MONSTER-DEFEAT-SIGNALS.md)
 新增實際死亡事件橋、精確wave/model/PRE、旗標增援與作者表單。來源／保存四TCP、兩舊控制、
 保存版真實時計Host88EXP及786HappyPath通過；同伴仍活時已成立。這是Server自有規則，

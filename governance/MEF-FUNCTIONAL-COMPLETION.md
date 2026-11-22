@@ -1,5 +1,10 @@
 # 關卡／MEF功能完成追蹤
 
+2026-11-23追加：[RAID指定怪物擊倒正常路線](../design/testing/RAID-MONSTER-DEFEAT-NORMAL-ROUTES.md)
+補RAID1～3回呼-only缺口；三保存配套、三原版／三新版TCP與三獨立Host完整五圖通關，
+普通守衛擊倒時頭目仍活、具名護衛另有身分，各一本經驗書／CP3000並回廣場。
+三Release與786HappyPath通過，原件／現用服務不變；Story新事件與指定v2仍待驗。
+
 2026-11-23追加：[指定怪物擊倒事件](../design/scenario-content/MONSTER-DEFEAT-SIGNALS.md)
 接實際正傷害至0HP，按模型／PRE／波次設旗標，無須普通守衛充當必要頭目。
 四新正流程、來源／保存版四TCP與兩舊控制、保存版獨立Host88EXP同隊回村及786HappyPath通過。

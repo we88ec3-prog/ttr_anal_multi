@@ -1,5 +1,9 @@
 # 指定怪物擊倒訊號
 
+2026-11-23後續：[RAID1～3正常路線](../testing/RAID-MONSTER-DEFEAT-NORMAL-ROUTES.md)
+已補三份保存配套、六TCP／三真實時計Host，普通守衛死亡時頭目仍活、具名護衛身分與
+經驗書一次／CP3000／回廣場皆已驗。下方RAID待驗是本批歷史界線；Story及人測仍分開。
+
 2026-11-23。SERVER_DESIGN_CHOICE／OFFLINE_SYNTHETIC／NOT_NATIVE_MEF。
 補普通怪物個別擊倒到 MEF 規則的事件橋。既有 `BossDefeated`、整波清除與
 [出招起手](MONSTER-ATTACK-START-SIGNALS.md)保持；不把普通守衛改成必要頭目來取得事件。
