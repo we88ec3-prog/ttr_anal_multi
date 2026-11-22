@@ -1,5 +1,15 @@
 # 關卡／MEF功能完成追蹤
 
+2026-11-22最新批次：[RAID 動態循環與外部結算](../design/scenario-content/RAID-STRUCTURED-LOOPS.md)
+擴充到固定 RAID1～3，提供獨立來源 profile、兩房重訪、正常機關停止、每輪旗標重置、
+書／CP每場一次預覽與版本配套。[完整驗證入口](../design/testing/RAID-LOOP-COMPLETE-ROUTES.md)
+分開來源三輪、保存四輪、同程序TCP、獨立Host、停用／歷史與指定v2待驗。
+下方「RAID loops OPEN」保留為前批快照；本批未提高原生MEF、Client／自然新帳號、巢狀或其他adapter狀態。
+整合波次／頭目階段／機關／分支／結算與回村仍以Case693交付為準，RAID正常成功回廣場。
+最終六場獨立Host／六條保存版TCP均5或11訪問、書一次／CP3000／EXP250000保持；
+三個停用版本與三個原RAID控制通過。當版Case69388EXP與Case695104EXP也都保存回原村同隊。
+三Release零警告／錯誤、732 HappyPath通過，隔離服務全停止；收據8af8d441。
+
 2026-11-22接續：[RAID獨立Host與成長修正](../design/testing/RAID-SEPARATE-HOST-ROUTES.md)已完成三基準／三配套真實時間五圖通關。移除RAID對其他成長關卡的隱藏依賴，保存Lv17實際HP900，各一本書、CP3000與EXP250000保持並回廣場；六條同程序TCP及Case695獨立Host104EXP控制也通過。三Release與729 HappyPath通過，隔離Host全停止。原碼定位與Server運行證據分開，Client／原生、自然新帳號及RAID loops仍OPEN。
 
 2026-11-22接續：[RAID正常TCP與共用配套讀取](../design/testing/RAID-NORMAL-TCP-ROUTES.md)已驗三基準與三份歷史r1配套，六場30原BND載入、各一本經驗書、CP3000保持及正常回廣場。三個舊應用層控制及726 HappyPath通過。共用reader保留來源／版本／設定核對與RAID nullable EXP；舊loop入口限制保持。這仍是同程序測試時計，獨立Host／指定v2／自然新帳號與原生MEF未提高。
