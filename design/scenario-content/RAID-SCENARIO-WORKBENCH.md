@@ -1,5 +1,7 @@
 # RAID 1–3 關卡與 AI 配套
 
+2026-11-22接續：[RAID正常TCP與共用配套讀取](../testing/RAID-NORMAL-TCP-ROUTES.md)已驗三基準與三份歷史r1配套，六場30原BND載入、各一本經驗書、CP3000保持及正常回廣場。三個舊應用層控制及726 HappyPath通過。共用reader保留來源／版本／設定核對與RAID nullable EXP；舊loop入口限制保持。這仍是同程序測試時計，獨立Host／指定v2／自然新帳號與原生MEF未提高。
+
 既有 RAID 的五圖 Server 關卡可以在 `/admin/scenarios` 選取 RAID 1、2、3，
 沿用版本保存、AI 配對、原 BND 檢查及 ZIP 匯出。這是 `NOT_NATIVE_MEF` 的
 Server 內容編輯，不能算原生 MEF 或 Client 自主 AI 的完成證據。

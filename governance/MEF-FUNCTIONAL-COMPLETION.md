@@ -1,5 +1,7 @@
 # 關卡／MEF功能完成追蹤
 
+2026-11-22接續：[RAID正常TCP與共用配套讀取](../design/testing/RAID-NORMAL-TCP-ROUTES.md)已驗三基準與三份歷史r1配套，六場30原BND載入、各一本經驗書、CP3000保持及正常回廣場。三個舊應用層控制及726 HappyPath通過。共用reader保留來源／版本／設定核對與RAID nullable EXP；舊loop入口限制保持。這仍是同程序測試時計，獨立Host／指定v2／自然新帳號與原生MEF未提高。
+
 2026-11-22接續：[泛用配套獨立部署](../design/scenario-content/GENERIC-LOOP-BUNDLE-DEPLOYMENT.md)已支援695/699在repo外解壓目錄的同版manifest／scenario／AI匯入。四條獨立完整Host真實時間TCP通過104/160/224/400EXP、逐訪成本、一次結算存檔與回原村同隊；726 HappyPath通過。準備帳號前置明列，指定v2／自然新帳號、RAID/Story、巢狀與原生MEF仍OPEN。下方設定-only／待部署敘述保留為前批快照。
 
 2026-11-22：[已知狩獵場泛用循環](../design/scenario-content/GENERIC-HUNTING-LOOPS.md)已開放315/693～706的explicit normal adapter並由來源推導編輯形狀。15 Case領域正流程、695/699兩村十條原BND TCP104/132/224/312/160/400EXP與成對管理／Host設定通過，726 HappyPath通過。新Case的獨立Host遊戲、Client／原生、RAID/Story及巢狀仍OPEN。
