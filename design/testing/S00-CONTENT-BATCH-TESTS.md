@@ -1,5 +1,15 @@
 # S00 關卡功能批次測試表
 
+## DL-B02 分支循環管理配套（指定v2待人工）
+
+離線／合成：分支工作台r1三輪、r2四輪、r3關閉的實際下載配套完成五路TCP，
+保存104/120/136/88EXP並回原隊；完整隔離Host載入配對內容後停止。
+管理頁實際改四輪預覽88～136EXP／最多15訪問通過，沒有發布到現用服務。
+待人工批次：DL-B01各輪機關／岔路／頭目與回村，加上已保存r2配套的四輪操作、
+角色資源／掉落顯示及136EXP結果。原v2與全新帳號路線不能以準備帳號TCP取代。
+詳見[分支管理規格](../scenario-content/STRUCTURED-BRANCH-LOOP-WORKBENCH.md)。
+
+
 ## MALL-EXT-01 獨立商城檔（指定新工作副本待人工）
 
 本批新檔 `Tartaros.ip-zh-tw-only-v2-mall-v2.exe`，讀 `Mall/CashProducts.xml`。

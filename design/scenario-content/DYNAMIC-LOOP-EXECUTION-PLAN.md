@@ -1,5 +1,7 @@
 # 動態循環：接續實作計畫
 
+2026-11-22分支管理接續：[分支循環工作台](STRUCTURED-BRANCH-LOOP-WORKBENCH.md)已補獨立profile、正確body表單、三版HTTP配套與五路下載檔TCP，並由完整Host載入三版後停止。舊prefix五路仍通過；Client／原生、其他adapter、巢狀與部署Host遊戲驗收仍OPEN。
+
 2026-11-22分支接續：[3／5／6／4body](STRUCTURED-BRANCH-LOOPS.md)已在正常Case693中逐輪選不同岔路、重做開關／延遲並正確累計104／120EXP；四條新TCP、四條舊前綴控制、700 HappyPath與隔離Host設定通過。分支管理／配套、其他adapter、巢狀／跨body流程與Client／原生仍待完成。
 
 2026-11-22啟動接續：[指定版本配套Host啟動](STRUCTURED-LOOP-BUNDLE-STARTUP.md)已補最後的完整程序設定預檢。實際三輪／四輪／關閉／改名配套及舊整合控制共五次啟動，SHA、AI、loop、EXP、增援／掉落／結果出口與其他Case皆正確後停止；699 HappyPath通過。其他adapter／巢狀循環、原生MEF、Client與另啟部署Host遊戲通關仍開放。

@@ -1,5 +1,7 @@
 # 關卡／MEF功能完成追蹤
 
+2026-11-22分支管理接續：[分支循環工作台](../design/scenario-content/STRUCTURED-BRANCH-LOOP-WORKBENCH.md)已補獨立profile、正確body表單、三版HTTP配套與五路下載檔TCP，並由完整Host載入三版後停止。舊prefix五路仍通過；Client／原生、其他adapter、巢狀與部署Host遊戲驗收仍OPEN。
+
 2026-11-22：[同場不同岔路循環](../design/scenario-content/STRUCTURED-BRANCH-LOOPS.md)已開放Case693分支body，逐輪交替3/6或6/3，保持新開關／延遲及逐訪成本，再走原頭目與一次104／120EXP回原隊；四路新TCP及四路舊前綴控制通過。15分析state只計每輪一條岔路、最多12實際訪問，700 HappyPath與三個Release通過；新Host設定預檢後停止。分支管理／配套、其他adapter／巢狀與Client／原生MEF仍開放。
 
 2026-11-22：[指定配套完整Host啟動](../design/scenario-content/STRUCTURED-LOOP-BUNDLE-STARTUP.md)已支援清單路徑及SHA、固定來源profile／payload／設定核對、原BND與重算metadata，再實際啟動Host驗所有四個Case。三輪／四輪／關閉／瀏覽器改名配套與舊整合控制五次預檢均停止；新關閉版本正常TCP88EXP，其他四路108／128／108／148保持。699 HappyPath及三個Release通過，現行服務未換。原生MEF、其他adapter／巢狀流程與Client／部署Host遊戲通關仍開放。

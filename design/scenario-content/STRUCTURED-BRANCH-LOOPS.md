@@ -28,6 +28,6 @@ Node5／6各沿用原怪物／PRE，新增該怪物掉183×1。Node4觀察共用
 
 三個Release零警告／錯誤、**700/700 HappyPath**通過。舊兩房循環四路仍保存108／128EXP，隔離Host確認新body與88～120界限、其他三Case仍76EXP後停止。TRX SHA `3e57860b1e00eb76e2d13ab1a735ee2c1588cd72f20e4aecf1cf913d2240be51`由機器收據保留；最初新測試的nullable標註編譯錯誤已修正，未列為通過。
 
-這批只開放JSON候選及正常入口／Host設定。既有管理端及配套讀取profile仍限兩房前綴，會明確拒絕把branch body套入固定兩房表單；分支循環專用編輯／配套交付待接續，不能因一般schema已可描述就宣稱管理端也完成。
+原批次只開放JSON候選及正常入口／Host設定。後續[分支循環工作台](STRUCTURED-BRANCH-LOOP-WORKBENCH.md)已補獨立profile、正確body表單、HTTP版本交付及完整Host配套載入；原批次700項結果保留，最新驗證以工作台收據為準。
 
 `GAME_RUNTIME_OBSERVATION`：準備角色4／Lv15與教學／Q15的loopback TCP，並非指定v2、人類正常升級或另啟部署Host遊戲通關。Client同chart3回跳、岔路圖序／畫面、每輪互動與104／120EXP仍待DL-B01；原生MEF／CPU移轉不因此閉合，非正流程仍待測。
