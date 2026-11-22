@@ -79,6 +79,11 @@
 
 ## 最新關卡分析補充
 
+- 2026-11-22：[怪物招式起手訊號](../design/scenario-content/MONSTER-ATTACK-START-SIGNALS.md)
+  將實際Server起手接入MEF旗標、頭目增援與圖形工作台；Case693來源／保存版兩分支及
+  獨立Host88EXP同隊回村，776 HappyPath。提前擊倒有明示替代來源，不等同起手。
+  新事件Story／RAID、人測v2及自然新帳號另待驗；官方格式仍不作功能開發門檻。
+
 - 已完成20類關卡功能的有界分析；實際67份配置的圖／旗標和BND分層稽核，進度、缺項、優化分列[玩家進度](MEF-level-functional-closure-20261118/PLAYER-PROGRESS.md)。這些包含歷史與候選，不等於67個已部署可玩副本。
 - 原生 `CSL.scn` 有保存／讀回seen紀錄的路徑。舊「一次／Client epoch」只足作Server派送預算，不保證重啟後未看或callback必跑；003F也可來自seen-skip。[原件補證](MEF-level-functional-closure-20261118/finite-handoff/report.md)
 - Q119清場演出後的地圖／完整點集重建會換代；較早的本地setter不保證保留。沿用已提交Server MEF旗標投影到新快照；只有需要多步演出才新增有限插播hook。

@@ -1,5 +1,10 @@
 # 關卡／MEF功能完成追蹤
 
+2026-11-22追加：[怪物招式起手訊號](../design/scenario-content/MONSTER-ATTACK-START-SIGNALS.md)
+將實際出招接入波次／旗標延遲與圖形工作台。Case693整合副本兩分支、四條TCP及保存第三版
+即時Host均88EXP保存／原村同隊返回；提前擊倒走明示替代來源，無虛構起手。
+三Release與776 HappyPath通過，收據bfbe2cf4。新事件Story／RAID與指定v2待驗，完整目標持續。
+
 2026-11-22最新：[普通狩獵場配套獨立部署](../design/scenario-content/NORMAL-HUNTING-BUNDLE-DEPLOYMENT.md)
 補普通catalog匯入入口，保留loop入口；同一瀏覽器三版以同版真實時計Host完成76EXP入庫／同村同隊返回，
 兩巡邏版有玩家輸入前0016證據。15普通Case配套／slot領域測試、771 HappyPath與三Release通過；
