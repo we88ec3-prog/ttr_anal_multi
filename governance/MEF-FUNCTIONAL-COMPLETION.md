@@ -1,5 +1,11 @@
 # 關卡／MEF功能完成追蹤
 
+2026-11-22最新：[主線循環接入核心](../design/scenario-content/STORY-STRUCTURED-LOOP-ADMISSION.md)
+增加明確Story模式、強制玩家資源延續、逐訪原敘事游標與最大獎勵範圍驗證。
+四個隔離SQLite正流程證明回跳時保存索引、一次任務完成及已即時入帳的擊殺EXP不重算；
+Q119候選原BND預檢、隔離Host設定8訪、三Release及742 HappyPath通過。
+這批仍PARTIAL：正常Story-loop TCP／獨立Host完整通關、工作台與配套交付及Client均OPEN，未套用狩獵場通關主張。
+
 2026-11-22最新：[巢狀循環](../design/scenario-content/NESTED-STRUCTURED-LOOPS.md)補嚴格包含、
 外層重跑時內層Invocation／Iteration重新起算、旗標scope與多層獎勵／訪問分析。
 來源四條正常原BND TCP保存188/124/120/88EXP回原村同隊；三層21訪屬領域fixture，
