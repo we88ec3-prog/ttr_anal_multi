@@ -1,5 +1,7 @@
 # MEF 完整副本：Case 693 整合版
 
+2026-11-22 最新交付入口：[整合副本交付與測試](../testing/INTEGRATED-DUNGEON-DELIVERY.md)。目前已補正常loopback TCP兩分支及V2訪次帳本核對；下列2026-11-21結果保留為歷史應用層證據，不能用其舊限制否定後續TCP成果，也不能把TCP提升為Client實機通過。
+
 2026-11-21。SERVER_DESIGN_CHOICE / NOT_NATIVE_MEF。沿用現行 scenario V1、MonsterBehavior 與既有 Server 權威，不宣稱還原官方 MEF 容器或 Client 自主 AI。
 
 ## 內容與入口
