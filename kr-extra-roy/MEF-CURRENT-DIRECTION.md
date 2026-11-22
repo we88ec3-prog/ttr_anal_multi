@@ -1,5 +1,10 @@
 # MEF 目前開發方向：Server 提供內容，優先由 MEF 處理
 
+2026-11-22：[FlagsCountReached反向索引](../design/scenario-content/FLAG-COUNT-DEPENDENCY-INDEX.md)
+已完成逐父旗標派送、宣告順序閉合、入場繼承／重置與fork；完整兩分支TCP回包、Story循環
+控制、同版Host88EXP回村及779 HappyPath通過。計量僅8對5候選列；其他消費者、全域血量、
+具體Client接口與人測仍各自待辦。
+
 2026-11-22：[Story明示初始清除分支](../design/testing/STORY-AUTHORED-EARLY-CLEAR-ROUTES.md)
 以獨立r2初始組30秒起手AI驗證先清敵仍有必要護衛、逐輪重置與一次結算，三TCP／三Host、
 5936／5984EXP及776 HappyPath通過。原r1下載及出招控制保持；地形匯出已接同版AI與SHA。

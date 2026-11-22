@@ -1,5 +1,10 @@
 # 關卡／MEF功能完成追蹤
 
+2026-11-22追加：[旗標數量反向依賴](../design/scenario-content/FLAG-COUNT-DEPENDENCY-INDEX.md)
+依新旗標只排受影響的條件列，保留原宣告順序固定點、loop重置及fork隔離。三新正流程、
+舊／新版兩條完整TCP回包對照、三條Story循環控制及同版獨立Host88EXP同隊回村通過；
+三Release與779 HappyPath通過，收據6257be28。所選候選列下界8對5是工作量，不是CPU節省。
+
 2026-11-22追加：[Story初始組先清除的作者範例](../design/testing/STORY-AUTHORED-EARLY-CLEAR-ROUTES.md)
 原r1保持實際起手控制；另存r2只讓初始組使用30秒起手AI，血量／傷害／護衛／獎勵保持。
 停止／三輪正常清除分支保存5936／5984EXP、一次Q119及同隊回村，三TCP／三同版Host、
