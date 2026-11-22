@@ -1,5 +1,7 @@
 # 動態循環：接續實作計畫
 
+2026-11-22：[獨立完整Host正常入口](../testing/SEPARATE-HOST-DUNGEON-ENTRY.md)已有舊整合與下載分支r2兩條跨程序TCP，走登入／廣場建隊／同隊進村／選關至Case693首圖啟用，使用真實時間且無內部world。隔離Host均停止；獨立Host戰鬥、機關、循環、頭目、結算與回村仍OPEN，不能以此入場證據宣稱完整通關。
+
 2026-11-22分支管理接續：[分支循環工作台](STRUCTURED-BRANCH-LOOP-WORKBENCH.md)已補獨立profile、正確body表單、三版HTTP配套與五路下載檔TCP，並由完整Host載入三版後停止。舊prefix五路仍通過；Client／原生、其他adapter、巢狀與部署Host遊戲驗收仍OPEN。
 
 2026-11-22分支接續：[3／5／6／4body](STRUCTURED-BRANCH-LOOPS.md)已在正常Case693中逐輪選不同岔路、重做開關／延遲並正確累計104／120EXP；四條新TCP、四條舊前綴控制、700 HappyPath與隔離Host設定通過。分支管理／配套、其他adapter、巢狀／跨body流程與Client／原生仍待完成。
