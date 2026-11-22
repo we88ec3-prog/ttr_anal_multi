@@ -1,5 +1,7 @@
 # 關卡／MEF功能完成追蹤
 
+2026-11-22：[關內出口權重工作台](../design/scenario-content/WEIGHTED-EXIT-WORKBENCH.md) 已提供來源旗標、逐出口權重、條件式比例及切回手動。瀏覽器改成出口6:3=2:8、改名同步、保存r1／手動r2及歷史r1再載入均通過；實際HTTP下載兩版四路TCP各保存88EXP回原隊。679 HappyPath、三個Release建置及窄視窗畫面存證通過，瀏覽器下載等待未確認完成、未列通過。NOT_NATIVE_MEF；動態loop／一般子圖、Client與獨立Host遊戲驗收仍開放。
+
 2026-11-22：[關內出口權重](../design/scenario-content/WEIGHTED-EXIT-SELECTION.md) 已於清場且機關延遲旗標成立後，依當時合格出口6:4只選一次，保存run／來源／policy／ticket至結算；兩路正常TCP各保存88EXP回原村同隊，原手動雙出口控制組及六個舊編譯配套bytes保持一致。Host隔離預檢與三個Release建置通過，679 HappyPath全通過。NOT_NATIVE_MEF；指定v2、自然新帳號、獨立Host遊戲通關、分布與專用權重GUI仍待驗／待開發。
 
 2026-11-22：[兩房重訪工作台](../design/scenario-content/FINITE-PREFIX-REPEAT-WORKBENCH.md) 已可選單房／前兩房、依保存版本預覽及下載配套。HTTP兩房2／3輪為108／128EXP，舊缺省單房ZIP與原golden bytes一致；實際下載三輪配套兩路TCP各一次128EXP保存回原隊伍。瀏覽器控制項108／96／128已驗、676 HappyPath通過；截圖擷取失敗未列版面驗收，Client與獨立Host遊戲通關仍待驗。

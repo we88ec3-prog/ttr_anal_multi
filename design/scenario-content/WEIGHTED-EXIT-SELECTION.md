@@ -19,7 +19,7 @@ fork複製已選結果，查詢／Enter／GroupCleared／互動不消耗亂數�
 分析仍保留出口自身旗標及合流交集。新run重新選，跨登入仍按既有重開政策。
 
 Schema、不可變catalog、Story欄位轉接須同步；JSON工作台能保存／匯出，旗標改名
-同步afterFlag。不宣稱專用權重圖形編輯器。測試ticket只由檢查器可信委派注入，
+同步afterFlag。後續[權重工作台](WEIGHTED-EXIT-WORKBENCH.md)已補圖形控制項。測試ticket只由檢查器可信委派注入，
 不接受遊戲封包或Host配置指定結果；正式runtime使用系統隨機來源。
 
 固定Case693候選在puzzle-door-ready後以出口3:6=6:4選一次，再接原分支、頭目、
