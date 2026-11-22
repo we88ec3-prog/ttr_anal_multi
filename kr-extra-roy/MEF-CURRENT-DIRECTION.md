@@ -1,5 +1,10 @@
 # MEF 目前開發方向：Server 提供內容，優先由 MEF 處理
 
+2026-11-23：[全域Health彙總](../design/scenario-content/TOTAL-COMBAT-HEALTH.md)
+已接首次建立、實際扣血與增援更新，不改既有返回條件。兩完整分支回包、Story控制、同版
+獨立Host88EXP同隊回村、三Release與782 HappyPath通過，最終短鎖版收據cc04445a。原全域Health查詢
+待辦縮小到已完成此getter；Boss／移除／AI的其他查詢、具體Client接口與人測仍分開。
+
 2026-11-22：[FlagsCountReached反向索引](../design/scenario-content/FLAG-COUNT-DEPENDENCY-INDEX.md)
 已完成逐父旗標派送、宣告順序閉合、入場繼承／重置與fork；完整兩分支TCP回包、Story循環
 控制、同版Host88EXP回村及779 HappyPath通過。計量僅8對5候選列；其他消費者、全域血量、

@@ -1,5 +1,11 @@
 # 關卡／MEF功能完成追蹤
 
+2026-11-23追加：[全域敵群血量彙總](../design/scenario-content/TOTAL-COMBAT-HEALTH.md)
+Health首次讀取後維護總量，保留原扣血／增援／清場／投射物及必要頭目gate。三新正流程、
+舊新版兩條完整TCP回包、Story循環控制及同版獨立Host88EXP同隊回村通過；三Release、
+782 HappyPath通過，最終短鎖版收據cc04445a。頭目房2966次原成員訪問對4次讀取／15次更新是工作量，
+不是CPU或Client卸載；其餘選擇器／移除／AI掃描及指定v2另待完成。
+
 2026-11-22追加：[旗標數量反向依賴](../design/scenario-content/FLAG-COUNT-DEPENDENCY-INDEX.md)
 依新旗標只排受影響的條件列，保留原宣告順序固定點、loop重置及fork隔離。三新正流程、
 舊／新版兩條完整TCP回包對照、三條Story循環控制及同版獨立Host88EXP同隊回村通過；
