@@ -1,5 +1,10 @@
 # 關卡／MEF功能完成追蹤
 
+2026-11-22最新：[普通狩獵場配套獨立部署](../design/scenario-content/NORMAL-HUNTING-BUNDLE-DEPLOYMENT.md)
+補普通catalog匯入入口，保留loop入口；同一瀏覽器三版以同版真實時計Host完成76EXP入庫／同村同隊返回，
+兩巡邏版有玩家輸入前0016證據。15普通Case配套／slot領域測試、771 HappyPath與三Release通過；
+其他Case完整Host／指定v2及自然新帳號未外推。收據aeac442e，原件／現用服務保持。
+
 2026-11-22最新：[巡邏圖形工作台](../design/scenario-content/PATROL-ROUTE-WORKBENCH.md)
 補路點／綠線、增刪改排序、獨立AI副本與同版交付。瀏覽器三版／歷史讀回、HTTP精確ZIP／AI、
 實際下載六路TCP76EXP同隊回村及756 HappyPath通過；收據61799a2c。這批採原76EXP範本，

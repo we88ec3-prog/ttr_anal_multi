@@ -1,5 +1,9 @@
 # 巡邏路線圖形編輯與配套交付
 
+2026-11-22接續：[普通配套獨立部署](NORMAL-HUNTING-BUNDLE-DEPLOYMENT.md)已以本頁實際r1／r2／r3
+完成同版真實時計Host六圖76EXP入庫及同隊回村，兩個巡邏版另有移動前0016證據；771 HappyPath。
+下方新下載版獨立Host待驗是前批歷史快照，指定v2／自然新帳號仍分開。
+
 2026-11-22，SERVER_DESIGN_CHOICE／NOT_NATIVE_MEF。
 接續[PATROL-BARRIER-ROUTES](PATROL-BARRIER-ROUTES.md)，沿用既有巡邏schema與完整保存驗證。
 

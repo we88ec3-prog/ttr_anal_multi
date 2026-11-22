@@ -1,5 +1,7 @@
 # MEF 目前開發方向：Server 提供內容，優先由 MEF 處理
 
+2026-11-22：[普通狩獵場配套部署](../design/scenario-content/NORMAL-HUNTING-BUNDLE-DEPLOYMENT.md)已接固定普通catalog，實際瀏覽器三版用同版獨立真實時計Host完成76EXP入庫／同隊回村，兩巡邏版另驗移動前0016位置。15個普通Case的配套／slot領域測試及771 HappyPath通過；其他Case遊戲／指定v2／自然新帳號仍各自待驗。
+
 2026-11-22：[巡邏路線圖形編輯](../design/scenario-content/PATROL-ROUTE-WORKBENCH.md)可從選取怪物建立AI副本、編排／排序／移除路點及匯出同版配套。瀏覽器三版、歷史保持、六路下載檔正常TCP各76EXP回原村同隊及756 HappyPath通過；新三版的獨立Host與指定v2各自待驗。
 
 2026-11-22：[巡邏屏障繞路](../design/scenario-content/PATROL-BARRIER-ROUTES.md)已從既有追擊／回位延伸至平時巡邏，保留路點順序、共用搜尋上限與追擊圈。原BND320位置、兩路正常TCP繞路及88EXP通關、獨立真實時計Host同隊回村、756 HappyPath通過；仍是Server二維路線，未提高Client自主AI／3D門或人測狀態。
