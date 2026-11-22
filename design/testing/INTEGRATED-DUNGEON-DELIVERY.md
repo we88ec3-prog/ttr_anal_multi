@@ -1,5 +1,10 @@
 # 整合副本交付與測試入口
 
+2026-11-23當版：[頭目查詢索引回歸](../scenario-content/BOSS-SELECTION-INDEX.md)以相同原BND／
+flag-delay整合內容完成兩路舊／新完整TCP回包對照及新版獨立真實時計Host六圖、波次／機關／
+分支／頭目階段／一次88EXP入庫與同村同隊返回。三Release與790HappyPath通過，隔離Host停止。
+本批是執行器查詢改善，未增加或改寫關卡玩法；指定v2與自然新帳號仍分開待驗。
+
 2026-11-23最新：[怪物 HP 工作台及保存版通關](../scenario-content/MONSTER-HP-WORKBENCH.md)
 沿用波次／頭目階段／機關／分支／結算，保存版四條完整TCP及兩個最終真實時間獨立Host
 均88EXP入庫、原村同隊返回；三Release與782HappyPath通過。下方舊版測試數及範圍保留歷史，

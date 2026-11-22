@@ -1,5 +1,10 @@
 # MEF 目前開發方向：Server 提供內容，優先由 MEF 處理
 
+2026-11-23：[頭目成員索引](../design/scenario-content/BOSS-SELECTION-INDEX.md)接既有出生身分，
+不快取死亡／移除結果。兩路舊／新版完整TCP回包保持、同版真實時計Host88EXP同隊回村，
+Story四路／RAID三路控制與790HappyPath、三Release通過。1294對1／3／461是成員工作量，
+不是CPU或Client卸載；其餘查詢／具體Client接口／人測與整體MEF工作保持各自待辦。
+
 2026-11-23：[Story逐輪擊倒事件](../design/testing/STORY-MONSTER-DEFEAT-NORMAL-ROUTES.md)
 已補保存配套、四TCP／兩真實時計Host，停止／三輪5936／5984EXP一次Q119同隊回村。
 新訪次重置與兩類事件逐輪獨立；三Release與786HappyPath通過，不提升Client／原生或自然新帳號狀態。

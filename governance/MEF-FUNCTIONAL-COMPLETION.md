@@ -1,5 +1,11 @@
 # 關卡／MEF功能完成追蹤
 
+2026-11-23追加：[頭目身分查詢索引](../design/scenario-content/BOSS-SELECTION-INDEX.md)
+保留wildcard／精確波、第一成員狀態與任一成員死亡／移除語意，接初次查詢及增援出生。
+四新正流程、兩舊／新完整TCP回包與同版真實時計Host88EXP同隊回村通過；Story四路及RAID三路
+控制保持，三Release與790HappyPath通過。頭目房1294原成員訪問對1初始／3出生／461已選讀取
+只是工作量；其餘AI／移除查詢、具體Client接口、自然新帳號與人測仍各自追蹤。
+
 2026-11-23追加：[Q119逐輪怪物擊倒](../design/testing/STORY-MONSTER-DEFEAT-NORMAL-ROUTES.md)
 補Story回呼-only缺口；四檔保存配套、兩舊／兩新TCP及兩獨立真實時計Host通過。
 停止／三輪保存5936／5984EXP、一次Q119與Q120游標、原村同隊返回；每輪四旗標／事實清空，
