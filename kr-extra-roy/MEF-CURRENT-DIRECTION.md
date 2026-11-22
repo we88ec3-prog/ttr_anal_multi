@@ -1,5 +1,10 @@
 # MEF 目前開發方向：Server 提供內容，優先由 MEF 處理
 
+2026-11-23：[Story首訪入場演出](../design/scenario-content/STORY-ENTRY-SCENE-POLICY.md)補有限內容
+的逐節點播放政策，保留原鍵／首次交接與任務權威。只加一欄的Q119三輪仍5984EXP，場景2
+派送及合成回報從三次變一次；五TCP／兩獨立真實時計Host與793HappyPath通過。JSON／保存配套
+已接、GUI與指定v2另待驗，不提升原生格式、實際播放或CPU卸載狀態。
+
 2026-11-23：[頭目成員索引](../design/scenario-content/BOSS-SELECTION-INDEX.md)接既有出生身分，
 不快取死亡／移除結果。兩路舊／新版完整TCP回包保持、同版真實時計Host88EXP同隊回村，
 Story四路／RAID三路控制與790HappyPath、三Release通過。1294對1／3／461是成員工作量，

@@ -1,5 +1,10 @@
 # 關卡／MEF功能完成追蹤
 
+2026-11-23追加：[Story入場演出政策](../design/scenario-content/STORY-ENTRY-SCENE-POLICY.md)
+逐節點可選EveryVisit／FirstVisit，依本場NodeVisit接既有場景／戰鬥交接。只差一欄的Q119
+擊倒三輪版本將場景2派送／回報從3次變1次，仍5984EXP；五TCP／兩真實時計Host、一次Q119與
+同隊回村、三Release／793HappyPath通過。JSON／配套已接，專用GUI與指定v2另待驗。
+
 2026-11-23追加：[頭目身分查詢索引](../design/scenario-content/BOSS-SELECTION-INDEX.md)
 保留wildcard／精確波、第一成員狀態與任一成員死亡／移除語意，接初次查詢及增援出生。
 四新正流程、兩舊／新完整TCP回包與同版真實時計Host88EXP同隊回村通過；Story四路及RAID三路
