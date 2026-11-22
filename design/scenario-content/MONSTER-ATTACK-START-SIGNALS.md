@@ -56,6 +56,7 @@ Schema已鏡像及解析，typed載入器與正常路線通過；沒有使用獨
 作完整驗證。775項早期結果及第一、二版只保留為歷史，不代替最終776項及第三版證據。
 
 後續：[RAID1～3正常路線](../testing/RAID-ATTACK-START-NORMAL-ROUTES.md)已另批補齊。
+Story另見[Q119逐輪起手正常路線](../testing/STORY-ATTACK-START-NORMAL-ROUTES.md)。
 以下保留本批快照及原收據界線，不將後批結果回填到本批證據。
 
 本批新增事件的遊玩證據限一般Case693；Story／RAID回呼已接線並建置，須另做正常路線。

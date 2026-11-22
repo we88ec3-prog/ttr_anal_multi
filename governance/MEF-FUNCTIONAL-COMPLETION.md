@@ -1,5 +1,11 @@
 # 關卡／MEF功能完成追蹤
 
+2026-11-22追加：[Story每輪起手與護衛](../design/testing/STORY-ATTACK-START-NORMAL-ROUTES.md)
+Q119首圖每輪實際起手接0.4秒護衛，四旗標隨lap重置；正常停止／三輪上限保存5936／5984EXP，
+一次Q119結算、Q120游標及同隊回村。四條TCP與三個同版獨立真實時計Host（含舊停止對照）通過，
+原版5932／5972保持，三Release零警告／錯誤、776 HappyPath通過，收據60eae329。
+Story／RAID／普通Case693起手事件各有自己的工程路線，指定v2及自然新帳號仍待驗，整體目標未完成。
+
 2026-11-22追加：[RAID起手事件正常通關](../design/testing/RAID-ATTACK-START-NORMAL-ROUTES.md)
 補齊RAID1～3先前僅接線的缺口：各以實際指定頭目起手觸發0.5秒增援、清完護衛結算。
 三份標準工作台保存／配套、六條原版及新版TCP、三個同版獨立真實時計Host均通過；

@@ -1,5 +1,10 @@
 # MEF 目前開發方向：Server 提供內容，優先由 MEF 處理
 
+2026-11-22：[Story逐輪起手事件](../design/testing/STORY-ATTACK-START-NORMAL-ROUTES.md)
+已補Q119實際出招→延遲護衛→逐訪擊殺EXP→一次結算與同隊回村，停止／三輪保存5936／5984EXP。
+四條TCP／三個同版真實時計Host與776 HappyPath通過，收據60eae329。此前「Story新事件待驗」
+為歷史批次界線；人測v2、自然新帳號、完整初始清除替代路線及其他未完功能維持各自待辦。
+
 2026-11-22：[RAID1～3起手事件](../design/testing/RAID-ATTACK-START-NORMAL-ROUTES.md)
 已由實際頭目起手接延遲護衛，三份保存配套、六條TCP與三個同版獨立Host正常通關；
 一本書／CP3000及正常回廣場保持，776 HappyPath與三Release通過，收據8f2939a5。
