@@ -1,5 +1,7 @@
 # 獨立完整Host的正常副本入口
 
+2026-11-22接續：[獨立Host通關](<SEPARATE-HOST-DUNGEON-COMPLETION.md>)已由另程序的正常TCP完成舊整合88EXP及同一下載分支r2提前離開104／四輪上限136EXP，皆保存與回原村同隊。此為準備帳號／真實時間；精確timer快照仍引用先前in-process收據，Client／原生及其他副本維持OPEN。
+
 2026-11-22；OFFLINE_SYNTHETIC / SERVER_CONFORMANCE / NOT_NATIVE_MEF。
 分析基準cc5b0e971，私有Server基準7f4eabe。這批補跨程序入口證據，不是原生MEF完成。
 
