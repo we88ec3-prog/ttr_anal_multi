@@ -1,5 +1,7 @@
 # 關卡／MEF功能完成追蹤
 
+2026-11-22：[真正執行中結構化循環](../design/scenario-content/STRUCTURED-LOOPS.md)已接同node重訪、明確上限／保留停止旗標、SCC與狀態圖／保守獎勵分析、V2逐訪成本及正常Case693入口。同內容因背包或上限分別兩／三輪，四條TCP各保存108／128EXP並回原隊，19／24枚投射物清除；四條舊控制與六個舊編譯配套不變。694 HappyPath及三個Release通過，隔離Host設定預檢後停止。專用Admin profile／GUI／HTTP交付、其他adapter、巢狀流程及Client／原生MEF仍開放，整體目標保持進行。
+
 2026-11-22：[本次整合副本交付](../design/testing/INTEGRATED-DUNGEON-DELIVERY.md)以既有Case693整合內容完成最新回歸：最小版及投射物版各兩條正常TCP分支，共四路各保存88EXP並回原村原隊。舊檢查器已接V2扣款訪次，六個節點訪次及庫存發布順序保持驗證。三個Release零警告／錯誤、689 HappyPath通過。既有玩法不是本輪重新新增；Client／獨立部署Host通關、原生MEF及更廣功能仍開放，未替換現行服務。
 
 2026-11-22：[進段重置群組](../design/scenario-content/FLAG-RESET-SCOPES.md) 已能清除指定旗標、保留整場事實並追蹤歷史逆推失效。新Case693兩路各重新付款、88EXP存檔回原隊；四條舊TCP控制及六個編譯配套bytes保持正常，689 HappyPath與三個Release通過。檢查器已支援扣款後等待開關的延後開門，庫存順序仍驗。群組／訪次紀錄保存到結果；動態loop控制、SCC／獎勵分析及Client驗收仍開放。

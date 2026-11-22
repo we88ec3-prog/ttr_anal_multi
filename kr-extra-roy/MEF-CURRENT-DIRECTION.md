@@ -1,5 +1,7 @@
 # MEF 目前開發方向：Server 提供內容，優先由 MEF 處理
 
+2026-11-22：[結構化循環](../design/scenario-content/STRUCTURED-LOOPS.md)已在執行中依權威旗標或上限重訪同node／離開，並接SCC、有界狀態條件與獎勵分析。相同Case693配套由正常機關選擇走兩／三輪，再走兩條原分支，各保存108／128EXP回原隊；694 HappyPath及三個Release通過。這是Server-owned NOT_NATIVE_MEF，沒有把生怪／AI移交Client。Admin完整交付、其他adapter、巢狀流程與實機仍待完成。
+
 2026-11-22：[進段重置群組](../design/scenario-content/FLAG-RESET-SCOPES.md) 已能清除指定旗標、保留整場事實並追蹤歷史逆推失效。新Case693兩路各重新付款、88EXP存檔回原隊；四條舊TCP控制及六個編譯配套bytes保持正常，689 HappyPath與三個Release通過。檢查器已支援扣款後等待開關的延後開門，庫存順序仍驗。群組／訪次紀錄保存到結果；動態loop控制、SCC／獎勵分析及Client驗收仍開放。
 
 2026-11-22：[節點訪次及機關V2](../design/scenario-content/SCENARIO-VISIT-IDENTITY.md) 已接Enter／fork／選擇／結果，機關提交綁目前訪次。V1表保留、歷史複製到空訪次，正流程驗相同run/node/key兩訪分扣；四條既有TCP（88／128EXP）逐圖對齊訪次及ledger，存檔回原隊，685 HappyPath與三個Release通過。這是動態loop基礎；同節點兩訪只在領域測試，TCP固定alias展開不算循環。旗標作用域、循環控制與Client仍開放。
