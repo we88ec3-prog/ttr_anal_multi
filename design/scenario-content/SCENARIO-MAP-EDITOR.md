@@ -1,5 +1,9 @@
 # 關卡二維地形編排
 
+2026-11-23：[互動範圍與屏障預覽](SPATIAL-AUTHORING-PREVIEW.md)補設定／Client圈線、
+數值與2／4／8倍跟隨縮放；旗標overlay處理重疊／靜態牆且不寫JSON。四狀態與Server
+CanStand全格掃描一致，兩版四TCP／保存版Host各88EXP同隊回村，793HappyPath通過。
+
 2026-11-23：[旗標分支表單](CONDITIONAL-EXIT-WORKBENCH.md)可設定判斷時機、來源與真假出口，
 切回手動／權重。六TCP／兩最終獨立Host各88EXP同隊回村，782HappyPath通過；其他adapter及人測分開。
 

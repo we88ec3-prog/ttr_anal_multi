@@ -1,5 +1,10 @@
 # MEF 目前開發方向：Server 提供內容，優先由 MEF 處理
 
+2026-11-23：[互動圈／屏障作者預覽](../design/scenario-content/SPATIAL-AUTHORING-PREVIEW.md)
+接既定D06，分清Server半徑、category0的0.8倍Client範圍與category1原半徑；重疊屏障格按
+所選旗標投影、靜態牆保留。四狀態對實際Server predicate、四TCP／保存版Host88EXP同隊回村、
+793HappyPath通過。這是作者工具，沒有以預覽代替原生門／Client實機或目前instance旗標。
+
 2026-11-23：[主線入場演出工作台](../design/scenario-content/STORY-ENTRY-SCENE-WORKBENCH.md)
 已補三種播放時機選單、無演出提示、版本保存／歷史及四檔ZIP。四版TCP與歷史r2／最新r4
 獨立真實時計Host皆5984EXP、一次Q119同隊回村，793HappyPath及三Release通過。此項GUI待辦

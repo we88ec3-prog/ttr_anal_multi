@@ -1,5 +1,10 @@
 # 關卡／MEF功能完成追蹤
 
+2026-11-23追加：[空間作者預覽](../design/scenario-content/SPATIAL-AUTHORING-PREVIEW.md)
+完成D06作者圖面部分：設定／Client圈線、數值、跟隨縮放與旗標屏障格；預覽不寫入關卡。
+四旗標狀態新增20／8／16／0格與Server CanStand相同，四TCP／保存版獨立Host各88EXP
+同隊回村，三Release及793HappyPath通過。指定v2／三維門、其餘D06與整體MEF保持各自待辦。
+
 2026-11-23追加：[入場演出圖形選單](../design/scenario-content/STORY-ENTRY-SCENE-WORKBENCH.md)
 補FirstVisit／EveryVisit／缺省的JSON-only缺口；瀏覽器三次保存、四版本ZIP、歷史r2讀回及
 主線／狩獵場顯示範圍已驗。四TCP／兩真實時計Host皆5984EXP一次Q119同隊回村，三Release與
