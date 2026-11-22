@@ -1,5 +1,7 @@
 # MEF 目前開發方向：Server 提供內容，優先由 MEF 處理
 
+2026-11-22：[旗標條件出口](../design/scenario-content/CONDITIONAL-EXIT-SELECTION.md) 已能依本場旗標真／假選定一個出口，保留至結算；同一Case693以31/33與31/35正常機關操作走兩路，各88EXP存檔回原村同隊。683 HappyPath、三個Release、原權重控制組及六個舊編譯配套bytes通過。這只是動態loop必要的分支原語；[循環DRAFT計畫](../design/scenario-content/DYNAMIC-LOOP-EXECUTION-PLAN.md)已核對訪次／旗標／機關ledger與現有EXP流程，動態loop仍未完成。NOT_NATIVE_MEF，Client與獨立Host遊戲驗收分開待驗。
+
 2026-11-22：[關內出口權重工作台](../design/scenario-content/WEIGHTED-EXIT-WORKBENCH.md) 已提供來源旗標、逐出口權重、條件式比例及切回手動。瀏覽器改成出口6:3=2:8、改名同步、保存r1／手動r2及歷史r1再載入均通過；實際HTTP下載兩版四路TCP各保存88EXP回原隊。679 HappyPath、三個Release建置及窄視窗畫面存證通過，瀏覽器下載等待未確認完成、未列通過。NOT_NATIVE_MEF；動態loop／一般子圖、Client與獨立Host遊戲驗收仍開放。
 
 2026-11-22：[關內出口權重](../design/scenario-content/WEIGHTED-EXIT-SELECTION.md) 已於清場且機關延遲旗標成立後，依當時合格出口6:4只選一次，保存run／來源／policy／ticket至結算；兩路正常TCP各保存88EXP回原村同隊，原手動雙出口控制組及六個舊編譯配套bytes保持一致。Host隔離預檢與三個Release建置通過，679 HappyPath全通過。NOT_NATIVE_MEF；指定v2、自然新帳號、獨立Host遊戲通關、分布與專用權重GUI仍待驗／待開發。

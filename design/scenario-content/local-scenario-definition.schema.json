@@ -532,6 +532,9 @@
         },
         "weightedExits": {
           "$ref": "#/$defs/weightedExits"
+        },
+        "conditionalExits": {
+          "$ref": "#/$defs/conditionalExits"
         }
       },
       "anyOf": [
@@ -575,6 +578,16 @@
         "encounters",
         "aiProfile",
         "rules"
+      ],
+      "allOf": [
+        {
+          "not": {
+            "required": [
+              "weightedExits",
+              "conditionalExits"
+            ]
+          }
+        }
       ]
     },
     "definition": {
@@ -1456,6 +1469,36 @@
               }
             }
           }
+        }
+      }
+    },
+    "conditionalExits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "afterFlag",
+        "whenFlag",
+        "trueKey",
+        "falseKey"
+      ],
+      "properties": {
+        "afterFlag": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,63}$"
+        },
+        "whenFlag": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,63}$"
+        },
+        "trueKey": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65535
+        },
+        "falseKey": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65535
         }
       }
     }
