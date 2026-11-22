@@ -1,5 +1,9 @@
 # MEF 目前開發方向：Server 提供內容，優先由 MEF 處理
 
+2026-11-23：[Story逐輪擊倒事件](../design/testing/STORY-MONSTER-DEFEAT-NORMAL-ROUTES.md)
+已補保存配套、四TCP／兩真實時計Host，停止／三輪5936／5984EXP一次Q119同隊回村。
+新訪次重置與兩類事件逐輪獨立；三Release與786HappyPath通過，不提升Client／原生或自然新帳號狀態。
+
 2026-11-23：[RAID普通守衛／具名護衛擊倒](../design/testing/RAID-MONSTER-DEFEAT-NORMAL-ROUTES.md)
 已有三保存配套、六TCP／三真實時計Host正常五圖通關，各發書一次、CP3000保持並回廣場。
 普通守衛事件成立時頭目仍活，三Release與786HappyPath通過；不提升Story新事件、人測或原生格式。

@@ -1,5 +1,10 @@
 # 關卡／MEF功能完成追蹤
 
+2026-11-23追加：[Q119逐輪怪物擊倒](../design/testing/STORY-MONSTER-DEFEAT-NORMAL-ROUTES.md)
+補Story回呼-only缺口；四檔保存配套、兩舊／兩新TCP及兩獨立真實時計Host通過。
+停止／三輪保存5936／5984EXP、一次Q119與Q120游標、原村同隊返回；每輪四旗標／事實清空，
+初始及具名擊倒重新成立，三Release與786HappyPath通過。Client／自然新帳號及其餘功能仍追蹤。
+
 2026-11-23追加：[RAID指定怪物擊倒正常路線](../design/testing/RAID-MONSTER-DEFEAT-NORMAL-ROUTES.md)
 補RAID1～3回呼-only缺口；三保存配套、三原版／三新版TCP與三獨立Host完整五圖通關，
 普通守衛擊倒時頭目仍活、具名護衛另有身分，各一本經驗書／CP3000並回廣場。

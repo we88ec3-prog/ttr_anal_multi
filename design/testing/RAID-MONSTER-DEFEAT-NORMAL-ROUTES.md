@@ -1,5 +1,7 @@
 # RAID 1～3：普通守衛與具名護衛擊倒事件
 
+後續：[Story Q119正常路線](STORY-MONSTER-DEFEAT-NORMAL-ROUTES.md)已另批補齊；下方Story待驗保留本批快照。
+
 2026-11-23。SERVER_DESIGN_CHOICE／OFFLINE_SYNTHETIC／NOT_NATIVE_MEF。
 承接[指定怪物擊倒契約](../scenario-content/MONSTER-DEFEAT-SIGNALS.md)，補該事件在 RAID
 先前只有回呼接線的工程驗證缺口。不回填舊收據，不變更原生格式或 Client 驗收。

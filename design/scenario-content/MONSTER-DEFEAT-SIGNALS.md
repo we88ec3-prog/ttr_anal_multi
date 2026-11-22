@@ -1,5 +1,9 @@
 # 指定怪物擊倒訊號
 
+2026-11-23後續：[Q119每輪擊倒正常路線](../testing/STORY-MONSTER-DEFEAT-NORMAL-ROUTES.md)
+已補Story配套、四TCP／兩真實時計Host，逐輪新訪次／事件重置及5936／5984EXP一次Q119同隊回村。
+下方Story待驗保留本批歷史界線，不回填舊收據；指定v2及更廣功能仍分開。
+
 2026-11-23後續：[RAID1～3正常路線](../testing/RAID-MONSTER-DEFEAT-NORMAL-ROUTES.md)
 已補三份保存配套、六TCP／三真實時計Host，普通守衛死亡時頭目仍活、具名護衛身分與
 經驗書一次／CP3000／回廣場皆已驗。下方RAID待驗是本批歷史界線；Story及人測仍分開。
