@@ -1,5 +1,9 @@
 # 關卡旗標控制增援
 
+2026-11-23：[指定怪物擊倒](MONSTER-DEFEAT-SIGNALS.md)可在普通守衛先倒、同伴仍活時設旗標，
+不用requiredBoss；支援初始／具名波模型與PRE配對。來源及保存版正常TCP／獨立Host與786HappyPath已驗，
+不外推Client或其他adapter的新事件通關。
+
 Server 自訂關卡的 `reinforcements` 與 `timedReinforcements` 可指定 `requiredFlags`。所有旗標、既有計時及可選的 `activationRegion` 都須成立才生成該波。未設定旗標的舊資料沿用原有行為。
 
 ```json

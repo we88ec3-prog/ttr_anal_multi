@@ -1,5 +1,11 @@
 # 關卡／MEF功能完成追蹤
 
+2026-11-23追加：[指定怪物擊倒事件](../design/scenario-content/MONSTER-DEFEAT-SIGNALS.md)
+接實際正傷害至0HP，按模型／PRE／波次設旗標，無須普通守衛充當必要頭目。
+四新正流程、來源／保存版四TCP與兩舊控制、保存版獨立Host88EXP同隊回村及786HappyPath通過。
+三Release零警告／錯誤；同伴仍100HP及具名波身分有獨立觀察。Story／RAID新事件正常路線、
+指定v2及其餘功能仍分開，原件／現用服務保持。
+
 2026-11-23追加：[旗標分支表單](../design/scenario-content/CONDITIONAL-EXIT-WORKBENCH.md)
 補conditionalExits的JSON-only缺口；設定／交換／改名、模式切換、取消與歷史讀回已驗。
 四版配套、六TCP／兩最終獨立Host各88EXP同隊回村，三Release及782HappyPath通過。

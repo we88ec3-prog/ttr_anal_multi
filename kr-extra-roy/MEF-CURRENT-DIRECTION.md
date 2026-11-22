@@ -1,5 +1,10 @@
 # MEF 目前開發方向：Server 提供內容，優先由 MEF 處理
 
+2026-11-23：[普通怪物擊倒訊號](../design/scenario-content/MONSTER-DEFEAT-SIGNALS.md)
+新增實際死亡事件橋、精確wave/model/PRE、旗標增援與作者表單。來源／保存四TCP、兩舊控制、
+保存版真實時計Host88EXP及786HappyPath通過；同伴仍活時已成立。這是Server自有規則，
+不將原生死亡動畫或移除視為權威；其他adapter新事件完整路線與Client另待驗。
+
 2026-11-23：[旗標分支表單](../design/scenario-content/CONDITIONAL-EXIT-WORKBENCH.md)
 已能設定時機、旗標及真假出口，改名同步與模式切換。保存版六TCP／兩最終獨立Host
 各88EXP同隊回村，三Release與782HappyPath通過；不改執行器／Client或原生格式驗收。

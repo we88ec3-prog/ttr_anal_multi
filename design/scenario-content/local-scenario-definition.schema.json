@@ -823,7 +823,8 @@
             "QuestCompleted",
             "FlagsCountReached",
             "FlagDelayElapsed",
-            "MonsterAttackStarted"
+            "MonsterAttackStarted",
+            "MonsterDefeated"
           ]
         },
         "region": {
@@ -1080,7 +1081,8 @@
                 "enum": [
                   "WaveCleared",
                   "WaveHealthReached",
-                  "MonsterAttackStarted"
+                  "MonsterAttackStarted",
+                  "MonsterDefeated"
                 ]
               }
             }
@@ -1241,15 +1243,17 @@
           "if": {
             "properties": {
               "event": {
-                "const": "MonsterAttackStarted"
+                "enum": [
+                  "MonsterAttackStarted",
+                  "MonsterDefeated"
+                ]
               }
             }
           },
           "then": {
             "required": [
               "monsterModel",
-              "monsterPre",
-              "attackId"
+              "monsterPre"
             ],
             "properties": {
               "monsterModel": {
@@ -1261,12 +1265,6 @@
                 "type": "integer",
                 "minimum": 1,
                 "maximum": 255
-              },
-              "attackId": {
-                "type": "string",
-                "minLength": 1,
-                "maxLength": 120,
-                "pattern": "\\S"
               }
             }
           },
@@ -1277,7 +1275,33 @@
               },
               "monsterPre": {
                 "type": "null"
-              },
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "event": {
+                "const": "MonsterAttackStarted"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "attackId"
+            ],
+            "properties": {
+              "attackId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 120,
+                "pattern": "\\S"
+              }
+            }
+          },
+          "else": {
+            "properties": {
               "attackId": {
                 "type": "null"
               }
