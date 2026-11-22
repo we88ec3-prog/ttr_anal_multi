@@ -1,5 +1,10 @@
 # 關卡／MEF功能完成追蹤
 
+2026-11-23追加：[旗標分支表單](../design/scenario-content/CONDITIONAL-EXIT-WORKBENCH.md)
+補conditionalExits的JSON-only缺口；設定／交換／改名、模式切換、取消與歷史讀回已驗。
+四版配套、六TCP／兩最終獨立Host各88EXP同隊回村，三Release及782HappyPath通過。
+原件／種子DB／現用服務不變，Client／其他adapter及其餘功能保持追蹤。
+
 2026-11-23追加：[怪物 HP 圖形工作台](../design/scenario-content/MONSTER-HP-WORKBENCH.md)
 補出生定義既有 HP 欄位；瀏覽器設定120/72/84及清空恢復80/60/60，三版歷史保存。
 四條 TCP 與兩個最終獨立 Host 各88EXP同隊回村、三Release及782HappyPath通過。

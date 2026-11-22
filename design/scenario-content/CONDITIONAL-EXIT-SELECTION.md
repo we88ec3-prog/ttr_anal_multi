@@ -1,5 +1,9 @@
 # 旗標條件出口選擇
 
+2026-11-23：[旗標分支圖形工作台](CONDITIONAL-EXIT-WORKBENCH.md)已補下方當時的專用表單缺口。
+瀏覽器設定／交換／改名／停用與歷史讀回，六保存版TCP／兩最終獨立Host各88EXP同隊回村，
+三Release與782HappyPath通過。舊JSON-only及Host待驗敘述保留歷史範圍。
+
 2026-11-22，SERVER_DESIGN_CHOICE／NOT_NATIVE_MEF。這是動態決定繼續／離開
 所需的分支原語；本批不宣稱已完成動態loop或任意循環圖。
 

@@ -1,5 +1,9 @@
 # MEF 目前開發方向：Server 提供內容，優先由 MEF 處理
 
+2026-11-23：[旗標分支表單](../design/scenario-content/CONDITIONAL-EXIT-WORKBENCH.md)
+已能設定時機、旗標及真假出口，改名同步與模式切換。保存版六TCP／兩最終獨立Host
+各88EXP同隊回村，三Release與782HappyPath通過；不改執行器／Client或原生格式驗收。
+
 2026-11-23：[出生定義 HP 圖形編輯](../design/scenario-content/MONSTER-HP-WORKBENCH.md)
 可設定／留空恢復成長或AI，三類怪物實際保存與歷史配套通過；四TCP／兩個最終Host各88EXP
 正常建隊通關同隊回村、三Release與782HappyPath通過。這是Server自有格式，非原生MEF或ClientAI移交。

@@ -1,5 +1,8 @@
 # 關卡二維地形編排
 
+2026-11-23：[旗標分支表單](CONDITIONAL-EXIT-WORKBENCH.md)可設定判斷時機、來源與真假出口，
+切回手動／權重。六TCP／兩最終獨立Host各88EXP同隊回村，782HappyPath通過；其他adapter及人測分開。
+
 2026-11-23：[怪物最大 HP](MONSTER-HP-WORKBENCH.md)可對選取出生定義設定或留空恢復繼承。
 實際瀏覽器初始／依序／定時三類保存與清空、四 TCP／兩個最終獨立 Host 88 EXP 同隊回村，
 三 Release 與 782 HappyPath 通過；人測及其他 adapter 不外推。
