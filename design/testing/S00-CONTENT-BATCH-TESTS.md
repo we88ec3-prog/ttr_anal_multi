@@ -1,5 +1,15 @@
 # S00 關卡功能批次測試表
 
+## DL-G02 泛用配套獨立Host通關（指定v2仍待人工）
+
+同一管理端r1四輪配套，各Case都有不付費的兩輪條件早停與每輪付費的四輪上限。
+獨立完整Host／真實時間正常TCP已驗695的10/18訪問、104/160EXP，以及699的11/21訪問、224/400EXP，
+皆逐輪交替岔路、清怪／拾取、頭目、一次結算存檔及同隊回Town1/map182或Town2/map183。
+付費路線各有四筆183×2、不同visit；不付費路線零筆。726 HappyPath通過，所有隔離Host停止。
+這是prepared role4Lv15；Town2另準備到Q132前置十個主線，不能記成自然新帳號或指定v2實機。
+[部署規格與收據](../scenario-content/GENERIC-LOOP-BUNDLE-DEPLOYMENT.md)保留配套identity及驗證器開發失敗原因。
+人工依DL-G01觀察畫面、按鍵、切圖、NPC與回村；本次未換現用服務。
+
 ## DL-G01 跨村泛用循環（指定v2待人工）
 
 Case695/Town1與Case699/Town2保留原chart/map的分支body，分別每輪四／五房。

@@ -1,5 +1,7 @@
 # 已知一般狩獵場的泛用循環入口與編輯形狀
 
+2026-11-22接續：[泛用配套獨立部署](GENERIC-LOOP-BUNDLE-DEPLOYMENT.md)已支援695/699在repo外解壓目錄的同版manifest／scenario／AI匯入。四條獨立完整Host真實時間TCP通過104/160/224/400EXP、逐訪成本、一次結算存檔與回原村同隊；726 HappyPath通過。準備帳號前置明列，指定v2／自然新帳號、RAID/Story、巢狀與原生MEF仍OPEN。下方設定-only／待部署敘述保留為前批快照。
+
 2026-11-22；SERVER_DESIGN_CHOICE / NOT_NATIVE_MEF。
 分析基準65b99cb3d、私有Server2aac5d4e。原Case693候選與歷史證據保持。
 本批移除正常入口及管理UI對693特定房號的假設，不增加原生MEF格式／傳檔opcode或修改Client。
