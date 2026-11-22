@@ -1,5 +1,16 @@
 # 關卡／MEF功能完成追蹤
 
+2026-11-22最新：[波次血量事件索引](../design/scenario-content/WAVE-HEALTH-EVENT-INDEX.md)
+完成生成／HP變更彙總、死亡分母與原派送phase；三個新正流程、完整兩分支舊／新版TCP、
+同版獨立Host88EXP及748 HappyPath通過。完整回包只正規化已查明的隨機wireAlias，未宣稱原始SHA相同。
+頭目房295成員訪問基準對4次登記／15次HP更新是工作量，不是CPU節省或Client卸載。
+官方容器復原依[目前方向](../kr-extra-roy/MEF-CURRENT-DIRECTION.md)已退出共同門檻，不能當目前全部MEF功能阻塞。
+
+2026-11-22主線後續：[正常通關](../design/scenario-content/STORY-STRUCTURED-LOOP-TCP-ROUTES.md)、
+[主線循環工作台／政策交付](../design/scenario-content/STORY-LOOP-WORKBENCH-DELIVERY.md)、
+[角色狀態延續](../design/scenario-content/STORY-LOOP-OWNER-CONTINUITY.md)已完成各自正常工程驗證。
+下列742核心批次的TCP／配套OPEN維持歷史快照；新收據不回填舊檔，Client／自然新帳號仍待驗。
+
 2026-11-22最新：[主線循環接入核心](../design/scenario-content/STORY-STRUCTURED-LOOP-ADMISSION.md)
 增加明確Story模式、強制玩家資源延續、逐訪原敘事游標與最大獎勵範圍驗證。
 四個隔離SQLite正流程證明回跳時保存索引、一次任務完成及已即時入帳的擊殺EXP不重算；

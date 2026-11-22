@@ -1,5 +1,9 @@
 # MEF 目前開發方向：Server 提供內容，優先由 MEF 處理
 
+2026-11-22：[波次血量事件索引](../design/scenario-content/WAVE-HEALTH-EVENT-INDEX.md)已把原每poll重掃改為生成／已接受扣血更新，保留死亡分母與原回報phase。獨立參考、完整兩分支TCP回包（只正規化隨機wireAlias）、同版獨立Host88EXP與748 HappyPath通過；每路頭目波原295成員訪問，改為登記4／HP更新15，非CPU／Client卸載量。官方格式搜尋維持退出目前功能目標，仍按下方已確定方向開發具體接口。
+
+2026-11-22主線接續：[正常TCP／Host通關](../design/scenario-content/STORY-STRUCTURED-LOOP-TCP-ROUTES.md)、[主線循環政策配套](../design/scenario-content/STORY-LOOP-WORKBENCH-DELIVERY.md)及[資源／索瑪防禦延續](../design/scenario-content/STORY-LOOP-OWNER-CONTINUITY.md)已另有完整工程收據；舊核心-only／工作台OPEN為當時快照。指定v2、自然新帳號及其他效果／具體Client接口仍分開，不改歷史原稿認定。
+
 2026-11-22：[分支區段動態循環](../design/scenario-content/STRUCTURED-BRANCH-LOOPS.md)已接正常Case693入口，同場兩／三輪交替不同岔路並重啟機關／延遲，四路保存104／120EXP回原隊，700 HappyPath及三個Release通過。宣告4個body成員但每輪只走3間房，沒有把互斥岔路都計EXP。分支管理端／配套仍待接續，NOT_NATIVE_MEF與Client移轉未知保持。
 
 2026-11-22：[完整配套Host啟動](../design/scenario-content/STRUCTURED-LOOP-BUNDLE-STARTUP.md)已從指定清單／SHA重驗profile、關卡、AI、原BND及界限，再啟動真正隔離Host驗設定。三／四輪、關閉、改名四個配套及舊整合控制五次通過後停止；699 HappyPath、三個Release與關閉版本88EXP正常TCP通過。這仍是NOT_NATIVE_MEF；原生分析、Client移轉、其他adapter與巢狀流程尚未完成。
