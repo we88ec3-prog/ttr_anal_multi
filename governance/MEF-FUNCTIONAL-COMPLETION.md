@@ -1,5 +1,13 @@
 # 關卡／MEF功能完成追蹤
 
+2026-11-22最新：[巢狀循環](../design/scenario-content/NESTED-STRUCTURED-LOOPS.md)補嚴格包含、
+外層重跑時內層Invocation／Iteration重新起算、旗標scope與多層獎勵／訪問分析。
+來源四條正常原BND TCP保存188/124/120/88EXP回原村同隊；三層21訪屬領域fixture，
+管理端保存三版與原版停用／歷史不可變已驗。保存版獨立Host及738 HappyPath以最終收據為準。
+下方「巢狀OPEN」是歷史快照；Client／原生、自主AI、自然新帳號及其他adapter未提高。
+最終：實際r2四路TCP208/160/104/88EXP，獨立完整Host19訪208／6訪88均保存同隊回村；
+三版HTTP／reader、舊雙區段四路與RAID1兩路控制通過。三Release與738 HappyPath通過，隔離服務全停止，收據33ce55f4。
+
 2026-11-22最新批次：[RAID 動態循環與外部結算](../design/scenario-content/RAID-STRUCTURED-LOOPS.md)
 擴充到固定 RAID1～3，提供獨立來源 profile、兩房重訪、正常機關停止、每輪旗標重置、
 書／CP每場一次預覽與版本配套。[完整驗證入口](../design/testing/RAID-LOOP-COMPLETE-ROUTES.md)
