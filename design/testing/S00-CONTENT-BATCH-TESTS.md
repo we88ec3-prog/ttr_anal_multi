@@ -1,5 +1,14 @@
 # S00 關卡功能批次測試表
 
+## DL-G01 跨村泛用循環（指定v2待人工）
+
+Case695/Town1與Case699/Town2保留原chart/map的分支body，分別每輪四／五房。
+控制時計TCP已驗八條候選104/132/224/312EXP及兩條實際四輪下載稿160/400EXP，存檔同隊回村。
+完整Host本批只驗兩個profile設定／啟動後停止，未列新Case的完整Host遊戲通關。
+人工待驗循環圖序、重訪清組、可選機關71或61、Space拾取及結果回原村；自然新帳號另驗。
+[泛用規格及收據](../scenario-content/GENERIC-HUNTING-LOOPS.md)分開記錄15個Case領域測試與兩村原BND實證。
+
+
 ## DL-S01 同場雙區段循環（指定v2待人工）
 
 Server自訂Case693的新候選保留原圖／chart，入口10/1與分支3/5或6/4各自循環，

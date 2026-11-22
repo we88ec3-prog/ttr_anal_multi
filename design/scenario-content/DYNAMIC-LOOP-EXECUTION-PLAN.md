@@ -1,5 +1,7 @@
 # 動態循環：接續實作計畫
 
+2026-11-22：[已知狩獵場泛用循環](GENERIC-HUNTING-LOOPS.md)已開放315/693～706的explicit normal adapter並由來源推導編輯形狀。15 Case領域正流程、695/699兩村十條原BND TCP104/132/224/312/160/400EXP與成對管理／Host設定通過，726 HappyPath通過。新Case的獨立Host遊戲、Client／原生、RAID/Story及巢狀仍OPEN。
+
 2026-11-22：[同場雙區段循環](SEQUENTIAL-STRUCTURED-LOOPS.md)已把入口與分支接入正常Case693、獨立編輯／停用及配套。四路TCP124/160、實際下載2/4輪156及單區段136、三版Host啟動與獨立完整Host160EXP回原村同隊皆通過；709 HappyPath及三個Release通過。巢狀／其他adapter、Client／原生及自然新帳號仍OPEN。
 
 2026-11-22接續：[獨立Host通關](<../testing/SEPARATE-HOST-DUNGEON-COMPLETION.md>)已由另程序的正常TCP完成舊整合88EXP及同一下載分支r2提前離開104／四輪上限136EXP，皆保存與回原村同隊。此為準備帳號／真實時間；精確timer快照仍引用先前in-process收據，Client／原生及其他副本維持OPEN。

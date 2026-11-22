@@ -1,5 +1,7 @@
 # 執行中結構化循環
 
+2026-11-22：[已知狩獵場泛用循環](GENERIC-HUNTING-LOOPS.md)已開放315/693～706的explicit normal adapter並由來源推導編輯形狀。15 Case領域正流程、695/699兩村十條原BND TCP104/132/224/312/160/400EXP與成對管理／Host設定通過，726 HappyPath通過。新Case的獨立Host遊戲、Client／原生、RAID/Story及巢狀仍OPEN。
+
 2026-11-22：[同場雙區段循環](SEQUENTIAL-STRUCTURED-LOOPS.md)已把入口與分支接入正常Case693、獨立編輯／停用及配套。四路TCP124/160、實際下載2/4輪156及單區段136、三版Host啟動與獨立完整Host160EXP回原村同隊皆通過；709 HappyPath及三個Release通過。巢狀／其他adapter、Client／原生及自然新帳號仍OPEN。
 
 2026-11-22：[分支區段循環](STRUCTURED-BRANCH-LOOPS.md)已加入正常Case693的3／5／6／4body，同一場逐輪可選不同岔路，重啟開關／延遲後保存104／120EXP回村；700 HappyPath通過。原兩房管理端及配套profile仍限前綴，分支工作台待接續；下列早期admission範圍依本補充擴大，不代表其他Case或巢狀流程開放。
