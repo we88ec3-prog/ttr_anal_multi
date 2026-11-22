@@ -1,0 +1,291 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:tartaros:structured-loop-authoring-bundle:v1-not-native-mef",
+  "title": "Canonical Case693 dynamic-loop authoring release; not native MEF",
+  "type": "object",
+  "additionalProperties": false,
+  "$comment": "This static schema describes canonical workbench output. The typed reader additionally binds filenames to draft/revision, pins manifest/payload bytes, compares the trusted source profile, revalidates original BND/AI/conditions, recomputes rewards/loops and verifies exact settings. Disabled-loop output omits loop/bounds metadata; it still requires the explicit admission mode. A schema check alone is not release acceptance.",
+  "properties": {
+    "schema": {
+      "const": "LOCAL_SCENARIO_AUTHORING_BUNDLE_V1_NOT_NATIVE_MEF"
+    },
+    "nativeMef": {
+      "const": false
+    },
+    "authority": {
+      "const": "SERVER_RECONSTRUCTION_NOT_NATIVE_MEF"
+    },
+    "draft": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9223372036854775807
+    },
+    "profileSha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "scenario": {
+      "$ref": "#/$defs/scenarioFile"
+    },
+    "behavior": {
+      "$ref": "#/$defs/behaviorFile"
+    },
+    "settings": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "TARTAROS_LOCAL_STAGE_ONE_SCENARIO_PATH": {
+          "type": "string",
+          "pattern": "^<解壓目錄>/scenario-[0-9a-f]{32}-r[1-9][0-9]*\\.scenario\\.json$"
+        },
+        "TARTAROS_LOCAL_STAGE_ONE_SCENARIO_SHA256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "TARTAROS_LOCAL_STAGE_ONE_CASE": {
+          "const": "693"
+        },
+        "TARTAROS_LOCAL_STRUCTURED_LOOPS_MODE": {
+          "const": "LOCAL_STRUCTURED_LOOPS_V1_NOT_NATIVE_MEF"
+        },
+        "TARTAROS_LOCAL_MONSTER_BEHAVIOR_PATH": {
+          "type": "string",
+          "pattern": "^<解壓目錄>/scenario-[0-9a-f]{32}-r[1-9][0-9]*\\.monster-behavior\\.json$"
+        },
+        "TARTAROS_LOCAL_MONSTER_BEHAVIOR_SHA256": {
+          "$ref": "#/$defs/sha256"
+        }
+      },
+      "required": [
+        "TARTAROS_LOCAL_STAGE_ONE_SCENARIO_PATH",
+        "TARTAROS_LOCAL_STAGE_ONE_SCENARIO_SHA256",
+        "TARTAROS_LOCAL_STAGE_ONE_CASE",
+        "TARTAROS_LOCAL_STRUCTURED_LOOPS_MODE",
+        "TARTAROS_LOCAL_MONSTER_BEHAVIOR_PATH",
+        "TARTAROS_LOCAL_MONSTER_BEHAVIOR_SHA256"
+      ]
+    },
+    "structuredLoops": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1,
+      "items": {
+        "$ref": "#/$defs/loopPreview"
+      }
+    },
+    "experienceBounds": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "minimum": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647
+        },
+        "maximum": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647
+        },
+        "completion": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647
+        },
+        "maximumNodeVisits": {
+          "type": "integer",
+          "minimum": 6,
+          "maximum": 36
+        },
+        "interpretation": {
+          "const": "CONSERVATIVE_PER_VISIT_BOUNDS_COMPLETION_ONCE"
+        }
+      },
+      "required": [
+        "minimum",
+        "maximum",
+        "completion",
+        "maximumNodeVisits",
+        "interpretation"
+      ]
+    }
+  },
+  "required": [
+    "schema",
+    "nativeMef",
+    "authority",
+    "draft",
+    "revision",
+    "profileSha256",
+    "scenario",
+    "behavior",
+    "settings"
+  ],
+  "dependentRequired": {
+    "structuredLoops": [
+      "experienceBounds"
+    ],
+    "experienceBounds": [
+      "structuredLoops"
+    ]
+  },
+  "$defs": {
+    "flag": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,63}$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "loopPreview": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/flag"
+        },
+        "entryNode": {
+          "const": 10
+        },
+        "latchNode": {
+          "const": 1
+        },
+        "exitKey": {
+          "const": 1
+        },
+        "exitNode": {
+          "const": 3
+        },
+        "maximumIterations": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 16
+        },
+        "untilFlag": {
+          "$ref": "#/$defs/flag"
+        },
+        "resetScope": {
+          "$ref": "#/$defs/flag"
+        },
+        "resetFlags": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/flag"
+          }
+        },
+        "retainFlags": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/flag"
+          }
+        },
+        "rooms": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "uniqueItems": true,
+          "items": {
+            "oneOf": [
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "node": {
+                    "const": 10
+                  },
+                  "chart": {
+                    "const": 10
+                  },
+                  "map": {
+                    "const": 3430
+                  }
+                },
+                "required": [
+                  "node",
+                  "chart",
+                  "map"
+                ]
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "node": {
+                    "const": 1
+                  },
+                  "chart": {
+                    "const": 1
+                  },
+                  "map": {
+                    "const": 3431
+                  }
+                },
+                "required": [
+                  "node",
+                  "chart",
+                  "map"
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "required": [
+        "id",
+        "entryNode",
+        "latchNode",
+        "exitKey",
+        "exitNode",
+        "maximumIterations",
+        "untilFlag",
+        "resetScope",
+        "resetFlags",
+        "retainFlags",
+        "rooms"
+      ]
+    },
+    "scenarioFile": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "file": {
+          "type": "string",
+          "pattern": "^scenario-[0-9a-f]{32}-r[1-9][0-9]*\\.scenario\\.json$"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      },
+      "required": [
+        "file",
+        "sha256"
+      ]
+    },
+    "behaviorFile": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "file": {
+          "type": "string",
+          "pattern": "^scenario-[0-9a-f]{32}-r[1-9][0-9]*\\.monster-behavior\\.json$"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      },
+      "required": [
+        "file",
+        "sha256"
+      ]
+    }
+  }
+}

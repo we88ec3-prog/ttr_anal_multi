@@ -1,5 +1,7 @@
 # 關卡／MEF功能完成追蹤
 
+2026-11-22：[指定配套完整Host啟動](../design/scenario-content/STRUCTURED-LOOP-BUNDLE-STARTUP.md)已支援清單路徑及SHA、固定來源profile／payload／設定核對、原BND與重算metadata，再實際啟動Host驗所有四個Case。三輪／四輪／關閉／瀏覽器改名配套與舊整合控制五次預檢均停止；新關閉版本正常TCP88EXP，其他四路108／128／108／148保持。699 HappyPath及三個Release通過，現行服務未換。原生MEF、其他adapter／巢狀流程與Client／部署Host遊戲通關仍開放。
+
 2026-11-22：[動態循環管理工作台](../design/scenario-content/STRUCTURED-LOOP-WORKBENCH.md)已加入獨立Case693循環profile、輪次／旗標表單、無草稿寫入的Server預覽及版本配套。HTTP r1三輪／r2四輪保留舊ZIP，實際下載四條TCP保存108／128／108／148EXP；瀏覽器停止旗標改名並保存的配套另通過108EXP。舊兩個單房ZIP保持golden、prefix兩路128EXP保持正常。696 HappyPath、三個Release與預設視窗截圖通過，隔離Admin均停止。新匯出版本完整Host啟動預檢、Client、其他adapter／巢狀流程及原生MEF仍開放。
 
 2026-11-22：[真正執行中結構化循環](../design/scenario-content/STRUCTURED-LOOPS.md)已接同node重訪、明確上限／保留停止旗標、SCC與狀態圖／保守獎勵分析、V2逐訪成本及正常Case693入口。同內容因背包或上限分別兩／三輪，四條TCP各保存108／128EXP並回原隊，19／24枚投射物清除；四條舊控制與六個舊編譯配套不變。694 HappyPath及三個Release通過，隔離Host設定預檢後停止。專用Admin profile／GUI／HTTP交付、其他adapter、巢狀流程及Client／原生MEF仍開放，整體目標保持進行。

@@ -1,5 +1,7 @@
 # MEF 目前開發方向：Server 提供內容，優先由 MEF 處理
 
+2026-11-22：[完整配套Host啟動](../design/scenario-content/STRUCTURED-LOOP-BUNDLE-STARTUP.md)已從指定清單／SHA重驗profile、關卡、AI、原BND及界限，再啟動真正隔離Host驗設定。三／四輪、關閉、改名四個配套及舊整合控制五次通過後停止；699 HappyPath、三個Release與關閉版本88EXP正常TCP通過。這仍是NOT_NATIVE_MEF；原生分析、Client移轉、其他adapter與巢狀流程尚未完成。
+
 2026-11-22：[循環管理工作台](../design/scenario-content/STRUCTURED-LOOP-WORKBENCH.md)已補專用profile、條件／輪次／重置保留旗標編輯、Server預覽及不可變版本ZIP。實際下載三／四輪及瀏覽器改名配套五條TCP保存108／128／148EXP回原隊，696 HappyPath與三個Release通過；舊配套控制不變。這是Server-owned NOT_NATIVE_MEF，沒有Client CPU卸載。新匯出版本Host啟動預檢、巢狀／其他adapter與原生／Client驗收仍開放。
 
 2026-11-22：[結構化循環](../design/scenario-content/STRUCTURED-LOOPS.md)已在執行中依權威旗標或上限重訪同node／離開，並接SCC、有界狀態條件與獎勵分析。相同Case693配套由正常機關選擇走兩／三輪，再走兩條原分支，各保存108／128EXP回原隊；694 HappyPath及三個Release通過。這是Server-owned NOT_NATIVE_MEF，沒有把生怪／AI移交Client。Admin完整交付、其他adapter、巢狀流程與實機仍待完成。

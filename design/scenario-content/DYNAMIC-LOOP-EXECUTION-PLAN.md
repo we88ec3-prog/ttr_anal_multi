@@ -1,5 +1,7 @@
 # 動態循環：接續實作計畫
 
+2026-11-22啟動接續：[指定版本配套Host啟動](STRUCTURED-LOOP-BUNDLE-STARTUP.md)已補最後的完整程序設定預檢。實際三輪／四輪／關閉／改名配套及舊整合控制共五次啟動，SHA、AI、loop、EXP、增援／掉落／結果出口與其他Case皆正確後停止；699 HappyPath通過。其他adapter／巢狀循環、原生MEF、Client與另啟部署Host遊戲通關仍開放。
+
 2026-11-22管理端接續：[循環工作台](STRUCTURED-LOOP-WORKBENCH.md)已補獨立profile、規則表單／Server預覽、保存／歷史版本與同版配套下載。實際下載與瀏覽器改名配套五條TCP通過108／128／148EXP，696 HappyPath通過；新匯出版本完整Host啟動預檢仍須接續，不能把管理頁或同程序TCP當成這項驗收。
 
 2026-11-22新實作：[結構化循環](STRUCTURED-LOOPS.md)已加入原node執行中的有界backedge、SCC／狀態圖與保守獎勵界限，Case693正常TCP同內容分別因背包條件或上限離開，兩種玩法各走兩條分支保存108／128EXP並回原隊。以下舊快照與實作順序保留；管理端完整profile／表單／HTTP交付、其他adapter與Client實機仍開放，不宣稱整體MEF完成。
