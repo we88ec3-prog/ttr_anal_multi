@@ -1,5 +1,7 @@
 # 關卡與怪物 AI 配套草稿
 
+2026-11-22：[動態循環工作台](STRUCTURED-LOOP-WORKBENCH.md)沿用同版三檔ZIP。有loop的清單新增structuredLoops預覽與experienceBounds，並保留明確loop mode；未含loop的舊清單結構保持。歷史r1在r2後仍可下載同bytes，實際新配套TCP通過，沒有自動套用到Host或Client。
+
 2026-11-22：AI攻擊新增可選 requiredFlags／disabledByFlag，沿用JSON編輯與同版配對匯出；實際節點引用須通過旗標來源與跨路徑檢查。詳見 [招式旗標條件](MONSTER-ATTACK-FLAGS.md)。
 
 2026-11-22：[怪物投射物呈現](MONSTER-PROJECTILE-VISUALS.md) 新增可選
