@@ -1,5 +1,10 @@
 # 關卡／MEF功能完成追蹤
 
+2026-11-23追加：[入場演出圖形選單](../design/scenario-content/STORY-ENTRY-SCENE-WORKBENCH.md)
+補FirstVisit／EveryVisit／缺省的JSON-only缺口；瀏覽器三次保存、四版本ZIP、歷史r2讀回及
+主線／狩獵場顯示範圍已驗。四TCP／兩真實時計Host皆5984EXP一次Q119同隊回村，三Release與
+793HappyPath通過。CRLF raw SHA各自綁定，不改AI語意；指定v2與其他演出功能仍待辦。
+
 2026-11-23追加：[Story入場演出政策](../design/scenario-content/STORY-ENTRY-SCENE-POLICY.md)
 逐節點可選EveryVisit／FirstVisit，依本場NodeVisit接既有場景／戰鬥交接。只差一欄的Q119
 擊倒三輪版本將場景2派送／回報從3次變1次，仍5984EXP；五TCP／兩真實時計Host、一次Q119與

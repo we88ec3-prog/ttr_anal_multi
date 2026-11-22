@@ -1,5 +1,9 @@
 # 主線副本的入場演出播放政策
 
+2026-11-23後續：[圖形工作台](STORY-ENTRY-SCENE-WORKBENCH.md)已完成三種選項、四保存版、
+歷史讀回及來源範圍控制。四TCP／兩真實時計Host維持5984EXP與同隊回村，793HappyPath通過。
+下方JSON-only／GUI待辦為前批界線；指定v2與其餘演出功能仍分開追蹤。
+
 2026-11-23。SERVER_DESIGN_CHOICE／NOT_NATIVE_MEF。接續 M07／M12 的內容播放政策，
 沿用已綁定敘事版本的原場景鍵；不是新增 SEQ／Lua 或普通場景常駐 runner。
 

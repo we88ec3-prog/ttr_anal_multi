@@ -1,5 +1,10 @@
 # MEF 目前開發方向：Server 提供內容，優先由 MEF 處理
 
+2026-11-23：[主線入場演出工作台](../design/scenario-content/STORY-ENTRY-SCENE-WORKBENCH.md)
+已補三種播放時機選單、無演出提示、版本保存／歷史及四檔ZIP。四版TCP與歷史r2／最新r4
+獨立真實時計Host皆5984EXP、一次Q119同隊回村，793HappyPath及三Release通過。此項GUI待辦
+已縮小；其餘演出／具體Client接口、人測與自然新帳號仍分開，沒有原生／CPU／播放狀態升格。
+
 2026-11-23：[Story首訪入場演出](../design/scenario-content/STORY-ENTRY-SCENE-POLICY.md)補有限內容
 的逐節點播放政策，保留原鍵／首次交接與任務權威。只加一欄的Q119三輪仍5984EXP，場景2
 派送及合成回報從三次變一次；五TCP／兩獨立真實時計Host與793HappyPath通過。JSON／保存配套
