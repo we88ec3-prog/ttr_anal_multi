@@ -1,5 +1,11 @@
 # 關卡／MEF功能完成追蹤
 
+2026-11-23追加：[初始空場／接近才生怪](../design/scenario-content/INITIAL-EMPTY-REGION-APPROACH.md)
+補D07內容採用缺口：Case693入口0怪仍pending必要波，正常進區才生原1004，掉183付款後接
+原分支／具名頭目／75%護衛與結算。來源／保存各兩路加舊控制兩路，六TCP各88EXP同隊回村；
+保存版獨立真實時計Host六圖／SQL守恆通過，三Release與796HappyPath通過。具名BossDefeated
+是沿用既有成果；提示素材／其他D07與指定v2另列。舊門報告僅移除上批追加註記，12封存檔hash恢復。
+
 2026-11-23追加：[一次性區域退訂](../design/scenario-content/REGION-OBSERVATION-RETIREMENT.md)
 補D06的RegionEntered／RegionHeld完成退訂，保留未完成離區／暫停重算、fork隔離及循環重入。
 三新正流程、四Q119 TCP及同版真實時計Host5984EXP一次Q119同隊回村通過；舊／新DLL相同

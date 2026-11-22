@@ -1,7 +1,5 @@
 # P0-9／P0-10：門、通路與出口換圖
 
-2026-11-23採用追加：RegionHeld候選已另存到[Q119封路正常路線](../../../design/testing/STORY-SEALED-GATE-NORMAL-ROUTES.md)，五TCP／兩保存配套真實時計Host完成受阻、占點開門、穿越、結算同隊回村。新版本只取本包末圖三欄，原候選／本次靜態分析保持；下表「尚未接入」是本報告原始狀態。clear-delay另一候選仍未採用，Client物理門／外觀缺口不變。
-
 **本輪已把「MEF能封住哪裡、能改哪一種門外觀、按出口後如何接到既有Server」分析到具體可交接的程度。** 找到Map635的真封口作者候選，補出6個事件物件門模型的狀態consumer，並對照目前Server的出口授權、交易規劃及點集重建。真正Client動態碰撞仍是獨立未證能力；本報告不把Server overlay、門動畫與portal亮光混成同一個開門功能。
 
 研究終點為：①原例繞行問題的具體正常內容解法；②門外觀與碰撞的writer／consumer界線；③Client按鍵到既有單出口／分岔／同圖／跨圖與Q交接。這些已各有來源、反例、typed契約及可重跑資料。這次是分析與候選內容，不是Server部署或實機驗收；沒有改正式RR或替他人宣告通過。[來源](source-manifest.json)、[契約](contracts.json)、[原件證據](native-proof.md)
