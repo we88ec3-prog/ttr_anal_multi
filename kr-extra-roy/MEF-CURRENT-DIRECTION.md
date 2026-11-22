@@ -1,5 +1,10 @@
 # MEF 目前開發方向：Server 提供內容，優先由 MEF 處理
 
+2026-11-22：[Story明示初始清除分支](../design/testing/STORY-AUTHORED-EARLY-CLEAR-ROUTES.md)
+以獨立r2初始組30秒起手AI驗證先清敵仍有必要護衛、逐輪重置與一次結算，三TCP／三Host、
+5936／5984EXP及776 HappyPath通過。原r1下載及出招控制保持；地形匯出已接同版AI與SHA。
+這是自有內容變體，不把它當未改r1、所有adapter或Client實機完成。
+
 2026-11-22：[Story逐輪起手事件](../design/testing/STORY-ATTACK-START-NORMAL-ROUTES.md)
 已補Q119實際出招→延遲護衛→逐訪擊殺EXP→一次結算與同隊回村，停止／三輪保存5936／5984EXP。
 四條TCP／三個同版真實時計Host與776 HappyPath通過，收據60eae329。此前「Story新事件待驗」

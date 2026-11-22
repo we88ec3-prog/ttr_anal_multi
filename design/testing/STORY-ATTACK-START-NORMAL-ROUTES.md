@@ -1,5 +1,8 @@
 # Q119：主線起手事件、每輪護衛與正常結算
 
+後續有[另存AI變體的初始清除範例](STORY-AUTHORED-EARLY-CLEAR-ROUTES.md)；它是獨立r2，
+不改寫本頁r1起手路線及初始清除未驗的歷史界線。
+
 2026-11-22，SERVER_DESIGN_CHOICE／OFFLINE_SYNTHETIC／NOT_NATIVE_MEF。
 承接[起手訊號契約](../scenario-content/MONSTER-ATTACK-START-SIGNALS.md)及主線循環既有
 正常入口，補齊Story adapter的新增事件證據。原版主程式、資源及使用者存檔保持唯讀。

@@ -1,5 +1,11 @@
 # 關卡／MEF功能完成追蹤
 
+2026-11-22追加：[Story初始組先清除的作者範例](../design/testing/STORY-AUTHORED-EARLY-CLEAR-ROUTES.md)
+原r1保持實際起手控制；另存r2只讓初始組使用30秒起手AI，血量／傷害／護衛／獎勵保持。
+停止／三輪正常清除分支保存5936／5984EXP、一次Q119及同隊回村，三TCP／三同版Host、
+三Release與776 HappyPath通過，收據4c2279b4。修正Story地形預檢漏讀配套AI，舊命令保持。
+這不是未變更r1的先清除證明；普通Case693／RAID完整替代分支及v2仍各自待驗。
+
 2026-11-22追加：[Story每輪起手與護衛](../design/testing/STORY-ATTACK-START-NORMAL-ROUTES.md)
 Q119首圖每輪實際起手接0.4秒護衛，四旗標隨lap重置；正常停止／三輪上限保存5936／5984EXP，
 一次Q119結算、Q120游標及同隊回村。四條TCP與三個同版獨立真實時計Host（含舊停止對照）通過，
