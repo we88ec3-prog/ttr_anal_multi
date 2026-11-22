@@ -1,5 +1,7 @@
 # MEF 目前開發方向：Server 提供內容，優先由 MEF 處理
 
+2026-11-22：[延遲門檻與父旗標索引](../design/scenario-content/DELAY-THRESHOLD-INDEX.md)保留三種起算／原phase與source順序，完成四個新正流程、完整兩分支舊新版TCP、同版真實時計獨立Host88EXP同隊回村及752 HappyPath。每路頭目房候選槽下界870／851對52／46門檻比較是工作量，不是CPU節省或Client卸載；其他combat時計／全域血量與具體接口分開接續。
+
 2026-11-22：[波次血量事件索引](../design/scenario-content/WAVE-HEALTH-EVENT-INDEX.md)已把原每poll重掃改為生成／已接受扣血更新，保留死亡分母與原回報phase。獨立參考、完整兩分支TCP回包（只正規化隨機wireAlias）、同版獨立Host88EXP與748 HappyPath通過；每路頭目波原295成員訪問，改為登記4／HP更新15，非CPU／Client卸載量。官方格式搜尋維持退出目前功能目標，仍按下方已確定方向開發具體接口。
 
 2026-11-22主線接續：[正常TCP／Host通關](../design/scenario-content/STORY-STRUCTURED-LOOP-TCP-ROUTES.md)、[主線循環政策配套](../design/scenario-content/STORY-LOOP-WORKBENCH-DELIVERY.md)及[資源／索瑪防禦延續](../design/scenario-content/STORY-LOOP-OWNER-CONTINUITY.md)已另有完整工程收據；舊核心-only／工作台OPEN為當時快照。指定v2、自然新帳號及其他效果／具體Client接口仍分開，不改歷史原稿認定。

@@ -1,5 +1,11 @@
 # 關卡／MEF功能完成追蹤
 
+2026-11-22最新：[延遲門檻與父旗標索引](../design/scenario-content/DELAY-THRESHOLD-INDEX.md)
+保留節點啟用／清場位置／父旗標三種起算及原派送順序，新增四個正流程。
+舊／新版完整兩分支TCP與同版真實時計獨立Host88EXP同隊回村通過；752 HappyPath、
+三Release通過。頭目房候選下界870／851對52／46門檻比較是工作量，未宣稱CPU節省。
+其他combat時計、全域血量查詢與具體Client接口仍分開；收據95282d82。
+
 2026-11-22最新：[波次血量事件索引](../design/scenario-content/WAVE-HEALTH-EVENT-INDEX.md)
 完成生成／HP變更彙總、死亡分母與原派送phase；三個新正流程、完整兩分支舊／新版TCP、
 同版獨立Host88EXP及748 HappyPath通過。完整回包只正規化已查明的隨機wireAlias，未宣稱原始SHA相同。
