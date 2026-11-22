@@ -1,5 +1,7 @@
 # RAID 1～3 正常 TCP 通關與配套核對
 
+2026-11-22接續：[RAID獨立Host與成長修正](RAID-SEPARATE-HOST-ROUTES.md)已完成三基準／三配套真實時間五圖通關。移除RAID對其他成長關卡的隱藏依賴，保存Lv17實際HP900，各一本書、CP3000與EXP250000保持並回廣場；六條同程序TCP及Case695獨立Host104EXP控制也通過。三Release與729 HappyPath通過，隔離Host全停止。原碼定位與Server運行證據分開，Client／原生、自然新帳號及RAID loops仍OPEN。
+
 2026-11-22；SERVER_DESIGN_CHOICE / OFFLINE_SYNTHETIC / NOT_NATIVE_MEF。
 分析基準8f28f2c29f9164486ec73a958ca41f6330708e4c，私有Server基準5be6fd5697421a7ecfbda0fb56b880cf81758ced。
 沿用[單場正流程](RAID-NORMAL-ROUTE-INSPECTION.md)及[固定RAID工作台](../scenario-content/RAID-SCENARIO-WORKBENCH.md)。

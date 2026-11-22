@@ -1,5 +1,14 @@
 # S00 關卡功能批次測試表
 
+## RAID-HOST01 獨立Host與獨立成長（指定v2仍待人工）
+
+修正active RAID沒有啟用保存等級能力的隱藏相依後，不開其他狩獵／Story成長的三基準與三配套均已通過
+獨立Host／真實時間正常建隊、五圖、各一本書、CP3000、Lv17／250000EXP與其他資產保持及返回廣場。
+世界資源事件最大HP900、Source/BND/AI/部署DLL與實際map/chart經核對，六條同程序TCP控制亦通過；
+一般Case695獨立Host仍104EXP存檔同隊回村。三Release、729 HappyPath通過，隔離Host全關閉。
+role4Lv17／裝備／教學Q15前置仍是準備資料，不是新帳號從零或Client驗收。RAID-03～07人工結果保持待驗。
+[證據與GAME_RUNTIME_OBSERVATION](RAID-SEPARATE-HOST-ROUTES.md)明列舊成長缺口、歷史／最終配置及未知界線。
+
 ## RAID-TCP01 正常TCP工程證據（指定v2仍待人工）
 
 RAID1～3三個原來源與三份歷史管理配套，六場共30圖的正常login／handoff、廣場建隊、選關、戰鬥／HP卷軸、
