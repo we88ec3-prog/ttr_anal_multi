@@ -1,5 +1,12 @@
 # 關卡／MEF功能完成追蹤
 
+2026-11-24追加：[來源綁定底圖快取](../design/scenario-content/BOUNDS-DECODE-CACHE.md)
+補D08底圖共用；每次仍驗SHA，准入政策分鍵、弱參考256鍵、每場屏障不共用。七圖兩載入
+14驗證／7解碼、真實Host72驗證／50解碼／22命中；舊新版四TCP全回包與完整mask相等，
+同版Host88EXP／SQL存7／一次結算同隊回村、802HappyPath及三Release通過。原fixture journal
+保留，只回復停止後副本作SQL讀回，不列故障套件。另[復活consumer](../design/scenario-content/REVIVAL-EFFECT-CONSUMER-STATUS-20261124.md)
+查詢逾時未取得語意，Action3／23仍未知；原件未動，不能把工具逾時當空結果或補猜退款。
+
 2026-11-24追加：[階段頭目與掉落同版完整副本](../design/scenario-content/PHASE-BOSS-LOOT-COMPLETE-DUNGEON.md)
 將既有階段AI與掉落r3合成明確配套，只改boss-arrival1086的AI綁定。來源／保存／舊對照六TCP，
 同保存配套兩個獨立實際時計Host走兩岔路，均88EXP一次、拾8付1存7、原村原隊；活頭目兩階段
