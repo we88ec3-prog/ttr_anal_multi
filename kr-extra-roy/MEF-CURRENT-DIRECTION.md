@@ -1,5 +1,10 @@
 # MEF 目前開發方向：Server 提供內容，優先由 MEF 處理
 
+2026-11-24：[演出放棄清理界線](SCENARIO-PRESENTATION-ABANDON-20261124/README.md)
+固定kind2直接005D路線與另一條Stop／關視窗分支的區別；active Stop必須先於End主清理才可達。
+兩原件窗口／五份REA來源與真正PostMessageW IAT核對通過。Scene取消仍須選定Scenario合法Stop接點，
+不以換圖、003F或Mission0031代替；戰鬥取消成果保持。這是接線分析增量，非新增實機／取消功能。
+
 2026-11-24：[占點期限排程](../design/scenario-content/HOLD-DEADLINE-SCHEDULING.md)接D06，
 同位置且未到期限省略掃描，離區／暫停／新節點保持重設；812HappyPath、四TCP、
 舊新版1,676則完整回包等價及實際時計Host5,984EXP同隊返村通過。量測為區域判定147→54，

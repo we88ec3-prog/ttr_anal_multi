@@ -1,5 +1,9 @@
 # Scenario 放棄確認到既有離隊請求
 
+同日接續：[演出取消清理界線](../SCENARIO-PRESENTATION-ABANDON-20261124/README.md)
+確認kind2跳過同函式另一條Stop／關視窗分支；不得把005D sender證據升格為已清除active Q。
+兩窗口／五份REA來源另核，保留本報告原結論及戰鬥取消成果。
+
 2026-11-24接續：[一般主線取消返村實作](../../design/scenario-content/STORY-ABANDON-RETURN.md)
 已補Encounter／Portal及工程倒地取消、同連線NPC重開。下方原接線計畫保留為來源分析時狀態；
 Q15橋接、播放中演出及指定v2原生倒地操作仍未完成，不因Server通過自動閉合。

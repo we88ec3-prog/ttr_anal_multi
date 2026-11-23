@@ -1,5 +1,9 @@
 # 主線放棄後返村與重開
 
+2026-11-24接續：[演出期間取消的原生清理界線](../../kr-extra-roy/SCENARIO-PRESENTATION-ABANDON-20261124/README.md)
+已確認kind2送005D前不經同函式Stop支線；單純換field亦不是qco清理保證。
+本文件Encounter／Portal成果保持，未據此擴開Intro／EnterScene／ClearScene／ReturnScene取消。
+
 2026-11-24追加：[Q15未到村取消回廣場](QUEST15-ABANDON-RETURN.md)已另行實作及工程驗證。
 下文原Q15待辦保留為本批一般主線完成時的範圍；原生倒地輸入與播放中演出仍未閉合。
 

@@ -11,6 +11,10 @@ SQLite保留同一拾取GUID與鍵。810HappyPath、三Release通過，隔離服
 
 ## ST-EXIT-01 主線放棄入口（一般主線／Q15工程通過；指定v2待補）
 
+2026-11-24原件清理補註：[kind2／active-Q Stop](../../kr-extra-roy/SCENARIO-PRESENTATION-ABANDON-20261124/README.md)
+兩窗口核對通過，演出中取消的合法Scenario清理入口仍未閉合；005D直接sender不包含另一支Stop。
+保持演出取消待開發與指定v2待測，不把原件分析當成可操作／已清理畫面。
+
 2026-11-24再接續：[Q15取消回廣場](../scenario-content/QUEST15-ABANDON-RETURN.md)補兩圖正常TCP、
 倒地正流程及獨立實際時計Host；歷史／183×3保持，取消不給資格，同連線NPC重開並正常到村才stage4。
 810HappyPath通過。指定v2進村前／倒地按鈕與演出中斷仍未驗，不整項提升人工通過。
