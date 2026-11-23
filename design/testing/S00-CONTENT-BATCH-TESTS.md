@@ -1,5 +1,13 @@
 # S00 關卡功能批次測試表
 
+## ST-EXIT-01 主線放棄入口（來源部分確認，實作／指定v2待補）
+
+2026-11-24原件確認模式2的2AF9控制項／kind2確認，於owner+5ED8非零時接既有005D/00。
+詳見[來源與Server接線要求](../../kr-extra-roy/SCENARIO-ABANDON-REQUEST-20261124/README.md)。
+不可由此填倒地輸入或返村成功；需補當前Client控制項可達性、明確隊伍政策，以及Server取消後
+不重登可互動NPC／重開未完主線的正常TCP／獨立Host。現有普通副本離隊與RAID0031不可代填。
+指定v2實機仍未排程，原件保持；沒有新增人工通過。
+
 ## BOSS-L01 階段頭目與掉落同版（指定v2待人工）
 
 使用[同版完整配套](../scenario-content/PHASE-BOSS-LOOT-COMPLETE-DUNGEON.md)，另開隔離資料庫與服務，
