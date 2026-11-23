@@ -1,5 +1,11 @@
 # 關卡／MEF功能完成追蹤
 
+2026-11-23追加：[傷害區空間篩選](../design/scenario-content/HAZARD-SPATIAL-FILTER.md)
+按32單位粗格保守篩選並保留活動時計，來源順序／精確圓形／停用旗標與原時序保持。
+三項獨立全掃描參考正流程通過，四TCP兩分支回包逐位元等價；入口判定512→55，僅為工作量計數。
+同保存配套真實時計Host六圖88EXP一次同隊回村／SQL守恆，三Release及799HappyPath通過。
+不宣稱deadline排程、CPU百分比或Client卸載；現用服務／Client保持，其他MEF與指定v2另列。
+
 2026-11-23追加：[傷害區表單與戰鬥中停用](../design/scenario-content/HAZARD-WORKBENCH-AND-SWITCH.md)
 補hazards的JSON-only缺口；瀏覽器五版新增／移除／恢復與既有AI同版交付通過。正常陷阱
 HP500→460／2次後，在原怪仍活著且未清場時按key13，旗標成立後1.5秒仍2次；TCP資源回包一致。
