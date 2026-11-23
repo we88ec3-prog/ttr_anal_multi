@@ -1,5 +1,10 @@
 # 訊號與出口條件編排
 
+2026-11-24新增：[BossHealthReached](BOSS-HEALTH-SIGNALS.md)選取本圖既有必要頭目，使用整數1～99%欄位，
+不再以同組護衛血量作分母；不提供額外wave／怪物覆寫。新選項已接共用編輯器，HTTP保存／匯出75%／50%版本、
+四TCP／一獨立Host通關與827HappyPath通過；實際瀏覽器點選新選項仍待驗，不能借用下方歷史UI成果。
+
+
 2026-11-22：新增 [FlagDelayElapsed](FLAG-DELAY-SIGNALS.md)，可選afterFlag及延遲秒數；正常poll觀察來源成立後起算，與入圖／清場延遲分開。來源旗標重新命名與刪除引用沿用管理，保存／匯出不自動發布；新欄位瀏覽器操作待驗。
 
 2026-11-22：新增 [FlagsCountReached](FLAG-COUNT-CONDITIONS.md)、觀察旗標與至少數量；重新命名同步watchedFlags引用、刪除受引用旗標受阻。既有版本保存／匯出不自動發布；新欄位瀏覽器操作仍待驗。

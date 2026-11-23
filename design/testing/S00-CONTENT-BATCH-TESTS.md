@@ -1,5 +1,13 @@
 # S00 關卡功能批次測試表
 
+## DG-BH-01 必要頭目本身血量階段（工程通過，瀏覽器／指定v2待測）
+
+2026-11-24：[BossHealthReached](../scenario-content/BOSS-HEALTH-SIGNALS.md)依既有必要頭目model/PRE/wave讀即時HP，
+護衛不加入分母；75%／50%兩HTTP保存版各兩完整TCP、r1獨立實際時計Host88EXP／原村同隊返回，827HappyPath。
+階段增援時頭目180／120HP，同波護衛1140／1080HP，組血量仍高於門檻；高HP路線正常綁定／消耗拾取復活卷軸續戰。
+新訊號瀏覽器點選與v2頭目階段畫面、機關／分支／結算畫面仍待驗。主線／RAID新訊號完整路線沒有由Case693外推。
+
+
 2026-11-24：[Q15開場取消](../scenario-content/QUEST15-INTRO-ABANDON.md)補本機scene1約定及Server scene2，
 兩TCP／兩實際時計Host取消前後零Q15階段／歷史、183×3保持；同連線NPC重開、正常兩圖後才stage4。
 824HappyPath／三Release通過。指定v2取消入口、畫面／鏡頭／輸入仍待測；Town5與設定廣場映射仍為候選。

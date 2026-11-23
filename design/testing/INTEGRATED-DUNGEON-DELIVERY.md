@@ -1,5 +1,11 @@
 # 整合副本交付與測試入口
 
+2026-11-24：[必要頭目血量階段](../scenario-content/BOSS-HEALTH-SIGNALS.md)新增獨立Case693比較配套，
+與護衛同組時只讀必要頭目HP；75%／50%兩保存版四TCP及r1獨立實際時計Host完成波次／機關／分支／頭目／88EXP／同隊回村。
+827HappyPath／三Release；正常已拾取復活道具續戰與庫存守恆另驗。原整合／flag-delay版本保持，並未全域替換。
+實際新管理選項瀏覽器操作、指定v2／自然新帳號與原生MEF仍各自待驗。
+
+
 2026-11-23當版：[頭目查詢索引回歸](../scenario-content/BOSS-SELECTION-INDEX.md)以相同原BND／
 flag-delay整合內容完成兩路舊／新完整TCP回包對照及新版獨立真實時計Host六圖、波次／機關／
 分支／頭目階段／一次88EXP入庫與同村同隊返回。三Release與790HappyPath通過，隔離Host停止。
