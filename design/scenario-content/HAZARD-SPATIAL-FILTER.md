@@ -1,5 +1,8 @@
 # 傷害區空間篩選
 
+2026-11-24接續：[期限前省略](HAZARD-DEADLINE-SCHEDULING.md)補上靜止位置與停用集合不變時的
+期限判斷；本頁原空間篩選與歷史收據保持。尚未處理占點期限或原生陷阱呈現。
+
 2026-11-23。SERVER_DESIGN_CHOICE／**NOT_NATIVE_MEF**。
 承接[傷害區圖形編排與停用](HAZARD-WORKBENCH-AND-SWITCH.md)，補 D06 空間契約 OPT02／OPT04 的候選篩選部分。
 不是原生 MEF 格式恢復，也不將傷害權威移交 Client。
