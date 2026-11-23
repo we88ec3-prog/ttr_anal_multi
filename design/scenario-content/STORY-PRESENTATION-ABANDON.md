@@ -1,5 +1,8 @@
 # 入場／清場演出取消返村
 
+2026-11-24接續：[主線開場取消](STORY-INTRO-ABANDON.md)補尚無Scenario的Intro，另核CSquare共用0038，
+Q119TCP／獨立Host與816HappyPath通過；下文原Intro待辦為當時範圍，ReturnScene／Q15／指定v2仍分開。
+
 2026-11-24。Server 接線已實作並通過工程正流程；**指定 v2 畫面／輸入與原生執行驗收未完成**。
 沿用[主線戰鬥取消](STORY-ABANDON-RETURN.md)的有效租約、單人隊長、revision提交與資產保存政策。
 本批只擴充目前已安裝Scenario的 `EnterScene`／`ClearScene`；不是Intro／ReturnScene／Q15演出取消。

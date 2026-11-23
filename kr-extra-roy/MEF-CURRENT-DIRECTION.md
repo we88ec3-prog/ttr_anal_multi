@@ -1,5 +1,10 @@
 # MEF 目前開發方向：Server 提供內容，優先由 MEF 處理
 
+2026-11-24：[戰鬥建立前的Intro取消](../design/scenario-content/STORY-INTRO-ABANDON.md)
+另核CSquare保留0038的兩原件窗口／兩REA身份；同任務Npc、不建Scenario、不發完成獎勵。
+Q119TCP／獨立Host、scene2／4控制及816HappyPath通過，Q117另有domain證據。
+ReturnScene／Q15演出、自然新帳號與指定v2仍分開，整體目標保持開啟。
+
 2026-11-24：[入場／清場演出取消](../design/scenario-content/STORY-PRESENTATION-ABANDON.md)
 選定Scenario繼承Town0038先Stop再載入，原件三窗口／三REA身份及有效Town參數閉合；
 兩新TCP＋原兩控制、實際時計入場／清場兩Host／814HappyPath通過。52擊倒EXP保留，0未完獎勵，

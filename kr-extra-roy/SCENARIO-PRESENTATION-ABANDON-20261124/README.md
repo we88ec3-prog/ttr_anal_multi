@@ -1,5 +1,10 @@
 # 演出期間放棄：kind2 與 active-Q Stop 的清理界線
 
+同日再接續：[尚無Scenario的Intro取消](../../design/scenario-content/STORY-INTRO-ABANDON.md)
+另核CSquare constructor／本地reset保留共用0038；兩原件窗口／兩REA身份與816HappyPath、
+Q119正常TCP／獨立Host通過。新增[intro-stop-source.json](intro-stop-source.json)與[驗證器](verify_intro_stop.py)。
+下文較早「Intro待補」保留作歷史範圍；ReturnScene／Q15演出與人工v2仍未升格。
+
 同日接續：[入場／清場演出取消接線](../../design/scenario-content/STORY-PRESENTATION-ABANDON.md)
 已選定Scenario繼承的村莊0038，先Stop再正常Town預載／69載入，並把同一context從43後快照移除。
 新增[town-stop-source.json](town-stop-source.json)與[驗證器](verify_town_stop.py)，三原件窗口3,116bytes／582指令，
