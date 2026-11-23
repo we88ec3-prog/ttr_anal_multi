@@ -1,5 +1,14 @@
 # S00 關卡功能批次測試表
 
+## DG-EQ-01 階段副本拾取裝備並回村穿戴（工程通過，指定v2待測）
+
+2026-11-24：[配套與收據](../scenario-content/PHASE-BOSS-EARNED-EQUIPMENT.md)。
+兩分支正常TCP與各自實際時計Host通關88EXP，卷軸8件−入口1件，
+頭目另掉2725／10044各1件；正常回Map182原隊伍後，role4穿戴slot1／2，
+SQLite保留同一拾取GUID與鍵。810HappyPath、三Release通過，隔離服務已停止。
+指定v2待驗：正常建隊到Case693、Space拾取兩件裝備、回村背包與穿戴畫面、
+既有visual7是否適合地面呈現。自然新帳號、其他Case與非正流程不由本批代替。
+
 ## ST-EXIT-01 主線放棄入口（一般主線／Q15工程通過；指定v2待補）
 
 2026-11-24再接續：[Q15取消回廣場](../scenario-content/QUEST15-ABANDON-RETURN.md)補兩圖正常TCP、

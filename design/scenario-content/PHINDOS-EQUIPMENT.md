@@ -1,5 +1,10 @@
 # 馮德斯鐵匠商品與裝備實例
 
+2026-11-24追加：[階段副本的來源映射裝備掉落](PHASE-BOSS-EARNED-EQUIPMENT.md)
+以既有2725／10044規則及產生鍵服務，通過兩分支TCP／獨立Host拾取回村穿戴；
+同一領取實例與背包鍵落盤。下文舊metadata fixture／當時能力缺口保留作歷史，
+不能視為現行全部狀態；本批仍不宣稱原生裝備地面模型或人工Client驗收。
+
 `ShopInfo.xml` 的 Town 1、Shop 2、NPC 10030 貨單含 Product 2614。韓版 `Product.xml` 的 Product 2614「스마트 글러브」對應 Item 2607，買入 3,700 LeeLoo，回售 370，其他幣別為零。`ItemTable2.xml` 的 Item 2607 為 class 1、`quan=1`、gettype 3。原始檔身份與參數由[商品設定](phindos.town-trade.json)記錄。這筆先用來驗證同款裝備分件，合成測試的 metadata 是測試資料。 [原版交易入口與強化視窗](../../governance/client-variants/20261109-mef-town-services/shop-services.md)
 
 從 `ShopInfo.xml` 的 Town 1 依 Shop No 列出商品，以 Product No 取得 `Product.xml` 的 Item、`LEELOO`、`SELL_LEELOO`，再以 Item 查 `ItemTable2.xml` 的 `class` 與 `quan`。三家店共有 36 筆 `quan=1`，其他幣別欄位皆為 0，已全部納入馮德斯的普通買賣設定。

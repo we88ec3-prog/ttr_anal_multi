@@ -1,5 +1,10 @@
 # MEF 目前開發方向：Server 提供內容，優先由 MEF 處理
 
+2026-11-24：[完整階段副本的裝備掉落](../design/scenario-content/PHASE-BOSS-EARNED-EQUIPMENT.md)
+保留卷軸版，新增來源映射2725武器／10044防具，由必要頭目掉落並正常回村穿戴；
+補配套部署遺漏的既有裝備服務開關。兩TCP／兩實際時計Host及810HappyPath通過，
+同一拾取實例保存，指定v2／地面外觀待驗；仍為NOT_NATIVE_MEF，整體目標保持開啟。
+
 2026-11-23：[互動圈／屏障作者預覽](../design/scenario-content/SPATIAL-AUTHORING-PREVIEW.md)
 接既定D06，分清Server半徑、category0的0.8倍Client範圍與category1原半徑；重疊屏障格按
 所選旗標投影、靜態牆保留。四狀態對實際Server predicate、四TCP／保存版Host88EXP同隊回村、

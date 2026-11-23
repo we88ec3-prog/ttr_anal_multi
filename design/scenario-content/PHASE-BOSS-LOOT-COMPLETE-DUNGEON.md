@@ -1,5 +1,9 @@
 # 階段頭目與掉落的同版完整副本
 
+2026-11-24追加：[裝備掉落／回村穿戴版本](PHASE-BOSS-EARNED-EQUIPMENT.md)另存新配套，
+保持本文件卷軸版本；兩TCP／兩實際時計Host、同一裝備實例穿戴與810HappyPath通過。
+原生掉落表、visual7地面呈現及指定v2仍未升格。
+
 2026-11-23開始、2026-11-24接續驗證。SERVER_DESIGN_CHOICE／**NOT_NATIVE_MEF**。
 本批把已完成的[旗標階段招式](MONSTER-ATTACK-FLAGS.md)與[掉落編排版本](GROUND-LOOT-WORKBENCH.md)
 整合成一份選定配套，再補獨立Host的實際時計出招驗證；沒有重新宣稱已存在的階段引擎為新實作。
