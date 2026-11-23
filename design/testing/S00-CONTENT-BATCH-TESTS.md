@@ -1,6 +1,11 @@
 # S00 關卡功能批次測試表
 
-## ST-EXIT-01 主線放棄入口（來源部分確認，實作／指定v2待補）
+## ST-EXIT-01 主線放棄入口（一般主線工程通過；Q15／指定v2待補）
+
+2026-11-24接續：一般主線Encounter／Portal返村已實作，兩條正常TCP與獨立實際時計Host
+證明同連線NPC重開、183×3保存、0／8EXP保留及Q119未完成獎勵列0；807HappyPath。
+工程倒地取消亦有正流程單元證據。詳[取消返村](../scenario-content/STORY-ABANDON-RETURN.md)。
+下文原待辦安排保留；Q15橋接、播放中演出及指定v2倒地操作仍未完成，不整項標記人工通過。
 
 2026-11-24原件確認模式2的2AF9控制項／kind2確認，於owner+5ED8非零時接既有005D/00。
 詳見[來源與Server接線要求](../../kr-extra-roy/SCENARIO-ABANDON-REQUEST-20261124/README.md)。
