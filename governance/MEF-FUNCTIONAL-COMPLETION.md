@@ -1,5 +1,12 @@
 # 關卡／MEF功能完成追蹤
 
+2026-11-23追加：[傷害區表單與戰鬥中停用](../design/scenario-content/HAZARD-WORKBENCH-AND-SWITCH.md)
+補hazards的JSON-only缺口；瀏覽器五版新增／移除／恢復與既有AI同版交付通過。正常陷阱
+HP500→460／2次後，在原怪仍活著且未清場時按key13，旗標成立後1.5秒仍2次；TCP資源回包一致。
+六TCP及同配套真實時計Host各88EXP一次同隊回村／SQL守恆，三Release及796HappyPath通過。
+原隔離程序中斷後依PID缺失恢復相同DLL／DB；r4工具尋路不足另以Inspector全格網補驗，
+遊戲怪物4096格上限不變。原件／現用服務保持，Client陷阱素材及其他MEF／待測範圍另列。
+
 2026-11-23追加：[初始空場圖形編排](../design/scenario-content/INITIAL-EMPTY-GROUP-WORKBENCH.md)
 補最後初始怪必留一隻的GUI限制；先備增援，再移除普通初始怪，可保存空場。保留必要Boss及
 波內至少一隻限制，另防空場刪除最後一波；摘要顯示初始／增援狀態。實際瀏覽器r2原入口→表單r3空場、
