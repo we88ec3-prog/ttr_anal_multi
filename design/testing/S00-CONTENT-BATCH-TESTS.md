@@ -1,5 +1,11 @@
 # S00 關卡功能批次測試表
 
+2026-11-24：[Q15成功到村演出跳過](../scenario-content/QUEST15-SUCCESSFUL-RETURN-SKIP.md)
+補scene3／4，兩TCP／兩獨立Host正常保存stage4、183×3及階段歷史，同連線完成Q117 NPC後回廣場。
+822HappyPath／三Release通過。指定v2仍待驗實際取消入口、鏡頭／輸入清理、自動私密一人隊伍、
+NPC與不重登入返廣場；開場scene1／2仍待補。下方較早「Q15演出待補」是歷史範圍。
+
+
 2026-11-24：[成功後跳過返村演出](../scenario-content/STORY-SUCCESSFUL-RETURN-SKIP.md)
 以獨立成功效果保留結算，不偽造003F；四TCP、兩實際時計Host及818HappyPath通過。
 Q119 stop/cap總5932/5972EXP，單筆5880獎勵與mastery40，離隊清房後Map182/Q120。

@@ -1,5 +1,10 @@
 # 新帳號至爾勒梅斯主線結束的單人驗收
 
+2026-11-24：[Q15成功到村演出跳過](QUEST15-SUCCESSFUL-RETURN-SKIP.md)完成scene3／4的Server接線，
+保留正常stage4與自動私密一人隊伍；兩TCP／兩實際時計Host完成NPC Q117後回廣場，822HappyPath通過。
+指定v2與自然全新帳號仍各自待驗；開場scene1／2及原生MEF未由本批代替。
+
+
 2026-11-24：[成功返村演出跳過](STORY-SUCCESSFUL-RETURN-SKIP.md)完成Server工程接線，
 四TCP／兩獨立Host保持同額成功結算並清隊，818HappyPath／三Release通過。
 Q119主線與Q132 domain範圍分開；指定v2／自然新帳號及原生MEF仍未由本批代替。
