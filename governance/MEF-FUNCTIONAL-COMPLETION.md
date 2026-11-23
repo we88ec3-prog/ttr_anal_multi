@@ -1,5 +1,11 @@
 # 關卡／MEF功能完成追蹤
 
+2026-11-23追加：[怪物掉落表單](../design/scenario-content/GROUND-LOOT-WORKBENCH.md)
+補單／多筆、初始／指定波次、商品／數量／外觀／機率／拾取半徑編排。生產函式八項轉換、
+HTTP五版配套與原AI bytes保持、八TCP各88EXP同隊回村，r3真實時計Host拾8付1存7／SQL39088一次結算通過。
+三Release及799HappyPath通過。瀏覽器因網址信心政策停止，沒有操作表單或截圖通過宣稱；
+函式fixture不算DOM／畫面驗收，這項仍待補。現用服務／Client保持，其他MEF未提高。
+
 2026-11-23追加：[傷害區空間篩選](../design/scenario-content/HAZARD-SPATIAL-FILTER.md)
 按32單位粗格保守篩選並保留活動時計，來源順序／精確圓形／停用旗標與原時序保持。
 三項獨立全掃描參考正流程通過，四TCP兩分支回包逐位元等價；入口判定512→55，僅為工作量計數。
