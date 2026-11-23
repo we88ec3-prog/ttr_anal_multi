@@ -1,5 +1,8 @@
 # 主線放棄後返村與重開
 
+2026-11-24追加：[Q15未到村取消回廣場](QUEST15-ABANDON-RETURN.md)已另行實作及工程驗證。
+下文原Q15待辦保留為本批一般主線完成時的範圍；原生倒地輸入與播放中演出仍未閉合。
+
 2026-11-24。SERVER_DESIGN_CHOICE／NOT_NATIVE_MEF。承接
 [模式2放棄確認來源](../../kr-extra-roy/SCENARIO-ABANDON-REQUEST-20261124/README.md)，
 將已收到的既有`5D 00 00`接到一般主線的取消交易。這不是指定v2倒地按鍵／畫面驗收。
