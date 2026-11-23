@@ -1,5 +1,10 @@
 # 新帳號至爾勒梅斯主線結束的單人驗收
 
+2026-11-24：[Q15開場取消與正常重開](QUEST15-INTRO-ABANDON.md)完成scene1／2的Server接線，
+兩TCP／兩獨立Host取消不建立階段，同連線正常重開兩圖才取得進村資格；824HappyPath通過。
+實際v2取消操作與清理、自然新帳號及原生MEF仍各自未由本批代替。
+
+
 2026-11-24：[Q15成功到村演出跳過](QUEST15-SUCCESSFUL-RETURN-SKIP.md)完成scene3／4的Server接線，
 保留正常stage4與自動私密一人隊伍；兩TCP／兩實際時計Host完成NPC Q117後回廣場，822HappyPath通過。
 指定v2與自然全新帳號仍各自待驗；開場scene1／2及原生MEF未由本批代替。

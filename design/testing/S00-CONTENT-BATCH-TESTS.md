@@ -1,5 +1,11 @@
 # S00 關卡功能批次測試表
 
+2026-11-24：[Q15開場取消](../scenario-content/QUEST15-INTRO-ABANDON.md)補本機scene1約定及Server scene2，
+兩TCP／兩實際時計Host取消前後零Q15階段／歷史、183×3保持；同連線NPC重開、正常兩圖後才stage4。
+824HappyPath／三Release通過。指定v2取消入口、畫面／鏡頭／輸入仍待測；Town5與設定廣場映射仍為候選。
+舊日期「Q15演出待補」保留歷史；四段已有Server分批工程證據，不代表實機整體通過。
+
+
 2026-11-24：[Q15成功到村演出跳過](../scenario-content/QUEST15-SUCCESSFUL-RETURN-SKIP.md)
 補scene3／4，兩TCP／兩獨立Host正常保存stage4、183×3及階段歷史，同連線完成Q117 NPC後回廣場。
 822HappyPath／三Release通過。指定v2仍待驗實際取消入口、鏡頭／輸入清理、自動私密一人隊伍、
