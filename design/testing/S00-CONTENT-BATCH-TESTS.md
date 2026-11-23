@@ -11,6 +11,11 @@ SQLite保留同一拾取GUID與鍵。810HappyPath、三Release通過，隔離服
 
 ## ST-EXIT-01 主線放棄入口（一般主線／Q15工程通過；指定v2待補）
 
+2026-11-24工程再接續：[EnterScene／ClearScene取消](../scenario-content/STORY-PRESENTATION-ABANDON.md)
+以既有Town0038在69前Stop，43後不重送；兩新TCP／原兩控制與獨立入場／清場兩Host、814HappyPath通過。
+指定v2待驗：在實際可達取消操作下，鏡頭／場景／角色／輸入清理、NPC重開與未完成獎勵保持。
+Intro／ReturnScene／Q15演出另列待補，不整項標記完成或人測通過。
+
 2026-11-24原件清理補註：[kind2／active-Q Stop](../../kr-extra-roy/SCENARIO-PRESENTATION-ABANDON-20261124/README.md)
 兩窗口核對通過，演出中取消的合法Scenario清理入口仍未閉合；005D直接sender不包含另一支Stop。
 保持演出取消待開發與指定v2待測，不把原件分析當成可操作／已清理畫面。

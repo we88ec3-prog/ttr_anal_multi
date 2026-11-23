@@ -1,5 +1,11 @@
 # 演出期間放棄：kind2 與 active-Q Stop 的清理界線
 
+同日接續：[入場／清場演出取消接線](../../design/scenario-content/STORY-PRESENTATION-ABANDON.md)
+已選定Scenario繼承的村莊0038，先Stop再正常Town預載／69載入，並把同一context從43後快照移除。
+新增[town-stop-source.json](town-stop-source.json)與[驗證器](verify_town_stop.py)，三原件窗口3,116bytes／582指令，
+三份保存REA身份與共用表／constructor／0038的Stop及Town參數核對通過。下文原缺口保留為本輪原始界線；
+新範圍只到EnterScene／ClearScene工程接線，Intro／ReturnScene／Q15演出與指定v2仍分開。
+
 2026-11-24。SOURCE_BACKED_PARTIAL；本批是既有 REA／Ghidra 與原件位元組的接線核對，
 不是 Client 操作或新增演出取消功能。前置為[模式2放棄來源](../SCENARIO-ABANDON-REQUEST-20261124/README.md)。
 目前 Server 的 Encounter／Portal 與 Q15 戰鬥取消已另有正常工程驗證，本報告不降低或代替它們。

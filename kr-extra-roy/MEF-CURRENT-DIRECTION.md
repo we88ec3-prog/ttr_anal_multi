@@ -1,5 +1,10 @@
 # MEF 目前開發方向：Server 提供內容，優先由 MEF 處理
 
+2026-11-24：[入場／清場演出取消](../design/scenario-content/STORY-PRESENTATION-ABANDON.md)
+選定Scenario繼承Town0038先Stop再載入，原件三窗口／三REA身份及有效Town參數閉合；
+兩新TCP＋原兩控制、實際時計入場／清場兩Host／814HappyPath通過。52擊倒EXP保留，0未完獎勵，
+不重登NPC重開。Intro／ReturnScene／Q15演出及指定v2仍分開，非整體MEF完成。
+
 2026-11-24：[演出放棄清理界線](SCENARIO-PRESENTATION-ABANDON-20261124/README.md)
 固定kind2直接005D路線與另一條Stop／關視窗分支的區別；active Stop必須先於End主清理才可達。
 兩原件窗口／五份REA來源與真正PostMessageW IAT核對通過。Scene取消仍須選定Scenario合法Stop接點，

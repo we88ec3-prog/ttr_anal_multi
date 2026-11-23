@@ -1,5 +1,9 @@
 # 主線放棄後返村與重開
 
+2026-11-24再接續：[入場／清場演出取消](STORY-PRESENTATION-ABANDON.md)已補合法共用Town0038先Stop再載入。
+兩新演出TCP＋原兩控制、獨立入場／清場兩Host與814HappyPath通過，52擊倒EXP保留／零未完獎勵。
+舊段「尚未擴開」為前一分析快照；Intro／ReturnScene／Q15演出及人工v2仍未升格。
+
 2026-11-24接續：[演出期間取消的原生清理界線](../../kr-extra-roy/SCENARIO-PRESENTATION-ABANDON-20261124/README.md)
 已確認kind2送005D前不經同函式Stop支線；單純換field亦不是qco清理保證。
 本文件Encounter／Portal成果保持，未據此擴開Intro／EnterScene／ClearScene／ReturnScene取消。
