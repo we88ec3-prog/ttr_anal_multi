@@ -1,5 +1,12 @@
 # S00 關卡功能批次測試表
 
+2026-11-24：[成功後跳過返村演出](../scenario-content/STORY-SUCCESSFUL-RETURN-SKIP.md)
+以獨立成功效果保留結算，不偽造003F；四TCP、兩實際時計Host及818HappyPath通過。
+Q119 stop/cap總5932/5972EXP，單筆5880獎勵與mastery40，離隊清房後Map182/Q120。
+指定v2待驗：scene5正常可達離隊、鏡頭／角色／輸入清理、背包與接Q120；Q15演出仍待補。
+下方舊日期的ReturnScene待辦保留為歷史，不代表本批實機已通過。
+
+
 ## DG-EQ-01 階段副本拾取裝備並回村穿戴（工程通過，指定v2待測）
 
 2026-11-24：[配套與收據](../scenario-content/PHASE-BOSS-EARNED-EQUIPMENT.md)。

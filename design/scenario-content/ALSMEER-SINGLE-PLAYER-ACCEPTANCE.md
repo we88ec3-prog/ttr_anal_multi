@@ -1,5 +1,10 @@
 # 新帳號至爾勒梅斯主線結束的單人驗收
 
+2026-11-24：[成功返村演出跳過](STORY-SUCCESSFUL-RETURN-SKIP.md)完成Server工程接線，
+四TCP／兩獨立Host保持同額成功結算並清隊，818HappyPath／三Release通過。
+Q119主線與Q132 domain範圍分開；指定v2／自然新帳號及原生MEF仍未由本批代替。
+
+
 2026-11-22：Q119 主線循環的正常 TCP／獨立 Host 停止及上限路線已完成，
 一次結算後同隊回村、Q120 開放；見[主線循環通關證據](STORY-STRUCTURED-LOOP-TCP-ROUTES.md)。
 這使用預備教學／Q15 進度，不取代下方自然新帳號或指定 v2 驗收。
