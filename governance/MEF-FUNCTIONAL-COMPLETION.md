@@ -1,5 +1,11 @@
 # 關卡／MEF功能完成追蹤
 
+2026-11-24追加：[階段頭目與掉落同版完整副本](../design/scenario-content/PHASE-BOSS-LOOT-COMPLETE-DUNGEON.md)
+將既有階段AI與掉落r3合成明確配套，只改boss-arrival1086的AI綁定。來源／保存／舊對照六TCP，
+同保存配套兩個獨立實際時計Host走兩岔路，均88EXP一次、拾8付1存7、原村原隊；活頭目兩階段
+有實際000D及readonly AttackId／HP／旗標快照。首輪工具商品鍵型別稽核修正後保留失敗資料、補驗新場。
+三Release及799HappyPath通過；不是新階段引擎或Client ACK，UI-DROP-01／自然新帳號與其餘MEF仍另列。
+
 2026-11-23追加：[怪物掉落表單](../design/scenario-content/GROUND-LOOT-WORKBENCH.md)
 補單／多筆、初始／指定波次、商品／數量／外觀／機率／拾取半徑編排。生產函式八項轉換、
 HTTP五版配套與原AI bytes保持、八TCP各88EXP同隊回村，r3真實時計Host拾8付1存7／SQL39088一次結算通過。
