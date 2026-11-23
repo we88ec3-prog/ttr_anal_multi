@@ -1,5 +1,9 @@
 # 一次性區域完成後退訂
 
+2026-11-24追加：[占點期限前省略](HOLD-DEADLINE-SCHEDULING.md)在既有pending mask之上，
+同位置且未到最早期限時不重掃未完成占點；移動、暫停及新節點仍失效／重設。
+812HappyPath與正常TCP／Host證據另存，不改下文歷史成果。
+
 2026-11-23。SERVER_DESIGN_CHOICE／**NOT_NATIVE_MEF**。完成
 [D06](../../kr-extra-roy/MEF-level-functional-closure-20261118/DEVELOPMENT-PLAN.md)
 的一次性區域退訂部分，沿用 RegionEntered／RegionHeld 的事件來源、半徑與時計。

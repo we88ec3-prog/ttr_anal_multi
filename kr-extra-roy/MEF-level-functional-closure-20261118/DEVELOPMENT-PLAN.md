@@ -36,6 +36,10 @@ MEF adapter必須保持：必要波未生成仍阻擋清場；剩餘投射物／
 
 ### D06：區域、點狀態與路徑共用
 
+2026-11-24接續：[占點期限排程](../../design/scenario-content/HOLD-DEADLINE-SCHEDULING.md)
+保持離區／演出重設、fork／loop生命週期及同期限原順序；四TCP、同檢查器舊新版1,676則回包等價、
+實際時計Host5,984EXP同隊返村、812HappyPath通過。這只閉合占點期限子項，不提升全部D06或原生門呈現。
+
 2026-11-24追加：[傷害區期限前省略](../../design/scenario-content/HAZARD-DEADLINE-SCHEDULING.md)
 沿既有空間篩選補上靜止／停用集合不變的期限排程；flag每次仍讀，保留原傷害與移動重算。
 不將此子項提升為占點期限、所有D06或原生門呈現全部完成。

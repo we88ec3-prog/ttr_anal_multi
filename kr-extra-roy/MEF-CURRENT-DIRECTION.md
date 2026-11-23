@@ -1,5 +1,10 @@
 # MEF 目前開發方向：Server 提供內容，優先由 MEF 處理
 
+2026-11-24：[占點期限排程](../design/scenario-content/HOLD-DEADLINE-SCHEDULING.md)接D06，
+同位置且未到期限省略掃描，離區／暫停／新節點保持重設；812HappyPath、四TCP、
+舊新版1,676則完整回包等價及實際時計Host5,984EXP同隊返村通過。量測為區域判定147→54，
+未宣稱CPU收益、Client下放或整體MEF完成。
+
 2026-11-24：[完整階段副本的裝備掉落](../design/scenario-content/PHASE-BOSS-EARNED-EQUIPMENT.md)
 保留卷軸版，新增來源映射2725武器／10044防具，由必要頭目掉落並正常回村穿戴；
 補配套部署遺漏的既有裝備服務開關。兩TCP／兩實際時計Host及810HappyPath通過，
