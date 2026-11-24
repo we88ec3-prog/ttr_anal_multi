@@ -1,5 +1,9 @@
 # 整合副本交付與測試入口
 
+**2026-11-24依使用者要求暫停開發。** 最新[開發／測試／未完成項交接](MEF-DEVELOPMENT-PAUSED-20261124.md)
+固定827HappyPath、三Release、頭目血量四TCP／一獨立Host的既有成果；
+新瀏覽器操作尚未開始，指定v2與原生MEF仍未完成。本次只更新文件並推送，沒有重跑測試。
+
 2026-11-24：[必要頭目血量階段](../scenario-content/BOSS-HEALTH-SIGNALS.md)新增獨立Case693比較配套，
 與護衛同組時只讀必要頭目HP；75%／50%兩保存版四TCP及r1獨立實際時計Host完成波次／機關／分支／頭目／88EXP／同隊回村。
 827HappyPath／三Release；正常已拾取復活道具續戰與庫存守恆另驗。原整合／flag-delay版本保持，並未全域替換。

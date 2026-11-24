@@ -1,5 +1,9 @@
 # S00 關卡功能批次測試表
 
+**2026-11-24使用者要求暫停開發。** 見[進度交接](MEF-DEVELOPMENT-PAUSED-20261124.md)。
+既有827HappyPath／三Release／頭目血量四TCP與一獨立Host保留；本次沒有新測試。
+新頭目血量選項瀏覽器操作尚未開始，指定v2／自然新帳號／原生MEF及既有暫緩項不改為通過。
+
 ## DG-BH-01 必要頭目本身血量階段（工程通過，瀏覽器／指定v2待測）
 
 2026-11-24：[BossHealthReached](../scenario-content/BOSS-HEALTH-SIGNALS.md)依既有必要頭目model/PRE/wave讀即時HP，
